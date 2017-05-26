@@ -113,7 +113,7 @@ public class CheckoutViewModel extends ViewModel {
 
         String temp= classData.getPricingType().equalsIgnoreCase("Group")?classData.getLevelDetails().get(0).getGroups().get(0).getPrice():
                 classData.getLevelDetails().get(0).getPrice();
-        totalAmount = new ObservableInt(Integer.valueOf(temp));
+        totalAmount = new ObservableInt(0);
 
         totalAmountAfterPromo = new ObservableInt(0);
         couponCode = new ObservableField<>();

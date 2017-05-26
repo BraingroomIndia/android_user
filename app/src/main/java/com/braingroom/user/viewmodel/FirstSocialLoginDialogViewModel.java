@@ -33,7 +33,7 @@ public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
         if (loginResp.getData().get(0).getReferralCode().equals("1"))
             referralVm.s_1.set(null);
 
-        if (loginResp.getData().get(0).getMobile() != null)
+        if (loginResp.getData().get(0).getMobile() != null && !loginResp.getData().get(0).getMobile().equals(""))
             mobileVm.s_1.set(null);
 
 

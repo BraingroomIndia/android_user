@@ -36,7 +36,7 @@ public class CountModifierItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 int currentCount = Integer.parseInt(countText.get());
-                if (currentCount > 1) {
+                if (currentCount > 0) {
                     currentCount = currentCount - 1;
                     countText.set(currentCount + "");
                     countChangeConsumer.accept(currentCount);

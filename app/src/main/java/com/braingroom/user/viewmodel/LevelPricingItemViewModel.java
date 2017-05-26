@@ -61,7 +61,7 @@ public class LevelPricingItemViewModel extends ViewModel {
         totalPrice = new ObservableField<>(0);
         this.priceList = priceList;
         this.dataChangeAction = dataChangeAction;
-        countVm = new CountModifierItemViewModel(1, countConsumer);
+        countVm = new CountModifierItemViewModel(0, countConsumer);
         sublevelClicked = new Action() {
             @Override
             public void run() throws Exception {
