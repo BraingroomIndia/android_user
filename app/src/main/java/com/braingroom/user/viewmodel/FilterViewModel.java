@@ -128,7 +128,9 @@ public class FilterViewModel extends ViewModel {
         });
 
         cityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_CITY, messageHelper, navigator, "search for city", false, cityApiObservable, "select a state first", cityConsumer, fragmentHelper);
+        cityVm.setSelectedValues(cityFilterMap);
         localityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_LOCALITY, messageHelper, navigator, "search for locality", false, localityApiObservable, "select a city first", null, fragmentHelper);
+        localityVm.setSelectedValues(localityFilterMap);
 
         vendorlistApiObservable = apiService.getVendors().map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
             @Override
@@ -142,9 +144,7 @@ public class FilterViewModel extends ViewModel {
             }
         });
         vendorListVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_VENDORLIST, messageHelper, navigator, "search for vendors", false, vendorlistApiObservable, "", null, fragmentHelper);
-
-//        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Localities", messageHelper, getLocalityApiObservable("3659"),/*Edited By Vikas Godar*/
-//                localityFilterMap, false, null);
+        localityVm.setSelectedValues(vendorListMap);
 
         communityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Communities", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
             @Override

@@ -113,6 +113,15 @@ public class SearchSelectListViewModel extends ViewModel {
 
     }
 
+    public void setSelectedValues(HashMap<String, String> selectedValues) {
+        for (String key : selectedValues.keySet()) {
+            selectedDataMap.clear();
+            selectedDataMap.put(key, new Pair<String, String>(selectedValues.get(key), null));
+            searchQuery.set("");
+            selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keySet()));
+        }
+    }
+
     /*populates dataMap*/
     public void refreshDataMap(final Observable<HashMap<String, Pair<String, String>>> dataSource) {
         dataMap.clear();

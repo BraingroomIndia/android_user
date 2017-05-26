@@ -138,15 +138,14 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                     learnersFilter.setMinorCateg("group_post");
                 }
                 if (itemId == R.id.action_find_partners) {
-                        learnersFilter.setMinorCateg("activity_request");
+                    learnersFilter.setMinorCateg("activity_request");
                 }
-                if(itemId == R.id.action_discuss_n_decide){
+                if (itemId == R.id.action_discuss_n_decide) {
                     // TODO: 25/05/17 change  the argument
-                    tutorsFilter.setMinorCateg("activity_request");
+                    tutorsFilter.setMinorCateg("user_post");
                 }
-                if(itemId == R.id.action_tutors_article){
-                    // TODO: 25/05/17  change  the argument
-                    tutorsFilter.setMinorCateg("activity_request");
+                if (itemId == R.id.action_tutors_article) {
+                    tutorsFilter.setMinorCateg("vendor_article");
                 }
                 updateFilter();
                 return true;
