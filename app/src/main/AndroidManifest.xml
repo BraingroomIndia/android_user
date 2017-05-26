@@ -146,13 +146,16 @@
         </activity>
         <activity
             android:name=".view.activity.CheckoutActivity"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".view.activity.ConnectHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.ClassDetailActivity" />
+
+        </activity>
+        <activity
+            android:name=".view.activity.ConnectHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+
         </activity>
 
         <activity android:name=".view.activity.SignupActivity">
