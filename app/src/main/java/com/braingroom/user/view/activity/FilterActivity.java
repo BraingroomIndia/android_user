@@ -2,7 +2,6 @@ package com.braingroom.user.view.activity;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,12 +41,12 @@ public class FilterActivity extends BaseActivity {
             }
         }, (HashMap<String, Integer>) getIntentSerializable("category")
                 , (HashMap<String, Integer>) getIntentSerializable("segment")
-                , (HashMap<String, Pair<String, String>>) getIntentSerializable("city")
-                , (HashMap<String, Pair<String, String>>) getIntentSerializable("locality")
+                , (HashMap<String, String>) getIntentSerializable("city")
+                , (HashMap<String, String>) getIntentSerializable("locality")
                 , (HashMap<String, Integer>) getIntentSerializable("community")
                 , (HashMap<String, Integer>) getIntentSerializable("classType")
                 , (HashMap<String, Integer>) getIntentSerializable("classSchedule")
-                , (HashMap<String, Pair<String, String>>) getIntentSerializable("vendorList")
+                , (HashMap<String, String>) getIntentSerializable("vendorList")
                 , getIntentString("keywords")
                 , getIntentString("startDate")
                 , getIntentString("endDate"));

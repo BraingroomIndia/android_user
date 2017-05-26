@@ -66,12 +66,12 @@ public class ClassListViewModel1 extends ViewModel {
 
     public HashMap<String, Integer> categoryFilterMap = new HashMap<>();
     public HashMap<String, Integer> segmentsFilterMap = new HashMap<>();
-    public HashMap<String, Integer> cityFilterMap = new HashMap<>();
-    public HashMap<String, Integer> localityFilterMap = new HashMap<>();
+    public HashMap<String, String> cityFilterMap = new HashMap<>();
+    public HashMap<String, String> localityFilterMap = new HashMap<>();
     public HashMap<String, Integer> communityFilterMap = new HashMap<>();
     public HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
     public HashMap<String, Integer> classScheduleFilterMap = new HashMap<>();
-    public HashMap<String, Integer> vendorListFilterMap = new HashMap<>();
+    public HashMap<String, String> vendorListFilterMap = new HashMap<>();
     public String keywords = "";
     public String startDate = "";
     public String endDate = "";
@@ -156,7 +156,7 @@ public class ClassListViewModel1 extends ViewModel {
                             elem.setLocality("Online");
                         else if (elem.getClassType().equalsIgnoreCase("Webinars"))
                             elem.setLocality("Webinars");
-                        else if (location.size()==0)
+                        else if (location.size() == 0)
                             elem.setLocality("");
                         else elem.setLocality(location.get(0).getLocality());
                         //Edited By Vikas Godara
@@ -280,7 +280,7 @@ public class ClassListViewModel1 extends ViewModel {
     private SegmentResp getDefaultSegments() {
         List<SegmentResp.Snippet> data = new ArrayList<>();
         data.add(new SegmentResp.Snippet("-1", "loading segments...", null));
-        return new SegmentResp("",data);
+        return new SegmentResp("", data);
     }
 
     private Observable<List<ViewModel>> getLoadingItems(int count) {
@@ -298,12 +298,12 @@ public class ClassListViewModel1 extends ViewModel {
             if (data != null) {
                 HashMap<String, Integer> categoryFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("category");
                 HashMap<String, Integer> segmentsFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("segment");
-                HashMap<String, Integer> cityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("city");
-                HashMap<String, Integer> localityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("locality");
+                HashMap<String, String> cityFilterMap = (HashMap<String, String>) data.getSerializableExtra("city");
+                HashMap<String, String> localityFilterMap = (HashMap<String, String>) data.getSerializableExtra("locality");
                 HashMap<String, Integer> communityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("community");
                 HashMap<String, Integer> classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classType");
                 HashMap<String, Integer> classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classSchedule");
-                HashMap<String, Integer> vendorListFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("vendorList");
+                HashMap<String, String> vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra("vendorList");
                 String startDate = data.getStringExtra("startDate");
                 String endDate = data.getStringExtra("endDate");
                 String keywords = data.getStringExtra("keywords");

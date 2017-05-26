@@ -51,12 +51,12 @@ public class FilterViewModel extends ViewModel {
     public FilterViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, FragmentHelper fragmentHelper
             , HashMap<String, Integer> categoryFilterMap,
                            HashMap<String, Integer> segmentsFilterMap,
-                           HashMap<String, Pair<String, String>> cityFilterMap,
-                           HashMap<String, Pair<String, String>> localityFilterMap,
+                           HashMap<String, String> cityFilterMap,
+                           HashMap<String, String> localityFilterMap,
                            HashMap<String, Integer> communityFilterMap,
                            HashMap<String, Integer> classTypeMap,
                            HashMap<String, Integer> classScheduleMap,
-                           HashMap<String, Pair<String, String>> vendorListMap,
+                           HashMap<String, String> vendorListMap,
                            String keywords,
                            String startDate,
                            String endDate
@@ -247,18 +247,26 @@ public class FilterViewModel extends ViewModel {
         clearFlag = true;
     }
 
+    private HashMap<String, String> getHashMap(HashMap<String, Pair<String, String>> source) {
+        HashMap<String, String> resultMap = new HashMap<>();
+        for (String key : source.keySet()) {
+            resultMap.put(key, source.get(key).first);
+        }
+        return resultMap;
+    }
+
     public void apply() {
         Intent resultIntent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("category", categoryVm.selectedItemsMap);
         bundle.putSerializable("segment", segmentsVm.selectedItemsMap);
-        bundle.putSerializable("city", cityVm.selectedDataMap);
-        bundle.putSerializable("locality", localityVm.selectedDataMap);
+        bundle.putSerializable("city", getHashMap(cityVm.selectedDataMap));
+        bundle.putSerializable("locality", getHashMap(localityVm.selectedDataMap));
         bundle.putSerializable("community", communityVm.selectedItemsMap);
         bundle.putSerializable("keywords", keywords.get());
         bundle.putSerializable("classType", classTypeVm.selectedItemsMap);
         bundle.putSerializable("classSchedule", classScheduleVm.selectedItemsMap);
-        bundle.putSerializable("vendorList", vendorListVm.selectedDataMap);
+        bundle.putSerializable("vendorList", getHashMap(vendorListVm.selectedDataMap));
         bundle.putString("startDate", startDateVm.date.get().equals("YYYY-MM-DD") ? "" : startDateVm.date.get());
         bundle.putString("endDate", endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());
         bundle.putBoolean("clearFlag", clearFlag);
