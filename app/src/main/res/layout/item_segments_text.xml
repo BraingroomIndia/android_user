@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.DataItemViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:background="@{vm.isSelected ? @drawable/solid_material_blue_rounded_corner : @drawable/solid_white_rounded_corner}"
+            android:gravity="center_vertical"
+            android:textColor="@{vm.isSelected ? @color/white : @color/colorTextDark}"
+            android:onClick="@{() -> vm.onClicked.accept(vm)}"
+            android:padding="@dimen/padding_med"
+            android:text="@{vm.s_1}"
+            app:font='@{@string/robotoRegular}' />
+    </LinearLayout>
+</layout>

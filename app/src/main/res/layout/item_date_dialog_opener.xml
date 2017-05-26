@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.DatePickerViewModel" />
+
+    </data>
+    <RelativeLayout
+        android:id="@+id/input_layout_password"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_med"
+        android:background="@drawable/stroke_gray"
+        android:onClick="@{vm.onOpenerClick}"
+        android:paddingLeft="@dimen/padding_large">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/arrow"
+            android:gravity="bottom"
+            android:text="@{vm.title}"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_medium"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_below="@+id/title"
+            android:layout_toLeftOf="@+id/arrow"
+            android:gravity="top"
+            android:text="@{vm.date}"
+            android:textColor="@color/colorTextGray"
+            android:textSize="@dimen/text_size_small"
+            app:font='@{@string/robotoRegular}' />
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="@dimen/margin_med"
+            android:layout_alignParentRight="true"
+            android:tint="@color/colorTextGray"
+            android:src="@drawable/ic_today_black_24dp" />
+
+    </RelativeLayout>
+</layout>

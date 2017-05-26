@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.fragment.CommentsItemViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/commenter_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            app:civ_border_color="@color/colorTextGray"
+            app:civ_border_width="2dp"
+            app:imageUrl="@{vm.commenterImage}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/margin_med"
+            android:layout_toRightOf="@+id/commenter_image"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@{vm.commenterName}"
+                android:textColor="@color/colorTextDark"
+                android:textSize="@dimen/text_size_medium"
+                app:font='@{@string/robotoBold}' />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:text="@{vm.comment}"
+                android:textColor="@color/colorTextDark"
+                android:textSize="@dimen/text_size_medium"
+                app:font='@{@string/robotoRegular}' />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@{vm.commentDate}"
+                    android:textColor="@color/colorTextGray"
+                    android:textSize="@dimen/text_size_small"
+                    app:font='@{@string/robotoRegular}' />
+
+                <!--<ImageView-->
+                <!--android:layout_width="5dp"-->
+                <!--android:layout_height="5dp"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_margin="@dimen/margin_med"-->
+                <!--android:src="@drawable/solid_circle_gray" />-->
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:ellipsize="end"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:maxLines="1"-->
+                <!--android:text='@{vm.liked ? "Liked" : "Like"}'-->
+                <!--android:textColor="@color/materialBlueGray"-->
+                <!--android:textSize="@dimen/text_size_medium"-->
+                <!--app:font='@{@string/robotoRegular}' />-->
+
+                <ImageView
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/margin_med"
+                    android:src="@drawable/solid_circle_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:onClick="@{vm.onReplyClicked}"
+                    android:text="Reply"
+                    android:textColor="@color/materialBlueGray"
+                    android:textSize="@dimen/text_size_medium"
+                    app:font='@{@string/robotoRegular}' />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:onClick="@{vm.onReplyClicked}"
+                android:text='@{vm.numReplies>0 ? "View " + vm.numReplies + " more replies" : ""}'
+                android:textColor="@color/colorTextDark"
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="@{vm.numReplies>1 ? View.VISIBLE : View.GONE}"
+                app:font='@{@string/robotoBold}' />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:onClick="@{vm.onReplyClicked}"
+                android:orientation="horizontal"
+                android:visibility="@{vm.numReplies==0 ? View.GONE : View.VISIBLE}">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    app:civ_border_color="@color/colorTextGray"
+                    app:civ_border_width="2dp"
+                    app:imageUrl="@{vm.firstReplyImage}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_med"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@{vm.firstReplyName}"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/text_size_medium"
+                    app:font='@{@string/robotoBold}' />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_med"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@{vm.firstReply}"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/text_size_medium"
+                    app:font='@{@string/robotoRegular}' />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

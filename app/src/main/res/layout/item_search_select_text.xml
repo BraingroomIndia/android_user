@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.SearchSelectListItemViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@{vm.isSelected ? @drawable/solid_material_blue_rounded_corner : @drawable/solid_white_rounded_corner_no_stroke}"
+        android:onClick="@{() -> vm.onClicked.accept(vm)}"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_small">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="@{vm.name}"
+            android:textColor="@{vm.isSelected ? @color/white : @color/colorTextDark}"
+            android:textSize="@dimen/text_size_medium"
+            app:font='@{@string/robotoRegular}' />
+    </LinearLayout>
+</layout>

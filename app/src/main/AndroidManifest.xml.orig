@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.braingroom.user">
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="25"
+        tools:overrideLibrary="com.facebook.shimmer" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:name=".UserApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_IRoVRf0Zpvi6sD" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <!-- <meta-data -->
+        <!-- android:name="com.razorpay.ApiKey" -->
+        <!-- android:value="rzp_live_SN4tYAqDnzHHem" /> -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/experience" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <service android:name=".FCMService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".FCMInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:label="@string/app_name">
+
+            <!-- android:theme="@style/AppTheme.NoActionBar"> -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.HomeActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.activity.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.ClassListActivity"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.SearchActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.ClassDetailActivity"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity android:name=".view.activity.ClassSimpleListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <!-- Edited By Vikas Godara -->
+        <activity
+            android:name=".view.activity.ProfileActivity"
+            android:label="@string/screen_profile"
+            android:parentActivityName=".view.activity.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <!-- Edited By Vikas Godara -->
+        <activity android:name=".view.activity.RazorpayActivity" />
+        <activity
+            android:name=".view.activity.ExploreActivity"
+            android:label="@string/screen_explore"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <!-- Edited By Vikas Godara -->
+        <activity
+            android:name=".view.activity.FilterActivity"
+            android:label="@string/screen_filter"
+            android:parentActivityName=".view.activity.ClassListActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.ClassListActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.FAQActivity"
+            android:label="FAQ">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <!-- Edited By Vikas Godara -->
+        <activity
+            android:name=".view.activity.VendorProfileActivity"
+            android:label="@string/screen_vendor_profile">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.CheckoutActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".view.activity.ConnectHomeActivity"
+<<<<<<< HEAD
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".view.activity.SignupActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.activity.MessageActivity"
+            android:label="@string/screen_message">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+
+        </activity>
+        <activity
+            android:name=".view.activity.NotificationActivity"
+            android:label="@string/screen_notification">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+
+        </activity>
+        <activity android:name=".view.activity.MessagesThreadActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.MessageActivity" />
+
+        </activity>
+=======
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".view.activity.SignupActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.TermsConditionActivity"
+            android:label="     Terms &amp; Condition">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity android:name=".view.activity.ContactUsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity android:name=".view.activity.ChangePasswordActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+
+>>>>>>> origin/bug-fix
+    </application>
+
+</manifest>

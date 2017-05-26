@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.MessagesThreadItemViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_med"
+        android:layout_marginRight="@dimen/margin_med"
+        android:layout_marginTop="@dimen/margin_small">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/solid_white_rounded_corner_chat"
+            android:paddingBottom="@dimen/padding_med"
+            android:paddingLeft="@dimen/padding_large"
+            android:paddingRight="@dimen/padding_large"
+            android:paddingTop="@dimen/padding_med"
+            android:text="@{vm.message}"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_medium"
+            android:visibility="@{vm.isMyMessage ? View.GONE : View.VISIBLE}"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/solid_gray_rounded_corner_chat"
+            android:paddingBottom="@dimen/padding_med"
+            android:paddingLeft="@dimen/padding_large"
+            android:paddingRight="@dimen/padding_large"
+            android:paddingTop="@dimen/padding_med"
+            android:text="@{vm.message}"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
+            android:visibility="@{vm.isMyMessage ? View.VISIBLE : View.GONE}"
+            app:font='@{@string/robotoRegular}' />
+
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,92 @@
+<resources>
+    <string name="app_name">Braingroom</string>
+
+    <string name="screen_profile">My Profile</string>
+    <string name="screen_wishlist">Wishlist</string>
+    <string name="screen_booking_history">Booking History</string>
+    <string name="facebook_app_id">251747498589861</string>
+    <string name="screen_explore">Explore</string>
+    <string name="screen_filter">Filter Options</string>
+    <string name="screen_vendor_profile">Vendor Profile</string>
+    <string name="screen_message">Messages</string>
+    <string name="screen_notification">Notifications</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_wishlist">Wishlist</string>
+    <string name="action_share">Share</string>
+
+    <string name="robotoRegular">Roboto-Regular.ttf</string>
+    <string name="robotoBold">Roboto-Bold.ttf</string>
+
+    <string name="searchHint">Search for Classes, Activities and More</string>
+    <string name="searchBlogHint">Search in blog posts</string>
+    <string name="searchHintLoading">Loading categories...</string>
+    <string name="searchHintSmall">Search for Classes and Activities</string>
+
+    <string name="main_category_1">Fun &amp;\nRecreation</string>
+    <string name="main_category_2">Informative \n&amp; Motivational</string>
+    <string name="main_category_3">Health\n&amp; Fitness</string>
+    <string name="main_category_4">Kids\n&amp; Teens</string>
+    <string name="main_category_5">Education &amp;\n Skill development</string>
+    <string name="main_category_6">Home\nMaintenance</string>
+
+    <string name="sign_up"><u>New here? Sign up</u>.</string>
+    <string name="google_maps_key">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
+
+    <string name="action_edit">Edit</string>
+    <string name="action_done">Done</string>
+    <string name="action_discard">Discard</string>
+
+    <string name="action_feed_main">Tips &amp; Tricks</string>
+    <string name="action_learners_forum">Buy &amp; Sell</string>
+    <string name="action_tutors_talk">Find Partners</string>
+
+    <string name="action_discuss_n_decide">Discuss &amp; Decide</string>
+    <string name="action_tutors_article">Tutors Article</string>
+
+    <string name="action_message">Edit</string>
+    <string name="action_notification">Edit</string>
+
+    <string-array name="main_category_list">
+        <item>Fun &amp; Recreation</item>
+        <item>Informative &amp; Motivational</item>
+        <item>Health &amp; Fitness</item>
+        <item>Kids &amp; Teens</item>
+        <item>Education &amp; Skill development</item>
+        <item>Home Maintenance</item>
+    </string-array>
+    <!--Added By Vikas Godara-->
+    <string name="q1">What is Braingroom?</string>
+    <string name="q2">What are the benefits of posting classes in Braingroom?</string>
+    <string name="q3">Why do I need to register in BrainGroom?</string>
+    <string name="q4">Is there any fee for registration?</string>
+    <string name="q5">What is \'Identity verified vendor\' and \'Credential verified vendor\' in BrainGroom?</string>
+    <string name="q6">What is the advantage of being a verified vendor?</string>
+    <string name="q7">How to post a class/workshop/activity in BrainGroom?</string>
+    <string name="q8">How many classes can I post in BrainGroom for free?</string>
+    <string name="q9">Can I remove/edit my class/workshop/activity details after posting in BrainGroom?</string>
+    <string name="q10">How to get my classes in \'Featured Classes List\' in home page and category page?</string>
+    <string name="q11">What is \'Catalogue\' in BrainGroom? And How to list my class/workshop/activity in catalogue?</string>
+    <string name="q12">How do I get notified if anyone books my class?</string>
+
+    <string name="a1">It is an online marketplace for educational, recreational and wellness classes with defined target segment, quantifiable outcomes and specified time duration. Braingroom Portal and app helps users find and book all types of education and lifestyle classes in and around them in few clicks. Class listing is completely free in braingroom.com. We also provide free marketing and promotions for every client.</string>
+    <string name="a2">Posting your classes/workshops/activities in BrainGroom helps your visibility in and around the city. We provide free publicity through all the social medias and also a free video and photo shoot to promote your classes/workshops/activities.</string>
+    <string name="a3">You will have the access to post your own classes/workshops/activities for free in BrainGroom. You will also be able to book your favourite classes/workshops/activities sessions.</string>
+    <string name="a4">No. Registering in BrainGroom is free.</string>
+    <string name="a5">Identity verified vendor will have an identity verified logo in the respective profile. To become an Identity verified vendor, upload any two of the identity proof (Aadhar card, Licence, Passport, academy registration certificate (only for academy) &amp; PAN card) in your profile and send the attested copy of your Identity proof to BrainGroom office.
+Credential verified vendor will have a credential verified logo in the respective profile. To become a Credential verified vendor, upload any one of your credential proof (Certification of Teacher, Experience Certificate &amp; any certificate related to the professional experience)</string>
+    <string name="a6">Verified logo in the class/workshop/activity provider\'s profile will be given first preference in the class listing page for any users.</string>
+    <string name="a7">To post a class/workshop/activity, you should be registered in BrainGroom. If you are a registered member, log in to your profile and click on \'Post a Class\' in your dashboard and post the respective class. Once BrainGroom admin verify your class, it will be posted in the portal/app.</string>
+    <string name="a8">You can post unlimited number classes in BrainGroom for free.</string>
+    <string name="a9">No, once you have posted the class, you cannot edit/delete the class/workshop/activity details till the validity of the class/workshop/activity gets over. If you want to edit/delete your class/workshop/activity, you can contact BrainGroom help desk and inform.</string>
+    <string name="a10">Select \'Promote your Class\' and choose your required days to promote your classes. Payments for home page &amp; category page featured listings will be different and will change from time to time based on demand. Vendors should check the details thoroughly before booking.</string>
+    <string name="a11">BrainGroom Catalogue is the B2B feature which helps Schools, Colleges, Corporate, Clubs, Residential Communities and Parties to organize an event (workshops/classes/activities) at their location within few clicks. To list your class/workshop/activity, click on \'Add to Catalogue\' in your Dashboard and select the respective class/activity/workshop to be added. After Admin verification, it will get posted in the Catalogue list.</string>
+    <string name="a12">For mobile application users, a push notification will be sent if there is any booking. Web users will get a notification in their respective BrainGroom dashboard for booking details.</string>
+    <string name="booking_related_help">For any booking related help contact us:\n<b>044-49507392\t\t044-65556012/3</b></string>
+
+
+    <!--Edited By Vikas Godara-->
+</resources>

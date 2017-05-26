@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2d4587</color>
+    <color name="colorPrimaryDark">#243568</color>
+    <color name="colorAccent">#38B9B5</color>
+
+    <color name="colorBackgroundGray">#F6F6F6</color>
+    <color name="colorTextGray">#A5A5A5</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="colorLightGray">#c7c7c7</color>
+    <color name="colorTextDark">#333333</color>
+
+    <color name="colorShimmerGray">#c7c7c7</color>
+
+    <color name="materialYellow">#FFEB3B</color>
+    <color name="materialGreen">#4CAF50</color>
+    <color name="materialRed">#F44336</color>
+    <color name="materialBlue">#039be5</color>
+    <color name="materialOrange">#e15a2d</color>
+    <color name="materialBlueGray">#607D8B</color>
+
+    <color name="pinColor1">#F44336</color>
+    <color name="pinColor2">#673AB7</color>
+    <color name="pinColor3">#03A9F4</color>
+    <color name="pinColor4">#4CAF50</color>
+    <color name="pinColor5">#e15a2d</color>
+    <color name="pinColor6">#009688</color>
+
+    <color name="fbFeedBackground">#cdcdd7</color>
+    <color name="fbLikeDark">#3f3f52</color>
+
+    <color name="bottomNavBackground">#ffffff</color>
+    <color name="bottomNavUnSelected">#a3a7a8</color>
+    <color name="bottomNavSelectedBlue">#2d4587</color>
+    <color name="bottomNavSelectedGreen">#38B9B5</color>
+
+
+</resources>

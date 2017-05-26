@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.ClassItemViewModel" />
+
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@color/white"
+            android:onClick="@{vm.onClicked}"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/margin_med"
+                android:layout_weight="6"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{vm.classData.image}"
+                app:placeHolder="@{vm.placeHolder}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/padding_med"
+                android:paddingLeft="@dimen/padding_med"
+                android:paddingRight="@dimen/padding_med">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="2"
+                    android:text="@{vm.classData.classTopic}"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/text_size_medium"
+                    app:font='@{@string/robotoRegular}' />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@{vm.classData.teacher}"
+                    android:textColor="@color/colorTextGray"
+                    android:textSize="@dimen/text_size_small"
+                    app:font='@{@string/robotoRegular}' />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_room_black_24dp"
+                        android:tint="@color/colorTextGray" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/padding_small"
+                        android:text="@{vm.classData.locality}"
+                        android:textColor="@color/colorTextGray"
+                        android:textSize="@dimen/text_size_small"
+                        app:font='@{@string/robotoRegular}' />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/margin_med"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/group"
+                        android:tint="@color/materialOrange"
+                        android:visibility='@{"Group".equalsIgnoreCase(vm.classData.pricingType) ? View.VISIBLE : View.GONE}' />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text='@{vm.classData.price == null || "".equals(vm.classData.price) ? "N/A" : "Rs "+vm.classData.price}'
+                        android:textColor="@color/materialGreen"
+                        app:font='@{@string/robotoRegular}' />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="@{vm.classData.classTypeData}"
+                        android:textColor="@color/materialBlue"
+                        app:font='@{@string/robotoRegular}' />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:text='@{vm.classData.noOfSession + " Sessions, "+ vm.classData.classDuration}'
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/text_size_small"
+                    app:font='@{@string/robotoRegular}' />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.braingroom.user.utils.CommonUtils" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.ConnectFeedDetailViewModel" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_med"
+                    card_view:cardElevation="@dimen/elevation_small">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_med">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp">
+
+                            <ImageView
+                                android:id="@+id/vendorProfile"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_marginRight="@dimen/margin_small"
+                                android:scaleType="centerCrop"
+                                app:imageUrl="@{vm.vendorImage}" />
+
+                            <TextView
+                                android:id="@+id/feed_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_toRightOf="@+id/vendorProfile"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:lines="1"
+                                android:text="@{vm.vendorName}"
+                                android:textColor="@color/colorTextDark"
+                                android:textSize="@dimen/text_size_medium"
+                                app:font='@{@string/robotoBold}' />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_below="@+id/feed_title"
+                                android:layout_toRightOf="@+id/vendorProfile"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:ellipsize="end"
+                                    android:gravity="center_vertical"
+                                    android:lines="1"
+                                    android:text="@{vm.date}"
+                                    android:textColor="@color/colorTextGray"
+                                    android:textSize="@dimen/text_size_medium"
+                                    app:font='@{@string/robotoRegular}' />
+
+                                <ImageView
+                                    android:layout_width="5dp"
+                                    android:layout_height="5dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="@dimen/margin_med"
+                                    android:src="@drawable/solid_circle_gray" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:ellipsize="end"
+                                    android:gravity="center_vertical"
+                                    android:lines="1"
+                                    android:text="@{vm.segment}"
+                                    android:textColor="@color/colorTextGray"
+                                    android:textSize="@dimen/text_size_medium"
+                                    app:font='@{@string/robotoRegular}' />
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="@dimen/margin_small"
+                                    android:src="@drawable/ic_call_made_black_24dp"
+                                    android:tint="@color/colorTextGray" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp"
+                                android:scaleType="centerCrop"
+                                app:imageUrl="@{vm.videoThumb ?? vm.image}" />
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerInParent="true"
+                                android:onClick="@{vm.playAction}"
+                                android:src="@drawable/play_button"
+                                android:visibility="@{vm.videoThumb==null ? View.GONE : View.VISIBLE}" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="@dimen/margin_small"
+                            android:background="@drawable/bottom_line_drawable"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_med">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:onClick="@{vm.likedUsersAction}"
+                                android:padding="3dp"
+                                android:src="@drawable/ic_thumb_up_black_24dp"
+                                android:tint="@color/colorTextGray" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/margin_small"
+                                android:gravity="center_vertical"
+                                android:onClick="@{vm.likedUsersAction}"
+                                android:text='@{vm.numLikes + ""}'
+                                android:textColor="@color/colorTextGray"
+                                app:font='@{@string/robotoRegular}' />
+
+                            <ImageView
+                                android:layout_width="5dp"
+                                android:layout_height="5dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_margin="@dimen/margin_med"
+                                android:src="@drawable/solid_circle_gray" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:onClick="@{vm.commentAction}"
+                                android:text='@{vm.numComments + " comments"}'
+                                android:textColor="@color/colorTextGray"
+                                app:font='@{@string/robotoRegular}' />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_margin="@dimen/margin_small"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:onClick="@{vm.likeAction}"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:src="@drawable/ic_thumb_up_black_24dp"
+                                    android:tint="@{vm.liked ? @color/materialBlue : @color/fbLikeDark}" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/margin_small"
+                                    android:gravity="center_vertical"
+                                    android:text="Like"
+                                    android:textColor="@{vm.liked ? @color/materialBlue : @color/fbLikeDark}"
+                                    app:font='@{@string/robotoBold}' />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:onClick="@{vm.commentAction}"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginTop="3dp"
+                                    android:src="@drawable/ic_chat_black_24dp"
+                                    android:tint="@color/fbLikeDark" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/margin_small"
+                                    android:gravity="center_vertical"
+                                    android:text="Comment"
+                                    android:textColor="@color/fbLikeDark"
+                                    app:font='@{@string/robotoBold}' />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:onClick="@{vm.reportAction}"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:src="@drawable/ic_do_not_disturb_on_black_24dp"
+                                    android:tint="@{vm.reported ? @color/materialRed : @color/fbLikeDark}" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/margin_small"
+                                    android:gravity="center_vertical"
+                                    android:text="Report"
+                                    android:textColor="@{vm.reported ? @color/materialRed : @color/fbLikeDark}"
+                                    app:font='@{@string/robotoBold}' />
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_med">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/padding_small"
+                            android:text="@{vm.title}"
+                            android:textColor="@color/colorTextDark"
+                            android:textSize="@dimen/text_size_medium"
+                            app:font='@{@string/robotoBold}' />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_small"
+                            android:layout_marginTop="@dimen/margin_med"
+                            android:ellipsize="end"
+                            android:paddingBottom="@dimen/padding_small"
+                            android:text="@{CommonUtils.fromHtml(vm.description)}"
+                            android:textColor="@color/colorTextDark"
+                            android:textSize="@dimen/text_size_medium"
+                            app:font='@{@string/robotoRegular}' />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </ScrollView>
+
+        <FrameLayout
+            android:id="@+id/comments_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+</layout>

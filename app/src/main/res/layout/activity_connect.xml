@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.braingroom.user.R" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.ConnectHomeViewModel" />
+    </data>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:openDrawer="start">
+
+
+        <include
+            layout="@layout/app_bar_connect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:vm="@{vm}" />
+
+        <!--<include-->
+        <!--layout="@layout/app_bar_connect"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:visibility="@{vmConnect==null ? View.GONE : View.VISIBLE}"-->
+        <!--app:vm="@{vmConnect}" />-->
+
+
+
+        <FrameLayout
+            android:id="@+id/comments_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:menu="@{vm.loggedIn ? R.menu.activity_home_drawer_loggedin : R.menu.activity_home_drawer}"
+            app:model="@{vm}" />
+
+    </android.support.v4.widget.DrawerLayout>
+
+</layout>

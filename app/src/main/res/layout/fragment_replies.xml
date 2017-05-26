@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.fragment.ReplyViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/solid_material_white_rounded_corner"
+        android:padding="@dimen/padding_med">
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:onClick="@{vm.onBackClicked}"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="@{vm.onBackClicked}"
+                android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
+                android:tint="@color/colorTextGray" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:background="@drawable/bottom_line_drawable_white_background"
+                android:gravity="center_vertical"
+                android:onClick="@{vm.onBackClicked}"
+                android:text="Comments"
+                android:textColor="@color/colorTextDark"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoBold}' />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/edit_comment"
+            android:layout_below="@+id/header"
+            android:clipToPadding="false"
+            bind:items="@{vm.repliesVm}"
+            bind:layout_vertical="@{true}"
+            bind:view_provider="@{@layout/item_reply}" />
+
+        <EditText
+            android:id="@+id/edit_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/send"
+            android:background="@drawable/top_line_drawable_solid_white"
+            android:hint="Write a reply..."
+            android:minHeight="50dp"
+            android:padding="@dimen/padding_med"
+            android:text="@={vm.reply}" />
+
+        <ImageView
+            android:id="@+id/send"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:onClick="@{vm.onSendClicked}"
+            android:padding="@dimen/padding_med"
+            android:src="@drawable/ic_send_black_24dp"
+            android:tint="@color/fbLikeDark" />
+
+    </RelativeLayout>
+</layout>

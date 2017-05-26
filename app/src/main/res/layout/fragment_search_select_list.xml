@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/solid_material_white_rounded_corner"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_med">
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/bottom_line_drawable"
+            android:hint="@{vm.searchHint}"
+            android:minHeight="50dp"
+            android:padding="@dimen/padding_med"
+            android:text="@={vm.searchQuery}" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/footer_container"
+            android:layout_below="@+id/search"
+            bind:items="@{vm.searchResults}"
+            bind:layout_vertical="@{true}"
+            bind:view_provider="@{@layout/item_search_select_text}" />
+
+        <RelativeLayout
+            android:id="@+id/footer_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/top_line_drawable_solid_white"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/save"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lines="1"
+                android:paddingLeft="@dimen/padding_med"
+                android:paddingRight="@dimen/padding_large"
+                android:text="@{vm.selectedItemsText}"
+                android:textColor="@color/colorTextGray"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoRegular}' />
+
+            <TextView
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/clear"
+                android:onClick="@{vm.onSaveClicked}"
+                android:padding="@dimen/padding_med"
+                android:text="SAVE"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoBold}' />
+
+            <TextView
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:onClick="@{vm.onClearClicked}"
+                android:padding="@dimen/padding_med"
+                android:text="CLEAR"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoRegular}' />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

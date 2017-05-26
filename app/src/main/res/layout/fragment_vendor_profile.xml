@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.braingroom.user.R" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.fragment.VendorProfileViewModel" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="com.braingroom.user.view.activity.ProfileActivity">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_med"
+                android:background="@color/colorPrimary">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="@dimen/margin_large"
+                    app:imageUrl="@{vm.image.s_1}"
+                    app:placeHolder="@{R.drawable.avatar_male}" />
+            </RelativeLayout>
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.name}"
+                app:hintText='@{"Name"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.locality}"
+                app:hintText='@{"Locality"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.city}"
+                app:hintText='@{"City"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.interest}"
+                app:hintText='@{"Interest"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.institution}"
+                app:hintText='@{"Institution"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.regId}"
+                app:hintText='@{"Reg. Id"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.expertise}"
+                app:hintText='@{"Expertise area"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.address}"
+                app:hintText='@{"Address"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.description}"
+                app:hintText='@{"Description"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.experience}"
+                app:hintText='@{"Experience"}' />
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:editable="@{false}"
+                app:data="@{vm.gender}"
+                app:hintText='@{"Gender"}' />
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

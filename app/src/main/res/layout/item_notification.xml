@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.braingroom.user.utils.CommonUtils" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.NotificationsItemViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/bottom_line_drawable"
+        android:onClick="@{vm.onClicked}"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:text="@{CommonUtils.fromHtml(vm.title)}"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_medium"
+            app:font='@{@string/robotoRegular}' />
+
+    </LinearLayout>
+</layout>

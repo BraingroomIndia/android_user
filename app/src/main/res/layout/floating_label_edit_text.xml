@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="data"
+            type="com.braingroom.user.viewmodel.DataItemViewModel" />
+
+        <variable
+            name="hintText"
+            type="String" />
+
+        <variable
+            name="editable"
+            type="boolean" />
+
+    </data>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:hint="@{hintText}"
+        android:visibility="@{data.s_1 == null ? View.GONE : View.VISIBLE}">
+
+        <EditText
+            android:id="@+id/input_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="@{editable}"
+            android:text="@={data.s_1}"
+            android:textColor="@color/colorTextDark"
+            app:font='@{@string/robotoRegular}' />
+
+    </android.support.design.widget.TextInputLayout>
+</layout>

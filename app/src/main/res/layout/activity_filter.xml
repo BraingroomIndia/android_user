@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.FilterViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.braingroom.user.view.activity.FilterActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_med">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_small"
+                            android:hint="Keywords">
+
+                            <EditText
+                                android:id="@+id/input_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={vm.keywords}"
+                                android:textColor="@color/colorTextDark"
+                                app:font='@{@string/robotoRegular}' />
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_med"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <include
+                                layout="@layout/item_date_dialog_opener"
+                                app:vm="@{vm.startDateVm}" />
+
+                            <include
+                                layout="@layout/item_date_dialog_opener"
+                                app:vm="@{vm.endDateVm}" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_med">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            layout="@layout/item_list_dialog_opener"
+                            app:editable="@{true}"
+                            app:vm="@{vm.categoryVm}" />
+
+                        <include
+                            layout="@layout/item_list_dialog_opener"
+                            app:editable="@{true}"
+                            app:vm="@{vm.segmentsVm}" />
+
+                        <include
+                            layout="@layout/item_list_fragment_opener"
+                            app:editable="@{true}"
+                            app:vm="@{vm.cityVm}" />
+
+                        <include
+                            layout="@layout/item_list_fragment_opener"
+                            app:editable="@{true}"
+                            app:vm="@{vm.localityVm}" />
+
+                        <include
+                            layout="@layout/item_list_dialog_opener"
+                            app:editable="@{true}"
+                            app:vm="@{vm.communityVm}" />
+
+                        <include
+                            layout="@layout/item_list_dialog_opener"
+                            app:editable="@{true}"
+                            app:vm="@{vm.classTypeVm}" />
+
+                        <include
+                            layout="@layout/item_list_dialog_opener"
+                            app:editable="@{true}"
+                            app:vm="@{vm.classScheduleVm}" />
+
+                        <include
+                            layout="@layout/item_list_fragment_opener"
+                            app:editable="@{true}"
+                            app:vm="@{vm.vendorListVm}" />
+
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+    </FrameLayout>
+</layout>

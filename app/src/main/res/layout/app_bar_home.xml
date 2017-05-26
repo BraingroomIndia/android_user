@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.HomeViewModel" />
+
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.braingroom.user.view.activity.HomeActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:elevation="0dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/search_height"
+                android:layout_margin="10dp"
+                android:background="@drawable/solid_white_rounded_corner"
+                android:drawableLeft="@drawable/search_new"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical"
+                android:onClick="@{vm.onSearchClicked}"
+                android:padding="10dp"
+                android:text="@string/searchHint"
+                android:textColor="@color/colorTextGray"
+                app:font='@{@string/robotoRegular}' />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <include
+            layout="@layout/content_home"
+            app:vm="@{vm}" />
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

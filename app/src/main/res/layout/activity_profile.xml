@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.ProfileViewModel" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="com.braingroom.user.view.activity.ProfileActivity">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_med"
+                android:background="@color/colorPrimary">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="@dimen/margin_large"
+                    android:onClick="@{vm.editable?vm.imageUploadVm.onUploadClicked:null}"
+                    app:imageUrl="@{vm.imageUploadVm.remoteAddress}"
+                    app:placeHolder="@{vm.imageUploadVm.placeHolder}" />
+            </RelativeLayout>
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.name}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"Name"}' />
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.email}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"Email"}' />
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.contact}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"Contact"}' />
+
+            <include
+                layout="@layout/item_list_dialog_opener"
+                app:editable="@{vm.editable}"
+                app:vm="@{vm.cityVm}" />
+
+            <include
+                layout="@layout/item_list_dialog_opener"
+                app:editable="@{vm.editable}"
+                app:vm="@{vm.localityVm}" />
+<!--
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.interest}"
+                app:hintText='@{"Interest"}'
+                app:editable="@{vm.editable}" />-->
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.ugInstitution}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"UG Institution"}' />
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.ugPassoutYear}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"UG Passout Year"}' />
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.pgInstitution}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"PG Institution"}' />
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.pgPassoutYear}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"PG Passout Year"}' />
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.dob}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"Date of birth"}' />
+
+            <include
+                layout="@layout/floating_label_edit_text"
+                app:data="@{vm.gender}"
+                app:editable="@{vm.editable}"
+                app:hintText='@{"Gender"}' />
+
+            <!--Edited By Vikas Godara-->
+            <include
+                layout="@layout/item_list_dialog_opener"
+                app:editable="@{vm.editable}"
+                app:vm="@{vm.categoryVm}" />
+            <!--Edited By Vikas Godara-->
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

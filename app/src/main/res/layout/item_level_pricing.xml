@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.LevelPricingItemViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="@dimen/margin_small"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="bottom"
+                android:lines="1"
+                android:paddingLeft="@dimen/padding_small"
+                android:text="@{vm.levelName}"
+                android:textColor="@color/colorTextGray"
+                app:font='@{@string/robotoBold}' />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="top"
+                    android:lines="1"
+                    android:paddingLeft="@dimen/padding_small"
+                    android:text="@{vm.sublevelName}"
+                    android:textColor="@color/colorTextDark"
+                    app:font='@{@string/robotoRegular}' />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="top"
+                    android:lines="1"
+                    android:paddingLeft="@dimen/padding_small"
+                    android:onClick="@{vm.sublevelClicked}"
+                    android:text="details"
+                    android:textColor="@color/materialBlue"
+                    app:font='@{@string/robotoRegular}' />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text='@{vm.totalPrice > 0 ? "Rs. " + vm.totalPrice : "" }'
+            android:textColor="@color/colorPrimary"
+            app:font='@{@string/robotoRegular}' />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <include
+                layout="@layout/item_count_modifier"
+                app:vm="@{vm.countVm}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

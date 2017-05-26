@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.LocationFilterViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="bottom"
+                android:text="Settings"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                app:font='@{@string/robotoRegular}' />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Location settings"
+                android:textColor="@color/white"
+                app:font='@{@string/robotoRegular}' />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="@dimen/padding_med">
+
+
+            <include
+                layout="@layout/item_list_dialog_opener"
+                app:editable="@{true}"
+                app:vm="@{vm.countryVm}" />
+
+            <include
+                layout="@layout/item_list_dialog_opener"
+                app:editable="@{true}"
+                app:vm="@{vm.stateVm}" />
+
+            <include
+                layout="@layout/item_list_dialog_opener"
+                app:editable="@{true}"
+                app:vm="@{vm.cityVm}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_large"
+                android:gravity="bottom"
+                android:onClick="@{vm.onSaveClicked}"
+                android:text="SAVE"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_medium"
+                app:font='@{@string/robotoBold}' />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:onClick="@{vm.onResetClicked}"
+                android:text="CLEAR"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_medium"
+                app:font='@{@string/robotoRegular}' />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
