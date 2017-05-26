@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.ActivityCheckoutBinding;
@@ -40,6 +41,11 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
         void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);
 
         void startRazorpayPayment(JSONObject options);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getSupportActionBar().setElevation(0);
     }
 
 
@@ -94,6 +100,14 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
     @Override
     protected int getLayoutId() {
         return R.layout.activity_checkout;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
