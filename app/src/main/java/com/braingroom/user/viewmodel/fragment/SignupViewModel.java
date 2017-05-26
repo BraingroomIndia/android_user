@@ -59,6 +59,7 @@ public class SignupViewModel extends ViewModel {
         mobileNumber = new DataItemViewModel("");
         institutionName = new DataItemViewModel("");
         passoutYear = new DataItemViewModel("");
+        signUpSnippet=new SignUpReq.Snippet();
 
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
@@ -217,6 +218,7 @@ public class SignupViewModel extends ViewModel {
                 for (CommonIdResp.Snippet snippet : resp.getData()) {
                     resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
                 }
+                instituteVm.refreshDataMap(instituteApiObservable);
                 return resMap;
             }
         });
