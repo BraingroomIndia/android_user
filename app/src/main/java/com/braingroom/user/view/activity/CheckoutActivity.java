@@ -42,11 +42,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
         void startRazorpayPayment(JSONObject options);
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getSupportActionBar().setElevation(0);
-    }
+
 
 
     @Override
