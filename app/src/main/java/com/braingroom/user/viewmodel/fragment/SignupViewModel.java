@@ -197,7 +197,7 @@ public class SignupViewModel extends ViewModel {
 
         localityVM=new SearchSelectListViewModel(SignupActivity.FRAGMENT_TITLE_LOCALITY, messageHelper, navigator, "search for localities", false, localityApiObservable, "select a city first", null, fragmentHelper);
 
-        interestAreaVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Communities", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
+        interestAreaVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Interest", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommunityResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();

@@ -133,7 +133,8 @@
 
                     <RelativeLayout
                         android:layout_width="100dp"
-                        android:layout_height="100dp">
+                        android:layout_height="100dp"
+                        android:visibility="@{vm.videoField ? View.VISIBLE : View.INVISIBLE}">
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -153,12 +154,14 @@
 
                 <include
                     layout="@layout/floating_label_edit_text"
+                    android:visibility="@{vm.videoField ? View.VISIBLE : View.INVISIBLE}"
                     app:data="@{vm.youtubeAddress}"
                     app:editable="@{true}"
                     app:hintText='@{"Youtube address"}' />
 
                 <include
                     layout="@layout/floating_label_edit_text"
+                    android:visibility="@{vm.classField ? View.VISIBLE : View.INVISIBLE}"
                     app:data="@{vm.classPageUrl}"
                     app:editable="@{true}"
                     app:hintText='@{"Class page url"}' />

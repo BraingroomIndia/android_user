@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel.fragment;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
@@ -36,7 +37,14 @@ public class ConnectPostViewModel extends ViewModel {
     public final ListDialogViewModel1 postTypeVm, groupVm, countryVm, stateVm, cityVm, localityVm;
     public final Action onSubmitClicked;
     public Navigator navigator;
-    public Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer;
+    public Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer,postConsumer;
+
+
+    public ObservableBoolean videoField =new ObservableBoolean(true);
+    public ObservableBoolean imageField =new ObservableBoolean(true);
+    public ObservableBoolean classField=new ObservableBoolean(true);
+    public ObservableBoolean dateField=new ObservableBoolean(false);
+    public ObservableBoolean activityField =new ObservableBoolean(false);
 
     public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory) {
         this.navigator = navigator;
@@ -53,7 +61,40 @@ public class ConnectPostViewModel extends ViewModel {
         postTypeApiData.put("Buy & sell", POST_TYPE_BUY_N_SELL);
         postTypeApiData.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
 
-        postTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Post type", messageHelper, Observable.just(new ListDialogData1(postTypeApiData)), new HashMap<String, Integer>(), false, null);
+        postConsumer=new Consumer<HashMap<String, Integer>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
+                if (selectedMap.values().iterator().hasNext())
+                    switch (selectedMap.values().iterator().next())
+                    {
+                        case POST_TYPE_KNOWLEDGE_NUGGETS:
+                            videoField.set(true);
+                            imageField.set(true);
+                            dateField.set(false);
+                            break;
+                        case POST_TYPE_BUY_N_SELL:
+                            imageField.set(true);
+                            videoField.set(false);
+                            classField.set(false);
+                            break;
+                        case POST_TYPE_LEARNING_PARTNERS:
+                            imageField.set(false);
+                            videoField.set(false);
+                            classField.set(true);
+                            break;
+                        default:
+                            break;
+
+
+                    }
+
+            }
+        };
+
+
+        postTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Post type", messageHelper, Observable.just(new ListDialogData1(postTypeApiData)), new HashMap<String, Integer>(), false, postConsumer);
+
+
 
 
         countryConsumer = new Consumer<HashMap<String, Integer>>() {
@@ -92,7 +133,7 @@ public class ConnectPostViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next();
-                    cityVm.reInit(getCityApiObservable(selectedId));
+                    localityVm.reInit(getLocalityApiObservable(selectedId));
                 }
             }
         };
@@ -135,8 +176,8 @@ public class ConnectPostViewModel extends ViewModel {
         });
     }
 
-    private Observable<ListDialogData1> getLocalityApiObservable(String countryId) {
-        return apiService.getLocalityList("-1").map(new Function<CommonIdResp, ListDialogData1>() {
+    private Observable<ListDialogData1> getLocalityApiObservable(String cityId) {
+        return apiService.getLocalityList(cityId).map(new Function<CommonIdResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
