@@ -1,9 +1,7 @@
-/*
 
 package com.braingroom.user.model.response;
 
 //Created by godara on 12/05/17.
-
 
 
 import android.content.BroadcastReceiver;
@@ -27,7 +25,6 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
 
 import static android.net.NetworkInfo.State;
-
 
 
 public class InternetConnection {
@@ -93,37 +90,41 @@ public class InternetConnection {
     }
 
 
-*/
 /*It takes a few milliseconds, from the connection is on
-      to we get an active working internet connection.
-*//*
+      to we get an active working internet connection.*/
 
 
     private void checkForWorkingInternetConnection() {
         currentRepeatCount = 1;
         delayBetweenRetry = 100;
 
-        isInternetOnObservable().retryWhen(new Function<Observable<Boolean>, Boolean>() {
+        isInternetOnObservable().retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
             @Override
-            public Boolean apply(@NonNull Observable<Boolean> booleanObservable) throws Exception {
-                return booleanObservable.flatMap(new Function<Boolean, ObservableSource<?>>() {
-                    @Override
-                    public ObservableSource<?> apply(@NonNull Boolean aVoid) throws Exception {
-                        if (currentRepeatCount >= maxRetryLimit) {
-                            return Observable.empty();
-                        }
-                        currentRepeatCount++;
-                        delayBetweenRetry += 300;
+            public ObservableSource<?> apply(@NonNull Observable<Throwable> throwableObservable) throws Exception {
+                if (currentRepeatCount >= maxRetryLimit) {
+                    return Observable.empty();
+                }
 
-                        return Observable.timer(delayBetweenRetry, TimeUnit.MILLISECONDS);
-                    }
-                })
-.filter(new Function<Observable<>>())
+                currentRepeatCount++;
+                delayBetweenRetry += 300;
 
- //unRegister for Internet connection change broadcast receiver
+                return Observable.timer(delayBetweenRetry, TimeUnit.MILLISECONDS);
+            }
+        }).filter(new Predicate<Boolean>() {
+            @Override
+            public boolean test(@NonNull Boolean aBoolean) throws Exception {
+                return aBoolean;
+            }
+        }).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(@NonNull Boolean aBoolean) throws Exception {
+                currentRepeatCount = maxRetryLimit;
+                internetStatusHotObservable.onNext(isInternetOn());
+            }
+        });
+    }
 
     public void unRegisterBroadCastReceiver() {
         context.unregisterReceiver(broadcastReceiver);
     }
 }
-*/
