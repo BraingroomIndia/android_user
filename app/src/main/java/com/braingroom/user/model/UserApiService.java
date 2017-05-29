@@ -105,7 +105,7 @@ public interface UserApiService {
 
     @POST("bookingHistory")
     @Headers("X-App-Type: BGUSR01")
-    Observable<ClassListResp> getBookingHistory(@Body CommonIdReq req);
+    Observable<BookingHistoryResp> getBookingHistory(@Body CommonIdReq req);
 
     @POST("exploreDashboard")
     @Headers("X-App-Type: BGUSR01")

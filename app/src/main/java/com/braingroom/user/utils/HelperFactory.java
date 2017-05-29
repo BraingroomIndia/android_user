@@ -46,7 +46,8 @@ public class HelperFactory {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 DatePicker datePicker = (DatePicker) dialog.getCustomView().findViewById(R.id.datePicker);
-                                ((DatePickerViewModel) viewModel).date.set(datePicker.getYear() + "-" + datePicker.getMonth() + "-" + datePicker.getDayOfMonth());
+                                int month= datePicker.getMonth()+1;
+                                ((DatePickerViewModel) viewModel).date.set(datePicker.getYear() + "-" + month + "-" + datePicker.getDayOfMonth());
                                 ((DatePickerViewModel) viewModel).handleOkClick();
                             }
                         })

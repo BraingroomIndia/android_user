@@ -48,6 +48,7 @@ public class DataflowService {
     @Inject
     @Named("defaultPref")
     public SharedPreferences pref;
+    private InternetConnection internetConnection;
 
     @Inject
     public DataflowService() {
@@ -75,9 +76,9 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
-    public Observable<BaseResp> firstSocialLogin(String userId,String mobile,String referralCode)
-    {
-        FirstSocialLoginReq req=new FirstSocialLoginReq(new FirstSocialLoginReq.Snippet(userId,mobile,referralCode));
+
+    public Observable<BaseResp> firstSocialLogin(String userId, String mobile, String referralCode) {
+        FirstSocialLoginReq req = new FirstSocialLoginReq(new FirstSocialLoginReq.Snippet(userId, mobile, referralCode));
         return api.firstSocialLogin(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
     }
@@ -212,8 +213,10 @@ public class DataflowService {
                             ClassData classData = new ClassData();
                             classData.setImage(classDetail.getPhoto());
                             classData.setClassTopic(classDetail.getClassTopic());
+                            if (classDetail.getLocation() != null)
                             classData.setLocality(classDetail.location.get(0).getLocality());
                             classData.setPricingType(classDetail.getPricingType());
+                            if (classDetail.getClassLevels() != null)
                             classData.setPrice(classDetail.classLevels.get(0).getPrice());
                             classData.setNoOfSession(classDetail.getNoOfSession());
                             classData.setClassDuration(classDetail.getClassDuration());
@@ -222,7 +225,7 @@ public class DataflowService {
                             classData.setClassTypeData(classDetail.getClassTypeData());
                             classData.setTeacher(classDetail.getTeacher());
                             //Edited by Vikas Godara
-                            dataList.add(gson.fromJson(gson.toJson(classData), ClassData.class));
+                            dataList.add(classData);
                             i++;
 
                         }
@@ -277,13 +280,30 @@ public class DataflowService {
 
     public Observable<List<ClassData>> getBookingHistory() {
         return api.getBookingHistory(new CommonIdReq(new CommonIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
+                .observeOn(AndroidSchedulers.mainThread()).map(new Function<BookingHistoryResp, List<ClassData>>() {
                     @Override
-                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
+                    public List<ClassData> apply(@NonNull BookingHistoryResp resp) throws Exception {
                         List<ClassData> dataList = new ArrayList<>();
-                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                        }
+                        if (!resp.getData().isEmpty())
+                            for (BookingHistoryResp.Snippet snippet : resp.getData()) {
+                                BookingHistoryResp.ClassDetail classDetail = snippet.getClassDetail();
+                                ClassData classData = new ClassData();
+                                classData.setImage(classDetail.getPhoto());
+                                classData.setClassTopic(classDetail.getClassTopic());
+                                if (classDetail.getLocation() != null)
+                                    classData.setLocality(classDetail.getLocation().get(0).getLocality());
+                                classData.setPricingType(classDetail.getClassType());
+                                if (classDetail.getClassLevels() != null)
+                                    classData.setPrice(classDetail.classLevels.get(0).getPrice());
+                                classData.setNoOfSession(classDetail.getNoOfSession());
+                                classData.setClassDuration(classDetail.getClassDuration());
+                                classData.setClassType(classDetail.getClassType());
+                                classData.setId(classDetail.getId());
+                                classData.setClassTypeData(classDetail.getClassTypeData());
+                                classData.setTeacher(classDetail.getTeacher());
+                                //Edited by Vikas Godara
+                                dataList.add(classData);
+                            }
                         return dataList;
                     }
                 });
@@ -537,8 +557,8 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<CommentViewReply> getReplies(String commentId){
-        return api.getReplies(new CommentViewReplyReq(new CommentViewReplyReq.Snippet(pref.getString(Constants.BG_ID, ""),commentId))).subscribeOn(Schedulers.io())
+    public Observable<CommentViewReply> getReplies(String commentId) {
+        return api.getReplies(new CommentViewReplyReq(new CommentViewReplyReq.Snippet(pref.getString(Constants.BG_ID, ""), commentId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -597,7 +617,7 @@ public class DataflowService {
     }
 
     public Observable<ConnectFeedResp> getFeedsByPostID(String postId) {
-        return api.getFeedsByPostID(new ConnectPostByIdReq(new ConnectPostByIdReq.Snippet(pref.getString(Constants.BG_ID, ""),postId))).subscribeOn(Schedulers.io())
+        return api.getFeedsByPostID(new ConnectPostByIdReq(new ConnectPostByIdReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

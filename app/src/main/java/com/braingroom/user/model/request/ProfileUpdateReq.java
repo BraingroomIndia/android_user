@@ -51,6 +51,9 @@ public class ProfileUpdateReq {
         @SerializedName("institution_name")
         public String institutionName = "";
 
+        @SerializedName("institution_id")
+        public String institutionId = "";
+
         @SerializedName("registration_id")
         public String registrationId = "";
 
@@ -64,10 +67,10 @@ public class ProfileUpdateReq {
         public String description = "";
 
         @SerializedName("gender")
-        public String gender = "";
+        public String gender="";
 
         @SerializedName("profile_image")
-        public String profileImage = "";
+        public String profileImage="";
 
         @SerializedName("primary_verification_media1")
         public String primaryVerificationMedia1 = "";
@@ -82,13 +85,14 @@ public class ProfileUpdateReq {
         public String secoundaryVerificationMedia2 = "";
 
         @SerializedName("secoundary_verification_media3")
-        public String secoundaryVerificationMedia = "";
+        public String secoundaryVerificationMedia3 = "";
 
         @SerializedName("official_reg_id")
         public String officialRegId = "";
 
         @SerializedName("area_of_expertise")
         public String areaOfExpertise = "";
+
 
     }
 }

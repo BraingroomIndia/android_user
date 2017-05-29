@@ -45,7 +45,7 @@ public class FilterData implements Serializable {
     }
 
     public GeneralFilterReq getFilterReq() {
-        return new GeneralFilterReq(new GeneralFilterReq.Snippet("", keywords, startDate, endDate, categoryId, segmentId, classType, communityId, classSchedule, classProvider, locationId, sortOrder));
+        return new GeneralFilterReq(new GeneralFilterReq.Snippet("", keywords, startDate, endDate, categoryId, segmentId, classType, communityId, classSchedule, classProvider, locationId, sortOrder,""));
     }
 
 

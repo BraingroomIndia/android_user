@@ -153,12 +153,13 @@ public class ProfileViewModel extends ViewModel {
     public void update() {
         ProfileUpdateReq.Snippet snippet = new ProfileUpdateReq.Snippet();
         // TODO: 23/04/17 change hardcoded uuid
-        snippet.setUuid("1132");
+        snippet.setUuid(pref.getString(Constants.UUID,""));
         snippet.setFirstName(name.s_1.get());
         snippet.setEmail(email.s_1.get());
         snippet.setMobile(contact.s_1.get());
         snippet.setCityId(cityVm.getSelectedItemsId().size() > 0 ? cityVm.getSelectedItemsId().get(0) : "");
         snippet.setLocalityId(localityVm.getSelectedItemsId().size() > 0 ? localityVm.getSelectedItemsId().get(0) : "");
+        snippet.setCategoryId(categoryVm.getSelectedItemsId().size()>0?categoryVm.getSelectedItemsId().get(0):"");
         snippet.setInstitutionName(ugInstitution.s_1.get());
         snippet.setGender(gender.s_1.get());
         snippet.setExpertiseArea(interest.s_1.get());

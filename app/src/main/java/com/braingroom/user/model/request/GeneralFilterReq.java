@@ -55,5 +55,8 @@ public class GeneralFilterReq {
         @SerializedName("price_sort_status")
         String sort = "";
 
+        @SerializedName("catlog")
+        String catalog = "";
+
     }
 }
