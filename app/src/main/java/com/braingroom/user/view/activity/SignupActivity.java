@@ -3,6 +3,7 @@ package com.braingroom.user.view.activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.FragmentHelper;
@@ -21,7 +22,8 @@ public class SignupActivity extends BaseActivity {
     public static final String FRAGMENT_TITLE_STATE = "state";
     public static final String FRAGMENT_TITLE_CITY = "city";
     public static final String FRAGMENT_TITLE_LOCALITY = "locality";
-    public static final String FRAGMENT_TITLE_INSTITUTE = "institute" ;
+    public static final String FRAGMENT_UG_COLLEGE = "UG College" ;
+    public static final String FRAGMENT_PG_COLLEGE="PG Collage";
 
     public interface UiHelper {
 
@@ -109,6 +111,15 @@ public class SignupActivity extends BaseActivity {
             }
         };
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public ViewModel getFragmentViewmodel(String title) {
@@ -120,8 +131,10 @@ public class SignupActivity extends BaseActivity {
             return viewModel.cityVm;
         if (FRAGMENT_TITLE_LOCALITY.equals(title))
             return viewModel.localityVM;
-        if (FRAGMENT_TITLE_INSTITUTE.equals(title))
-            return viewModel.instituteVm;
+        if (FRAGMENT_UG_COLLEGE.equals(title))
+            return viewModel.ugInstituteVm;
+        if (FRAGMENT_PG_COLLEGE.equals(title))
+            return viewModel.pgInstituteVm;
         return null;
     }
 }

@@ -1,4 +1,5 @@
 /*
+
 package com.braingroom.user.model.response;
 
 //Created by godara on 12/05/17.
@@ -91,10 +92,12 @@ public class InternetConnection {
         context.registerReceiver(broadcastReceiver, filter);
     }
 
- */
+
+*/
 /*It takes a few milliseconds, from the connection is on
       to we get an active working internet connection.
 *//*
+
 
     private void checkForWorkingInternetConnection() {
         currentRepeatCount = 1;
@@ -115,24 +118,12 @@ public class InternetConnection {
                         return Observable.timer(delayBetweenRetry, TimeUnit.MILLISECONDS);
                     }
                 })
-.filter(new Predicate<Object>() {
-    @Override
-    public boolean test(@NonNull Object aBoolean) throws Exception {
-        return (aBoolean==true);
-    }
-}).subscribe(new Consumer<Boolean>() {
-                            @Override
-                            public void accept(@NonNull Boolean internetConnection) throws Exception {
-                                currentRepeatCount = maxRetryLimit;
-                                internetStatusHotObservable.onNext(isInternetOn());
-                            }
-                        });
-
-    }
+.filter(new Function<Observable<>>())
 
  //unRegister for Internet connection change broadcast receiver
 
     public void unRegisterBroadCastReceiver() {
         context.unregisterReceiver(broadcastReceiver);
     }
-}*/
+}
+*/

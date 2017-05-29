@@ -80,6 +80,12 @@
                     app:editable="@{true}"
                     app:vm="@{vm.genderVm}" />
 
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.referralCodeVm}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Referral Code"}' />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -101,13 +107,14 @@
                         android:textSize="@dimen/text_size_large"
                         app:font='@{@string/robotoRegular}' />
 
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="@dimen/margin_med"
                         android:background="@drawable/solid_bg_green_rounded_corner"
-                        android:onClick="@{vm.onNextClicked}"
+                        android:onClick="@{vm.onSignupClicked}"
                         android:paddingBottom="@dimen/padding_small"
                         android:paddingLeft="@dimen/padding_med"
                         android:paddingRight="@dimen/padding_med"

@@ -95,8 +95,8 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<BaseResp> signUp(SignUpReq signUpReq) {
-        return api.BuyerRegistration(signUpReq);
+    public Observable<SignUpResp> signUp(SignUpReq signUpReq) {
+        return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<CommunityResp> getCommunity() {

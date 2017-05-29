@@ -46,7 +46,7 @@ public class ProfileViewModel extends ViewModel {
 
     public final Action onBackClicked;
     public Consumer<HashMap<String, Integer>> cityConsumer;
-    public Consumer <HashMap<String, Integer>> categoryConsumer; //Edited By Vikas Goodara
+    public Consumer<HashMap<String, Integer>> categoryConsumer; //Edited By Vikas Goodara
 
     Observable<ProfileData> getProfileObservable;
 
@@ -58,7 +58,7 @@ public class ProfileViewModel extends ViewModel {
         this.uiHelper = uiHelper;
         this.messageHelper = messageHelper;
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
-        getProfileObservable = apiService.getProfile(pref.getString(Constants.BG_ID,"")).doOnNext(new Consumer<ProfileData>() {
+       getProfileObservable = apiService.getProfile(pref.getString(Constants.BG_ID, "")).doOnNext(new Consumer<ProfileData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
                 name.s_1.set(data.getName());
@@ -70,11 +70,15 @@ public class ProfileViewModel extends ViewModel {
                 pgPassoutYear.s_1.set(data.getPgInstitutePassingYear());
                 imageUploadVm.remoteAddress.set(data.getProfileImage());
                 HashMap<String, Integer> selectedCityMap = new HashMap<>();
-                selectedCityMap.put(data.getCity(), Integer.parseInt(data.getCityId()));
-                cityVm.setSelectedItemsMap(selectedCityMap);
-                HashMap<String, Integer> selectedLocalityMap = new HashMap<>();
-                selectedLocalityMap.put(data.getLocality(), Integer.parseInt(data.getLocalityId()));
-                localityVm.setSelectedItemsMap(selectedLocalityMap);
+                if (!data.getCity().equals("")) {
+                    selectedCityMap.put(data.getCity(), Integer.parseInt(data.getCityId()));
+                    cityVm.setSelectedItemsMap(selectedCityMap);
+                    HashMap<String, Integer> selectedLocalityMap = new HashMap<>();
+                    if (!data.getLocality().equals("")) {
+                        selectedLocalityMap.put(data.getLocality(), Integer.parseInt(data.getLocalityId()));
+                        localityVm.setSelectedItemsMap(selectedLocalityMap);
+                    }
+                }
                 uiHelper.invalidateMenu();
             }
         }).doOnError(new Consumer<Throwable>() {
@@ -117,7 +121,7 @@ public class ProfileViewModel extends ViewModel {
                         // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                         return new ListDialogData1(itemMap);
                     }
-                }), new HashMap<String,Integer>(), false, categoryConsumer);
+                }), new HashMap<String, Integer>(), false, categoryConsumer);
         //Edited By Vikas Goodara
 
         localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Locality", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, null);

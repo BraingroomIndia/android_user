@@ -385,13 +385,13 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setAmount("" + totalAmountAfterPromo.get());
         snippet.setClassId(classData.getId());
         // TODO remove hardcoding
-        snippet.setUserId("302");
+        snippet.setUserId(pref.getString(Constants.BG_ID,""));
         snippet.setLocalityId(selectedLocalityId);
         snippet.setTxnid(razorpayId);
         snippet.setUserEmail(mChekcoutData.getEmail());
         snippet.setUserMobile(mChekcoutData.getPhone());
         // TODO: 19/04/17 remove hardcoded user id
-        snippet.setUserId("302");
+        snippet.setUserId(pref.getString(Constants.BG_ID,""));
 
         List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
         for (ViewModel nonReactiveItem : nonReactiveItems) {

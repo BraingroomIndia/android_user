@@ -118,13 +118,13 @@
                 <include
                     layout="@layout/item_list_fragment_opener"
                     app:editable="@{true}"
-                    app:vm="@{vm.instituteVm}" />
+                    app:vm="@{vm.ugInstituteVm}" />
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.passoutYear}"
                     app:editable="@{true}"
-                    app:hintText='@{"PassOut Year"}' />
+                    app:hintText='@{"Passout Year"}' />
 
 
                 <TextView

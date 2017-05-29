@@ -36,7 +36,7 @@ public interface UserApiService {
 
     @POST("BuyerRegistration")
     @Headers("X-App-Type: BGUSR01")
-    Observable<BaseResp> BuyerRegistration(@Body SignUpReq req);
+    Observable<SignUpResp> BuyerRegistration(@Body SignUpReq req);
 
     @POST("getCommunity")
     @Headers("X-App-Type: BGUSR01")

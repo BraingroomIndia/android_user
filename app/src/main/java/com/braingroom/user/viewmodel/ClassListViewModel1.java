@@ -231,6 +231,10 @@ public class ClassListViewModel1 extends ViewModel {
         classes = getLoadingItems(4).mergeWith(apiService.generalFilter(filterData.getFilterReq(), 0).map(classDataMapFunction)).doOnNext(new Consumer<List<ViewModel>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+                if (viewModels.size() < 2) {
+                    layoutType.set(LAYOUT_TYPE_ROW);
+                    uiHelper.changeLayout(layoutType.get());
+                }
                 nonReactiveItems = viewModels;
                 uiHelper.notifyDataChanged();
             }

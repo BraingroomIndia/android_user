@@ -52,7 +52,7 @@ public class FilterViewModel extends ViewModel {
             , HashMap<String, Integer> categoryFilterMap,
                            HashMap<String, Integer> segmentsFilterMap,
                            HashMap<String, String> cityFilterMap,
-                           HashMap<String, String> localityFilterMap,
+                           final HashMap<String, String> localityFilterMap,
                            HashMap<String, Integer> communityFilterMap,
                            HashMap<String, Integer> classTypeMap,
                            HashMap<String, Integer> classScheduleMap,
@@ -108,14 +108,14 @@ public class FilterViewModel extends ViewModel {
                             return resMap;
                         }
                     });
-                    localityVm.refreshDataMap(cityApiObservable);
+                    localityVm.refreshDataMap(localityApiObservable);
                 } else {
                     localityVm.refreshDataMap(null);
                 }
             }
         };
 
-        cityApiObservable = apiService.getCityList("3659").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+        cityApiObservable = apiService.getCityList("35").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
             @Override
             public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
@@ -126,6 +126,7 @@ public class FilterViewModel extends ViewModel {
                 return resMap;
             }
         });
+
 
         cityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_CITY, messageHelper, navigator, "search for city", false, cityApiObservable, "select a state first", cityConsumer, fragmentHelper);
         cityVm.setSelectedValues(cityFilterMap);

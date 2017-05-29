@@ -10,7 +10,7 @@
 
     </data>
     <RelativeLayout
-        android:id="@+id/input_layout_password"
+        android:id="@+id/input_layout_date_picker"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin_med"

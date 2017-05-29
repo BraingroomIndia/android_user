@@ -35,14 +35,14 @@
                         android:padding="@dimen/padding_med">
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/input_layout_password"
+                            android:id="@+id/input_layout_keywords"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/margin_small"
                             android:hint="Keywords">
 
                             <EditText
-                                android:id="@+id/input_password"
+                                android:id="@+id/input_keywords"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@={vm.keywords}"
