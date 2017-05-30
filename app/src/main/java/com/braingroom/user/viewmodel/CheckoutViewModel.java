@@ -76,6 +76,8 @@ public class CheckoutViewModel extends ViewModel {
 
     public String selectedLocalityId;
 
+    public  int isGuest;
+
     final ClassData classData;
     PayUCheckoutData mChekcoutData;
     public final boolean usePayU = false;
@@ -183,6 +185,7 @@ public class CheckoutViewModel extends ViewModel {
         onProceedClicked = new Action() {
             @Override
             public void run() throws Exception {
+
                 if (selectedLocalityId == null) {
                     messageHelper.show("Select locality for class");
                     return;
@@ -195,6 +198,7 @@ public class CheckoutViewModel extends ViewModel {
                                     try {
 
                                         startPayment(userId, GUEST_USER);
+                                        isGuest=1;
                                     } catch (JSONException e) {
                                         messageHelper.show("Something went wrong. JSON error");
                                     }
@@ -202,6 +206,7 @@ public class CheckoutViewModel extends ViewModel {
                             }));
                     return;
                 }
+                isGuest=0;
                 startPayment(pref.getString(Constants.BG_ID, ""), REGISTERED_USER);
 
             }
@@ -396,7 +401,9 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setUserEmail(mChekcoutData.getEmail());
         snippet.setUserMobile(mChekcoutData.getPhone());
         // TODO: 19/04/17 remove hardcoded user id
-        snippet.setUserId(pref.getString(Constants.BG_ID,""));
+        snippet.setUserId(mChekcoutData.getUdf1());
+        snippet.setIsGuest(isGuest);
+
         Log.d(TAG, "\n\n\nhandleRazorpaySuccess: amount\t:\t" +totalAmountAfterPromo.get()+"\nclassID\t:\t"+classData.getId()+
                 "\nUserID\t:\t"+pref.getString(Constants.BG_ID,"")+"LocalityId\t:\t"+selectedLocalityId+"\n TxnId\t:\t"+razorpayId+
                 "\nEmailId\t:\t"+mChekcoutData.getEmail()+"\nPhoneNo.\t:\t"+mChekcoutData.getPhone()+"\n\n\n" );

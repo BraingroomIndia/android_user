@@ -16,8 +16,10 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ProfileActivity;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
@@ -25,6 +27,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 public class ProfileViewModel extends ViewModel {
+
+    public static final int TYPE_MALE = 1;
+    public static final int TYPE_FEMALE = 2;
 
     public final ObservableField<Boolean> editable = new ObservableField<>(false);
     public final DataItemViewModel name = new DataItemViewModel("");
@@ -41,6 +46,8 @@ public class ProfileViewModel extends ViewModel {
     public final DataItemViewModel dob = new DataItemViewModel("");
     public final DataItemViewModel gender = new DataItemViewModel("");
     public final DataItemViewModel communityClass = new DataItemViewModel("");
+    public final ListDialogViewModel1 genderVm;
+    public final DatePickerViewModel dobVm;
 
     public final ImageUploadViewModel imageUploadVm;
 
@@ -58,7 +65,13 @@ public class ProfileViewModel extends ViewModel {
         this.uiHelper = uiHelper;
         this.messageHelper = messageHelper;
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
-       getProfileObservable = apiService.getProfile(pref.getString(Constants.BG_ID, "")).doOnNext(new Consumer<ProfileData>() {
+        dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
+        LinkedHashMap<String, Integer> ClassTypeApiData = new LinkedHashMap<>();
+        ClassTypeApiData.put("Male", TYPE_MALE);
+        ClassTypeApiData.put("Female", TYPE_FEMALE);
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), new HashMap<String, Integer>(), false, null);
+
+        getProfileObservable = apiService.getProfile(pref.getString(Constants.BG_ID, "")).doOnNext(new Consumer<ProfileData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
                 name.s_1.set(data.getName());
@@ -70,6 +83,7 @@ public class ProfileViewModel extends ViewModel {
                 pgPassoutYear.s_1.set(data.getPgInstitutePassingYear());
                 imageUploadVm.remoteAddress.set(data.getProfileImage());
                 HashMap<String, Integer> selectedCityMap = new HashMap<>();
+                HashMap<String, Integer> selectedInterestMap = new HashMap<>();
                 if (!data.getCity().equals("")) {
                     selectedCityMap.put(data.getCity(), Integer.parseInt(data.getCityId()));
                     cityVm.setSelectedItemsMap(selectedCityMap);
@@ -78,6 +92,13 @@ public class ProfileViewModel extends ViewModel {
                         selectedLocalityMap.put(data.getLocality(), Integer.parseInt(data.getLocalityId()));
                         localityVm.setSelectedItemsMap(selectedLocalityMap);
                     }
+                }
+                if (!data.categoryName.equals("") && !data.getCategoryId().equals("")) {
+                    List<String> categoryName = Arrays.asList(data.getCategoryName().split("\\s*,\\s*"));
+                    List<Integer> categoryId = Arrays.asList(stringToIntArray(data.getCategoryId().split("\\s*,\\s*")));
+                    for (int i = 0; i < categoryId.size(); i++)
+                        selectedInterestMap.put(categoryName.get(i), categoryId.get(i));
+                    categoryVm.setSelectedItemsMap(selectedInterestMap);
                 }
                 uiHelper.invalidateMenu();
             }
@@ -94,6 +115,7 @@ public class ProfileViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next();
+                    localityVm.selectedItemsMap.clear();
                     localityVm.reInit(getLocalityApiObservable(selectedId));
                 }
             }
@@ -121,7 +143,7 @@ public class ProfileViewModel extends ViewModel {
                         // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                         return new ListDialogData1(itemMap);
                     }
-                }), new HashMap<String, Integer>(), false, categoryConsumer);
+                }), new HashMap<String, Integer>(), true, categoryConsumer);
         //Edited By Vikas Goodara
 
         localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Locality", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, null);
@@ -152,17 +174,26 @@ public class ProfileViewModel extends ViewModel {
 
     public void update() {
         ProfileUpdateReq.Snippet snippet = new ProfileUpdateReq.Snippet();
+
+        if (dobVm.date.get().equals("choose")) {
+            messageHelper.show("Please enter your Date of Birth");
+            return;
+        }
+        if (genderVm.selectedItemsMap.isEmpty()) {
+            snippet.setGender("");
+        } else
+            snippet.setGender(genderVm.selectedItemsText.get());
         // TODO: 23/04/17 change hardcoded uuid
-        snippet.setUuid(pref.getString(Constants.UUID,""));
+        snippet.setUuid(pref.getString(Constants.UUID, ""));
         snippet.setFirstName(name.s_1.get());
         snippet.setEmail(email.s_1.get());
         snippet.setMobile(contact.s_1.get());
         snippet.setCityId(cityVm.getSelectedItemsId().size() > 0 ? cityVm.getSelectedItemsId().get(0) : "");
         snippet.setLocalityId(localityVm.getSelectedItemsId().size() > 0 ? localityVm.getSelectedItemsId().get(0) : "");
-        snippet.setCategoryId(categoryVm.getSelectedItemsId().size()>0?categoryVm.getSelectedItemsId().get(0):"");
+        snippet.setCategoryId(categoryVm.getSelectedItemsId().size() > 0 ? categoryVm.getSelectedItemsId().get(0) : "");
         snippet.setInstitutionName(ugInstitution.s_1.get());
         snippet.setGender(gender.s_1.get());
-        snippet.setExpertiseArea(interest.s_1.get());
+        snippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
         snippet.setCommunityId(communityClass.s_1.get());
         snippet.setProfileImage(imageUploadVm.remoteAddress.get());
         messageHelper.showProgressDialog(null, "Updating your profile...");
@@ -195,5 +226,14 @@ public class ProfileViewModel extends ViewModel {
     public void edit() {
         editable.set(true);
         uiHelper.invalidateMenu();
+    }
+
+    public static Integer[] stringToIntArray(String[] a) {
+        Integer[] b = new Integer[a.length];
+        for (int i = 0; i < a.length; i++) {
+            b[i] = Integer.parseInt(a[i]);
+        }
+
+        return b;
     }
 }

@@ -31,6 +31,10 @@ public class ClassSimpleListViewModel extends ViewModel {
                         List<ViewModel> results = new ArrayList<>();
                         if (resp.size() == 0) resp = getDefaultClasses();
                         for (final ClassData elem : resp) {
+                            if (elem.getClassType().equalsIgnoreCase("Online Classes"))
+                                elem.setLocality("Online");
+                            else if (elem.getClassType().equalsIgnoreCase("Webinars"))
+                                elem.setLocality("Webinar");
                             results.add(new ClassItemViewModel(elem, new Action() {
                                 @Override
                                 public void run() throws Exception {

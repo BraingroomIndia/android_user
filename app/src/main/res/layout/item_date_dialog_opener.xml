@@ -7,6 +7,9 @@
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.DatePickerViewModel" />
+        <variable
+            name="editable"
+            type="boolean" />
 
     </data>
     <RelativeLayout
@@ -15,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin_med"
         android:background="@drawable/stroke_gray"
-        android:onClick="@{vm.onOpenerClick}"
+        android:onClick="@{!editable ? vm.onOpenerClick : null}"
         android:paddingLeft="@dimen/padding_large">
 
         <TextView

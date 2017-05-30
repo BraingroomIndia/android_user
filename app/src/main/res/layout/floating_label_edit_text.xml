@@ -5,6 +5,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="android.text.InputType"/>
 
         <variable
             name="data"
@@ -16,6 +17,10 @@
 
         <variable
             name="editable"
+            type="boolean" />
+
+        <variable
+            name="password"
             type="boolean" />
 
     </data>
@@ -33,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="@{editable}"
+            android:inputType="@{password ? (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) : InputType.TYPE_CLASS_TEXT}"
             android:text="@={data.s_1}"
             android:textColor="@color/colorTextDark"
             app:font='@{@string/robotoRegular}' />

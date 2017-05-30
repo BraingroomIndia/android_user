@@ -96,17 +96,21 @@
                 app:editable="@{vm.editable}"
                 app:hintText='@{"PG Passout Year"}' />
 
-            <include
-                layout="@layout/floating_label_edit_text"
-                app:data="@{vm.dob}"
-                app:editable="@{vm.editable}"
-                app:hintText='@{"Date of birth"}' />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_med">
+
+                <include
+                    layout="@layout/item_date_dialog_opener"
+                    app:editable="@{!vm.editable}"
+                    app:vm="@{vm.dobVm}" />
+            </LinearLayout>
 
             <include
-                layout="@layout/floating_label_edit_text"
-                app:data="@{vm.gender}"
+                layout="@layout/item_list_dialog_opener"
                 app:editable="@{vm.editable}"
-                app:hintText='@{"Gender"}' />
+                app:vm="@{vm.genderVm}" />
 
             <!--Edited By Vikas Godara-->
             <include

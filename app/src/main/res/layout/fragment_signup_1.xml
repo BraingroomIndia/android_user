@@ -75,13 +75,15 @@
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.password}"
                     app:editable="@{true}"
-                    app:hintText='@{"Password"}' />
+                    app:hintText='@{"Password"}'
+                    app:password="@{true}"/>
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.confirmPassword}"
                     app:editable="@{true}"
-                    app:hintText='@{"Confirm password"}' />
+                    app:hintText='@{"Confirm password"}'
+                    app:password="@{true}"/>
 
                 <include
                     layout="@layout/floating_label_edit_text"

@@ -21,6 +21,9 @@ public class RazorSuccessReq {
         @SerializedName("user_id")
         public String userId;
 
+        @SerializedName("is_guest")
+        int isGuest;
+
         @SerializedName("user_email")
         public String userEmail;
 

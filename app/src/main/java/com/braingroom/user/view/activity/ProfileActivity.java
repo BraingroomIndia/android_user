@@ -55,10 +55,13 @@ public class ProfileActivity extends BaseActivity {
         }
         if (item.getItemId() == R.id.action_done) {
             ((ProfileViewModel) vm).update();
-            getNavigator().navigateActivity(ProfileActivity.class,null);
+            getNavigator().navigateActivity(ProfileActivity.class, null);
         }
         if (item.getItemId() == R.id.action_discard) {
             ((ProfileViewModel) vm).revertData();
+        }
+        if (item.getItemId() == android.R.id.home) {
+            getNavigator().navigateActivity(HomeActivity.class, null);
         }
         return true;
     }
