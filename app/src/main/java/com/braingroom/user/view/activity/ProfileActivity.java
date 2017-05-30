@@ -60,8 +60,6 @@ public class ProfileActivity extends BaseActivity {
         if (item.getItemId() == R.id.action_discard) {
             ((ProfileViewModel) vm).revertData();
         }
-        if (item.getItemId()==android.R.id.home)
-            onBackPressed();
         return true;
     }
 

@@ -82,7 +82,7 @@ public class LoginActivity extends BaseActivity implements
                             @Override
                             public void onCompleted(JSONObject user, GraphResponse graphResponse) {
                                 ((LoginViewmodel) vm).setFacebookUser(user);
-                                ((LoginViewmodel) vm).socialLogin("");
+                                ((LoginViewmodel) vm).socialLogin("facebook");
                             }
                         });
                         Bundle parameters = new Bundle();
@@ -214,7 +214,7 @@ public class LoginActivity extends BaseActivity implements
                 GoogleSignInAccount acct = result.getSignInAccount();
                 ((LoginViewmodel) vm).setGoogleAccDetails(acct);
 //                showMandatoryEmailPopup();
-                ((LoginViewmodel) vm).socialLogin("");
+                ((LoginViewmodel) vm).socialLogin("google");
             } else {
                 getMessageHelper().show("Unable to sign into google");
             }

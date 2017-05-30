@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.ActivityClassList1Binding;
@@ -119,6 +120,15 @@ public class ClassListActivity extends BaseActivity {
         };
         return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(), getIntentString("categoryId"), getIntentString("searchQuery"), getIntentString("communityId"), uiHelper);
     }
+/*    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
 
     @Override
     protected int getLayoutId() {

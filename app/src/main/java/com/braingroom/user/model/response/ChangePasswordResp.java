@@ -3,6 +3,7 @@ package com.braingroom.user.model.response;
 /**
  * Created by godara on 18/05/17.
  */
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -10,20 +11,17 @@ import java.util.List;
 import lombok.Getter;
 
 
-public class ChangePasswordResp {
+public class ChangePasswordResp extends BaseResp {
+
+
+    @SerializedName("sync_time")
+    String syncTime;
     @Getter
     @SerializedName("braingroom")
-    Snippet data;
-    public static class Snippet{
-        @Getter
-        @SerializedName("res_code")
-        String resCode;
+    List<Snippet> data;
 
-        @Getter
-        @SerializedName("res_msg")
-        String resMsg;
+    public static class Snippet {
 
-        @SerializedName("sync_time")
-        String syncTime;
+
     }
 }

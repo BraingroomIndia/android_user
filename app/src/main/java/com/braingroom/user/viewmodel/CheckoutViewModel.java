@@ -46,6 +46,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
 
+import static com.braingroom.user.FCMInstanceIdService.TAG;
+
 public class CheckoutViewModel extends ViewModel {
 
     public final int GUEST_USER = 1;
@@ -351,6 +353,9 @@ public class CheckoutViewModel extends ViewModel {
                         preFill.put("email", chekcoutData.getEmail());
                         preFill.put("contact", chekcoutData.getPhone());
                         options.put("prefill", preFill);
+                        Log.d(TAG, "accept: name\t:\t"+classData.getClassTopic()+"\ndescription, By: " + classData.getTeacher()
+                        +"\namount\t:\t"+ Integer.parseInt(chekcoutData.getAmount()) * 100+"\nemail\t:\t"+ chekcoutData.getEmail()
+                                +"\ncontact\t:\t"+ chekcoutData.getPhone());
                         uiHelper.startRazorpayPayment(options);
                     }
 
@@ -385,13 +390,16 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setAmount("" + totalAmountAfterPromo.get());
         snippet.setClassId(classData.getId());
         // TODO remove hardcoding
-        snippet.setUserId(pref.getString(Constants.BG_ID,""));
+        snippet.setUserId(mChekcoutData.getUdf1());
         snippet.setLocalityId(selectedLocalityId);
         snippet.setTxnid(razorpayId);
         snippet.setUserEmail(mChekcoutData.getEmail());
         snippet.setUserMobile(mChekcoutData.getPhone());
         // TODO: 19/04/17 remove hardcoded user id
         snippet.setUserId(pref.getString(Constants.BG_ID,""));
+        Log.d(TAG, "\n\n\nhandleRazorpaySuccess: amount\t:\t" +totalAmountAfterPromo.get()+"\nclassID\t:\t"+classData.getId()+
+                "\nUserID\t:\t"+pref.getString(Constants.BG_ID,"")+"LocalityId\t:\t"+selectedLocalityId+"\n TxnId\t:\t"+razorpayId+
+                "\nEmailId\t:\t"+mChekcoutData.getEmail()+"\nPhoneNo.\t:\t"+mChekcoutData.getPhone()+"\n\n\n" );
 
         List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
         for (ViewModel nonReactiveItem : nonReactiveItems) {

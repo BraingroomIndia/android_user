@@ -119,15 +119,15 @@ public class LoginViewmodel extends ViewModel {
         });
     }
 
-    public void socialLogin(final String contactNumber) {
+    public void socialLogin(final String type) {
         String name = "", email = "", picture = null, socialId = "", fcmToken;
-        if (facebookUser != null) {
+        if (type.equals("facebook")) {
             name = facebookUser.optString("name");
             picture = facebookUser.optJSONObject("picture").optJSONObject("data").optString("url");
             email = facebookUser.optString("email");
             socialId = facebookUser.optString("id");
         }
-        if (googleAccDetails != null) {
+        if (type.equals("google")) {
             name = googleAccDetails.getDisplayName();
             if (googleAccDetails.getPhotoUrl() != null)
                 picture = googleAccDetails.getPhotoUrl().toString();
@@ -142,7 +142,7 @@ public class LoginViewmodel extends ViewModel {
         fcmToken = pref.getString(Constants.FCM_TOKEN, "");
 
 
-        apiService.socialLogin(name, picture, email, socialId, fcmToken, contactNumber).subscribe(new Consumer<LoginResp>() {
+        apiService.socialLogin(name, picture, email, socialId, fcmToken, "").subscribe(new Consumer<LoginResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
 

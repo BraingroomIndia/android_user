@@ -2,6 +2,7 @@ package com.braingroom.user.model;
 
 import android.content.SharedPreferences;
 
+import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassListData;
 import com.braingroom.user.model.dto.ConnectFilterData;
@@ -13,6 +14,7 @@ import com.braingroom.user.model.request.*;
 import com.braingroom.user.model.response.*;
 
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.view.activity.BaseActivity;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -48,7 +50,9 @@ public class DataflowService {
     @Inject
     @Named("defaultPref")
     public SharedPreferences pref;
-    private InternetConnection internetConnection;
+
+
+    private InternetConnection internetConnection=new InternetConnection(UserApplication.getInstance());
 
     @Inject
     public DataflowService() {
@@ -142,7 +146,7 @@ public class DataflowService {
     }
 
     public Observable<WishlistResp> addToWishlist(String classId) {
-        return api.addToWishlist(new WishlistReq(new WishlistReq.Snippet("fas_57b69d10a6a23", classId))).subscribeOn(Schedulers.io())
+        return api.addToWishlist(new WishlistReq(new WishlistReq.Snippet(pref.getString(Constants.UUID, ""), classId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -202,7 +206,7 @@ public class DataflowService {
 
 
     public Observable<List<ClassData>> getWishList() {
-        return api.getWishlist(new CommonUuidReq(new CommonUuidReq.Snippet("fas_57b69d10a6a23"))).subscribeOn(Schedulers.io())
+        return api.getWishlist(new CommonUuidReq(new CommonUuidReq.Snippet(pref.getString(Constants.UUID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
                     @Override
                     public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
@@ -210,14 +214,15 @@ public class DataflowService {
                         //Edited by Vikas Godara
                         int i = 0;
                         for (ClassListResp.Snippet classDetail : classListResp.getData()) {
+
                             ClassData classData = new ClassData();
-                            classData.setImage(classDetail.getPhoto());
+                            classData.setImage(classDetail.getPicName());
                             classData.setClassTopic(classDetail.getClassTopic());
                             if (classDetail.getLocation() != null)
-                            classData.setLocality(classDetail.location.get(0).getLocality());
+                                classData.setLocality(classDetail.location.get(0).getLocality());
                             classData.setPricingType(classDetail.getPricingType());
                             if (classDetail.getClassLevels() != null)
-                            classData.setPrice(classDetail.classLevels.get(0).getPrice());
+                                classData.setPrice(classDetail.classLevels.get(0).getPrice());
                             classData.setNoOfSession(classDetail.getNoOfSession());
                             classData.setClassDuration(classDetail.getClassDuration());
                             classData.setClassType(classDetail.getClassType());
@@ -309,228 +314,236 @@ public class DataflowService {
                 });
     }
 
-    public Observable<ClassData> getClassDetail(String classId) {
-        return api.getClassDetail(new ClassDetailReq(new ClassDetailReq.Snippet(classId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, ClassData>() {
-                    @Override
-                    public ClassData apply(@NonNull ClassListResp resp) throws Exception {
-                        return gson.fromJson(gson.toJson(resp.getData().get(0)), ClassData.class);
+    public Observable<ClassData> getClassDetail(final String classId) {
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends ClassData>>() {
+            @Override
+            public ObservableSource<? extends ClassData> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus) {
+                    return api.getClassDetail(new ClassDetailReq(new ClassDetailReq.Snippet(classId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, ClassData>() {
+                                @Override
+                                public ClassData apply(@NonNull ClassListResp resp) throws Exception {
+                                    return gson.fromJson(gson.toJson(resp.getData().get(0)), ClassData.class);
+                                }
+                            });
+                } else
+                    return Observable.empty();
 
-                    }
-                });
+            }
+        });
     }
 
-    public Observable<List<ClassData>> getIndigeneousClass() {
+public Observable<List<ClassData>>getIndigeneousClass(){
         return api.getIndianClass().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                        }
-                        return dataList;
-                    }
-                });
-    }
+        .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>(){
+@Override
+public List<ClassData> apply(@NonNull ClassListResp classListResp)throws Exception{
+        List<ClassData> dataList=new ArrayList<>();
+        for(ClassListResp.Snippet snippet:classListResp.getData()){
+        dataList.add(gson.fromJson(gson.toJson(snippet),ClassData.class));
+        }
+        return dataList;
+        }
+        });
+        }
 
-    public Observable<List<ClassData>> getFeaturedClass() {
+public Observable<List<ClassData>>getFeaturedClass(){
         return api.getFeaturedClass().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                        }
-                        return dataList;
-                    }
-                });
-    }
+        .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>(){
+@Override
+public List<ClassData> apply(@NonNull ClassListResp classListResp)throws Exception{
+        List<ClassData> dataList=new ArrayList<>();
+        for(ClassListResp.Snippet snippet:classListResp.getData()){
+        dataList.add(gson.fromJson(gson.toJson(snippet),ClassData.class));
+        }
+        return dataList;
+        }
+        });
+        }
 
-    public Observable<List<ClassData>> getTrendingClass() {
+public Observable<List<ClassData>>getTrendingClass(){
         return api.getTrendingClass().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                        }
-                        return dataList;
-                    }
-                });
-    }
+        .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>(){
+@Override
+public List<ClassData> apply(@NonNull ClassListResp classListResp)throws Exception{
+        List<ClassData> dataList=new ArrayList<>();
+        for(ClassListResp.Snippet snippet:classListResp.getData()){
+        dataList.add(gson.fromJson(gson.toJson(snippet),ClassData.class));
+        }
+        return dataList;
+        }
+        });
+        }
 
-    @android.support.annotation.NonNull
-    private MultipartBody.Part prepareFilePart(String partName, String fileName, String type) {
-        File file = null;
-        file = new File(fileName);
-        RequestBody requestFile =
-                RequestBody.create(
-                        MediaType.parse(type),
-                        file
-                );
-        return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
-    }
+@android.support.annotation.NonNull
+private MultipartBody.Part prepareFilePart(String partName,String fileName,String type){
+        File file=null;
+        file=new File(fileName);
+        RequestBody requestFile=
+        RequestBody.create(
+        MediaType.parse(type),
+        file
+        );
+        return MultipartBody.Part.createFormData(partName,file.getName(),requestFile);
+        }
 
 
-    public Observable<ExploreResp> getExploreDashboard(String latitude, String longitude) {
+public Observable<ExploreResp> getExploreDashboard(String latitude,String longitude){
 
-        return api.getExploreDashboard(new ExploreReq(new ExploreReq.Snippet(null, null, null, latitude, longitude))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return api.getExploreDashboard(new ExploreReq(new ExploreReq.Snippet(null,null,null,latitude,longitude))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
 
-    }
+        }
 
-    public Observable<ExploreResp> exploreFilter(String categoryId, String location, String distance, String latitude, String longitude) {
+public Observable<ExploreResp> exploreFilter(String categoryId,String location,String distance,String latitude,String longitude){
 
-        return api.exploreFilter(new ExploreReq(new ExploreReq.Snippet(categoryId, location, distance, latitude, longitude))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        return api.exploreFilter(new ExploreReq(new ExploreReq.Snippet(categoryId,location,distance,latitude,longitude))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<MarkerDataResp> getMarkerData(String latitude, String longitude) {
-        return api.exploreMarkerData(new MarkerDataReq(new MarkerDataReq.Snippet(latitude, longitude))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+public Observable<MarkerDataResp> getMarkerData(String latitude,String longitude){
+        return api.exploreMarkerData(new MarkerDataReq(new MarkerDataReq.Snippet(latitude,longitude))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<PayUCheckoutData> getPayUCheckoutData(PayUBookingDetailsReq req, final String promoId, final String promoVal) {
+public Observable<PayUCheckoutData> getPayUCheckoutData(PayUBookingDetailsReq req,final String promoId,final String promoVal){
 
         return api.getBookingDetails(req)
-                .flatMap(new Function<PayUBookingDetailsResp, ObservableSource<PayUCheckoutData>>() {
-                    @Override
-                    public ObservableSource<PayUCheckoutData> apply(@NonNull PayUBookingDetailsResp resp) throws Exception {
+        .flatMap(new Function<PayUBookingDetailsResp, ObservableSource<PayUCheckoutData>>(){
+@Override
+public ObservableSource<PayUCheckoutData> apply(@NonNull PayUBookingDetailsResp resp)throws Exception{
 
-                        final PayUHashGenReq.Snippet snippet = new PayUHashGenReq.Snippet();
-                        snippet.setPromoId(promoId);
-                        snippet.setPromoValue(promoVal);
-                        snippet.setAmount(resp.getData().get(0).getAmount());
-                        snippet.setEmail(resp.getData().get(0).getEmail());
-                        snippet.setFirstName(resp.getData().get(0).getFirstname());
-                        snippet.setFUrl(resp.getData().get(0).getFurl());
-                        snippet.setKey(resp.getData().get(0).getKey());
-                        snippet.setPhone(resp.getData().get(0).getPhone());
-                        snippet.setProductInfo(resp.getData().get(0).getProductinfo());
-                        snippet.setServiceProvider(resp.getData().get(0).getServiceProvider());
-                        snippet.setSUrl(resp.getData().get(0).getSurl());
-                        snippet.setTxnId(resp.getData().get(0).getTxnid());
-                        snippet.setUdf1(resp.getData().get(0).getUdf1());
-                        snippet.setUdf2(resp.getData().get(0).getUdf2());
-                        snippet.setUdf3(resp.getData().get(0).getUdf3());
-                        snippet.setUdf4(resp.getData().get(0).getUdf4());
+final PayUHashGenReq.Snippet snippet=new PayUHashGenReq.Snippet();
+        snippet.setPromoId(promoId);
+        snippet.setPromoValue(promoVal);
+        snippet.setAmount(resp.getData().get(0).getAmount());
+        snippet.setEmail(resp.getData().get(0).getEmail());
+        snippet.setFirstName(resp.getData().get(0).getFirstname());
+        snippet.setFUrl(resp.getData().get(0).getFurl());
+        snippet.setKey(resp.getData().get(0).getKey());
+        snippet.setPhone(resp.getData().get(0).getPhone());
+        snippet.setProductInfo(resp.getData().get(0).getProductinfo());
+        snippet.setServiceProvider(resp.getData().get(0).getServiceProvider());
+        snippet.setSUrl(resp.getData().get(0).getSurl());
+        snippet.setTxnId(resp.getData().get(0).getTxnid());
+        snippet.setUdf1(resp.getData().get(0).getUdf1());
+        snippet.setUdf2(resp.getData().get(0).getUdf2());
+        snippet.setUdf3(resp.getData().get(0).getUdf3());
+        snippet.setUdf4(resp.getData().get(0).getUdf4());
 
-                        PayUHashGenReq req = new PayUHashGenReq(snippet);
-                        return api.generatePayUHash(req).map(new Function<PayUHashResp, PayUCheckoutData>() {
-                            @Override
-                            public PayUCheckoutData apply(@NonNull PayUHashResp payUHashResp) throws Exception {
-                                PayUCheckoutData payUdata = gson.fromJson(gson.toJson(snippet), PayUCheckoutData.class);
-                                payUdata.setPaymentHash(payUHashResp.getData().get(0).getPaymentHash());
-                                payUdata.setVasMobileSdkHash(payUHashResp.getData().get(0).getVasMobileSdkHash());
-                                payUdata.setPaymentMobileSdkHash(payUHashResp.getData().get(0).getPaymentMobileSdkHash());
-                                payUdata.setUserCardHash(payUHashResp.getData().get(0).getUserCardHash());
-                                return payUdata;
-                            }
-                        });
-                    }
-                }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        PayUHashGenReq req=new PayUHashGenReq(snippet);
+        return api.generatePayUHash(req).map(new Function<PayUHashResp, PayUCheckoutData>(){
+@Override
+public PayUCheckoutData apply(@NonNull PayUHashResp payUHashResp)throws Exception{
+        PayUCheckoutData payUdata=gson.fromJson(gson.toJson(snippet),PayUCheckoutData.class);
+        payUdata.setPaymentHash(payUHashResp.getData().get(0).getPaymentHash());
+        payUdata.setVasMobileSdkHash(payUHashResp.getData().get(0).getVasMobileSdkHash());
+        payUdata.setPaymentMobileSdkHash(payUHashResp.getData().get(0).getPaymentMobileSdkHash());
+        payUdata.setUserCardHash(payUHashResp.getData().get(0).getUserCardHash());
+        return payUdata;
+        }
+        });
+        }
+        }).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<RazorSuccessResp> postRazorpaySuccess(RazorSuccessReq req) {
+public Observable<RazorSuccessResp> postRazorpaySuccess(RazorSuccessReq req){
         return api.postRazorPaySuccess(req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<VendorReviewResp> getVendorReviews(String vendorId) {
+public Observable<VendorReviewResp> getVendorReviews(String vendorId){
         return api.getVendorProfile(new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorReviewResp>() {
-                    @Override
-                    public VendorReviewResp apply(@NonNull VendorProfileResp resp) throws Exception {
-                        VendorReviewResp dataList;
-                        List<VendorReviewResp.Snippet> snippetList = new ArrayList<VendorReviewResp.Snippet>();
-                        int i = 0;
-                        for (VendorProfileResp.Snippet.Review review : resp.getData().get(i).getReview()) {
-                            VendorReviewResp.Snippet snippet = (new VendorReviewResp.
-                                    Snippet(null, null, review.text, review.by, null, null, null, null, null));
-                            snippetList.add(gson.fromJson(gson.toJson(snippet), VendorReviewResp.Snippet.class));
+        .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorReviewResp>(){
+@Override
+public VendorReviewResp apply(@NonNull VendorProfileResp resp)throws Exception{
+        VendorReviewResp dataList;
+        List<VendorReviewResp.Snippet>snippetList=new ArrayList<VendorReviewResp.Snippet>();
+        int i=0;
+        for(VendorProfileResp.Snippet.Review review:resp.getData().get(i).getReview()){
+        VendorReviewResp.Snippet snippet=(new VendorReviewResp.
+        Snippet(null,null,review.text,review.by,null,null,null,null,null));
+        snippetList.add(gson.fromJson(gson.toJson(snippet),VendorReviewResp.Snippet.class));
 
-                            i++;
+        i++;
 
-                        }
-                        dataList = new VendorReviewResp(snippetList);
+        }
+        dataList=new VendorReviewResp(snippetList);
 
-                        return dataList;
-                    }
-                });
-    }
+        return dataList;
+        }
+        });
+        }
 
-    public Observable<CommonIdResp> getCountry() {
+public Observable<CommonIdResp> getCountry(){
         return api.getCountry().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<CommonIdResp> getState(String searchKey) {
+public Observable<CommonIdResp> getState(String searchKey){
         return api.getState(new StateReq(new StateReq.Snippet(searchKey))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<CommonIdResp> getInstitute(String countryId) {
+public Observable<CommonIdResp> getInstitute(String countryId){
         return api.getInstitute(new InstituteReq(new InstituteReq.Snippet(""))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<LikeResp> like(String postId) {
-        return api.like(new LikeReq(new LikeReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+public Observable<LikeResp> like(String postId){
+        return api.like(new LikeReq(new LikeReq.Snippet(pref.getString(Constants.BG_ID,""),postId))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<ReportResp> report(String postId) {
-        return api.report(new ReportReq(new ReportReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+public Observable<ReportResp> report(String postId){
+        return api.report(new ReportReq(new ReportReq.Snippet(pref.getString(Constants.BG_ID,""),postId))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<CategoryTreeResp> getCategoryTree() {
+public Observable<CategoryTreeResp> getCategoryTree(){
         return api.getCategories()
-                .flatMap(new Function<CategoryResp, Observable<CategoryTreeResp>>() {
-                             @Override
-                             public Observable<CategoryTreeResp> apply(@NonNull CategoryResp resp) throws Exception {
-                                 List<Observable<SegmentResp>> segmentObservableList = new ArrayList<>();
-                                 for (CategoryResp.Snippet category : resp.getData()) {
-                                     segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet(category.getId()))));
-                                 }
+        .flatMap(new Function<CategoryResp, Observable<CategoryTreeResp>>(){
+@Override
+public Observable<CategoryTreeResp> apply(@NonNull CategoryResp resp)throws Exception{
+        List<Observable<SegmentResp>>segmentObservableList=new ArrayList<>();
+        for(CategoryResp.Snippet category:resp.getData()){
+        segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet(category.getId()))));
+        }
 
-                                 final Map<String, CategoryResp.Snippet> categoryMap = new HashMap<>();
-                                 for (CategoryResp.Snippet snippet : resp.getData()) {
-                                     categoryMap.put(snippet.getId(), snippet);
-                                 }
+final Map<String, CategoryResp.Snippet>categoryMap=new HashMap<>();
+        for(CategoryResp.Snippet snippet:resp.getData()){
+        categoryMap.put(snippet.getId(),snippet);
+        }
 
-                                 return Observable.zip(segmentObservableList, new Function<Object[], CategoryTreeResp>() {
-                                     @Override
-                                     public CategoryTreeResp apply(@NonNull Object[] segments) throws Exception {
-                                         List<CategoryTreeResp.Snippet> rootSnippetList = new ArrayList<>();
-                                         CategoryTreeResp.Snippet rootSnippet;
-                                         for (Object segmentObj : segments) {
-                                             SegmentResp segment = (SegmentResp) segmentObj;
-                                             rootSnippet = new CategoryTreeResp.Snippet(categoryMap.get(segment.getCategoryId()), segment.getData());
-                                             rootSnippetList.add(rootSnippet);
-                                         }
-                                         return new CategoryTreeResp(1, rootSnippetList);
-                                     }
+        return Observable.zip(segmentObservableList,new Function<Object[],CategoryTreeResp>(){
+@Override
+public CategoryTreeResp apply(@NonNull Object[]segments)throws Exception{
+        List<CategoryTreeResp.Snippet>rootSnippetList=new ArrayList<>();
+        CategoryTreeResp.Snippet rootSnippet;
+        for(Object segmentObj:segments){
+        SegmentResp segment=(SegmentResp)segmentObj;
+        rootSnippet=new CategoryTreeResp.Snippet(categoryMap.get(segment.getCategoryId()),segment.getData());
+        rootSnippetList.add(rootSnippet);
+        }
+        return new CategoryTreeResp(1,rootSnippetList);
+        }
 
-                                 });
-                             }
+        });
+        }
 
-                         }
-                );
-    }
+        }
+        );
+        }
 
-    public Observable<ConnectFeedResp> getConnectFeed(ConnectFilterData connectFilterData, int pageIndex) {
-        ConnectFeedReq req = connectFilterData.getFilterReq();
-        req.getData().setUserId(pref.getString(Constants.BG_ID, ""));
-        return api.getConnectFeedData(pageIndex > 0 ? pageIndex + "" : "", req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+public Observable<ConnectFeedResp> getConnectFeed(ConnectFilterData connectFilterData,int pageIndex){
+        ConnectFeedReq req=connectFilterData.getFilterReq();
+        req.getData().setUserId(pref.getString(Constants.BG_ID,""));
+        return api.getConnectFeedData(pageIndex>0?pageIndex+"":"",req).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<CommentListResp> getComments(String postId) {
+public Observable<CommentListResp> getComments(String postId){
 //        CommentListResp.Snippet snippet = new CommentListResp.Snippet();
 //        CommentListResp.Reply reply = new CommentListResp.Reply();
 //        snippet.setComment("The menu itself created in main FragmentActivity. I want to change this item's icon programmatically depending on the open Fragment and, obviously, have different actions when the user hits this button. I tried several things to do that, but nothing worked. The last thing I tried was this code in my Fragment's onCreateView method:");
@@ -553,17 +566,17 @@ public class DataflowService {
 //        result.addAll(Collections.nCopies(20, snippet));
 //        return Observable.just(new CommentListResp(1, result));
 
-        return api.getComments(new PostRelatedReq(new PostRelatedReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        return api.getComments(new PostRelatedReq(new PostRelatedReq.Snippet(pref.getString(Constants.BG_ID,""),postId))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<CommentViewReply> getReplies(String commentId) {
-        return api.getReplies(new CommentViewReplyReq(new CommentViewReplyReq.Snippet(pref.getString(Constants.BG_ID, ""), commentId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+public Observable<CommentViewReply> getReplies(String commentId){
+        return api.getReplies(new CommentViewReplyReq(new CommentViewReplyReq.Snippet(pref.getString(Constants.BG_ID,""),commentId))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
 
-    public Observable<LikedUsersListResp> getLikedUsers(String postId) {
+public Observable<LikedUsersListResp> getLikedUsers(String postId){
 //        LikedUsersListResp.Snippet snippet = new LikedUsersListResp.Snippet();
 //        snippet.setUserImage("https://lh5.googleusercontent.com/-n-KJMm8mENs/AAAAAAAAAAI/AAAAAAAAAHY/uG2vXBFifNU/photo.jpg?sz=50");
 //        snippet.setUserName("Himanshu Agrahari");
@@ -571,63 +584,63 @@ public class DataflowService {
 //        likesList.addAll(Collections.nCopies(5, snippet));
 //        return Observable.just(new LikedUsersListResp(likesList));
 
-        return api.getPostLikes(new PostRelatedReq(new PostRelatedReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        return api.getPostLikes(new PostRelatedReq(new PostRelatedReq.Snippet(pref.getString(Constants.BG_ID,""),postId))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
 
-    public Observable<BaseResp> postArticleVideos(ConnectPostReq.ArticleAndVideos req) {
+public Observable<BaseResp> postArticleVideos(ConnectPostReq.ArticleAndVideos req){
         return api.postArticleVideos(req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<BaseResp> postDecideDiscuss(ConnectPostReq.DecideAndDiscuss req) {
+public Observable<BaseResp> postDecideDiscuss(ConnectPostReq.DecideAndDiscuss req){
         return api.postDecideDiscuss(req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<BaseResp> postKnowledgeNuggets(ConnectPostReq.KnowledgeNuggets req) {
+public Observable<BaseResp> postKnowledgeNuggets(ConnectPostReq.KnowledgeNuggets req){
         return api.postKnowledgeNuggets(req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<BaseResp> postBuyAndSell(ConnectPostReq.BuyAndSell req) {
+public Observable<BaseResp> postBuyAndSell(ConnectPostReq.BuyAndSell req){
         return api.postBuyAndSell(req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<BaseResp> postLearningPartner(ConnectPostReq.LearningPartner req) {
+public Observable<BaseResp> postLearningPartner(ConnectPostReq.LearningPartner req){
         return api.postLearningPartner(req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<CommentReplyResp> commentReply(String postId, String replyId, String text) {
-        return api.commentReply(new CommentReplyReq(new CommentReplyReq.Snippet(pref.getString(Constants.BG_ID, ""), postId, replyId, text))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+public Observable<CommentReplyResp> commentReply(String postId,String replyId,String text){
+        return api.commentReply(new CommentReplyReq(new CommentReplyReq.Snippet(pref.getString(Constants.BG_ID,""),postId,replyId,text))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<GuestUserResp> addGuestUser(String name, String email, String number) {
-        return api.addGuestUser(new GuestUserReq(new GuestUserReq.Snippet(name, email, number))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+public Observable<GuestUserResp> addGuestUser(String name,String email,String number){
+        return api.addGuestUser(new GuestUserReq(new GuestUserReq.Snippet(name,email,number))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<NotificationListResp> getNotifications() {
+public Observable<NotificationListResp> getNotifications(){
         return api.getUserNotifications(new CommonUserIdReq(new CommonUserIdReq.Snippet("1132"))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<ConnectFeedResp> getFeedsByPostID(String postId) {
-        return api.getFeedsByPostID(new ConnectPostByIdReq(new ConnectPostByIdReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+public Observable<ConnectFeedResp> getFeedsByPostID(String postId){
+        return api.getFeedsByPostID(new ConnectPostByIdReq(new ConnectPostByIdReq.Snippet(pref.getString(Constants.BG_ID,""),postId))).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+        }
 
-    public Observable<MessageListResp> getMessages() {
+public Observable<MessageListResp> getMessages(){
         // TODO: 21/05/17 remove hardcoded userid
-        List<MessageListResp.Snippet> dataList = new ArrayList<>();
-        MessageListResp.Snippet snippet = new MessageListResp.Snippet();
+        List<MessageListResp.Snippet>dataList=new ArrayList<>();
+        MessageListResp.Snippet snippet=new MessageListResp.Snippet();
         snippet.setSenderId("0");
         snippet.setRecieverId("1");
-        MessageListResp.Message message = new MessageListResp.Message();
+        MessageListResp.Message message=new MessageListResp.Message();
         message.setAddDate("12 sept");
         message.setMessage("test message himanshu test message test test himanshu test message");
         message.setId("1");
@@ -635,33 +648,33 @@ public class DataflowService {
         snippet.setMessage(message);
         snippet.setSenderName("Himanshu Agrahari");
         snippet.setSenderPic("https://www.braingroom.com/img/Buyer/profile/201705100651530709511001494399113.jpg");
-        dataList.addAll(Collections.nCopies(20, snippet));
+        dataList.addAll(Collections.nCopies(20,snippet));
 
-        MessageListResp resp = new MessageListResp(dataList);
+        MessageListResp resp=new MessageListResp(dataList);
         return Observable.just(resp);
 //        return api.getMessages(new MessageListReq(new MessageListReq.Snippet("39"))).subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread());
-    }
+        }
 
-    public Observable<ChatListResp> getChatMessages(String senderId) {
+public Observable<ChatListResp> getChatMessages(String senderId){
         // TODO: 21/05/17 remove hardcoded userid
-        List<ChatListResp.Snippet> dataList = new ArrayList<>();
-        ChatListResp.Snippet chat1 = new ChatListResp.Snippet();
+        List<ChatListResp.Snippet>dataList=new ArrayList<>();
+        ChatListResp.Snippet chat1=new ChatListResp.Snippet();
         chat1.setText("From sender msg 1");
         chat1.setUserId("0");
         chat1.setTime("1495524123");
 
-        ChatListResp.Snippet chat2 = new ChatListResp.Snippet();
+        ChatListResp.Snippet chat2=new ChatListResp.Snippet();
         chat2.setText("From sender msg 2");
         chat2.setUserId("0");
         chat2.setTime("1495524123");
 
-        ChatListResp.Snippet chat3 = new ChatListResp.Snippet();
+        ChatListResp.Snippet chat3=new ChatListResp.Snippet();
         chat3.setText("From sender msg 3");
         chat3.setUserId("0");
         chat3.setTime("1495524123");
 
-        ChatListResp.Snippet chat4 = new ChatListResp.Snippet();
+        ChatListResp.Snippet chat4=new ChatListResp.Snippet();
         chat4.setText("From me msg 1");
         chat4.setUserId("1");
         chat4.setTime("1495524123");
@@ -671,11 +684,11 @@ public class DataflowService {
         dataList.add(chat3);
         dataList.add(chat4);
 
-        ChatListResp resp = new ChatListResp(dataList);
-        return Observable.just(resp);
+        ChatListResp resp=new ChatListResp(dataList);
+        return Observable.just(null);
 //        return api.getMessages(new MessageListReq(new MessageListReq.Snippet("39"))).subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread());
-    }
+        }
 
 
-}
+        }

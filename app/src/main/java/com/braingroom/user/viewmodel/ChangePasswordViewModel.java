@@ -62,7 +62,7 @@ public class ChangePasswordViewModel extends ViewModel {
 
             @Override
             public void accept(@io.reactivex.annotations.NonNull ChangePasswordResp changePasswordResp) throws Exception {
-                if (changePasswordResp.getData().getResMsg().equals("Password Changed Successfully")) {
+                if (changePasswordResp.getData()!=null) {
                     messageHelper.dismissActiveProgress();
                     logOut();
                     navigator.navigateActivity(LoginActivity.class, null);
