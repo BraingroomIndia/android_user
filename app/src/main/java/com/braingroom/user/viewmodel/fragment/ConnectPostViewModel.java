@@ -3,6 +3,7 @@ package com.braingroom.user.viewmodel.fragment;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ListDialogData1;
@@ -24,11 +25,16 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
+import static lombok.libs.org.objectweb.asm.commons.GeneratorAdapter.AND;
+
 public class ConnectPostViewModel extends ViewModel {
+
+    private String TAG = getClass().getCanonicalName();
 
     public static final int POST_TYPE_KNOWLEDGE_NUGGETS = 1;
     public static final int POST_TYPE_BUY_N_SELL = 2;
     public static final int POST_TYPE_LEARNING_PARTNERS = 3;
+    public static final int POST_TYPE_DISCUSS_AND_DECIDE = 4;
 
 
     public final DataItemViewModel title, youtubeAddress, classPageUrl;
@@ -37,6 +43,7 @@ public class ConnectPostViewModel extends ViewModel {
     public final ListDialogViewModel1 postTypeVm, groupVm, countryVm, stateVm, cityVm, localityVm;
     public final Action onSubmitClicked;
     public Navigator navigator;
+    private String postType;
     public Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer,postConsumer;
 
 
@@ -46,8 +53,9 @@ public class ConnectPostViewModel extends ViewModel {
     public ObservableBoolean dateField=new ObservableBoolean(false);
     public ObservableBoolean activityField =new ObservableBoolean(false);
 
-    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory) {
+    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, String postType) {
         this.navigator = navigator;
+        this.postType = postType;
         title = new DataItemViewModel("");
         description = new ObservableField<>("");
         youtubeAddress = new DataItemViewModel("");
@@ -57,9 +65,32 @@ public class ConnectPostViewModel extends ViewModel {
         videoUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.video_placeholder, null);
 
         LinkedHashMap<String, Integer> postTypeApiData = new LinkedHashMap<>();
-        postTypeApiData.put("Knowledge nuggets", POST_TYPE_KNOWLEDGE_NUGGETS);
-        postTypeApiData.put("Buy & sell", POST_TYPE_BUY_N_SELL);
-        postTypeApiData.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
+
+        LinkedHashMap<String, Integer> postTypeLearnerApiData = new LinkedHashMap<>();
+        postTypeLearnerApiData.put("Knowledge nuggets", POST_TYPE_KNOWLEDGE_NUGGETS);
+        postTypeLearnerApiData.put("Buy & sell", POST_TYPE_BUY_N_SELL);
+        postTypeLearnerApiData.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
+
+        LinkedHashMap<String, Integer> postTypeTutorApiData = new LinkedHashMap<>();
+        postTypeTutorApiData.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
+
+        postTypeApiData = postTypeLearnerApiData;
+
+        HashMap<String, Integer> mSelectedPostType = new HashMap<String, Integer>();
+        if("action_tips_tricks".equalsIgnoreCase(postType)) mSelectedPostType.put("Knowledge nuggets", POST_TYPE_KNOWLEDGE_NUGGETS);
+        else if("action_buy_sell".equalsIgnoreCase(postType)) mSelectedPostType.put("Buy & sell", POST_TYPE_BUY_N_SELL);
+        else if("action_find_partners".equalsIgnoreCase(postType)) mSelectedPostType.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
+        else if("action_tutors_article".equalsIgnoreCase(postType)){
+            postTypeApiData = postTypeTutorApiData;
+            mSelectedPostType.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
+        }
+        else if("action_discuss_n_decide".equalsIgnoreCase(postType)){
+            postTypeApiData = postTypeTutorApiData;
+            mSelectedPostType.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
+        }
+
+        Log.d(TAG,"postType: "+postType);
+
 
         postConsumer=new Consumer<HashMap<String, Integer>>() {
             @Override
@@ -92,10 +123,9 @@ public class ConnectPostViewModel extends ViewModel {
         };
 
 
-        postTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Post type", messageHelper, Observable.just(new ListDialogData1(postTypeApiData)), new HashMap<String, Integer>(), false, postConsumer);
-
-
-
+        postTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Post type", messageHelper
+                , Observable.just(new ListDialogData1(postTypeApiData))
+                , mSelectedPostType, false, postConsumer);
 
         countryConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override

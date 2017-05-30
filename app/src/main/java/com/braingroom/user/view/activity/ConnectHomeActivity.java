@@ -20,9 +20,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -41,6 +43,8 @@ import com.braingroom.user.viewmodel.ViewModel;
 
 
 public class ConnectHomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ConnectUiHelper {
+
+    private String TAG = getClass().getCanonicalName();
 
     public interface UiHelper {
         void updateLocationFilter();
@@ -94,6 +98,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                     case 0:
                         mAppBar.setBackgroundResource(R.color.colorPrimary);
                         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                        fab.setVisibility(View.VISIBLE);
                         mBottomNav.getMenu().clear();
                         mBottomNav.inflateMenu(R.menu.bottom_nav_connect);
                         mBottomNav.setItemTextColor(greenList);
@@ -103,6 +108,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                     case 1:
                         mAppBar.setBackgroundResource(R.color.colorAccent);
                         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+                        fab.setVisibility(View.INVISIBLE);
                         mBottomNav.getMenu().clear();
                         mBottomNav.inflateMenu(R.menu.bottom_nav_connect_2);
                         mBottomNav.setItemTextColor(blueList);
@@ -145,7 +151,11 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                     tutorsFilter.setMinorCateg("user_post");
                 }
                 if (itemId == R.id.action_tutors_article) {
+                    fab.setVisibility(View.INVISIBLE);
                     tutorsFilter.setMinorCateg("vendor_article");
+                }
+                else{
+                    fab.setVisibility(View.VISIBLE);
                 }
                 updateFilter();
                 return true;
@@ -370,14 +380,47 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     @Override
     public void openConnectPost() {
+        Log.d(TAG,"openConnectPost: "+tutorTalkSelectedNav+", "+learnerForumSelectedNav);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, ConnectPostFragment.newInstance()).addToBackStack(null).commit();
+        String postType = getActivePostType();
+        Fragment mFragement = postType==null ? ConnectPostFragment.newInstance() : ConnectPostFragment.newInstanceByPostType(postType) ;
+        transaction.replace(R.id.comments_container, mFragement).addToBackStack(null).commit();
     }
 
     @Override
     public void popFragment() {
         popBackstack();
+    }
+
+
+    private String getActivePostType()
+    {
+        String postType = null;
+
+        if(pager==null) return postType;
+
+        int itemId = tutorTalkSelectedNav;
+        if (pager.getCurrentItem() == 0) itemId = learnerForumSelectedNav;
+
+        if (itemId == R.id.action_tips_tricks) {
+            postType = "action_tips_tricks";
+        }
+        if (itemId == R.id.action_buy_sell) {
+            postType = "action_buy_sell";
+        }
+        if (itemId == R.id.action_find_partners) {
+            postType = "action_find_partners";
+        }
+        if (itemId == R.id.action_discuss_n_decide) {
+            postType = "action_discuss_n_decide";
+        }
+        if (itemId == R.id.action_tutors_article) {
+            postType = "action_tutors_article";
+        }
+
+        return postType;
+
     }
 
 
