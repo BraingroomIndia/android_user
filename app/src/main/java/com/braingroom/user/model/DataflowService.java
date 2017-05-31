@@ -1,6 +1,7 @@
 package com.braingroom.user.model;
 
 import android.content.SharedPreferences;
+import android.support.v4.media.MediaBrowserCompat;
 import android.util.Log;
 
 import com.braingroom.user.UserApplication;
@@ -689,4 +690,21 @@ public class DataflowService {
     }
 
 
+    public Observable<UploadPostApiResp> uploadPostApiImage(String filePath, String type, String post_type) {
+        return api.postApiUpload("uploadPostImage"
+                , prepareFilePart("image", filePath, type)
+                , "1"
+                , post_type
+        ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<UploadPostApiResp> uploadPostApiVideo(String filePath, String type, String post_type) {
+        return api.postApiUpload("uploadPostVideo"
+                , prepareFilePart("video", filePath, type)
+                , "1"
+                , post_type
+        ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

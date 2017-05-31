@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel.fragment;
 
+import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
@@ -15,6 +16,8 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.viewmodel.DataItemViewModel;
 import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ListDialogViewModel1;
+import com.braingroom.user.viewmodel.PostApiImageUploadViewModel;
+import com.braingroom.user.viewmodel.PostApiVideoUploadViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.HashMap;
@@ -38,7 +41,8 @@ public class ConnectPostViewModel extends ViewModel {
 
 
     public final DataItemViewModel title, youtubeAddress, classPageUrl;
-    public final ImageUploadViewModel imageUploadVm, videoUploadVm;
+    public final PostApiImageUploadViewModel imageUploadVm;
+    public final PostApiVideoUploadViewModel videoUploadVm;
     public final ObservableField<String> description;
     public final ListDialogViewModel1 postTypeVm, groupVm, countryVm, stateVm, cityVm, localityVm;
     public final Action onSubmitClicked;
@@ -52,6 +56,8 @@ public class ConnectPostViewModel extends ViewModel {
     public ObservableBoolean classField=new ObservableBoolean(true);
     public ObservableBoolean dateField=new ObservableBoolean(false);
     public ObservableBoolean activityField =new ObservableBoolean(false);
+    public ObservableBoolean groupsField =new ObservableBoolean(true);
+
 
     public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, String postType) {
         this.navigator = navigator;
@@ -61,8 +67,8 @@ public class ConnectPostViewModel extends ViewModel {
         youtubeAddress = new DataItemViewModel("");
         classPageUrl = new DataItemViewModel("");
 
-        imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.image_placeholder, null);
-        videoUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.video_placeholder, null);
+        imageUploadVm = new PostApiImageUploadViewModel(messageHelper, navigator, R.drawable.image_placeholder, null);
+        videoUploadVm = new PostApiVideoUploadViewModel(messageHelper, navigator, R.drawable.video_placeholder, null);
 
         LinkedHashMap<String, Integer> postTypeApiData = new LinkedHashMap<>();
 
@@ -102,16 +108,25 @@ public class ConnectPostViewModel extends ViewModel {
                             videoField.set(true);
                             imageField.set(true);
                             dateField.set(false);
+                            groupsField.set(true);
                             break;
                         case POST_TYPE_BUY_N_SELL:
                             imageField.set(true);
                             videoField.set(false);
                             classField.set(false);
+                            groupsField.set(true);
                             break;
                         case POST_TYPE_LEARNING_PARTNERS:
                             imageField.set(false);
                             videoField.set(false);
-                            classField.set(true);
+                            classField.set(false);
+                            groupsField.set(true);
+                            break;
+                        case POST_TYPE_DISCUSS_AND_DECIDE:
+                            imageField.set(true);
+                            videoField.set(false);
+                            classField.set(false);
+                            groupsField.set(false);
                             break;
                         default:
                             break;
@@ -122,6 +137,11 @@ public class ConnectPostViewModel extends ViewModel {
             }
         };
 
+        try {
+            postConsumer.accept(mSelectedPostType);
+        } catch (Exception e) {
+            Log.e(TAG,e.getLocalizedMessage());
+        }
 
         postTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Post type", messageHelper
                 , Observable.just(new ListDialogData1(postTypeApiData))
@@ -234,4 +254,10 @@ public class ConnectPostViewModel extends ViewModel {
         });
     }
 
+    @Override
+    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
+        super.handleActivityResult(requestCode, resultCode, data);
+        imageUploadVm.handleActivityResult(requestCode,resultCode,data);
+        videoUploadVm.handleActivityResult(requestCode,resultCode,data);
+    }
 }

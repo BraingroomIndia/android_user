@@ -154,6 +154,14 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
+                public void launchVideoChooserActivity(int reqCode) {
+                    Intent intent = new Intent();
+                    intent.setType("video/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), reqCode);
+                }
+
+                @Override
                 public void launchPlaceSearchIntent(int reqCode) {
                     try {
                         Intent intent =

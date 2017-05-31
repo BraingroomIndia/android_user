@@ -34,6 +34,7 @@ public class ListDialogViewModel1 extends ViewModel {
     public final String title;
     public final ObservableField<String> selectedItemsText = new ObservableField<>("");
     public final Action onOpenerClick;
+    private String TAG = getClass().getCanonicalName();
 
     public ListDialogViewModel1(@NonNull final DialogHelper dialogHelper, final String title, @NonNull final MessageHelper messageHelper
             , Observable<ListDialogData1> sourceObservable, @NonNull HashMap<String, Integer> selectedItemsMap, final boolean isMultiSelect
@@ -42,7 +43,6 @@ public class ListDialogViewModel1 extends ViewModel {
         this.title = title;
         this.messageHelper = messageHelper;
         this.selectedItemsMap = selectedItemsMap;
-        setSelectedItemsText();
         this.dialogHelper = dialogHelper;
         this.resultConsumer = resultConsumer;
         this.isMultiSelect = isMultiSelect;
@@ -53,6 +53,8 @@ public class ListDialogViewModel1 extends ViewModel {
                 show();
             }
         };
+        setSelectedItemsText();
+
     }
 
     public void setSourceObservable(Observable<ListDialogData1> sourceObservable) {
@@ -138,6 +140,12 @@ public class ListDialogViewModel1 extends ViewModel {
     public void setSelectedItemsMap(HashMap<String, Integer> selectedItemsMap) {
         this.selectedItemsMap = selectedItemsMap;
         setSelectedItemsText();
+        try {
+            if (resultConsumer != null)
+                resultConsumer.accept(selectedItemsMap);
+        } catch (Exception e) {
+            Log.e(TAG,e.getLocalizedMessage());
+        }
     }
 
     public List<String> getSelectedItemsId() {

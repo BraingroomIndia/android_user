@@ -64,10 +64,15 @@
                     app:editable="@{true}"
                     app:vm="@{vm.postTypeVm}" />
 
-                <include
-                    layout="@layout/item_list_dialog_opener"
-                    app:editable="@{true}"
-                    app:vm="@{vm.groupVm}" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.groupsField ? View.VISIBLE : View.GONE}" >
+                    <include
+                        layout="@layout/item_list_dialog_opener"
+                        app:editable="@{true}"
+                        app:vm="@{vm.groupVm}" />
+                </FrameLayout>
 
                 <include
                     layout="@layout/floating_label_edit_text"
@@ -110,16 +115,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginTop="@dimen/margin_large"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="@{vm.imageField || vm.videoField ? View.VISIBLE : View.GONE}"
+                    >
 
                     <RelativeLayout
                         android:layout_width="100dp"
-                        android:layout_height="100dp">
+                        android:layout_height="100dp"
+                        android:visibility="@{vm.imageField ? View.VISIBLE : View.GONE}" >
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="10dp"
+                            android:onClick="@{vm.imageUploadVm.onUploadClicked}"
                             app:imageUrl="@{vm.imageUploadVm.remoteAddress}"
                             app:placeHolder="@{vm.imageUploadVm.placeHolder}" />
 
@@ -134,13 +143,14 @@
                     <RelativeLayout
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:visibility="@{vm.videoField ? View.VISIBLE : View.INVISIBLE}">
+                        android:visibility="@{vm.videoField ? View.VISIBLE : View.GONE}">
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="10dp"
                             app:imageUrl="@{vm.videoUploadVm.remoteAddress}"
+                            android:onClick="@{vm.videoUploadVm.onUploadClicked}"
                             app:placeHolder="@{vm.videoUploadVm.placeHolder}" />
 
                         <ImageView
@@ -152,20 +162,30 @@
                     </RelativeLayout>
                 </LinearLayout>
 
-                <include
-                    layout="@layout/floating_label_edit_text"
-                    android:visibility="@{vm.videoField ? View.VISIBLE : View.INVISIBLE}"
-                    app:data="@{vm.youtubeAddress}"
-                    app:editable="@{true}"
-                    app:hintText='@{"Youtube address"}' />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.videoField ? View.VISIBLE : View.GONE}">
 
-                <include
-                    layout="@layout/floating_label_edit_text"
-                    android:visibility="@{vm.classField ? View.VISIBLE : View.INVISIBLE}"
-                    app:data="@{vm.classPageUrl}"
-                    app:editable="@{true}"
-                    app:hintText='@{"Class page url"}' />
+                    <include
+                        layout="@layout/floating_label_edit_text"
+                        android:visibility="@{vm.videoField ? View.VISIBLE : View.GONE}"
+                        app:data="@{vm.youtubeAddress}"
+                        app:editable="@{true}"
+                        app:hintText='@{"Youtube address"}' />
+                </FrameLayout>
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.classField ? View.VISIBLE : View.GONE}">
+                    <include
+                        layout="@layout/floating_label_edit_text"
+                        android:visibility="@{vm.classField ? View.VISIBLE : View.GONE}"
+                        app:data="@{vm.classPageUrl}"
+                        app:editable="@{true}"
+                        app:hintText='@{"Class page url"}' />
+                </FrameLayout>
 
                 <TextView
                     android:layout_width="wrap_content"

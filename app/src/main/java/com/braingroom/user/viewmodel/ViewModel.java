@@ -21,6 +21,7 @@ public class ViewModel {
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
     public static final int REQ_CODE_CHOOSE_IMAGE = 1;
     public static final int REQ_CODE_CHOOSE_FILTER = 2;
+    public static final int REQ_CODE_CHOOSE_VIDEO = 3;
 
     @Inject
     public DataflowService apiService;

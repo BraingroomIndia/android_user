@@ -87,6 +87,12 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="a12">For mobile application users, a push notification will be sent if there is any booking. Web users will get a notification in their respective BrainGroom dashboard for booking details.</string>
     <string name="booking_related_help">For any booking related help contact us:\n<b>044-49507392\t\t044-65556012/3</b></string>
 
+    <string name="post_type_vendor_article">vendor_article</string>
+    <string name="post_type_user_post">user_post</string>
+    <string name="post_type_tips_tricks">tips_tricks</string>
+    <string name="post_type_bug_sell">bug_sell</string>
+    <string name="post_type_activity_request">activity_request</string>
+
 
     <!--Edited By Vikas Godara-->
 </resources>

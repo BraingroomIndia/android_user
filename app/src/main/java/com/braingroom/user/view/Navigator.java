@@ -17,6 +17,8 @@ public interface Navigator {
 
     void launchImageChooserActivity(int reqCode);
 
+    void launchVideoChooserActivity(int reqCode);
+
     void launchPlaceSearchIntent(int reqCode);
 
     void finishActivity(Intent resultData);
