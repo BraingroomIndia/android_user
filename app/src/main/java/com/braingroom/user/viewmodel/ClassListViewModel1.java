@@ -156,9 +156,10 @@ public class ClassListViewModel1 extends ViewModel {
                             elem.setLocality("Online");
                         else if (elem.getClassType().equalsIgnoreCase("Webinars"))
                             elem.setLocality("Webinars");
-                        else if (location.size() == 0)
+                        else if (elem.getLocation().size() == 0)
                             elem.setLocality("");
-                        else elem.setLocality(location.get(0).getLocality());
+                        else if (location != null)
+                            elem.setLocality(location.get(0).getLocality());
                         //Edited By Vikas Godara
                         results.add(new ClassItemViewModel(elem, new Action() {
                             @Override

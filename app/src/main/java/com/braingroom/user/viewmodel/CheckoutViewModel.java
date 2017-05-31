@@ -76,7 +76,7 @@ public class CheckoutViewModel extends ViewModel {
 
     public String selectedLocalityId;
 
-    public  int isGuest;
+    public int isGuest;
 
     final ClassData classData;
     PayUCheckoutData mChekcoutData;
@@ -115,7 +115,7 @@ public class CheckoutViewModel extends ViewModel {
 
     public CheckoutViewModel(@NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData) {
 
-        String temp= classData.getPricingType().equalsIgnoreCase("Group")?classData.getLevelDetails().get(0).getGroups().get(0).getPrice():
+        String temp = classData.getPricingType().equalsIgnoreCase("Group") ? classData.getLevelDetails().get(0).getGroups().get(0).getPrice() :
                 classData.getLevelDetails().get(0).getPrice();
         totalAmount = new ObservableInt(0);
 
@@ -198,7 +198,7 @@ public class CheckoutViewModel extends ViewModel {
                                     try {
 
                                         startPayment(userId, GUEST_USER);
-                                        isGuest=1;
+                                        isGuest = 1;
                                     } catch (JSONException e) {
                                         messageHelper.show("Something went wrong. JSON error");
                                     }
@@ -206,7 +206,7 @@ public class CheckoutViewModel extends ViewModel {
                             }));
                     return;
                 }
-                isGuest=0;
+                isGuest = 0;
                 startPayment(pref.getString(Constants.BG_ID, ""), REGISTERED_USER);
 
             }
@@ -358,9 +358,9 @@ public class CheckoutViewModel extends ViewModel {
                         preFill.put("email", chekcoutData.getEmail());
                         preFill.put("contact", chekcoutData.getPhone());
                         options.put("prefill", preFill);
-                        Log.d(TAG, "accept: name\t:\t"+classData.getClassTopic()+"\ndescription, By: " + classData.getTeacher()
-                        +"\namount\t:\t"+ Integer.parseInt(chekcoutData.getAmount()) * 100+"\nemail\t:\t"+ chekcoutData.getEmail()
-                                +"\ncontact\t:\t"+ chekcoutData.getPhone());
+                        Log.d(TAG, "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
+                                + "\namount\t:\t" + Integer.parseInt(chekcoutData.getAmount()) * 100 + "\nemail\t:\t" + chekcoutData.getEmail()
+                                + "\ncontact\t:\t" + chekcoutData.getPhone());
                         uiHelper.startRazorpayPayment(options);
                     }
 
@@ -404,17 +404,27 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setUserId(mChekcoutData.getUdf1());
         snippet.setIsGuest(isGuest);
 
-        Log.d(TAG, "\n\n\nhandleRazorpaySuccess: amount\t:\t" +totalAmountAfterPromo.get()+"\nclassID\t:\t"+classData.getId()+
-                "\nUserID\t:\t"+pref.getString(Constants.BG_ID,"")+"LocalityId\t:\t"+selectedLocalityId+"\n TxnId\t:\t"+razorpayId+
-                "\nEmailId\t:\t"+mChekcoutData.getEmail()+"\nPhoneNo.\t:\t"+mChekcoutData.getPhone()+"\n\n\n" );
+        Log.d(TAG, "\n\n\nhandleRazorpaySuccess: amount\t:\t" + totalAmountAfterPromo.get() + "\nclassID\t:\t" + classData.getId() +
+                "\nUserID\t:\t" + pref.getString(Constants.BG_ID, "") + "LocalityId\t:\t" + selectedLocalityId + "\n TxnId\t:\t" + razorpayId +
+                "\nEmailId\t:\t" + mChekcoutData.getEmail() + "\nPhoneNo.\t:\t" + mChekcoutData.getPhone() + "\n\n\n");
 
+        class tickets {
+            public tickets(List<RazorSuccessReq.Levels> levelsList) {
+                this.levelsList = levelsList;
+            }
+
+            List<RazorSuccessReq.Levels> levelsList;
+        }
         List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
         for (ViewModel nonReactiveItem : nonReactiveItems) {
             if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
                 levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
             }
         }
-        snippet.setTickets(gson.toJson(levelsList));
+        tickets ticket =new tickets(levelsList);
+        String temp =gson.toJson(levelsList);
+        temp="{\"tickets\":"+temp+"}";
+        snippet.setTickets(temp);
         apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).subscribe(new Consumer<RazorSuccessResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {

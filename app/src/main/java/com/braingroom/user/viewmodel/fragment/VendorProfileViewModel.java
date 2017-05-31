@@ -16,7 +16,7 @@ public class VendorProfileViewModel extends ViewModel {
     public final DataItemViewModel name = new DataItemViewModel(null);
     public final DataItemViewModel locality = new DataItemViewModel(null);
     public final DataItemViewModel city = new DataItemViewModel(null);
-    public final DataItemViewModel interest = new DataItemViewModel(null);
+    public final DataItemViewModel interest = new DataItemViewModel("");
     public final DataItemViewModel institution = new DataItemViewModel(null);
     public final DataItemViewModel regId = new DataItemViewModel(null);
     public final DataItemViewModel expertise = new DataItemViewModel(null);
@@ -35,7 +35,7 @@ public class VendorProfileViewModel extends ViewModel {
                 name.s_1.set(data.getName());
                 locality.s_1.set(data.getLocality());
                 city.s_1.set(data.getCity());
-                interest.s_1.set(data.getInterest());
+                interest.s_1.set(data.getCategoryName());
                 institution.s_1.set(data.getInstitution());
                 regId.s_1.set(null);
                 expertise.s_1.set(data.getExpertiseArea());

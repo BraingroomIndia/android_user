@@ -65,6 +65,7 @@ public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         editor.clear();
+                        editor.commit();
                         messageHelper.show("some Error occurred");
 
                     }

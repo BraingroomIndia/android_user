@@ -82,6 +82,7 @@ public class AppModule {
             builder = new OkHttpClient.Builder()
                     .addInterceptor(customInterceptor)
                     .cache(cache);
+
         }
 
         builder = builder.connectTimeout(100, TimeUnit.SECONDS);

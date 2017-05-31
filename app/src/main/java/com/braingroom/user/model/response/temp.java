@@ -1,7 +1,81 @@
-package com.braingroom.user.model;
+/*
+package com.braingroom.user.model.response;
+
+*/
+/**
+ * Created by godara on 31/05/17.
+ *//*
+
 
 import android.content.SharedPreferences;
-import android.util.Log;
+
+import com.braingroom.user.UserApplication;
+import com.braingroom.user.model.*;
+import com.braingroom.user.model.dto.ClassData;
+import com.braingroom.user.model.dto.ClassListData;
+import com.braingroom.user.model.dto.ConnectFilterData;
+import com.braingroom.user.model.dto.PayUCheckoutData;
+import com.braingroom.user.model.dto.ProfileData;
+import com.braingroom.user.model.dto.VendorProfileData;
+import com.braingroom.user.model.request.ChangePasswordReq;
+import com.braingroom.user.model.request.CityReq;
+import com.braingroom.user.model.request.ClassDetailReq;
+import com.braingroom.user.model.request.CommentReplyReq;
+import com.braingroom.user.model.request.CommentViewReply;
+import com.braingroom.user.model.request.CommentViewReplyReq;
+import com.braingroom.user.model.request.CommonIdReq;
+import com.braingroom.user.model.request.CommonUserIdReq;
+import com.braingroom.user.model.request.CommonUuidReq;
+import com.braingroom.user.model.request.ConnectDataReq;
+import com.braingroom.user.model.request.ConnectFeedReq;
+import com.braingroom.user.model.request.ConnectPostByIdReq;
+import com.braingroom.user.model.request.ConnectPostReq;
+import com.braingroom.user.model.request.ExploreReq;
+import com.braingroom.user.model.request.FirstSocialLoginReq;
+import com.braingroom.user.model.request.GeneralFilterReq;
+import com.braingroom.user.model.request.GuestUserReq;
+import com.braingroom.user.model.request.InstituteReq;
+import com.braingroom.user.model.request.LikeReq;
+import com.braingroom.user.model.request.LocalityReq;
+import com.braingroom.user.model.request.LoginReq;
+import com.braingroom.user.model.request.MarkerDataReq;
+import com.braingroom.user.model.request.PayUBookingDetailsReq;
+import com.braingroom.user.model.request.PayUHashGenReq;
+import com.braingroom.user.model.request.PostRelatedReq;
+import com.braingroom.user.model.request.ProfileUpdateReq;
+import com.braingroom.user.model.request.PromocodeReq;
+import com.braingroom.user.model.request.RazorSuccessReq;
+import com.braingroom.user.model.request.ReportReq;
+import com.braingroom.user.model.request.SearchReq;
+import com.braingroom.user.model.request.SegmentReq;
+import com.braingroom.user.model.request.SignUpReq;
+import com.braingroom.user.model.request.SocialLoginReq;
+import com.braingroom.user.model.request.StateReq;
+import com.braingroom.user.model.request.WishlistReq;
+import com.braingroom.user.utils.Constants;
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;package com.braingroom.user.model;
+
+import android.content.SharedPreferences;
 
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ClassData;
@@ -38,8 +112,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static com.rollbar.android.Rollbar.TAG;
-
 public class DataflowService {
 
     @Inject
@@ -55,7 +127,7 @@ public class DataflowService {
     public SharedPreferences pref;
 
 
-    private InternetConnection internetConnection = new InternetConnection(UserApplication.getInstance());
+    private com.braingroom.user.model.InternetConnection internetConnection = new com.braingroom.user.model.InternetConnection(UserApplication.getInstance());
 
     @Inject
     public DataflowService() {
@@ -68,8 +140,18 @@ public class DataflowService {
         snippet.setEmail(email);
         snippet.setPassword(password);
         snippet.setRegId(fcmToken);
-        return api.login(new LoginReq(snippet)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        final LoginReq req = new LoginReq(snippet);
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends LoginResp>>() {
+            @Override
+            public ObservableSource<? extends LoginResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.login(req).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                else
+                    return null;
+            }
+        });
+
     }
 
     public Observable<LoginResp> socialLogin(String name, String profileImage, String email, String id, String fcmToken, String mobile) {
@@ -79,8 +161,17 @@ public class DataflowService {
         snippet.setSocialId(id);
         snippet.setPhone(mobile);
         snippet.setRegId(fcmToken);
-        return api.socialLogin(new SocialLoginReq(snippet)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        final SocialLoginReq req = new SocialLoginReq(snippet);
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<LoginResp>>() {
+            @Override
+            public ObservableSource<LoginResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.socialLogin(req).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                else return null;
+            }
+        });
+
 
     }
 
@@ -103,29 +194,68 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<SignUpResp> signUp(SignUpReq signUpReq) {
-        return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    public Observable<SignUpResp> signUp(final SignUpReq signUpReq) {
+
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends SignUpResp>>() {
+            @Override
+            public ObservableSource<? extends SignUpResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                else
+                    return null;
+            }
+        });
+
     }
 
     public Observable<CommunityResp> getCommunity() {
-        return api.getCommunity().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends CommunityResp>>() {
+            @Override
+            public ObservableSource<? extends CommunityResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getCommunity().subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                else
+                    return null;
+            }
+        });
     }
 
     public Observable<CategoryResp> getCategory() {
-        return api.getCategories().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends CategoryResp>>() {
+            @Override
+            public ObservableSource<? extends CategoryResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                return api.getCategories().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        });
     }
 
     public Observable<GroupResp> getGroups() {
-        return api.getGroups(ConnectDataReq.getGroupRequest()).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends GroupResp>>() {
+            @Override
+            public ObservableSource<? extends GroupResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getGroups(ConnectDataReq.getGroupRequest()).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                else
+                    return null;
+            }
+        });
     }
 
 
-    public Observable<SegmentResp> getSegments(String categoryId) {
-        return api.getSegments(new SegmentReq(new SegmentReq.Snippet(categoryId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public Observable<SegmentResp> getSegments(final String categoryId) {
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends SegmentResp>>() {
+            @Override
+            public ObservableSource<? extends SegmentResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getSegments(new SegmentReq(new SegmentReq.Snippet(categoryId))).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                else
+                    return null;
+            }
+        });
     }
 
     public Observable<UploadResp> uploadImage(String filePath, String type) {
@@ -154,15 +284,23 @@ public class DataflowService {
     }
 
 
-    public Observable<ProfileData> getProfile(String userId) {
-        return api.getProfile(new CommonIdReq(new CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ProfileResp, ProfileData>() {
-                    @Override
-                    public ProfileData apply(@NonNull ProfileResp resp) throws Exception {
-                        return gson.fromJson(gson.toJson(resp.getData().get(0)), ProfileData.class);
+    public Observable<ProfileData> getProfile(final String userId) {
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends ProfileData>>() {
+            @Override
+            public ObservableSource<? extends ProfileData> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getProfile(new CommonIdReq(new CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()).map(new Function<ProfileResp, ProfileData>() {
+                                @Override
+                                public ProfileData apply(@NonNull ProfileResp resp) throws Exception {
+                                    return gson.fromJson(gson.toJson(resp.getData().get(0)), ProfileData.class);
 
-                    }
-                });
+                                }
+                            });
+                else
+                    return null;
+            }
+        });
     }
 
     public Observable<CommonIdResp> updateProfile(ProfileUpdateReq req) {
@@ -189,24 +327,30 @@ public class DataflowService {
                 });
     }
 
-    public Observable<ClassListData> generalFilter(GeneralFilterReq req, int pageIndex) {
+    public Observable<ClassListData> generalFilter(final GeneralFilterReq req, final int pageIndex) {
 
-        return api.generalFilter(pageIndex > 0 ? pageIndex + "" : "", req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, ClassListData>() {
-                    @Override
-                    public ClassListData apply(@NonNull ClassListResp classListResp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>(0);
-
-                            for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                                dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                                Log.d(TAG, "apply: " + snippet.toString());
-                            }
-                        ClassListData dataWrapper = new ClassListData();
-                        dataWrapper.setNextPage(classListResp.getNextPage());
-                        dataWrapper.setClassDataList(dataList);
-                        return dataWrapper;
-                    }
-                });
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends ClassListData>>() {
+            @Override
+            public ObservableSource<? extends ClassListData> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.generalFilter(pageIndex > 0 ? pageIndex + "" : "", req).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, ClassListData>() {
+                                @Override
+                                public ClassListData apply(@NonNull ClassListResp classListResp) throws Exception {
+                                    List<ClassData> dataList = new ArrayList<>();
+                                    for (ClassListResp.Snippet snippet : classListResp.getData()) {
+                                        dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                                    }
+                                    ClassListData dataWrapper = new ClassListData();
+                                    dataWrapper.setNextPage(classListResp.getNextPage());
+                                    dataWrapper.setClassDataList(dataList);
+                                    return dataWrapper;
+                                }
+                            });
+                else
+                    return null;
+            }
+        });
     }
 
 
@@ -300,10 +444,10 @@ public class DataflowService {
                                 ClassData classData = new ClassData();
                                 classData.setImage(classDetail.getPhoto());
                                 classData.setClassTopic(classDetail.getClassTopic());
-                                if (classDetail.getLocation().size() != 0)
+                                if (classDetail.getLocation().size() == 0)
                                     classData.setLocality(classDetail.getLocation().get(0).getLocality());
                                 classData.setPricingType(classDetail.getClassType());
-                                if (classDetail.getClassLevels().size() != 0)
+                                if (classDetail.getClassLevels().size() == 0)
                                     classData.setPrice(classDetail.classLevels.get(0).getPrice());
                                 classData.setNoOfSession(classDetail.getNoOfSession());
                                 classData.setClassDuration(classDetail.getClassDuration());
@@ -320,57 +464,88 @@ public class DataflowService {
     }
 
     public Observable<ClassData> getClassDetail(final String classId) {
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends ClassData>>() {
+            @Override
+            public ObservableSource<? extends ClassData> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus) {
+                    return api.getClassDetail(new ClassDetailReq(new ClassDetailReq.Snippet(classId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, ClassData>() {
+                                @Override
+                                public ClassData apply(@NonNull ClassListResp resp) throws Exception {
+                                    return gson.fromJson(gson.toJson(resp.getData().get(0)), ClassData.class);
+                                }
+                            });
+                } else
+                    return null;
 
-        return api.getClassDetail(new ClassDetailReq(new ClassDetailReq.Snippet(classId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, ClassData>() {
-                    @Override
-                    public ClassData apply(@NonNull ClassListResp resp) throws Exception {
-                        return gson.fromJson(gson.toJson(resp.getData().get(0)), ClassData.class);
-                    }
-                });
-
+            }
+        });
     }
 
     public Observable<List<ClassData>> getIndigeneousClass() {
-        return api.getIndianClass().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                        }
-                        return dataList;
-                    }
-                });
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends List<ClassData>>>() {
+            @Override
+            public ObservableSource<? extends List<ClassData>> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getIndianClass().subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
+                                @Override
+                                public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
+                                    List<ClassData> dataList = new ArrayList<>();
+                                    for (ClassListResp.Snippet snippet : classListResp.getData()) {
+                                        dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                                    }
+                                    return dataList;
+                                }
+                            });
+                else
+                    return null;
+            }
+        });
     }
 
     public Observable<List<ClassData>> getFeaturedClass() {
-        return api.getFeaturedClass().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                        }
-                        return dataList;
-                    }
-                });
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends List<ClassData>>>() {
+            @Override
+            public ObservableSource<? extends List<ClassData>> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getFeaturedClass().subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
+                                @Override
+                                public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
+                                    List<ClassData> dataList = new ArrayList<>();
+                                    for (ClassListResp.Snippet snippet : classListResp.getData()) {
+                                        dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                                    }
+                                    return dataList;
+                                }
+                            });
+                else
+                    return null;
+            }
+        });
     }
 
     public Observable<List<ClassData>> getTrendingClass() {
-        return api.getTrendingClass().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                        }
-                        return dataList;
-                    }
-                });
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends List<ClassData>>>() {
+            @Override
+            public ObservableSource<? extends List<ClassData>> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getTrendingClass().subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
+                                @Override
+                                public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
+                                    List<ClassData> dataList = new ArrayList<>();
+                                    for (ClassListResp.Snippet snippet : classListResp.getData()) {
+                                        dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                                    }
+                                    return dataList;
+                                }
+                            });
+                else
+                    return null;
+            }
+        });
     }
 
     @android.support.annotation.NonNull
@@ -386,22 +561,44 @@ public class DataflowService {
     }
 
 
-    public Observable<ExploreResp> getExploreDashboard(String latitude, String longitude) {
+    public Observable<ExploreResp> getExploreDashboard(final String latitude, final String longitude) {
 
-        return api.getExploreDashboard(new ExploreReq(new ExploreReq.Snippet(null, null, null, latitude, longitude))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends ExploreResp>>() {
+            @Override
+            public ObservableSource<? extends ExploreResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getExploreDashboard(new ExploreReq(new ExploreReq.Snippet(null, null, null, latitude, longitude))).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                else
+                    return null;
+            }
+
+        });
 
     }
 
-    public Observable<ExploreResp> exploreFilter(String categoryId, String location, String distance, String latitude, String longitude) {
+    public Observable<ExploreResp> exploreFilter(final String categoryId, final String location, final String distance, final String latitude, final String longitude) {
 
-        return api.exploreFilter(new ExploreReq(new ExploreReq.Snippet(categoryId, location, distance, latitude, longitude))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends ExploreResp>>() {
+            @Override
+            public ObservableSource<? extends ExploreResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                return api.exploreFilter(new ExploreReq(new ExploreReq.Snippet(categoryId, location, distance, latitude, longitude))).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        }) ;
     }
 
-    public Observable<MarkerDataResp> getMarkerData(String latitude, String longitude) {
-        return api.exploreMarkerData(new MarkerDataReq(new MarkerDataReq.Snippet(latitude, longitude))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public Observable<MarkerDataResp> getMarkerData(final String latitude, final String longitude) {
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends MarkerDataResp>>() {
+            @Override
+            public ObservableSource<? extends MarkerDataResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.exploreMarkerData(new MarkerDataReq(new MarkerDataReq.Snippet(latitude, longitude))).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                else
+                    return null;
+            }
+        });
     }
 
     public Observable<PayUCheckoutData> getPayUCheckoutData(PayUBookingDetailsReq req, final String promoId, final String promoVal) {
@@ -534,11 +731,20 @@ public class DataflowService {
                 );
     }
 
-    public Observable<ConnectFeedResp> getConnectFeed(ConnectFilterData connectFilterData, int pageIndex) {
-        ConnectFeedReq req = connectFilterData.getFilterReq();
-        req.getData().setUserId(pref.getString(Constants.BG_ID, ""));
-        return api.getConnectFeedData(pageIndex > 0 ? pageIndex + "" : "", req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public Observable<ConnectFeedResp> getConnectFeed(ConnectFilterData connectFilterData, final int pageIndex) {
+        ConnectFeedReq temp = connectFilterData.getFilterReq();
+        temp.getData().setUserId(pref.getString(Constants.BG_ID, ""));
+        final ConnectFeedReq req=temp;
+        return internetConnection.isInternetOnObservable().switchMap(new Function<Boolean, ObservableSource<? extends ConnectFeedResp>>() {
+            @Override
+            public ObservableSource<? extends ConnectFeedResp> apply(@NonNull Boolean connectionStatus) throws Exception {
+                if (connectionStatus)
+                    return api.getConnectFeedData(pageIndex > 0 ? pageIndex + "" : "", req).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                else
+                    return null;
+            }
+        }) ;
     }
 
     public Observable<CommentListResp> getComments(String postId) {
@@ -649,7 +855,7 @@ public class DataflowService {
         dataList.addAll(Collections.nCopies(20, snippet));
 
         MessageListResp resp = new MessageListResp(dataList);
-        return Observable.just(resp);
+        return Observable.empty();
 //        return api.getMessages(new MessageListReq(new MessageListReq.Snippet("39"))).subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread());
     }
@@ -683,10 +889,11 @@ public class DataflowService {
         dataList.add(chat4);
 
         ChatListResp resp = new ChatListResp(dataList);
-        return Observable.just(null);
+        return Observable.empty();
 //        return api.getMessages(new MessageListReq(new MessageListReq.Snippet("39"))).subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
 }
+*/

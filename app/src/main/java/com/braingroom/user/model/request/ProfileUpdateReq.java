@@ -51,9 +51,6 @@ public class ProfileUpdateReq {
         @SerializedName("institution_name")
         public String institutionName = "";
 
-        @SerializedName("institution_id")
-        public String institutionId = "";
-
         @SerializedName("registration_id")
         public String registrationId = "";
 
@@ -68,6 +65,9 @@ public class ProfileUpdateReq {
 
         @SerializedName("gender")
         public String gender="";
+
+        @SerializedName("dob")
+        public String dob = "";
 
         @SerializedName("profile_image")
         public String profileImage="";

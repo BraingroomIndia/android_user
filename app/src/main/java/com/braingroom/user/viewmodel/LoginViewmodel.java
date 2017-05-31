@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
@@ -109,6 +110,7 @@ public class LoginViewmodel extends ViewModel {
                 } else {
                     editor.clear();
                     messageHelper.show(loginResp.getResMsg());
+
                 }
             }
         }, new Consumer<Throwable>() {
@@ -160,6 +162,7 @@ public class LoginViewmodel extends ViewModel {
                     }
                 } else {
                     editor.clear();
+                    editor.commit();
                     messageHelper.show(loginResp.getResMsg());
                 }
 

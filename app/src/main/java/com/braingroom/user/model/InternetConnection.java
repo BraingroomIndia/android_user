@@ -31,7 +31,7 @@ public class InternetConnection {
     private Context context;
     private BroadcastReceiver broadcastReceiver;
     private PublishSubject<Boolean> internetStatusHotObservable;
-    private final int maxRetryLimit = 5;
+    private final int maxRetryLimit = 20;
     private int delayBetweenRetry = 100;
     private int currentRepeatCount = 1;
 
@@ -106,7 +106,7 @@ public class InternetConnection {
                 }
 
                 currentRepeatCount++;
-                delayBetweenRetry += 300;
+                delayBetweenRetry += 100;
 
                 return Observable.timer(delayBetweenRetry, TimeUnit.MILLISECONDS);
             }

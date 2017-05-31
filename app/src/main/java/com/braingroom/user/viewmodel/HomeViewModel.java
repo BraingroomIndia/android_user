@@ -184,13 +184,16 @@ public class HomeViewModel extends ViewModel {
         mGoogleMap.clear();
         markerList.clear();
         double latSum = 0, lngSum = 0;
+        int i=0;
         for (ClassLocationData location : locations) {
             latlng = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
             latSum = latSum + Double.valueOf(location.getLatitude());
+            Log.d(TAG, "populateMarkers : " +i+"\n" +location.toString());
             lngSum = lngSum + Double.valueOf(location.getLongitude());
             markerOption = new MarkerOptions().position(latlng).title(location.getLocationArea()).icon(getPinIcon(location));
             markerList.add(markerOption);
             mGoogleMap.addMarker(markerOption).setTag(location.getLatitude() + "," + location.getLongitude());
+            i++;
         }
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latSum / locations.size(), lngSum / locations.size()), 11.0f));
     }

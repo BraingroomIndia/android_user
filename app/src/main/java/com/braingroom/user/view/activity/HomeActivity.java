@@ -2,6 +2,9 @@ package com.braingroom.user.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +33,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import io.reactivex.functions.Consumer;
 
 public class HomeActivity extends BaseActivity
@@ -43,6 +50,18 @@ public class HomeActivity extends BaseActivity
     @SuppressWarnings({"MissingPermission"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+/*        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }*/
         initMap();
         rxLocation = new RxLocation(this);
         locationRequest = LocationRequest.create()
@@ -154,11 +173,11 @@ public class HomeActivity extends BaseActivity
             return true;
         }
         if (id == R.id.action_messages) {
-            getNavigator().navigateActivity(MessageActivity.class, null);
+            //getNavigator().navigateActivity(MessageActivity.class, null);
             return true;
         }
         if (id == R.id.action_notifications) {
-            getNavigator().navigateActivity(NotificationActivity.class, null);
+           // getNavigator().navigateActivity(NotificationActivity.class, null);
             return true;
         }
 

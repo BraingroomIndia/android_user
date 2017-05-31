@@ -174,11 +174,11 @@ public class ProfileViewModel extends ViewModel {
 
     public void update() {
         ProfileUpdateReq.Snippet snippet = new ProfileUpdateReq.Snippet();
-
+/*
         if (dobVm.date.get().equals("choose")) {
             messageHelper.show("Please enter your Date of Birth");
             return;
-        }
+        }*/
         if (genderVm.selectedItemsMap.isEmpty()) {
             snippet.setGender("");
         } else
@@ -191,8 +191,9 @@ public class ProfileViewModel extends ViewModel {
         snippet.setCityId(cityVm.getSelectedItemsId().size() > 0 ? cityVm.getSelectedItemsId().get(0) : "");
         snippet.setLocalityId(localityVm.getSelectedItemsId().size() > 0 ? localityVm.getSelectedItemsId().get(0) : "");
         snippet.setCategoryId(categoryVm.getSelectedItemsId().size() > 0 ? categoryVm.getSelectedItemsId().get(0) : "");
-        snippet.setInstitutionName(ugInstitution.s_1.get());
-        snippet.setGender(gender.s_1.get());
+        snippet.setInstitutionName("");
+        snippet.setDob(dobVm.date.get());
+        snippet.setGender(genderVm.getSelectedItemsId().size()>0? genderVm.getSelectedItemsId().get(0):"");
         snippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
         snippet.setCommunityId(communityClass.s_1.get());
         snippet.setProfileImage(imageUploadVm.remoteAddress.get());

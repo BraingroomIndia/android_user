@@ -33,6 +33,7 @@ public class SearchViewModel extends ViewModel {
                 for (CategoryResp.Snippet snippet : categoryResp.getData()) {
                     mainCategories.put(snippet.getCategoryName(), snippet.getId());
                 }
+                mainCategories.put("All","");
                 editable.set(true);
             }
         }, new Consumer<Throwable>() {
