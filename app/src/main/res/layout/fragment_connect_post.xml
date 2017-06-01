@@ -67,12 +67,19 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="@{vm.groupsField ? View.VISIBLE : View.GONE}" >
+                    android:visibility="@{vm.groupsField ? View.VISIBLE : View.GONE}">
+
                     <include
                         layout="@layout/item_list_dialog_opener"
                         app:editable="@{true}"
                         app:vm="@{vm.groupVm}" />
                 </FrameLayout>
+
+                <!--   <include
+                       android:visibility="@{vm.activityField ? View.VISIBLE : View.GONE}"
+                       layout="@layout/item_list_dialog_opener"
+                       app:editable="@{true}"
+                       app:vm="{vm.activityVm}"/>-->
 
                 <include
                     layout="@layout/floating_label_edit_text"
@@ -116,19 +123,18 @@
                     android:layout_height="100dp"
                     android:layout_marginTop="@dimen/margin_large"
                     android:gravity="center"
-                    android:visibility="@{vm.imageField || vm.videoField ? View.VISIBLE : View.GONE}"
-                    >
+                    android:visibility="@{vm.imageField || vm.videoField ? View.VISIBLE : View.GONE}">
 
                     <RelativeLayout
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:visibility="@{vm.imageField ? View.VISIBLE : View.GONE}" >
+                        android:visibility="@{vm.imageField ? View.VISIBLE : View.GONE}">
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="10dp"
                             android:onClick="@{vm.imageUploadVm.onUploadClicked}"
+                            android:padding="10dp"
                             app:imageUrl="@{vm.imageUploadVm.remoteAddress}"
                             app:placeHolder="@{vm.imageUploadVm.placeHolder}" />
 
@@ -148,9 +154,9 @@
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:onClick="@{vm.videoUploadVm.onUploadClicked}"
                             android:padding="10dp"
                             app:imageUrl="@{vm.videoUploadVm.remoteAddress}"
-                            android:onClick="@{vm.videoUploadVm.onUploadClicked}"
                             app:placeHolder="@{vm.videoUploadVm.placeHolder}" />
 
                         <ImageView
@@ -179,6 +185,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="@{vm.classField ? View.VISIBLE : View.GONE}">
+
                     <include
                         layout="@layout/floating_label_edit_text"
                         android:visibility="@{vm.classField ? View.VISIBLE : View.GONE}"
@@ -187,24 +194,91 @@
                         app:hintText='@{"Class page url"}' />
                 </FrameLayout>
 
-                <TextView
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_med"
+                android:visibility="@{vm.proposedTimeField ? View.VISIBLE :View.GONE}">
+
+                <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginTop="@dimen/margin_med"
-                    android:background="@drawable/solid_bg_green_rounded_corner"
-                    android:onClick="@{vm.onSubmitClicked}"
-                    android:paddingBottom="@dimen/padding_small"
-                    android:paddingLeft="@dimen/padding_med"
-                    android:paddingRight="@dimen/padding_med"
-                    android:paddingTop="@dimen/padding_small"
-                    android:text="Submit"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_large"
-                    app:font='@{@string/robotoRegular}' />
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{!vm.isRecurring}"
+                        android:onClick="@{vm.changeDateText}"
+                        android:text="On Date"
+                        />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@={vm.isRecurring}"
+                        android:onClick="@{vm.changeDateText}"
+                        android:text="Recurring Date" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <include
+                        layout="@layout/item_date_dialog_opener"
+                        app:vm="@{vm.firstDateVm}" />
+
+                    <include
+                        layout="@layout/item_date_dialog_opener"
+                        android:visibility="@{vm.isRecurring ? View.VISIBLE : View.GONE}"
+                        app:vm="@{vm.secondDateVm}" />
+
+                </LinearLayout>
+
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.proposedTime}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Proposed Time"}' />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.requestNote}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Request Note"}' />
+
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.privacyVm}" />
+
+
             </LinearLayout>
 
-        </LinearLayout>
-    </ScrollView>
 
-</layout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="@dimen/margin_med"
+                android:background="@drawable/solid_bg_green_rounded_corner"
+                android:onClick="@{vm.onSubmitClicked}"
+                android:paddingBottom="@dimen/padding_small"
+                android:paddingLeft="@dimen/padding_med"
+                android:paddingRight="@dimen/padding_med"
+                android:paddingTop="@dimen/padding_small"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoRegular}' />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
+
+    </layout>

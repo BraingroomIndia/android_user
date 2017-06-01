@@ -22,6 +22,7 @@ public class ViewModel {
     public static final int REQ_CODE_CHOOSE_IMAGE = 1;
     public static final int REQ_CODE_CHOOSE_FILTER = 2;
     public static final int REQ_CODE_CHOOSE_VIDEO = 3;
+    public static final int REQ_CODE_LOGIN=4;
 
     @Inject
     public DataflowService apiService;

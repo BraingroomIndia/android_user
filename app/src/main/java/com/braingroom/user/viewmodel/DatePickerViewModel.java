@@ -10,7 +10,7 @@ public class DatePickerViewModel extends DialogViewModel {
     public final ObservableField<String> date;
     public DialogHelper dialogHelper;
 
-    public DatePickerViewModel(@NonNull DialogHelper dialogHelper,String title,String defaultDate) {
+    public DatePickerViewModel(@NonNull DialogHelper dialogHelper, String title, String defaultDate) {
         super(dialogHelper, title);
         date = new ObservableField(defaultDate);
         this.dialogHelper = dialogHelper;
@@ -21,9 +21,14 @@ public class DatePickerViewModel extends DialogViewModel {
         this.dialogHelper.showDatePicker();
     }
 
-    public void reset(){
+    public void reset() {
         date.set("YYYY-MM-DD");
         selectedItemsText.set("select filter values");
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title.set(title);
     }
 
 }

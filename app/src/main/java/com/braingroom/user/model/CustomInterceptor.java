@@ -1,5 +1,6 @@
 package com.braingroom.user.model;
 
+import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.SegmentResp;
 import com.google.gson.Gson;
 
@@ -23,6 +24,8 @@ public class CustomInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     Gson gson;
+
+    InternetConnection internetConnection =new InternetConnection(UserApplication.getInstance());
 
     @Inject
     public CustomInterceptor(Gson gson) {

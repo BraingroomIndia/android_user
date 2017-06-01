@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -421,9 +422,9 @@ public class CheckoutViewModel extends ViewModel {
                 levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
             }
         }
-        tickets ticket =new tickets(levelsList);
-        String temp =gson.toJson(levelsList);
-        temp="{\"tickets\":"+temp+"}";
+        tickets ticket = new tickets(levelsList);
+        String temp = gson.toJson(levelsList);
+        temp = "{\"tickets\":" + temp + "}";
         snippet.setTickets(temp);
         apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).subscribe(new Consumer<RazorSuccessResp>() {
             @Override
@@ -519,6 +520,22 @@ public class CheckoutViewModel extends ViewModel {
         checksum.setVar1(var1);
         checksum.setSalt(salt);
         return checksum.getHash();
+    }
+
+    @Override
+    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_CODE_LOGIN) {
+            if (data != null && data.hasExtra("classId")) {
+                String classId =data.getStringExtra("classId");
+
+                apiService.getClassDetail(classId).subscribe(new Consumer<ClassData>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull ClassData data) throws Exception {
+
+                    }
+                });
+            }
+        }
     }
 
 
