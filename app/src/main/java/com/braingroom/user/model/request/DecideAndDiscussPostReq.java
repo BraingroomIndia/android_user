@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class KnowledgeNuggetsReq {
+public class DecideAndDiscussPostReq {
 
     @SerializedName("braingroom")
     Snippet data;
@@ -22,8 +22,11 @@ public class KnowledgeNuggetsReq {
         @SerializedName("uuid")
         public String uuid;
 
-        @SerializedName("post_type")
-        public String postType;
+        @SerializedName("category_id")
+        public String categoryId;
+
+        @SerializedName("segment_id")
+        public String segmentId;
 
         @SerializedName("post_title")
         public String postTitle;
@@ -45,18 +48,5 @@ public class KnowledgeNuggetsReq {
 
         @SerializedName("post_thumb_upload")
         public String postThumbUpload;
-
-        @SerializedName("videouploadway")
-        public String videouploadway;
-
-        @SerializedName("video")
-        public String video;
-
-        @SerializedName("video_upload")
-        public String videoUpload;
-
-        @SerializedName("class_link")
-        public String classLink;
     }
-
 }

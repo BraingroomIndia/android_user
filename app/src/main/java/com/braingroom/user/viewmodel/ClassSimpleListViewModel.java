@@ -22,7 +22,8 @@ import io.reactivex.functions.Function;
 public class ClassSimpleListViewModel extends ViewModel {
 
     private boolean paginationInProgress = false;
-    private ObservableField<Integer> nextPage = new ObservableField<>(0);
+    private ObservableField<Integer> nextPage = new ObservableField<>(1);
+    private boolean nextPageAvailable =true;
     private final String listType;
     Observable<List<ClassData>> apiObservable = null;
 
@@ -33,20 +34,21 @@ public class ClassSimpleListViewModel extends ViewModel {
         this.listType = listType1;
         classes = new ArrayList<>();
 
-        if ("bookinghistory".equalsIgnoreCase(listType))
-            apiObservable = apiService.getBookingHistory();
         result = FieldUtils.toObservable(nextPage).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
                 if ("wishlist".equalsIgnoreCase(listType))
                     apiObservable = apiService.getWishList(nextPage.get());
+                else if ("bookinghistory".equalsIgnoreCase(listType))
+                    apiObservable = apiService.getBookingHistory(nextPage.get());
+
                 return apiObservable.map(new Function<List<ClassData>, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(List<ClassData> resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         if (resp.size() == 0)
-                            nextPage.set(-1);
+                            nextPageAvailable =false;
                         for (final ClassData elem : resp) {
                             if (elem.getClassType().equalsIgnoreCase("Online Classes"))
                                 elem.setLocality("Online");
@@ -75,7 +77,7 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     @Override
     public void paginate() {
-        if (nextPage.get() > 0 && !paginationInProgress) {
+        if (nextPageAvailable && !paginationInProgress) {
             nextPage.set((nextPage.get() + 1));
         }
     }

@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class DecideAndDiscussReq {
+public class ArticleAndVideosPostReq {
 
     @SerializedName("braingroom")
     Snippet data;
@@ -49,4 +49,6 @@ public class DecideAndDiscussReq {
         @SerializedName("post_thumb_upload")
         public String postThumbUpload;
     }
+
 }
+

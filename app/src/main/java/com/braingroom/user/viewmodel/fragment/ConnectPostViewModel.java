@@ -8,6 +8,11 @@ import android.util.Log;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ListDialogData1;
+import com.braingroom.user.model.request.BuyAndSellPostReq;
+import com.braingroom.user.model.request.ConnectPostReq;
+import com.braingroom.user.model.request.DecideAndDiscussPostReq;
+import com.braingroom.user.model.request.KnowledgeNuggetsPostReq;
+import com.braingroom.user.model.request.LearningPartnerPostReq;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.GroupResp;
@@ -50,6 +55,13 @@ public class ConnectPostViewModel extends ViewModel {
     public final HelperFactory helperFactory;
 
 
+    //Request
+    BuyAndSellPostReq.Snippet buyAndSellSnippet;
+    KnowledgeNuggetsPostReq.Snippet knowledgeNuggetsSnippet;
+    LearningPartnerPostReq.Snippet learningPartnerPostSnippet;
+    DecideAndDiscussPostReq.Snippet decideAndDiscussSnippet;
+
+
     public final DataItemViewModel title, youtubeAddress, classPageUrl, proposedTime, requestNote;
     public final PostApiImageUploadViewModel imageUploadVm;
     public final PostApiVideoUploadViewModel videoUploadVm;
@@ -87,6 +99,12 @@ public class ConnectPostViewModel extends ViewModel {
         secondDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "To", "choose");
         imageUploadVm = new PostApiImageUploadViewModel(messageHelper, navigator, R.drawable.image_placeholder, null);
         videoUploadVm = new PostApiVideoUploadViewModel(messageHelper, navigator, R.drawable.video_placeholder, null);
+
+        //request
+        buyAndSellSnippet = new BuyAndSellPostReq.Snippet();
+        knowledgeNuggetsSnippet = new KnowledgeNuggetsPostReq.Snippet();
+        learningPartnerPostSnippet = new LearningPartnerPostReq.Snippet();
+        decideAndDiscussSnippet = new DecideAndDiscussPostReq.Snippet();
 
         LinkedHashMap<String, Integer> postTypeApiData = new LinkedHashMap<>();
 
@@ -294,6 +312,12 @@ public class ConnectPostViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_BUY_N_SELL) {
+                    BuyAndSellPostReq.Snippet snippet = new BuyAndSellPostReq.Snippet();
+                    snippet.setPostType("user_post");
+                    snippet.setPostTitle(title.s_1.get());
+                    snippet.setPostSummary(description.get());
+                    return;
+
 
                 }
 //
@@ -381,6 +405,34 @@ public class ConnectPostViewModel extends ViewModel {
                 return new ListDialogData1(itemMap);
             }
         });
+
+    }
+
+    private void setCountry(String id) {
+        buyAndSellSnippet.setCountryId(id);
+        knowledgeNuggetsSnippet.setCountryId(id);
+        decideAndDiscussSnippet.setCountryId(id);
+        learningPartnerPostSnippet.setCountryId(id);
+    }
+
+    private void setState(String id) {
+        buyAndSellSnippet.setStateId(id);
+        knowledgeNuggetsSnippet.setStateId(id);
+        decideAndDiscussSnippet.setStateId(id);
+        learningPartnerPostSnippet.setStateId(id);
+
+    }
+    private void setCity(String id) {
+        buyAndSellSnippet.setCityId(id);
+        knowledgeNuggetsSnippet.setCityId(id);
+        decideAndDiscussSnippet.setCityId(id);
+        learningPartnerPostSnippet.setCityId(id);
+    }
+    private void setLocality(String id) {
+        buyAndSellSnippet.setLocalityId(id);
+        knowledgeNuggetsSnippet.setLocalityId(id);
+        decideAndDiscussSnippet.setLocalityId(id);
+        learningPartnerPostSnippet.setLocalityId(id);
 
     }
 }

@@ -1,7 +1,6 @@
 package com.braingroom.user.model;
 
 
-
 import com.braingroom.user.model.request.*;
 import com.braingroom.user.model.response.*;
 
@@ -105,17 +104,18 @@ public interface UserApiService {
     @Headers("X-App-Type: BGUSR01")
     Observable<ClassListResp> generalFilter(@Path("pageIndex") String pageIndex, @Body GeneralFilterReq req);
 
-    @POST("getAllWishList{pageIndex}")
+    @POST("getAllWishList/{pageIndex}")
     @Headers("X-App-Type: BGUSR01")
-    Observable<ClassListResp> getWishlist(@Path("pageIndex") String pageIndex,@Body CommonUuidReq req);
+    Observable<ClassListResp> getWishlist(@Path("pageIndex") String pageIndex, @Body CommonUuidReq req);
 
-    @POST("VendorProfile")
+    @POST("bookingHistory/{pageIndex}")
     @Headers("X-App-Type: BGUSR01")
-    Observable<VendorProfileResp> getVendorProfile(@Body CommonIdReq req);
+    Observable<BookingHistoryResp> getBookingHistory(@Path("pageIndex") String pageIndex, @Body CommonIdReq req);
 
-    @POST("bookingHistory")
+    @POST("VendorProfile/{pageIndex}")
     @Headers("X-App-Type: BGUSR01")
-    Observable<BookingHistoryResp> getBookingHistory(@Body CommonIdReq req);
+    Observable<VendorProfileResp> getVendorProfile(@Path("pageIndex") String pageIndex,@Body CommonIdReq req);
+
 
     @POST("exploreDashboard")
     @Headers("X-App-Type: BGUSR01")
@@ -174,7 +174,6 @@ public interface UserApiService {
     Observable<CommonIdResp> getState(@Body StateReq req);
 
 
-
     @POST("getInstitions")
     @Headers("X-App-Type: BGUSR01")
     Observable<CommonIdResp> getInstitute(@Body InstituteReq req);
@@ -219,23 +218,23 @@ public interface UserApiService {
 
     @POST("addPost")
     @Headers("X-App-Type: BGUSR01")
-    Observable<BaseResp> postArticleVideos(@Body ConnectPostReq.ArticleAndVideos req);
+    Observable<BaseResp> postArticleVideos(@Body ArticleAndVideosPostReq req);
 
     @POST("addPost")
     @Headers("X-App-Type: BGUSR01")
-    Observable<BaseResp> postDecideDiscuss(@Body ConnectPostReq.DecideAndDiscuss req);
+    Observable<BaseResp> postDecideDiscuss(@Body DecideAndDiscussPostReq req);
 
     @POST("addPost")
     @Headers("X-App-Type: BGUSR01")
-    Observable<BaseResp> postKnowledgeNuggets(@Body ConnectPostReq.KnowledgeNuggets req);
+    Observable<BaseResp> postKnowledgeNuggets(@Body KnowledgeNuggetsPostReq req);
 
     @POST("addPost")
     @Headers("X-App-Type: BGUSR01")
-    Observable<BaseResp> postBuyAndSell(@Body ConnectPostReq.BuyAndSell req);
+    Observable<BaseResp> postBuyAndSell(@Body BuyAndSellPostReq req);
 
     @POST("addPost")
     @Headers("X-App-Type: BGUSR01")
-    Observable<BaseResp> postLearningPartner(@Body ConnectPostReq.LearningPartner req);
+    Observable<BaseResp> postLearningPartner(@Body LearningPartnerPostReq req);
 
     @POST("addGuestUser")
     @Headers("X-App-Type: BGUSR01")

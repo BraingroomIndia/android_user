@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class ArticleAndVideosReq {
+public class KnowledgeNuggetsPostReq {
 
     @SerializedName("braingroom")
     Snippet data;
@@ -22,11 +22,8 @@ public class ArticleAndVideosReq {
         @SerializedName("uuid")
         public String uuid;
 
-        @SerializedName("category_id")
-        public String categoryId;
-
-        @SerializedName("segment_id")
-        public String segmentId;
+        @SerializedName("post_type")
+        public String postType;
 
         @SerializedName("post_title")
         public String postTitle;
@@ -48,7 +45,18 @@ public class ArticleAndVideosReq {
 
         @SerializedName("post_thumb_upload")
         public String postThumbUpload;
+
+        @SerializedName("videouploadway")
+        public String videouploadway;
+
+        @SerializedName("video")
+        public String video;
+
+        @SerializedName("video_upload")
+        public String videoUpload;
+
+        @SerializedName("class_link")
+        public String classLink;
     }
 
 }
-

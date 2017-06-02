@@ -24,6 +24,8 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             bind:divider_decoration='@{"space_divider"}'
             bind:items="@{vm.items}"
+            bind:paginate="@{true}"
+            bind:viewmodel="@{vm}"
             bind:layout_vertical="@{true}"
             bind:space_length="@{@dimen/margin_med}"
             bind:view_provider="@{@layout/item_class_row_listing}" />

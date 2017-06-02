@@ -1,7 +1,6 @@
 package com.braingroom.user.model;
 
 import android.content.SharedPreferences;
-import android.support.v4.media.MediaBrowserCompat;
 import android.util.Log;
 
 import com.braingroom.user.UserApplication;
@@ -16,7 +15,6 @@ import com.braingroom.user.model.request.*;
 import com.braingroom.user.model.response.*;
 
 import com.braingroom.user.utils.Constants;
-import com.braingroom.user.view.activity.BaseActivity;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -217,7 +215,7 @@ public class DataflowService {
 
 
     public Observable<List<ClassData>> getWishList(int pageIndex) {
-        return api.getWishlist(pageIndex > 0 ? pageIndex + "" : "",
+        return api.getWishlist(pageIndex > 1 ? pageIndex + "" : "",
                 new CommonUuidReq(new CommonUuidReq.Snippet(pref.getString(Constants.UUID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
                     @Override
@@ -252,7 +250,7 @@ public class DataflowService {
     }
 
     public Observable<VendorProfileData> getVendorProfile(String vendorId) {
-        return api.getVendorProfile(new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
+        return api.getVendorProfile("",new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorProfileData>() {
                     @Override
                     public VendorProfileData apply(@NonNull VendorProfileResp resp) throws Exception {
@@ -261,8 +259,9 @@ public class DataflowService {
                 });
     }
 
-    public Observable<List<ClassData>> getVendorClassList(String vendorId) {
-        return api.getVendorProfile(new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
+    public Observable<List<ClassData>> getVendorClassList(Integer pageIndex,String vendorId) {
+        return api.getVendorProfile(pageIndex > 1 ? pageIndex + "" : "",
+                new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, List<ClassData>>() {
                     @Override
                     public List<ClassData> apply(@NonNull VendorProfileResp resp) throws Exception {
@@ -295,8 +294,9 @@ public class DataflowService {
                 });
     }
 
-    public Observable<List<ClassData>> getBookingHistory() {
-        return api.getBookingHistory(new CommonIdReq(new CommonIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
+    public Observable<List<ClassData>> getBookingHistory(Integer pageIndex) {
+        return api.getBookingHistory(pageIndex > 1 ? pageIndex + "" : "",
+                new CommonIdReq(new CommonIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<BookingHistoryResp, List<ClassData>>() {
                     @Override
                     public List<ClassData> apply(@NonNull BookingHistoryResp resp) throws Exception {
@@ -459,7 +459,7 @@ public class DataflowService {
     }
 
     public Observable<VendorReviewResp> getVendorReviews(String vendorId) {
-        return api.getVendorProfile(new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
+        return api.getVendorProfile("",new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorReviewResp>() {
                     @Override
                     public VendorReviewResp apply(@NonNull VendorProfileResp resp) throws Exception {
@@ -617,28 +617,28 @@ public class DataflowService {
     }
 
 
-    public Observable<BaseResp> postArticleVideos(ConnectPostReq.ArticleAndVideos req) {
-        return api.postArticleVideos(req).subscribeOn(Schedulers.io())
+    public Observable<BaseResp> postArticleVideos(ArticleAndVideosPostReq.Snippet snippet) {
+        return api.postArticleVideos(new ArticleAndVideosPostReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<BaseResp> postDecideDiscuss(ConnectPostReq.DecideAndDiscuss req) {
-        return api.postDecideDiscuss(req).subscribeOn(Schedulers.io())
+    public Observable<BaseResp> postDecideDiscuss(DecideAndDiscussPostReq.Snippet snippet) {
+        return api.postDecideDiscuss(new DecideAndDiscussPostReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<BaseResp> postKnowledgeNuggets(ConnectPostReq.KnowledgeNuggets req) {
-        return api.postKnowledgeNuggets(req).subscribeOn(Schedulers.io())
+    public Observable<BaseResp> postKnowledgeNuggets(KnowledgeNuggetsPostReq.Snippet snippet) {
+        return api.postKnowledgeNuggets(new KnowledgeNuggetsPostReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<BaseResp> postBuyAndSell(ConnectPostReq.BuyAndSell req) {
-        return api.postBuyAndSell(req).subscribeOn(Schedulers.io())
+    public Observable<BaseResp> postBuyAndSell(BuyAndSellPostReq.Snippet snippet) {
+        return api.postBuyAndSell(new BuyAndSellPostReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<BaseResp> postLearningPartner(ConnectPostReq.LearningPartner req) {
-        return api.postLearningPartner(req).subscribeOn(Schedulers.io())
+    public Observable<BaseResp> postLearningPartner(LearningPartnerPostReq.Snippet snippet) {
+        return api.postLearningPartner(new LearningPartnerPostReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
