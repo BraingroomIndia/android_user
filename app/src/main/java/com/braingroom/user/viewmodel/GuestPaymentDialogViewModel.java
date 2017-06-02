@@ -1,11 +1,13 @@
 package com.braingroom.user.viewmodel;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.braingroom.user.model.response.GuestUserResp;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 
 import org.apache.commons.validator.routines.EmailValidator;
@@ -25,7 +27,9 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
         onClickLogin = new Action() {
             @Override
             public void run() throws Exception {
-                navigator.navigateActivity(LoginActivity.class, null);
+                Bundle data = new Bundle();
+                data.putSerializable("backStackActivity", CheckoutActivity.class.getSimpleName());
+                navigator.navigateActivity(LoginActivity.class, data);
                 navigator.finishActivity();
             }
         };

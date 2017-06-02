@@ -2,9 +2,6 @@ package com.braingroom.user.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +10,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,9 +28,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import io.reactivex.functions.Consumer;
 
@@ -216,7 +209,9 @@ public class HomeActivity extends BaseActivity
             });
         }
         if (id == R.id.nav_login) {
-            getNavigator().navigateActivity(LoginActivity.class, null);
+            Bundle data = new Bundle();
+            data.putSerializable("backStackActivity", HomeActivity.class.getSimpleName());
+            getNavigator().navigateActivity(LoginActivity.class, data);
             finish();
         }
         if (id == R.id.nav_register) {
