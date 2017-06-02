@@ -210,7 +210,7 @@ public class HomeActivity extends BaseActivity
         }
         if (id == R.id.nav_login) {
             Bundle data = new Bundle();
-            data.putSerializable("backStackActivity", HomeActivity.class.getSimpleName());
+            data.putString("backStackActivity", HomeActivity.class.getSimpleName());
             getNavigator().navigateActivity(LoginActivity.class, data);
             finish();
         }

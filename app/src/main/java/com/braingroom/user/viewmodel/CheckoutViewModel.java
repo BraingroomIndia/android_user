@@ -116,8 +116,8 @@ public class CheckoutViewModel extends ViewModel {
 
     public CheckoutViewModel(@NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData) {
 
-        String temp = classData.getPricingType().equalsIgnoreCase("Group") ? classData.getLevelDetails().get(0).getGroups().get(0).getPrice() :
-                classData.getLevelDetails().get(0).getPrice();
+//        String temp = classData.getPricingType().equalsIgnoreCase("Group") ? classData.getLevelDetails().get(0).getGroups().get(0).getPrice() :
+//                classData.getLevelDetails().get(0).getPrice();
         totalAmount = new ObservableInt(0);
 
         totalAmountAfterPromo = new ObservableInt(0);
@@ -193,7 +193,7 @@ public class CheckoutViewModel extends ViewModel {
                 }
                 if (!loggedIn.get()) {
                     helperFactory.createDialogHelper()
-                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(messageHelper, navigator, new UiHelper() {
+                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData,messageHelper, navigator, new UiHelper() {
                                 @Override
                                 public void initiateGuestPayment(String userId) {
                                     try {

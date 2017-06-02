@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.response.GuestUserResp;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -20,7 +21,7 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
     public final DataItemViewModel emailVm, mobileVm, nameVm;
     public final Action onClickLogin, onClickGuestPay;
 
-    public GuestPaymentDialogViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper,String classId) {
+    public GuestPaymentDialogViewModel(final ClassData classData, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper, String classId) {
         emailVm = new DataItemViewModel("");
         mobileVm = new DataItemViewModel("");
         nameVm = new DataItemViewModel("");
@@ -28,7 +29,8 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                data.putSerializable("backStackActivity", CheckoutActivity.class.getSimpleName());
+                data.putString("backStackActivity", CheckoutActivity.class.getSimpleName());
+                data.putSerializable("classData", classData);
                 navigator.navigateActivity(LoginActivity.class, data);
                 navigator.finishActivity();
             }

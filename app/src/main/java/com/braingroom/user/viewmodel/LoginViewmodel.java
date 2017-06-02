@@ -1,11 +1,9 @@
 package com.braingroom.user.viewmodel;
 
 
-import android.content.Intent;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.braingroom.user.model.request.LoginReq;
 import com.braingroom.user.model.response.LoginResp;
@@ -15,11 +13,12 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
-import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.activity.SignupActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONObject;
+
+import java.io.Serializable;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
@@ -43,12 +42,15 @@ public class LoginViewmodel extends ViewModel {
     @Setter
     LoginActivity.UIHandler uiHandler;
 
-    String classId;
+    String parentActivity;
+    Serializable classData;
 
-    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @Nullable String classId) {
+    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity, Serializable data) {
+        this.parentActivity = parentActivity;
+        this.classData = data;
         this.messageHelper = messageHelper;
         this.navigator = navigator;
-        this.classId = classId;
+//        this.classId = classId;
         onLoginClicked = new Action() {
             @Override
             public void run() throws Exception {
@@ -110,14 +112,13 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.NAME, loginResp.getData().get(0).getName());
                         editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
                         editor.commit();
-                        if (classId != null) {
-                            Intent intent = new Intent();
-                            Bundle bundle = new Bundle();
-                            bundle.putString(classId,"classId");
-                            intent.putExtras(bundle);
-                            navigator.finishActivity(intent);
+                        if (HomeActivity.class.getSimpleName().equals(parentActivity)) {
+                            navigator.navigateActivity(HomeActivity.class, null);
+                        } else {
+                            Bundle data = new Bundle();
+                            data.putSerializable("classData", classData);
+                            navigator.navigateActivity(CheckoutActivity.class, data);
                         }
-                        navigator.navigateActivity(HomeActivity.class, null);
                         navigator.finishActivity();
                     }
                 } else {
@@ -170,7 +171,14 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
                         editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
                         editor.commit();
-                        navigator.navigateActivity(HomeActivity.class, null);
+
+                        if (HomeActivity.class.getSimpleName().equals(parentActivity)) {
+                            navigator.navigateActivity(HomeActivity.class, null);
+                        } else {
+                            Bundle data = new Bundle();
+                            data.putSerializable("classData", classData);
+                            navigator.navigateActivity(CheckoutActivity.class, data);
+                        }
                         navigator.finishActivity();
                     }
                 } else {

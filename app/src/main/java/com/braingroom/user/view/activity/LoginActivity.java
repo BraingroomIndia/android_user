@@ -1,6 +1,5 @@
 package com.braingroom.user.view.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,6 +31,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 public class LoginActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -47,6 +48,8 @@ public class LoginActivity extends BaseActivity implements
     ActionBar actionBar;
 
     String classId;
+    String parentActivity;
+    Serializable data;
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -67,15 +70,14 @@ public class LoginActivity extends BaseActivity implements
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFbLogin = (LoginButton) findViewById(R.id.fb_login_original);
         callbackManager = CallbackManager.Factory.create();
         mFbLogin.setReadPermissions("email");
-        Intent intent =getIntent();
-        classId =intent.getStringExtra("classId");
+        Intent intent = getIntent();
+        classId = intent.getStringExtra("classId");
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -164,7 +166,9 @@ public class LoginActivity extends BaseActivity implements
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new LoginViewmodel(getMessageHelper(), getNavigator(), classId);
+        parentActivity = getIntentString("backStackActivity");
+        data = getIntentSerializable("classData");
+        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, data);
     }
 
     @Override
