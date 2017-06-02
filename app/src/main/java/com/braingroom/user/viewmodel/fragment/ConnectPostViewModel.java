@@ -73,7 +73,7 @@ public class ConnectPostViewModel extends ViewModel {
     public final ObservableBoolean categoryField = new ObservableBoolean(false);
 
 
-    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, String postType) {
+    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, final String postType) {
         this.navigator = navigator;
         this.helperFactory = helperFactory;
         this.postType = postType;
@@ -293,7 +293,12 @@ public class ConnectPostViewModel extends ViewModel {
         onSubmitClicked = new Action() {
             @Override
             public void run() throws Exception {
-//                uiHelper.next();
+                if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_BUY_N_SELL) {
+
+                }
+//
+//
+// uiHelper.next();
             }
         };
         changeDateText = new Action() {

@@ -216,8 +216,9 @@ public class DataflowService {
     }
 
 
-    public Observable<List<ClassData>> getWishList() {
-        return api.getWishlist(new CommonUuidReq(new CommonUuidReq.Snippet(pref.getString(Constants.UUID, "")))).subscribeOn(Schedulers.io())
+    public Observable<List<ClassData>> getWishList(int pageIndex) {
+        return api.getWishlist(pageIndex > 0 ? pageIndex + "" : "",
+                new CommonUuidReq(new CommonUuidReq.Snippet(pref.getString(Constants.UUID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
                     @Override
                     public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {

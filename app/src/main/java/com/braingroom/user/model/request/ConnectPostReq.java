@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Setter;
 
 /**
  * Created by himan on 1/25/2017.
@@ -114,6 +115,7 @@ public class ConnectPostReq {
         @SerializedName("braingroom")
         ArticleAndVideosSnippet data;
 
+        @Setter
         public static class ArticleAndVideosSnippet {
 
             @SerializedName("uuid")
@@ -150,6 +152,7 @@ public class ConnectPostReq {
 
     }
 
+    @Setter
     public static class DecideAndDiscuss {
 
         @SerializedName("braingroom")

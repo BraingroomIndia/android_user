@@ -105,9 +105,9 @@ public interface UserApiService {
     @Headers("X-App-Type: BGUSR01")
     Observable<ClassListResp> generalFilter(@Path("pageIndex") String pageIndex, @Body GeneralFilterReq req);
 
-    @POST("getAllWishList")
+    @POST("getAllWishList{pageIndex}")
     @Headers("X-App-Type: BGUSR01")
-    Observable<ClassListResp> getWishlist(@Body CommonUuidReq req);
+    Observable<ClassListResp> getWishlist(@Path("pageIndex") String pageIndex,@Body CommonUuidReq req);
 
     @POST("VendorProfile")
     @Headers("X-App-Type: BGUSR01")

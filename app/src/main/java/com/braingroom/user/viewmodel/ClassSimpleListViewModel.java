@@ -1,9 +1,11 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.dto.ClassData;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassDetailActivity;
@@ -13,29 +15,46 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
 public class ClassSimpleListViewModel extends ViewModel {
 
-    public final Observable<List<ViewModel>> classes;
+    private boolean paginationInProgress = false;
+    private ObservableField<Integer> nextPage = new ObservableField<>(0);
+    private final String listType;
+    Observable<List<ClassData>> apiObservable = null;
 
-    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType) {
-        Observable<List<ClassData>> apiObservable = null;
-        if("wishlist".equalsIgnoreCase(listType)) apiObservable = apiService.getWishList();
-        if("bookinghistory".equalsIgnoreCase(listType)) apiObservable = apiService.getBookingHistory();
-        classes = Observable.just(getDefaultClasses()).mergeWith(apiObservable)
-                .map(new Function<List<ClassData>, List<ViewModel>>() {
+    public Observable<List<ViewModel>> result;
+    private List<ViewModel> classes;
+    private final Navigator navigator;
+
+    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1) {
+        this.listType = listType1;
+        this.navigator = navigator;
+        classes = new ArrayList<>();
+
+        if ("bookinghistory".equalsIgnoreCase(listType))
+            apiObservable = apiService.getBookingHistory();
+        result = FieldUtils.toObservable(nextPage).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+            @Override
+            public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                paginationInProgress = true;
+                if ("wishlist".equalsIgnoreCase(listType))
+                    apiObservable = apiService.getWishList(nextPage.get());
+                return apiObservable.map(new Function<List<ClassData>, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(List<ClassData> resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
-                        if (resp.size() == 0) resp = getDefaultClasses();
+                        if (resp.size() == 0)
+                            nextPage.set(-1);
                         for (final ClassData elem : resp) {
                             if (elem.getClassType().equalsIgnoreCase("Online Classes"))
                                 elem.setLocality("Online");
                             else if (elem.getClassType().equalsIgnoreCase("Webinars"))
                                 elem.setLocality("Webinar");
-                            results.add(new ClassItemViewModel(elem, new Action() {
+                            classes.add(new ClassItemViewModel(elem, new Action() {
                                 @Override
                                 public void run() throws Exception {
                                     if (!elem.getId().equals("-1")) {
@@ -46,11 +65,22 @@ public class ClassSimpleListViewModel extends ViewModel {
                                 }
                             }));
                         }
-                        return results;
+                        paginationInProgress = false;
+                        return classes;
                     }
                 });
 
+            }
+        });
+
     }
+
+    public void paginate() {
+        if (nextPage.get() > 0 && !paginationInProgress) {
+            nextPage.set((nextPage.get() + 1));
+        }
+    }
+
 
     private List<ClassData> getDefaultClasses() {
         return Collections.nCopies(0, new ClassData());

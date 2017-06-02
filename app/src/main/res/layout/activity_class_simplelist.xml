@@ -18,9 +18,10 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/class_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            bind:items="@{vm.classes}"
+            bind:items="@{vm.result}"
             bind:layout_vertical="@{true}"
             bind:divider_decoration='@{"line_divider"}'
             bind:view_provider="@{@layout/item_class_row_listing}"
