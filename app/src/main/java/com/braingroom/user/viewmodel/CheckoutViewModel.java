@@ -79,7 +79,7 @@ public class CheckoutViewModel extends ViewModel {
 
     public int isGuest;
 
-    final ClassData classData;
+    ClassData classData;
     PayUCheckoutData mChekcoutData;
     public final boolean usePayU = false;
     MessageHelper messageHelper;
@@ -204,7 +204,7 @@ public class CheckoutViewModel extends ViewModel {
                                         messageHelper.show("Something went wrong. JSON error");
                                     }
                                 }
-                            }));
+                            },classData.getId()));
                     return;
                 }
                 isGuest = 0;
@@ -531,6 +531,7 @@ public class CheckoutViewModel extends ViewModel {
                 apiService.getClassDetail(classId).subscribe(new Consumer<ClassData>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull ClassData data) throws Exception {
+                        classData=data;
 
                     }
                 });

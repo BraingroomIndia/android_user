@@ -123,6 +123,10 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 //                getMessageHelper().show("paymemt failure");
             }
         }
+        if (requestCode== vm.REQ_CODE_LOGIN)
+        {
+            vm.handleActivityResult(requestCode,resultCode,data);
+        }
 //        if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
 //            if (data != null) {
 //                String response = data.getStringExtra("payu_response");

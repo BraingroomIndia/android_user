@@ -123,6 +123,11 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<CommonIdResp> getGroupActivities(String groupIds) {
+        return api.getGroupActivities(new CommonIdReq(new CommonIdReq.Snippet(groupIds))).subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread());
+    }
+
 
     public Observable<SegmentResp> getSegments(String categoryId) {
         return api.getSegments(new SegmentReq(new SegmentReq.Snippet(categoryId))).subscribeOn(Schedulers.io())
@@ -198,10 +203,10 @@ public class DataflowService {
                     public ClassListData apply(@NonNull ClassListResp classListResp) throws Exception {
                         List<ClassData> dataList = new ArrayList<>(0);
 
-                            for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                                dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                                Log.d(TAG, "apply: " + snippet.toString());
-                            }
+                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
+                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                            Log.d(TAG, "apply: " + snippet.toString());
+                        }
                         ClassListData dataWrapper = new ClassListData();
                         dataWrapper.setNextPage(classListResp.getNextPage());
                         dataWrapper.setClassDataList(dataList);
@@ -535,6 +540,27 @@ public class DataflowService {
                 );
     }
 
+    public Observable<SegmentResp> getSegmentTree(List<Integer> categoryIds) {
+        List<Observable<SegmentResp>> segmentObservableList = new ArrayList<>();
+        if (categoryIds.size()==0)
+            return Observable.empty();
+        for (Integer categoryId : categoryIds) {
+            segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet(""+categoryId))));
+        }
+        return Observable.zip(segmentObservableList, new Function<Object[], SegmentResp>() {
+            @Override
+            public SegmentResp apply(@NonNull Object[] segments) throws Exception {
+                List<SegmentResp.Snippet> snippets = new ArrayList<SegmentResp.Snippet>();
+                for (Object segmentObj : segments) {
+                    SegmentResp segment = (SegmentResp) segmentObj;
+                    snippets.addAll(segment.getData());
+                }
+                return new SegmentResp("1", snippets);
+            }
+        });
+
+    }
+
     public Observable<ConnectFeedResp> getConnectFeed(ConnectFilterData connectFilterData, int pageIndex) {
         ConnectFeedReq req = connectFilterData.getFilterReq();
         req.getData().setUserId(pref.getString(Constants.BG_ID, ""));
@@ -545,7 +571,9 @@ public class DataflowService {
     public Observable<CommentListResp> getComments(String postId) {
 //        CommentListResp.Snippet snippet = new CommentListResp.Snippet();
 //        CommentListResp.Reply reply = new CommentListResp.Reply();
-//        snippet.setComment("The menu itself created in main FragmentActivity. I want to change this item's icon programmatically depending on the open Fragment and, obviously, have different actions when the user hits this button. I tried several things to do that, but nothing worked. The last thing I tried was this code in my Fragment's onCreateView method:");
+//        snippet.setComment("The menu itself created in main FragmentActivity.
+// I want to change this item's icon programmatically depending on the open Fragment and, obviously, have different actions when the user hits this button.
+// I tried several things to do that, but nothing worked. The last thing I tried was this code in my Fragment's onCreateView method:");
 //        snippet.setUserImage("https://lh5.googleusercontent.com/-n-KJMm8mENs/AAAAAAAAAAI/AAAAAAAAAHY/uG2vXBFifNU/photo.jpg?sz=50");
 //        snippet.setUserName("Himanshu Agrahari");
 //        snippet.setDate("12 Sept, 4:00 PM");

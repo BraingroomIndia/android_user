@@ -64,22 +64,31 @@
                     app:editable="@{true}"
                     app:vm="@{vm.postTypeVm}" />
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{vm.groupsField ? View.VISIBLE : View.GONE}">
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    android:visibility="@{vm.groupsField ? View.VISIBLE : View.GONE}"
+                    app:editable="@{true}"
+                    app:vm="@{vm.groupVm}" />
 
-                    <include
-                        layout="@layout/item_list_dialog_opener"
-                        app:editable="@{true}"
-                        app:vm="@{vm.groupVm}" />
-                </FrameLayout>
 
-                <!--   <include
-                       android:visibility="@{vm.activityField ? View.VISIBLE : View.GONE}"
-                       layout="@layout/item_list_dialog_opener"
-                       app:editable="@{true}"
-                       app:vm="{vm.activityVm}"/>-->
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    android:visibility="@{vm.activityField ? View.VISIBLE : View.GONE}"
+                    app:editable="@{true}"
+                    app:vm="@{vm.activityVm}" />
+
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}"
+                    app:editable="@{true}"
+                    app:vm="@{vm.categoryVm}" />
+
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}"
+                    app:editable="@{true}"
+                    app:vm="@{vm.segmentsVm}" />
+
 
                 <include
                     layout="@layout/floating_label_edit_text"
@@ -195,90 +204,89 @@
                 </FrameLayout>
 
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/padding_med"
-                android:visibility="@{vm.proposedTimeField ? View.VISIBLE :View.GONE}">
-
-                <RadioGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{!vm.isRecurring}"
-                        android:onClick="@{vm.changeDateText}"
-                        android:text="On Date"
-                        />
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@={vm.isRecurring}"
-                        android:onClick="@{vm.changeDateText}"
-                        android:text="Recurring Date" />
-                </RadioGroup>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <include
-                        layout="@layout/item_date_dialog_opener"
-                        app:vm="@{vm.firstDateVm}" />
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_med"
+                    android:visibility="@{vm.proposedTimeField ? View.VISIBLE :View.GONE}">
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{!vm.isRecurring}"
+                            android:onClick="@{vm.changeDateText}"
+                            android:text="On Date" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@={vm.isRecurring}"
+                            android:onClick="@{vm.changeDateText}"
+                            android:text="Recurring Date" />
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include
+                            layout="@layout/item_date_dialog_opener"
+                            app:vm="@{vm.firstDateVm}" />
+
+                        <include
+                            layout="@layout/item_date_dialog_opener"
+                            android:visibility="@{vm.isRecurring ? View.VISIBLE : View.GONE}"
+                            app:vm="@{vm.secondDateVm}" />
+
+                    </LinearLayout>
+
 
                     <include
-                        layout="@layout/item_date_dialog_opener"
-                        android:visibility="@{vm.isRecurring ? View.VISIBLE : View.GONE}"
-                        app:vm="@{vm.secondDateVm}" />
+                        layout="@layout/floating_label_edit_text"
+                        app:data="@{vm.proposedTime}"
+                        app:editable="@{true}"
+                        app:hintText='@{"Proposed Time"}' />
+
+                    <include
+                        layout="@layout/floating_label_edit_text"
+                        app:data="@{vm.requestNote}"
+                        app:editable="@{true}"
+                        app:hintText='@{"Request Note"}' />
+
+                    <include
+                        layout="@layout/item_list_dialog_opener"
+                        app:editable="@{true}"
+                        app:vm="@{vm.privacyVm}" />
+
 
                 </LinearLayout>
 
 
-                <include
-                    layout="@layout/floating_label_edit_text"
-                    app:data="@{vm.proposedTime}"
-                    app:editable="@{true}"
-                    app:hintText='@{"Proposed Time"}' />
-
-                <include
-                    layout="@layout/floating_label_edit_text"
-                    app:data="@{vm.requestNote}"
-                    app:editable="@{true}"
-                    app:hintText='@{"Request Note"}' />
-
-                <include
-                    layout="@layout/item_list_dialog_opener"
-                    app:editable="@{true}"
-                    app:vm="@{vm.privacyVm}" />
-
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="@dimen/margin_med"
+                    android:background="@drawable/solid_bg_green_rounded_corner"
+                    android:onClick="@{vm.onSubmitClicked}"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:paddingLeft="@dimen/padding_med"
+                    android:paddingRight="@dimen/padding_med"
+                    android:paddingTop="@dimen/padding_small"
+                    android:text="Submit"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large"
+                    app:font='@{@string/robotoRegular}' />
             </LinearLayout>
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="@dimen/margin_med"
-                android:background="@drawable/solid_bg_green_rounded_corner"
-                android:onClick="@{vm.onSubmitClicked}"
-                android:paddingBottom="@dimen/padding_small"
-                android:paddingLeft="@dimen/padding_med"
-                android:paddingRight="@dimen/padding_med"
-                android:paddingTop="@dimen/padding_small"
-                android:text="Submit"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_large"
-                app:font='@{@string/robotoRegular}' />
         </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
-</ScrollView>
-
-    </layout>
+</layout>

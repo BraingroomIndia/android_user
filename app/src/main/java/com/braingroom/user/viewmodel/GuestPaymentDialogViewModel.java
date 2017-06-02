@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -18,15 +19,16 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
     public final DataItemViewModel emailVm, mobileVm, nameVm;
     public final Action onClickLogin, onClickGuestPay;
 
-    public GuestPaymentDialogViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper) {
+    public GuestPaymentDialogViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper,String classId) {
         emailVm = new DataItemViewModel("");
         mobileVm = new DataItemViewModel("");
         nameVm = new DataItemViewModel("");
+        final Bundle bundle = new Bundle();
+        bundle.putString(classId,"classId");;
         onClickLogin = new Action() {
             @Override
             public void run() throws Exception {
-                navigator.navigateActivity(LoginActivity.class, null);
-                navigator.finishActivity();
+                navigator.navigateActivityForResult(LoginActivity.class, bundle,REQ_CODE_LOGIN);
             }
         };
 
