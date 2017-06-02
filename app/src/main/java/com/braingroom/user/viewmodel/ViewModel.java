@@ -62,6 +62,9 @@ public class ViewModel {
     public void init() {
     }
 
+    public void paginate() {
+    }
+
 
     public void handleActivityResult(final int requestCode, int resultCode, Intent data) {
     }

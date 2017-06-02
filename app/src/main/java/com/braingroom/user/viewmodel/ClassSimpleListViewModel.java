@@ -28,11 +28,9 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     public Observable<List<ViewModel>> result;
     private List<ViewModel> classes;
-    private final Navigator navigator;
 
     public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1) {
         this.listType = listType1;
-        this.navigator = navigator;
         classes = new ArrayList<>();
 
         if ("bookinghistory".equalsIgnoreCase(listType))
@@ -75,6 +73,7 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     }
 
+    @Override
     public void paginate() {
         if (nextPage.get() > 0 && !paginationInProgress) {
             nextPage.set((nextPage.get() + 1));

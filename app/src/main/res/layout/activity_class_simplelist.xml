@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.ClassSimpleListViewModel" />
@@ -21,10 +23,12 @@
             android:id="@+id/class_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            bind:divider_decoration='@{"line_divider"}'
             bind:items="@{vm.result}"
             bind:layout_vertical="@{true}"
-            bind:divider_decoration='@{"line_divider"}'
+            bind:paginate="@{true}"
             bind:view_provider="@{@layout/item_class_row_listing}"
+            bind:viewmodel="@{vm}"
             tools:context="com.braingroom.user.view.activity.ClassSimpleListActivity" />
 
     </RelativeLayout>

@@ -48,7 +48,6 @@ import com.braingroom.user.viewmodel.ViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,10 +155,10 @@ public class BindingUtils {
 
     // Extra Utilities
 
-    @BindingAdapter(value = {"layout_vertical", "divider_decoration", "space_length"}, requireAll = false)
-    public static void bindLinearLayoutManager(@NonNull RecyclerView recyclerView, boolean vertical, String decorationType, float spaceLength) {
+    @BindingAdapter(value = {"layout_vertical", "divider_decoration", "space_length","paginate","viewmodel"}, requireAll = false)
+    public static void bindLinearLayoutManager(@NonNull RecyclerView recyclerView, boolean vertical, String decorationType, float spaceLength, boolean paginate, final ViewModel vm) {
         int orientation = vertical ? RecyclerView.VERTICAL : RecyclerView.HORIZONTAL;
-        LinearLayoutManager lm = new LinearLayoutManager(recyclerView.getContext(), orientation, false);
+        final LinearLayoutManager lm = new LinearLayoutManager(recyclerView.getContext(), orientation, false);
         lm.setAutoMeasureEnabled(true);
 
         if (DIVIDER_TYPE_LINE.equalsIgnoreCase(decorationType)) {
@@ -169,6 +168,29 @@ public class BindingUtils {
             recyclerView.addItemDecoration(new SpacingDecoration((int) spaceLength, 1));
         }
         recyclerView.setLayoutManager(lm);
+
+        if(paginate){
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int visibleItemCount = lm.getChildCount();
+                    int totalItemCount = lm.getItemCount();
+                    int firstVisibleItemPosition = lm.findFirstVisibleItemPosition();
+
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                         vm.paginate();
+                    }
+
+                }
+            });
+
+        }
     }
 
     @BindingAdapter(value = {"layout_grid_vertical", "span_count", "divider_decoration", "space_length"}, requireAll = false)
