@@ -3,13 +3,16 @@ package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.braingroom.user.model.request.LoginReq;
 import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.SearchActivity;
@@ -40,9 +43,12 @@ public class LoginViewmodel extends ViewModel {
     @Setter
     LoginActivity.UIHandler uiHandler;
 
-    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
+    String classId;
+
+    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @Nullable String classId) {
         this.messageHelper = messageHelper;
         this.navigator = navigator;
+        this.classId = classId;
         onLoginClicked = new Action() {
             @Override
             public void run() throws Exception {
@@ -94,7 +100,7 @@ public class LoginViewmodel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
-                    if ("".equals(loginResp.getData().get(0).getMobile())||loginResp.getData().get(0).getReferralCode()==null) {
+                    if ("".equals(loginResp.getData().get(0).getMobile()) || loginResp.getData().get(0).getReferralCode() == null) {
                         uiHandler.showEmailDialog(loginResp);
                     } else {
                         editor.putBoolean(Constants.LOGGED_IN, true);
@@ -104,6 +110,13 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.NAME, loginResp.getData().get(0).getName());
                         editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
                         editor.commit();
+                        if (classId != null) {
+                            Intent intent = new Intent();
+                            Bundle bundle = new Bundle();
+                            bundle.putString(classId,"classId");
+                            intent.putExtras(bundle);
+                            navigator.finishActivity(intent);
+                        }
                         navigator.navigateActivity(HomeActivity.class, null);
                         navigator.finishActivity();
                     }

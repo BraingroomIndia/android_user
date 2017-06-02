@@ -46,6 +46,8 @@ public class LoginActivity extends BaseActivity implements
 
     ActionBar actionBar;
 
+    String classId;
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         getMessageHelper().show("Failed connecting to google");
@@ -65,12 +67,16 @@ public class LoginActivity extends BaseActivity implements
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFbLogin = (LoginButton) findViewById(R.id.fb_login_original);
         callbackManager = CallbackManager.Factory.create();
         mFbLogin.setReadPermissions("email");
+        Intent intent =getIntent();
+        classId =intent.getStringExtra("classId");
+
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
@@ -146,7 +152,8 @@ public class LoginActivity extends BaseActivity implements
             }
 
             @Override
-            public void showEmailDialog(LoginResp resp) {showMandatoryEmailPopup(resp);
+            public void showEmailDialog(LoginResp resp) {
+                showMandatoryEmailPopup(resp);
             }
 
         };
@@ -157,7 +164,7 @@ public class LoginActivity extends BaseActivity implements
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new LoginViewmodel(getMessageHelper(), getNavigator());
+        return new LoginViewmodel(getMessageHelper(), getNavigator(), classId);
     }
 
     @Override
@@ -177,7 +184,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login,
-                new FirstSocialLoginDialogViewModel(loginResp,getMessageHelper(),getNavigator()));
+                new FirstSocialLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator()));
         /*new MaterialDialog.Builder(LoginActivity.this)
                 .title("Contact details")
                 .content("Please enter your mobile number")
@@ -221,12 +228,13 @@ public class LoginActivity extends BaseActivity implements
         }
         callbackManager.onActivityResult(requestCode, responseCode, data);
 
+
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if (item.getItemId()==android.R.id.home)
-            getNavigator().navigateActivity(HomeActivity.class,null);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            getNavigator().navigateActivity(HomeActivity.class, null);
         return true;
     }
 

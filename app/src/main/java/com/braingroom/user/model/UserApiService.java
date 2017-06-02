@@ -195,6 +195,11 @@ public interface UserApiService {
     @Headers("X-App-Type: BGUSR01")
     Observable<GroupResp> getGroups(@Body ConnectDataReq req);
 
+    @POST("getGroupActivities")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<CommonIdResp> getGroupActivities(@Body CommonIdReq req);
+
+
     @POST("getConnectFeedsData/{pageIndex}")
     @Headers("X-App-Type: BGUSR01")
     Observable<ConnectFeedResp> getConnectFeedData(@Path("pageIndex") String pageIndex, @Body ConnectFeedReq req);

@@ -20,7 +20,7 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
     public final DataItemViewModel emailVm, mobileVm, nameVm;
     public final Action onClickLogin, onClickGuestPay;
 
-    public GuestPaymentDialogViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper) {
+    public GuestPaymentDialogViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper,String classId) {
         emailVm = new DataItemViewModel("");
         mobileVm = new DataItemViewModel("");
         nameVm = new DataItemViewModel("");

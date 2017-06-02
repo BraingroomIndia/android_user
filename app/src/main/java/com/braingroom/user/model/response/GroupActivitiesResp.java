@@ -7,21 +7,25 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Created by godara on 01/06/17.
+ */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class CommonIdResp extends BaseResp {
+public class GroupActivitiesResp extends BaseResp {
+
 
     @SerializedName("braingroom")
-    List<Snippet> data;
+    List<Snippet> snippet;
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
     public static class Snippet {
 
         @SerializedName("id")
-        String id;
+        public String id;
 
-        @SerializedName(value = "name", alternate = {"college_name","activity_name"})
-        String textValue;
+        @SerializedName("activity_name")
+        public String activityName;
     }
 }
