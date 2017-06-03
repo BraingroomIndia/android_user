@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel" />
+
+        <variable
+            name="editable"
+            type="boolean" />
+
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/input_layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_line_drawable"
+        android:onClick="@{editable ? vm.onOpenClicked : null}"
+        android:paddingBottom="@dimen/padding_large"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingTop="@dimen/padding_med">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/arrow"
+            android:gravity="bottom"
+            android:text="@{vm.title}"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_large"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_below="@+id/title"
+            android:layout_toLeftOf="@+id/arrow"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:lines="1"
+            android:text="@{vm.selectedItemsText}"
+            android:textColor="@color/colorTextGray"
+            android:textSize="@dimen/text_size_medium"
+            app:font='@{@string/robotoRegular}' />
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/padding_med"
+            android:src="@drawable/ic_chevron_right_black_24dp"
+            android:tint="@color/colorTextGray" />
+
+    </RelativeLayout>
+</layout>

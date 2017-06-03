@@ -154,7 +154,6 @@ public class BindingUtils {
     }
 
     // Extra Utilities
-
     @BindingAdapter(value = {"layout_vertical", "divider_decoration", "space_length","paginate","viewmodel"}, requireAll = false)
     public static void bindLinearLayoutManager(@NonNull RecyclerView recyclerView, boolean vertical, String decorationType, float spaceLength, boolean paginate, final ViewModel vm) {
         int orientation = vertical ? RecyclerView.VERTICAL : RecyclerView.HORIZONTAL;
@@ -208,7 +207,6 @@ public class BindingUtils {
         if (DIVIDER_TYPE_SPACE.equalsIgnoreCase(decorationType)) {
             recyclerView.addItemDecoration(new SpacingDecoration((int) spaceLength, 2));
         }
-
         recyclerView.setLayoutManager(gm);
     }
 

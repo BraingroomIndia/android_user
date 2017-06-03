@@ -18,7 +18,6 @@ import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.HomeActivity;
-import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.SignupActivity;
 import com.braingroom.user.viewmodel.DataItemViewModel;
 import com.braingroom.user.viewmodel.DatePickerViewModel;
@@ -51,13 +50,14 @@ public class SignupViewModel extends ViewModel {
 
     public final Action onSignupClicked, onBackClicked;
 
-    public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM, ugInstituteVm, pgInstituteVm;
+    public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM, pgInstituteVm;
+    public final DynamicSearchSelectListViewModel ugInstituteVm;
     public Observable<HashMap<String, Pair<String, String>>> instituteUGVm, stateApiObservable, cityApiObservable, localityApiObservable, instituteApiObservable;
 
     private SignUpReq.Snippet signUpSnippet;
 
 
-    public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper) {
+    public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
         this.navigator = navigator;
         fullName = new DataItemViewModel("");
         emailId = new DataItemViewModel("");
@@ -118,11 +118,11 @@ public class SignupViewModel extends ViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
-                        if (signUpResp.getData().size()>0) {
+                        if (signUpResp.getData().size() > 0) {
                             messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                    navigator.navigateActivity(HomeActivity.class,null);
+                                    navigator.navigateActivity(HomeActivity.class, null);
                                 }
                             });
                         } else {
@@ -305,8 +305,8 @@ public class SignupViewModel extends ViewModel {
                 return resMap;
             }
         });
-        ugInstituteVm = new SearchSelectListViewModel(SignupActivity.FRAGMENT_UG_COLLEGE, messageHelper, navigator, "search for institutes ", false, instituteApiObservable, "", null, fragmentHelper);
-        pgInstituteVm = new SearchSelectListViewModel(SignupActivity.FRAGMENT_PG_COLLEGE, messageHelper, navigator, "search for institutes ", false, instituteApiObservable, "", null, fragmentHelper);
+        ugInstituteVm = new DynamicSearchSelectListViewModel(SignupActivity.FRAGMENT_UG_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
+        pgInstituteVm = new SearchSelectListViewModel(SignupActivity.FRAGMENT_PG_COLLEGE, messageHelper, navigator, "search for institutes ", false, instituteApiObservable, "", null, dynamicSearchFragmentHelper);
 
 
     }

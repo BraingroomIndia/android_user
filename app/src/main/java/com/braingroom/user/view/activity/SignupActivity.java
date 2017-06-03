@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.braingroom.user.R;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
+import com.braingroom.user.view.fragment.DynamicSearchSelectListFragment;
 import com.braingroom.user.view.fragment.SearchSelectListFragment;
 import com.braingroom.user.view.fragment.Signup1Fragment;
 import com.braingroom.user.view.fragment.Signup2Fragment;
@@ -57,6 +58,19 @@ public class SignupActivity extends BaseActivity {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
                 transaction.add(R.id.fragment_container, SearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
+
+            }
+
+            @Override
+            public void remove(String tag) {
+                popBackstack(tag);
+            }
+        },new FragmentHelper() {
+            @Override
+            public void show(String tag) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+                transaction.add(R.id.fragment_container, DynamicSearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
 
             }
 

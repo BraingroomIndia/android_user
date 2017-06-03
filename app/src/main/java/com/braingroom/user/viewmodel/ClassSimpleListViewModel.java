@@ -4,6 +4,7 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
@@ -23,7 +24,7 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     private boolean paginationInProgress = false;
     private ObservableField<Integer> nextPage = new ObservableField<>(1);
-    private boolean nextPageAvailable =true;
+    private boolean nextPageAvailable = true;
     private final String listType;
     Observable<List<ClassData>> apiObservable = null;
 
@@ -43,32 +44,36 @@ public class ClassSimpleListViewModel extends ViewModel {
                 else if ("bookinghistory".equalsIgnoreCase(listType))
                     apiObservable = apiService.getBookingHistory(nextPage.get());
 
-                return apiObservable.map(new Function<List<ClassData>, List<ViewModel>>() {
-                    @Override
-                    public List<ViewModel> apply(List<ClassData> resp) throws Exception {
-                        List<ViewModel> results = new ArrayList<>();
-                        if (resp.size() == 0)
-                            nextPageAvailable =false;
-                        for (final ClassData elem : resp) {
-                            if (elem.getClassType().equalsIgnoreCase("Online Classes"))
-                                elem.setLocality("Online");
-                            else if (elem.getClassType().equalsIgnoreCase("Webinars"))
-                                elem.setLocality("Webinar");
-                            classes.add(new ClassItemViewModel(elem, new Action() {
-                                @Override
-                                public void run() throws Exception {
-                                    if (!elem.getId().equals("-1")) {
-                                        Bundle data = new Bundle();
-                                        data.putString("id", elem.getId());
-                                        navigator.navigateActivity(ClassDetailActivity.class, data);
-                                    }
+                return apiObservable
+                        .map(new Function<List<ClassData>, List<ViewModel>>() {
+                            @Override
+                            public List<ViewModel> apply(List<ClassData> resp) throws Exception {
+                                List<ViewModel> results = new ArrayList<>();
+                                if (resp.size() == 0)
+                                    nextPageAvailable = false;
+                                if (resp.size() == 0 && classes.size() == 0) {
+                                    classes.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                                 }
-                            }));
-                        }
-                        paginationInProgress = false;
-                        return classes;
-                    }
-                });
+                                for (final ClassData elem : resp) {
+                                    if (elem.getClassType().equalsIgnoreCase("Online Classes"))
+                                        elem.setLocality("Online");
+                                    else if (elem.getClassType().equalsIgnoreCase("Webinars"))
+                                        elem.setLocality("Webinar");
+                                    classes.add(new ClassItemViewModel(elem, new Action() {
+                                        @Override
+                                        public void run() throws Exception {
+                                            if (!elem.getId().equals("-1")) {
+                                                Bundle data = new Bundle();
+                                                data.putString("id", elem.getId());
+                                                navigator.navigateActivity(ClassDetailActivity.class, data);
+                                            }
+                                        }
+                                    }));
+                                }
+                                paginationInProgress = false;
+                                return classes;
+                            }
+                        }).mergeWith(getLoadingItems(3));
 
             }
         });
@@ -83,8 +88,11 @@ public class ClassSimpleListViewModel extends ViewModel {
     }
 
 
-    private List<ClassData> getDefaultClasses() {
-        return Collections.nCopies(0, new ClassData());
+    private Observable<List<ViewModel>> getLoadingItems(int count) {
+        List<ViewModel> result = new ArrayList<>();
+        result.addAll(classes);
+        result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
+        return Observable.just(result);
     }
 
 

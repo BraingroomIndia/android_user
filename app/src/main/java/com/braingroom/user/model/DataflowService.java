@@ -491,8 +491,8 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<CommonIdResp> getInstitute(String countryId) {
-        return api.getInstitute(new InstituteReq(new InstituteReq.Snippet(""))).subscribeOn(Schedulers.io())
+    public Observable<CommonIdResp> getInstitute(String keyword) {
+        return api.getInstitute(new InstituteReq(new InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

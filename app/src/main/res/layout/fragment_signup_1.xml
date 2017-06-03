@@ -118,7 +118,7 @@
 
 
                 <include
-                    layout="@layout/item_list_fragment_opener"
+                    layout="@layout/item_list_searchable_fragment_opener"
                     app:editable="@{true}"
                     app:vm="@{vm.ugInstituteVm}" />
 
