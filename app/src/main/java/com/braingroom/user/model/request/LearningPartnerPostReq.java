@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -57,6 +58,9 @@ public class LearningPartnerPostReq {
 
         @SerializedName("request_date")
         public String requestDate;
+
+        @SerializedName("pdr_time")
+        String recurringRequestTime;
 
         @SerializedName("proposed_date_from")
         public String proposedDateFrom;

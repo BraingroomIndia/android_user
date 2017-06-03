@@ -13,10 +13,12 @@ import com.braingroom.user.model.request.ConnectPostReq;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.KnowledgeNuggetsPostReq;
 import com.braingroom.user.model.request.LearningPartnerPostReq;
+import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -56,10 +58,10 @@ public class ConnectPostViewModel extends ViewModel {
 
 
     //Request
-    BuyAndSellPostReq.Snippet buyAndSellSnippet;
-    KnowledgeNuggetsPostReq.Snippet knowledgeNuggetsSnippet;
-    LearningPartnerPostReq.Snippet learningPartnerPostSnippet;
-    DecideAndDiscussPostReq.Snippet decideAndDiscussSnippet;
+    private BuyAndSellPostReq.Snippet buyAndSellSnippet;
+    private KnowledgeNuggetsPostReq.Snippet knowledgeNuggetsSnippet;
+    private LearningPartnerPostReq.Snippet learningPartnerPostSnippet;
+    private DecideAndDiscussPostReq.Snippet decideAndDiscussSnippet;
 
 
     public final DataItemViewModel title, youtubeAddress, classPageUrl, proposedTime, requestNote;
@@ -71,7 +73,7 @@ public class ConnectPostViewModel extends ViewModel {
     public final Action onSubmitClicked, changeDateText;
     public Navigator navigator;
     private String postType;
-    public Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer, postConsumer, groupConsumer, categoryConsumer;
+    private Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer, localityConsumer, postConsumer, groupConsumer, categoryConsumer;
 
 
     public final ObservableBoolean videoField = new ObservableBoolean(true);
@@ -116,7 +118,6 @@ public class ConnectPostViewModel extends ViewModel {
         postTypeLearnerApiData.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
 
         LinkedHashMap<String, Integer> privacyTypeApiData = new LinkedHashMap<>();
-        privacyTypeApiData.put("Privacy", PRIVACY_TYPE_PRIVATE);
         privacyTypeApiData.put("Group", PRIVACY_TYPE_GROUP);
         privacyTypeApiData.put("All", PRIVACY_TYPE_ALL);
 
@@ -139,15 +140,16 @@ public class ConnectPostViewModel extends ViewModel {
             postTypeApiData = postTypeTutorApiData;
             mSelectedPostType.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
         }
-        if (isRecurring.get())
 
 
-            Log.d(TAG, "postType: " + postType);
+        Log.d(TAG, "postType: " + postType);
 
 
         postConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
+                imageUploadVm.remoteAddress.set(null);
+                videoUploadVm.remoteAddress.set(null);
                 if (selectedMap.values().iterator().hasNext())
                     switch (selectedMap.values().iterator().next()) {
                         case POST_TYPE_KNOWLEDGE_NUGGETS:
@@ -214,6 +216,7 @@ public class ConnectPostViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next();
+                    setCountry(selectedId);
                     stateVm.reInit(getStateApiObservable(selectedId));
                 }
             }
@@ -235,6 +238,7 @@ public class ConnectPostViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next();
+                    setState(selectedId);
                     cityVm.reInit(getCityApiObservable(selectedId));
                 }
             }
@@ -245,29 +249,50 @@ public class ConnectPostViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next();
+                    setCity(selectedId);
                     localityVm.reInit(getLocalityApiObservable(selectedId));
+                }
+            }
+        };
+        localityConsumer = new Consumer<HashMap<String, Integer>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
+                if (selectedMap.values().iterator().hasNext()) {
+                    String selectedId = "" + selectedMap.values().iterator().next();
+                    setLocality(selectedId);
+                }
+            }
+        };
+        groupConsumer = new Consumer<HashMap<String, Integer>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
+                if (selectedMap.values().iterator().hasNext()) {
+                    String selectedIds = android.text.TextUtils.join(",", new ArrayList(selectedMap.values()));
+                    setGroup(selectedIds);
+                    activityVm.reInit(getgetGroupActivitiesApiObservable(selectedIds));
+                    Log.d(TAG, "accept: " + selectedIds);
+                }
+
+            }
+        };
+        categoryConsumer = new Consumer<HashMap<String, Integer>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
+                if (selectedMap.values().iterator().hasNext()) {
+                    String selectedId = android.text.TextUtils.join(",", new ArrayList(selectedMap.values()));
+                    setCategory(selectedId);
+                    segmentsVm.reInit(getSegmentsApiObservable(selectedId));
                 }
             }
         };
 
         stateVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "State", messageHelper, getStateApiObservable("-1"), new HashMap<String, Integer>(), false, stateConsumer);
         cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), new HashMap<String, Integer>(), false, cityConsumer);
-        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Localities", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, null);
+        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Localities", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, localityConsumer);
 
 
         activityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Activity", messageHelper, getgetGroupActivitiesApiObservable("-1")
                 , new HashMap<String, Integer>(), false, null);
-
-        groupConsumer = new Consumer<HashMap<String, Integer>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
-                String selectedIds = selectedMap.values().toString();
-                selectedIds = selectedIds.substring(1, selectedIds.length() - 1);
-                activityVm.reInit(getgetGroupActivitiesApiObservable(selectedIds));
-                Log.d(TAG, "accept: " + selectedIds);
-
-            }
-        };
 
 
         groupVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Groups", messageHelper, apiService.getGroups().map(new Function<GroupResp, ListDialogData1>() {
@@ -282,15 +307,6 @@ public class ConnectPostViewModel extends ViewModel {
             }
         }), new HashMap<String, Integer>(), true, groupConsumer);
 
-        categoryConsumer = new Consumer<HashMap<String, Integer>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
-                if (selectedMap.values().iterator().hasNext()) {
-                    List<Integer> selectedId = new ArrayList(selectedMap.values());
-                    segmentsVm.reInit(getSegmentsApiObservable(selectedId));
-                }
-            }
-        };
         categoryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Category", messageHelper, apiService.getCategory()
                 .map(new Function<CategoryResp, ListDialogData1>() {
                     @Override
@@ -305,21 +321,139 @@ public class ConnectPostViewModel extends ViewModel {
                 }), new HashMap<String, Integer>(), true, categoryConsumer);
 
 
-        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable(new ArrayList<Integer>(0)), new HashMap<String, Integer>(), false, null);
+        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable("-1"), new HashMap<String, Integer>(), false, null);
 
 
         onSubmitClicked = new Action() {
             @Override
             public void run() throws Exception {
                 if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_BUY_N_SELL) {
-                    BuyAndSellPostReq.Snippet snippet = new BuyAndSellPostReq.Snippet();
-                    snippet.setPostType("user_post");
-                    snippet.setPostTitle(title.s_1.get());
-                    snippet.setPostSummary(description.get());
-                    return;
+                    if (!groupVm.selectedItemsMap.values().iterator().hasNext()) {
+                        messageHelper.show("Please Select a Group");
+                        return;
+                    }
+                    if (title.s_1.get().equals("")) {
+                        messageHelper.show("Please enter Post Title");
+                        return;
+                    }
+                    if (description.get().equals("")) {
+                        messageHelper.show("Please enter Description");
+                        return;
+                    }
+                    buyAndSellSnippet.setUuid(pref.getString(Constants.UUID, ""));
+                    buyAndSellSnippet.setPostType("group_post");
+                    buyAndSellSnippet.setPostTitle(title.s_1.get());
+                    buyAndSellSnippet.setPostSummary(description.get());
+                    buyAndSellSnippet.setPostThumbUpload(imageUploadVm.remoteAddress.get());
+                    apiService.postBuyAndSell(buyAndSellSnippet).subscribe(new Consumer<BaseResp>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
 
+                        }
+                    });
+
+                } else if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_KNOWLEDGE_NUGGETS) {
+                    if (!groupVm.selectedItemsMap.values().iterator().hasNext()) {
+                        messageHelper.show("Please Select a Group");
+                        return;
+                    }
+                    if (title.s_1.get().equals("")) {
+                        messageHelper.show("Please enter Post Title");
+                        return;
+                    }
+                    if (description.get().equals("")) {
+                        messageHelper.show("Please enter Description");
+                        return;
+                    }
+                    knowledgeNuggetsSnippet.setUuid(pref.getString(Constants.UUID, ""));
+                    knowledgeNuggetsSnippet.setPostType("tips_tricks");
+                    knowledgeNuggetsSnippet.setPostTitle(title.s_1.get());
+                    knowledgeNuggetsSnippet.setPostSummary(description.get());
+                    knowledgeNuggetsSnippet.setPostThumbUpload(imageUploadVm.remoteAddress.get());
+                    knowledgeNuggetsSnippet.setVideo(videoUploadVm.remoteAddress.get());
+                    knowledgeNuggetsSnippet.setYoutubeUrl(youtubeAddress.s_1.get());
+                    knowledgeNuggetsSnippet.setClassLink(classPageUrl.s_1.get());
+                    apiService.postKnowledgeNuggets(knowledgeNuggetsSnippet).subscribe(new Consumer<BaseResp>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+
+                        }
+                    });
+                } else if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_LEARNING_PARTNERS) {
+                    if (!groupVm.selectedItemsMap.values().iterator().hasNext()) {
+                        messageHelper.show("Please Select a Group");
+                        return;
+                    }
+                    if (!segmentsVm.selectedItemsMap.values().iterator().hasNext()) {
+                        messageHelper.show("Please Select at least one  segment");
+                        return;
+                    }
+                    if (title.s_1.get().equals("")) {
+                        messageHelper.show("Please enter Post Title");
+                        return;
+                    }
+                    if (description.get().equals("")) {
+                        messageHelper.show("Please enter Description");
+                        return;
+                    }
+                    learningPartnerPostSnippet.setUuid(pref.getString(Constants.UUID, ""));
+                    learningPartnerPostSnippet.setPostType("activity_request");
+                    learningPartnerPostSnippet.setActivityType(android.text.TextUtils.join(",", activityVm.getSelectedIndex()));
+                    learningPartnerPostSnippet.setPostTitle(title.s_1.get());
+                    learningPartnerPostSnippet.setPostSummary(description.get());
+                    learningPartnerPostSnippet.setRequestNote(requestNote.s_1.get());
+                    learningPartnerPostSnippet.setProposedDateType(isRecurring.get() ? "1" : "0");
+                    if (isRecurring.get()) {
+                        learningPartnerPostSnippet.setProposedDateFrom(firstDateVm.date.get());
+                        learningPartnerPostSnippet.setProposedDateTo(secondDateVm.date.get());
+                        learningPartnerPostSnippet.setRecurringRequestTime(proposedTime.s_1.get());
+                    } else {
+                        learningPartnerPostSnippet.setRequestDate(firstDateVm.date.get());
+                        learningPartnerPostSnippet.setRequestTime(proposedTime.s_1.get());
+                    }
+                    if (privacyVm.selectedItemsMap.values().iterator().hasNext())
+                        learningPartnerPostSnippet.setPrivacyType(android.text.TextUtils.join("", privacyVm.getSelectedIndex()));
+                    else
+                        learningPartnerPostSnippet.setPrivacyType("-1");
+                    apiService.postLearningPartner(learningPartnerPostSnippet).subscribe(new Consumer<BaseResp>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+
+                        }
+                    });
+
+                } else if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_DISCUSS_AND_DECIDE) {
+                    if (!categoryVm.selectedItemsMap.values().iterator().hasNext()) {
+                        messageHelper.show("Please Select at least one Category");
+                        return;
+                    }
+                    if (!segmentsVm.selectedItemsMap.values().iterator().hasNext()) {
+                        messageHelper.show("Please Select at least one  segment");
+                        return;
+                    }
+                    if (title.s_1.get().equals("")) {
+                        messageHelper.show("Please enter Post Title");
+                        return;
+                    }
+                    if (description.get().equals("")) {
+                        messageHelper.show("Please enter Description");
+                        return;
+                    }
+                    decideAndDiscussSnippet.setUuid(pref.getString(Constants.UUID, ""));
+                    decideAndDiscussSnippet.setPostType("user_post");
+                    decideAndDiscussSnippet.setSegmentId(android.text.TextUtils.join(",", segmentsVm.getSelectedIndex()));
+                    decideAndDiscussSnippet.setPostTitle(title.s_1.get());
+                    decideAndDiscussSnippet.setPostSummary(description.get());
+                    decideAndDiscussSnippet.setPostThumbUpload(imageUploadVm.remoteAddress.get());
+                    apiService.postDecideDiscuss(decideAndDiscussSnippet).subscribe(new Consumer<BaseResp>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+
+                        }
+                    });
 
                 }
+
 //
 //
 // uiHelper.next();
@@ -393,8 +527,8 @@ public class ConnectPostViewModel extends ViewModel {
         });
     }
 
-    private Observable<ListDialogData1> getSegmentsApiObservable(List<Integer> categoryId) {
-        return apiService.getSegmentTree(categoryId).map(new Function<SegmentResp, ListDialogData1>() {
+    private Observable<ListDialogData1> getSegmentsApiObservable(String categoryId) {
+        return apiService.getSegments(categoryId).map(new Function<SegmentResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull SegmentResp segmentsResp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
@@ -413,6 +547,9 @@ public class ConnectPostViewModel extends ViewModel {
         knowledgeNuggetsSnippet.setCountryId(id);
         decideAndDiscussSnippet.setCountryId(id);
         learningPartnerPostSnippet.setCountryId(id);
+        setState("");
+        setCity("");
+        setLocality("");
     }
 
     private void setState(String id) {
@@ -420,19 +557,36 @@ public class ConnectPostViewModel extends ViewModel {
         knowledgeNuggetsSnippet.setStateId(id);
         decideAndDiscussSnippet.setStateId(id);
         learningPartnerPostSnippet.setStateId(id);
+        setCity("");
+        setLocality("");
 
     }
+
     private void setCity(String id) {
         buyAndSellSnippet.setCityId(id);
         knowledgeNuggetsSnippet.setCityId(id);
         decideAndDiscussSnippet.setCityId(id);
         learningPartnerPostSnippet.setCityId(id);
+        setLocality("");
     }
+
     private void setLocality(String id) {
         buyAndSellSnippet.setLocalityId(id);
         knowledgeNuggetsSnippet.setLocalityId(id);
         decideAndDiscussSnippet.setLocalityId(id);
         learningPartnerPostSnippet.setLocalityId(id);
 
+    }
+
+    private void setGroup(String id) {
+        buyAndSellSnippet.setGroupId(id);
+        learningPartnerPostSnippet.setGroupId(id);
+        knowledgeNuggetsSnippet.setGroupId(id);
+        learningPartnerPostSnippet.setActivityType(null);
+    }
+
+    private void setCategory(String id) {
+        decideAndDiscussSnippet.setCategoryId(id);
+        decideAndDiscussSnippet.setSegmentId(null);
     }
 }

@@ -30,15 +30,16 @@ public class VendorClassViewModel extends ViewModel {
     private boolean nextPageAvailable = true;
 
     public VendorClassViewModel(@NonNull final Navigator navigator, final String vendorId) {
+        classes =new ArrayList<>();
 
         items = FieldUtils.toObservable(nextPage).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getVendorClassList(nextPage.get(),vendorId).map(new Function<List<ClassData>, List<ViewModel>>() {
+                return apiService.getVendorClassList(nextPage.get(), vendorId).map(new Function<List<ClassData>, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(List<ClassData> resp) throws Exception {
-                        if (resp.size() == 0);
-                        nextPageAvailable =false;
+                        if (resp.size() == 0)
+                            nextPageAvailable = false;
                         for (final ClassData elem : resp) {
                             classes.add(new ClassItemViewModel(elem, new Action() {
                                 @Override

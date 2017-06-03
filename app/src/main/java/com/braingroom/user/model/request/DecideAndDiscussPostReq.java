@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -21,6 +22,9 @@ public class DecideAndDiscussPostReq {
 
         @SerializedName("uuid")
         public String uuid;
+
+        @SerializedName("post_type")
+        public String postType;
 
         @SerializedName("category_id")
         public String categoryId;

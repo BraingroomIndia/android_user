@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -17,46 +18,53 @@ public class KnowledgeNuggetsPostReq {
     Snippet data;
 
     @Setter
+    @Getter
     public static class Snippet {
 
         @SerializedName("uuid")
-        public String uuid;
+        String uuid;
 
         @SerializedName("post_type")
-        public String postType;
+        String postType = "tips_tricks";
+
+        @SerializedName("group_id")
+        String groupId;
 
         @SerializedName("post_title")
-        public String postTitle;
+        String postTitle;
 
         @SerializedName("post_summary")
-        public String postSummary;
+        String postSummary;
 
         @SerializedName("country_id")
-        public String countryId;
+        String countryId;
 
         @SerializedName("state_id")
-        public String stateId;
+        String stateId;
 
         @SerializedName("city_id")
-        public String cityId;
+        String cityId;
 
         @SerializedName("locality_id")
-        public String localityId;
+        String localityId;
 
         @SerializedName("post_thumb_upload")
-        public String postThumbUpload;
+        String postThumbUpload;
 
         @SerializedName("videouploadway")
-        public String videouploadway;
+        String videouploadway;
 
         @SerializedName("video")
-        public String video;
+        String video;
+
+        @SerializedName("youtube_url")
+        String youtubeUrl;
 
         @SerializedName("video_upload")
-        public String videoUpload;
+        String videoUpload;
 
         @SerializedName("class_link")
-        public String classLink;
+        String classLink;
     }
 
 }

@@ -35,7 +35,7 @@ public class UserApplication extends Application {
 
     public static String BASE_URL = "https://www.braingroom.com/apis/";
     //Edited By Vikas Godara
-    public static String DEV_BASE_URL = "https://www.braingroom.com/apis/";
+    public static String DEV_BASE_URL = "https://dev.braingroom.com/apis/";
     //Edited By Vikas Godara
 
     private static UserApplication sInstance;
