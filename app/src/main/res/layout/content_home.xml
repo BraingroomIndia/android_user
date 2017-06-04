@@ -11,103 +11,117 @@
             type="com.braingroom.user.viewmodel.HomeViewModel" />
     </data>
 
-    <android.support.v4.widget.NestedScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.braingroom.user.view.activity.HomeActivity"
-        tools:showIn="@layout/app_bar_home">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBackgroundGray"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="com.braingroom.user.view.activity.HomeActivity"
+            tools:showIn="@layout/app_bar_home">
 
-            <android.support.v7.widget.RecyclerView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/category_container_height"
-                android:background="@color/colorPrimary"
-                android:nestedScrollingEnabled="false"
-                android:scrollbars="none"
-                bind:items="@{vm.categories}"
-                bind:layout_vertical="@{false}"
-                bind:view_provider="@{@layout/item_category_home}" />
+                android:layout_height="wrap_content"
+                android:background="@color/colorBackgroundGray"
+                android:orientation="vertical">
 
-
-            <include
-                layout="@layout/content_showcase_list_1"
-                app:vm="@{vm.trendingVm}" />
-
-            <include
-                layout="@layout/content_typical_grid"
-                app:vm="@{vm.communityVm}" />
-
-            <include
-                layout="@layout/content_showcase_list_1"
-                app:vm="@{vm.featuredVm}" />
-
-            <include
-                layout="@layout/content_showcase_list_1"
-                app:vm="@{vm.indigenousVm}" />
-
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginBottom="@dimen/margin_med"
-                android:layout_marginTop="@dimen/margin_med"
-                card_view:cardElevation="@dimen/elevation_small">
-
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="@dimen/category_container_height"
+                    android:background="@color/colorPrimary"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="none"
+                    bind:items="@{vm.categories}"
+                    bind:layout_vertical="@{false}"
+                    bind:view_provider="@{@layout/item_category_home}" />
+
+
+                <include
+                    layout="@layout/content_showcase_list_1"
+                    app:vm="@{vm.trendingVm}" />
+
+                <include
+                    layout="@layout/content_typical_grid"
+                    app:vm="@{vm.communityVm}" />
+
+                <include
+                    layout="@layout/content_showcase_list_1"
+                    app:vm="@{vm.featuredVm}" />
+
+                <include
+                    layout="@layout/content_showcase_list_1"
+                    app:vm="@{vm.indigenousVm}" />
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="@dimen/margin_med"
+                    android:layout_marginTop="@dimen/margin_med"
+                    card_view:cardElevation="@dimen/elevation_small">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/header_height_med"
-                            android:layout_weight="6"
-                            android:background="@drawable/bottom_line_drawable"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/margin_large"
-                            android:text="Locations on map"
-                            android:textColor="@color/colorTextDark"
-                            android:textSize="@dimen/text_size_medium"
-                            app:font='@{@string/robotoBold}' />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/header_height_med"
-                            android:layout_weight="4"
-                            android:background="@drawable/bottom_line_drawable"
-                            android:gravity="right"
-                            android:onClick="@{vm.onExploreClicked}"
-                            android:paddingLeft="@dimen/margin_large"
-                            android:text="view details"
-                            android:textColor="@color/materialBlue"
-                            android:paddingRight="@dimen/margin_large"
-                            android:textSize="@dimen/text_size_medium"
-                            app:font='@{@string/robotoRegular}' />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/header_height_med"
+                                android:layout_weight="6"
+                                android:background="@drawable/bottom_line_drawable"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="@dimen/margin_large"
+                                android:text="Locations on map"
+                                android:textColor="@color/colorTextDark"
+                                android:textSize="@dimen/text_size_medium"
+                                app:font='@{@string/robotoBold}' />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/header_height_med"
+                                android:layout_weight="4"
+                                android:background="@drawable/bottom_line_drawable"
+                                android:gravity="right"
+                                android:onClick="@{vm.onExploreClicked}"
+                                android:paddingLeft="@dimen/margin_large"
+                                android:paddingRight="@dimen/margin_large"
+                                android:text="view details"
+                                android:textColor="@color/materialBlue"
+                                android:textSize="@dimen/text_size_medium"
+                                app:font='@{@string/robotoRegular}' />
+                        </LinearLayout>
+
+                        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            android:id="@+id/map"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
                     </LinearLayout>
 
-                    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
-                        android:id="@+id/map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+                </android.support.v7.widget.CardView>
 
 
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            app:vm="@{vm.connectivityViewmodel}" />
+
+    </RelativeLayout>
 
 </layout>

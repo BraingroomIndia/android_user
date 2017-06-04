@@ -83,6 +83,7 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     provided 'org.projectlombok:lombok:1.12.6'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'com.github.pwittchen:reactivenetwork-rx2:0.9.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -1,7 +1,6 @@
 package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableField;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -49,6 +48,7 @@ public class HomeViewModel extends ViewModel {
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final CommunityGridViewModel communityVm;
     public final ShowcaseClassListViewModel featuredVm, trendingVm, indigenousVm;
+    public final ConnectivityViewModel connectivityViewmodel;
     public final Observable<List<ViewModel>> categories;
 
     List<ClassLocationData> locationList = new ArrayList<>();
@@ -76,7 +76,7 @@ public class HomeViewModel extends ViewModel {
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         this.userEmail.set(pref.getString(Constants.EMAIL, null));
-
+        this.connectivityViewmodel = new ConnectivityViewModel();
         this.dialogHelper = dialogHelper;
         this.navigator = navigator;
 
@@ -86,7 +86,7 @@ public class HomeViewModel extends ViewModel {
         pinColorMap.put("#ab47ff", R.drawable.pin_new_4);
         pinColorMap.put("#a3a3a3", R.drawable.pin_new_5);
         pinColorMap.put("#50bef7", R.drawable.pin_new_6);
-        pinColorMap.put("My Location",R.drawable.pin_0);
+        pinColorMap.put("My Location", R.drawable.pin_0);
 
         categories = apiService.getCategory()
                 //Edited By Vikas Godara
@@ -184,11 +184,11 @@ public class HomeViewModel extends ViewModel {
         mGoogleMap.clear();
         markerList.clear();
         double latSum = 0, lngSum = 0;
-        int i=0;
+        int i = 0;
         for (ClassLocationData location : locations) {
             latlng = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
             latSum = latSum + Double.valueOf(location.getLatitude());
-            Log.d(TAG, "populateMarkers : " +i+"\n" +location.toString());
+            Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());
             lngSum = lngSum + Double.valueOf(location.getLongitude());
             markerOption = new MarkerOptions().position(latlng).title(location.getLocationArea()).icon(getPinIcon(location));
             markerList.add(markerOption);
@@ -200,5 +200,12 @@ public class HomeViewModel extends ViewModel {
 
     private BitmapDescriptor getPinIcon(ClassLocationData data) {
         return BitmapDescriptorFactory.fromResource(pinColorMap.get(data.getColorCode()));
+    }
+
+    @Override
+    public void retry() {
+        featuredVm.retry();
+        trendingVm.retry();
+        indigenousVm.retry();
     }
 }

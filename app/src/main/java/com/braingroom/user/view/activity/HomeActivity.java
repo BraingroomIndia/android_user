@@ -167,6 +167,7 @@ public class HomeActivity extends BaseActivity
         }
         if (id == R.id.action_messages) {
             //getNavigator().navigateActivity(MessageActivity.class, null);
+            vm.retry();
             return true;
         }
         if (id == R.id.action_notifications) {
