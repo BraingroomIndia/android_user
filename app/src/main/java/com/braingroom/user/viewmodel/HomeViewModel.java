@@ -76,7 +76,12 @@ public class HomeViewModel extends ViewModel {
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         this.userEmail.set(pref.getString(Constants.EMAIL, null));
-        this.connectivityViewmodel = new ConnectivityViewModel();
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+            }
+        });
         this.dialogHelper = dialogHelper;
         this.navigator = navigator;
 

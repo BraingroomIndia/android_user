@@ -52,6 +52,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
+            android:onClick="@{vm.retryAction}"
             android:paddingLeft="@dimen/padding_medium"
             android:paddingRight="@dimen/padding_medium"
             android:text="RETRY"
