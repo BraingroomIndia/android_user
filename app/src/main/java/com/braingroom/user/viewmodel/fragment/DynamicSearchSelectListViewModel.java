@@ -32,7 +32,7 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
     public final Action onSaveClicked, onClearClicked, onOpenClicked;
     public final Observable<List<ViewModel>> searchResults;
     public final ObservableField<String> selectedItemsText = new ObservableField<>("select items");
-    public final ObservableField<String> searchQuery = new ObservableField<>();
+    public final ObservableField<String> searchQuery = new ObservableField<>("");
     public final ObservableField<String> searchHint = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
     public final Map<String, Pair<String, String>> dataMap = new HashMap<>();

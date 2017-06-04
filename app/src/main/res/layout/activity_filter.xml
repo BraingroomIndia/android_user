@@ -10,6 +10,7 @@
             type="com.braingroom.user.viewmodel.FilterViewModel" />
     </data>
 
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -72,59 +73,64 @@
 
                 </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_med">
+                    android:layout_height="wrap_content">
 
-                    <LinearLayout
+                    <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_marginTop="@dimen/margin_med">
 
-                        <include
-                            layout="@layout/item_list_dialog_opener"
-                            app:editable="@{true}"
-                            app:vm="@{vm.categoryVm}" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                        <include
-                            layout="@layout/item_list_dialog_opener"
-                            app:editable="@{true}"
-                            app:vm="@{vm.segmentsVm}" />
+                            <include
+                                layout="@layout/item_list_dialog_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.categoryVm}" />
 
-                        <include
-                            layout="@layout/item_list_fragment_opener"
-                            app:editable="@{true}"
-                            app:vm="@{vm.cityVm}" />
+                            <include
+                                layout="@layout/item_list_dialog_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.segmentsVm}" />
 
-                        <include
-                            layout="@layout/item_list_fragment_opener"
-                            app:editable="@{true}"
-                            app:vm="@{vm.localityVm}" />
+                            <include
+                                layout="@layout/item_list_fragment_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.cityVm}" />
 
-                        <include
-                            layout="@layout/item_list_dialog_opener"
-                            app:editable="@{true}"
-                            app:vm="@{vm.communityVm}" />
+                            <include
+                                layout="@layout/item_list_fragment_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.localityVm}" />
 
-                        <include
-                            layout="@layout/item_list_dialog_opener"
-                            app:editable="@{true}"
-                            app:vm="@{vm.classTypeVm}" />
+                            <include
+                                layout="@layout/item_list_dialog_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.communityVm}" />
 
-                        <include
-                            layout="@layout/item_list_dialog_opener"
-                            app:editable="@{true}"
-                            app:vm="@{vm.classScheduleVm}" />
+                            <include
+                                layout="@layout/item_list_dialog_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.classTypeVm}" />
 
-                        <include
-                            layout="@layout/item_list_fragment_opener"
-                            app:editable="@{true}"
-                            app:vm="@{vm.vendorListVm}" />
+                            <include
+                                layout="@layout/item_list_dialog_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.classScheduleVm}" />
+
+                            <include
+                                layout="@layout/item_list_fragment_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.vendorListVm}" />
 
 
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </ScrollView>
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
@@ -137,4 +143,5 @@
         </FrameLayout>
 
     </FrameLayout>
+
 </layout>

@@ -52,7 +52,7 @@ public class FilterViewModel extends ViewModel {
             , HashMap<String, Integer> categoryFilterMap,
                            HashMap<String, Integer> segmentsFilterMap,
                            HashMap<String, String> cityFilterMap,
-                           final HashMap<String, String> localityFilterMap,
+                           HashMap<String, String> localityFilterMap,
                            HashMap<String, Integer> communityFilterMap,
                            HashMap<String, Integer> classTypeMap,
                            HashMap<String, Integer> classScheduleMap,
@@ -128,7 +128,7 @@ public class FilterViewModel extends ViewModel {
         });
 
 
-        cityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_CITY, messageHelper, navigator, "search for city", false, cityApiObservable, "select a state first", cityConsumer, fragmentHelper);
+        cityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_CITY, messageHelper, navigator, "search for city", false, cityApiObservable, "", cityConsumer, fragmentHelper);
         cityVm.setSelectedValues(cityFilterMap);
         localityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_LOCALITY, messageHelper, navigator, "search for locality", false, localityApiObservable, "select a city first", null, fragmentHelper);
         localityVm.setSelectedValues(localityFilterMap);
@@ -145,7 +145,7 @@ public class FilterViewModel extends ViewModel {
             }
         });
         vendorListVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_VENDORLIST, messageHelper, navigator, "search for vendors", false, vendorlistApiObservable, "", null, fragmentHelper);
-        localityVm.setSelectedValues(vendorListMap);
+        vendorListVm.setSelectedValues(vendorListMap);
 
         communityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Communities", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
             @Override
@@ -234,15 +234,17 @@ public class FilterViewModel extends ViewModel {
     }
 
     public void reset() {
+       /* HashMap<String,String> emptyHashMap= new HashMap<>();
+        emptyHashMap.put("","");*/
         keywords.set("");
         categoryVm.reset();
         segmentsVm.reset();
-        cityVm.refreshDataMap(null);
+        cityVm.clearSelectedValue();
         localityVm.refreshDataMap(null);
         communityVm.reset();
         classTypeVm.reset();
         classScheduleVm.reset();
-        vendorListVm.refreshDataMap(null);
+        vendorListVm.clearSelectedValue();
         startDateVm.reset();
         endDateVm.reset();
         clearFlag = true;

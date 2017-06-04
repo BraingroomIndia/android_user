@@ -1,12 +1,14 @@
 package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ClassListActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class SearchViewModel extends ViewModel {
     public final ObservableField<String> searchQuery = new ObservableField<>("");
     public final Observable<List<ViewModel>> results;
     public final Map<String, String> mainCategories = new HashMap<>();
-    public final Action onBackClicked;
+    public final Action onBackClicked,onSearchClicked;
 
     public SearchViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
 
@@ -33,7 +35,6 @@ public class SearchViewModel extends ViewModel {
                 for (CategoryResp.Snippet snippet : categoryResp.getData()) {
                     mainCategories.put(snippet.getCategoryName(), snippet.getId());
                 }
-                mainCategories.put("All","");
                 editable.set(true);
             }
         }, new Consumer<Throwable>() {
@@ -62,6 +63,15 @@ public class SearchViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 navigator.finishActivity();
+            }
+        };
+        onSearchClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                Bundle data = new Bundle();
+                data.putString("categoryId", "");
+                data.putString("searchQuery", searchQuery.get());
+                navigator.navigateActivity(ClassListActivity.class, data);
             }
         };
 

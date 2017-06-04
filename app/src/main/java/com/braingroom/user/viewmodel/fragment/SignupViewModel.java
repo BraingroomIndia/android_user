@@ -50,8 +50,8 @@ public class SignupViewModel extends ViewModel {
 
     public final Action onSignupClicked, onBackClicked;
 
-    public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM, pgInstituteVm;
-    public final DynamicSearchSelectListViewModel ugInstituteVm;
+    public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM  ;
+    public final DynamicSearchSelectListViewModel ugInstituteVm,pgInstituteVm;
     public Observable<HashMap<String, Pair<String, String>>> instituteUGVm, stateApiObservable, cityApiObservable, localityApiObservable, instituteApiObservable;
 
     private SignUpReq.Snippet signUpSnippet;
@@ -306,7 +306,7 @@ public class SignupViewModel extends ViewModel {
             }
         });
         ugInstituteVm = new DynamicSearchSelectListViewModel(SignupActivity.FRAGMENT_UG_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
-        pgInstituteVm = new SearchSelectListViewModel(SignupActivity.FRAGMENT_PG_COLLEGE, messageHelper, navigator, "search for institutes ", false, instituteApiObservable, "", null, dynamicSearchFragmentHelper);
+        pgInstituteVm = new DynamicSearchSelectListViewModel(SignupActivity.FRAGMENT_PG_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
 
 
     }

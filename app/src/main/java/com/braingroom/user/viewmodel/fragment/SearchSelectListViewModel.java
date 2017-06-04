@@ -122,6 +122,12 @@ public class SearchSelectListViewModel extends ViewModel {
         }
     }
 
+    public void clearSelectedValue() {
+        selectedDataMap.clear();
+        searchQuery.set("");
+        selectedItemsText.set("select items");
+    }
+
     /*populates dataMap*/
     public void refreshDataMap(final Observable<HashMap<String, Pair<String, String>>> dataSource) {
         dataMap.clear();
