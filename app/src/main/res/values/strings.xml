@@ -24,7 +24,7 @@
     <string name="searchHint">Search for Classes, Activities and More</string>
     <string name="searchBlogHint">Search in blog posts</string>
     <string name="searchHintLoading">Loading categories...</string>
-    <string name="searchHintSmall">Search for Classes and Activities</string>
+    <string name="searchHintSmall">Search for Classes</string>
 
     <string name="main_category_1">Fun &amp;\nRecreation</string>
     <string name="main_category_2">Informative \n&amp; Motivational</string>

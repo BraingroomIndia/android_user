@@ -124,7 +124,7 @@
             android:name=".view.activity.FilterActivity"
             android:label="@string/screen_filter"
             android:parentActivityName=".view.activity.ClassListActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.ClassListActivity" />
