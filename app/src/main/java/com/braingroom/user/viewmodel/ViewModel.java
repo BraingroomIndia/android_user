@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.utils.Constants;
-import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -19,10 +16,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-
 public class ViewModel {
 
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
@@ -30,7 +23,6 @@ public class ViewModel {
     public static final int REQ_CODE_CHOOSE_FILTER = 2;
     public static final int REQ_CODE_CHOOSE_VIDEO = 3;
     public static final int REQ_CODE_LOGIN = 4;
-
 
 
     @Inject
@@ -81,5 +73,11 @@ public class ViewModel {
 
     public void retry() {
         retries.set(retries.get() + 1);
+    }
+
+    public void onPause() {
+    }
+
+    public void onResume() {
     }
 }

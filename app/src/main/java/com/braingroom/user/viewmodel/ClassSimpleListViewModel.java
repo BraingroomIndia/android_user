@@ -30,12 +30,24 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     public Observable<List<ViewModel>> result;
     private List<ViewModel> classes;
+    public final ConnectivityViewModel connectivityViewmodel;
 
     public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1) {
         this.listType = listType1;
         classes = new ArrayList<>();
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+            }
+        });
 
-        result = FieldUtils.toObservable(nextPage).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+        result = (FieldUtils.toObservable(retries).map(new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return nextPage.get();
+            }
+        }).mergeWith(FieldUtils.toObservable(nextPage)).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
@@ -76,7 +88,7 @@ public class ClassSimpleListViewModel extends ViewModel {
                         }).mergeWith(getLoadingItems(3));
 
             }
-        });
+        }));
 
     }
 
@@ -95,5 +107,16 @@ public class ClassSimpleListViewModel extends ViewModel {
         return Observable.just(result);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectivityViewmodel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        connectivityViewmodel.onPause();
+    }
 
 }

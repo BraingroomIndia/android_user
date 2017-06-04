@@ -5,11 +5,10 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.braingroom.user.R;
-import com.braingroom.user.UserApplication;
-import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -19,20 +18,45 @@ public class ConnectivityViewModel extends ViewModel {
     public static final int INTERNET_CONNECTIVITY_PLACEHOLDER = R.drawable.avatar_female;
     public ObservableField<Boolean> isConnected = new ObservableField<>(true);
     public final Action retryAction;
+    private Disposable internetDisposable;
 
     public ConnectivityViewModel(@NonNull final Action retryAction) {
         this.retryAction = retryAction;
-        ReactiveNetwork.observeNetworkConnectivity(UserApplication.getInstance())
+
+    }
+
+    @Override
+    public void onResume() {
+        internetDisposable = ReactiveNetwork.observeInternetConnectivity()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Connectivity>() {
+                .subscribe(new Consumer<Boolean>() {
                     @Override
-                    public void accept(final Connectivity connectivity) {
-                        isConnected.set(connectivity.isAvailable());
-                        Log.d("Connectivity ", "accept: " + connectivity.isAvailable());
+                    public void accept(Boolean isConnectedToInternet) {
+                        if (!isConnected.get() && isConnectedToInternet) {
+                            try {
+                                retryAction.run();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        isConnected.set(isConnectedToInternet);
+
+                        Log.d("Connectivity", "accept: " + isConnectedToInternet);
                     }
                 });
     }
 
+    @Override
+    public void onPause() {
+        safelyDispose(internetDisposable);
+    }
 
+    private void safelyDispose(Disposable... disposables) {
+        for (Disposable subscription : disposables) {
+            if (subscription != null && !subscription.isDisposed()) {
+                subscription.dispose();
+            }
+        }
+    }
 }

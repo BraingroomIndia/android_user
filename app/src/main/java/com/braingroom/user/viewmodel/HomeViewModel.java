@@ -212,5 +212,18 @@ public class HomeViewModel extends ViewModel {
         featuredVm.retry();
         trendingVm.retry();
         indigenousVm.retry();
+        communityVm.retry();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectivityViewmodel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        connectivityViewmodel.onPause();
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 
 public class CommunityGridViewModel extends ViewModel {
@@ -24,30 +26,36 @@ public class CommunityGridViewModel extends ViewModel {
 
     public CommunityGridViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final Class<?> destination) {
 
-        gridItems = Observable.just(getDefaultResponse()).mergeWith(apiService.getCommunity())
-                .map(new Function<CommunityResp, List<ViewModel>>() {
-                    @Override
-                    public List<ViewModel> apply(CommunityResp resp) throws Exception {
-                        List<ViewModel> results = new ArrayList<>();
-                        if (resp.getData().size() == 0) resp = getDefaultResponse();
-                        for (final CommunityResp.Snippet snippet : resp.getData()) {
-                            if (snippet.getImage()!=null)
-                                snippet.setImage(snippet.getImage().replaceAll("jpg","png"));
-                            results.add
-                                    (new IconTextItemViewModel(snippet.getImage(), snippet.getName(), new MyConsumer<IconTextItemViewModel>() {
-                                @Override
-                                public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
-                                    if (!snippet.getId().equals("-1")) {
-                                        Bundle data = new Bundle();
-                                        data.putString("communityId", snippet.getId());
-                                        navigator.navigateActivity(destination, data);
-                                    }
+        gridItems = FieldUtils.toObservable(retries).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+            @Override
+            public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return  Observable.just(getDefaultResponse()).mergeWith(apiService.getCommunity())
+                        .map(new Function<CommunityResp, List<ViewModel>>() {
+                            @Override
+                            public List<ViewModel> apply(CommunityResp resp) throws Exception {
+                                List<ViewModel> results = new ArrayList<>();
+                                if (resp.getData().size() == 0) resp = getDefaultResponse();
+                                for (final CommunityResp.Snippet snippet : resp.getData()) {
+                                    if (snippet.getImage()!=null)
+                                        snippet.setImage(snippet.getImage().replaceAll("jpg","png"));
+                                    results.add
+                                            (new IconTextItemViewModel(snippet.getImage(), snippet.getName(), new MyConsumer<IconTextItemViewModel>() {
+                                                @Override
+                                                public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
+                                                    if (!snippet.getId().equals("-1")) {
+                                                        Bundle data = new Bundle();
+                                                        data.putString("communityId", snippet.getId());
+                                                        navigator.navigateActivity(destination, data);
+                                                    }
+                                                }
+                                            }));
                                 }
-                            }));
-                        }
-                        return results;
-                    }
-                });
+                                return results;
+                            }
+                        });
+            }
+        });
+
 
     }
 

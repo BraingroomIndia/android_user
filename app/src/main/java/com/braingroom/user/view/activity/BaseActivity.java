@@ -1,6 +1,5 @@
 package com.braingroom.user.view.activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -9,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Display;
@@ -70,10 +68,9 @@ public abstract class BaseActivity extends MvvmActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         UserApplication.getInstance().getMAppComponent().inject(this);
-    screenDims = new ScreenDims();
+        screenDims = new ScreenDims();
         Point size = new Point();
         WindowManager w = getWindowManager();
-
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -92,12 +89,14 @@ public abstract class BaseActivity extends MvvmActivity {
     protected void onResume() {
         super.onResume();
         isActive = true;
+        vm.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isActive = false;
+        vm.onPause();
     }
 
     @NonNull
