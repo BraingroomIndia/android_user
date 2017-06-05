@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel.fragment;
 
 import android.databinding.ObservableField;
+import android.nfc.Tag;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -14,6 +15,7 @@ import com.braingroom.user.viewmodel.SearchSelectListItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
+
+import static com.braingroom.user.FCMInstanceIdService.TAG;
 
 public class SearchSelectListViewModel extends ViewModel {
 
@@ -40,12 +44,14 @@ public class SearchSelectListViewModel extends ViewModel {
     PublishSubject<SearchSelectListItemViewModel> multipleSelect = PublishSubject.create();
     PublishSubject<String> selectClear = PublishSubject.create();
     Observable<HashMap<String, Pair<String, String>>> apiObservable;
+    final Consumer<HashMap<String, Pair<String, String>>> saveConsumer;
 
     public SearchSelectListViewModel(final String title, final MessageHelper messageHelper, final Navigator navigator, String searchHint
             , final boolean isMultipleSelect, final Observable<HashMap<String, Pair<String, String>>> apiObservableArg, final String dependencySelectMessage, final Consumer<HashMap<String, Pair<String, String>>> saveConsumer, final FragmentHelper fragmentHelper) {
         this.searchHint.set(searchHint);
         this.title.set(title);
         this.apiObservable = apiObservableArg;
+        this.saveConsumer = saveConsumer;
         refreshDataMap(this.apiObservable);
         searchResults = FieldUtils.toObservable(searchQuery)
                 .map(new Function<String, List<ViewModel>>() {
@@ -120,6 +126,12 @@ public class SearchSelectListViewModel extends ViewModel {
             searchQuery.set("");
             selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keySet()));
         }
+        if (saveConsumer != null)
+            try {
+                saveConsumer.accept(selectedDataMap);
+            } catch (Exception e) {
+                Log.d(TAG, "setSelectedValues : " + e.toString());
+            }
     }
 
     public void clearSelectedValue() {
