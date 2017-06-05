@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ConnectivityViewModel extends ViewModel {
 
-    public static final int INTERNET_CONNECTIVITY_PLACEHOLDER = R.drawable.avatar_female;
+    public static final int INTERNET_CONNECTIVITY_PLACEHOLDER = R.drawable.no_network;
     public ObservableField<Boolean> isConnected = new ObservableField<>(true);
     public final Action retryAction;
     private Disposable internetDisposable;
