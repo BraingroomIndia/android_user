@@ -12,6 +12,9 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -67,12 +70,12 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public ConnectFeedDetailViewModel(final String postId, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
 
-        apiService.getFeedsByPostID("252").subscribe(new Consumer<ConnectFeedResp>() {
+        apiService.getFeedsByPostID(postId).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ConnectFeedResp resp) throws Exception {
 
                 vendorImage.set(resp.getData().get(0).getVendorImage());
-                date.set(resp.getData().get(0).getDate());
+                date.set(getHumanDate(resp.getData().get(0).getDate()));
                 segment.set(resp.getData().get(0).getSegName());
                 title.set(resp.getData().get(0).getTitle());
                 description.set(resp.getData().get(0).getDescription());
@@ -180,6 +183,19 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             return videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
         } catch (IndexOutOfBoundsException iobe) {
             return null;
+        }
+    }
+
+    private String getHumanDate(String timeStamp) {
+        if (timeStamp == null)
+            return "";
+        long time = Long.valueOf(timeStamp) * 1000;
+        try {
+            java.text.DateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy");
+            Date netDate = (new Date(time));
+            return sdf.format(netDate);
+        } catch (Exception ex) {
+            return "xx";
         }
     }
 
