@@ -45,7 +45,7 @@ public abstract class MvvmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent().getExtras() != null)
-            extras = getIntent().getExtras().getBundle("data");
+            extras = getIntent().getExtras().getBundle("classData");
         binding = DataBindingUtil.setContentView(this, getLayoutId());
         vm = createViewModel();
         getDefaultBinder().bind(binding, vm);

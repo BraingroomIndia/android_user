@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.R;
@@ -9,6 +10,8 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.CheckoutActivity;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 
 import java.util.ArrayList;
@@ -74,7 +77,9 @@ public class ConnectHomeViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (!loggedIn.get()) {
-                    messageHelper.showLoginRequireDialog("To create new content, you need to log in");
+                    Bundle data =new Bundle();
+                    data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
+                    messageHelper.showLoginRequireDialog("To create new content, you need to log in",data);
                     return;
                 }
                 uiHelper.openConnectPost();

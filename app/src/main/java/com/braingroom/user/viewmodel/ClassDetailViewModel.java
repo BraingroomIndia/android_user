@@ -36,7 +36,7 @@ import lombok.Setter;
 
 public class ClassDetailViewModel extends ViewModel {
 
-    private ClassData mClassData;
+    public ClassData mClassData;
 
     String defaultLink = "https://www.braingroom.com/Vendor/defult_pic.jpg";
     public final ObservableField<String> imagePath = new ObservableField<>(null);

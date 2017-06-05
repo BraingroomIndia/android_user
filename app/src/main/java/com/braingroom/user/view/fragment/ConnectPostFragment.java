@@ -34,7 +34,7 @@ public class ConnectPostFragment extends BaseFragment {
     public static Fragment newInstanceByPostType(String postType) {
         ConnectPostFragment mFragment = new ConnectPostFragment();
         Bundle args = new Bundle();
-        args.putString(POST_TYPE,postType);
+        args.putString(POST_TYPE, postType);
         mFragment.setArguments(args);
         return mFragment;
     }
@@ -48,10 +48,16 @@ public class ConnectPostFragment extends BaseFragment {
     protected ViewModel createViewModel() {
         Bundle args = getArguments();
         String postType = null;
-        if(args!=null){
+        if (args != null) {
             postType = args.getString(POST_TYPE);
         }
-        return new ConnectPostViewModel(activity.getMessageHelper(), mNavigator, activity.getHelperFactory(), postType);
+        return new ConnectPostViewModel(activity.getMessageHelper(), mNavigator, activity.getHelperFactory(), postType,
+        new UiHelper() {
+            @Override
+            public void next() {
+                closeFragment();
+            }
+        });
     }
 
     @Override
@@ -62,8 +68,8 @@ public class ConnectPostFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG,"onActivityResult: "+requestCode);
-        vm.handleActivityResult(requestCode,resultCode,data);
+        Log.d(TAG, "onActivityResult: " + requestCode);
+        vm.handleActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -73,12 +79,12 @@ public class ConnectPostFragment extends BaseFragment {
     private Navigator mNavigator = new Navigator() {
         @Override
         public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
-            activity.getNavigator().navigateActivity(destination,bundle);
+            activity.getNavigator().navigateActivity(destination, bundle);
         }
 
         @Override
         public void navigateActivityForResult(Class<?> destination, @Nullable Bundle bundle, int reqCode) {
-            activity.getNavigator().navigateActivityForResult(destination,bundle,reqCode);
+            activity.getNavigator().navigateActivityForResult(destination, bundle, reqCode);
         }
 
         @Override
@@ -141,5 +147,9 @@ public class ConnectPostFragment extends BaseFragment {
             activity.getNavigator().openStandaloneYoutube(videoId);
         }
     };
+
+    private void closeFragment() {
+        getActivity().onBackPressed();
+    }
 
 }

@@ -128,8 +128,8 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
             vm.handleActivityResult(requestCode,resultCode,data);
         }
 //        if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
-//            if (data != null) {
-//                String response = data.getStringExtra("payu_response");
+//            if (classData != null) {
+//                String response = classData.getStringExtra("payu_response");
 //                Log.d("PAYU RESPONSE", "onActivityResult: " + response);
 //                getMessageHelper().showDismissInfo("Congrats!", "Your class has been successfully booked");
 //            } else {

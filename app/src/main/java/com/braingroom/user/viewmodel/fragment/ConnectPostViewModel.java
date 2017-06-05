@@ -22,6 +22,7 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.viewmodel.DataItemViewModel;
 import com.braingroom.user.viewmodel.DatePickerViewModel;
 import com.braingroom.user.viewmodel.ImageUploadViewModel;
@@ -64,7 +65,7 @@ public class ConnectPostViewModel extends ViewModel {
     private DecideAndDiscussPostReq.Snippet decideAndDiscussSnippet;
 
 
-    public final DataItemViewModel title, youtubeAddress, classPageUrl, proposedTime, requestNote;
+    public final DataItemViewModel title, youtubeAddress, classPageUrl, proposedLocation, proposedTime, requestNote;
     public final PostApiImageUploadViewModel imageUploadVm;
     public final PostApiVideoUploadViewModel videoUploadVm;
     public final DatePickerViewModel firstDateVm, secondDateVm;
@@ -87,7 +88,7 @@ public class ConnectPostViewModel extends ViewModel {
     public final ObservableBoolean categoryField = new ObservableBoolean(false);
 
 
-    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, final String postType) {
+    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, final String postType, final ConnectPostFragment.UiHelper uiHelper) {
         this.navigator = navigator;
         this.helperFactory = helperFactory;
         this.postType = postType;
@@ -95,6 +96,7 @@ public class ConnectPostViewModel extends ViewModel {
         description = new ObservableField<>("");
         youtubeAddress = new DataItemViewModel("");
         classPageUrl = new DataItemViewModel("");
+        proposedLocation = new DataItemViewModel("");
         proposedTime = new DataItemViewModel("");
         requestNote = new DataItemViewModel("");
         firstDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "On", "choose");
@@ -329,7 +331,7 @@ public class ConnectPostViewModel extends ViewModel {
             public void run() throws Exception {
                 if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_BUY_N_SELL) {
                     if (!groupVm.selectedItemsMap.values().iterator().hasNext()) {
-                        messageHelper.show("Please Select a Group");
+                        messageHelper.show("Please select a Group");
                         return;
                     }
                     if (title.s_1.get().equals("")) {
@@ -348,6 +350,8 @@ public class ConnectPostViewModel extends ViewModel {
                     apiService.postBuyAndSell(buyAndSellSnippet).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+                            messageHelper.show(baseResp.getResMsg());
+                            uiHelper.next();
 
                         }
                     });
@@ -376,16 +380,18 @@ public class ConnectPostViewModel extends ViewModel {
                     apiService.postKnowledgeNuggets(knowledgeNuggetsSnippet).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+                            messageHelper.show(baseResp.getResMsg());
+                            uiHelper.next();
 
                         }
                     });
                 } else if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_LEARNING_PARTNERS) {
                     if (!groupVm.selectedItemsMap.values().iterator().hasNext()) {
-                        messageHelper.show("Please Select a Group");
+                        messageHelper.show("Please select a Group");
                         return;
                     }
-                    if (!segmentsVm.selectedItemsMap.values().iterator().hasNext()) {
-                        messageHelper.show("Please Select at least one  segment");
+                    if (!activityVm.selectedItemsMap.values().iterator().hasNext()) {
+                        messageHelper.show("Please select a Activity");
                         return;
                     }
                     if (title.s_1.get().equals("")) {
@@ -396,13 +402,18 @@ public class ConnectPostViewModel extends ViewModel {
                         messageHelper.show("Please enter Description");
                         return;
                     }
+                    if (proposedLocation.s_1.get().equals("")) {
+                        messageHelper.show("Please enter Proposed Location ");
+                        return;
+                    }
                     learningPartnerPostSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     learningPartnerPostSnippet.setPostType("activity_request");
                     learningPartnerPostSnippet.setActivityType(android.text.TextUtils.join(",", activityVm.getSelectedIndex()));
                     learningPartnerPostSnippet.setPostTitle(title.s_1.get());
                     learningPartnerPostSnippet.setPostSummary(description.get());
                     learningPartnerPostSnippet.setRequestNote(requestNote.s_1.get());
-                    learningPartnerPostSnippet.setProposedDateType(isRecurring.get() ? "1" : "0");
+                    learningPartnerPostSnippet.setProposedLocation(proposedLocation.s_1.get());
+                    learningPartnerPostSnippet.setProposedDateType(isRecurring.get() ? "2" : "1");
                     if (isRecurring.get()) {
                         learningPartnerPostSnippet.setProposedDateFrom(firstDateVm.date.get());
                         learningPartnerPostSnippet.setProposedDateTo(secondDateVm.date.get());
@@ -418,25 +429,27 @@ public class ConnectPostViewModel extends ViewModel {
                     apiService.postLearningPartner(learningPartnerPostSnippet).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+                            messageHelper.show(baseResp.getResMsg());
+                            uiHelper.next();
 
                         }
                     });
 
                 } else if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_DISCUSS_AND_DECIDE) {
                     if (!categoryVm.selectedItemsMap.values().iterator().hasNext()) {
-                        messageHelper.show("Please Select at least one Category");
+                        messageHelper.show("Please select at least one Category");
                         return;
                     }
                     if (!segmentsVm.selectedItemsMap.values().iterator().hasNext()) {
-                        messageHelper.show("Please Select at least one  segment");
+                        messageHelper.show("Please select at least one  segment");
                         return;
                     }
                     if (title.s_1.get().equals("")) {
-                        messageHelper.show("Please enter Post Title");
+                        messageHelper.show("Please enter Post title");
                         return;
                     }
                     if (description.get().equals("")) {
-                        messageHelper.show("Please enter Description");
+                        messageHelper.show("Please enter description");
                         return;
                     }
                     decideAndDiscussSnippet.setUuid(pref.getString(Constants.UUID, ""));
@@ -448,6 +461,8 @@ public class ConnectPostViewModel extends ViewModel {
                     apiService.postDecideDiscuss(decideAndDiscussSnippet).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+                            messageHelper.show(baseResp.getResMsg());
+                            uiHelper.next();
 
                         }
                     });
@@ -456,7 +471,7 @@ public class ConnectPostViewModel extends ViewModel {
 
 //
 //
-// uiHelper.next();
+                //uiHelper.next();
             }
         };
         changeDateText = new Action() {

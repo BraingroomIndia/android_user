@@ -2,6 +2,7 @@ package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.response.ConnectFeedResp;
@@ -11,6 +12,7 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -84,7 +86,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
             public void run() throws Exception {
 
                 if (!loggedIn.get()) {
-                    messageHelper.showLoginRequireDialog("Only logged in users can like a post");
+
+                    Bundle data =new Bundle();
+                    data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
+                    messageHelper.showLoginRequireDialog("Only logged in users can like a post",data);
                     return;
                 }
 
@@ -132,7 +137,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (!loggedIn.get()) {
-                    messageHelper.showLoginRequireDialog("Only logged in users can report a post");
+                    Bundle data =new Bundle();
+                    data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
+                    messageHelper.showLoginRequireDialog("Only logged in users can report a post",data);
                     return;
                 }
                 apiService.report(data.getId()).subscribe(new Consumer<ReportResp>() {

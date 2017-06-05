@@ -49,7 +49,7 @@ public class LoginActivity extends BaseActivity implements
 
     String classId;
     String parentActivity;
-    Serializable data;
+    Serializable classData;
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -167,8 +167,10 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected ViewModel createViewModel() {
         parentActivity = getIntentString("backStackActivity");
-        data = getIntentSerializable("classData");
-        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, data);
+        classData = getIntentSerializable("classData");
+        classId =getIntentString("id");
+
+        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData,classId);
     }
 
     @Override

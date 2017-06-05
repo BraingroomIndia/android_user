@@ -11,6 +11,8 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CheckoutActivity;
+import com.braingroom.user.view.activity.ClassDetailActivity;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.SignupActivity;
@@ -43,14 +45,15 @@ public class LoginViewmodel extends ViewModel {
     LoginActivity.UIHandler uiHandler;
 
     String parentActivity;
+    String classId;
     Serializable classData;
 
-    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity, Serializable data) {
+    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity, Serializable data,String classId) {
         this.parentActivity = parentActivity;
         this.classData = data;
         this.messageHelper = messageHelper;
         this.navigator = navigator;
-//        this.classId = classId;
+        this.classId = classId;
         onLoginClicked = new Action() {
             @Override
             public void run() throws Exception {
@@ -112,22 +115,32 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.NAME, loginResp.getData().get(0).getName());
                         editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
                         editor.commit();
-                        if (HomeActivity.class.getSimpleName().equals(parentActivity)) {
-                            navigator.navigateActivity(HomeActivity.class, null);
-                        } else {
+                        if (CheckoutActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();
                             data.putSerializable("classData", classData);
                             navigator.navigateActivity(CheckoutActivity.class, data);
+                        } else if (ConnectHomeActivity.class.getSimpleName().equals(parentActivity)) {
+                            navigator.navigateActivity(ConnectHomeActivity.class, null);
+                        } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
+                            Bundle data =new Bundle();
+                            data.putString("id", classId);
+                            navigator.navigateActivity(ClassDetailActivity.class,data);
+                        } else {
+                            navigator.navigateActivity(HomeActivity.class, null);
                         }
                         navigator.finishActivity();
                     }
-                } else {
+                } else
+
+                {
                     editor.clear();
                     messageHelper.show(loginResp.getResMsg());
 
                 }
             }
-        }, new Consumer<Throwable>() {
+        }, new Consumer<Throwable>()
+
+        {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 messageHelper.show("some error occurred");

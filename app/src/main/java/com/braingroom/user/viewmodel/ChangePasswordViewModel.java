@@ -40,6 +40,7 @@ public class ChangePasswordViewModel extends ViewModel {
                 if (!isPasswordValid(newPassword.get())) {
                     messageHelper.show("Enter a valid password");
                 } else if (!newPassword.get().equals(confirmPassword.get())) {
+                    confirmPassword.set("");
                     messageHelper.show("Password doesn't match");
                 } else {
                     messageHelper.showProgressDialog("Wait", "Changing password...");
@@ -63,10 +64,14 @@ public class ChangePasswordViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ChangePasswordResp changePasswordResp) throws Exception {
                 if (changePasswordResp.getData()!=null) {
+                    oldPassword.set("");
+                    newPassword.set("");
+                    confirmPassword.set("");
                     messageHelper.dismissActiveProgress();
                     logOut();
                     navigator.navigateActivity(LoginActivity.class, null);
                 } else {
+                    oldPassword.set("");
                     messageHelper.dismissActiveProgress();
                     messageHelper.show("Unable to change password");
 
@@ -76,6 +81,9 @@ public class ChangePasswordViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                oldPassword.set("");
+                newPassword.set("");
+                confirmPassword.set("");
                 messageHelper.show("some error occurred");
             }
         });
