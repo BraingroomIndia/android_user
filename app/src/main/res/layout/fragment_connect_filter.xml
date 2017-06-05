@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.ConnectFilterViewModel" />
+    </data>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.braingroom.user.view.activity.FilterActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_med">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_keywords"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_small"
+                            android:hint="Keywords">
+
+                            <EditText
+                                android:id="@+id/input_keywords"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={vm.keywords}"
+                                android:textColor="@color/colorTextDark"
+                                app:font='@{@string/robotoRegular}' />
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_med">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <include
+                                layout="@layout/item_list_fragment_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.categoryVm}" />
+
+                            <include
+                                layout="@layout/item_list_fragment_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.segmentsVm}" />
+
+                            <include
+                                layout="@layout/item_list_fragment_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.myGroups}" />
+
+                            <include
+                                layout="@layout/item_list_fragment_opener"
+                                app:editable="@{true}"
+                                app:vm="@{vm.allGroups}" />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </ScrollView>
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+</layout>

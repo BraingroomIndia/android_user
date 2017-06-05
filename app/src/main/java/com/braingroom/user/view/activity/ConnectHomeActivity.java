@@ -32,17 +32,28 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.view.ConnectUiHelper;
+import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.view.fragment.ConnectFeedFragment;
+import com.braingroom.user.view.fragment.ConnectFilterFragment;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.view.fragment.LikesFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
+import com.braingroom.user.view.fragment.SearchSelectListFragment;
+import com.braingroom.user.viewmodel.ConnectFilterViewModel;
 import com.braingroom.user.viewmodel.ConnectHomeViewModel;
 import com.braingroom.user.viewmodel.LocationFilterViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
+import lombok.Getter;
+
 
 public class ConnectHomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ConnectUiHelper {
+
+    public static final String FRAGMENT_TITLE_CATEGORY = "Category";
+    public static final String FRAGMENT_TITLE_SEGMENT = "Segments";
+    public static final String FRAGMENT_TITLE_MY_GROUPS = "My Groups";
+    public static final String FRAGMENT_TITLE_ALL_GROUPS = "All Groups";
 
     private String TAG = getClass().getCanonicalName();
 
@@ -69,6 +80,9 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     public ConnectPagerAdapter pagerAdapter;
     ConnectFilterData learnersFilter, tutorsFilter;
 
+    @Getter
+    ConnectFilterViewModel connectFilterViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +94,18 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         blueList = new ColorStateList(states, new int[]{
                 ContextCompat.getColor(this, R.color.bottomNavSelectedBlue),
                 ContextCompat.getColor(this, R.color.bottomNavUnSelected)
+        });
+        connectFilterViewModel = new ConnectFilterViewModel(getMessageHelper(), getNavigator(), new FragmentHelper() {
+            @Override
+            public void show(String tag) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.comments_container, SearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
+            }
+
+            @Override
+            public void remove(String tag) {
+                popBackstack(tag);
+            }
         });
         initFilters();
         mBottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -153,8 +179,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                 if (itemId == R.id.action_tutors_article) {
                     fab.setVisibility(View.INVISIBLE);
                     tutorsFilter.setMinorCateg("vendor_article");
-                }
-                else{
+                } else {
                     fab.setVisibility(View.VISIBLE);
                 }
                 updateFilter();
@@ -229,8 +254,12 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             getNavigator().finishActivity();
             return true;
         }
-        if (id == R.id.action_location) {
-            getHelperFactory().createDialogHelper().showCustomView(R.layout.dialog_location, new LocationFilterViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), uiHelper));
+        if (id == R.id.action_filter) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+            transaction.replace(R.id.comments_container, ConnectFilterFragment.newInstance()).addToBackStack(null).commit();
+
+//            getHelperFactory().createDialogHelper().showCustomView(R.layout.dialog_location, new LocationFilterViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), uiHelper));
             return true;
         }
 
@@ -283,6 +312,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             getNavigator().navigateActivity(TermsConditionActivity.class, null);
         if (id == R.id.nav_contact)
             getNavigator().navigateActivity(ContactUsActivity.class, null);
+        if (id == R.id.nav_location)
+            getHelperFactory().createDialogHelper().showCustomView(R.layout.dialog_location, new LocationFilterViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), uiHelper));
 
         //Edited By Vikas Godara
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -380,11 +411,11 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     @Override
     public void openConnectPost() {
-        Log.d(TAG,"openConnectPost: "+tutorTalkSelectedNav+", "+learnerForumSelectedNav);
+        Log.d(TAG, "openConnectPost: " + tutorTalkSelectedNav + ", " + learnerForumSelectedNav);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         String postType = getActivePostType();
-        Fragment mFragement = postType==null ? ConnectPostFragment.newInstance() : ConnectPostFragment.newInstanceByPostType(postType) ;
+        Fragment mFragement = postType == null ? ConnectPostFragment.newInstance() : ConnectPostFragment.newInstanceByPostType(postType);
         transaction.replace(R.id.comments_container, mFragement).addToBackStack(null).commit();
     }
 
@@ -394,11 +425,10 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
 
-    private String getActivePostType()
-    {
+    private String getActivePostType() {
         String postType = null;
 
-        if(pager==null) return postType;
+        if (pager == null) return postType;
 
         int itemId = tutorTalkSelectedNav;
         if (pager.getCurrentItem() == 0) itemId = learnerForumSelectedNav;
@@ -421,6 +451,19 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
         return postType;
 
+    }
+
+    @Override
+    public ViewModel getFragmentViewmodel(String title) {
+        if (FRAGMENT_TITLE_ALL_GROUPS.equals(title))
+            return connectFilterViewModel.allGroups;
+        if (FRAGMENT_TITLE_MY_GROUPS.equals(title))
+            return connectFilterViewModel.myGroups;
+        if (FRAGMENT_TITLE_CATEGORY.equals(title))
+            return connectFilterViewModel.categoryVm;
+        if (FRAGMENT_TITLE_SEGMENT.equals(title))
+            return connectFilterViewModel.segmentsVm;
+        return null;
     }
 
 

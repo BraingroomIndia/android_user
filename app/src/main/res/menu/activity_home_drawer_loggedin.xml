@@ -31,6 +31,10 @@
             android:icon="@drawable/ic_chat_black_24dp"
             android:title="Contact US" />
         <item
+            android:id="@+id/nav_location"
+            android:icon="@drawable/pin"
+            android:title="Location Settings" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
             android:title="Logout" />

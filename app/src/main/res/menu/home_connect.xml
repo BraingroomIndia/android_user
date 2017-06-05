@@ -17,8 +17,8 @@
         android:title="Connect"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_location"
-        android:icon="@drawable/ic_room_white_24dp"
-        android:title="Location"
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="Filter"
         app:showAsAction="always" />
 </menu>

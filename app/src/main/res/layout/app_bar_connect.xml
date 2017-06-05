@@ -30,62 +30,62 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/tab_collapse_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <!--<android.support.design.widget.CollapsingToolbarLayout-->
+            <!--android:id="@+id/tab_collapse_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:fitsSystemWindows="true"-->
+            <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/search_height"
-                        android:layout_margin="10dp"
-                        android:layout_toLeftOf="@+id/filter"
-                        android:background="@drawable/solid_white_rounded_corner">
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/search_height"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:layout_toLeftOf="@+id/filter"-->
+            <!--android:background="@drawable/solid_white_rounded_corner">-->
 
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentLeft="true"
-                            android:layout_toLeftOf="@+id/search"
-                            android:background="@null"
-                            android:gravity="center_vertical"
-                            android:hint="@string/searchBlogHint"
-                            android:paddingLeft="@dimen/padding_large"
-                            android:text="@={vm.searchQuery}"
-                            android:textColor="@color/colorTextDark"
-                            android:textColorHint="@color/colorTextGray"
-                            app:font='@{@string/robotoRegular}' />
+            <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_toLeftOf="@+id/search"-->
+            <!--android:background="@null"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="@string/searchBlogHint"-->
+            <!--android:paddingLeft="@dimen/padding_large"-->
+            <!--android:text="@={vm.searchQuery}"-->
+            <!--android:textColor="@color/colorTextDark"-->
+            <!--android:textColorHint="@color/colorTextGray"-->
+            <!--app:font='@{@string/robotoRegular}' />-->
 
-                        <ImageView
-                            android:id="@+id/search"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentRight="true"
-                            android:onClick="@{vm.onSearchClicked}"
-                            android:padding="@dimen/padding_small"
-                            android:src="@drawable/ic_arrow_forward_black_24dp"
-                            android:tint="@color/colorTextDark" />
-                    </RelativeLayout>
+            <!--<ImageView-->
+            <!--android:id="@+id/search"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:onClick="@{vm.onSearchClicked}"-->
+            <!--android:padding="@dimen/padding_small"-->
+            <!--android:src="@drawable/ic_arrow_forward_black_24dp"-->
+            <!--android:tint="@color/colorTextDark" />-->
+            <!--</RelativeLayout>-->
 
-                    <ImageView
-                        android:id="@+id/filter"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:onClick="@{vm.onFilterClicked}"
-                        android:padding="@dimen/padding_med"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/controls" />
-                </RelativeLayout>
-            </android.support.design.widget.CollapsingToolbarLayout>
+            <!--<ImageView-->
+            <!--android:id="@+id/filter"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:onClick="@{vm.onFilterClicked}"-->
+            <!--android:padding="@dimen/padding_med"-->
+            <!--android:scaleType="centerInside"-->
+            <!--android:src="@drawable/controls" />-->
+            <!--</RelativeLayout>-->
+            <!--</android.support.design.widget.CollapsingToolbarLayout>-->
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
@@ -126,7 +126,7 @@
             app:elevation="10dp"
             app:itemIconTint="@drawable/bottom_nav_selector"
             app:itemTextColor="@drawable/bottom_nav_selector"
-            app:layout_behavior="com.braingroom.user.utils.BottomNavigationBehavior"/>
+            app:layout_behavior="com.braingroom.user.utils.BottomNavigationBehavior" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

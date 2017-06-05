@@ -30,6 +30,12 @@
             bind:view_provider="@{@layout/item_class_row_listing}"
             bind:viewmodel="@{vm}"
             tools:context="com.braingroom.user.view.activity.ClassSimpleListActivity" />
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            app:vm="@{vm.connectivityViewmodel}" />
 
     </RelativeLayout>
 </layout>
