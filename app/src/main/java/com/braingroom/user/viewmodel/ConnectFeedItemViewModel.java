@@ -13,6 +13,7 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
+import com.braingroom.user.view.activity.PostDetailActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,7 +64,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public ObservableBoolean acceptVisibility, accepted;
 
     @NonNull
-    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction;
+    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, detailShowAction;
 
     public ConnectFeedItemViewModel(final ConnectFeedResp.Snippet data, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
@@ -80,7 +81,14 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.videoThumb = new ObservableField<>(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
         this.liked = new ObservableBoolean(data.getLiked() == 0 ? false : true);
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
-
+        this.detailShowAction = new Action() {
+            @Override
+            public void run() throws Exception {
+                Bundle bundleData = new Bundle();
+                bundleData.putString("postId", data.getId());
+                navigator.navigateActivity(PostDetailActivity.class, bundleData);
+            }
+        };
         likeAction = new Action() {
             @Override
             public void run() throws Exception {
@@ -173,7 +181,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     }
 
     private String getHumanDate(String timeStamp) {
-        if (timeStamp==null)
+        if (timeStamp == null)
             return "";
         long time = Long.valueOf(timeStamp) * 1000;
         try {
