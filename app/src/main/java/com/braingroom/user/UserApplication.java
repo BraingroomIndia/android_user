@@ -70,7 +70,7 @@ public class UserApplication extends Application {
             Timber.plant(new CrashReportingTree());
         }
         sInstance = this;
-        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this, BASE_URL)).build();
+        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this, DEV_BASE_URL)).build();
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
 
     }

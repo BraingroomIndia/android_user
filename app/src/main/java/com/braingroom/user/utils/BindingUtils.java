@@ -41,6 +41,7 @@ import com.braingroom.user.view.adapters.ViewModelBinder;
 import com.braingroom.user.view.adapters.ViewPagerAdapter;
 import com.braingroom.user.view.adapters.ViewProvider;
 import com.braingroom.user.viewmodel.ConnectHomeViewModel;
+import com.braingroom.user.viewmodel.EmptyItemViewModel;
 import com.braingroom.user.viewmodel.HomeViewModel;
 import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
 import com.braingroom.user.viewmodel.TileShimmerItemViewModel;
@@ -130,6 +131,8 @@ public class BindingUtils {
                     return R.layout.item_shimmer_row;
                 if (vm instanceof TileShimmerItemViewModel)
                     return R.layout.item_shimmer_tile;
+                if (vm instanceof EmptyItemViewModel)
+                    return R.layout.item_empty_data;
                 return layoutId;
             }
         };
@@ -154,7 +157,7 @@ public class BindingUtils {
     }
 
     // Extra Utilities
-    @BindingAdapter(value = {"layout_vertical", "divider_decoration", "space_length","paginate","viewmodel"}, requireAll = false)
+    @BindingAdapter(value = {"layout_vertical", "divider_decoration", "space_length", "paginate", "viewmodel"}, requireAll = false)
     public static void bindLinearLayoutManager(@NonNull RecyclerView recyclerView, boolean vertical, String decorationType, float spaceLength, boolean paginate, final ViewModel vm) {
         int orientation = vertical ? RecyclerView.VERTICAL : RecyclerView.HORIZONTAL;
         final LinearLayoutManager lm = new LinearLayoutManager(recyclerView.getContext(), orientation, false);
@@ -168,7 +171,7 @@ public class BindingUtils {
         }
         recyclerView.setLayoutManager(lm);
 
-        if(paginate){
+        if (paginate) {
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -183,7 +186,7 @@ public class BindingUtils {
                     int firstVisibleItemPosition = lm.findFirstVisibleItemPosition();
 
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
-                         vm.paginate();
+                        vm.paginate();
                     }
 
                 }
