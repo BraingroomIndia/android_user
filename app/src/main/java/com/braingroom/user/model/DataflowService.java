@@ -25,6 +25,7 @@ import com.braingroom.user.model.request.CommonUuidReq;
 import com.braingroom.user.model.request.ConnectDataReq;
 import com.braingroom.user.model.request.ConnectFeedReq;
 import com.braingroom.user.model.request.ConnectPostByIdReq;
+import com.braingroom.user.model.request.ContactAdmin;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.ExploreReq;
 import com.braingroom.user.model.request.FirstSocialLoginReq;
