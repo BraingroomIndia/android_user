@@ -90,9 +90,8 @@ public interface UserApiService {
     @POST
     @Headers("X-App-Type: BGUSR01")
     Observable<UploadPostApiResp> postApiUpload(
-            @Url String url
+             @Url String url
             , @Part MultipartBody.Part file
-            , @Part("post_id") String post_id
             , @Part("post_type") String post_type
     );
 

@@ -69,7 +69,7 @@ public class ProfileResp extends BaseResp {
         @SerializedName("gender")
         public String gender;
 
-        @SerializedName("dob")
+        @SerializedName("d_o_b")
         public String dob;
 
         @SerializedName("profile_image")

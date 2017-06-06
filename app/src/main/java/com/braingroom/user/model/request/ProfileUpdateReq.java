@@ -51,6 +51,19 @@ public class ProfileUpdateReq {
         @SerializedName("institution_name")
         public String institutionName = "";
 
+        @SerializedName("institute_name1")
+        String ugInstituteName;
+
+        @SerializedName("institute_poy1")
+        String ugInstitutePassingYear;
+
+        @SerializedName("institute_name2")
+        String pgInstituteName;
+
+        @SerializedName("institute_poy2")
+        String pgInstitutePassingYear;
+
+
         @SerializedName("registration_id")
         public String registrationId = "";
 

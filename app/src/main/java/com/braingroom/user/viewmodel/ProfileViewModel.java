@@ -75,6 +75,8 @@ public class ProfileViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
                 HashMap<String, Integer> selectedGender = new HashMap<>();
+                if (!data.getGender().equals("-1"))
+                    selectedGender.put(data.getGender().equals("1") ? "Male" : "Female", Integer.valueOf(data.getGender()));
                 name.s_1.set(data.getName());
                 email.s_1.set(data.getEmail());
                 contact.s_1.set(data.getContactNo());
@@ -84,7 +86,9 @@ public class ProfileViewModel extends ViewModel {
                 ugPassoutYear.s_1.set(data.getUgInstitutePassingYear());
                 pgPassoutYear.s_1.set(data.getPgInstitutePassingYear());
                 imageUploadVm.remoteAddress.set(data.getProfileImage());
-                genderVm.setSelectedItems(new Integer[] {Integer.valueOf(data.getGender())});
+                genderVm.setSelectedItemsMap(selectedGender);
+                if (data.getDob() != null && !data.getDob().equals(""))
+                    dobVm.date.set(data.getDob());
                 HashMap<String, Integer> selectedCityMap = new HashMap<>();
                 HashMap<String, Integer> selectedInterestMap = new HashMap<>();
                 if (!data.getCity().equals("")) {
@@ -195,6 +199,8 @@ public class ProfileViewModel extends ViewModel {
         snippet.setLocalityId(localityVm.getSelectedItemsId().size() > 0 ? localityVm.getSelectedItemsId().get(0) : "");
         snippet.setCategoryId(categoryVm.getSelectedItemsId().size() > 0 ? categoryVm.getSelectedItemsId().get(0) : "");
         snippet.setInstitutionName("");
+        snippet.setUgInstitutePassingYear(ugPassoutYear.s_1.get());
+        snippet.setPgInstituteName(pgInstitution.s_1.get());
         snippet.setDob(dobVm.date.get());
         snippet.setGender(genderVm.getSelectedItemsId().size() > 0 ? genderVm.getSelectedItemsId().get(0) : "");
         snippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
