@@ -14,7 +14,7 @@ import com.braingroom.user.viewmodel.fragment.PostAcceptViewModel;
 
 public class PostAcceptFragment extends BaseFragment {
 
-    public static PostAcceptFragment newInstance(String postId, String commentId, String replyId) {
+    public static PostAcceptFragment newInstance(String postId) {
         Bundle bundle = new Bundle();
         bundle.putString("postId", postId);
         PostAcceptFragment fragment = new PostAcceptFragment();
@@ -32,6 +32,6 @@ public class PostAcceptFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_likes;
+        return R.layout.fragment_post_accept;
     }
 }

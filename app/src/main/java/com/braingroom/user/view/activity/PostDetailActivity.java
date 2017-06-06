@@ -8,11 +8,12 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.view.fragment.LikesFragment;
+import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
 import com.braingroom.user.viewmodel.ConnectFeedDetailViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
-public class PostDetailActivity extends BaseActivity implements ConnectUiHelper{
+public class PostDetailActivity extends BaseActivity implements ConnectUiHelper {
 
 
     @NonNull
@@ -52,6 +53,14 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper{
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, ConnectPostFragment.newInstance()).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void openAcceptedUsersFragment(String postId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, PostAcceptFragment.newInstance(postId)).addToBackStack(null).commit();
+
     }
 
     @Override

@@ -10,7 +10,7 @@
 
         <variable
             name="vm"
-            type="com.braingroom.user.viewmodel.fragment.LikesViewModel" />
+            type="com.braingroom.user.viewmodel.fragment.PostAcceptViewModel" />
 
     </data>
 
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            bind:items="@{vm.likesVm}"
+            bind:items="@{vm.items}"
             bind:layout_vertical="@{true}"
             bind:view_provider="@{@layout/item_liked_users}" />
 

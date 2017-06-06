@@ -38,6 +38,7 @@ import com.braingroom.user.view.fragment.ConnectFeedFragment;
 import com.braingroom.user.view.fragment.ConnectFilterFragment;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.view.fragment.LikesFragment;
+import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
 import com.braingroom.user.view.fragment.SearchSelectListFragment;
 import com.braingroom.user.viewmodel.ConnectFilterViewModel;
@@ -409,6 +410,14 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, LikesFragment.newInstance(postId, commentId, replyId)).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void openAcceptedUsersFragment(String postId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, PostAcceptFragment.newInstance(postId)).addToBackStack(null).commit();
+
     }
 
     @Override

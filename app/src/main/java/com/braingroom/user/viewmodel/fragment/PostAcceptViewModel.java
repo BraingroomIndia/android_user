@@ -14,11 +14,11 @@ import io.reactivex.functions.Function;
 public class PostAcceptViewModel extends ViewModel {
 
     public final Action onBackClicked;
-    public final Observable<List<ViewModel>> likesVm;
+    public final Observable<List<ViewModel>> items;
 
     public PostAcceptViewModel(String postId ,final ConnectUiHelper uiHelper) {
 
-        likesVm = apiService.getAcceptedUsers(postId)
+        items = apiService.getAcceptedUsers(postId)
                 .map(new Function<LikedUsersListResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(LikedUsersListResp resp) throws Exception {

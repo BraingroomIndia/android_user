@@ -8,6 +8,7 @@ public interface ConnectUiHelper {
     void openReplyFragment(String postId, String commentId);
 
     void openLikesFragment(String postId, String commentId, String replyId);
+    void openAcceptedUsersFragment(String postId);
 
     void openConnectPost();
 

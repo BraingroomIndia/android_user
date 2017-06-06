@@ -109,8 +109,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
         showAcceptedUsers = new Action() {
             @Override
             public void run() throws Exception {
-                if(isPostOwner.get()){
-
+                if (isPostOwner.get()) {
+                    uiHelper.openAcceptedUsersFragment(data.getId());
                 }
             }
         };
@@ -120,9 +120,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
                 if (!loggedIn.get()) {
 
-                    Bundle data =new Bundle();
+                    Bundle data = new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
-                    messageHelper.showLoginRequireDialog("Only logged in users can like a post",data);
+                    messageHelper.showLoginRequireDialog("Only logged in users can like a post", data);
                     return;
                 }
 
@@ -183,9 +183,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (!loggedIn.get()) {
-                    Bundle data =new Bundle();
+                    Bundle data = new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
-                    messageHelper.showLoginRequireDialog("Only logged in users can report a post",data);
+                    messageHelper.showLoginRequireDialog("Only logged in users can report a post", data);
                     return;
                 }
                 apiService.report(data.getId()).subscribe(new Consumer<ReportResp>() {
