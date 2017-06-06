@@ -45,7 +45,12 @@ public class ConnectPostFragment extends BaseFragment {
         if (args != null) {
             postType = args.getString(POST_TYPE);
         }
-        return new ConnectPostViewModel(activity.getMessageHelper(), activity.getNavigator(), activity.getHelperFactory(), postType);
+        return new ConnectPostViewModel(activity.getMessageHelper(), activity.getNavigator(), activity.getHelperFactory(), postType, new UiHelper() {
+            @Override
+            public void next() {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override

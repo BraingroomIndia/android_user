@@ -3,10 +3,12 @@ package com.braingroom.user.viewmodel.fragment;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.braingroom.user.R;
+import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.BuyAndSellPostReq;
 import com.braingroom.user.model.request.ConnectPostReq;
@@ -18,7 +20,9 @@ import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.model.response.UploadResp;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.utils.FileUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -41,6 +45,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
+import static android.app.Activity.RESULT_OK;
 import static lombok.libs.org.objectweb.asm.commons.GeneratorAdapter.AND;
 
 public class ConnectPostViewModel extends ViewModel {
@@ -555,6 +560,16 @@ public class ConnectPostViewModel extends ViewModel {
             }
         });
 
+    }
+
+    @Override
+    public void handleActivityResult(final int requestCode, int resultCode, Intent data) {
+        if ((requestCode == REQ_CODE_CHOOSE_IMAGE)
+                && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri fileUri = data.getData();
+            imageUploadVm.imageUpload(fileUri);
+
+        }
     }
 
     private void setCountry(String id) {

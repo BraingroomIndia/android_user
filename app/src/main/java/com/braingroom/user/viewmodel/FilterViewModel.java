@@ -129,8 +129,8 @@ public class FilterViewModel extends ViewModel {
 
 
         cityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_CITY, messageHelper, navigator, "search for city", false, cityApiObservable, "", cityConsumer, fragmentHelper);
-        cityVm.setSelectedValues(cityFilterMap);
         localityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_LOCALITY, messageHelper, navigator, "search for locality", false, localityApiObservable, "select a city first", null, fragmentHelper);
+        cityVm.setSelectedValues(cityFilterMap);
         localityVm.setSelectedValues(localityFilterMap);
 
         vendorlistApiObservable = apiService.getVendors().map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {

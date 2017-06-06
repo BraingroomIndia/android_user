@@ -41,41 +41,35 @@ public class PostApiImageUploadViewModel extends ViewModel {
 
     }
 
-
-    @Override
-    public void handleActivityResult(final int requestCode, int resultCode, Intent data) {
-        if ((requestCode == REQ_CODE_CHOOSE_IMAGE)
-                && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri fileUri = data.getData();
-            Log.d(TAG, "fileuri: "+fileUri);
-            messageHelper.show("uploading...");
-            apiService.uploadPostApiImage(
-                    FileUtils.getPath(UserApplication.getInstance(), fileUri)
-                    , UserApplication.getInstance().getContentResolver().getType(fileUri)
-                    , "tips_tricks"
-            )
-                    .subscribe(new Consumer<UploadPostApiResp>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {
-                            if (resp.getResCode().equals("1")) {
-                                messageHelper.show("image upload success");
-                                remoteAddress.set(resp.getData().get(0).getUrl());
-                                Log.d(TAG, "getImgPath: "+resp.getData());
-                                Log.d(TAG, "getImgPath: "+resp.getData().get(0).getUrl());
-                            } else {
-                                messageHelper.show("image upload FAIlURE");
-                            }
-
-                        }
-
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+    public void imageUpload(Uri fileUri) {
+        messageHelper.show("uploading...");
+        apiService.uploadPostApiImage(
+                FileUtils.getPath(UserApplication.getInstance(), fileUri)
+                , UserApplication.getInstance().getContentResolver().getType(fileUri)
+                , "tips_tricks"
+        )
+                .subscribe(new Consumer<UploadPostApiResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {
+                        if (resp.getResCode().equals("1")) {
+                            messageHelper.show("image upload success");
+                            remoteAddress.set(resp.getData().get(0).getUrl());
+                            Log.d(TAG, "getImgPath: " + resp.getData());
+                            Log.d(TAG, "getImgPath: " + resp.getData().get(0).getUrl());
+                        } else {
                             messageHelper.show("image upload FAIlURE");
                         }
-                    });
 
-        }
+                    }
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        messageHelper.show("image upload FAIlURE");
+                    }
+                });
+
+
     }
 
 }
