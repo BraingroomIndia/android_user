@@ -45,10 +45,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public final ObservableField<String> description;
 
     @NonNull
-    public final ObservableField<Integer> numLikes;
+    public final ObservableField<Integer> numLikes,numAccepts;
 
     @NonNull
-    public final ObservableField<String> numComments, numAccepts;
+    public final ObservableField<String> numComments;
 
     @NonNull
     public final ObservableField<String> image;

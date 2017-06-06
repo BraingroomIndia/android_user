@@ -1,12 +1,86 @@
 package com.braingroom.user.model;
 
 
-import com.braingroom.user.model.request.*;
-import com.braingroom.user.model.response.*;
-
+import com.braingroom.user.model.request.ArticleAndVideosPostReq;
+import com.braingroom.user.model.request.BuyAndSellPostReq;
+import com.braingroom.user.model.request.ChangePasswordReq;
+import com.braingroom.user.model.request.ChatMessageReq;
+import com.braingroom.user.model.request.CityReq;
+import com.braingroom.user.model.request.ClassDetailReq;
+import com.braingroom.user.model.request.CommentReplyReq;
+import com.braingroom.user.model.request.CommentViewReply;
+import com.braingroom.user.model.request.CommentViewReplyReq;
+import com.braingroom.user.model.request.CommonIdReq;
+import com.braingroom.user.model.request.CommonUserIdReq;
+import com.braingroom.user.model.request.CommonUuidReq;
+import com.braingroom.user.model.request.ConnectDataReq;
+import com.braingroom.user.model.request.ConnectFeedReq;
+import com.braingroom.user.model.request.ConnectPostByIdReq;
+import com.braingroom.user.model.request.ContactAdmin;
+import com.braingroom.user.model.request.DecideAndDiscussPostReq;
+import com.braingroom.user.model.request.ExploreReq;
+import com.braingroom.user.model.request.FirstSocialLoginReq;
+import com.braingroom.user.model.request.GeneralFilterReq;
+import com.braingroom.user.model.request.GuestUserReq;
+import com.braingroom.user.model.request.InstituteReq;
+import com.braingroom.user.model.request.KnowledgeNuggetsPostReq;
+import com.braingroom.user.model.request.LearningPartnerPostReq;
+import com.braingroom.user.model.request.LikeReq;
+import com.braingroom.user.model.request.LocalityReq;
+import com.braingroom.user.model.request.LoginReq;
+import com.braingroom.user.model.request.MarkerDataReq;
+import com.braingroom.user.model.request.MessageListReq;
+import com.braingroom.user.model.request.PayUBookingDetailsReq;
+import com.braingroom.user.model.request.PayUHashGenReq;
+import com.braingroom.user.model.request.PostRelatedReq;
+import com.braingroom.user.model.request.ProfileUpdateReq;
+import com.braingroom.user.model.request.PromocodeReq;
+import com.braingroom.user.model.request.RazorSuccessReq;
+import com.braingroom.user.model.request.ReportReq;
+import com.braingroom.user.model.request.SearchReq;
+import com.braingroom.user.model.request.SegmentReq;
+import com.braingroom.user.model.request.SignUpReq;
+import com.braingroom.user.model.request.SocialLoginReq;
+import com.braingroom.user.model.request.StateReq;
+import com.braingroom.user.model.request.VendorReviewReq;
+import com.braingroom.user.model.request.WishlistReq;
+import com.braingroom.user.model.response.BaseResp;
+import com.braingroom.user.model.response.BookingHistoryResp;
+import com.braingroom.user.model.response.CategoryResp;
+import com.braingroom.user.model.response.ChangePasswordResp;
+import com.braingroom.user.model.response.ChatListResp;
+import com.braingroom.user.model.response.ClassListResp;
+import com.braingroom.user.model.response.CommentListResp;
+import com.braingroom.user.model.response.CommentReplyResp;
+import com.braingroom.user.model.response.CommonIdResp;
+import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.ConnectFeedResp;
+import com.braingroom.user.model.response.ExploreResp;
+import com.braingroom.user.model.response.GroupResp;
+import com.braingroom.user.model.response.GuestUserResp;
+import com.braingroom.user.model.response.LikeResp;
+import com.braingroom.user.model.response.LikedUsersListResp;
+import com.braingroom.user.model.response.LoginResp;
+import com.braingroom.user.model.response.MarkerDataResp;
+import com.braingroom.user.model.response.MessageListResp;
+import com.braingroom.user.model.response.NotificationListResp;
+import com.braingroom.user.model.response.PayUBookingDetailsResp;
+import com.braingroom.user.model.response.PayUHashResp;
+import com.braingroom.user.model.response.ProfileResp;
+import com.braingroom.user.model.response.PromocodeResp;
+import com.braingroom.user.model.response.RazorSuccessResp;
+import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.model.response.UploadPostApiResp;
+import com.braingroom.user.model.response.UploadResp;
+import com.braingroom.user.model.response.VendorProfileResp;
+import com.braingroom.user.model.response.VendorReviewResp;
+import com.braingroom.user.model.response.WishlistResp;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -92,7 +166,7 @@ public interface UserApiService {
     Observable<UploadPostApiResp> postApiUpload(
              @Url String url
             , @Part MultipartBody.Part file
-            , @Part("post_type") String post_type
+            , @Part("post_type") RequestBody post_type
     );
 
     @POST("getSegment")

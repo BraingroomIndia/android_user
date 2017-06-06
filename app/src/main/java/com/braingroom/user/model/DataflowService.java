@@ -803,7 +803,7 @@ public class DataflowService {
     public Observable<UploadPostApiResp> uploadPostApiImage(String filePath, String type, String post_type) {
         return api.postApiUpload("uploadPostImage"
                 , prepareFilePart("image", filePath, type)
-                , post_type
+                , RequestBody.create(MediaType.parse("text/plain"), post_type)
         ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -811,7 +811,7 @@ public class DataflowService {
     public Observable<UploadPostApiResp> uploadPostApiVideo(String filePath, String type, String post_type) {
         return api.postApiUpload("uploadPostVideo"
                 , prepareFilePart("video", filePath, type)
-                , post_type
+                , RequestBody.create(MediaType.parse("text/plain"), post_type)
         ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
