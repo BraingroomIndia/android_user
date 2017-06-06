@@ -10,16 +10,86 @@ import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.PayUCheckoutData;
 import com.braingroom.user.model.dto.ProfileData;
 import com.braingroom.user.model.dto.VendorProfileData;
-
-import com.braingroom.user.model.request.*;
-import com.braingroom.user.model.response.*;
-
+import com.braingroom.user.model.request.ArticleAndVideosPostReq;
+import com.braingroom.user.model.request.BuyAndSellPostReq;
+import com.braingroom.user.model.request.ChangePasswordReq;
+import com.braingroom.user.model.request.ChatMessageReq;
+import com.braingroom.user.model.request.CityReq;
+import com.braingroom.user.model.request.ClassDetailReq;
+import com.braingroom.user.model.request.CommentReplyReq;
+import com.braingroom.user.model.request.CommentViewReply;
+import com.braingroom.user.model.request.CommentViewReplyReq;
+import com.braingroom.user.model.request.CommonIdReq;
+import com.braingroom.user.model.request.CommonUserIdReq;
+import com.braingroom.user.model.request.CommonUuidReq;
+import com.braingroom.user.model.request.ConnectDataReq;
+import com.braingroom.user.model.request.ConnectFeedReq;
+import com.braingroom.user.model.request.ConnectPostByIdReq;
+import com.braingroom.user.model.request.DecideAndDiscussPostReq;
+import com.braingroom.user.model.request.ExploreReq;
+import com.braingroom.user.model.request.FirstSocialLoginReq;
+import com.braingroom.user.model.request.GeneralFilterReq;
+import com.braingroom.user.model.request.GuestUserReq;
+import com.braingroom.user.model.request.InstituteReq;
+import com.braingroom.user.model.request.KnowledgeNuggetsPostReq;
+import com.braingroom.user.model.request.LearningPartnerPostReq;
+import com.braingroom.user.model.request.LikeReq;
+import com.braingroom.user.model.request.LocalityReq;
+import com.braingroom.user.model.request.LoginReq;
+import com.braingroom.user.model.request.MarkerDataReq;
+import com.braingroom.user.model.request.MessageListReq;
+import com.braingroom.user.model.request.PayUBookingDetailsReq;
+import com.braingroom.user.model.request.PayUHashGenReq;
+import com.braingroom.user.model.request.PostRelatedReq;
+import com.braingroom.user.model.request.ProfileUpdateReq;
+import com.braingroom.user.model.request.PromocodeReq;
+import com.braingroom.user.model.request.RazorSuccessReq;
+import com.braingroom.user.model.request.ReportReq;
+import com.braingroom.user.model.request.SearchReq;
+import com.braingroom.user.model.request.SegmentReq;
+import com.braingroom.user.model.request.SignUpReq;
+import com.braingroom.user.model.request.SocialLoginReq;
+import com.braingroom.user.model.request.StateReq;
+import com.braingroom.user.model.request.WishlistReq;
+import com.braingroom.user.model.response.BaseResp;
+import com.braingroom.user.model.response.BookingHistoryResp;
+import com.braingroom.user.model.response.CategoryResp;
+import com.braingroom.user.model.response.CategoryTreeResp;
+import com.braingroom.user.model.response.ChangePasswordResp;
+import com.braingroom.user.model.response.ChatListResp;
+import com.braingroom.user.model.response.ClassListResp;
+import com.braingroom.user.model.response.CommentListResp;
+import com.braingroom.user.model.response.CommentReplyResp;
+import com.braingroom.user.model.response.CommonIdResp;
+import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.ConnectFeedResp;
+import com.braingroom.user.model.response.ExploreResp;
+import com.braingroom.user.model.response.GroupResp;
+import com.braingroom.user.model.response.GuestUserResp;
+import com.braingroom.user.model.response.LikeResp;
+import com.braingroom.user.model.response.LikedUsersListResp;
+import com.braingroom.user.model.response.LoginResp;
+import com.braingroom.user.model.response.MarkerDataResp;
+import com.braingroom.user.model.response.MessageListResp;
+import com.braingroom.user.model.response.NotificationListResp;
+import com.braingroom.user.model.response.PayUBookingDetailsResp;
+import com.braingroom.user.model.response.PayUHashResp;
+import com.braingroom.user.model.response.ProfileResp;
+import com.braingroom.user.model.response.PromocodeResp;
+import com.braingroom.user.model.response.RazorSuccessResp;
+import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.model.response.UploadPostApiResp;
+import com.braingroom.user.model.response.UploadResp;
+import com.braingroom.user.model.response.VendorProfileResp;
+import com.braingroom.user.model.response.VendorReviewResp;
+import com.braingroom.user.model.response.WishlistResp;
 import com.braingroom.user.utils.Constants;
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -250,7 +320,7 @@ public class DataflowService {
     }
 
     public Observable<VendorProfileData> getVendorProfile(String vendorId) {
-        return api.getVendorProfile("",new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
+        return api.getVendorProfile("", new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorProfileData>() {
                     @Override
                     public VendorProfileData apply(@NonNull VendorProfileResp resp) throws Exception {
@@ -259,7 +329,7 @@ public class DataflowService {
                 });
     }
 
-    public Observable<List<ClassData>> getVendorClassList(Integer pageIndex,String vendorId) {
+    public Observable<List<ClassData>> getVendorClassList(Integer pageIndex, String vendorId) {
         return api.getVendorProfile(pageIndex > 1 ? pageIndex + "" : "",
                 new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, List<ClassData>>() {
@@ -459,7 +529,7 @@ public class DataflowService {
     }
 
     public Observable<VendorReviewResp> getVendorReviews(String vendorId) {
-        return api.getVendorProfile("",new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
+        return api.getVendorProfile("", new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorReviewResp>() {
                     @Override
                     public VendorReviewResp apply(@NonNull VendorProfileResp resp) throws Exception {
@@ -543,10 +613,10 @@ public class DataflowService {
 
     public Observable<SegmentResp> getSegmentTree(List<Integer> categoryIds) {
         List<Observable<SegmentResp>> segmentObservableList = new ArrayList<>();
-        if (categoryIds.size()==0)
+        if (categoryIds.size() == 0)
             return Observable.empty();
         for (Integer categoryId : categoryIds) {
-            segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet(""+categoryId))));
+            segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet("" + categoryId))));
         }
         return Observable.zip(segmentObservableList, new Function<Object[], SegmentResp>() {
             @Override
@@ -664,58 +734,58 @@ public class DataflowService {
 
     public Observable<MessageListResp> getMessages() {
         // TODO: 21/05/17 remove hardcoded userid
-        List<MessageListResp.Snippet> dataList = new ArrayList<>();
-        MessageListResp.Snippet snippet = new MessageListResp.Snippet();
-        snippet.setSenderId("0");
-        snippet.setRecieverId("1");
-        MessageListResp.Message message = new MessageListResp.Message();
-        message.setAddDate("12 sept");
-        message.setMessage("test message himanshu test message test test himanshu test message");
-        message.setId("1");
-        message.setModifyDate("12 sept");
-        snippet.setMessage(message);
-        snippet.setSenderName("Himanshu Agrahari");
-        snippet.setSenderPic("https://www.braingroom.com/img/Buyer/profile/201705100651530709511001494399113.jpg");
-        dataList.addAll(Collections.nCopies(20, snippet));
-
-        MessageListResp resp = new MessageListResp(dataList);
-        return Observable.just(resp);
-//        return api.getMessages(new MessageListReq(new MessageListReq.Snippet("39"))).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
+//        List<MessageListResp.Snippet> dataList = new ArrayList<>();
+//        MessageListResp.Snippet snippet = new MessageListResp.Snippet();
+//        snippet.setSenderId("0");
+//        snippet.setRecieverId("1");
+//        MessageListResp.Message message = new MessageListResp.Message();
+//        message.setAddDate("12 sept");
+//        message.setMessage("test message himanshu test message test test himanshu test message");
+//        message.setId("1");
+//        message.setModifyDate("12 sept");
+//        snippet.setMessage(message);
+//        snippet.setSenderName("Himanshu Agrahari");
+//        snippet.setSenderPic("https://www.braingroom.com/img/Buyer/profile/201705100651530709511001494399113.jpg");
+//        dataList.addAll(Collections.nCopies(20, snippet));
+//
+//        MessageListResp resp = new MessageListResp(dataList);
+//        return Observable.just(resp);
+        return api.getMessages(new MessageListReq(new MessageListReq.Snippet("39"))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<ChatListResp> getChatMessages(String senderId) {
         // TODO: 21/05/17 remove hardcoded userid
-        List<ChatListResp.Snippet> dataList = new ArrayList<>();
-        ChatListResp.Snippet chat1 = new ChatListResp.Snippet();
-        chat1.setText("From sender msg 1");
-        chat1.setUserId("0");
-        chat1.setTime("1495524123");
-
-        ChatListResp.Snippet chat2 = new ChatListResp.Snippet();
-        chat2.setText("From sender msg 2");
-        chat2.setUserId("0");
-        chat2.setTime("1495524123");
-
-        ChatListResp.Snippet chat3 = new ChatListResp.Snippet();
-        chat3.setText("From sender msg 3");
-        chat3.setUserId("0");
-        chat3.setTime("1495524123");
-
-        ChatListResp.Snippet chat4 = new ChatListResp.Snippet();
-        chat4.setText("From me msg 1");
-        chat4.setUserId("1");
-        chat4.setTime("1495524123");
-
-        dataList.add(chat1);
-        dataList.add(chat2);
-        dataList.add(chat3);
-        dataList.add(chat4);
-
-        ChatListResp resp = new ChatListResp(dataList);
-        return Observable.just(null);
-//        return api.getMessages(new MessageListReq(new MessageListReq.Snippet("39"))).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
+//        List<ChatListResp.Snippet> dataList = new ArrayList<>();
+//        ChatListResp.Snippet chat1 = new ChatListResp.Snippet();
+//        chat1.setText("From sender msg 1");
+//        chat1.setUserId("0");
+//        chat1.setTime("1495524123");
+//
+//        ChatListResp.Snippet chat2 = new ChatListResp.Snippet();
+//        chat2.setText("From sender msg 2");
+//        chat2.setUserId("0");
+//        chat2.setTime("1495524123");
+//
+//        ChatListResp.Snippet chat3 = new ChatListResp.Snippet();
+//        chat3.setText("From sender msg 3");
+//        chat3.setUserId("0");
+//        chat3.setTime("1495524123");
+//
+//        ChatListResp.Snippet chat4 = new ChatListResp.Snippet();
+//        chat4.setText("From me msg 1");
+//        chat4.setUserId("1");
+//        chat4.setTime("1495524123");
+//
+//        dataList.add(chat1);
+//        dataList.add(chat2);
+//        dataList.add(chat3);
+//        dataList.add(chat4);
+//
+//        ChatListResp resp = new ChatListResp(dataList);
+//        return Observable.just(resp);
+        return api.getChatMessages(new ChatMessageReq(new ChatMessageReq.Snippet(senderId, "39"))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
