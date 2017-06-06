@@ -101,6 +101,16 @@
                         android:tint="@color/colorTextGray" />
 
                 </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="@dimen/margin_med"
+                    android:onClick="@{(v) -> vm.showMenuPopup(v)}"
+                    android:src="@drawable/vert_more_dots"
+                    android:tint="@color/colorTextGray" />
             </RelativeLayout>
 
             <TextView
@@ -122,8 +132,8 @@
                 android:layout_marginBottom="@dimen/margin_small"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:paddingBottom="@dimen/padding_small"
                 android:onClick="@{vm.detailShowAction}"
+                android:paddingBottom="@dimen/padding_small"
                 android:text="@{CommonUtils.fromHtml(vm.description)}"
                 android:textColor="@color/colorTextGray"
                 android:textSize="@dimen/text_size_medium"

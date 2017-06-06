@@ -2,7 +2,9 @@ package com.braingroom.user.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 public interface Navigator {
 
@@ -24,4 +26,6 @@ public interface Navigator {
     void finishActivity(Intent resultData);
 
     void openStandaloneYoutube(String videoId);
+
+    void showMenuPopup(@MenuRes int layout, View v);
 }

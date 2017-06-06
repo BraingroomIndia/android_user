@@ -83,6 +83,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     @Getter
     ConnectFilterViewModel connectFilterViewModel;
 
+    Fragment mFragement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -415,7 +417,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         String postType = getActivePostType();
-        Fragment mFragement = postType == null ? ConnectPostFragment.newInstance() : ConnectPostFragment.newInstanceByPostType(postType);
+        mFragement = postType == null ? ConnectPostFragment.newInstance() : ConnectPostFragment.newInstanceByPostType(postType);
         transaction.replace(R.id.comments_container, mFragement).addToBackStack(null).commit();
     }
 
@@ -466,5 +468,9 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         return null;
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(mFragement!=null && !mFragement.isDetached()) mFragement.onActivityResult( requestCode,  resultCode,  data);
+    }
 }

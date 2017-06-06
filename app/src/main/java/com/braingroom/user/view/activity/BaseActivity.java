@@ -1,17 +1,22 @@
 package com.braingroom.user.view.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Display;
+import android.view.MenuInflater;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -26,10 +31,12 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
 
@@ -145,19 +152,54 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
-                public void launchImageChooserActivity(int reqCode) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), reqCode);
+                public void showMenuPopup(@MenuRes int layout, View v) {
+                    PopupMenu popup = new PopupMenu(BaseActivity.this, v);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(layout, popup.getMenu());
+                    popup.show();
+                }
+
+
+                @Override
+                public void launchImageChooserActivity(final int reqCode) {
+
+                    RxPermissions rxPermissions = new RxPermissions(BaseActivity.this);
+                    rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Boolean granted) throws Exception {
+                            if (granted) {
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Select Picture"), reqCode);
+                            }
+                        }
+                    });
+//                    Intent intent = new Intent();
+//                    intent.setType("image/*");
+//                    intent.setAction(Intent.ACTION_GET_CONTENT);
+//                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), reqCode);
                 }
 
                 @Override
-                public void launchVideoChooserActivity(int reqCode) {
-                    Intent intent = new Intent();
-                    intent.setType("video/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), reqCode);
+                public void launchVideoChooserActivity(final int reqCode) {
+
+                    RxPermissions rxPermissions = new RxPermissions(BaseActivity.this);
+                    rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Boolean granted) throws Exception {
+                            if (granted) {
+                                Intent intent = new Intent();
+                                intent.setType("video/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Select Video"), reqCode);
+                            }
+                        }
+                    });
+//                    Intent intent = new Intent();
+//                    intent.setType("video/*");
+//                    intent.setAction(Intent.ACTION_GET_CONTENT);
+//                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), reqCode);
                 }
 
                 @Override
@@ -173,7 +215,9 @@ public abstract class BaseActivity extends MvvmActivity {
                         Log.d("Place Api", "launchPlaceSearchIntent: " + e.getMessage());
                     }
                 }
-            };
+            }
+
+                    ;
         return navigator;
     }
 
