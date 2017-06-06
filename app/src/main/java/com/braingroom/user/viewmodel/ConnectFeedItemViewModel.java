@@ -47,7 +47,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public final ObservableField<Integer> numLikes;
 
     @NonNull
-    public final ObservableField<String> numComments;
+    public final ObservableField<String> numComments, numAccepts;
 
     @NonNull
     public final ObservableField<String> image;
@@ -59,16 +59,20 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public final ObservableField<String> videoThumb;
 
     @NonNull
-    public final ObservableBoolean liked, reported;
+    public final ObservableBoolean liked, reported, isPostOwner;
 
     @NonNull
-    public ObservableBoolean acceptVisibility, accepted;
+    public final ObservableBoolean accepted;
 
     @NonNull
-    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, detailShowAction;
+    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers;
 
     @NonNull
     public final Navigator navigator;
+
+    public final String postType;
+
+    public final boolean isActivityRequest;
 
     public ConnectFeedItemViewModel(final ConnectFeedResp.Snippet data, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
@@ -86,12 +90,27 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.videoThumb = new ObservableField<>(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
         this.liked = new ObservableBoolean(data.getLiked() == 0 ? false : true);
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
-        this.detailShowAction = new Action() {
+        this.postType = data.getPostType();
+        this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
+        this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
+        this.numAccepts = new ObservableField<>(data.getNumAccepted());
+        // TODO: 06/06/17 remove hardcoded userid 
+        this.isPostOwner = new ObservableBoolean("39".equals(data.getPostOwner()));
+
+        detailShowAction = new Action() {
             @Override
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
                 bundleData.putString("postId", data.getId());
                 navigator.navigateActivity(PostDetailActivity.class, bundleData);
+            }
+        };
+        showAcceptedUsers = new Action() {
+            @Override
+            public void run() throws Exception {
+                if(isPostOwner.get()){
+
+                }
             }
         };
         likeAction = new Action() {
@@ -143,6 +162,19 @@ public class ConnectFeedItemViewModel extends ViewModel {
                 navigator.openStandaloneYoutube(video.get());
             }
         };
+
+        acceptAction = new Action() {
+            @Override
+            public void run() throws Exception {
+
+            }
+        };
+        shareAction = new Action() {
+            @Override
+            public void run() throws Exception {
+
+            }
+        };
         reportAction = new Action() {
             @Override
             public void run() throws Exception {
@@ -173,7 +205,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
     }
 
     public void showMenuPopup(View v) {
-        navigator.showMenuPopup(R.menu.connect_feed_item_1, v);
+        if (isActivityRequest)
+            navigator.showMenuPopup(R.menu.connect_feed_item_2, v);
+        else
+            navigator.showMenuPopup(R.menu.connect_feed_item_1, v);
 
     }
 

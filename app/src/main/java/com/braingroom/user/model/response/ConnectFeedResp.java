@@ -56,6 +56,18 @@ public class ConnectFeedResp extends BaseResp {
         @SerializedName("reported")
         private int reported;
 
+        // TODO: 06/06/17 remove hardcoding
+        /*******************************/
+        @SerializedName("accepted")
+        private int isAccepted = 0;
+
+        @SerializedName("num_accepted")
+        private String numAccepted = "3";
+
+        @SerializedName("user_id")
+        private String postOwner = "39";
+        /*******************************/
+
         @SerializedName("post_image")
         private String image;
 

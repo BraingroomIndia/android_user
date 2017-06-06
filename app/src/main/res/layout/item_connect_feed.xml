@@ -159,49 +159,86 @@
 
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_margin="@dimen/margin_small"
                 android:background="@drawable/bottom_line_drawable"
-                android:orientation="horizontal"
                 android:paddingBottom="@dimen/padding_med">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:onClick="@{vm.likedUsersAction}"
-                    android:padding="3dp"
-                    android:src="@drawable/ic_thumb_up_black_24dp"
-                    android:tint="@color/colorTextGray" />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/margin_small"
-                    android:gravity="center_vertical"
-                    android:onClick="@{vm.likedUsersAction}"
-                    android:text='@{vm.numLikes + ""}'
-                    android:textColor="@color/colorTextGray"
-                    app:font='@{@string/robotoRegular}' />
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/acceptContainer"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/margin_med"
-                    android:src="@drawable/solid_circle_gray" />
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:onClick="@{vm.likedUsersAction}"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_thumb_up_black_24dp"
+                        android:tint="@color/colorTextGray" />
 
-                <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:gravity="center_vertical"
+                        android:onClick="@{vm.likedUsersAction}"
+                        android:text='@{vm.numLikes + ""}'
+                        android:textColor="@color/colorTextGray"
+                        app:font='@{@string/robotoRegular}' />
+
+                    <ImageView
+                        android:layout_width="5dp"
+                        android:layout_height="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/margin_med"
+                        android:src="@drawable/solid_circle_gray" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:onClick="@{vm.commentAction}"
+                        android:text='@{vm.numComments + " comments"}'
+                        android:textColor="@color/colorTextGray"
+                        app:font='@{@string/robotoRegular}' />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/acceptContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:onClick="@{vm.commentAction}"
-                    android:text='@{vm.numComments + " comments"}'
-                    android:textColor="@color/colorTextGray"
-                    app:font='@{@string/robotoRegular}' />
-            </LinearLayout>
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal"
+                    android:visibility="@{vm.isActivityRequest ? View.VISIBLE : View.GONE}">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:onClick="@{vm.showAcceptedUsers}"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_people_black_24dp"
+                        android:tint="@{vm.isPostOwner ? @color/materialGreen : @color/colorTextGray}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:gravity="center_vertical"
+                        android:onClick="@{vm.showAcceptedUsers}"
+                        android:text='@{vm.numAccepts + ""}'
+                        android:textColor="@{vm.isPostOwner ? @color/materialGreen : @color/colorTextGray}"
+                        app:font='@{@string/robotoRegular}' />
+
+                </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -267,23 +304,49 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="@{vm.reportAction}"
-                    android:orientation="horizontal">
+                    android:onClick="@{vm.acceptAction}"
+                    android:orientation="horizontal"
+                    android:visibility="@{vm.isActivityRequest ? View.VISIBLE : View.GONE}">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_do_not_disturb_on_black_24dp"
-                        android:tint="@{vm.reported ? @color/materialRed : @color/fbLikeDark}" />
+                        android:src="@drawable/ic_check_black_24dp"
+                        android:tint="@{vm.reported ? @color/materialBlue : @color/fbLikeDark}" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/margin_small"
                         android:gravity="center_vertical"
-                        android:text="Report"
-                        android:textColor="@{vm.reported ? @color/materialRed : @color/fbLikeDark}"
+                        android:text='@{vm.accepted ? "Accepted":"Accept"}'
+                        android:textColor="@{vm.reported ? @color/materialBlue : @color/fbLikeDark}"
+                        app:font='@{@string/robotoBold}' />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="@{vm.shareAction}"
+                    android:orientation="horizontal"
+                    android:visibility="@{vm.isActivityRequest ? View.GONE : View.VISIBLE}">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_reply_black_24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:gravity="center_vertical"
+                        android:text="Share"
                         app:font='@{@string/robotoBold}' />
 
                 </LinearLayout>
