@@ -73,6 +73,10 @@ public interface UserApiService {
     @Headers("X-App-Type: BGUSR01")
     Observable<ClassListResp> getClassDetail(@Body ClassDetailReq req);
 
+    @POST("contactAdmin")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<BaseResp> contactAdmin(@Body ContactAdmin req);
+
     @POST("getProfile")
     @Headers("X-App-Type: BGUSR01")
     Observable<ProfileResp> getProfile(@Body CommonIdReq req);

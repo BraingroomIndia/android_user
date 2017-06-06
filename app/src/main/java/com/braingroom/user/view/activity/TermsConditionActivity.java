@@ -102,7 +102,7 @@ public class TermsConditionActivity extends AppCompatActivity {
             "<li>Vendors can call our helpline and can ask the reason for their rejection to improve and repost. Still admin decision is final.</li>\n" +
             "<li>Vendors posting obscene &amp; irrelevant class posts will be deactivated at once. Also class posts hurting sentiments of certain individuals / group of people will also be removed at once.</li>\n" +
             "<li>Vendors taking Braingroom’s help to upload classes, should be aware that it is their responsibility to provide the right description, details &amp; pictures. Braingroom cannot be responsible for any such mismatch in the information provided.</li>\n" +
-            "<li>To avoid data mismatch, as a procedure once the class summary and details are written by BrainGroom (on behalf of vendors), we will send it to the vendor and the vendor needs to reply within 48hrs if there is any correction.</li>\n" +
+            "<li>To avoid classData mismatch, as a procedure once the class summary and details are written by BrainGroom (on behalf of vendors), we will send it to the vendor and the vendor needs to reply within 48hrs if there is any correction.</li>\n" +
             "<li>/If there is no correction sent to Braingroom within 48 hours, then we will put it in the website and the full responsibility lies with the vendors. For corrections mailed within 48 hours, we will make those changes, get confirmation and then publish it in BrainGroom.</li>\n" +
             "<br>\n" +
             "<h4 class=\"text-primary\">Issue Resolution related:</h4>\n" +

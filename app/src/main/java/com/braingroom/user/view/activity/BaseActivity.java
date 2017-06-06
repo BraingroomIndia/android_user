@@ -118,14 +118,14 @@ public abstract class BaseActivity extends MvvmActivity {
                 @Override
                 public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
                     Intent intent = new Intent(BaseActivity.this, destination);
-                    intent.putExtra("data", bundle);
+                    intent.putExtra("classData", bundle);
                     startActivity(intent);
                 }
 
                 @Override
                 public void navigateActivityForResult(Class<?> destination, @Nullable Bundle bundle, int reqCode) {
                     Intent intent = new Intent(BaseActivity.this, destination);
-                    intent.putExtra("data", bundle);
+                    intent.putExtra("classData", bundle);
                     startActivityForResult(intent, reqCode);
                 }
 
@@ -232,7 +232,7 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
-                public void showLoginRequireDialog(String content) {
+                public void showLoginRequireDialog(String content, final Bundle data) {
                     dismissActiveProgress();
                     MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
                     builder.title("Login required");
@@ -240,7 +240,7 @@ public abstract class BaseActivity extends MvvmActivity {
                     builder.positiveText("Okay").onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                            getNavigator().navigateActivity(LoginActivity.class, null);
+                            getNavigator().navigateActivity(LoginActivity.class, data);
                             getNavigator().finishActivity();
                         }
                     }).show();

@@ -104,10 +104,14 @@ public class ClassDetailActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_wishlist) {
-            if (vm.loggedIn.get()){
+            if (vm.loggedIn.get()) {
                 ((ClassDetailViewModel) vm).addToWishlist();
+            } else {
+                Bundle data = new Bundle();
+                data.putString("id",getIntentString("id"));
+                data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
+                getMessageHelper().showLoginRequireDialog("Please login to add to wishlist",data);
             }
-            else getMessageHelper().showLoginRequireDialog("Please login to add to wishlist");
             return true;
         }
 

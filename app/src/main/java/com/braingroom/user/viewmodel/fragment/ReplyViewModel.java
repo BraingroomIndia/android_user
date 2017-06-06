@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel.fragment;
 
 import android.databinding.ObservableField;
+import android.os.Bundle;
 
 import com.braingroom.user.model.request.CommentViewReply;
 import com.braingroom.user.model.response.CommentReplyResp;
@@ -8,6 +9,7 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -45,7 +47,10 @@ public class ReplyViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (!loggedIn.get()) {
-                    messageHelper.showLoginRequireDialog("Please login before reply");
+
+                    Bundle data =new Bundle();
+                    data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
+                    messageHelper.showLoginRequireDialog("Please login before reply",data);
                     return;
                 }
 

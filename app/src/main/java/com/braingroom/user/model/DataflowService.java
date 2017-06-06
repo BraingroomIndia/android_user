@@ -286,7 +286,7 @@ public class DataflowService {
 
     public Observable<List<ClassData>> getWishList(int pageIndex) {
         return api.getWishlist(pageIndex > 1 ? pageIndex + "" : "",
-                new CommonUuidReq(new CommonUuidReq.Snippet(pref.getString(Constants.UUID, "")))).subscribeOn(Schedulers.io())
+                new CommonUuidReq(new CommonUuidReq.Snippet(/*pref.getString(Constants.UUID, "")*/"1234"))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
                     @Override
                     public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
@@ -406,6 +406,10 @@ public class DataflowService {
                     }
                 });
 
+    }
+
+    public Observable<BaseResp> contactAdmin(ContactAdmin req) {
+        return api.contactAdmin(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<List<ClassData>> getIndigeneousClass() {

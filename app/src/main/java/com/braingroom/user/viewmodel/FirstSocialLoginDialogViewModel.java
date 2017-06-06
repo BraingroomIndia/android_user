@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -9,7 +10,12 @@ import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.CheckoutActivity;
+import com.braingroom.user.view.activity.ClassDetailActivity;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.HomeActivity;
+
+import java.io.Serializable;
 
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -24,7 +30,8 @@ public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
     public final String userId;
 
     public FirstSocialLoginDialogViewModel(@NonNull final LoginResp loginResp, @NonNull final MessageHelper messageHelper,
-                                           @NonNull final Navigator navigator) {
+                                           @NonNull final Navigator navigator,final String parentActivity,final String classId,
+                                           final Serializable classData) {
         mobileVm = new DataItemViewModel("");
 
         referralVm = new DataItemViewModel("");
@@ -57,6 +64,20 @@ public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
                             editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
                             editor.commit();
                             navigator.navigateActivity(HomeActivity.class, null);
+                            if (CheckoutActivity.class.getSimpleName().equals(parentActivity)) {
+                                Bundle data = new Bundle();
+                                data.putSerializable("classData", classData);
+                                navigator.navigateActivity(CheckoutActivity.class, data);
+                            } else if (ConnectHomeActivity.class.getSimpleName().equals(parentActivity)) {
+                                navigator.navigateActivity(ConnectHomeActivity.class, null);
+                            } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
+                                Bundle data =new Bundle();
+                                data.putString("id", classId);
+                                navigator.navigateActivity(ClassDetailActivity.class,data);
+                            } else {
+                                navigator.navigateActivity(HomeActivity.class, null);
+                            }
+                            navigator.finishActivity();
                             navigator.finishActivity();
                         }
 
@@ -75,12 +96,7 @@ public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
         };
     }
 
-    private boolean isValidPhoneNo(CharSequence phoneNo) {
-        if (!TextUtils.isEmpty(phoneNo)) {
-            return android.util.Patterns.PHONE.matcher(phoneNo).matches();
-        }
-        return false;
-    }
+
 
 
 }

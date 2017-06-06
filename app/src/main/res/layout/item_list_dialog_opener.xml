@@ -11,6 +11,7 @@
         <variable
             name="editable"
             type="boolean" />
+        <import type="android.view.View" />
 
 
     </data>
@@ -56,6 +57,7 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:padding="@dimen/padding_med"
+            android:visibility="@{editable ? View.VISIBLE : View.GONE}"
             android:src="@drawable/ic_chevron_right_black_24dp"
             android:tint="@color/colorTextGray" />
 

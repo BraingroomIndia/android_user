@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
 
+import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.response.WishlistResp;
@@ -36,7 +37,7 @@ import lombok.Setter;
 
 public class ClassDetailViewModel extends ViewModel {
 
-    private ClassData mClassData;
+    public ClassData mClassData;
 
     String defaultLink = "https://www.braingroom.com/Vendor/defult_pic.jpg";
     public final ObservableField<String> imagePath = new ObservableField<>(null);
@@ -68,11 +69,11 @@ public class ClassDetailViewModel extends ViewModel {
     @Setter
     ClassDetailActivity.UiHelper uiHelper;
 
-    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, onGiftClicked, onPeopleNearYou, onConnect;
+    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, onGiftClicked, onPeopleNearYou, onConnect, onGetTutor;
 
     public boolean isInWishlist = false;
 
-    public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String classId) {
+    public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final String classId) {
         addresses = Observable.just(addressList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
@@ -183,6 +184,13 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 navigator.navigateActivity(ConnectHomeActivity.class, Bundle.EMPTY);
+            }
+        };
+        onGetTutor = new Action() {
+            @Override
+            public void run() throws Exception {
+                helperFactory.createDialogHelper().showCustomView(R.layout.content_contact_admin_dailog,new ContactAdminDialogViewModel(messageHelper,navigator,classId));
+
             }
         };
         //Edited By Vikas Godara

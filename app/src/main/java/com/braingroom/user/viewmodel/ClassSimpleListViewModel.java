@@ -24,6 +24,7 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     private boolean paginationInProgress = false;
     private ObservableField<Integer> nextPage = new ObservableField<>(1);
+    private Integer lastPage =0;
     private boolean nextPageAvailable = true;
     private final String listType;
     Observable<List<ClassData>> apiObservable = null;
@@ -42,12 +43,12 @@ public class ClassSimpleListViewModel extends ViewModel {
             }
         });
 
-        result = (FieldUtils.toObservable(retries).map(new Function<Integer, Integer>() {
+        result = (FieldUtils.toObservable(retries)/*.map(new Function<Integer, Integer>() {
             @Override
             public Integer apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return nextPage.get();
             }
-        }).mergeWith(FieldUtils.toObservable(nextPage)).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+        })*/.mergeWith(FieldUtils.toObservable(nextPage)).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;

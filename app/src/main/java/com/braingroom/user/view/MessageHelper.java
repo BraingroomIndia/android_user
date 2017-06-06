@@ -16,6 +16,7 @@
 
 package com.braingroom.user.view;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -25,7 +26,7 @@ public interface MessageHelper {
 
 
     void show(String message);
-    void showLoginRequireDialog(String message);
+    void showLoginRequireDialog(String message, Bundle data);
     void showDismissInfo(@Nullable String title, @NonNull String content);
     void showAcceptableInfo(@Nullable String title, @NonNull String content, @NonNull MaterialDialog.SingleButtonCallback positiveCallback);
     void showProgressDialog(@Nullable String title, @NonNull String content);
