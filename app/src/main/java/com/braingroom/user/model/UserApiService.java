@@ -194,6 +194,10 @@ public interface UserApiService {
     @Headers("X-App-Type: BGUSR01")
     Observable<LikedUsersListResp> getPostLikes(@Body PostRelatedReq postRelatedReq);
 
+    @POST("getPostAcceptedUsers")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<LikedUsersListResp> getAcceptedUsers(@Body PostRelatedReq postRelatedReq);
+
     @POST("getConnectData")
     @Headers("X-App-Type: BGUSR01")
     Observable<GroupResp> getGroups(@Body ConnectDataReq req);

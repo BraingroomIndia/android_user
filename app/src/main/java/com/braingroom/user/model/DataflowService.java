@@ -25,6 +25,7 @@ import com.braingroom.user.model.request.CommonUuidReq;
 import com.braingroom.user.model.request.ConnectDataReq;
 import com.braingroom.user.model.request.ConnectFeedReq;
 import com.braingroom.user.model.request.ConnectPostByIdReq;
+import com.braingroom.user.model.request.ContactAdmin;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.ExploreReq;
 import com.braingroom.user.model.request.FirstSocialLoginReq;
@@ -687,6 +688,12 @@ public class DataflowService {
 //        return Observable.just(new LikedUsersListResp(likesList));
 
         return api.getPostLikes(new PostRelatedReq(new PostRelatedReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<LikedUsersListResp> getAcceptedUsers(String postId) {
+        // TODO: 06/06/17 remove hardcoded id
+        return api.getAcceptedUsers(new PostRelatedReq(new PostRelatedReq.Snippet(null, "19"))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
