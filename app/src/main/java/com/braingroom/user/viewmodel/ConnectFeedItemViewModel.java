@@ -4,7 +4,9 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
 
+import com.braingroom.user.R;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.LikeResp;
 import com.braingroom.user.model.response.ReportResp;
@@ -66,8 +68,12 @@ public class ConnectFeedItemViewModel extends ViewModel {
     @NonNull
     public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, detailShowAction;
 
+    @NonNull
+    public final Navigator navigator;
+
     public ConnectFeedItemViewModel(final ConnectFeedResp.Snippet data, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
+        this.navigator = navigator;
         this.vendorImage = new ObservableField<>(data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
         this.segment = new ObservableField<>(data.getSegName());
@@ -169,6 +175,12 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
             }
         };
+
+    }
+
+    public void showMenuPopup(View v) {
+        navigator.showMenuPopup(R.menu.connect_feed_item_1, v);
+
     }
 
     private String getVideoId(String videoUrl) {
