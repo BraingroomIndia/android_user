@@ -248,6 +248,10 @@ public interface UserApiService {
     @Headers("X-App-Type: BGUSR01")
     Observable<MessageListResp> getMessages(@Body MessageListReq req);
 
+    @POST("getChatMessages")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<ChatListResp> getChatMessages(@Body ChatMessageReq req);
+
     @POST("postMessage")
     @Headers("X-App-Type: BGUSR01")
     Observable<MessageListResp> postMessage(@Body MessageListReq req);
