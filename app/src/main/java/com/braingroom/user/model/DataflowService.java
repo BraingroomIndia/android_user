@@ -216,7 +216,7 @@ public class DataflowService {
 
     public Observable<List<ClassData>> getWishList(int pageIndex) {
         return api.getWishlist(pageIndex > 1 ? pageIndex + "" : "",
-                new CommonUuidReq(new CommonUuidReq.Snippet(pref.getString(Constants.UUID, "")))).subscribeOn(Schedulers.io())
+                new CommonUuidReq(new CommonUuidReq.Snippet(/*pref.getString(Constants.UUID, "")*/"1234"))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
                     @Override
                     public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
@@ -250,7 +250,7 @@ public class DataflowService {
     }
 
     public Observable<VendorProfileData> getVendorProfile(String vendorId) {
-        return api.getVendorProfile("",new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
+        return api.getVendorProfile("", new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorProfileData>() {
                     @Override
                     public VendorProfileData apply(@NonNull VendorProfileResp resp) throws Exception {
@@ -259,7 +259,7 @@ public class DataflowService {
                 });
     }
 
-    public Observable<List<ClassData>> getVendorClassList(Integer pageIndex,String vendorId) {
+    public Observable<List<ClassData>> getVendorClassList(Integer pageIndex, String vendorId) {
         return api.getVendorProfile(pageIndex > 1 ? pageIndex + "" : "",
                 new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, List<ClassData>>() {
@@ -336,6 +336,10 @@ public class DataflowService {
                     }
                 });
 
+    }
+
+    public Observable<BaseResp> contactAdmin(ContactAdmin req) {
+        return api.contactAdmin(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<List<ClassData>> getIndigeneousClass() {
@@ -459,7 +463,7 @@ public class DataflowService {
     }
 
     public Observable<VendorReviewResp> getVendorReviews(String vendorId) {
-        return api.getVendorProfile("",new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
+        return api.getVendorProfile("", new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorReviewResp>() {
                     @Override
                     public VendorReviewResp apply(@NonNull VendorProfileResp resp) throws Exception {
@@ -543,10 +547,10 @@ public class DataflowService {
 
     public Observable<SegmentResp> getSegmentTree(List<Integer> categoryIds) {
         List<Observable<SegmentResp>> segmentObservableList = new ArrayList<>();
-        if (categoryIds.size()==0)
+        if (categoryIds.size() == 0)
             return Observable.empty();
         for (Integer categoryId : categoryIds) {
-            segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet(""+categoryId))));
+            segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet("" + categoryId))));
         }
         return Observable.zip(segmentObservableList, new Function<Object[], SegmentResp>() {
             @Override

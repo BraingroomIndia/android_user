@@ -192,6 +192,20 @@ public class LoginViewmodel extends ViewModel {
                             data.putSerializable("classData", classData);
                             navigator.navigateActivity(CheckoutActivity.class, data);
                         }
+                        if (CheckoutActivity.class.getSimpleName().equals(parentActivity)) {
+                            Bundle data = new Bundle();
+                            data.putSerializable("classData", classData);
+                            navigator.navigateActivity(CheckoutActivity.class, data);
+                        } else if (ConnectHomeActivity.class.getSimpleName().equals(parentActivity)) {
+                            navigator.navigateActivity(ConnectHomeActivity.class, null);
+                        } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
+                            Bundle data =new Bundle();
+                            data.putString("id", classId);
+                            navigator.navigateActivity(ClassDetailActivity.class,data);
+                        } else {
+                            navigator.navigateActivity(HomeActivity.class, null);
+                        }
+                        navigator.finishActivity();
                         navigator.finishActivity();
                     }
                 } else {

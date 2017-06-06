@@ -85,7 +85,7 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="a10">Select \'Promote your Class\' and choose your required days to promote your classes. Payments for home page &amp; category page featured listings will be different and will change from time to time based on demand. Vendors should check the details thoroughly before booking.</string>
     <string name="a11">BrainGroom Catalogue is the B2B feature which helps Schools, Colleges, Corporate, Clubs, Residential Communities and Parties to organize an event (workshops/classes/activities) at their location within few clicks. To list your class/workshop/activity, click on \'Add to Catalogue\' in your Dashboard and select the respective class/activity/workshop to be added. After Admin verification, it will get posted in the Catalogue list.</string>
     <string name="a12">For mobile application users, a push notification will be sent if there is any booking. Web users will get a notification in their respective BrainGroom dashboard for booking details.</string>
-    <string name="booking_related_help">For any booking related help contact us:\n<b>044-49507392\t\t044-65556012/3</b></string>
+    <string name="booking_related_help">For any booking related help contact us:\n\n<b>044-49507392\t\t044-65556012/3</b></string>
 
     <string name="post_type_vendor_article">vendor_article</string>
     <string name="post_type_user_post">user_post</string>

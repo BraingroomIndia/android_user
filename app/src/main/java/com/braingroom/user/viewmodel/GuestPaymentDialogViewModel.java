@@ -65,13 +65,4 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
             }
         };
     }
-
-    private boolean isValidPhoneNo(CharSequence phoneNo) {
-        if (!TextUtils.isEmpty(phoneNo)) {
-            return android.util.Patterns.PHONE.matcher(phoneNo).matches();
-        }
-        return false;
-    }
-
-
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
@@ -79,5 +80,12 @@ public class ViewModel {
     }
 
     public void onResume() {
+    }
+
+    public boolean isValidPhoneNo(CharSequence phoneNo) {
+        if (!TextUtils.isEmpty(phoneNo)) {
+            return android.util.Patterns.PHONE.matcher(phoneNo).matches();
+        }
+        return false;
     }
 }

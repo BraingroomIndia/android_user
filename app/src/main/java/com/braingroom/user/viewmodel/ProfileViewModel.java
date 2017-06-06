@@ -66,22 +66,25 @@ public class ProfileViewModel extends ViewModel {
         this.messageHelper = messageHelper;
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
-        LinkedHashMap<String, Integer> ClassTypeApiData = new LinkedHashMap<>();
-        ClassTypeApiData.put("Male", TYPE_MALE);
-        ClassTypeApiData.put("Female", TYPE_FEMALE);
-        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), new HashMap<String, Integer>(), false, null);
+        final LinkedHashMap<String, Integer> GenderTypeApiData = new LinkedHashMap<>();
+        GenderTypeApiData.put("Male", TYPE_MALE);
+        GenderTypeApiData.put("Female", TYPE_FEMALE);
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null);
 
         getProfileObservable = apiService.getProfile(pref.getString(Constants.BG_ID, "")).doOnNext(new Consumer<ProfileData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
+                HashMap<String, Integer> selectedGender = new HashMap<>();
                 name.s_1.set(data.getName());
                 email.s_1.set(data.getEmail());
                 contact.s_1.set(data.getContactNo());
+                dobVm.date.set(data.getDob());
                 ugInstitution.s_1.set(data.getUgInstituteName());
                 pgInstitution.s_1.set(data.getPgInstituteName());
                 ugPassoutYear.s_1.set(data.getUgInstitutePassingYear());
                 pgPassoutYear.s_1.set(data.getPgInstitutePassingYear());
                 imageUploadVm.remoteAddress.set(data.getProfileImage());
+                genderVm.setSelectedItems(new Integer[] {Integer.valueOf(data.getGender())});
                 HashMap<String, Integer> selectedCityMap = new HashMap<>();
                 HashMap<String, Integer> selectedInterestMap = new HashMap<>();
                 if (!data.getCity().equals("")) {
@@ -93,7 +96,7 @@ public class ProfileViewModel extends ViewModel {
                         localityVm.setSelectedItemsMap(selectedLocalityMap);
                     }
                 }
-                if (!data.categoryName.equals("") && !data.getCategoryId().equals("")) {
+                if (!data.getCategoryName().equals("") && !data.getCategoryId().equals("")) {
                     List<String> categoryName = Arrays.asList(data.getCategoryName().split("\\s*,\\s*"));
                     List<Integer> categoryId = Arrays.asList(stringToIntArray(data.getCategoryId().split("\\s*,\\s*")));
                     for (int i = 0; i < categoryId.size(); i++)
@@ -193,7 +196,7 @@ public class ProfileViewModel extends ViewModel {
         snippet.setCategoryId(categoryVm.getSelectedItemsId().size() > 0 ? categoryVm.getSelectedItemsId().get(0) : "");
         snippet.setInstitutionName("");
         snippet.setDob(dobVm.date.get());
-        snippet.setGender(genderVm.getSelectedItemsId().size()>0? genderVm.getSelectedItemsId().get(0):"");
+        snippet.setGender(genderVm.getSelectedItemsId().size() > 0 ? genderVm.getSelectedItemsId().get(0) : "");
         snippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
         snippet.setCommunityId(communityClass.s_1.get());
         snippet.setProfileImage(imageUploadVm.remoteAddress.get());

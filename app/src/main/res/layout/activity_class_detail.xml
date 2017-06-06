@@ -366,13 +366,41 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
 
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/margin_large"
+                        android:padding="@dimen/margin_small"
+                        android:gravity="center"
                         android:text="@string/booking_related_help"
                         android:textSize="@dimen/text_size_medium" />
+
+
                 </android.support.v7.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/search_height"
+                    android:layout_marginTop="@dimen/cardview_compat_inset_shadow"
+                    android:background="@color/colorTextGray"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:onClick="@{vm.onGetTutor}"
+                        android:paddingLeft="@dimen/padding_med"
+                        android:paddingRight="@dimen/padding_med"
+                        android:text="Get your own Tutor for this class"
+                        android:textColor="@color/materialGreen"
+                        app:font='@{@string/robotoBold}' />
+
+
+                </LinearLayout>
+
 
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
