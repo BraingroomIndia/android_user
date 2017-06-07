@@ -64,7 +64,9 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public ObservableBoolean acceptVisibility, accepted;
 
     @NonNull
-    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction;
+    public final Action likeAction, commentAction, reportAction, likedUsersAction,playAction, acceptAction;
+
+    public  boolean isActivityRequest;
 
     @NonNull
     String postId;
@@ -87,6 +89,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 image.set("".equals(resp.getData().get(0).getImage()) ? null : resp.getData().get(0).getImage());
                 video.set(getVideoId(resp.getData().get(0).getVideo()));
                 videoThumb.set(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
+                isActivityRequest = "activity_request".equalsIgnoreCase(resp.getData().get(0).getPostType());
                 liked.set(resp.getData().get(0).getLiked() == 0 ? false : true);
                 reported.set(resp.getData().get(0).getReported() == 0 ? false : true);
             }
@@ -144,6 +147,12 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             public void run() throws Exception {
                 if (postId == null) return;
                 uiHelper.openLikesFragment(postId, null, null);
+            }
+        };
+        acceptAction = new Action() {
+            @Override
+            public void run() throws Exception {
+
             }
         };
         playAction = new Action() {

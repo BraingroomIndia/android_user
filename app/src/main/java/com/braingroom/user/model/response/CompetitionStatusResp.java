@@ -7,9 +7,12 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Created by himan on 6/7/2017.
+ */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class CommonIdResp extends BaseResp {
+public class CompetitionStatusResp extends BaseResp {
 
     @SerializedName("braingroom")
     List<Snippet> data;
@@ -17,11 +20,7 @@ public class CommonIdResp extends BaseResp {
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
     public static class Snippet {
-
-        @SerializedName("id")
-        String id;
-
-        @SerializedName(value = "name", alternate = {"college_name","activity_name","school_name"})
-        String textValue;
+        @SerializedName("status")
+        public Integer status;
     }
 }

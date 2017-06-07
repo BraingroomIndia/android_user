@@ -74,6 +74,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".view.activity.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -160,6 +161,15 @@
 
         <activity
             android:name=".view.activity.SignupActivity"
+            android:windowSoftInputMode="stateHidden">
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+
+        <activity
+            android:name=".view.activity.SignUpActivityCompetition"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

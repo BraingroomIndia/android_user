@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.util.Log;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.response.CategoryResp;
+import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.MyConsumer;
@@ -84,6 +86,7 @@ public class HomeViewModel extends ViewModel {
         });
         this.dialogHelper = dialogHelper;
         this.navigator = navigator;
+
 
         pinColorMap.put("#026510", R.drawable.pin_new_1);
         pinColorMap.put("#ffa0d0", R.drawable.pin_new_2);
