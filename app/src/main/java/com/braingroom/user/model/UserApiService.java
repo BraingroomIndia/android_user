@@ -72,6 +72,7 @@ import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.ReportResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.model.response.ThirdPartyProfileResp;
 import com.braingroom.user.model.response.UploadPostApiResp;
 import com.braingroom.user.model.response.UploadResp;
 import com.braingroom.user.model.response.VendorProfileResp;
@@ -344,5 +345,9 @@ public interface UserApiService {
     @POST("getFeedsByPostID")
     @Headers("X-App-Type: BGUSR01")
     Observable<ConnectFeedResp> getFeedsByPostID(@Body ConnectPostByIdReq req);
+
+    @POST("viewThirdPartProfile")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<ThirdPartyProfileResp> getThirdPartyProfile(@Body CommonIdReq req);
 
 }

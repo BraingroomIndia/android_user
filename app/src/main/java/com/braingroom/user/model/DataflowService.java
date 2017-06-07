@@ -81,6 +81,7 @@ import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.ReportResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.model.response.ThirdPartyProfileResp;
 import com.braingroom.user.model.response.UploadPostApiResp;
 import com.braingroom.user.model.response.UploadResp;
 import com.braingroom.user.model.response.VendorProfileResp;
@@ -746,6 +747,11 @@ public class DataflowService {
 
     public Observable<ConnectFeedResp> getFeedsByPostID(String postId) {
         return api.getFeedsByPostID(new ConnectPostByIdReq(new ConnectPostByIdReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ThirdPartyProfileResp> getThirdPartyProfile(String userId) {
+        return api.getThirdPartyProfile(new CommonIdReq(new CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

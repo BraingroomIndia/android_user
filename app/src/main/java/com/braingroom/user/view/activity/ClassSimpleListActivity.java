@@ -63,6 +63,6 @@ public class ClassSimpleListActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_class_simplelist;
+        return R.layout.class_simplelist;
     }
 }

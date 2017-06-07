@@ -38,6 +38,7 @@
                     android:layout_height="70dp"
                     android:layout_alignParentLeft="true"
                     android:layout_marginRight="@dimen/margin_small"
+                    android:onClick="@{vm.showthirdpartyProfile}"
                     android:scaleType="centerCrop"
                     app:imageUrl="@{vm.vendorImage}" />
 
@@ -50,6 +51,7 @@
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:lines="1"
+                    android:onClick="@{vm.showthirdpartyProfile}"
                     android:text="@{vm.vendorName}"
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"

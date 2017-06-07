@@ -21,6 +21,7 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
+import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -71,7 +72,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public final ObservableBoolean accepted;
 
     @NonNull
-    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers;
+    public final Action likeAction, commentAction, reportAction,
+            likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile;
 
     @NonNull
     public final Navigator navigator;
@@ -110,6 +112,17 @@ public class ConnectFeedItemViewModel extends ViewModel {
                 navigator.navigateActivity(PostDetailActivity.class, bundleData);
             }
         };
+
+        showthirdpartyProfile = new Action() {
+            @Override
+            public void run() throws Exception {
+                Bundle bundleData = new Bundle();
+                bundleData.putString("userId", data.getPostOwner());
+                navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+            }
+        };
+
+
         showAcceptedUsers = new Action() {
             @Override
             public void run() throws Exception {

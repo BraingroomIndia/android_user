@@ -204,6 +204,9 @@
                 android:value="com.braingroom.user.view.activity.MessageActivity" />
         </activity>
         <activity android:name=".view.activity.PostDetailActivity"></activity>
+        <activity
+            android:name=".view.activity.ThirdPartyViewActivity"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>
