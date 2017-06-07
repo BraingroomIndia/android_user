@@ -568,8 +568,16 @@ public class ConnectPostViewModel extends ViewModel {
                 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri fileUri = data.getData();
             imageUploadVm.imageUpload(fileUri);
+            Log.d(TAG, "fileuri: " + fileUri);
+
+        } else if (((requestCode == REQ_CODE_CHOOSE_VIDEO)
+                && resultCode == RESULT_OK && data != null && data.getData() != null)) {
+            Uri fileUri = data.getData();
+            videoUploadVm.uploadVideo(fileUri);
+            Log.d(TAG, "fileuri: " + fileUri);
 
         }
+
     }
 
     private void setCountry(String id) {
