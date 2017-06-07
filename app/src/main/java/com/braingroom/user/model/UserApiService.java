@@ -54,6 +54,7 @@ import com.braingroom.user.model.response.CommentListResp;
 import com.braingroom.user.model.response.CommentReplyResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.GroupResp;
@@ -255,6 +256,14 @@ public interface UserApiService {
     @POST("getInstitions")
     @Headers("X-App-Type: BGUSR01")
     Observable<CommonIdResp> getInstitute(@Body InstituteReq req);
+
+    @POST("getSchools")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<CommonIdResp> getSchools(@Body InstituteReq req);
+
+    @POST("getCompetitionStatus")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<CompetitionStatusResp>getCompetitionStatus();
 
     @POST("getComments")
     @Headers("X-App-Type: BGUSR01")

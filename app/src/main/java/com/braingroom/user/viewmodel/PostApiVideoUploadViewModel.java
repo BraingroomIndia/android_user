@@ -42,40 +42,35 @@ public class PostApiVideoUploadViewModel extends ViewModel {
     }
 
 
-    @Override
-    public void handleActivityResult(final int requestCode, int resultCode, Intent data) {
-        if ((requestCode == REQ_CODE_CHOOSE_VIDEO)
-                && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri fileUri = data.getData();
-            Log.d(TAG, "fileuri: "+fileUri);
-            messageHelper.show("uploading...");
-            apiService.uploadPostApiImage(
-                    FileUtils.getPath(UserApplication.getInstance(), fileUri)
-                    , UserApplication.getInstance().getContentResolver().getType(fileUri)
-                    , "tips_tricks"
-            )
-                    .subscribe(new Consumer<UploadPostApiResp>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {
-                            if (resp.getResCode().equals("1")) {
-                                messageHelper.show("video upload success");
-                                remoteAddress.set(resp.getData().get(0).getThumb());
-                                Log.d(TAG, "VideoPath: "+resp.getData().get(0).getUrl());
-                                Log.d(TAG, "VideoThumbPath: "+resp.getData().get(0).getThumb());
-                            } else {
-                                messageHelper.show("video upload FAIlURE");
-                            }
-
-                        }
-
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+    public void uploadVideo(Uri fileUri) {
+        messageHelper.show("uploading...");
+        apiService.uploadPostApiImage(
+                FileUtils.getPath(UserApplication.getInstance(), fileUri)
+                , UserApplication.getInstance().getContentResolver().getType(fileUri)
+                , "tips_tricks"
+        )
+                .subscribe(new Consumer<UploadPostApiResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {
+                        if (resp.getResCode().equals("1")) {
+                            messageHelper.show("video upload success");
+                            remoteAddress.set(resp.getData().get(0).getThumb());
+                            Log.d(TAG, "VideoPath: " + resp.getData().get(0).getUrl());
+                            Log.d(TAG, "VideoThumbPath: " + resp.getData().get(0).getThumb());
+                        } else {
                             messageHelper.show("video upload FAIlURE");
                         }
-                    });
 
-        }
+                    }
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        messageHelper.show("video upload FAIlURE");
+                    }
+                });
+
     }
-
 }
+
+

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.fragment.SignUpViewModelCompetition" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="bottom"
+                    android:text="Register"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"
+                    app:font='@{@string/robotoRegular}' />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Step 2 of 2 - Profile image etc"
+                    android:textColor="@color/white"
+                    app:font='@{@string/robotoRegular}' />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="@dimen/padding_med">
+
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.interestAreaVm}" />
+
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.communityClassVm}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_med">
+
+                    <include
+                        layout="@layout/item_date_dialog_opener"
+                        app:vm="@{vm.dobVm}" />
+                </LinearLayout>
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.countryVm}" />
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.stateVm}" />
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.cityVm}" />
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.localityVM}" />
+
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.genderVm}" />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.referralCodeVm}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Referral Code"}' />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_med">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="@dimen/margin_med"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:onClick="@{vm.onBackClicked}"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:paddingLeft="@dimen/padding_med"
+                        android:paddingRight="@dimen/padding_med"
+                        android:paddingTop="@dimen/padding_small"
+                        android:text="Back"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}' />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/margin_med"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:onClick="@{vm.onSignupClicked}"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:paddingLeft="@dimen/padding_med"
+                        android:paddingRight="@dimen/padding_med"
+                        android:paddingTop="@dimen/padding_small"
+                        android:text="Sign up"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}' />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</layout>

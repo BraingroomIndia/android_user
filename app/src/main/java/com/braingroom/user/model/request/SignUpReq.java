@@ -66,6 +66,9 @@ public class SignUpReq extends BaseResp{
         @SerializedName("community_id")
         public String communityId;
 
+        @SerializedName("school_id")
+        String schoolName;
+
         @SerializedName("institute_name1")
         private String instituteName1;
 

@@ -63,6 +63,7 @@ import com.braingroom.user.model.response.CommentListResp;
 import com.braingroom.user.model.response.CommentReplyResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.GroupResp;
@@ -569,6 +570,14 @@ public class DataflowService {
 
     public Observable<CommonIdResp> getInstitute(String keyword) {
         return api.getInstitute(new InstituteReq(new InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<CommonIdResp> getSchools(String keyword) {
+        return api.getSchools(new InstituteReq(new InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<CompetitionStatusResp>getCompetitionStatus(){
+        return api.getCompetitionStatus().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

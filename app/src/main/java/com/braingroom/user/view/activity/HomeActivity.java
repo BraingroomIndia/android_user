@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
+import com.braingroom.user.viewmodel.CompetitionDialogViewModel;
 import com.braingroom.user.viewmodel.HomeViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.google.android.gms.location.LocationRequest;
@@ -39,10 +40,22 @@ public class HomeActivity extends BaseActivity
     RxLocation rxLocation;
     LocationRequest locationRequest;
 
+    private static final String TAG = HomeActivity.class.getSimpleName();
+
+
     @Override
     @SuppressWarnings({"MissingPermission"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        if (!vm.loggedIn.get() && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && action != null && action.equals(Intent.ACTION_MAIN)) {
+            Log.d(TAG, "onCreate: first run");
+            getHelperFactory().createDialogHelper().showCustomView(R.layout.content_competition_banner, new CompetitionDialogViewModel(getNavigator()));
+
+
+        }
 /*        try {
             PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -71,10 +84,10 @@ public class HomeActivity extends BaseActivity
                     rxLocation.location().updates(locationRequest).subscribe(new Consumer<Location>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception {
-                            LatLng myLocation =new LatLng(location.getLatitude(),location.getLongitude());
-                           MarkerOptions markerOption = new MarkerOptions().position(myLocation).title("Your Location").
+                            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            MarkerOptions markerOption = new MarkerOptions().position(myLocation).title("Your Location").
                                     icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_0));
-                            ((HomeViewModel) vm).mGoogleMap.addMarker(markerOption).setTag(myLocation.latitude+","+myLocation.longitude);
+                            ((HomeViewModel) vm).mGoogleMap.addMarker(markerOption).setTag(myLocation.latitude + "," + myLocation.longitude);
                             ((HomeViewModel) vm).refreshMapPinsToNewLocation("" + location.getLatitude(), "" + location.getLongitude());
                         }
                     }, new Consumer<Throwable>() {
@@ -219,15 +232,15 @@ public class HomeActivity extends BaseActivity
             getNavigator().navigateActivity(SignupActivity.class, null);
             finish();
         }
-        if (id==R.id.nav_faq)
+        if (id == R.id.nav_faq)
             //Edited By Vikas Godara
-            getNavigator().navigateActivity(FAQActivity.class,null);
-        if (id==R.id.nav_tnc)
-            getNavigator().navigateActivity(TermsConditionActivity.class,null);
-        if (id==R.id.nav_contact)
-            getNavigator().navigateActivity(ContactUsActivity.class,null);
-        if (id==R.id.nav_change_pass)
-            getNavigator().navigateActivity(ChangePasswordActivity.class,null);
+            getNavigator().navigateActivity(FAQActivity.class, null);
+        if (id == R.id.nav_tnc)
+            getNavigator().navigateActivity(TermsConditionActivity.class, null);
+        if (id == R.id.nav_contact)
+            getNavigator().navigateActivity(ContactUsActivity.class, null);
+        if (id == R.id.nav_change_pass)
+            getNavigator().navigateActivity(ChangePasswordActivity.class, null);
 
         //Edited By Vikas Godara
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

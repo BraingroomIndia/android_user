@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.fragment.SignUpViewModelCompetition" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="bottom"
+                    android:text="Register"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"
+                    app:font='@{@string/robotoRegular}' />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Step 1 of 2 - Basic information"
+                    android:textColor="@color/white"
+                    app:font='@{@string/robotoRegular}' />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="@dimen/padding_med">
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.fullName}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Full Name"}' />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.emailId}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Email"}' />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.password}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Password"}'
+                    app:password="@{true}" />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.confirmPassword}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Confirm password"}'
+                    app:password="@{true}" />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.mobileNumber}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Mobile number"}' />
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.ugInstituteVm}" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_med">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="@dimen/margin_med"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:onClick="@{vm.onSkipAndSignupClicked}"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:paddingLeft="@dimen/padding_med"
+                        android:paddingRight="@dimen/padding_med"
+                        android:paddingTop="@dimen/padding_small"
+                        android:text="Sign Up"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}' />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/margin_med"
+                        android:background="@drawable/solid_bg_green_rounded_corner"
+                        android:onClick="@{vm.onNextClicked}"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:paddingLeft="@dimen/padding_med"
+                        android:paddingRight="@dimen/padding_med"
+                        android:paddingTop="@dimen/padding_small"
+                        android:text="Next"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}' />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</layout>

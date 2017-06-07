@@ -64,11 +64,6 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     }
 
     @Override
-    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId) {
-
-    }
-
-    @Override
     public void popFragment() {
         popBackstack();
     }
