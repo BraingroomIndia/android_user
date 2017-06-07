@@ -109,7 +109,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             public void remove(String tag) {
                 popBackstack(tag);
             }
-        });
+        }, this);
         initFilters();
         mBottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         mBottomNav.inflateMenu(R.menu.bottom_nav_connect);
@@ -392,6 +392,19 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
     @Override
+    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId) {
+        learnersFilter.setSearchQuery(keyword);
+        learnersFilter.setCategId(categoryId);
+        learnersFilter.setSegId(segmentId);
+        if ("".equals(myGroupId))
+            tutorsFilter.setGroupId(allGroupId);
+        else
+            tutorsFilter.setGroupId(myGroupId);
+        tutorsFilter.setSearchQuery(keyword);
+        updateFilter();
+    }
+
+    @Override
     public void openCommentsFragment(String postId) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
@@ -480,6 +493,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(mFragement!=null && !mFragement.isDetached()) mFragement.onActivityResult( requestCode,  resultCode,  data);
+        if (mFragement != null && !mFragement.isDetached())
+            mFragement.onActivityResult(requestCode, resultCode, data);
     }
 }

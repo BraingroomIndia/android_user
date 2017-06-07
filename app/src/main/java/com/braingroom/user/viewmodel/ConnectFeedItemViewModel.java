@@ -215,7 +215,6 @@ public class ConnectFeedItemViewModel extends ViewModel {
             navigator.showMenuPopup(R.menu.connect_feed_item_2, v);
         else
             navigator.showMenuPopup(R.menu.connect_feed_item_1, v);
-
     }
 
     private String getVideoId(String videoUrl) {
