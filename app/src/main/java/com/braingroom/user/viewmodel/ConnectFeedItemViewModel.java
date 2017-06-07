@@ -1,15 +1,20 @@
 package com.braingroom.user.viewmodel;
 
+import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.LikeResp;
 import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -45,7 +50,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public final ObservableField<String> description;
 
     @NonNull
-    public final ObservableField<Integer> numLikes,numAccepts;
+    public final ObservableField<Integer> numLikes, numAccepts;
 
     @NonNull
     public final ObservableField<String> numComments;
@@ -95,8 +100,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
         this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
         this.numAccepts = new ObservableField<>(data.getNumAccepted());
-        // TODO: 06/06/17 remove hardcoded userid 
-        this.isPostOwner = new ObservableBoolean("39".equals(data.getPostOwner()));
+        this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwner()));
 
         detailShowAction = new Action() {
             @Override
@@ -170,12 +174,35 @@ public class ConnectFeedItemViewModel extends ViewModel {
         acceptAction = new Action() {
             @Override
             public void run() throws Exception {
+                if (!loggedIn.get()) {
+                    Bundle data = new Bundle();
+                    data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
+                    messageHelper.showLoginRequireDialog("Only logged in users can accept a request", data);
+                    return;
+                }
+                apiService.addAccept(data.getId()).subscribe(new Consumer<BaseResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+                        messageHelper.show(baseResp.getResMsg());
+                        if ("1".equals(baseResp.getResCode())) accepted.set(true);
+                        else accepted.set(false);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+
+                    }
+                });
 
             }
         };
         shareAction = new Action() {
             @Override
             public void run() throws Exception {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Checkout this post I found at Braingroom : " + data.getShareUrl());
+                navigator.navigateActivity(Intent.createChooser(shareIntent, "Share link using"));
 
             }
         };
@@ -191,6 +218,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
                 apiService.report(data.getId()).subscribe(new Consumer<ReportResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull ReportResp resp) throws Exception {
+                        messageHelper.show("Reported!");
                         if (resp.getData().get(0).getReported() == 0) {
                             reported.set(false);
                         } else {
@@ -211,10 +239,31 @@ public class ConnectFeedItemViewModel extends ViewModel {
     }
 
     public void showMenuPopup(View v) {
+        PopupMenu.OnMenuItemClickListener clickListener = new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.action_report) {
+                    try {
+                        reportAction.run();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (item.getItemId() == R.id.action_share) {
+                    try {
+                        shareAction.run();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return true;
+            }
+        };
         if (isActivityRequest)
-            navigator.showMenuPopup(R.menu.connect_feed_item_2, v);
+            navigator.showMenuPopup(R.menu.connect_feed_item_2, v, clickListener);
         else
-            navigator.showMenuPopup(R.menu.connect_feed_item_1, v);
+            navigator.showMenuPopup(R.menu.connect_feed_item_1, v, clickListener);
+
     }
 
     private String getVideoId(String videoUrl) {

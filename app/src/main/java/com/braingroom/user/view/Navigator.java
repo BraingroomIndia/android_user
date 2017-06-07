@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.PopupMenu;
 import android.view.View;
 
 public interface Navigator {
@@ -27,5 +28,5 @@ public interface Navigator {
 
     void openStandaloneYoutube(String videoId);
 
-    void showMenuPopup(@MenuRes int layout, View v);
+    void showMenuPopup(@MenuRes int layout, View v, PopupMenu.OnMenuItemClickListener clickListner);
 }

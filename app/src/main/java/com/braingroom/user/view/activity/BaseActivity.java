@@ -11,12 +11,12 @@ import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Display;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -152,10 +152,11 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
-                public void showMenuPopup(@MenuRes int layout, View v) {
+                public void showMenuPopup(@MenuRes int layout, View v, android.support.v7.widget.PopupMenu.OnMenuItemClickListener clickListner) {
                     PopupMenu popup = new PopupMenu(BaseActivity.this, v);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(layout, popup.getMenu());
+                    popup.setOnMenuItemClickListener(clickListner);
                     popup.show();
                 }
 

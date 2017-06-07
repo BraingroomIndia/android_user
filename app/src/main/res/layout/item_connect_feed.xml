@@ -314,7 +314,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_check_black_24dp"
-                        android:tint="@{vm.reported ? @color/materialBlue : @color/fbLikeDark}" />
+                        android:tint="@{vm.accepted ? @color/materialBlue : @color/fbLikeDark}" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -322,7 +322,7 @@
                         android:layout_marginLeft="@dimen/margin_small"
                         android:gravity="center_vertical"
                         android:text='@{vm.accepted ? "Accepted":"Accept"}'
-                        android:textColor="@{vm.reported ? @color/materialBlue : @color/fbLikeDark}"
+                        android:textColor="@{vm.accepted ? @color/materialBlue : @color/fbLikeDark}"
                         app:font='@{@string/robotoBold}' />
 
                 </LinearLayout>

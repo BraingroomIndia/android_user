@@ -76,5 +76,8 @@ public class ConnectFeedResp extends BaseResp {
 
         @SerializedName("date")
         private String date;
+
+        @SerializedName("share_url")
+        private String shareUrl;
     }
 }

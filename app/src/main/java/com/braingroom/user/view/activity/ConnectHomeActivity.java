@@ -60,7 +60,6 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     public interface UiHelper {
         void updateLocationFilter();
-
     }
 
     public UiHelper uiHelper;

@@ -692,8 +692,14 @@ public class DataflowService {
     }
 
     public Observable<LikedUsersListResp> getAcceptedUsers(String postId) {
+        return api.getAcceptedUsers(new PostRelatedReq(new PostRelatedReq.Snippet(null, postId))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Observable<BaseResp> addAccept(String postId) {
         // TODO: 06/06/17 remove hardcoded id
-        return api.getAcceptedUsers(new PostRelatedReq(new PostRelatedReq.Snippet(null, "19"))).subscribeOn(Schedulers.io())
+        return api.addAccept(new PostRelatedReq(new PostRelatedReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
