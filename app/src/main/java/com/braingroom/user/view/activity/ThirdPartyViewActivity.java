@@ -92,7 +92,7 @@ public class ThirdPartyViewActivity extends BaseActivity {
         @Override
         public Fragment getItem(int i) {
             if (i == 0) return ThirdPartyInfoFragment.newInstance();
-            if (i == 1) return ClassSimpleListFragment.newInstance();
+            if (i == 1) return ClassSimpleListFragment.newInstance(userid);
             return null;
         }
 
