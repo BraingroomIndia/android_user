@@ -328,7 +328,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:onClick="@{vm.acceptAction}"
+                                android:onClick="@{!vm.accepted ? vm.acceptAction : null}"
                                 android:orientation="horizontal"
                                 android:visibility="@{vm.isActivityRequest.get() ? View.VISIBLE : View.GONE}">
 
@@ -346,7 +346,7 @@
                                     android:gravity="center_vertical"
                                     android:text='@{vm.accepted ? "Accepted":"Accept"}'
                                     android:textColor="@{vm.accepted ? @color/materialBlue : @color/fbLikeDark}"
-                                    app:font='@{@string/robotoBold}'/>
+                                    app:font='@{@string/robotoBold}' />
                             </LinearLayout>
 
                             <LinearLayout
