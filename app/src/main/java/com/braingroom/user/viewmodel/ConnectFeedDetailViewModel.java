@@ -59,6 +59,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public final ObservableBoolean liked = new ObservableBoolean();
     @NonNull
     public final ObservableBoolean reported = new ObservableBoolean();
+    public final ObservableBoolean  isMediaAvailable = new ObservableBoolean();
 
     @NonNull
     public ObservableBoolean acceptVisibility, accepted;
@@ -92,6 +93,8 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 isActivityRequest = "activity_request".equalsIgnoreCase(resp.getData().get(0).getPostType());
                 liked.set(resp.getData().get(0).getLiked() == 0 ? false : true);
                 reported.set(resp.getData().get(0).getReported() == 0 ? false : true);
+                isMediaAvailable.set((resp.getData().get(0).getVideo()!=null || !resp.getData().get(0).getImage().equals("")));
+
             }
         }, new Consumer<Throwable>() {
             @Override

@@ -370,8 +370,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/margin_large"
                         android:gravity="center"
+                        android:padding="@dimen/margin_large"
                         android:text="@string/booking_related_help"
                         android:textSize="@dimen/text_size_medium" />
 
@@ -400,7 +400,6 @@
 
 
                 </LinearLayout>
-
 
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
