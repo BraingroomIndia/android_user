@@ -66,7 +66,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public final ObservableField<String> videoThumb;
 
     @NonNull
-    public final ObservableBoolean liked, reported, isPostOwner,isMediaAvailable;
+    public final ObservableBoolean liked, reported, isPostOwner, isMediaAvailable;
 
     @NonNull
     public final ObservableBoolean accepted;
@@ -103,7 +103,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
         this.numAccepts = new ObservableField<>(data.getNumAccepted());
         this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwner()));
-        this.isMediaAvailable =new ObservableBoolean(data.getVideo()!=null || !data.getImage().equals(""));
+        this.isMediaAvailable = new ObservableBoolean(data.getVideo() != null || !data.getImage().equals(""));
 
         detailShowAction = new Action() {
             @Override
@@ -198,7 +198,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                         messageHelper.show(baseResp.getResMsg());
-                        if ("1".equals(baseResp.getResCode())) accepted.set(true);
+                        if ("1".equals(baseResp.getResCode())) {
+                            accepted.set(true);
+                            numAccepts.set(numAccepts.get()+1);
+                        }
                         else accepted.set(false);
                     }
                 }, new Consumer<Throwable>() {
