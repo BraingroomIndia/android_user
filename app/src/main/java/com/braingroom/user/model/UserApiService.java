@@ -30,6 +30,7 @@ import com.braingroom.user.model.request.LocalityReq;
 import com.braingroom.user.model.request.LoginReq;
 import com.braingroom.user.model.request.MarkerDataReq;
 import com.braingroom.user.model.request.MessageListReq;
+import com.braingroom.user.model.request.MessageReplyReq;
 import com.braingroom.user.model.request.PayUBookingDetailsReq;
 import com.braingroom.user.model.request.PayUHashGenReq;
 import com.braingroom.user.model.request.PostRelatedReq;
@@ -345,7 +346,7 @@ public interface UserApiService {
 
     @POST("postMessage")
     @Headers("X-App-Type: BGUSR01")
-    Observable<MessageListResp> postMessage(@Body MessageListReq req);
+    Observable<BaseResp> postMessage(@Body MessageReplyReq req);
 
     @POST("getUserNotifications")
     @Headers("X-App-Type: BGUSR01")

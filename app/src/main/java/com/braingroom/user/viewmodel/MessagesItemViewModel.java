@@ -30,7 +30,7 @@ public class MessagesItemViewModel extends ViewModel {
             public void run() throws Exception {
                 Bundle data = new Bundle();
                 // TODO: 23/05/17 change to senderId
-                data.putString("sender_id", "0");//senderId);
+                data.putString("sender_id", senderId);//senderId);
                 data.putString("sender_name", senderName);//senderId);
                 data.putString("sender_image", senderImage);//senderId);
                 navigator.navigateActivity(MessagesThreadActivity.class, data);
