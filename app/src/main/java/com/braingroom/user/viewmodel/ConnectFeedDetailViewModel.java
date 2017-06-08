@@ -75,7 +75,10 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
 
     @NonNull
-    public ObservableBoolean acceptVisibility, accepted;
+    public ObservableBoolean acceptVisibility;
+
+    @NonNull
+    public ObservableBoolean accepted =new ObservableBoolean(false);
 
     @NonNull
     public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, acceptAction, shareAction, showAcceptedUsers;
@@ -113,6 +116,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 isPostOwner.set((pref.getString(Constants.BG_ID, "").equals(resp.getData().get(0).getPostOwner())));
                 liked.set(resp.getData().get(0).getLiked() == 0 ? false : true);
                 reported.set(resp.getData().get(0).getReported() == 0 ? false : true);
+                accepted.set(resp.getData().get(0).getIsAccepted() == 1);
                 isMediaAvailable.set((resp.getData().get(0).getVideo() != null || !resp.getData().get(0).getImage().equals("")));
                 shareUrl.set(resp.getData().get(0).getShareUrl());
 
