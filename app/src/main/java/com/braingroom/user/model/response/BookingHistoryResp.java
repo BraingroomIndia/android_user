@@ -1,12 +1,12 @@
 package com.braingroom.user.model.response;
 
-import com.braingroom.user.model.request.SignUpReq;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
@@ -14,6 +14,7 @@ import lombok.Getter;
  */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class BookingHistoryResp {
     @SerializedName("res_code")
     public String resCode;
@@ -29,6 +30,7 @@ public class BookingHistoryResp {
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
         @SerializedName("PayuTransaction")
@@ -44,6 +46,7 @@ public class BookingHistoryResp {
     }
 
     @Getter
+    @EqualsAndHashCode(callSuper = false)
     public static class ClassDetail {
 
         @SerializedName("id")
@@ -100,6 +103,7 @@ public class BookingHistoryResp {
 
 
         @Getter
+        @EqualsAndHashCode(callSuper = false)
         public class ClassLevel {
 
             @SerializedName("level_id")
@@ -121,6 +125,7 @@ public class BookingHistoryResp {
         }
 
         @Getter
+        @EqualsAndHashCode(callSuper = false)
         public class  Location {
 
             @SerializedName("locality_id")
@@ -144,6 +149,7 @@ public class BookingHistoryResp {
 
     }
 
+    @EqualsAndHashCode(callSuper = false)
     static class PayuTransaction {
 
         @SerializedName("id")
@@ -183,6 +189,7 @@ public class BookingHistoryResp {
     }
 
 
+    @EqualsAndHashCode(callSuper = false)
     static class Tickets {
 
         @SerializedName("id")

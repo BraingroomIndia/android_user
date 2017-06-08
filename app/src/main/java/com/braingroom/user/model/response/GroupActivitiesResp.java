@@ -6,12 +6,14 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by godara on 01/06/17.
  */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class GroupActivitiesResp extends BaseResp {
 
 
@@ -20,6 +22,7 @@ public class GroupActivitiesResp extends BaseResp {
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
         @SerializedName("id")

@@ -6,12 +6,14 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by himan on 1/24/2017.
  */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class RazorSuccessResp extends BaseResp {
 
     @SerializedName("braingroom")
@@ -19,6 +21,7 @@ public class RazorSuccessResp extends BaseResp {
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
         @SerializedName("txnid")

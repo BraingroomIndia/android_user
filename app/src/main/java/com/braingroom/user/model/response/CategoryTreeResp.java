@@ -5,9 +5,11 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class CategoryTreeResp {
 
     long respCode;
@@ -16,6 +18,7 @@ public class CategoryTreeResp {
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
         CategoryResp.Snippet category;
         List<SegmentResp.Snippet> segments;

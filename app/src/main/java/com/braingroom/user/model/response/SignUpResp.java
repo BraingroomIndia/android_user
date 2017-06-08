@@ -1,12 +1,12 @@
 package com.braingroom.user.model.response;
 
-import com.braingroom.user.model.request.SignUpReq;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
@@ -14,12 +14,14 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class SignUpResp extends BaseResp{
     @SerializedName("braingroom")
     List<Snippet> data;
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet{
         @SerializedName("first_name")
         public String firstName;

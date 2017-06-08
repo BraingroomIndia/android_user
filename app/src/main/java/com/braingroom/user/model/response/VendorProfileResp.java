@@ -6,9 +6,11 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class VendorProfileResp extends BaseResp {
 
     @SerializedName("braingroom")
@@ -16,6 +18,7 @@ public class VendorProfileResp extends BaseResp {
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
         @SerializedName("id")
@@ -79,6 +82,7 @@ public class VendorProfileResp extends BaseResp {
         @SerializedName("review")
         public List<Review> review;
 
+        @EqualsAndHashCode(callSuper = false)
         public static class ClassDetail {
 
             @SerializedName("id")

@@ -6,9 +6,11 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class CommentListResp extends BaseResp {
 
     @SerializedName("next_page")
@@ -18,6 +20,7 @@ public class CommentListResp extends BaseResp {
     List<Snippet> data;
 
     @Data
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
         @SerializedName("id")
@@ -47,6 +50,7 @@ public class CommentListResp extends BaseResp {
     }
 
     @Data
+    @EqualsAndHashCode(callSuper = false)
     public static class Reply {
 
         @SerializedName("reply_id")

@@ -6,9 +6,11 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class ClassListResp extends BaseResp {
 
     @SerializedName("next_page")
@@ -18,6 +20,7 @@ public class ClassListResp extends BaseResp {
     List<Snippet> data;
 
     @Data
+    @EqualsAndHashCode(callSuper = false)
     @AllArgsConstructor(suppressConstructorProperties = true)
     public static class Snippet {
 
@@ -114,8 +117,8 @@ public class ClassListResp extends BaseResp {
 
         @SerializedName("locality")
         private String locality;
-//Edited By Vikas Goodara
-        @SerializedName(value = "location", alternate = {"vendorClasseLocationDetail","VendorClasseLocationDetail"})
+        //Edited By Vikas Goodara
+        @SerializedName(value = "location", alternate = {"vendorClasseLocationDetail", "VendorClasseLocationDetail"})
         public List<Location> location;
         //Edited By Vikas Goodara
         @SerializedName(value = "vendorClasseLevelDetail", alternate = "VendorClasseLevelDetail")
@@ -145,6 +148,7 @@ public class ClassListResp extends BaseResp {
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
     public static class ClassLevel {
         @SerializedName("level_id")
         private String levelId;
@@ -165,6 +169,7 @@ public class ClassListResp extends BaseResp {
         private List<ClassGroup> groups;
     }
 
+    @EqualsAndHashCode(callSuper = false)
     public static class ClassGroup {
         @SerializedName("group_price")
         private String price;

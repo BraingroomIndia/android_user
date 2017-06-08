@@ -8,9 +8,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 
+@EqualsAndHashCode(callSuper = false)
 public class ChangePasswordResp extends BaseResp {
 
 
@@ -20,6 +22,7 @@ public class ChangePasswordResp extends BaseResp {
     @SerializedName("braingroom")
     List<Snippet> data;
 
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
 

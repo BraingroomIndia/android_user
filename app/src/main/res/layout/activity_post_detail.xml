@@ -238,7 +238,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentRight="true"
+                                android:layout_margin="@dimen/margin_small"
                                 android:orientation="horizontal"
+                                android:paddingBottom="@dimen/padding_med"
                                 android:visibility="@{vm.isActivityRequest ? View.VISIBLE : View.GONE}">
 
                                 <ImageView
@@ -303,7 +305,6 @@
                                 android:gravity="center"
                                 android:onClick="@{vm.commentAction}"
                                 android:orientation="horizontal">
-
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
@@ -311,7 +312,6 @@
                                     android:layout_marginTop="3dp"
                                     android:src="@drawable/ic_chat_black_24dp"
                                     android:tint="@color/fbLikeDark" />
-
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
@@ -320,7 +320,6 @@
                                     android:text="Comment"
                                     android:textColor="@color/fbLikeDark"
                                     app:font='@{@string/robotoBold}' />
-
                             </LinearLayout>
 
                             <LinearLayout
@@ -337,7 +336,7 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     android:src="@drawable/ic_check_black_24dp"
-                                    android:tint="@{vm.reported ? @color/materialBlue : @color/fbLikeDark}" />
+                                    android:tint="@{vm.accepted ? @color/materialBlue : @color/fbLikeDark}" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -346,7 +345,7 @@
                                     android:gravity="center_vertical"
                                     android:text='@{vm.accepted ? "Accepted":"Accept"}'
                                     android:textColor="@{vm.accepted ? @color/materialBlue : @color/fbLikeDark}"
-                                    app:font='@{@string/robotoBold}'/>
+                                    app:font='@{@string/robotoBold}' />
                             </LinearLayout>
 
                             <LinearLayout

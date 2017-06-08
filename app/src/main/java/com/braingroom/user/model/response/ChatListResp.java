@@ -6,15 +6,18 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
+@EqualsAndHashCode(callSuper = false)
 public class ChatListResp extends BaseResp {
 
     @SerializedName("braingroom")
     List<Snippet> data;
 
     @Data
+    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
         @SerializedName("user_id")
