@@ -370,8 +370,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/margin_large"
                         android:gravity="center"
+                        android:padding="@dimen/margin_large"
                         android:text="@string/booking_related_help"
                         android:textSize="@dimen/text_size_medium" />
 
@@ -400,7 +400,6 @@
 
 
                 </LinearLayout>
-
 
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -484,6 +483,30 @@
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/bottomNavBackground"
+            android:elevation="10dp"
+            app:elevation="10dp"
+            app:itemIconTint="@drawable/bottom_nav_selector"
+            app:itemTextColor="@drawable/bottom_nav_selector"
+            app:layout_behavior="com.braingroom.user.utils.BottomNavigationBehavior" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="70dp"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:onClick="@{vm.onPostClicked}"
+            android:src="@drawable/ic_mode_edit_white_24dp"
+            app:layout_anchor="@id/bottom_navigation"
+            app:layout_anchorGravity="top|right|end"
+            app:layout_behavior="com.braingroom.user.utils.FabHideBehavior" />
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

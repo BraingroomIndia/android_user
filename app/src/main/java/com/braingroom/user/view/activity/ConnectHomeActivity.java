@@ -479,6 +479,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(mFragement!=null && !mFragement.isDetached()) mFragement.onActivityResult( requestCode,  resultCode,  data);
+        if (mFragement != null && !mFragement.isDetached())
+            mFragement.onActivityResult(requestCode, resultCode, data);
     }
 }
