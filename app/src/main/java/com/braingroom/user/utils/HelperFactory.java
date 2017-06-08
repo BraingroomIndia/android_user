@@ -108,7 +108,7 @@ public class HelperFactory {
             public void showCustomView(@LayoutRes int layoutId, final CustomDialogViewModel viewModel) {
                 ViewDataBinding binding = DataBindingUtil.inflate(activity.getLayoutInflater(), layoutId, null, false);
                 getDefaultBinder().bind(binding, viewModel);
-                viewModel.setDialogInstance(new MaterialDialog.Builder(activity).customView(binding.getRoot(), true)
+                viewModel.setDialogInstance(new MaterialDialog.Builder(activity).customView(binding.getRoot(), false)
                         .alwaysCallSingleChoiceCallback()
                         .showListener(new DialogInterface.OnShowListener() {
                             @Override
