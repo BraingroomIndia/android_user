@@ -21,6 +21,9 @@ public class CompetitionStatusResp extends BaseResp {
     @AllArgsConstructor(suppressConstructorProperties = true)
     public static class Snippet {
         @SerializedName("status")
-        public Integer status;
+        Integer status;
+
+        @SerializedName("banner_url")
+        String backgroundUrl;
     }
 }

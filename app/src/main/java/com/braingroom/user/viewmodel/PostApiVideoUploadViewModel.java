@@ -23,6 +23,7 @@ public class PostApiVideoUploadViewModel extends ViewModel {
 
     public final ObservableField<Integer> placeHolder = new ObservableField<>();
     public final ObservableField<String> remoteAddress = new ObservableField<>("");
+    public final ObservableField<String> thumbUrl =new ObservableField<>(null);
     public final Action onUploadClicked;
     MessageHelper messageHelper;
     private String TAG = getClass().getCanonicalName();
@@ -44,7 +45,7 @@ public class PostApiVideoUploadViewModel extends ViewModel {
 
     public void uploadVideo(Uri fileUri) {
         messageHelper.show("uploading...");
-        apiService.uploadPostApiImage(
+        apiService.uploadPostApiVideo(
                 FileUtils.getPath(UserApplication.getInstance(), fileUri)
                 , UserApplication.getInstance().getContentResolver().getType(fileUri)
                 , "tips_tricks"
@@ -52,9 +53,10 @@ public class PostApiVideoUploadViewModel extends ViewModel {
                 .subscribe(new Consumer<UploadPostApiResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {
-                        if (resp.getResCode().equals("1")) {
+                        if (resp.getData()!=null && !resp.getData().isEmpty()) {
                             messageHelper.show("video upload success");
-                            remoteAddress.set(resp.getData().get(0).getThumb());
+                            remoteAddress.set(resp.getData().get(0).getUrl());
+                            thumbUrl.set(resp.getData().get(0).getThumb());
                             Log.d(TAG, "VideoPath: " + resp.getData().get(0).getUrl());
                             Log.d(TAG, "VideoThumbPath: " + resp.getData().get(0).getThumb());
                         } else {

@@ -13,7 +13,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/action_find"
-        android:icon="@drawable/ic_explore_white_24dp"
+        android:icon="@drawable/ic_home_white_24dp"
         android:title="Connect"
         app:showAsAction="always" />
     <item

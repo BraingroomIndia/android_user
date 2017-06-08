@@ -1,5 +1,7 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableField;
+
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
@@ -17,12 +19,13 @@ import io.reactivex.functions.Consumer;
 
 public class CompetitionDialogViewModel extends CustomDialogViewModel {
     public final Action onContinue, onDissmis;
+    public ObservableField<String> background =new ObservableField<>("");
 
     public CompetitionDialogViewModel(@NonNull final Navigator navigator) {
         onContinue = new Action() {
             @Override
             public void run() throws Exception {
-                navigator.navigateActivity(SignUpActivityCompetition.class,null);
+                navigator.navigateActivity(SignUpActivityCompetition.class, null);
             }
         };
         onDissmis = new Action() {
@@ -35,8 +38,11 @@ public class CompetitionDialogViewModel extends CustomDialogViewModel {
         apiService.getCompetitionStatus().subscribe(new Consumer<CompetitionStatusResp>() {
             @Override
             public void accept(@NonNull CompetitionStatusResp resp) throws Exception {
-                if (resp.getData().get(0).getStatus()==0)
+                if (resp.getData().get(0).getStatus() == 0)
                     dismissDialog();
+                else
+                    background.set(resp.getData().get(0).getBackgroundUrl());
+
 
             }
         });

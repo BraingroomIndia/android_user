@@ -165,7 +165,7 @@
                             android:layout_height="match_parent"
                             android:onClick="@{vm.videoUploadVm.onUploadClicked}"
                             android:padding="10dp"
-                            app:imageUrl="@{vm.videoUploadVm.remoteAddress}"
+                            app:imageUrl="@{vm.videoUploadVm.thumbUrl}"
                             app:placeHolder="@{vm.videoUploadVm.placeHolder}" />
 
                         <ImageView

@@ -51,8 +51,6 @@ public class KnowledgeNuggetsPostReq {
         @SerializedName("post_thumb_upload")
         String postThumbUpload;
 
-        @SerializedName("videouploadway")
-        String videouploadway;
 
         @SerializedName("video")
         String video;
@@ -60,8 +58,6 @@ public class KnowledgeNuggetsPostReq {
         @SerializedName("youtube_url")
         String youtubeUrl;
 
-        @SerializedName("video_upload")
-        String videoUpload;
 
         @SerializedName("class_link")
         String classLink;

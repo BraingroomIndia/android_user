@@ -9,37 +9,38 @@
             type="com.braingroom.user.viewmodel.CompetitionDialogViewModel" />
     </data>
 
-<RelativeLayout
-    android:layout_width="200dp"
-    android:layout_height="200dp"
-    android:background="@color/colorPrimary">
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentRight="true"
-        android:tint="@color/cb_dark_grey"
-        android:onClick="@{vm.onDissmis}"
-        android:src="@drawable/close"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/solid_material_blue_rounded_corner"
-        android:onClick="@{vm.onContinue}"
-        android:paddingBottom="@dimen/padding_small"
-        android:paddingLeft="@dimen/padding_large"
-        android:paddingRight="@dimen/padding_large"
-        android:paddingTop="@dimen/padding_small"
-        android:text="Continue"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_large"
-        app:font='@{@string/robotoRegular}' />
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/app_popup_banner">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:onClick="@{vm.onDissmis}"
+            android:src="@drawable/close"
+            android:tint="@color/cb_dark_grey" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/solid_material_blue_rounded_corner"
+            android:onClick="@{vm.onContinue}"
+            android:paddingBottom="@dimen/padding_small"
+            android:paddingLeft="@dimen/padding_large"
+            android:paddingRight="@dimen/padding_large"
+            android:paddingTop="@dimen/padding_small"
+            android:text="Continue"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large"
+            app:font='@{@string/robotoRegular}' />
 
 
-
-</RelativeLayout>
+    </RelativeLayout>
 
 
 </layout>

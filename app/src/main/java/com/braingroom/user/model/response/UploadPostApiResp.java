@@ -23,7 +23,7 @@ public class UploadPostApiResp extends BaseResp {
         @SerializedName("url")
         String url;
 
-        @SerializedName("thumb")
+        @SerializedName("success_url")
         String thumb;
 
     }

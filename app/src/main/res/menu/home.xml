@@ -13,7 +13,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_connect"
-        android:icon="@drawable/ic_group_work_white_24dp"
+        android:icon="@drawable/ic_vector_circle_white_24dp"
         android:title="Connect"
         app:showAsAction="ifRoom" />
 </menu>

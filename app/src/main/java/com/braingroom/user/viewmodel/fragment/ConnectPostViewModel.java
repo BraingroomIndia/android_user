@@ -157,6 +157,7 @@ public class ConnectPostViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
                 imageUploadVm.remoteAddress.set(null);
                 videoUploadVm.remoteAddress.set(null);
+                videoUploadVm.thumbUrl.set(null);
                 if (selectedMap.values().iterator().hasNext())
                     switch (selectedMap.values().iterator().next()) {
                         case POST_TYPE_KNOWLEDGE_NUGGETS:
@@ -382,6 +383,8 @@ public class ConnectPostViewModel extends ViewModel {
                     knowledgeNuggetsSnippet.setVideo(videoUploadVm.remoteAddress.get());
                     knowledgeNuggetsSnippet.setYoutubeUrl(youtubeAddress.s_1.get());
                     knowledgeNuggetsSnippet.setClassLink(classPageUrl.s_1.get());
+                    knowledgeNuggetsSnippet.setPostThumbUpload(imageUploadVm.remoteAddress.get());
+                    knowledgeNuggetsSnippet.setVideo(videoUploadVm.remoteAddress.get());
                     apiService.postKnowledgeNuggets(knowledgeNuggetsSnippet).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {

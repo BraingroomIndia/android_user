@@ -1,11 +1,16 @@
 package com.braingroom.user.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.BindingConversion;
 import android.databinding.InverseBindingAdapter;
 import android.databinding.InverseBindingListener;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +24,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.test.suitebuilder.annotation.Suppress;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -48,6 +54,7 @@ import com.braingroom.user.viewmodel.TileShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -231,6 +238,37 @@ public class BindingUtils {
         if (scaleHeight == 0) scaleHeight = 250;
         requestCreator.centerCrop()
                 .fit().into(imageView);
+    }
+
+    @BindingAdapter(value = {"backgroundImageUrl"})
+    public static void setBackgroundImageUrl(final View view, String url) {
+        Log.d(TAG, "setImageUrl: " + url);
+        if ("".equals(url)) url = null;
+        Picasso picasso = Picasso.with(view.getContext());
+
+        picasso.load(url)
+                .into(new Target() {
+
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        int sdk = android.os.Build.VERSION.SDK_INT;
+                        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                            view.setBackgroundDrawable(new BitmapDrawable(view.getContext().getResources(), bitmap));
+                        } else {
+                            view.setBackground(new BitmapDrawable(view.getContext().getResources(), bitmap));
+                        }
+                    }
+
+                    @Override
+                    public void onBitmapFailed(final Drawable errorDrawable) {
+                        Log.d("TAG", "FAILED");
+                    }
+
+                    @Override
+                    public void onPrepareLoad(final Drawable placeHolderDrawable) {
+                        Log.d("TAG", "Prepare Load");
+                    }
+                });
     }
 
     @BindingAdapter(value = {"font"})
