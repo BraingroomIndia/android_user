@@ -368,9 +368,9 @@ public class DataflowService {
                 });
     }
 
-    public Observable<List<ClassData>> getBookingHistory(Integer pageIndex) {
+    public Observable<List<ClassData>> getBookingHistory(String userId, Integer pageIndex) {
         return api.getBookingHistory(pageIndex > 1 ? pageIndex + "" : "",
-                new CommonIdReq(new CommonIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
+                new CommonIdReq(new CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<BookingHistoryResp, List<ClassData>>() {
                     @Override
                     public List<ClassData> apply(@NonNull BookingHistoryResp resp) throws Exception {

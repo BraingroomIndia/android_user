@@ -19,43 +19,34 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 public class ClassSimpleListViewModel extends ViewModel {
 
     private boolean paginationInProgress = false;
     private ObservableField<Integer> nextPage = new ObservableField<>(1);
-    private Integer lastPage =0;
+    private Integer lastPage = 0;
     private boolean nextPageAvailable = true;
     private final String listType;
     Observable<List<ClassData>> apiObservable = null;
 
     public Observable<List<ViewModel>> result;
     private List<ViewModel> classes;
-    public final ConnectivityViewModel connectivityViewmodel;
 
-    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1) {
+    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1, final String userId) {
+
         this.listType = listType1;
         classes = new ArrayList<>();
-        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
-            @Override
-            public void run() throws Exception {
-                retry();
-            }
-        });
 
-        result = (FieldUtils.toObservable(retries)/*.map(new Function<Integer, Integer>() {
-            @Override
-            public Integer apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return nextPage.get();
-            }
-        })*/.mergeWith(FieldUtils.toObservable(nextPage)).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+
+        result = FieldUtils.toObservable(nextPage).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
                 if ("wishlist".equalsIgnoreCase(listType))
                     apiObservable = apiService.getWishList(nextPage.get());
                 else if ("bookinghistory".equalsIgnoreCase(listType))
-                    apiObservable = apiService.getBookingHistory(nextPage.get());
+                    apiObservable = apiService.getBookingHistory(userId, nextPage.get());
 
                 return apiObservable
                         .map(new Function<List<ClassData>, List<ViewModel>>() {
@@ -89,7 +80,7 @@ public class ClassSimpleListViewModel extends ViewModel {
                         }).mergeWith(getLoadingItems(3));
 
             }
-        }));
+        });
 
     }
 
@@ -108,16 +99,5 @@ public class ClassSimpleListViewModel extends ViewModel {
         return Observable.just(result);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        connectivityViewmodel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        connectivityViewmodel.onPause();
-    }
 
 }

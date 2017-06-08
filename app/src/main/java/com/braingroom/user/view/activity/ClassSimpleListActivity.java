@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.R;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.viewmodel.ClassSimpleListViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -58,7 +59,7 @@ public class ClassSimpleListActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new ClassSimpleListViewModel(getMessageHelper(), getNavigator(), getIntentString("listType"));
+        return new ClassSimpleListViewModel(getMessageHelper(), getNavigator(), getIntentString("listType"),pref.getString(Constants.BG_ID, ""));
     }
 
     @Override

@@ -12,10 +12,12 @@ import com.braingroom.user.viewmodel.ViewModel;
  */
 
 public class ClassSimpleListFragment extends BaseFragment {
+    private static String userId;
 
-    public static ClassSimpleListFragment newInstance() {
+    public static ClassSimpleListFragment newInstance(String id) {
 
         Bundle bundle = new Bundle();
+        userId = id;
 //        bundle.putString("majorCateg", majorCateg);
         ClassSimpleListFragment fragment = new ClassSimpleListFragment();
         fragment.setArguments(bundle);
@@ -26,7 +28,7 @@ public class ClassSimpleListFragment extends BaseFragment {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new ClassSimpleListViewModel(activity.getMessageHelper(), activity.getNavigator(), "wishlist");
+        return new ClassSimpleListViewModel(activity.getMessageHelper(), activity.getNavigator(), "bookinghistory", userId);
     }
 
     @Override
