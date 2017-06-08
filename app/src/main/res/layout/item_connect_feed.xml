@@ -144,7 +144,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{vm.isActivityRequest==null ? View.GONE : View.VISIBLE}">
+                android:visibility="@{vm.isActivityRequest ? View.GONE : View.VISIBLE}">
 
                 <ImageView
                     android:layout_width="match_parent"
