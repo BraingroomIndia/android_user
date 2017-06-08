@@ -25,6 +25,7 @@ import lombok.Getter;
 public class ThirdPartyViewActivity extends BaseActivity {
 
     private String TAG = getClass().getCanonicalName();
+    public String userid;
 
     ViewPager pager;
     public PagerAdapter pagerAdapter;
@@ -37,6 +38,7 @@ public class ThirdPartyViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setTitle("Profile");
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         pager = (ViewPager) findViewById(R.id.pager);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
@@ -47,7 +49,8 @@ public class ThirdPartyViewActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        viewModel = new ThirdPartyViewModel(getIntentString("userId"), getMessageHelper(), getNavigator());
+        userid=getIntentString("userId");
+        viewModel = new ThirdPartyViewModel(userid, getMessageHelper(), getNavigator());
         return viewModel;
     }
 
@@ -65,11 +68,16 @@ public class ThirdPartyViewActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-//        if (id == R.id.action_find) {
-//            getNavigator().navigateActivity(HomeActivity.class, null);
-//            getNavigator().finishActivity();
-//            return true;
-//        }
+        if (id == R.id.action_messages) {
+
+            String userName =((ThirdPartyViewModel) vm).name.s_1.get();
+            Bundle bundle = new Bundle();
+            bundle.putString("sender_id",userid);
+            bundle.putString("sender_name",userName);
+            getNavigator().navigateActivity(MessagesThreadActivity.class,bundle);
+            getNavigator().finishActivity();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

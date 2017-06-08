@@ -18,7 +18,7 @@ public class ChatMessageReq {
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
     public static class Snippet {
-        @SerializedName("reciever_id")
+        @SerializedName("receiver_id")
         String receiverId;
 
         @SerializedName("sender_id")

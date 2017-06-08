@@ -39,6 +39,7 @@ import com.braingroom.user.model.request.LocalityReq;
 import com.braingroom.user.model.request.LoginReq;
 import com.braingroom.user.model.request.MarkerDataReq;
 import com.braingroom.user.model.request.MessageListReq;
+import com.braingroom.user.model.request.MessageReplyReq;
 import com.braingroom.user.model.request.PayUBookingDetailsReq;
 import com.braingroom.user.model.request.PayUHashGenReq;
 import com.braingroom.user.model.request.PostRelatedReq;
@@ -572,11 +573,13 @@ public class DataflowService {
         return api.getInstitute(new InstituteReq(new InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
     public Observable<CommonIdResp> getSchools(String keyword) {
         return api.getSchools(new InstituteReq(new InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<CompetitionStatusResp>getCompetitionStatus(){
+
+    public Observable<CompetitionStatusResp> getCompetitionStatus() {
         return api.getCompetitionStatus().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -782,7 +785,7 @@ public class DataflowService {
 //
 //        MessageListResp resp = new MessageListResp(dataList);
 //        return Observable.just(resp);
-        return api.getMessages(new MessageListReq(new MessageListReq.Snippet("39"))).subscribeOn(Schedulers.io())
+        return api.getMessages(new MessageListReq(new MessageListReq.Snippet(pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -816,7 +819,12 @@ public class DataflowService {
 //
 //        ChatListResp resp = new ChatListResp(dataList);
 //        return Observable.just(resp);
-        return api.getChatMessages(new ChatMessageReq(new ChatMessageReq.Snippet(senderId, "39"))).subscribeOn(Schedulers.io())
+        return api.getChatMessages(new ChatMessageReq(new ChatMessageReq.Snippet(senderId, pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<BaseResp> postMessage(MessageReplyReq.Snippet snippet) {
+        return api.postMessage(new MessageReplyReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

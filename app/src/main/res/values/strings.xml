@@ -47,7 +47,7 @@
     <string name="action_discuss_n_decide">Discuss &amp; Decide</string>
     <string name="action_tutors_article">Tutors Article</string>
 
-    <string name="action_message">Edit</string>
+    <string name="action_message">Message</string>
     <string name="action_notification">Edit</string>
 
     <string-array name="main_category_list">
