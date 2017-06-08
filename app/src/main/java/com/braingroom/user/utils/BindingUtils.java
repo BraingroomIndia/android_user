@@ -240,36 +240,6 @@ public class BindingUtils {
                 .fit().into(imageView);
     }
 
-    @BindingAdapter(value = {"backgroundImageUrl"})
-    public static void setBackgroundImageUrl(final View view, String url) {
-        Log.d(TAG, "setImageUrl: " + url);
-        if ("".equals(url)) url = null;
-        Picasso picasso = Picasso.with(view.getContext());
-
-        picasso.load(url)
-                .into(new Target() {
-
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        int sdk = android.os.Build.VERSION.SDK_INT;
-                        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                            view.setBackgroundDrawable(new BitmapDrawable(view.getContext().getResources(), bitmap));
-                        } else {
-                            view.setBackground(new BitmapDrawable(view.getContext().getResources(), bitmap));
-                        }
-                    }
-
-                    @Override
-                    public void onBitmapFailed(final Drawable errorDrawable) {
-                        Log.d("TAG", "FAILED");
-                    }
-
-                    @Override
-                    public void onPrepareLoad(final Drawable placeHolderDrawable) {
-                        Log.d("TAG", "Prepare Load");
-                    }
-                });
-    }
 
     @BindingAdapter(value = {"font"})
     public static void setTypeface(TextView textView, String fontName) {
