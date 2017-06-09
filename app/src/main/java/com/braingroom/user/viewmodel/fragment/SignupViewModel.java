@@ -48,7 +48,9 @@ public class SignupViewModel extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked;
+    public final Action onSignupClicked, onBackClicked,onSkipAndSignupClicked;
+
+    public final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
     public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM  ;
     public final DynamicSearchSelectListViewModel ugInstituteVm,pgInstituteVm;
@@ -98,7 +100,7 @@ public class SignupViewModel extends ViewModel {
         onSignupClicked = new Action() {
             @Override
             public void run() throws Exception {
-                if (communityClassVm.selectedItemsMap.isEmpty()) {
+/*                if (communityClassVm.selectedItemsMap.isEmpty()) {
                     messageHelper.show("Please select atleast one Community ");
                     return;
                 }
@@ -109,7 +111,9 @@ public class SignupViewModel extends ViewModel {
                 if (genderVm.selectedItemsMap.isEmpty()) {
                     messageHelper.show("Please select your gender");
                     return;
-                }
+                }*/
+                if (!localityVM.selectedDataMap.isEmpty())
+                    signUpSnippet.setLocality("" + localityVM.selectedDataMap.values().iterator().next().first);
                 signUpSnippet.setCommunityId(android.text.TextUtils.join(",", communityClassVm.getSelectedItemsId()));
                 signUpSnippet.setDOB(dobVm.date.get());
                 signUpSnippet.setGender(genderVm.selectedItemsText.get());
@@ -135,6 +139,70 @@ public class SignupViewModel extends ViewModel {
             }
         };
 
+        onSkipAndSignupClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (fullName.s_1.get().equals("")) {
+                    messageHelper.show("Please Enter your name");
+                    return;
+                }
+                if (!isValidEmail(emailId.s_1.get())) {
+                    messageHelper.show("Please Enter a valid email Id");
+                    return;
+                }
+                if (password.s_1.get().equals("")) {
+                    messageHelper.show("Please enter a password");
+                    return;
+                }
+                if (!password.s_1.get().equals(confirmPassword.s_1.get())) {
+                    messageHelper.show("Password doesn't match");
+                    return;
+                }
+                if (!isValidPhone(mobileNumber.s_1.get())) {
+                    messageHelper.show("Please enter a valid mobile number");
+                    return;
+                }
+       /*         if (signUpSnippet.getCityId() == null) {
+                    messageHelper.show("Please select a city");
+                    return;
+                }
+                if (interestAreaVm.selectedItemsMap.isEmpty()) {
+                    messageHelper.show("Please select atleast one area of Interest");
+                    return;
+                }
+                if (!ugInstituteVm.selectedDataMap.isEmpty() && !isValidYear(passoutYear.s_1.get())) {
+                    messageHelper.show("Please enter valid passout year");
+                    return;
+                }*/
+                signUpSnippet.setName(fullName.s_1.get());
+                signUpSnippet.setEmail(emailId.s_1.get());
+                signUpSnippet.setPassword(password.s_1.get());
+                signUpSnippet.setMobileNo(mobileNumber.s_1.get());
+                signUpSnippet.setCategoryId(android.text.TextUtils.join(",", interestAreaVm.getSelectedItemsId()));
+                if (!ugInstituteVm.selectedDataMap.isEmpty() && isValidYear(passoutYear.s_1.get())) {
+                    signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first);
+                    signUpSnippet.setInstitutePoy1(passoutYear.s_1.get());
+                }
+                apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
+
+                        if (signUpResp.getData().size() > 0) {
+                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                                    navigator.navigateActivity(HomeActivity.class, null);
+                                }
+                            });
+                        } else {
+                            messageHelper.show(signUpResp.getResMsg());
+                        }
+
+                    }
+                });
+
+            }
+        };
         onNextClicked = new Action() {
             @Override
             public void run() throws Exception {
@@ -158,7 +226,7 @@ public class SignupViewModel extends ViewModel {
                     messageHelper.show("Please enter a valid mobile number");
                     return;
                 }
-                if (signUpSnippet.getCityId() == null) {
+       /*         if (signUpSnippet.getCityId() == null) {
                     messageHelper.show("Please select a city");
                     return;
                 }
@@ -169,7 +237,7 @@ public class SignupViewModel extends ViewModel {
                 if (!ugInstituteVm.selectedDataMap.isEmpty() && !isValidYear(passoutYear.s_1.get())) {
                     messageHelper.show("Please enter valid passout year");
                     return;
-                }
+                }*/
                 signUpSnippet.setName(fullName.s_1.get());
                 signUpSnippet.setEmail(emailId.s_1.get());
                 signUpSnippet.setPassword(password.s_1.get());
@@ -179,11 +247,8 @@ public class SignupViewModel extends ViewModel {
                     signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first);
                     signUpSnippet.setInstitutePoy1(passoutYear.s_1.get());
                 }
-                if (localityVM.selectedDataMap.isEmpty())
-                    signUpSnippet.setLocality("");
-                else
-                    signUpSnippet.setLocality("" + localityVM.selectedDataMap.values().iterator().next().first);
                 uiHelper.next();
+
             }
         };
 

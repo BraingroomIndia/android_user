@@ -98,6 +98,4 @@ public class ClassSimpleListViewModel extends ViewModel {
         result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
         return Observable.just(result);
     }
-
-
 }
