@@ -41,6 +41,8 @@ public class SignUpViewModelCompetition extends ViewModel {
 
     public static final int TYPE_MALE = 1;
     public static final int TYPE_FEMALE = 2;
+    public static final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
+
 
     public final DataItemViewModel fullName, emailId, password, confirmPassword, mobileNumber, referralCodeVm;
     public final ListDialogViewModel1 interestAreaVm;

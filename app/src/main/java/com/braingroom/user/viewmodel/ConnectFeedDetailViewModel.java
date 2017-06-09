@@ -20,6 +20,8 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
+import com.braingroom.user.view.activity.ThirdPartyViewActivity;
+import com.braingroom.user.view.activity.VendorProfileActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +36,9 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
     @NonNull
     public final ObservableField<String> vendorName = new ObservableField<>();
+
+    @NonNull
+    public String userId;
 
     @NonNull
     public final ObservableField<String> date = new ObservableField<>();
@@ -68,22 +73,30 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
     @NonNull
     public final ObservableBoolean liked = new ObservableBoolean();
+
     @NonNull
     public final ObservableBoolean reported = new ObservableBoolean();
+
+    @NonNull
     public final ObservableBoolean isMediaAvailable = new ObservableBoolean();
+
+    @NonNull
     public final ObservableBoolean isPostOwner = new ObservableBoolean();
+
+    @NonNull
+    public Boolean isVendor = false;
 
 
     @NonNull
     public ObservableBoolean acceptVisibility;
 
     @NonNull
-    public ObservableBoolean accepted =new ObservableBoolean(false);
+    public ObservableBoolean accepted = new ObservableBoolean(false);
 
     @NonNull
-    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, acceptAction, shareAction, showAcceptedUsers;
+    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile;
 
-    public ObservableField<Boolean> isActivityRequest =new ObservableField<>(false);
+    public ObservableField<Boolean> isActivityRequest = new ObservableField<>(false);
 
     public final Navigator navigator;
 
@@ -101,6 +114,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull ConnectFeedResp resp) throws Exception {
 
                 vendorImage.set(resp.getData().get(0).getVendorImage());
+                userId = resp.getData().get(0).getPostOwner();
                 date.set(getHumanDate(resp.getData().get(0).getDate()));
                 segment.set(resp.getData().get(0).getSegName());
                 title.set(resp.getData().get(0).getTitle());
@@ -109,6 +123,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 numComments.set(resp.getData().get(0).getNumComments());
                 numAccepts.set(resp.getData().get(0).getNumAccepted());
                 vendorName.set(resp.getData().get(0).getVendorName());
+                isVendor = resp.getData().get(0).getPostType().equalsIgnoreCase("vendor_article");
                 image.set("".equals(resp.getData().get(0).getImage()) ? null : resp.getData().get(0).getImage());
                 video.set(getVideoId(resp.getData().get(0).getVideo()));
                 videoThumb.set(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
@@ -127,6 +142,23 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
             }
         });
+        showthirdpartyProfile = new Action() {
+            @Override
+            public void run() throws Exception {
+                Bundle bundleData = new Bundle();
+                if (!isVendor) {
+                    bundleData.putString("userId", userId);
+                    navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+                    navigator.finishActivity();
+                }
+                else {
+
+                    bundleData.putString("id", userId);
+                    navigator.navigateActivity(VendorProfileActivity.class, bundleData);
+                    navigator.finishActivity();
+                }
+            }
+        };
 
         likeAction = new Action() {
             @Override
@@ -192,9 +224,8 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                         messageHelper.show(baseResp.getResMsg());
                         if ("1".equals(baseResp.getResCode())) {
                             accepted.set(true);
-                            numAccepts.set(numAccepts.get()+1);
-                        }
-                        else accepted.set(false);
+                            numAccepts.set(numAccepts.get() + 1);
+                        } else accepted.set(false);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

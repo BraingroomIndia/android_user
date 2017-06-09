@@ -63,32 +63,33 @@
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.fullName}"
                     app:editable="@{true}"
-                    app:hintText='@{"Full Name"}' />
+                    app:hintText='@{"Full Name" + vm.mandatory}' />
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.emailId}"
                     app:editable="@{true}"
-                    app:hintText='@{"Email"}' />
+                    app:hintText='@{"Email" + vm.mandatory}' />
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.password}"
                     app:editable="@{true}"
-                    app:hintText='@{"Password"}'
+                    app:hintText='@{"Password" + vm.mandatory}'
                     app:password="@{true}" />
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.confirmPassword}"
                     app:editable="@{true}"
-                    app:hintText='@{"Confirm password"}'
+                    app:hintText='@{"Confirm password" + vm.mandatory}'
                     app:password="@{true}" />
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.mobileNumber}"
                     app:editable="@{true}"
+                    app:number="@{true}"
                     app:hintText='@{"Mobile number"}' />
 
                 <include

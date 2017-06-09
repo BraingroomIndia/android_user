@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -32,11 +33,16 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     public Observable<List<ViewModel>> result;
     private List<ViewModel> classes;
+    private final String userId;
 
-    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1, final String userId) {
+    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1,  String id) {
 
         this.listType = listType1;
         classes = new ArrayList<>();
+        if (id!=null)
+            this.userId = id;
+        else
+            this.userId =pref.getString(Constants.BG_ID,"");;
 
 
         result = FieldUtils.toObservable(nextPage).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {

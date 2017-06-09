@@ -22,6 +22,7 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
+import com.braingroom.user.view.activity.VendorProfileActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -118,8 +119,18 @@ public class ConnectFeedItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
-                bundleData.putString("userId", data.getPostOwner());
-                navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+                if (data.getPostType().equalsIgnoreCase("vendor_article")) {
+
+                    bundleData.putString("id", data.getPostOwner());
+                    navigator.navigateActivity(VendorProfileActivity.class, bundleData);
+                    navigator.finishActivity();
+
+                } else {
+                    bundleData.putString("userId", data.getPostOwner());
+                    navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+                    navigator.finishActivity();
+
+                }
             }
         };
 
@@ -200,9 +211,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
                         messageHelper.show(baseResp.getResMsg());
                         if ("1".equals(baseResp.getResCode())) {
                             accepted.set(true);
-                            numAccepts.set(numAccepts.get()+1);
-                        }
-                        else accepted.set(false);
+                            numAccepts.set(numAccepts.get() + 1);
+                        } else accepted.set(false);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

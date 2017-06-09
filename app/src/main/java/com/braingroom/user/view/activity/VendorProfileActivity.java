@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.ActivityVendorProfileBinding;
@@ -67,5 +68,15 @@ public class VendorProfileActivity extends BaseActivity {
             if (position == 2) return "Reviews";
             return "NO TAB";
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
