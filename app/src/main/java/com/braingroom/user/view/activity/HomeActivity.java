@@ -104,7 +104,7 @@ public class HomeActivity extends BaseActivity
                         }
                     });
                 } else {
-                    getMessageHelper().show("Permission not granted, showing location as chennai");
+                    getMessageHelper().show("Showing default location as chennai");
                 }
             }
         });

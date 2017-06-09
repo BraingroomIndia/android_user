@@ -59,12 +59,6 @@
                 android:paddingRight="20dp"
                 android:paddingTop="@dimen/padding_med">
 
-
-                <include
-                    layout="@layout/item_list_dialog_opener"
-                    app:editable="@{true}"
-                    app:vm="@{vm.communityClassVm}" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -81,10 +75,37 @@
                     app:vm="@{vm.genderVm}" />
 
                 <include
-                    layout="@layout/floating_label_edit_text"
-                    app:data="@{vm.referralCodeVm}"
+                    layout="@layout/item_list_dialog_opener"
                     app:editable="@{true}"
-                    app:hintText='@{"Referral Code"}' />
+                    app:vm="@{vm.interestAreaVm}" />
+
+<!--                <include
+                    layout="@layout/item_list_dialog_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.communityClassVm}" />-->
+
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.countryVm}" />
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.stateVm}" />
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.cityVm}" />
+
+                <include
+                    layout="@layout/item_list_fragment_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.localityVM}" />
+
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -119,7 +140,7 @@
                         android:paddingLeft="@dimen/padding_med"
                         android:paddingRight="@dimen/padding_med"
                         android:paddingTop="@dimen/padding_small"
-                        android:text="Sign up"
+                        android:text="Skip &amp; Sign up"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
                         app:font='@{@string/robotoRegular}' />
@@ -128,5 +149,6 @@
 
         </LinearLayout>
     </ScrollView>
+
 
 </layout>

@@ -6,6 +6,7 @@
 
         <import type="android.view.View" />
         <import type="android.text.InputType"/>
+        <import type = "android.text.Html" />
 
         <variable
             name="data"
@@ -22,6 +23,9 @@
         <variable
             name="password"
             type="boolean" />
+        <variable
+            name="number"
+            type="boolean"/>
 
     </data>
 
@@ -30,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
-        android:hint="@{hintText}"
+        android:hint="@{Html.fromHtml(hintText)}"
         android:visibility="@{data.s_1 == null ? View.GONE : View.VISIBLE}">
 
         <EditText
@@ -38,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="@{editable}"
-            android:inputType="@{password ? (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) : InputType.TYPE_CLASS_TEXT}"
+            android:inputType="@{password ? (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) : (number ? InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER: InputType.TYPE_CLASS_TEXT)}"
             android:text="@={data.s_1}"
             android:textColor="@color/colorTextDark"
             app:font='@{@string/robotoRegular}' />
