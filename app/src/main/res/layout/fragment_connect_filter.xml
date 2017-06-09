@@ -11,14 +11,15 @@
     </data>
 
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/footer_container"
             tools:context="com.braingroom.user.view.activity.FilterActivity">
 
             <LinearLayout
@@ -72,6 +73,14 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/padding_med"
+                                android:text="For Learners Forum"
+                                android:textColor="@color/materialBlue"
+                                app:font='@{@string/robotoRegular}' />
+
                             <include
                                 layout="@layout/item_list_fragment_opener"
                                 app:editable="@{true}"
@@ -81,6 +90,14 @@
                                 layout="@layout/item_list_fragment_opener"
                                 app:editable="@{true}"
                                 app:vm="@{vm.segmentsVm}" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/padding_med"
+                                android:text="For Tutor Talk"
+                                android:textColor="@color/materialBlue"
+                                app:font='@{@string/robotoRegular}' />
 
                             <include
                                 layout="@layout/item_list_fragment_opener"
@@ -99,13 +116,47 @@
 
         </android.support.v4.widget.NestedScrollView>
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <!--<FrameLayout-->
+            <!--android:id="@+id/fragment_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+        <!--</FrameLayout>-->
+
+        <RelativeLayout
+            android:id="@+id/footer_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/top_line_drawable_solid_white"
+            android:gravity="center_vertical">
 
-        </FrameLayout>
+            <TextView
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/clear"
+                android:onClick="@{vm.onApplyClicked}"
+                android:padding="@dimen/padding_med"
+                android:text="SAVE"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoBold}' />
 
-    </FrameLayout>
+            <TextView
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:onClick="@{vm.onResetClicked}"
+                android:padding="@dimen/padding_med"
+                android:text="CLEAR"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoRegular}' />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
 
 </layout>

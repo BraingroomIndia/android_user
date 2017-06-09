@@ -7,6 +7,7 @@ import android.util.Pair;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -28,13 +29,17 @@ public class ConnectFilterViewModel extends ViewModel {
     public final Action onBackClicked, onResetClicked, onApplyClicked;
     public Navigator navigator;
     public Consumer<HashMap<String, Pair<String, String>>> categoryConsumer;
-    public Consumer<HashMap<String, Pair<String, String>>> myGroupsConsumer;
+    public Consumer<HashMap<String, Pair<String, String>>> myGroupsConsumer, allGroupsConsumer;
     private boolean clearFlag = false;
     public Observable<HashMap<String, Pair<String, String>>> segmentsApiObservable, categoryApiObservable, myGroupsApiObservable, allGroupsApiObservable;
+    ConnectUiHelper uiHelper;
+    FragmentHelper fragmentHelper;
 
-    public ConnectFilterViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, FragmentHelper fragmentHelper
+    public ConnectFilterViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, FragmentHelper fragmentHelper, ConnectUiHelper uiHelper
     ) {
         this.navigator = navigator;
+        this.uiHelper = uiHelper;
+        this.fragmentHelper = fragmentHelper;
 
         categoryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
             @Override
@@ -81,12 +86,22 @@ public class ConnectFilterViewModel extends ViewModel {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
                 HashMap<String, Pair<String, String>> resMap = new HashMap<>();
                 for (GroupResp.Snippet snippet : resp.getData()) {
-                    resMap.put(snippet.getName(), new Pair<String, String>(snippet.getId(), snippet.getImage()));
+                    resMap.put(snippet.getName(), new Pair<>(snippet.getId(), snippet.getImage()));
                 }
                 return resMap;
             }
         });
-        myGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_MY_GROUPS, messageHelper, navigator, "search for your groups", false, myGroupsApiObservable, "select a city first", null, fragmentHelper);
+
+        myGroupsConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+                if (selectedMap.values().iterator().hasNext()) {
+                    allGroups.clearSelectedValue();
+                }
+            }
+        };
+
+        myGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_MY_GROUPS, messageHelper, navigator, "search for your groups", false, myGroupsApiObservable, "", myGroupsConsumer, fragmentHelper);
 
         allGroupsApiObservable = apiService.getGroups().map(new Function<GroupResp, HashMap<String, Pair<String, String>>>() {
             @Override
@@ -99,7 +114,17 @@ public class ConnectFilterViewModel extends ViewModel {
                 return resMap;
             }
         });
-        allGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_ALL_GROUPS, messageHelper, navigator, "search for groups", false, allGroupsApiObservable, "select a city first", null, fragmentHelper);
+
+        allGroupsConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+                if (selectedMap.values().iterator().hasNext()) {
+                    myGroups.clearSelectedValue();
+                }
+            }
+        };
+
+        allGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_ALL_GROUPS, messageHelper, navigator, "search for groups", false, allGroupsApiObservable, "", allGroupsConsumer, fragmentHelper);
 
         onBackClicked = new Action() {
             @Override
@@ -127,10 +152,11 @@ public class ConnectFilterViewModel extends ViewModel {
        /* HashMap<String,String> emptyHashMap= new HashMap<>();
         emptyHashMap.put("","");*/
         keywords.set("");
-        categoryVm.refreshDataMap(categoryApiObservable);
+        categoryVm.clearSelectedValue();
         segmentsVm.refreshDataMap(null);
-        myGroups.refreshDataMap(myGroupsApiObservable);
-        allGroups.refreshDataMap(allGroupsApiObservable);
+        segmentsVm.clearSelectedValue();
+        myGroups.clearSelectedValue();
+        allGroups.clearSelectedValue();
     }
 
     private HashMap<String, String> getHashMap(HashMap<String, Pair<String, String>> source) {
@@ -142,5 +168,24 @@ public class ConnectFilterViewModel extends ViewModel {
     }
 
     public void apply() {
+        String keyword = keywords.get();
+        String categoryId = "";
+        if (!categoryVm.selectedDataMap.isEmpty())
+            categoryId = categoryVm.selectedDataMap.values().iterator().next().first;
+
+        String segmentId = "";
+        if (!segmentsVm.selectedDataMap.isEmpty())
+            segmentId = segmentsVm.selectedDataMap.values().iterator().next().first;
+
+        String myGroupId = "";
+        if (!myGroups.selectedDataMap.isEmpty())
+            myGroupId = myGroups.selectedDataMap.values().iterator().next().first;
+
+        String allGroupId = "";
+        if (!allGroups.selectedDataMap.isEmpty())
+            allGroupId = allGroups.selectedDataMap.values().iterator().next().first;
+
+        this.uiHelper.setFilterData(keyword, categoryId, segmentId, myGroupId, allGroupId);
+        uiHelper.popFragment();
     }
 }

@@ -10,7 +10,6 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 
