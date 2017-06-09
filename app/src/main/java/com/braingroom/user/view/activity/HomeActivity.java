@@ -237,7 +237,7 @@ public class HomeActivity extends BaseActivity
         }
         if (id == R.id.nav_register) {
             getNavigator().navigateActivity(SignupActivity.class, null);
-            finish();
+//            finish();
         }
         if (id == R.id.nav_faq)
             //Edited By Vikas Godara

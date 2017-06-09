@@ -23,8 +23,8 @@ public class SignupActivity extends BaseActivity {
     public static final String FRAGMENT_TITLE_STATE = "state";
     public static final String FRAGMENT_TITLE_CITY = "city";
     public static final String FRAGMENT_TITLE_LOCALITY = "locality";
-    public static final String FRAGMENT_UG_COLLEGE = "UG College" ;
-    public static final String FRAGMENT_PG_COLLEGE="PG Collage";
+    public static final String FRAGMENT_UG_COLLEGE = "UG College";
+    public static final String FRAGMENT_PG_COLLEGE = "PG Collage";
 
     public interface UiHelper {
 
@@ -65,7 +65,7 @@ public class SignupActivity extends BaseActivity {
             public void remove(String tag) {
                 popBackstack(tag);
             }
-        },new FragmentHelper() {
+        }, new FragmentHelper() {
             @Override
             public void show(String tag) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -125,6 +125,7 @@ public class SignupActivity extends BaseActivity {
             }
         };
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -150,5 +151,13 @@ public class SignupActivity extends BaseActivity {
         if (FRAGMENT_PG_COLLEGE.equals(title))
             return viewModel.pgInstituteVm;
         return null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        getSupportFragmentManager().executePendingTransactions();
+        int fragCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (fragCount == 0) finish();
     }
 }
