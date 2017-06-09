@@ -32,6 +32,7 @@ public class ConnectFeedResp extends BaseResp {
         @SerializedName("vendor_name")
         private String vendorName;
 
+
         @SerializedName("title")
         private String title;
 
