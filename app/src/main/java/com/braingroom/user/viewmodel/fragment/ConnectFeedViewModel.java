@@ -52,15 +52,15 @@ public class ConnectFeedViewModel extends ViewModel {
         }
     };
 
-    public ConnectFeedViewModel(String majorCateg, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper, String vendorId
+    public ConnectFeedViewModel(String majorCateg, String minorCateg, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper, String vendorId
             , @NonNull final ConnectUiHelper uiHelper, ConnectFeedFragment.FragmentUiHelper fragmentUiHelper) {
         this.filterData = new ConnectFilterData();
         this.filterData.setMajorCateg(majorCateg);
+        this.filterData.setMinorCateg(minorCateg);
         this.filterData.setCountryId(pref.getInt("connect_country_id", 0) == 0 ? "" : pref.getInt("connect_country_id", 0) + "");
         this.filterData.setStateId(pref.getInt("connect_state_id", 0) == 0 ? "" : pref.getInt("connect_state_id", 0) + "");
         this.filterData.setCityId(pref.getInt("connect_city_id", 0) == 0 ? "" : pref.getInt("connect_city_id", 0) + "");
-        this.filterData.setMinorCateg("");
-        
+
         this.fragmentUiHelper = fragmentUiHelper;
         feedDataMapFunction = new Function<ConnectFeedResp, List<ViewModel>>() {
             @Override

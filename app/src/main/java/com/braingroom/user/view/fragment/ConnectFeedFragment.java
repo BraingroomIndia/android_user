@@ -24,10 +24,11 @@ import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
 
 public class ConnectFeedFragment extends BaseFragment {
 
-    public static ConnectFeedFragment newInstance(String majorCateg) {
+    public static ConnectFeedFragment newInstance(String majorCateg, String minorCateg) {
 
         Bundle bundle = new Bundle();
         bundle.putString("majorCateg", majorCateg);
+        bundle.putString("minorCateg", minorCateg);
         ConnectFeedFragment fragment = new ConnectFeedFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -95,7 +96,7 @@ public class ConnectFeedFragment extends BaseFragment {
                     mAdapter.notifyDataSetChanged();
             }
         };
-        return new ConnectFeedViewModel(getStringArguments("majorCateg"), activity.getNavigator(), activity.getHelperFactory(), activity.getMessageHelper(), activity.getIntentString("id")
+        return new ConnectFeedViewModel(getStringArguments("majorCateg"), getStringArguments("minorCateg"), activity.getNavigator(), activity.getHelperFactory(), activity.getMessageHelper(), activity.getIntentString("id")
                 , ((ConnectUiHelper) activity), uiHelper);
     }
 

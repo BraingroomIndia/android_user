@@ -455,10 +455,10 @@
                             android:background="@color/white"
                             android:ellipsize="end"
                             android:gravity="center"
-                            android:onClick="@{vm.onPeopleNearYou}"
+                            android:onClick="@{vm.openConnectTnT}"
                             android:paddingLeft="@dimen/padding_med"
                             android:paddingRight="@dimen/padding_med"
-                            android:text="People Near You"
+                            android:text="Tips &amp; Tricks"
                             android:textColor="@color/materialGreen"
                             app:font='@{@string/robotoBold}' />
 
@@ -469,10 +469,24 @@
                             android:layout_weight="1"
                             android:background="@color/white"
                             android:gravity="center"
-                            android:onClick="@{vm.onConnect}"
+                            android:onClick="@{vm.openConnectBnS}"
                             android:paddingLeft="@dimen/padding_med"
                             android:paddingRight="@dimen/padding_med"
-                            android:text="Connect"
+                            android:text="Buy &amp; Sell"
+                            android:textColor="@color/materialGreen"
+                            app:font='@{@string/robotoBold}' />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="0.5dp"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:onClick="@{vm.openConnectFP}"
+                            android:paddingLeft="@dimen/padding_med"
+                            android:paddingRight="@dimen/padding_med"
+                            android:text="Find Partners"
                             android:textColor="@color/materialGreen"
                             app:font='@{@string/robotoBold}' />
 

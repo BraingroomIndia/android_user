@@ -5,8 +5,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.Html;
-import android.text.Spanned;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
@@ -69,7 +67,8 @@ public class ClassDetailViewModel extends ViewModel {
     @Setter
     ClassDetailActivity.UiHelper uiHelper;
 
-    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, onGiftClicked, onPeopleNearYou, onConnect, onGetTutor;
+    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked,
+            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor,openConnectTnT,openConnectBnS,openConnectFP;
 
     public boolean isInWishlist = false;
 
@@ -79,6 +78,32 @@ public class ClassDetailViewModel extends ViewModel {
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
         this.uiHelper = uiHelper;
+        openConnectTnT= new Action() {
+            @Override
+            public void run() throws Exception {
+                Bundle data = new Bundle();
+                data.putString("defMinorCateg","tips_tricks");
+                navigator.navigateActivity(ConnectHomeActivity.class,data);
+            }
+        };
+        openConnectBnS= new Action() {
+            @Override
+            public void run() throws Exception {
+                Bundle data = new Bundle();
+                data.putString("defMinorCateg","group_post");
+                navigator.navigateActivity(ConnectHomeActivity.class,data);
+
+            }
+        };
+        openConnectFP= new Action() {
+            @Override
+            public void run() throws Exception {
+                Bundle data = new Bundle();
+                data.putString("defMinorCateg","activity_request");
+                navigator.navigateActivity(ConnectHomeActivity.class,data);
+
+            }
+        };
         apiService.getClassDetail(classId).subscribe(new Consumer<ClassData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ClassData classData) throws Exception {
@@ -95,6 +120,7 @@ public class ClassDetailViewModel extends ViewModel {
                 description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
                 sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                 classTopic.set(classData.getClassTopic());
+
                 if ("1".equals(classData.getWishlist())) {
                     isInWishlist = true;
                     uiHelper.invalidateMenu();
