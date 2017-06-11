@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.view.MessageHelper;
@@ -19,7 +20,7 @@ public class LevelPricingItemViewModel extends ViewModel {
     public final ObservableField<String> sublevelName;
 
     @NonNull
-    public final ObservableField<Integer> totalPrice;
+    public final ObservableInt totalPrice;
 
     @NonNull
     public final CountModifierItemViewModel countVm;
@@ -58,7 +59,7 @@ public class LevelPricingItemViewModel extends ViewModel {
         this.levelName = new ObservableField<>(levelName);
         this.levelId = levelId;
         this.sublevelName = new ObservableField<>(subLevelName);
-        totalPrice = new ObservableField<>(0);
+        totalPrice = new ObservableInt(0);
         this.priceList = priceList;
         this.dataChangeAction = dataChangeAction;
         countVm = new CountModifierItemViewModel(0, countConsumer);

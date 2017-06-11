@@ -1,6 +1,6 @@
 package com.braingroom.user.viewmodel;
 
-import android.databinding.ObservableField;
+import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 import android.view.Menu;
 
@@ -31,7 +31,7 @@ public class ProfileViewModel extends ViewModel {
     public static final int TYPE_MALE = 1;
     public static final int TYPE_FEMALE = 2;
 
-    public final ObservableField<Boolean> editable = new ObservableField<>(false);
+    public final ObservableBoolean editable = new ObservableBoolean(false);//observableBoolean;
     public final DataItemViewModel name = new DataItemViewModel("");
     public final DataItemViewModel email = new DataItemViewModel("");
     public final DataItemViewModel contact = new DataItemViewModel("");
@@ -59,6 +59,7 @@ public class ProfileViewModel extends ViewModel {
 
     public final ProfileActivity.UiHelper uiHelper;
     public final MessageHelper messageHelper;
+    private final ObservableBoolean observableBoolean = new ObservableBoolean(false);
 
     public ProfileViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @NonNull final ProfileActivity.UiHelper uiHelper) {

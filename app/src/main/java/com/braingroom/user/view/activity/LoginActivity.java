@@ -48,6 +48,7 @@ public class LoginActivity extends BaseActivity implements
     ActionBar actionBar;
 
     String classId;
+    String thirdPartyUserId;
     String parentActivity;
     Serializable classData;
 
@@ -78,6 +79,7 @@ public class LoginActivity extends BaseActivity implements
         mFbLogin.setReadPermissions("email");
         Intent intent = getIntent();
         classId = intent.getStringExtra("classId");
+        thirdPartyUserId = intent.getStringExtra("thirdPartyUserId");
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -168,9 +170,9 @@ public class LoginActivity extends BaseActivity implements
     protected ViewModel createViewModel() {
         parentActivity = getIntentString("backStackActivity");
         classData = getIntentSerializable("classData");
-        classId =getIntentString("id");
+        classId = getIntentString("id");
 
-        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData,classId);
+        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData, classId, thirdPartyUserId);
     }
 
     @Override
@@ -190,7 +192,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login,
-                new FirstSocialLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(),parentActivity,classId,classData));
+                new FirstSocialLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData));
         /*new MaterialDialog.Builder(LoginActivity.this)
                 .title("Contact details")
                 .content("Please enter your mobile number")

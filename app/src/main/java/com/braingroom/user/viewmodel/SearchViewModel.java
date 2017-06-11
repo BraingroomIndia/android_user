@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,7 +22,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 public class SearchViewModel extends ViewModel {
-    public final ObservableField<Boolean> editable = new ObservableField<>(false);
+    public final ObservableBoolean editable = new ObservableBoolean(false);
     public final ObservableField<String> searchQuery = new ObservableField<>("");
     public final Observable<List<ViewModel>> results;
     public final Map<String, String> mainCategories = new HashMap<>();

@@ -48,7 +48,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
     public ObservableField<String> fixedClassDate = new ObservableField<>();
-    public ObservableField<Boolean> isMapVisible = new ObservableField<>(true);
+    public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
     public String vendorId;
     public final ConnectableObservable<List<ViewModel>> addresses;

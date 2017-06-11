@@ -1,6 +1,6 @@
 package com.braingroom.user.viewmodel;
 
-import android.databinding.ObservableField;
+import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ConnectivityViewModel extends ViewModel {
 
     public static final int INTERNET_CONNECTIVITY_PLACEHOLDER = R.drawable.no_network;
-    public ObservableField<Boolean> isConnected = new ObservableField<>(true);
+    public ObservableBoolean isConnected = new ObservableBoolean(true);
     public final Action retryAction;
     private Disposable internetDisposable;
 

@@ -23,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
+        <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_SN4tYAqDnzHHem" />
         <meta-data

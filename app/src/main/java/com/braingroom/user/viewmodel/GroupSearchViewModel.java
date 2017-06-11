@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
@@ -18,7 +19,7 @@ import io.reactivex.observables.ConnectableObservable;
 
 public class GroupSearchViewModel extends ViewModel {
 
-    public final ObservableField<Boolean> editable = new ObservableField<>(false);
+    public final ObservableBoolean editable = new ObservableBoolean(false);
     public final ObservableField<String> searchQuery = new ObservableField<>("");
     public final ConnectableObservable<List<ViewModel>> results;
     public final List<ViewModel> groupsData;

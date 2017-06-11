@@ -49,7 +49,7 @@ public class ThirdPartyViewActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        userid=getIntentString("userId");
+        userid = getIntentString("userId");
         viewModel = new ThirdPartyViewModel(userid, getMessageHelper(), getNavigator());
         return viewModel;
     }
@@ -70,11 +70,19 @@ public class ThirdPartyViewActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_messages) {
 
-            String userName =((ThirdPartyViewModel) vm).name.s_1.get();
+            if (!vm.loggedIn.get()) {
+                Bundle data = new Bundle();
+                data.putString("backStackActivity", ThirdPartyViewActivity.class.getSimpleName());
+                data.putString("thirdPartyUserId", userid);
+                getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
+                return true;
+            }
+
+            String userName = ((ThirdPartyViewModel) vm).name.s_1.get();
             Bundle bundle = new Bundle();
-            bundle.putString("sender_id",userid);
-            bundle.putString("sender_name",userName);
-            getNavigator().navigateActivity(MessagesThreadActivity.class,bundle);
+            bundle.putString("sender_id", userid);
+            bundle.putString("sender_name", userName);
+            getNavigator().navigateActivity(MessagesThreadActivity.class, bundle);
             getNavigator().finishActivity();
         }
 

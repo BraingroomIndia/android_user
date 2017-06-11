@@ -16,6 +16,7 @@ import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.SignupActivity;
+import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONObject;
@@ -46,11 +47,13 @@ public class LoginViewmodel extends ViewModel {
 
     String parentActivity;
     String classId;
+    String thirdPartyUserId;
     Serializable classData;
 
-    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity, Serializable data,String classId) {
+    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity, Serializable data, String classId, String thirdPartyUserId) {
         this.parentActivity = parentActivity;
         this.classData = data;
+        this.thirdPartyUserId = thirdPartyUserId;
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.classId = classId;
@@ -122,10 +125,14 @@ public class LoginViewmodel extends ViewModel {
                         } else if (ConnectHomeActivity.class.getSimpleName().equals(parentActivity)) {
                             navigator.navigateActivity(ConnectHomeActivity.class, null);
                         } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
-                            Bundle data =new Bundle();
+                            Bundle data = new Bundle();
                             data.putString("id", classId);
-                            navigator.navigateActivity(ClassDetailActivity.class,data);
-                        } else {
+                            navigator.navigateActivity(ClassDetailActivity.class, data);
+                        } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {
+                            Bundle data = new Bundle();
+                            data.putString("userId", thirdPartyUserId);
+                            navigator.navigateActivity(ThirdPartyViewActivity.class, data);
+                        }else {
                             navigator.navigateActivity(HomeActivity.class, null);
                         }
                         navigator.finishActivity();
@@ -199,12 +206,18 @@ public class LoginViewmodel extends ViewModel {
                         } else if (ConnectHomeActivity.class.getSimpleName().equals(parentActivity)) {
                             navigator.navigateActivity(ConnectHomeActivity.class, null);
                         } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
-                            Bundle data =new Bundle();
+                            Bundle data = new Bundle();
                             data.putString("id", classId);
-                            navigator.navigateActivity(ClassDetailActivity.class,data);
+                            navigator.navigateActivity(ClassDetailActivity.class, data);
+                        } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {
+                            Bundle data = new Bundle();
+                            data.putString("userId", thirdPartyUserId);
+                            navigator.navigateActivity(ThirdPartyViewActivity.class, data);
                         } else {
                             navigator.navigateActivity(HomeActivity.class, null);
                         }
+
+
                         navigator.finishActivity();
                         navigator.finishActivity();
                     }

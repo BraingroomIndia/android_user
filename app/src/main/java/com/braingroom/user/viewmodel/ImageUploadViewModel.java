@@ -2,6 +2,7 @@ package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -19,7 +20,7 @@ import static android.app.Activity.RESULT_OK;
 public class ImageUploadViewModel extends ViewModel {
 
 
-    public final ObservableField<Integer> placeHolder = new ObservableField<>();
+    public final ObservableInt placeHolder = new ObservableInt();
     public final ObservableField<String> remoteAddress = new ObservableField<>("");
     public final Action onUploadClicked;
     MessageHelper messageHelper;

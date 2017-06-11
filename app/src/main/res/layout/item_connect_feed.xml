@@ -44,7 +44,7 @@
 
                 <TextView
                     android:id="@+id/feed_title"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_alignParentTop="true"
                     android:layout_toRightOf="@+id/vendorProfile"
@@ -56,6 +56,18 @@
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
                     app:font='@{@string/robotoBold}' />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:padding="5dp"
+                    android:layout_marginLeft="@dimen/margin_small"
+                    android:layout_toRightOf="@+id/feed_title"
+                    android:layout_alignTop="@+id/feed_title"
+                    android:src="@drawable/ic_textsms_white_24dp"
+                    android:tint="@color/fbLikeDark"
+                    android:onClick="@{vm.onMessageClick}"
+                    android:visibility="@{vm.isBuyAndSell ? View.VISIBLE : View.GONE}"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
