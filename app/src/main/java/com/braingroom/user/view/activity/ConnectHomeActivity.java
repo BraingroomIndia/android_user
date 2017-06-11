@@ -311,6 +311,16 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 //            getHelperFactory().createDialogHelper().showCustomView(R.layout.dialog_location, new LocationFilterViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), uiHelper));
             return true;
         }
+        if (id == R.id.action_messages) {
+            getNavigator().navigateActivity(MessageActivity.class, null);
+//            vm.retry();
+            return true;
+        }
+        if (id == R.id.action_notifications) {
+            getNavigator().navigateActivity(NotificationActivity.class, null);
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
