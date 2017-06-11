@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.braingroom.user.utils.AppComponent;
@@ -16,9 +15,6 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.DaggerAppComponent;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
-import com.facebook.stetho.Stetho;
-import com.google.firebase.crash.FirebaseCrash;
-import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.HashMap;
@@ -57,20 +53,20 @@ public class UserApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
         MultiDex.install(this);
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
+        Fabric.with(this, new Crashlytics());
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            return;
+//        }
 //        mRefWatcher = LeakCanary.install(this);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        Stetho.initializeWithDefaults(this);
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        } else {
-            Timber.plant(new CrashReportingTree());
-        }
+//        Stetho.initializeWithDefaults(this);
+//        if (BuildConfig.DEBUG) {
+//            Timber.plant(new Timber.DebugTree());
+//        } else {
+//            Timber.plant(new CrashReportingTree());
+//        }
         sInstance = this;
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this, BASE_URL)).build();
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
@@ -105,18 +101,18 @@ public class UserApplication extends Application {
         textView.setTypeface(getFont(Constants.FONT_BOLD));
     }
 
-    private static class CrashReportingTree extends Timber.Tree {
-        @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
-            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
-                return;
-            }
-            if (t != null) {
-                if (priority == Log.ERROR) {
-                    FirebaseCrash.report(t);
-                }
-            }
-        }
-    }
+//    private static class CrashReportingTree extends Timber.Tree {
+//        @Override
+//        protected void log(int priority, String tag, String message, Throwable t) {
+//            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
+//                return;
+//            }
+//            if (t != null) {
+//                if (priority == Log.ERROR) {
+//                    FirebaseCrash.report(t);
+//                }
+//            }
+//        }
+//    }
 
 }

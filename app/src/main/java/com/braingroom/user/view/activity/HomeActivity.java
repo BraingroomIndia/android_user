@@ -113,7 +113,6 @@ public class HomeActivity extends BaseActivity
     @Override
     protected void onStart() {
         super.onStart();
-//        Crashlytics.getInstance().crash();
         initNavigationDrawer();
     }
 
