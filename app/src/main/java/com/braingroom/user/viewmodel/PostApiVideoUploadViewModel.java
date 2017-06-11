@@ -1,14 +1,13 @@
 package com.braingroom.user.viewmodel;
 
-import android.content.Intent;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.UploadPostApiResp;
-import com.braingroom.user.model.response.UploadResp;
 import com.braingroom.user.utils.FileUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -16,12 +15,10 @@ import com.braingroom.user.view.Navigator;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-import static android.app.Activity.RESULT_OK;
-
 public class PostApiVideoUploadViewModel extends ViewModel {
 
 
-    public final ObservableField<Integer> placeHolder = new ObservableField<>();
+    public final ObservableInt placeHolder = new ObservableInt();
     public final ObservableField<String> remoteAddress = new ObservableField<>("");
     public final ObservableField<String> thumbUrl =new ObservableField<>(null);
     public final Action onUploadClicked;

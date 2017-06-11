@@ -3,6 +3,7 @@ package com.braingroom.user.viewmodel;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
@@ -20,6 +21,7 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
+import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
@@ -52,7 +54,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public final ObservableField<String> description;
 
     @NonNull
-    public final ObservableField<Integer> numLikes, numAccepts;
+    public final ObservableInt numLikes, numAccepts;
 
     @NonNull
     public final ObservableField<String> numComments;
@@ -74,14 +76,14 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     @NonNull
     public final Action likeAction, commentAction, reportAction,
-            likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile;
+            likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile, onMessageClick;
 
     @NonNull
     public final Navigator navigator;
 
     public final String postType;
 
-    public final boolean isActivityRequest;
+    public final boolean isActivityRequest, isBuyAndSell;
 
     public ConnectFeedItemViewModel(final ConnectFeedResp.Snippet data, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
@@ -91,7 +93,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.segment = new ObservableField<>(data.getSegName());
         this.title = new ObservableField<>(data.getTitle());
         this.description = new ObservableField<>(data.getDescription());
-        this.numLikes = new ObservableField<>("".equals(data.getNumLikes()) ? 0 : Integer.parseInt(data.getNumLikes()));
+        this.numLikes = new ObservableInt("".equals(data.getNumLikes()) ? 0 : Integer.parseInt(data.getNumLikes()));
         this.numComments = new ObservableField<>(data.getNumComments());
         this.vendorName = new ObservableField<>(data.getVendorName());
         this.image = new ObservableField<>("".equals(data.getImage()) ? null : data.getImage());
@@ -101,8 +103,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
         this.postType = data.getPostType();
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
+        this.isBuyAndSell = "group_post".equalsIgnoreCase(postType);
         this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
-        this.numAccepts = new ObservableField<>(data.getNumAccepted());
+        this.numAccepts = new ObservableInt(data.getNumAccepted());
         this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwner()));
         this.isMediaAvailable = new ObservableBoolean(data.getVideo() != null || !data.getImage().equals(""));
 
@@ -114,6 +117,24 @@ public class ConnectFeedItemViewModel extends ViewModel {
                 navigator.navigateActivity(PostDetailActivity.class, bundleData);
             }
         };
+
+        onMessageClick = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (!loggedIn.get()) {
+                    Bundle data = new Bundle();
+                    data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
+                    messageHelper.showLoginRequireDialog("Only logged in users can send a message", data);
+                    return;
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString("sender_id", data.getPostOwner());
+                bundle.putString("sender_name", data.getVendorName());
+                navigator.navigateActivity(MessagesThreadActivity.class, bundle);
+
+            }
+        };
+
 
         showthirdpartyProfile = new Action() {
             @Override

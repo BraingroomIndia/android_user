@@ -2,6 +2,7 @@ package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -42,7 +43,7 @@ public class ViewModel {
     protected
     SharedPreferences.Editor editor;
 
-    public final ObservableField<Boolean> loggedIn = new ObservableField<>(false);
+    public final ObservableBoolean loggedIn = new ObservableBoolean(false);
 
     /*for non reactive adapter recycler views*/
     public

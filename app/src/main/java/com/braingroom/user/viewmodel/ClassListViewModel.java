@@ -2,7 +2,6 @@ package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -35,7 +34,7 @@ public class ClassListViewModel extends ViewModel {
     public final Observable<List<ViewModel>> segments;
     public final ObservableBoolean segmentsVisibility = new ObservableBoolean(true);
     public final Observable<List<ViewModel>> classes;
-    public final ObservableField<Boolean> tileView = new ObservableField<>(false);
+    public final ObservableBoolean tileView = new ObservableBoolean(false);
     public final Action onViewChangeClicked, onSortClicked, onFilterClicked;
     public final ListDialogViewModel sortDialog;
     Consumer<List<String>> sortResultConsumer;

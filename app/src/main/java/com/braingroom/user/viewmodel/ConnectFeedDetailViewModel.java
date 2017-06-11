@@ -3,6 +3,7 @@ package com.braingroom.user.viewmodel;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
@@ -53,13 +54,13 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public final ObservableField<String> description = new ObservableField<>("");
 
     @NonNull
-    public final ObservableField<Integer> numLikes = new ObservableField<>();
+    public final ObservableInt numLikes = new ObservableInt(0);
 
     @NonNull
     public final ObservableField<String> numComments = new ObservableField<>();
 
     @NonNull
-    public final ObservableField<Integer> numAccepts = new ObservableField<>();
+    public final ObservableInt numAccepts = new ObservableInt();
 
 
     @NonNull
@@ -96,7 +97,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     @NonNull
     public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile;
 
-    public ObservableField<Boolean> isActivityRequest = new ObservableField<>(false);
+    public ObservableBoolean isActivityRequest = new ObservableBoolean(false);
 
     public final Navigator navigator;
 
