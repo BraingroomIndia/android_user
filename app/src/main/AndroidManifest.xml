@@ -217,6 +217,9 @@
         <activity
             android:name=".view.activity.ThirdPartyViewActivity"
             android:windowSoftInputMode="stateHidden"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
     </application>
 
 </manifest>

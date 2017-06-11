@@ -13,8 +13,8 @@ import com.braingroom.user.utils.AppModule;
 import com.braingroom.user.utils.BindingAdapters;
 import com.braingroom.user.utils.BindingUtils;
 import com.braingroom.user.utils.Constants;
-
 import com.braingroom.user.utils.DaggerAppComponent;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.crash.FirebaseCrash;
@@ -24,6 +24,7 @@ import com.squareup.leakcanary.RefWatcher;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.fabric.sdk.android.Fabric;
 import lombok.Getter;
 import timber.log.Timber;
 
@@ -56,6 +57,7 @@ public class UserApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         MultiDex.install(this);
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
