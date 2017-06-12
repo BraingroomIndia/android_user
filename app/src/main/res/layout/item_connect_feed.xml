@@ -56,19 +56,7 @@
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
                     app:font='@{@string/robotoBold}' />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/feed_title"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:onClick="@{vm.showthirdpartyProfile}"
-                    android:text="@{vm.vendorCollege}"
-                    android:textColor="@color/colorTextDark"
-                    android:textSize="@dimen/text_size_medium"
-                    app:font='@{@string/robotoBold}'/>
+
 
                 <ImageView
                     android:layout_width="25dp"
@@ -81,12 +69,24 @@
                     android:tint="@color/fbLikeDark"
                     android:onClick="@{vm.onMessageClick}"
                     android:visibility="@{vm.isBuyAndSell ? View.VISIBLE : View.GONE}"/>
+                <TextView
+                    android:layout_below="@id/feed_title"
+                    android:layout_toRightOf="@id/vendorProfile"
+                    android:id="@+id/institute"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:ellipsize="end"
+                    android:onClick="@{vm.showthirdpartyProfile}"
+                    android:text="@{vm.vendorCollege}"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/text_size_medium"
+                    app:font='@{@string/robotoRegular}'/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_below="@+id/feed_title"
+                    android:layout_below="@+id/institute"
                     android:layout_toRightOf="@+id/vendorProfile"
                     android:orientation="horizontal">
 
@@ -340,7 +340,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="@{vm.acceptAction}"
+                    android:onClick="@{vm.accepted ? null : vm.acceptAction}"
                     android:orientation="horizontal"
                     android:visibility="@{vm.isActivityRequest ? View.VISIBLE : View.GONE}">
 
