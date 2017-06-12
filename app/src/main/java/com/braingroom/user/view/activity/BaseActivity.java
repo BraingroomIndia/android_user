@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
@@ -150,6 +151,14 @@ public abstract class BaseActivity extends MvvmActivity {
                     Intent intent = YouTubeStandalonePlayer.createVideoIntent(BaseActivity.this, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId);
                     startActivity(intent);
                 }
+
+                @Override
+                public void openStandaloneVideo(String videoId) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoId));
+                    intent.setDataAndType(Uri.parse(videoId), "video/mp4");
+                    startActivity(intent);
+                }
+
 
                 @Override
                 public void showMenuPopup(@MenuRes int layout, View v, android.support.v7.widget.PopupMenu.OnMenuItemClickListener clickListner) {

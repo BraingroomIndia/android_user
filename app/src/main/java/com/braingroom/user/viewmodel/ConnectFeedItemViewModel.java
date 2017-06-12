@@ -7,6 +7,7 @@ import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -35,7 +36,10 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 
+
 public class ConnectFeedItemViewModel extends ViewModel {
+
+    public static final String TAG = ConnectHomeActivity.class.getSimpleName();
 
     @NonNull
     public final ObservableField<String> vendorImage;
@@ -81,7 +85,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     @NonNull
     public final Action likeAction, commentAction, reportAction,
-            likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile, onMessageClick,openSegment;
+            likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile, onMessageClick, openSegment;
 
     @NonNull
     public final Navigator navigator;
@@ -90,7 +94,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     public final boolean isActivityRequest, isBuyAndSell;
 
-    public  ObservableInt categoryImg =new ObservableInt();
+    public ObservableInt categoryImg = new ObservableInt();
 
     public final int[] resArray = new int[]{R.drawable.main_category_1,
             R.drawable.main_category_2, //Edited By Vikas Godara
@@ -102,7 +106,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public ConnectFeedItemViewModel(final ConnectFeedResp.Snippet data, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
         data.setCategoryId("2");
-        categoryImg.set(resArray[Integer.parseInt(data.getCategoryId())-1]);
+        categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - 1]);
         this.navigator = navigator;
         this.vendorImage = new ObservableField<>(data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
@@ -117,6 +121,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.video = new ObservableField<>(getVideoId(data.getVideo()));
         this.videoThumb = new ObservableField<>(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
         this.liked = new ObservableBoolean(data.getLiked() == 0 ? false : true);
+        Log.d(TAG, "ConnectFeedItemViewModel: \n videoUrl \t " +video.get()+ "\n videoThumb \t" +videoThumb.get() + "\n"   );
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
         this.postType = data.getPostType();
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
@@ -248,6 +253,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
             public void run() throws Exception {
                 if (video.get().contains("www.youtube.com/embed"))
                     navigator.openStandaloneYoutube(video.get());
+                else
+                    navigator.openStandaloneVideo(video.get());
 
             }
         };
@@ -352,7 +359,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
     private String getVideoId(String videoUrl) {
         if (videoUrl == null) return null;
         try {
-            return videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
+            if (videoUrl.contains("www.youtube.com/embed"))
+                return videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
+            else
+                return videoUrl;
         } catch (IndexOutOfBoundsException iobe) {
             return null;
         }

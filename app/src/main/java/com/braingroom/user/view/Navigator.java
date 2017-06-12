@@ -28,5 +28,7 @@ public interface Navigator {
 
     void openStandaloneYoutube(String videoId);
 
+    void openStandaloneVideo(String videoUrl);
+
     void showMenuPopup(@MenuRes int layout, View v, PopupMenu.OnMenuItemClickListener clickListner);
 }
