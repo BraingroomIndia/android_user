@@ -55,6 +55,7 @@ import com.braingroom.user.model.request.StateReq;
 import com.braingroom.user.model.request.WishlistReq;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.BookingHistoryResp;
+import com.braingroom.user.model.response.CatalogueGroupResp;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CategoryTreeResp;
 import com.braingroom.user.model.response.ChangePasswordResp;
@@ -785,7 +786,7 @@ public class DataflowService {
 //
 //        MessageListResp resp = new MessageListResp(dataList);
 //        return Observable.just(resp);
-        return api.getMessages(new MessageListReq(new MessageListReq.Snippet(pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
+        return api.getMessages(new MessageListReq(new MessageListReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -819,7 +820,7 @@ public class DataflowService {
 //
 //        ChatListResp resp = new ChatListResp(dataList);
 //        return Observable.just(resp);
-        return api.getChatMessages(new ChatMessageReq(new ChatMessageReq.Snippet(senderId, pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
+        return api.getChatMessages(new ChatMessageReq(new ChatMessageReq.Snippet(senderId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -842,6 +843,11 @@ public class DataflowService {
                 , prepareFilePart("video", filePath, type)
                 , RequestBody.create(MediaType.parse("text/plain"), post_type)
         ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<CatalogueGroupResp> getCatalogueGroups() {
+        return api.getCatalogueGroup().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }

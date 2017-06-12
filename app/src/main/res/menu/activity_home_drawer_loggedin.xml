@@ -31,6 +31,10 @@
             android:icon="@drawable/ic_chat_black_24dp"
             android:title="Contact US" />
         <item
+            android:id="@+id/nav_catalogue"
+            android:icon="@drawable/ic_class_black_24dp"
+            android:title="Catalogue" />
+        <item
             android:id="@+id/nav_location"
             android:icon="@drawable/pin"
             android:title="Location Settings" />
