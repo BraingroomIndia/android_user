@@ -2,10 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_tips_tricks"
+        android:id="@+id/action_all"
         android:enabled="true"
         android:icon="@drawable/ic_view_headline_white_24dp"
         android:title="@string/action_feed_main"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_tips_tricks"
+        android:enabled="true"
+        android:icon="@drawable/tips_tricks"
+        android:title="@string/action_tips_tricks"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_buy_sell"

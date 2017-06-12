@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_all"
+        android:enabled="true"
+        android:icon="@drawable/ic_view_headline_white_24dp"
+        android:title="@string/action_feed_main"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_tutors_article"
         android:enabled="true"
         android:icon="@drawable/ic_people_white_24dp"
