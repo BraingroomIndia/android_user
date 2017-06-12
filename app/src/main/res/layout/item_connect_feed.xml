@@ -116,7 +116,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/margin_small"
-                        app:imageResource="@{vm.categoryImg}"
+                        app:placeHolder="@{vm.categoryImg}"
                         android:onClick="@{vm.openSegment}"
                         android:tint="@color/colorTextGray" />
 
