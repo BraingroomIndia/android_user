@@ -72,9 +72,9 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     ColorStateList greenList, blueList;
 
     @IdRes
-    int learnerForumSelectedNav = R.id.action_tips_tricks;
+    int learnerForumSelectedNav = R.id.action_all;
     @IdRes
-    int tutorTalkSelectedNav = R.id.action_tips_tricks;
+    int tutorTalkSelectedNav = R.id.action_all;
 
     ViewPager pager;
     public ConnectPagerAdapter pagerAdapter;
@@ -445,9 +445,9 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     private void initFilters() {
         learnersFilter = new ConnectFilterData();
-        learnersFilter.setMajorCateg(defMajorCateg);
+        learnersFilter.setMajorCateg("learners_forum");
         tutorsFilter = new ConnectFilterData();
-        tutorsFilter.setMajorCateg(defMinorCateg);
+        tutorsFilter.setMajorCateg("tutors_talk");
         setLocationData();
     }
 

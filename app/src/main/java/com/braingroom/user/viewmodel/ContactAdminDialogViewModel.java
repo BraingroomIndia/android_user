@@ -5,15 +5,8 @@ import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.request.ContactAdmin;
 import com.braingroom.user.model.response.BaseResp;
-import com.braingroom.user.model.response.LoginResp;
-import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.viewmodel.DialogViewModel;
-
-import org.apache.commons.validator.routines.EmailValidator;
-
-import java.io.Serializable;
 
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -43,14 +36,14 @@ public class ContactAdminDialogViewModel extends CustomDialogViewModel {
                 } else if (!isValidPhoneNo(mobileVm.s_1.get())) {
                     messageHelper.show("Please enter a valid phone Number");
                     return;
-                }else  if (!EmailValidator.getInstance(false).isValid(emailVm.s_1.get())){
+                } else if (false) { //if (!EmailValidator.getInstance(false).isValid(emailVm.s_1.get())){
                     messageHelper.show("Please enter a valid email id");
                     return;
-                }else if (message.get().equals("")){
+                } else if (message.get().equals("")) {
                     messageHelper.show("Please write a message");
                     return;
                 }
-                ContactAdmin.Snippet snippet =new ContactAdmin.Snippet();
+                ContactAdmin.Snippet snippet = new ContactAdmin.Snippet();
                 snippet.setName(nameVm.s_1.get());
                 snippet.setMobile(mobileVm.s_1.get());
                 snippet.setEmail(emailVm.s_1.get());

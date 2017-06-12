@@ -41,7 +41,8 @@
     <string name="action_done">Done</string>
     <string name="action_discard">Discard</string>
 
-    <string name="action_feed_main">Tips &amp; Tricks</string>
+    <string name="action_feed_main">All</string>
+    <string name="action_tips_tricks">Tips &amp; Tricks</string>
     <string name="action_learners_forum">Buy &amp; Sell</string>
     <string name="action_tutors_talk">Find Partners</string>
 

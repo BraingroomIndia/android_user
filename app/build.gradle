@@ -91,7 +91,7 @@ dependencies {
     compile 'com.patloew.rxlocation:rxlocation:1.0.3'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.jakewharton:process-phoenix:2.0.0'
-    compile 'commons-validator:commons-validator:1.4.1'
+//    compile 'commons-validator:commons-validator:1.4.1'
     compile 'com.github.pwittchen:reactivenetwork-rx2:0.9.1'
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
