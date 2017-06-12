@@ -17,9 +17,11 @@ import com.braingroom.user.model.response.LikeResp;
 import com.braingroom.user.model.response.ReportResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
+import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
@@ -40,6 +42,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     @NonNull
     public final ObservableField<String> vendorName;
+
+    @NonNull
+    public final ObservableField<String> vendorCollege;
 
     @NonNull
     public final ObservableField<String> date;
@@ -76,7 +81,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     @NonNull
     public final Action likeAction, commentAction, reportAction,
-            likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile, onMessageClick;
+            likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile, onMessageClick,openSegment;
 
     @NonNull
     public final Navigator navigator;
@@ -85,8 +90,19 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     public final boolean isActivityRequest, isBuyAndSell;
 
+    public  ObservableInt categoryImg =new ObservableInt();
+
+    public final int[] resArray = new int[]{R.drawable.main_category_1,
+            R.drawable.main_category_2, //Edited By Vikas Godara
+            R.drawable.main_category_3,
+            R.drawable.main_category_4,
+            R.drawable.main_category_5, //Edited By Vikas Godara
+            R.drawable.main_category_6};
+
     public ConnectFeedItemViewModel(final ConnectFeedResp.Snippet data, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
+        data.setCategoryId("2");
+        categoryImg.set(resArray[Integer.parseInt(data.getCategoryId())-1]);
         this.navigator = navigator;
         this.vendorImage = new ObservableField<>(data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
@@ -96,6 +112,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.numLikes = new ObservableInt("".equals(data.getNumLikes()) ? 0 : Integer.parseInt(data.getNumLikes()));
         this.numComments = new ObservableField<>(data.getNumComments());
         this.vendorName = new ObservableField<>(data.getVendorName());
+        this.vendorCollege = new ObservableField<>(data.getInstituteName());
         this.image = new ObservableField<>("".equals(data.getImage()) ? null : data.getImage());
         this.video = new ObservableField<>(getVideoId(data.getVideo()));
         this.videoThumb = new ObservableField<>(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
@@ -108,6 +125,22 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.numAccepts = new ObservableInt(data.getNumAccepted());
         this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwner()));
         this.isMediaAvailable = new ObservableBoolean(data.getVideo() != null || !data.getImage().equals(""));
+
+
+        openSegment = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (!data.getCategoryId().equals("-1")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("categoryId", data.getCategoryId());
+                    bundle.putString("segmentId", data.getSegId());
+                    navigator.navigateActivity(ClassListActivity.class, bundle);
+                    return;
+                }
+                return;
+            }
+        };
+
 
         detailShowAction = new Action() {
             @Override
@@ -213,7 +246,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
         playAction = new Action() {
             @Override
             public void run() throws Exception {
-                navigator.openStandaloneYoutube(video.get());
+                if (video.get().contains("www.youtube.com/embed"))
+                    navigator.openStandaloneYoutube(video.get());
+
             }
         };
 

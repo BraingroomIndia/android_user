@@ -753,7 +753,7 @@ public class DataflowService {
     }
 
     public Observable<NotificationListResp> getNotifications() {
-        return api.getUserNotifications(new CommonUserIdReq(new CommonUserIdReq.Snippet("1132"))).subscribeOn(Schedulers.io())
+        return api.getUserNotifications(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

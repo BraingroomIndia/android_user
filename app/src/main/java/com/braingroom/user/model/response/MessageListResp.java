@@ -23,7 +23,7 @@ public class MessageListResp extends BaseResp {
         @SerializedName("sender_id")
         public String senderId;
 
-        @SerializedName("sender_name")
+        @SerializedName("username")
         public String senderName;
 
         @SerializedName("reciever_id")

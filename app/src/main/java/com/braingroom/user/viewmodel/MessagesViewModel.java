@@ -36,11 +36,11 @@ public class MessagesViewModel extends ViewModel {
 
 
     private String getHumanDate(String timeStamp) {
-        long time = Integer.valueOf(timeStamp)*1000;
+        long time = Integer.valueOf(timeStamp);
 
         try {
             DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            Date netDate = (new Date(timeStamp));
+            Date netDate = (new Date(time*1000));
             return sdf.format(netDate);
         } catch (Exception ex) {
             return "xx";

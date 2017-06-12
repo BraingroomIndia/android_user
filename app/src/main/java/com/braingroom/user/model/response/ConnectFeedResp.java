@@ -39,6 +39,12 @@ public class ConnectFeedResp extends BaseResp {
         @SerializedName("detail")
         private String description;
 
+        @SerializedName("institute_name")
+        private String instituteName;
+
+        @SerializedName("category_id")
+        private String categoryId;
+
         @SerializedName("segment_id")
         private String segId;
 

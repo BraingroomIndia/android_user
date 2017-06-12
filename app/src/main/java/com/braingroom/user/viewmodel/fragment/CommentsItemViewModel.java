@@ -58,7 +58,7 @@ public class CommentsItemViewModel extends ViewModel {
 
         try {
             DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            Date netDate = (new Date(timeStamp));
+            Date netDate = (new Date(timeStamp*1000));
             return sdf.format(netDate);
         } catch (Exception ex) {
             return "xx";

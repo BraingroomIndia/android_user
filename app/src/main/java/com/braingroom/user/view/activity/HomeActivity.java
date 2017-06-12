@@ -186,11 +186,23 @@ public class HomeActivity extends BaseActivity
             return true;
         }
         if (id == R.id.action_messages) {
+            if (!vm.loggedIn.get()) {
+                Bundle data = new Bundle();
+                data.putString("backStackActivity", HomeActivity.class.getSimpleName());
+                getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
+                return true;
+            }
             getNavigator().navigateActivity(MessageActivity.class, null);
 //            vm.retry();
             return true;
         }
         if (id == R.id.action_notifications) {
+            if (!vm.loggedIn.get()) {
+                Bundle data = new Bundle();
+                data.putString("backStackActivity", HomeActivity.class.getSimpleName());
+                getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
+                return true;
+            }
             getNavigator().navigateActivity(NotificationActivity.class, null);
             return true;
         }

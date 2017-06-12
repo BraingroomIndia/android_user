@@ -56,6 +56,19 @@
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
                     app:font='@{@string/robotoBold}' />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/feed_title"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:onClick="@{vm.showthirdpartyProfile}"
+                    android:text="@{vm.vendorCollege}"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/text_size_medium"
+                    app:font='@{@string/robotoBold}'/>
 
                 <ImageView
                     android:layout_width="25dp"
@@ -95,24 +108,32 @@
                         android:layout_margin="@dimen/margin_med"
                         android:src="@drawable/solid_circle_gray" />
 
+<!--                    <include
+                        layout="@layout/item_icon_text_horizontal"
+                        app:vm="@{vm.segmentVm}" />-->
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        app:imageResource="@{vm.categoryImg}"
+                        android:onClick="@{vm.openSegment}"
+                        android:tint="@color/colorTextGray" />
+
                     <TextView
+                        android:layout_marginLeft="@dimen/margin_med"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:lines="1"
+                        android:onClick="@{vm.openSegment}"
                         android:text="@{vm.segment}"
                         android:textColor="@color/colorTextGray"
                         android:textSize="@dimen/text_size_medium"
                         app:font='@{@string/robotoRegular}' />
 
-                    <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/margin_small"
-                        android:src="@drawable/ic_call_made_black_24dp"
-                        android:tint="@color/colorTextGray" />
+
 
                 </LinearLayout>
 
@@ -162,7 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:scaleType="centerCrop"
-                    app:imageUrl="@{vm.videoThumb ?? vm.image}" />
+                    app:imageUrl="@{vm.image ?? vm.videoThumb }" />
 
                 <ImageView
                     android:layout_width="50dp"

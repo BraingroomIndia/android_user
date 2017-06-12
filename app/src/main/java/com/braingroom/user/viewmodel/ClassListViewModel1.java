@@ -104,12 +104,13 @@ public class ClassListViewModel1 extends ViewModel {
     private int nextPage = 0;
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @Nullable String categoryId, @Nullable String searchQuery, @Nullable String communityId, final ClassListActivity.UiHelper uiHelper) {
+            , @NonNull final HelperFactory helperFactory, @Nullable String categoryId, @Nullable String searchQuery, @Nullable String communityId,@Nullable String segmentId, final ClassListActivity.UiHelper uiHelper) {
         layoutType = new ObservableInt(LAYOUT_TYPE_TILE);
         nonReactiveItems = new ArrayList<>();
 
         filterData.setCategoryId(categoryId);
         filterData.setCommunityId(communityId);
+        filterData.setSegmentId(segmentId);
         filterData.setKeywords(searchQuery);
 
         this.uiHelper = uiHelper;
