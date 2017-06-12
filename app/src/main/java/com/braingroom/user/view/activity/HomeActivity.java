@@ -57,12 +57,12 @@ public class HomeActivity extends BaseActivity
 
         Intent intent = getIntent();
         String action = intent.getAction();
-        if (!vm.loggedIn.get() && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && action != null && action.equals(Intent.ACTION_MAIN)) {
+    /*    if (!vm.loggedIn.get() && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && action != null && action.equals(Intent.ACTION_MAIN)) {
             Log.d(TAG, "onCreate: first run");
             getHelperFactory().createDialogHelper().showCustomView(R.layout.content_competition_banner, new CompetitionDialogViewModel(getNavigator()));
 
 
-        }
+        }*/
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {

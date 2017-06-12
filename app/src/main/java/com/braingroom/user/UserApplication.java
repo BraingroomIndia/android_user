@@ -15,6 +15,7 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.DaggerAppComponent;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
+import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public class UserApplication extends Application {
 //        mRefWatcher = LeakCanary.install(this);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-//        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this);
 //        if (BuildConfig.DEBUG) {
 //            Timber.plant(new Timber.DebugTree());
 //        } else {
