@@ -77,7 +77,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.activity.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -154,23 +153,17 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.ClassDetailActivity" />
-
         </activity>
         <activity
             android:name=".view.activity.ConnectHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".view.activity.SignupActivity"
             android:windowSoftInputMode="stateHidden">
-
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.braingroom.user.view.activity.HomeActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
         </activity>
-
         <activity
             android:name=".view.activity.SignUpActivityCompetition"
             android:windowSoftInputMode="stateHidden">
@@ -195,8 +188,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
         </activity>
-
-
         <activity
             android:name=".view.activity.MessageActivity"
             android:label="@string/screen_message">
@@ -216,10 +207,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.MessageActivity" />
         </activity>
-        <activity android:name=".view.activity.PostDetailActivity"></activity>
+        <activity android:name=".view.activity.PostDetailActivity" />
         <activity
             android:name=".view.activity.ThirdPartyViewActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".view.activity.CatalogueHomeActivity"
+            android:label="@string/screen_catalogue">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

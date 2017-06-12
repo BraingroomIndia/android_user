@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.CatalogueHomeViewModel" />
+
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            bind:divider_decoration='@{"space_divider"}'
+            bind:items="@{vm.feedItems}"
+            bind:layout_vertical="@{true}"
+            bind:space_length="@{@dimen/margin_med}"
+            bind:view_provider="@{@layout/item_catalogue_categories}" />
+
+    </android.support.v4.widget.NestedScrollView>
+</layout>

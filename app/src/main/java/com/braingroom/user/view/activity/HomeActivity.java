@@ -261,6 +261,11 @@ public class HomeActivity extends BaseActivity
         if (id == R.id.nav_change_pass)
             getNavigator().navigateActivity(ChangePasswordActivity.class, null);
 
+        if (id == R.id.nav_catalogue) {
+            getNavigator().navigateActivity(CatalogueHomeActivity.class, null);
+//            finish();
+        }
+
         //Edited By Vikas Godara
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

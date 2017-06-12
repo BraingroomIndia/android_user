@@ -47,6 +47,7 @@ import com.braingroom.user.model.request.VendorReviewReq;
 import com.braingroom.user.model.request.WishlistReq;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.BookingHistoryResp;
+import com.braingroom.user.model.response.CatalogueGroupResp;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.ChangePasswordResp;
 import com.braingroom.user.model.response.ChatListResp;
@@ -167,7 +168,7 @@ public interface UserApiService {
     @POST
     @Headers("X-App-Type: BGUSR01")
     Observable<UploadPostApiResp> postApiUpload(
-             @Url String url
+            @Url String url
             , @Part MultipartBody.Part file
             , @Part("post_type") RequestBody post_type
     );
@@ -194,7 +195,7 @@ public interface UserApiService {
 
     @POST("VendorProfile/{pageIndex}")
     @Headers("X-App-Type: BGUSR01")
-    Observable<VendorProfileResp> getVendorProfile(@Path("pageIndex") String pageIndex,@Body CommonIdReq req);
+    Observable<VendorProfileResp> getVendorProfile(@Path("pageIndex") String pageIndex, @Body CommonIdReq req);
 
 
     @POST("exploreDashboard")
@@ -264,7 +265,7 @@ public interface UserApiService {
 
     @POST("getCompetitionStatus")
     @Headers("X-App-Type: BGUSR01")
-    Observable<CompetitionStatusResp>getCompetitionStatus();
+    Observable<CompetitionStatusResp> getCompetitionStatus();
 
     @POST("getComments")
     @Headers("X-App-Type: BGUSR01")
@@ -359,5 +360,9 @@ public interface UserApiService {
     @POST("viewThirdPartProfile")
     @Headers("X-App-Type: BGUSR01")
     Observable<ThirdPartyProfileResp> getThirdPartyProfile(@Body CommonIdReq req);
+
+    @POST("getConnectGroup")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<CatalogueGroupResp> getCatalogueGroup();
 
 }
