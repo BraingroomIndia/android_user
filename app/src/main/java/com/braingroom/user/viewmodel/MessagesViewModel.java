@@ -5,7 +5,10 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -24,11 +27,27 @@ public class MessagesViewModel extends ViewModel {
                         List<ViewModel> results = new ArrayList<>();
                         for (final MessageListResp.Snippet elem : resp.getData()) {
                             results.add(new MessagesItemViewModel(navigator, elem.getSenderId(), elem.getSenderName(),
-                                    elem.getSenderPic(), elem.getMessage().getMessage(), elem.getMessage().getModifyDate()));
+                                    elem.getSenderPic(), elem.getMessage().getMessage(), getHumanDate(elem.getMessage().getModifyDate())));
                         }
                         return results;
                     }
                 });
     }
 
+
+    private String getHumanDate(String timeStamp) {
+        long time = Integer.valueOf(timeStamp)*1000;
+
+        try {
+            DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            Date netDate = (new Date(timeStamp));
+            return sdf.format(netDate);
+        } catch (Exception ex) {
+            return "xx";
+        }
+    }
+
 }
+
+
+
