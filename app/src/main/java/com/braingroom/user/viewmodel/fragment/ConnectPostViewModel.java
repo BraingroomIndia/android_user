@@ -93,10 +93,10 @@ public class ConnectPostViewModel extends ViewModel {
     public final ObservableBoolean categoryField = new ObservableBoolean(false);
 
 
-    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, final String postType, final ConnectPostFragment.UiHelper uiHelper) {
+    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, final String postType1, final ConnectPostFragment.UiHelper uiHelper) {
         this.navigator = navigator;
         this.helperFactory = helperFactory;
-        this.postType = postType;
+        this.postType = postType1;
         title = new DataItemViewModel("");
         description = new ObservableField<>("");
         youtubeAddress = new DataItemViewModel("");
@@ -162,6 +162,7 @@ public class ConnectPostViewModel extends ViewModel {
                     switch (selectedMap.values().iterator().next()) {
                         case POST_TYPE_KNOWLEDGE_NUGGETS:
                             videoField.set(true);
+                            postType = "tips_tricks";
                             imageField.set(true);
                             classField.set(true);
                             groupsField.set(true);
@@ -172,6 +173,7 @@ public class ConnectPostViewModel extends ViewModel {
                             break;
                         case POST_TYPE_BUY_N_SELL:
                             imageField.set(true);
+                            postType = "group_post";
                             groupsField.set(true);
                             videoField.set(false);
                             classField.set(false);
@@ -181,6 +183,7 @@ public class ConnectPostViewModel extends ViewModel {
                             break;
                         case POST_TYPE_LEARNING_PARTNERS:
                             groupsField.set(true);
+                            postType = "activity_request";
                             proposedTimeField.set(true);
                             activityField.set(true);
                             imageField.set(false);
@@ -190,6 +193,7 @@ public class ConnectPostViewModel extends ViewModel {
                             break;
                         case POST_TYPE_DISCUSS_AND_DECIDE:
                             imageField.set(true);
+                            postType = "user_post";
                             categoryField.set(true);
                             videoField.set(false);
                             classField.set(false);
@@ -570,13 +574,13 @@ public class ConnectPostViewModel extends ViewModel {
         if ((requestCode == REQ_CODE_CHOOSE_IMAGE)
                 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri fileUri = data.getData();
-            imageUploadVm.imageUpload(fileUri);
+            imageUploadVm.imageUpload(fileUri,postType);
             Log.d(TAG, "fileuri: " + fileUri);
 
         } else if (((requestCode == REQ_CODE_CHOOSE_VIDEO)
                 && resultCode == RESULT_OK && data != null && data.getData() != null)) {
             Uri fileUri = data.getData();
-            videoUploadVm.uploadVideo(fileUri);
+            videoUploadVm.uploadVideo(fileUri,postType);
             Log.d(TAG, "fileuri: " + fileUri);
 
         }

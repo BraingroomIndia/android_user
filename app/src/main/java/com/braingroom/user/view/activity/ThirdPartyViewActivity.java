@@ -83,7 +83,6 @@ public class ThirdPartyViewActivity extends BaseActivity {
             bundle.putString("sender_id", userid);
             bundle.putString("sender_name", userName);
             getNavigator().navigateActivity(MessagesThreadActivity.class, bundle);
-            getNavigator().finishActivity();
         }
 
         return super.onOptionsItemSelected(item);

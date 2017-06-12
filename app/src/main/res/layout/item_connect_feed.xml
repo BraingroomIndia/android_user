@@ -76,7 +76,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:ellipsize="end"
-                    android:onClick="@{vm.showthirdpartyProfile}"
                     android:text="@{vm.vendorCollege}"
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"

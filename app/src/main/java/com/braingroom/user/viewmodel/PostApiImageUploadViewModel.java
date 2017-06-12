@@ -38,12 +38,12 @@ public class PostApiImageUploadViewModel extends ViewModel {
 
     }
 
-    public void imageUpload(Uri fileUri) {
+    public void imageUpload(Uri fileUri,String postType) {
         messageHelper.show("uploading...");
         apiService.uploadPostApiImage(
                 FileUtils.getPath(UserApplication.getInstance(), fileUri)
                 , UserApplication.getInstance().getContentResolver().getType(fileUri)
-                , "tips_tricks"
+                , postType
         )
                 .subscribe(new Consumer<UploadPostApiResp>() {
                     @Override

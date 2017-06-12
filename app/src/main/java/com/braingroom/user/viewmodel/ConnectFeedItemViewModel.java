@@ -36,7 +36,6 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 
-
 public class ConnectFeedItemViewModel extends ViewModel {
 
     public static final String TAG = ConnectHomeActivity.class.getSimpleName();
@@ -121,7 +120,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.video = new ObservableField<>(getVideoId(data.getVideo()));
         this.videoThumb = new ObservableField<>(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
         this.liked = new ObservableBoolean(data.getLiked() == 0 ? false : true);
-        Log.d(TAG, "ConnectFeedItemViewModel: \n videoUrl \t " +video.get()+ "\n videoThumb \t" +videoThumb.get() + "\n"   );
+        Log.d(TAG, "ConnectFeedItemViewModel: \n videoUrl \t " + video.get() + "\n videoThumb \t" + videoThumb.get() + "\n");
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
         this.postType = data.getPostType();
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
@@ -179,16 +178,11 @@ public class ConnectFeedItemViewModel extends ViewModel {
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
                 if (data.getPostType().equalsIgnoreCase("vendor_article")) {
-
                     bundleData.putString("id", data.getPostOwner());
                     navigator.navigateActivity(VendorProfileActivity.class, bundleData);
-                    navigator.finishActivity();
-
                 } else {
                     bundleData.putString("userId", data.getPostOwner());
                     navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
-                    navigator.finishActivity();
-
                 }
             }
         };
@@ -251,10 +245,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         playAction = new Action() {
             @Override
             public void run() throws Exception {
-                if (video.get().contains("www.youtube.com/embed"))
                     navigator.openStandaloneYoutube(video.get());
-                else
-                    navigator.openStandaloneVideo(video.get());
 
             }
         };
@@ -359,10 +350,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     private String getVideoId(String videoUrl) {
         if (videoUrl == null) return null;
         try {
-            if (videoUrl.contains("www.youtube.com/embed"))
                 return videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
-            else
-                return videoUrl;
         } catch (IndexOutOfBoundsException iobe) {
             return null;
         }

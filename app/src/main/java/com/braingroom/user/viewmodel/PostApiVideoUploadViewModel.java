@@ -40,12 +40,12 @@ public class PostApiVideoUploadViewModel extends ViewModel {
     }
 
 
-    public void uploadVideo(Uri fileUri) {
+    public void uploadVideo(Uri fileUri, String postType) {
         messageHelper.show("uploading...");
         apiService.uploadPostApiVideo(
                 FileUtils.getPath(UserApplication.getInstance(), fileUri)
                 , UserApplication.getInstance().getContentResolver().getType(fileUri)
-                , "tips_tricks"
+                , postType
         )
                 .subscribe(new Consumer<UploadPostApiResp>() {
                     @Override
