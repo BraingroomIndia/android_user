@@ -16,7 +16,7 @@ import com.braingroom.user.utils.DaggerAppComponent;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
-import com.squareup.leakcanary.RefWatcher;
+/*import com.squareup.leakcanary.RefWatcher;*/
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,12 +44,12 @@ public class UserApplication extends Application {
     @Getter
     private AppComponent mAppComponent;
     private Map<String, Typeface> fontCache = new HashMap<>();
-    private RefWatcher mRefWatcher;
+   /* private RefWatcher mRefWatcher;
 
     public static RefWatcher getRefWatcher(Context context) {
         return getInstance().mRefWatcher;
     }
-
+*/
 
     @Override
     public void onCreate() {

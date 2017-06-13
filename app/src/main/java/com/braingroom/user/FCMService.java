@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.HomeActivity;
+import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -28,7 +29,7 @@ public class FCMService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData().get("postId"));
+            Log.d(TAG, "Message data payload: " + remoteMessage.getData().get("post_id"));
         }
 
         if (remoteMessage.getNotification() != null) {
@@ -43,10 +44,12 @@ public class FCMService extends FirebaseMessagingService {
 
         Intent intent;
         Bundle data = new Bundle();
-        String postId=remoteMessage.getData().get("postId");
-        String classId =remoteMessage.getData().get("classId");
-        String title =remoteMessage.getNotification().getTitle();
-        String messageBody= remoteMessage.getNotification().getBody();
+        String postId=remoteMessage.getData().get("post_id");
+        String classId =remoteMessage.getData().get("class_id");
+        String messageSenderId = remoteMessage.getData().get("sender_id");
+        String messageSenderName = remoteMessage.getData().get("sender_name");
+        String title =remoteMessage.getData().get("type");
+        String messageBody= remoteMessage.getData().get("message");
 
         if (postId != null) {
             intent = new Intent(this, PostDetailActivity.class);
@@ -57,6 +60,11 @@ public class FCMService extends FirebaseMessagingService {
             intent = new Intent(this, ClassDetailActivity.class);
             data.putString("id",classId);
 
+        }
+        else if (messageSenderId!=null){
+            intent= new Intent(this, MessagesThreadActivity.class);
+            data.putString("sender_id",messageSenderId);
+            data.putString("sender_name",messageSenderName);
         }
         else {
             intent = new Intent(this,HomeActivity.class);

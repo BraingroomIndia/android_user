@@ -18,6 +18,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/commenter_image"
+            android:onClick="@{vm.showthirdpartyProfile}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
@@ -41,6 +42,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="@{vm.commenterName}"
+                android:onClick="@{vm.showthirdpartyProfile}"
                 android:textColor="@color/colorTextDark"
                 android:textSize="@dimen/text_size_medium"
                 app:font='@{@string/robotoBold}' />
@@ -156,7 +158,6 @@
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="@{vm.firstReply}"
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
                     app:font='@{@string/robotoRegular}' />

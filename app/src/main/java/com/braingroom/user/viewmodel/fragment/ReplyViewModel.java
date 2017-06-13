@@ -37,7 +37,7 @@ public class ReplyViewModel extends ViewModel {
             public List<ViewModel> apply(@NonNull CommentViewReply resp) throws Exception {
                 List<ViewModel> results = new ArrayList<>();
                 for (CommentViewReply.Snippet elem:resp.getData())
-                    results.add(new ReplyItemViewModel(postId,commentId,elem,uiHelper));
+                    results.add(new ReplyItemViewModel(postId,commentId,elem,navigator,uiHelper));
                 return results;
             }
         });

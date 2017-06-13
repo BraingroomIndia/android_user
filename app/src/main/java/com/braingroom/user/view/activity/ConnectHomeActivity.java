@@ -299,8 +299,9 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_find) {
-            getNavigator().navigateActivity(HomeActivity.class, null);
-            getNavigator().finishActivity();
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            getNavigator().navigateActivity(intent);
             return true;
         }
         if (id == R.id.action_filter) {
@@ -415,7 +416,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) return "Learners Forum";
-            if (position == 1) return "Tutor Talk";
+            if (position == 1) return "Tutors Talk";
             return "NO TAB";
         }
 

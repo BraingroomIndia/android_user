@@ -44,7 +44,7 @@
     <string name="action_feed_main">All</string>
     <string name="action_tips_tricks">Tips &amp; Tricks</string>
     <string name="action_learners_forum">Buy &amp; Sell</string>
-    <string name="action_tutors_talk">Find Partners</string>
+    <string name="action_tutors_talk">Activity Partners</string>
 
     <string name="action_discuss_n_decide">Discuss &amp; Decide</string>
     <string name="action_tutors_article">Tutors Article</string>
@@ -94,6 +94,7 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="post_type_tips_tricks">tips_tricks</string>
     <string name="post_type_bug_sell">bug_sell</string>
     <string name="post_type_activity_request">activity_request</string>
+
 
 
     <!--Edited By Vikas Godara-->

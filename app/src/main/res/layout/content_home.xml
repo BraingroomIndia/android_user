@@ -9,6 +9,7 @@
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.HomeViewModel" />
+        <import type="android.view.View" />
     </data>
 
     <RelativeLayout
@@ -40,46 +41,50 @@
                     bind:view_provider="@{@layout/item_category_home}" />
 
                 <RelativeLayout
+                    android:id="@+id/competition_banner"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_med"
                     android:background="@color/colorAccent"
-                    android:paddingLeft="@dimen/padding_small"
-                    android:paddingRight="@dimen/padding_small">
+                    android:onClick="@{vm.onRegister}"
+                    android:padding="@dimen/padding_med">
 
-                    <TextView
+
+                    <com.hanks.htextview.scale.ScaleTextView
+                        android:id="@+id/textview"
                         android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_toLeftOf="@+id/register"
-                        android:gravity="bottom"
-                        android:text="Creative kids hunt ( Inter-School Competition )"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_med"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:onClick="@{vm.onRegister}"
                         android:textColor="@color/white"
-                        app:font='@{@string/robotoBold}' />
-
+                        app:font='@{@string/robotoBold}'/>
+<!--
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="25dp"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_toLeftOf="@+id/register"
-                        android:gravity="top"
-                        android:text="Register your kid with respective school now."
-                        android:textColor="@color/white"
-                        app:font='@{@string/robotoRegular}' />
 
-                    <TextView
-                        android:id="@+id/register"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/solid_material_blue_rounded_corner"
-                        android:padding="@dimen/padding_small"
-                        android:text="Register Now"
+                        android:layout_toLeftOf="@+id/register"
+                        android:gravity="center_horizontal"
+                        android:text="Register your kid now."
                         android:textColor="@color/white"
-                        app:font='@{@string/robotoRegular}' />
+                        android:textSize="@dimen/text_size_medium"
+                        app:font='@{@string/robotoRegular}' />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/register"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:background="@drawable/solid_material_blue_rounded_corner"-->
+                        <!--android:padding="@dimen/padding_small"-->
+                        <!--android:text="Register Now"-->
+                        <!--android:textColor="@color/white"-->
+                        <!--app:font='@{@string/robotoRegular}' />-->
                 </RelativeLayout>
 
 

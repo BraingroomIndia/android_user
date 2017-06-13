@@ -39,7 +39,7 @@ public class CommentsViewModel extends ViewModel {
                     public List<ViewModel> apply(CommentListResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         for (final CommentListResp.Snippet elem : resp.getData()) {
-                            results.add(new CommentsItemViewModel(postId,elem, uiHelper));
+                            results.add(new CommentsItemViewModel(postId,elem, navigator,uiHelper));
                         }
                         return results;
                     }

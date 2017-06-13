@@ -27,7 +27,7 @@ public class PostAcceptFragment extends BaseFragment {
     @Override
     protected ViewModel createViewModel() {
         String postId = getStringArguments("postId");
-        return new PostAcceptViewModel(postId, ((ConnectUiHelper) activity));
+        return new PostAcceptViewModel(postId, ((ConnectUiHelper) activity), activity.getNavigator());
     }
 
     @Override

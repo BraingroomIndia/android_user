@@ -1,6 +1,5 @@
 package com.braingroom.user.viewmodel;
 
-import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +9,6 @@ import android.util.Log;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.response.CategoryResp;
-import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.MyConsumer;
@@ -21,6 +19,7 @@ import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.ExploreActivity;
 import com.braingroom.user.view.activity.SearchActivity;
+import com.braingroom.user.view.activity.SignUpActivityCompetition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -44,7 +43,7 @@ import static com.rollbar.android.Rollbar.TAG;
 
 public class HomeViewModel extends ViewModel {
 
-    public final Action onSearchClicked, onExploreClicked;
+    public final Action onSearchClicked, onExploreClicked,onRegister;
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
@@ -59,7 +58,6 @@ public class HomeViewModel extends ViewModel {
     Observable<ExploreResp> exploreObservable;
     public GoogleMap mGoogleMap; //Edited by Vikas Godara
     Map<String, Integer> pinColorMap = new HashMap<>();
-
     DialogHelper dialogHelper;
     Navigator navigator;
 
@@ -96,6 +94,12 @@ public class HomeViewModel extends ViewModel {
         pinColorMap.put("#50bef7", R.drawable.pin_new_6);
         pinColorMap.put("My Location", R.drawable.pin_0);
 
+        onRegister = new Action() {
+            @Override
+            public void run() throws Exception {
+                navigator.navigateActivity(SignUpActivityCompetition.class, null);
+            }
+        };
         categories = apiService.getCategory()
                 //Edited By Vikas Godara
                 .map(new Function<CategoryResp, List<CategoryResp.Snippet>>() {

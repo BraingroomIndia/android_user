@@ -28,6 +28,9 @@ public class CommentViewReply extends BaseResp {
         @SerializedName("user_name")
         public String userName;
 
+        @SerializedName("user_id")
+        private String userId;
+
         @SerializedName("user_image")
         public String userImage;
 

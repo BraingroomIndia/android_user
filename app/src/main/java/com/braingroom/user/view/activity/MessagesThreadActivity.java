@@ -23,6 +23,7 @@ public class MessagesThreadActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String temp = "new";
         recyclerView = ((ActivityMessageThreadBinding) binding).recyclerview;
 
     }
@@ -32,12 +33,11 @@ public class MessagesThreadActivity extends BaseActivity {
     protected ViewModel createViewModel() {
         String senserId = getIntentString("sender_id");
         String senderName = getIntentString("sender_name");
-        String senderImage = getIntentString("sender_image");
         getSupportActionBar().setTitle(senderName);
         return new MessagesThreadViewModel(senserId, getMessageHelper(), getNavigator(), new UiHelper() {
             @Override
             public void scrollToEnd() {
-                recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount()-1 );
             }
 
             @Override

@@ -152,5 +152,13 @@ public class SignUpActivityCompetition extends BaseActivity {
             return viewModel.ugInstituteVm;
         return null;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        getSupportFragmentManager().executePendingTransactions();
+        int fragCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (fragCount == 0) finish();
+    }
 }
 

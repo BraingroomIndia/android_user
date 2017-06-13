@@ -26,6 +26,9 @@ public class CommentListResp extends BaseResp {
         @SerializedName("id")
         public String id;
 
+        @SerializedName("user_id")
+        private String userId;
+
         @SerializedName("user_name")
         public String userName;
 

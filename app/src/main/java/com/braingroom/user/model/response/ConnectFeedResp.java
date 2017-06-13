@@ -66,7 +66,7 @@ public class ConnectFeedResp extends BaseResp {
         @SerializedName("reported")
         private int reported;
 
-        @SerializedName("accepted")
+        @SerializedName("accept_status")
         private int isAccepted = 0;
 
         @SerializedName("accept_count")

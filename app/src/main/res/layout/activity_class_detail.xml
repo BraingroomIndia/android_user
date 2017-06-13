@@ -486,7 +486,7 @@
                             android:onClick="@{vm.openConnectFP}"
                             android:paddingLeft="@dimen/padding_med"
                             android:paddingRight="@dimen/padding_med"
-                            android:text="Find Partners"
+                            android:text="Learning Partners"
                             android:textColor="@color/materialGreen"
                             app:font='@{@string/robotoBold}' />
 

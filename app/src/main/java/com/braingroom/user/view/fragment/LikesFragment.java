@@ -31,7 +31,7 @@ public class LikesFragment extends BaseFragment {
         String postId = getStringArguments("postId");
         String commentId = getStringArguments("commentId");
         String replyId = getStringArguments("replyId");
-        return new LikesViewModel(postId,commentId,replyId, ((ConnectUiHelper) activity));
+        return new LikesViewModel(postId,commentId,replyId, ((ConnectUiHelper) activity),activity.getNavigator());
     }
 
     @Override

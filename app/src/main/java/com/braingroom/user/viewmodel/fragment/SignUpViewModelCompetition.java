@@ -177,10 +177,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                 signUpSnippet.setPassword(password.s_1.get());
                 signUpSnippet.setMobileNo(mobileNumber.s_1.get());
                 signUpSnippet.setSchoolName(ugInstituteVm.selectedDataMap.values().iterator().next().first);
-                signUpSnippet.setCountry("");
-                signUpSnippet.setState("");
-                signUpSnippet.setCityId("");
-                signUpSnippet.setLocality("");
+                uiHelper.next();
 
             }
         };

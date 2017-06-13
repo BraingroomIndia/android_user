@@ -16,4 +16,5 @@
         android:icon="@drawable/ic_vector_circle_white_24dp"
         android:title="Connect"
         app:showAsAction="ifRoom" />
+
 </menu>

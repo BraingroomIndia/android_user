@@ -105,7 +105,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
                         android:layout_marginTop="@dimen/margin_med"
                         android:background="@drawable/solid_bg_green_rounded_corner"
                         android:onClick="@{vm.onSkipAndSignupClicked}"
@@ -119,7 +119,7 @@
                         app:font='@{@string/robotoRegular}' />
 
 
-                    <TextView
+                 <!--   <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -133,7 +133,7 @@
                         android:text="Next"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
-                        app:font='@{@string/robotoRegular}' />
+                        app:font='@{@string/robotoRegular}' />-->
                 </RelativeLayout>
             </LinearLayout>
 

@@ -17,6 +17,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -31,12 +34,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hanks.htextview.base.HTextView;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
 public class HomeActivity extends BaseActivity
@@ -48,12 +55,45 @@ public class HomeActivity extends BaseActivity
     LocationRequest locationRequest;
 
     private static final String TAG = HomeActivity.class.getSimpleName();
+    private HTextView textView;
+    private RelativeLayout competitionBanner;
 
 
     @Override
     @SuppressWarnings({"MissingPermission"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        competitionBanner = (RelativeLayout) findViewById(R.id.competition_banner);
+        if (vm.loggedIn.get())
+            competitionBanner.setVisibility(View.GONE);
+        textView = (HTextView) findViewById(R.id.textview);
+        Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
+                onClick((int) (aLong % 3));
+            }
+        });
+
+/*
+
+        ((SeekBar) findViewById(R.id.seekbar)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textView.setProgress(progress / 100f);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+*/
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -181,8 +221,9 @@ public class HomeActivity extends BaseActivity
 //            ((ActivityHomeBinding) binding).setVm(null);
 //            binding.getRoot().invalidate();
 //            initNavigationDrawer();
-            getNavigator().navigateActivity(ConnectHomeActivity.class, null);
-            getNavigator().finishActivity();
+            Intent intent = new Intent(this, ConnectHomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            getNavigator().navigateActivity(intent);
             return true;
         }
         if (id == R.id.action_messages) {
@@ -270,5 +311,12 @@ public class HomeActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    int index = 0;
+    String[] sentences = {"Creative kids hunt ( Inter-School Competition )","Click to Register your kid now!"};
+
+    public void onClick(int index) {
+        textView.animateText(sentences[index]);
     }
 }

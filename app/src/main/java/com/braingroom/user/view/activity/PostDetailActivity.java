@@ -1,7 +1,11 @@
 package com.braingroom.user.view.activity;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.ConnectUiHelper;
@@ -26,6 +30,7 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     protected int getLayoutId() {
         return R.layout.activity_post_detail;
     }
+
 
     @Override
     public void openCommentsFragment(String postId) {

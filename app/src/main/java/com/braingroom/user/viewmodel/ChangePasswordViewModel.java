@@ -70,6 +70,7 @@ public class ChangePasswordViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     logOut();
                     navigator.navigateActivity(LoginActivity.class, null);
+                    navigator.finishActivity();
                 } else {
                     oldPassword.set("");
                     messageHelper.dismissActiveProgress();

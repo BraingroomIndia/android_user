@@ -76,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="@{vm.vendorCollege}"
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
@@ -110,7 +111,7 @@
 <!--                    <include
                         layout="@layout/item_icon_text_horizontal"
                         app:vm="@{vm.segmentVm}" />-->
-                    <ImageView
+              <!--      <ImageView
                         android:layout_width="15dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -130,7 +131,7 @@
                         android:text="@{vm.segment}"
                         android:textColor="@color/colorTextGray"
                         android:textSize="@dimen/text_size_medium"
-                        app:font='@{@string/robotoRegular}' />
+                        app:font='@{@string/robotoRegular}' />-->
 
 
 
