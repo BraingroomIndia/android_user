@@ -58,5 +58,8 @@ public class GeneralFilterReq {
         @SerializedName("catlog")
         String catalog = "";
 
+        @SerializedName("gift_id")
+        String giftId = "";
+
     }
 }

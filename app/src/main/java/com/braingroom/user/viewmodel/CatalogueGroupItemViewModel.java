@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.response.CatalogueGroupResp;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.PostDetailActivity;
+import com.braingroom.user.view.activity.ClassListActivity;
 
 import io.reactivex.functions.Action;
 
@@ -38,8 +38,8 @@ public class CatalogueGroupItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
-                bundleData.putString("postId", data.getId());
-                navigator.navigateActivity(PostDetailActivity.class, bundleData);
+                bundleData.putString("catalogId", data.getId());
+                navigator.navigateActivity(ClassListActivity.class, bundleData);
             }
         };
 

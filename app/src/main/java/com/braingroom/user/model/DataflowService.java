@@ -68,6 +68,7 @@ import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ExploreResp;
+import com.braingroom.user.model.response.GiftcardResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.GuestUserResp;
 import com.braingroom.user.model.response.LikeResp;
@@ -754,7 +755,7 @@ public class DataflowService {
     }
 
     public Observable<NotificationListResp> getNotifications() {
-        return api.getUserNotifications(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
+        return api.getUserNotifications(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -848,6 +849,46 @@ public class DataflowService {
 
     public Observable<CatalogueGroupResp> getCatalogueGroups() {
         return api.getCatalogueGroup().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<List<GiftcardResp.DataSnippet>> getIndividualGiftcards() {
+        return api.getGiftcards().map(new Function<GiftcardResp, List<GiftcardResp.DataSnippet>>() {
+            @Override
+            public List<GiftcardResp.DataSnippet> apply(@NonNull GiftcardResp resp) throws Exception {
+                return resp.getData().get(0).getIndividual();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<List<GiftcardResp.DataSnippet>> getCorporateGiftcards() {
+        return api.getGiftcards().map(new Function<GiftcardResp, List<GiftcardResp.DataSnippet>>() {
+            @Override
+            public List<GiftcardResp.DataSnippet> apply(@NonNull GiftcardResp resp) throws Exception {
+                return resp.getData().get(0).getCorporate();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<List<GiftcardResp.DataSnippet>> getNgoGiftcards() {
+        return api.getGiftcards().map(new Function<GiftcardResp, List<GiftcardResp.DataSnippet>>() {
+            @Override
+            public List<GiftcardResp.DataSnippet> apply(@NonNull GiftcardResp resp) throws Exception {
+                return resp.getData().get(0).getNgo();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<CommonIdResp> getNgoList(String giftcardId) {
+        return api.getNgoList(new CommonIdReq(new CommonIdReq.Snippet(giftcardId))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<CommonIdResp> getNgoCategories(String giftcardId) {
+        return api.getNgoSegments(new CommonIdReq(new CommonIdReq.Snippet(giftcardId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }

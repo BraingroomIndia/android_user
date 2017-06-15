@@ -52,10 +52,10 @@ dependencies {
     })
     compile project(':payUMoneysdk')
     compile project(':sdkui')
-    compile 'com.google.android.gms:play-services-auth:10.2.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
+    //    compile 'commons-validator:commons-validator:1.4.1'
     compile 'com.google.android.gms:play-services-auth:10.2.1'
     compile 'com.google.android.gms:play-services-maps:10.2.1'
     compile 'com.android.support:appcompat-v7:25.3.0'

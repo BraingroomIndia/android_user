@@ -59,6 +59,7 @@ import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ExploreResp;
+import com.braingroom.user.model.response.GiftcardResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.GuestUserResp;
 import com.braingroom.user.model.response.LikeResp;
@@ -364,5 +365,25 @@ public interface UserApiService {
     @POST("getConnectGroup")
     @Headers("X-App-Type: BGUSR01")
     Observable<CatalogueGroupResp> getCatalogueGroup();
+
+    @POST("getGiftCatagories")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<GiftcardResp> getGiftcards();
+
+//    @POST("getCorporateGiftcards")
+//    @Headers("X-App-Type: BGUSR01")
+//    Observable<GiftcardResp> getCorporateGiftcards();
+//
+//    @POST("getNgoGiftcards")
+//    @Headers("X-App-Type: BGUSR01")
+//    Observable<GiftcardResp> getNgoGiftcards();
+
+    @POST("getNGOListByNGOCatagory")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<CommonIdResp> getNgoList(@Body CommonIdReq req);
+
+    @POST("getCategoriesByNGOCatagory")
+    @Headers("X-App-Type: BGUSR01")
+    Observable<CommonIdResp> getNgoSegments(@Body CommonIdReq req);
 
 }
