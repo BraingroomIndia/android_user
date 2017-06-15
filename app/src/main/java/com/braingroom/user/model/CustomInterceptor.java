@@ -1,5 +1,7 @@
 package com.braingroom.user.model;
 
+import android.util.Log;
+
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.SegmentResp;
 import com.google.gson.Gson;
@@ -11,6 +13,10 @@ import java.nio.charset.UnsupportedCharsetException;
 
 import javax.inject.Inject;
 
+import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -19,13 +25,15 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 
+import static com.rollbar.android.Rollbar.TAG;
+
 public class CustomInterceptor implements Interceptor {
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     Gson gson;
 
-    InternetConnection internetConnection =new InternetConnection(UserApplication.getInstance());
+   // InternetConnection internetConnection = new InternetConnection(UserApplication.getInstance());
 
     @Inject
     public CustomInterceptor(Gson gson) {
@@ -34,10 +42,17 @@ public class CustomInterceptor implements Interceptor {
 
 
     @Override
-    public Response intercept(Chain chain)
-            throws IOException {
+    public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        Response response = chain.proceed(request);
+        Response response = null;
+        try {
+            response = chain.proceed(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "intercept: no network " );
+            UserApplication.getInstance().getInternetStatusBus().onNext(false);
+            throw e;
+        }
         if (request.url().toString().endsWith("getSegment")) {
             String categoryId = request.header("categoryId");
             ResponseBody responseBody = response.body();
@@ -96,3 +111,5 @@ public class CustomInterceptor implements Interceptor {
         }
     }
 }
+
+

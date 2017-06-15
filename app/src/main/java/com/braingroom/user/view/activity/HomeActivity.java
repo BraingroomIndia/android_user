@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
@@ -65,15 +66,21 @@ public class HomeActivity extends BaseActivity
         super.onCreate(savedInstanceState);
 
         competitionBanner = (RelativeLayout) findViewById(R.id.competition_banner);
-        if (vm.loggedIn.get())
-            competitionBanner.setVisibility(View.GONE);
         textView = (HTextView) findViewById(R.id.textview);
-        Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
-                onClick((int) (aLong % 3));
-            }
-        });
+        if (!vm.loggedIn.get()) {
+            Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
+                    animate((int) (aLong % 2));
+                }
+            });
+        } else {
+//            textView.setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0,0);
+            competitionBanner.setLayoutParams(params);
+        }
+
+
 
 /*
 
@@ -314,9 +321,9 @@ public class HomeActivity extends BaseActivity
     }
 
     int index = 0;
-    String[] sentences = {"Creative kids hunt ( Inter-School Competition )","Click to Register your kid now!"};
+    String[] sentences = {"Creative kids hunt ( Inter-School Competition )", "Click to Register your kid now!"};
 
-    public void onClick(int index) {
+    public void animate(int index) {
         textView.animateText(sentences[index]);
     }
 }

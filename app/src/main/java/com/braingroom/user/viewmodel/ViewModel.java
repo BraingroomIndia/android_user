@@ -2,10 +2,12 @@ package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
@@ -25,6 +27,8 @@ public class ViewModel {
     public static final int REQ_CODE_CHOOSE_FILTER = 2;
     public static final int REQ_CODE_CHOOSE_VIDEO = 3;
     public static final int REQ_CODE_LOGIN = 4;
+    public boolean apiSuccessful = false;
+    public ConnectivityViewModel connectivityViewmodel;
 
 
     @Inject
@@ -50,7 +54,7 @@ public class ViewModel {
     @NonNull
     List<ViewModel> nonReactiveItems = new ArrayList<>();
 
-    public ObservableField<Integer> retries = new ObservableField<>(0);
+    public ObservableField<Integer> callAgain = new ObservableField<>(0);
 
     public ViewModel() {
         UserApplication.getInstance().getMAppComponent().inject(this);
@@ -74,7 +78,8 @@ public class ViewModel {
     }
 
     public void retry() {
-        retries.set(retries.get() + 1);
+        callAgain.set(callAgain.get() + 1);
+        connectivityViewmodel.isConnected.set(true);
     }
 
     public void onPause() {

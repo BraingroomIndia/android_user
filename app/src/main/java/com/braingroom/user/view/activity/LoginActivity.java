@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -51,6 +52,7 @@ public class LoginActivity extends BaseActivity implements
     String thirdPartyUserId;
     String parentActivity;
     Serializable classData;
+    public static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -109,6 +111,7 @@ public class LoginActivity extends BaseActivity implements
 
                     @Override
                     public void onError(FacebookException exception) {
+                        Log.d(TAG, "onError: " + exception.toString());
                         getMessageHelper().show("Facebook login error");
                     }
                 });
@@ -192,7 +195,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login,
-                new FirstSocialLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData));
+                new FirstSocialLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData),false);
         /*new MaterialDialog.Builder(LoginActivity.this)
                 .title("Contact details")
                 .content("Please enter your mobile number")
@@ -223,6 +226,7 @@ public class LoginActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int responseCode,
                                     Intent data) {
         super.onActivityResult(requestCode, responseCode, data);
+
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {

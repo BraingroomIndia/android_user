@@ -5,11 +5,13 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.response.WishlistResp;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.MessageHelper;
@@ -26,12 +28,18 @@ import com.google.android.youtube.player.YouTubePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observables.ConnectableObservable;
 import lombok.Setter;
+
+import static com.rollbar.android.Rollbar.TAG;
 
 public class ClassDetailViewModel extends ViewModel {
 
@@ -51,10 +59,12 @@ public class ClassDetailViewModel extends ViewModel {
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
     public String vendorId;
+    public ObservableField<Boolean> isShimmerOn = new ObservableField<>(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
     List<ViewModel> addressList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
     List<MarkerOptions> markerList = new ArrayList<>();
+    public ObservableField<Integer> retry = new ObservableField<>(0);
 
     private GoogleMap mGoogleMap;
     YouTubePlayer youTubePlayer;
@@ -68,157 +78,275 @@ public class ClassDetailViewModel extends ViewModel {
     ClassDetailActivity.UiHelper uiHelper;
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked,
-            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor,openConnectTnT,openConnectBnS,openConnectFP;
+            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, openConnectTnT, openConnectBnS, openConnectFP;
 
     public boolean isInWishlist = false;
 
     public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final String classId) {
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+                Log.d(TAG, "run: " + callAgain.get());
+            }
+        });
         addresses = Observable.just(addressList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
         this.uiHelper = uiHelper;
-        openConnectTnT= new Action() {
+        openConnectTnT = new Action() {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                data.putString("defMinorCateg","tips_tricks");
-                navigator.navigateActivity(ConnectHomeActivity.class,data);
+                data.putString("defMinorCateg", "tips_tricks");
+                navigator.navigateActivity(ConnectHomeActivity.class, data);
             }
         };
-        openConnectBnS= new Action() {
+        openConnectBnS = new Action() {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                data.putString("defMinorCateg","group_post");
-                navigator.navigateActivity(ConnectHomeActivity.class,data);
+                data.putString("defMinorCateg", "group_post");
+                navigator.navigateActivity(ConnectHomeActivity.class, data);
 
             }
         };
-        openConnectFP= new Action() {
+        openConnectFP = new Action() {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                data.putString("defMinorCateg","activity_request");
-                navigator.navigateActivity(ConnectHomeActivity.class,data);
+                data.putString("defMinorCateg", "activity_request");
+                navigator.navigateActivity(ConnectHomeActivity.class, data);
 
             }
         };
-        apiService.getClassDetail(classId).subscribe(new Consumer<ClassData>() {
+        FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull ClassData classData) throws Exception {
-                mClassData = classData;
-                if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
-                    isMapVisible.set(false);
-                vendorId = classData.getTeacherId();
-                imagePath.set(classData.getImage()); //Edited by Vikas Godara
-                rating.set("" + classData.getRating());
-                price.set(classData.getLevelDetails().get(0).getPrice() == null ?
-                        classData.getLevelDetails().get(0).getGroups().get(1).getPrice() : classData.getLevelDetails().get(0).getPrice());
-                teacherPic.set(classData.getTeacherPic());
-                teacherName.set(classData.getTeacher());
-                description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
-                sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
-                classTopic.set(classData.getClassTopic());
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return !apiSuccessful;
+            }
+        }).flatMap(new Function<Integer, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return apiService.getClassDetail(classId).map(new Function<ClassData, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(@io.reactivex.annotations.NonNull ClassData classData) throws Exception {
 
-                if ("1".equals(classData.getWishlist())) {
-                    isInWishlist = true;
-                    uiHelper.invalidateMenu();
-                }
-                if ("fixed".equalsIgnoreCase(classData.getClassTypeData())) {
-                    fixedClassDate.set(classData.getSessionTime() + ", " + classData.getSessionDate());
-                }
-                if (isMapVisible.get())
-                    for (final ClassLocationData classLocationData : classData.getLocation()) {
-                        locationList.add(classLocationData);
-                        addressList.add(new DataItemViewModel(classLocationData.getLocality(), false, new MyConsumer<DataItemViewModel>() {
-                            @Override
-                            public void accept(@io.reactivex.annotations.NonNull DataItemViewModel dataItemViewModel) {
-                                messageHelper.showDismissInfo(null, classLocationData.getLocationArea());
+                        mClassData = classData;
+                        if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
+                            isMapVisible.set(false);
+                        vendorId = classData.getTeacherId();
+                        imagePath.set(classData.getImage()); //Edited by Vikas Godara
+                        rating.set("" + classData.getRating());
+                        price.set(classData.getLevelDetails().get(0).getPrice() == null ?
+                                classData.getLevelDetails().get(0).getGroups().get(1).getPrice() : classData.getLevelDetails().get(0).getPrice());
+                        teacherPic.set(classData.getTeacherPic());
+                        teacherName.set(classData.getTeacher());
+                        description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
+                        sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
+                        classTopic.set(classData.getClassTopic());
+
+                        if ("1".equals(classData.getWishlist()))
+                            isInWishlist = true;
+                        if ("fixed".equalsIgnoreCase(classData.getClassTypeData())) {
+                            fixedClassDate.set(classData.getSessionTime() + ", " + classData.getSessionDate());
+                        }
+                        if (isMapVisible.get())
+                            for (final ClassLocationData classLocationData : classData.getLocation()) {
+                                locationList.add(classLocationData);
+                                addressList.add(new DataItemViewModel(classLocationData.getLocality(), false, new MyConsumer<DataItemViewModel>() {
+                                    @Override
+                                    public void accept(@io.reactivex.annotations.NonNull DataItemViewModel dataItemViewModel) {
+                                        messageHelper.showDismissInfo(null, classLocationData.getLocationArea());
+                                    }
+                                }, null));
                             }
-                        }, null));
+                        addresses.connect();
+
+                        if (classData.getVideoId() != null && !classData.getVideoId().equalsIgnoreCase(defaultLink)) {//Edited By Vikas Godara
+
+                            if (classData.getVideoId().contains("www.youtube.com/embed")) {
+                                isYouTube.set(true);
+                                videoId.set(classData.getVideoId().substring(classData.getVideoId().lastIndexOf('/') + 1));
+                            } else {
+                                isYouTube.set(false);
+                                videoId.set(classData.getVideoId());
+                            }
+                        }
+                        uiHelper.stopShimmer();
+                        isShimmerOn.set(false);
+                        apiSuccessful = true;
+                        if (isMapVisible.get())
+                            if (mGoogleMap != null && markerList.size() == 0)
+                                populateMarkers(locationList);
+                        uiHelper.invalidateMenu();
+                        if (youTubePlayer == null && videoId.get() != null && isYouTube.get()) {
+                            uiHelper.initYoutube();
+                        }
+
+                        return Observable.empty();
+
                     }
-                addresses.connect();
-                if (isMapVisible.get())
-                    if (mGoogleMap != null && markerList.size() == 0) populateMarkers(locationList);
+                }).onErrorReturn(new Function<Throwable, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return Observable.empty();
+                    }
+                });
+            }
+        }).subscribe();
 
-                if (classData.getVideoId() != null && !classData.getVideoId().equalsIgnoreCase(defaultLink)) {//Edited By Vikas Godara
+                /*  })subscribe(new Consumer<ClassData>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull ClassData classData) throws Exception {
+                        uiHelper.stopShimmer();
+                        isShimmerOn.set(false);
+                        mClassData = classData;
+                        if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
+                            isMapVisible.set(false);
+                        vendorId = classData.getTeacherId();
+                        imagePath.set(classData.getImage()); //Edited by Vikas Godara
+                        rating.set("" + classData.getRating());
+                        price.set(classData.getLevelDetails().get(0).getPrice() == null ?
+                                classData.getLevelDetails().get(0).getGroups().get(1).getPrice() : classData.getLevelDetails().get(0).getPrice());
+                        teacherPic.set(classData.getTeacherPic());
+                        teacherName.set(classData.getTeacher());
+                        description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
+                        sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
+                        classTopic.set(classData.getClassTopic());
 
-                    if (classData.getVideoId().contains("www.youtube.com/embed")) {
-                        isYouTube.set(true);
-                        videoId.set(classData.getVideoId().substring(classData.getVideoId().lastIndexOf('/') + 1));
-                    } else {
-                        isYouTube.set(false);
-                        videoId.set(classData.getVideoId());
+                        if ("1".equals(classData.getWishlist())) {
+                            isInWishlist = true;
+                            uiHelper.invalidateMenu();
+                        }
+                        if ("fixed".equalsIgnoreCase(classData.getClassTypeData())) {
+                            fixedClassDate.set(classData.getSessionTime() + ", " + classData.getSessionDate());
+                        }
+                        if (isMapVisible.get())
+                            for (final ClassLocationData classLocationData : classData.getLocation()) {
+                                locationList.add(classLocationData);
+                                addressList.add(new DataItemViewModel(classLocationData.getLocality(), false, new MyConsumer<DataItemViewModel>() {
+                                    @Override
+                                    public void accept(@io.reactivex.annotations.NonNull DataItemViewModel dataItemViewModel) {
+                                        messageHelper.showDismissInfo(null, classLocationData.getLocationArea());
+                                    }
+                                }, null));
+                            }
+                        addresses.connect();
+                        if (isMapVisible.get())
+                            if (mGoogleMap != null && markerList.size() == 0) populateMarkers(locationList);
+
+                        if (classData.getVideoId() != null && !classData.getVideoId().equalsIgnoreCase(defaultLink)) {//Edited By Vikas Godara
+
+                            if (classData.getVideoId().contains("www.youtube.com/embed")) {
+                                isYouTube.set(true);
+                                videoId.set(classData.getVideoId().substring(classData.getVideoId().lastIndexOf('/') + 1));
+                            } else {
+                                isYouTube.set(false);
+                                videoId.set(classData.getVideoId());
+                            }
+                        }
+                        if (youTubePlayer == null && videoId.get() != null && isYouTube.get()) {
+                            uiHelper.initYoutube();
+                        }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+
+                    }
+                });
+                return Observable.empty();
+
+            }
+        });*/
+
+        onBookClicked = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        if (mClassData != null) {
+                            Bundle data = new Bundle();
+                            data.putSerializable("classData", mClassData);
+                            navigator.navigateActivity(CheckoutActivity.class, data);
+                        }
                     }
                 }
-                if (youTubePlayer == null && videoId.get() != null && isYouTube.get()) {
-                    uiHelper.initYoutube();
+
+        ;
+        onShowDetailAddressClicked = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        messageHelper.show("coming soon.");
+                    }
                 }
 
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+        ;
+        onVendorProfileClicked = new
 
-            }
-        });
-        onBookClicked = new Action() {
-            @Override
-            public void run() throws Exception {
-                if (mClassData != null) {
-                    Bundle data = new Bundle();
-                    data.putSerializable("classData", mClassData);
-                    navigator.navigateActivity(CheckoutActivity.class, data);
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        Bundle data = new Bundle();
+                        data.putString("id", vendorId);
+                        navigator.navigateActivity(VendorProfileActivity.class, data);
+                    }
                 }
-            }
-        };
-        onShowDetailAddressClicked = new Action() {
-            @Override
-            public void run() throws Exception {
-                messageHelper.show("coming soon.");
-            }
-        };
-        onVendorProfileClicked = new Action() {
-            @Override
-            public void run() throws Exception {
-                Bundle data = new Bundle();
-                data.putString("id", vendorId);
-                navigator.navigateActivity(VendorProfileActivity.class, data);
-            }
-        };
+
+        ;
         //Edited by Vikas Godara
-        onGiftClicked = new Action() {
-            @Override
-            public void run() throws Exception {
-                List<String> message = new ArrayList<>();
-                message.add("Gift class feature will be add soon");
-                helperFactory.createDialogHelper().showListDialog("Coming Soon", message);
+        onGiftClicked = new
 
-            }
-        };
-        onPeopleNearYou = new Action() {
-            @Override
-            public void run() throws Exception {
-                List<String> message = new ArrayList<>();
-                message.add("People near you feature will be add soon");
-                helperFactory.createDialogHelper().showListDialog("Coming Soon", message);
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        List<String> message = new ArrayList<>();
+                        message.add("Gift class feature will be add soon");
+                        helperFactory.createDialogHelper().showListDialog("Coming Soon", message);
 
-            }
-        };
-        onConnect = new Action() {
-            @Override
-            public void run() throws Exception {
-                navigator.navigateActivity(ConnectHomeActivity.class, Bundle.EMPTY);
-            }
-        };
-        onGetTutor = new Action() {
-            @Override
-            public void run() throws Exception {
-                helperFactory.createDialogHelper().showCustomView(R.layout.content_contact_admin_dailog,new ContactAdminDialogViewModel(messageHelper,navigator,classId));
+                    }
+                }
 
-            }
-        };
+        ;
+        onPeopleNearYou = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        List<String> message = new ArrayList<>();
+                        message.add("People near you feature will be add soon");
+                        helperFactory.createDialogHelper().showListDialog("Coming Soon", message);
+
+                    }
+                }
+
+        ;
+        onConnect = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        navigator.navigateActivity(ConnectHomeActivity.class, Bundle.EMPTY);
+                    }
+                }
+
+        ;
+        onGetTutor = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        helperFactory.createDialogHelper().showCustomView(R.layout.content_contact_admin_dailog, new ContactAdminDialogViewModel(messageHelper, navigator, classId), false);
+
+                    }
+                }
+
+        ;
         //Edited By Vikas Godara
 
     }
@@ -273,5 +401,17 @@ public class ClassDetailViewModel extends ViewModel {
         shareIntent.putExtra(Intent.EXTRA_TEXT, "Checkout this class I found at Braingroom : " + mClassData.getClassWebUrl());
         navigator.navigateActivity(Intent.createChooser(shareIntent, "Share link using"));
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectivityViewmodel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        connectivityViewmodel.onPause();
     }
 }

@@ -17,22 +17,32 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 public class ShowcaseClassListViewModel extends ViewModel {
 
     public final int defaultCount = 4;
     public final Observable<List<ViewModel>> items;
+    private boolean apiSuccessful = false;
+    List<ViewModel> results;
     public final ObservableField<String> title = new ObservableField<>("");
 
     public ShowcaseClassListViewModel(@NonNull final String title, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final Observable<List<ClassData>> apiObservable, final Class<?> destination) {
         this.title.set(title);
-        items = FieldUtils.toObservable(retries).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+        items = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return !apiSuccessful;
+            }
+        }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                results = new ArrayList<>();
                 return getLoadingItems().mergeWith(apiObservable.map(new Function<List<ClassData>, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(List<ClassData> resp) throws Exception {
-                        List<ViewModel> results = new ArrayList<>();
+
+                        apiSuccessful = true;
 //                if (resp.size() == 0) resp = getDefaultResponse();
                         for (final ClassData elem : resp) {
                             results.add(new ClassItemViewModel(elem, new Action() {
@@ -46,6 +56,11 @@ public class ShowcaseClassListViewModel extends ViewModel {
                                 }
                             }));
                         }
+                        return results;
+                    }
+                }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                    @Override
+                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return results;
                     }
                 }));

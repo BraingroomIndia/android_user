@@ -159,7 +159,7 @@ public class ExploreViewModel extends ViewModel {
                 String latitude = TextUtils.split((String) marker.getTag(), ",")[0];
                 String longitude = TextUtils.split((String) marker.getTag(), ",")[1];
                 if (!latitude.equalsIgnoreCase("my Location"))
-                    dialogHelper.showCustomView(R.layout.marker_class_list, new MarkerClassListViewModel("Classes", navigator, latitude, longitude));
+                    dialogHelper.showCustomView(R.layout.marker_class_list, new MarkerClassListViewModel("Classes", navigator, latitude, longitude), false);
                 return false;
             }
         });

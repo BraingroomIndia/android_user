@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.braingroom.user.R;
+import com.braingroom.user.UserApplication;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,20 +28,16 @@ public class ConnectivityViewModel extends ViewModel {
 
     @Override
     public void onResume() {
-        internetDisposable = ReactiveNetwork.observeInternetConnectivity()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Boolean>() {
+        internetDisposable = UserApplication.getInstance().getInternetStatusBus().subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean isConnectedToInternet) {
-                        if (!isConnected.get() && isConnectedToInternet) {
+                        if (!isConnectedToInternet) {
                             try {
-                                retryAction.run();
+                               isConnected.set(false);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-                        isConnected.set(isConnectedToInternet);
 
                         Log.d("Connectivity", "accept: " + isConnectedToInternet);
                     }

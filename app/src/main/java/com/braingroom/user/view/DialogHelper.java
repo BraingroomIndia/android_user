@@ -21,7 +21,7 @@ public abstract class DialogHelper {
 
     public abstract void showSingleSelectList(String title, List<String> items, Integer[] selectedItems);
 
-    public abstract void showCustomView(@LayoutRes int layoutId, CustomDialogViewModel viewModel);
+    public abstract void showCustomView(@LayoutRes int layoutId, CustomDialogViewModel viewModel, boolean closeClickOutside);
 
 
     public void handleDialogOkClick(Integer[] selectedIndices) {

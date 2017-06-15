@@ -143,4 +143,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.viewBinding = viewBinding;
         }
     }
+
 }

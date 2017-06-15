@@ -18,17 +18,22 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 public class ClassDetailActivity extends BaseActivity {
 
     YouTubePlayerFragment youTubePlayerFragment;
     MyPlaybackEventListener myPlaybackEventListener;
     UiHelper uiHelper;
     SupportMapFragment mapFragment;
+    ShimmerFrameLayout shimmerFrameLayout;
 
     public interface UiHelper {
         void initYoutube();
 
         void invalidateMenu();
+
+        void stopShimmer();
     }
 
     @Override
@@ -43,6 +48,8 @@ public class ClassDetailActivity extends BaseActivity {
             }
         });
         youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_fragment);
+        shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_container);
+        shimmerFrameLayout.startShimmerAnimation();
 //        ((ClassDetailViewModel) vm).setUiHelper(uiHelper);
     }
 
@@ -71,7 +78,6 @@ public class ClassDetailActivity extends BaseActivity {
                     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
                         Log.d("Youtube player error", "onInitializationFailure: ");
                     }
-
                 });
 
             }
@@ -79,6 +85,11 @@ public class ClassDetailActivity extends BaseActivity {
             @Override
             public void invalidateMenu() {
                 invalidateOptionsMenu();
+            }
+
+            @Override
+            public void stopShimmer() {
+                shimmerFrameLayout.stopShimmerAnimation();
             }
 
         };
@@ -108,9 +119,9 @@ public class ClassDetailActivity extends BaseActivity {
                 ((ClassDetailViewModel) vm).addToWishlist();
             } else {
                 Bundle data = new Bundle();
-                data.putString("id",getIntentString("id"));
+                data.putString("id", getIntentString("id"));
                 data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
-                getMessageHelper().showLoginRequireDialog("Please login to add to wishlist",data);
+                getMessageHelper().showLoginRequireDialog("Please login to add to wishlist", data);
             }
             return true;
         }

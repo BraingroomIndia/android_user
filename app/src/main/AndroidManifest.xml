@@ -142,7 +142,8 @@
         <!-- Edited By Vikas Godara -->
         <activity
             android:name=".view.activity.VendorProfileActivity"
-            android:label="@string/screen_vendor_profile">
+            android:label="@string/screen_vendor_profile"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />

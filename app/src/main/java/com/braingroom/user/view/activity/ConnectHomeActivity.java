@@ -386,7 +386,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         if (id == R.id.nav_contact)
             getNavigator().navigateActivity(ContactUsActivity.class, null);
         if (id == R.id.nav_location)
-            getHelperFactory().createDialogHelper().showCustomView(R.layout.dialog_location, new LocationFilterViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), uiHelper));
+            getHelperFactory().createDialogHelper().showCustomView(R.layout.dialog_location, new LocationFilterViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), uiHelper), false);
 
         //Edited By Vikas Godara
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

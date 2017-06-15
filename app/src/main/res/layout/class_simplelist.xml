@@ -14,6 +14,11 @@
 
     </data>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <RelativeLayout
 
         android:layout_width="match_parent"
@@ -31,5 +36,12 @@
             bind:viewmodel="@{vm}"
             tools:context="com.braingroom.user.view.activity.ClassSimpleListActivity" />
 
+
     </RelativeLayout>
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:vm="@{vm.connectivityViewmodel}" />
+    </FrameLayout>
 </layout>

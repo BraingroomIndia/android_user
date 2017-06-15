@@ -69,7 +69,7 @@ public class ConnectHomeViewModel extends ViewModel {
         onFilterClicked = new Action() {
             @Override
             public void run() throws Exception {
-                helperFactory.createDialogHelper().showCustomView(R.layout.content_group_data, catSegVm);
+                helperFactory.createDialogHelper().showCustomView(R.layout.content_group_data, catSegVm, false);
             }
         };
         onPostClicked = new Action() {

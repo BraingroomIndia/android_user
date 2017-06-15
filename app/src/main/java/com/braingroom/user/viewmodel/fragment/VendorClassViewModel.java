@@ -9,6 +9,7 @@ import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.viewmodel.ClassItemViewModel;
+import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 public class VendorClassViewModel extends ViewModel {
 
@@ -26,20 +28,31 @@ public class VendorClassViewModel extends ViewModel {
     private List<ViewModel> classes;
 
     private boolean paginationInProgress = false;
-    private ObservableField<Integer> nextPage = new ObservableField<>(1);
-    private boolean nextPageAvailable = true;
+    private int nextPage = 1;
+    private int currentPage = 0;
 
     public VendorClassViewModel(@NonNull final Navigator navigator, final String vendorId) {
-        classes =new ArrayList<>();
+        classes = new ArrayList<>();
 
-        items = FieldUtils.toObservable(nextPage).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+        items = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return false;
+            }
+        }).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return currentPage < nextPage;
+            }
+        }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getVendorClassList(nextPage.get(), vendorId).map(new Function<List<ClassData>, List<ViewModel>>() {
+                return apiService.getVendorClassList(nextPage, vendorId).map(new Function<List<ClassData>, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(List<ClassData> resp) throws Exception {
+                        currentPage = nextPage;
                         if (resp.size() == 0)
-                            nextPageAvailable = false;
+                            callAgain = null;
                         for (final ClassData elem : resp) {
                             classes.add(new ClassItemViewModel(elem, new Action() {
                                 @Override
@@ -54,16 +67,34 @@ public class VendorClassViewModel extends ViewModel {
                         }
                         return classes;
                     }
-                });
+                }).mergeWith(getLoadingItems(3));
             }
         });
+    }
+    private Observable<List<ViewModel>> getLoadingItems(int count) {
+        List<ViewModel> result = new ArrayList<>();
+        result.addAll(classes);
+        result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
+        return Observable.just(result);
     }
 
     @Override
     public void paginate() {
-        if (nextPageAvailable && !paginationInProgress) {
-            nextPage.set((nextPage.get() + 1));
+        if (!paginationInProgress) {
+            callAgain.set(callAgain.get() + 1);
+            nextPage = nextPage + 1;
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectivityViewmodel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        connectivityViewmodel.onPause();
     }
 
         /*apiService.getVendorClassList(vendorId))

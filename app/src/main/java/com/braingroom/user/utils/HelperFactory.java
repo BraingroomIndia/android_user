@@ -105,11 +105,12 @@ public class HelperFactory {
             }
 
             @Override
-            public void showCustomView(@LayoutRes int layoutId, final CustomDialogViewModel viewModel) {
+            public void showCustomView(@LayoutRes int layoutId, final CustomDialogViewModel viewModel, boolean closeClickOutside) {
                 ViewDataBinding binding = DataBindingUtil.inflate(activity.getLayoutInflater(), layoutId, null, false);
                 getDefaultBinder().bind(binding, viewModel);
                 viewModel.setDialogInstance(new MaterialDialog.Builder(activity).customView(binding.getRoot(), false)
                         .alwaysCallSingleChoiceCallback()
+                        .canceledOnTouchOutside(closeClickOutside)
                         .showListener(new DialogInterface.OnShowListener() {
                             @Override
                             public void onShow(DialogInterface dialog) {

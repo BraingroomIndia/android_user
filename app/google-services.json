@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "873890902795-t9na9o9rr0e3vnj9fe9cdeb2p3btgtor.apps.googleusercontent.com",
+          "client_id": "873890902795-p7plh583dscmoeini3cn1ba52r1g00ef.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.braingroom.user",
-            "certificate_hash": "8ff219409dd8e8554b1a738048674592204cac10"
+            "certificate_hash": "d37b098553384b1f9ddaf3415eeac9582f58ce8d"
           }
         },
         {

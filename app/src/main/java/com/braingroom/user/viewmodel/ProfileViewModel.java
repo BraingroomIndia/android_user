@@ -11,6 +11,7 @@ import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -22,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -63,6 +65,12 @@ public class ProfileViewModel extends ViewModel {
 
     public ProfileViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @NonNull final ProfileActivity.UiHelper uiHelper) {
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+            }
+        });
         this.uiHelper = uiHelper;
         this.messageHelper = messageHelper;
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
@@ -72,7 +80,60 @@ public class ProfileViewModel extends ViewModel {
         GenderTypeApiData.put("Female", TYPE_FEMALE);
         genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null);
 
-        getProfileObservable = apiService.getProfile(pref.getString(Constants.BG_ID, "")).doOnNext(new Consumer<ProfileData>() {
+        getProfileObservable = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<ProfileData>>() {
+            @Override
+            public Observable<ProfileData> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return apiService.getProfile(pref.getString(Constants.BG_ID, "")).onErrorReturn(new Function<Throwable, ProfileData>() {
+                    @Override
+                    public ProfileData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return null;
+                    }
+                }).doOnNext(new Consumer<ProfileData>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
+                        HashMap<String, Integer> selectedGender = new HashMap<>();
+                        if (!data.getGender().equals("-1"))
+                            selectedGender.put(data.getGender().equals("1") ? "Male" : "Female", Integer.valueOf(data.getGender()));
+                        name.s_1.set(data.getName());
+                        email.s_1.set(data.getEmail());
+                        contact.s_1.set(data.getContactNo());
+                        dobVm.date.set(data.getDob());
+                        ugInstitution.s_1.set(data.getUgInstituteName());
+                        pgInstitution.s_1.set(data.getPgInstituteName());
+                        ugPassoutYear.s_1.set(data.getUgInstitutePassingYear());
+                        pgPassoutYear.s_1.set(data.getPgInstitutePassingYear());
+                        imageUploadVm.remoteAddress.set(data.getProfileImage());
+                        genderVm.setSelectedItemsMap(selectedGender);
+                        if (data.getDob() != null && !data.getDob().equals(""))
+                            dobVm.date.set(data.getDob());
+                        HashMap<String, Integer> selectedCityMap = new HashMap<>();
+                        HashMap<String, Integer> selectedInterestMap = new HashMap<>();
+                        if (!data.getCity().equals("")) {
+                            selectedCityMap.put(data.getCity(), Integer.parseInt(data.getCityId()));
+                            cityVm.setSelectedItemsMap(selectedCityMap);
+                            HashMap<String, Integer> selectedLocalityMap = new HashMap<>();
+                            if (!data.getLocality().equals("")) {
+                                selectedLocalityMap.put(data.getLocality(), Integer.parseInt(data.getLocalityId()));
+                                localityVm.setSelectedItemsMap(selectedLocalityMap);
+                            }
+                        }
+                        if (!data.getCategoryName().equals("") && !data.getCategoryId().equals("")) {
+                            List<String> categoryName = Arrays.asList(data.getCategoryName().split("\\s*,\\s*"));
+                            List<Integer> categoryId = Arrays.asList(stringToIntArray(data.getCategoryId().split("\\s*,\\s*")));
+                            for (int i = 0; i < categoryId.size(); i++)
+                                selectedInterestMap.put(categoryName.get(i), categoryId.get(i));
+                            categoryVm.setSelectedItemsMap(selectedInterestMap);
+                        }
+                        uiHelper.invalidateMenu();
+                    }
+                }).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+
+                    }
+                });
+            }
+        });/*apiService.getProfile(pref.getString(Constants.BG_ID, "")).doOnNext(new Consumer<ProfileData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
                 HashMap<String, Integer> selectedGender = new HashMap<>();
@@ -115,7 +176,7 @@ public class ProfileViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
 
             }
-        });
+        });*/
 
 
         cityConsumer = new Consumer<HashMap<String, Integer>>() {

@@ -22,10 +22,12 @@ android {
         applicationId "com.braingroom.user"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+
     }
     buildTypes {
         release {
@@ -92,7 +94,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     //compile 'com.jakewharton:process-phoenix:2.0.0'
 //    compile 'commons-validator:commons-validator:1.4.1'
-    compile 'com.github.pwittchen:reactivenetwork-rx2:0.9.1'
+   compile 'com.github.pwittchen:reactivenetwork-rx2:0.9.1'
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     annotationProcessor 'com.squareup:javapoet:1.7.0'

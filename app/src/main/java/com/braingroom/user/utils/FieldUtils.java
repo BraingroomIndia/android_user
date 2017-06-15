@@ -3,6 +3,7 @@ package com.braingroom.user.utils;
 import android.databinding.Observable.OnPropertyChangedCallback;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -22,6 +23,7 @@ public class FieldUtils {
                     @Override
                     public void onPropertyChanged(android.databinding.Observable observable, int i) {
                         e.onNext(field.get());
+                        Log.d("onPropertyChanged", "cancel: " +field.toString());
                     }
                 };
                 field.addOnPropertyChangedCallback(callback);
@@ -29,6 +31,7 @@ public class FieldUtils {
                     @Override
                     public void cancel() throws Exception {
                         field.removeOnPropertyChangedCallback(callback);
+                        Log.d("removeOnProperty", "cancel: " +field.toString());
                     }
                 });
             }

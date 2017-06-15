@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.fabric.sdk.android.Fabric;
+import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
 import timber.log.Timber;
 
@@ -37,6 +38,9 @@ public class UserApplication extends Application {
     //Edited By Vikas Godara
 
     private static UserApplication sInstance;
+
+    @Getter
+    PublishSubject<Boolean> internetStatusBus;
 
     @Getter
     public TypedArray classPlaceholder;
@@ -71,6 +75,7 @@ public class UserApplication extends Application {
         sInstance = this;
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this, BASE_URL)).build();
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
+        internetStatusBus = PublishSubject.create();
 
     }
 

@@ -204,7 +204,7 @@ public class CheckoutViewModel extends ViewModel {
                                         messageHelper.show("Something went wrong. JSON error");
                                     }
                                 }
-                            },classData.getId()));
+                            },classData.getId()), false);
                     return;
                 }
                 isGuest = 0;

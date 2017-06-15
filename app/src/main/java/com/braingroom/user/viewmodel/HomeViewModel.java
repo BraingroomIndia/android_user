@@ -11,6 +11,7 @@ import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -35,15 +36,17 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 import static com.rollbar.android.Rollbar.TAG;
 
 public class HomeViewModel extends ViewModel {
 
-    public final Action onSearchClicked, onExploreClicked,onRegister;
+    public final Action onSearchClicked, onExploreClicked, onRegister;
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
@@ -80,6 +83,8 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 retry();
+                connectivityViewmodel.isConnected.set(true);
+                Log.d(TAG, "run internet: " +connectivityViewmodel.isConnected.get());
             }
         });
         this.dialogHelper = dialogHelper;
@@ -100,37 +105,55 @@ public class HomeViewModel extends ViewModel {
                 navigator.navigateActivity(SignUpActivityCompetition.class, null);
             }
         };
-        categories = apiService.getCategory()
-                //Edited By Vikas Godara
-                .map(new Function<CategoryResp, List<CategoryResp.Snippet>>() {
-                    @Override
-                    public List<CategoryResp.Snippet> apply(@io.reactivex.annotations.NonNull CategoryResp categoryResp) throws Exception {
-                        List<CategoryResp.Snippet> snippetList = categoryResp.getData();
-                        Collections.swap(snippetList, 1, 4);
-                        return snippetList;
-                    }
-                })
-                //Edited by Vikas Godara
-                .map(new Function<List<CategoryResp.Snippet>, List<ViewModel>>() {
-                    @Override
-                    public List<ViewModel> apply(List<CategoryResp.Snippet> resp) throws Exception {
-                        List<ViewModel> results = new ArrayList<>();
-                        for (final CategoryResp.Snippet snippet : resp) {
-                            results.add(new IconTextItemViewModel(resArray[Integer.parseInt(snippet.getId()) - 1], snippet.getCategoryName(), new MyConsumer<IconTextItemViewModel>() {
-                                @Override
-                                public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
-                                    if (!snippet.getId().equals("-1")) {
-                                        Bundle data = new Bundle();
-                                        data.putString("categoryId", snippet.getId());
-                                        navigator.navigateActivity(ClassListActivity.class, data);
-                                    }
+        categories = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return !apiSuccessful;
+            }
+        }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+            @Override
+            public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
 
+                return apiService.getCategory()
+                        //Edited By Vikas Godara
+                        .map(new Function<CategoryResp, List<CategoryResp.Snippet>>() {
+                            @Override
+                            public List<CategoryResp.Snippet> apply(@io.reactivex.annotations.NonNull CategoryResp categoryResp) throws Exception {
+                                List<CategoryResp.Snippet> snippetList = categoryResp.getData();
+                                Collections.swap(snippetList, 1, 4);
+                                return snippetList;
+                            }
+                        })
+                        //Edited by Vikas Godara
+                        .map(new Function<List<CategoryResp.Snippet>, List<ViewModel>>() {
+                            @Override
+                            public List<ViewModel> apply(List<CategoryResp.Snippet> resp) throws Exception {
+                                List<ViewModel> results = new ArrayList<>();
+                                for (final CategoryResp.Snippet snippet : resp) {
+                                    results.add(new IconTextItemViewModel(resArray[Integer.parseInt(snippet.getId()) - 1], snippet.getCategoryName(), new MyConsumer<IconTextItemViewModel>() {
+                                        @Override
+                                        public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
+                                            if (!snippet.getId().equals("-1")) {
+                                                Bundle data = new Bundle();
+                                                data.putString("categoryId", snippet.getId());
+                                                navigator.navigateActivity(ClassListActivity.class, data);
+                                            }
+
+                                        }
+                                    }));
                                 }
-                            }));
-                        }
-                        return results;
-                    }
-                });
+                                return results;
+                            }
+                        }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                            @Override
+                            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                                return new ArrayList<>();
+                            }
+                        });
+
+            }
+        });
+
 
         refreshMapPinsToNewLocation("13.0826802", "80.2707184");
         onSearchClicked = new Action() {
@@ -183,7 +206,7 @@ public class HomeViewModel extends ViewModel {
             public boolean onMarkerClick(Marker marker) {
                 String latitude = TextUtils.split((String) marker.getTag(), ",")[0];
                 String longitude = TextUtils.split((String) marker.getTag(), ",")[1];
-                dialogHelper.showCustomView(R.layout.marker_class_list, new MarkerClassListViewModel("Classes", navigator, latitude, longitude));
+                dialogHelper.showCustomView(R.layout.marker_class_list, new MarkerClassListViewModel("Classes", navigator, latitude, longitude), false);
                 return false;
             }
         });
@@ -216,10 +239,13 @@ public class HomeViewModel extends ViewModel {
 
     @Override
     public void retry() {
+        callAgain.set(callAgain.get()+1);
         featuredVm.retry();
         trendingVm.retry();
         indigenousVm.retry();
         communityVm.retry();
+        Log.d(TAG, "retry: featuredVm retry:\t" + featuredVm.callAgain.get() + "\nretry: trendingVm retry:	" + indigenousVm.callAgain.get() +
+                "\nretry: indigenousVm retry:	" + indigenousVm.callAgain.get() + "\nretry: communityVm retry:	" + communityVm.callAgain.get());
     }
 
     @Override
