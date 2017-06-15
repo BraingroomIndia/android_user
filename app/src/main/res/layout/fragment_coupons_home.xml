@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.GiftCouponViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/edittext"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_large"
+            android:background="@drawable/solid_white_rounded_corner"
+            android:hint="Minimum Rs. 500"
+            android:inputType="number"
+            android:paddingLeft="@dimen/padding_med"
+            android:text="@={vm.couponValue}"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/edittext"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_med"
+            android:background="@drawable/solid_bg_green_rounded_corner"
+            android:gravity="center"
+            android:onClick="@{vm.openCouponForm}"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large"
+            app:font='@{@string/robotoBold}' />
+    </RelativeLayout>
+
+</layout>

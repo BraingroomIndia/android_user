@@ -156,7 +156,7 @@
         </activity>
         <activity
             android:name=".view.activity.ConnectHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.activity.SignupActivity"
             android:windowSoftInputMode="stateHidden">
@@ -217,6 +217,28 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.GiftcardCouponActivity"
+            android:label="@string/screen_giftcoupons">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity android:name=".view.activity.CouponFormActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.GiftcardCouponActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.NgoFormActivity"
+            android:label="@string/screen_ngo_form"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.GiftcardCouponActivity" />
+
         </activity>
     </application>
 

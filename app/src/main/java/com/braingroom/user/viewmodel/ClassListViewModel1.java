@@ -104,7 +104,8 @@ public class ClassListViewModel1 extends ViewModel {
     private int nextPage = 0;
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @Nullable String categoryId, @Nullable String searchQuery, @Nullable String communityId,@Nullable String segmentId, final ClassListActivity.UiHelper uiHelper) {
+            , @NonNull final HelperFactory helperFactory, @Nullable String categoryId, @Nullable String searchQuery, @Nullable String communityId, @Nullable String segmentId,
+                               @Nullable String catalog, @Nullable String giftId, final ClassListActivity.UiHelper uiHelper) {
         layoutType = new ObservableInt(LAYOUT_TYPE_TILE);
         nonReactiveItems = new ArrayList<>();
 
@@ -112,11 +113,13 @@ public class ClassListViewModel1 extends ViewModel {
         filterData.setCommunityId(communityId);
         filterData.setSegmentId(segmentId);
         filterData.setKeywords(searchQuery);
+        filterData.setCatalog(catalog);
+        filterData.setGiftId(giftId);
 
         this.uiHelper = uiHelper;
         /* if coming from community click
         * hide macro selects and call */
-        if (communityId != null) {
+        if (communityId != null || !"".equals(catalog)) {
             segmentsVisibility.set(false);
         }
         segments = Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(filterData.getCategoryId()))

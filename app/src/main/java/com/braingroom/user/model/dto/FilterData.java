@@ -20,9 +20,9 @@ public class FilterData implements Serializable {
     String classProvider = "";
     String locationId = "";
     String city = "";
-
-
     String sortOrder = "";
+    String catalog = "";
+    String giftId = "";
 
     public void setFilterData(FilterData data) {
         setKeywords(data.getKeywords());
@@ -36,6 +36,8 @@ public class FilterData implements Serializable {
         setClassProvider(data.getClassProvider());
         setLocationId(data.getLocationId());
         setCity(data.getCity());
+        setCatalog(data.getCatalog());
+        setGiftId(data.getGiftId());
         if (sortOrder.equals(""))
             setSortOrder(data.getSortOrder());
     }
@@ -45,7 +47,7 @@ public class FilterData implements Serializable {
     }
 
     public GeneralFilterReq getFilterReq() {
-        return new GeneralFilterReq(new GeneralFilterReq.Snippet("", keywords, startDate, endDate, categoryId, segmentId, classType, communityId, classSchedule, classProvider, locationId, sortOrder,""));
+        return new GeneralFilterReq(new GeneralFilterReq.Snippet("", keywords, startDate, endDate, categoryId, segmentId, classType, communityId, classSchedule, classProvider, locationId, sortOrder, catalog,giftId));
     }
 
 
@@ -154,5 +156,23 @@ public class FilterData implements Serializable {
     public void setCity(String city) {
         if (city == null) city = "";
         this.city = city;
+    }
+
+    public String getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(String catalog) {
+        if (catalog == null) catalog = "";
+        this.catalog = catalog;
+    }
+
+    public String getGiftId() {
+        return giftId;
+    }
+
+    public void setGiftId(String giftId) {
+        if (giftId == null) giftId = "";
+        this.giftId = giftId;
     }
 }

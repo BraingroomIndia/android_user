@@ -11,6 +11,8 @@
     <string name="screen_message">Messages</string>
     <string name="screen_notification">Notifications</string>
     <string name="screen_catalogue">Catalogue</string>
+    <string name="screen_giftcoupons">Giftcards &amp; Coupons</string>
+    <string name="screen_ngo_form">NGO Form</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

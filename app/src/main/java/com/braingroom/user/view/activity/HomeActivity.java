@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
-import com.braingroom.user.viewmodel.CompetitionDialogViewModel;
 import com.braingroom.user.viewmodel.HomeViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.google.android.gms.location.LocationRequest;
@@ -263,6 +262,10 @@ public class HomeActivity extends BaseActivity
 
         if (id == R.id.nav_catalogue) {
             getNavigator().navigateActivity(CatalogueHomeActivity.class, null);
+//            finish();
+        }
+        if (id == R.id.nav_giftcard) {
+            getNavigator().navigateActivity(GiftcardCouponActivity.class, null);
 //            finish();
         }
 
