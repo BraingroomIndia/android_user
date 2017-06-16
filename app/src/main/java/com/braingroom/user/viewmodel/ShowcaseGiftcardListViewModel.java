@@ -26,7 +26,7 @@ public class ShowcaseGiftcardListViewModel extends ViewModel {
                                          @NonNull final Navigator navigator, final Observable<List<GiftcardResp.DataSnippet>> apiObservable,
                                          final String giftcardType) {
         this.title.set(title);
-        items = FieldUtils.toObservable(retries).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+        items = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return getLoadingItems().mergeWith(apiObservable.map(new Function<List<GiftcardResp.DataSnippet>, List<ViewModel>>() {

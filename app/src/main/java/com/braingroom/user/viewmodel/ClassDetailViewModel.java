@@ -59,7 +59,7 @@ public class ClassDetailViewModel extends ViewModel {
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
     public String vendorId;
-    public ObservableField<Boolean> isShimmerOn = new ObservableField<>(true);
+    public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
     List<ViewModel> addressList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();

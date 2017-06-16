@@ -55,16 +55,16 @@ public class HomeViewModel extends ViewModel {
     public final ConnectivityViewModel connectivityViewmodel;
     public final Observable<List<ViewModel>> categories;
 
-    List<ClassLocationData> locationList = new ArrayList<>();
-    List<MarkerOptions> markerList = new ArrayList<>();
+    private List<ClassLocationData> locationList = new ArrayList<>();
+    private List<MarkerOptions> markerList = new ArrayList<>();
 
     Observable<ExploreResp> exploreObservable;
     public GoogleMap mGoogleMap; //Edited by Vikas Godara
-    Map<String, Integer> pinColorMap = new HashMap<>();
-    DialogHelper dialogHelper;
+    private Map<String, Integer> pinColorMap = new HashMap<>();
+    private DialogHelper dialogHelper;
     Navigator navigator;
 
-    public final int[] resArray = new int[]{R.drawable.main_category_1,
+    private final int[] resArray = new int[]{R.drawable.main_category_1,
             R.drawable.main_category_2, //Edited By Vikas Godara
             R.drawable.main_category_3,
             R.drawable.main_category_4,
