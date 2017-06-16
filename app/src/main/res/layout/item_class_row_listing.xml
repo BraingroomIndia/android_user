@@ -93,6 +93,7 @@
                         android:src="@drawable/group"
                         android:tint="@color/materialOrange"
                         android:visibility='@{"Group".equalsIgnoreCase(vm.classData.pricingType) ? View.VISIBLE : View.GONE}' />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -100,9 +101,9 @@
                         android:layout_marginLeft="@dimen/margin_med"
                         android:scaleType="centerInside"
                         android:text="Group"
-                        app:font='@{@string/robotoRegular}'
                         android:tint="@color/materialOrange"
-                        android:visibility='@{"Group".equalsIgnoreCase(vm.classData.pricingType) ? View.VISIBLE : View.GONE}' />
+                        android:visibility='@{"Group".equalsIgnoreCase(vm.classData.pricingType) ? View.VISIBLE : View.GONE}'
+                        app:font='@{@string/robotoRegular}' />
                 </LinearLayout>
 
                 <LinearLayout

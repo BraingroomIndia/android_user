@@ -2,10 +2,8 @@ package com.braingroom.user.viewmodel;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.braingroom.user.model.response.BaseResp;
-import com.braingroom.user.model.response.GuestUserResp;
 import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
@@ -73,6 +71,7 @@ public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
                             } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
                                 Bundle data =new Bundle();
                                 data.putString("id", classId);
+                                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                 navigator.navigateActivity(ClassDetailActivity.class,data);
                             } else {
                                 navigator.navigateActivity(HomeActivity.class, null);

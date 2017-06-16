@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.ClassItemViewModel" />
+
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:onClick="@{vm.onClicked}">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_margin="@dimen/margin_med"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{vm.classData.image}"
+                app:placeHolder="@{vm.placeHolder}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_margin="@dimen/margin_med"
+                android:layout_toRightOf="@+id/icon"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="2"
+                    android:text="@{vm.classData.classTopic}"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/text_size_medium"
+                    app:font='@{@string/robotoRegular}' />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text='@{vm.classData.noOfSession + " Sessions"}'
+                        android:textColor="@color/colorTextGray"
+                        android:textSize="@dimen/text_size_medium"
+                        app:font='@{@string/robotoRegular}' />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text='@{vm.classData.classDuration}'
+                        android:textColor="@color/colorTextGray"
+                        android:textSize="@dimen/text_size_medium"
+                        app:font='@{@string/robotoRegular}' />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

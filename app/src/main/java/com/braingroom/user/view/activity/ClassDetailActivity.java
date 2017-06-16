@@ -3,22 +3,24 @@ package com.braingroom.user.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.braingroom.user.R;
+import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
+import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
-
-import com.facebook.shimmer.ShimmerFrameLayout;
 
 public class ClassDetailActivity extends BaseActivity {
 
@@ -34,6 +36,9 @@ public class ClassDetailActivity extends BaseActivity {
         void invalidateMenu();
 
         void stopShimmer();
+
+        void showQuoteForm();
+
     }
 
     @Override
@@ -92,12 +97,20 @@ public class ClassDetailActivity extends BaseActivity {
                 shimmerFrameLayout.stopShimmerAnimation();
             }
 
+            @Override
+            public void showQuoteForm() {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance()).addToBackStack(null).commit();
+            }
+
         };
         return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"));
     }
 
     @Override
     protected int getLayoutId() {
+        if (ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin")))
+            return R.layout.activity_class_detail_catalog;
         return R.layout.activity_class_detail;
     }
 

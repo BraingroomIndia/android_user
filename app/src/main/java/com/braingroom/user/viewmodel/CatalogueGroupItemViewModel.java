@@ -39,6 +39,7 @@ public class CatalogueGroupItemViewModel extends ViewModel {
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
                 bundleData.putString("catalogId", data.getId());
+                bundleData.putString("origin", ClassListViewModel1.ORIGIN_CATALOG);
                 navigator.navigateActivity(ClassListActivity.class, bundleData);
             }
         };

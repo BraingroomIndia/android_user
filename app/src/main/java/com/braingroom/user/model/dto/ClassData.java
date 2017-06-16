@@ -11,6 +11,7 @@ import java.util.List;
 
 public class ClassData implements Serializable {
 
+
     @SerializedName("id")
     private String id;
 
@@ -110,6 +111,16 @@ public class ClassData implements Serializable {
 
     @SerializedName("vendorClasseLevelDetail")
     private List<ClassLevelData> levelDetails;
+
+    @SerializedName("catalog_description")
+    private String catalogDescription;
+
+    @SerializedName("class_provider")
+    private String classProvider;
+
+    @SerializedName("catalog_locations")
+    private List<String> catalogLocations;
+
 
     public List<ClassLevelData> getLevelDetails() {
         return levelDetails;
@@ -374,5 +385,29 @@ public class ClassData implements Serializable {
 
     public void setClassWebUrl(String classWebUrl) {
         this.classWebUrl = classWebUrl;
+    }
+
+    public String getCatalogDescription() {
+        return catalogDescription;
+    }
+
+    public void setCatalogDescription(String catalogDescription) {
+        this.catalogDescription = catalogDescription;
+    }
+
+    public String getClassProvider() {
+        return classProvider;
+    }
+
+    public void setClassProvider(String classProvider) {
+        this.classProvider = classProvider;
+    }
+
+    public List<String> getCatalogLocations() {
+        return catalogLocations;
+    }
+
+    public void setCatalogLocations(List<String> catalogLocations) {
+        this.catalogLocations = catalogLocations;
     }
 }

@@ -127,6 +127,7 @@ public class LoginViewmodel extends ViewModel {
                         } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();
                             data.putString("id", classId);
+                            data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                             navigator.navigateActivity(ClassDetailActivity.class, data);
                         } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();
@@ -208,6 +209,7 @@ public class LoginViewmodel extends ViewModel {
                         } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();
                             data.putString("id", classId);
+                            data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                             navigator.navigateActivity(ClassDetailActivity.class, data);
                         } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();

@@ -1,6 +1,5 @@
 package com.braingroom.user.viewmodel.fragment;
 
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -9,6 +8,7 @@ import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.viewmodel.ClassItemViewModel;
+import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -60,6 +60,7 @@ public class VendorClassViewModel extends ViewModel {
                                     if (!elem.getId().equals("-1")) {
                                         Bundle data = new Bundle();
                                         data.putString("id", elem.getId());
+                                        data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                         navigator.navigateActivity(ClassDetailActivity.class, data);
                                     }
                                 }

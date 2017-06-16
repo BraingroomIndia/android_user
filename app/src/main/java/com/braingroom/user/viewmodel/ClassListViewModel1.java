@@ -48,6 +48,9 @@ public class ClassListViewModel1 extends ViewModel {
     public static final int SORT_ORDER_LOW_TO_HIGH = 2;
     public static final int SORT_ORDER_HIGH_TO_LOW = 1;
 
+    public static final String ORIGIN_HOME = "HOME";
+    public static final String ORIGIN_CATALOG = "CATALOG";
+    public static final String ORIGIN_GIFT = "GIFT";
 
     public final
     @NonNull
@@ -82,34 +85,44 @@ public class ClassListViewModel1 extends ViewModel {
     PublishSubject<DataItemViewModel> segmentSelectorSubject = PublishSubject.create();
 
     @Getter
-    ViewProvider viewProvider = new ViewProvider() {
-        @Override
-        public int getView(ViewModel vm) {
-            if (layoutType.get() == LAYOUT_TYPE_ROW) {
-                if (vm instanceof ClassItemViewModel)
-                    return R.layout.item_class_row_listing;
-                else if (vm instanceof EmptyItemViewModel)
-                    return R.layout.item_empty_data;
-                else if (vm instanceof RowShimmerItemViewModel)
-                    return R.layout.item_shimmer_row;
-            } else {
-                if (vm instanceof ClassItemViewModel)
-                    return R.layout.item_class_tile_listing;
-                else if (vm instanceof EmptyItemViewModel)
-                    return R.layout.item_empty_data;
-                else if (vm instanceof TileShimmerItemViewModel)
-                    return R.layout.item_shimmer_tile;
-            }
-            return 0;
-        }
-    };
+    ViewProvider viewProvider;
 
     private int nextPage = 0;
     private int currentPage = 0;
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @Nullable String categoryId, @Nullable String searchQuery, @Nullable String communityId, @Nullable String segmentId,
-                               @Nullable String catalog, @Nullable String giftId, final ClassListActivity.UiHelper uiHelper) {
+                               @Nullable String catalog, @Nullable String giftId, @Nullable final String origin, final ClassListActivity.UiHelper uiHelper) {
+
+
+        viewProvider = new ViewProvider() {
+            @Override
+            public int getView(ViewModel vm) {
+                if (layoutType.get() == LAYOUT_TYPE_ROW) {
+                    if (vm instanceof ClassItemViewModel) {
+                        if (ORIGIN_CATALOG.equals(origin))
+                            return R.layout.item_class_row_catalog;
+                        if (ORIGIN_HOME.equals(origin) || ORIGIN_GIFT.equals(origin))
+                            return R.layout.item_class_row_listing;
+                    } else if (vm instanceof EmptyItemViewModel)
+                        return R.layout.item_empty_data;
+                    else if (vm instanceof RowShimmerItemViewModel)
+                        return R.layout.item_shimmer_row;
+                } else {
+                    if (vm instanceof ClassItemViewModel) {
+                        if (ORIGIN_CATALOG.equals(origin))
+                            return R.layout.item_class_tile_catalog;
+                        if (ORIGIN_HOME.equals(origin) || ORIGIN_GIFT.equals(origin))
+                            return R.layout.item_class_tile_listing;
+                    } else if (vm instanceof EmptyItemViewModel)
+                        return R.layout.item_empty_data;
+                    else if (vm instanceof TileShimmerItemViewModel)
+                        return R.layout.item_shimmer_tile;
+                }
+                return 0;
+            }
+        };
+
         layoutType = new ObservableInt(LAYOUT_TYPE_TILE);
         nonReactiveItems = new ArrayList<>();
 
@@ -186,6 +199,7 @@ public class ClassListViewModel1 extends ViewModel {
                             public void run() throws Exception {
                                 Bundle data = new Bundle();
                                 data.putString("id", elem.getId());
+                                data.putString("origin", origin);
                                 navigator.navigateActivity(ClassDetailActivity.class, data);
                             }
                         }));

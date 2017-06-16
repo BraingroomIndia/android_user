@@ -1,6 +1,5 @@
 package com.braingroom.user.viewmodel;
 
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,10 +11,6 @@ import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassDetailActivity;
-import com.braingroom.user.viewmodel.ClassItemViewModel;
-import com.braingroom.user.viewmodel.ConnectivityViewModel;
-import com.braingroom.user.viewmodel.EmptyItemViewModel;
-import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -100,6 +95,7 @@ public class ClassSimpleListViewModel extends ViewModel {
                                             if (!elem.getId().equals("-1")) {
                                                 Bundle data = new Bundle();
                                                 data.putString("id", elem.getId());
+                                                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                                 navigator.navigateActivity(ClassDetailActivity.class, data);
                                             }
                                         }

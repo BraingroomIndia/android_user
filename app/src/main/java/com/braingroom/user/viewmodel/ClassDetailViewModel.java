@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
+import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
@@ -28,7 +29,6 @@ import com.google.android.youtube.player.YouTubePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -55,6 +55,9 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
     public final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
+    public final ObservableField<String> catalogDescription = new ObservableField<>(null);
+    public final ObservableField<String> classProvider = new ObservableField<>(null);
+    public final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
@@ -72,17 +75,16 @@ public class ClassDetailViewModel extends ViewModel {
     final MessageHelper messageHelper;
     @NonNull
     final Navigator navigator;
-    //    @NonNull
-//    final  HelperFactory helperFactory;
     @Setter
     ClassDetailActivity.UiHelper uiHelper;
 
-    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked,
+    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, openConnectTnT, openConnectBnS, openConnectFP;
 
     public boolean isInWishlist = false;
 
-    public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final String classId) {
+    public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
+                                @NonNull final Navigator navigator, final String classId) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -153,7 +155,9 @@ public class ClassDetailViewModel extends ViewModel {
                         description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
-
+                        catalogDescription.set(classData.getCatalogDescription());
+                        classProvider.set(classData.getClassProvider());
+                        catalogLocationList.addAll(classData.getCatalogLocations());
                         if ("1".equals(classData.getWishlist()))
                             isInWishlist = true;
                         if ("fixed".equalsIgnoreCase(classData.getClassTypeData())) {
@@ -339,16 +343,20 @@ public class ClassDetailViewModel extends ViewModel {
 
         ;
         onGetTutor = new
-
                 Action() {
                     @Override
                     public void run() throws Exception {
                         helperFactory.createDialogHelper().showCustomView(R.layout.content_contact_admin_dailog, new ContactAdminDialogViewModel(messageHelper, navigator, classId), false);
 
                     }
-                }
-
-        ;
+                };
+        getQuoteClicked = new
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        uiHelper.showQuoteForm();
+                    }
+                };
         //Edited By Vikas Godara
 
     }
@@ -404,8 +412,9 @@ public class ClassDetailViewModel extends ViewModel {
         navigator.navigateActivity(Intent.createChooser(shareIntent, "Share link using"));
 
     }
+
     @Override
-    public void retry(){
+    public void retry() {
         connectivityViewmodel.isConnected.set(true);
         callAgain.set(callAgain.get()+1);
     }

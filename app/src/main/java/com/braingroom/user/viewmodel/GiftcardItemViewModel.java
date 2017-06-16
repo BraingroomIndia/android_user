@@ -35,6 +35,7 @@ public class GiftcardItemViewModel extends ViewModel {
                     navigator.navigateActivity(NgoFormActivity.class, data);
                 } else {
                     data.putString("giftId", cardId.get());//senderId);
+                    data.putString("origin", ClassListViewModel1.ORIGIN_GIFT);
                     navigator.navigateActivity(ClassListActivity.class, data);
                 }
             }

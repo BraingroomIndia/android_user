@@ -15,10 +15,9 @@ import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
+import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import java.util.Map;
 
 public class FCMService extends FirebaseMessagingService {
 
@@ -59,6 +58,7 @@ public class FCMService extends FirebaseMessagingService {
         else if(classId!=null) {
             intent = new Intent(this, ClassDetailActivity.class);
             data.putString("id",classId);
+            data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
 
         }
         else if (messageSenderId!=null){
