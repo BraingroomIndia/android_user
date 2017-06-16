@@ -84,6 +84,7 @@ public class ClassListViewModel extends ViewModel {
                             if (!elem.getId().equals("-1")) {
                                 Bundle data = new Bundle();
                                 data.putString("id", elem.getId());
+                                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                 navigator.navigateActivity(ClassDetailActivity.class, data);
                             }
                         }

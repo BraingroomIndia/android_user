@@ -26,7 +26,7 @@ public class SearchViewModel extends ViewModel {
     public final ObservableField<String> searchQuery = new ObservableField<>("");
     public final Observable<List<ViewModel>> results;
     public final Map<String, String> mainCategories = new HashMap<>();
-    public final Action onBackClicked,onSearchClicked;
+    public final Action onBackClicked, onSearchClicked;
 
     public SearchViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
 
@@ -53,7 +53,7 @@ public class SearchViewModel extends ViewModel {
                         if (s.length() > 0) {
                             final List<String> categoryList = new ArrayList<>(mainCategories.keySet());
                             for (int i = 0; i < categoryList.size(); i++) {
-                                results.add(new SearchResultItemViewModel(new SearchResultItem(s, mainCategories.get(categoryList.get(i)) + "", categoryList.get(i)),navigator));
+                                results.add(new SearchResultItemViewModel(new SearchResultItem(s, mainCategories.get(categoryList.get(i)) + "", categoryList.get(i)), navigator));
                             }
                         }
                         return results;
@@ -72,6 +72,7 @@ public class SearchViewModel extends ViewModel {
                 Bundle data = new Bundle();
                 data.putString("categoryId", "");
                 data.putString("searchQuery", searchQuery.get());
+                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }
         };

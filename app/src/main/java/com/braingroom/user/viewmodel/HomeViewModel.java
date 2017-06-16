@@ -136,6 +136,7 @@ public class HomeViewModel extends ViewModel {
                                             if (!snippet.getId().equals("-1")) {
                                                 Bundle data = new Bundle();
                                                 data.putString("categoryId", snippet.getId());
+                                                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                                 navigator.navigateActivity(ClassListActivity.class, data);
                                             }
 

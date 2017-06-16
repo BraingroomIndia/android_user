@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.QuoteFormViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_med">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.organizationName}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Organization Name"}' />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include
+                        layout="@layout/floating_label_edit_text"
+                        app:data="@{vm.audienceStrength}"
+                        app:editable="@{true}"
+                        app:hintText='@{"Expected audience strength"}' />
+
+                    <include
+                        layout="@layout/item_date_dialog_opener"
+                        app:editable="@{!vm.editable}"
+                        app:vm="@{vm.dateVm}" />
+                </LinearLayout>
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.hostClassLocation}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Host class location"}' />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.mobileNumber}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Mobile number"}' />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.classNeedDetail}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Explain catalogue class need"}' />
+
+                <include
+                    layout="@layout/floating_label_edit_text"
+                    app:data="@{vm.description}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Description"}' />
+
+                <include
+                    layout="@layout/item_list_dialog_opener"
+                    app:editable="@{true}"
+                    app:vm="@{vm.classModeVm}" />
+
+                <TextView
+                    android:id="@+id/remove_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="@dimen/margin_med"
+                    android:onClick="@{() -> vm.removeThisFragment.accept(vm)}"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:paddingLeft="@dimen/padding_med"
+                    android:paddingRight="@dimen/padding_med"
+                    android:paddingTop="@dimen/padding_small"
+                    android:text="REMOVE"
+                    android:textColor="@color/materialBlue"
+                    android:visibility="@{vm.removable ? View.VISIBLE : View.GONE}"
+                    app:font='@{@string/robotoRegular}' />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v7.widget.CardView>
+</layout>

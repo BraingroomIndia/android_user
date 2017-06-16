@@ -34,6 +34,7 @@ public class MarkerClassListViewModel extends CustomDialogViewModel {
                         public void accept(@io.reactivex.annotations.NonNull DataItemViewModel var1) {
                             Bundle data = new Bundle();
                             data.putString("id", elem.getClassId());
+                            data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                             navigator.navigateActivity(ClassDetailActivity.class, data);
 
                         }

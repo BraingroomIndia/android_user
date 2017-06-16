@@ -25,6 +25,7 @@ public class SearchResultItemViewModel extends ViewModel {
                 Bundle data = new Bundle();
                 data.putString("categoryId", item.categoryId);
                 data.putString("searchQuery", item.query);
+                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }
         };

@@ -117,7 +117,9 @@ public class ClassListActivity extends BaseActivity {
                     mAdapter.notifyDataSetChanged();
             }
         };
-        return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(), getIntentString("categoryId"), getIntentString("searchQuery"), getIntentString("communityId"),getIntentString("segmentId"),getIntentString("catalogId"),getIntentString("giftId"), uiHelper);
+        return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(), getIntentString("categoryId"),
+                getIntentString("searchQuery"), getIntentString("communityId"), getIntentString("segmentId"),
+                getIntentString("catalogId"), getIntentString("giftId"), getIntentString("origin"), uiHelper);
     }
 /*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {

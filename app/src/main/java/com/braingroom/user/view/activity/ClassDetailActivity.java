@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
+import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,6 +35,7 @@ public class ClassDetailActivity extends BaseActivity {
         void invalidateMenu();
 
         void stopShimmer();
+
     }
 
     @Override
@@ -98,6 +100,8 @@ public class ClassDetailActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
+        if (ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin")))
+            return R.layout.activity_class_detail_catalog;
         return R.layout.activity_class_detail;
     }
 

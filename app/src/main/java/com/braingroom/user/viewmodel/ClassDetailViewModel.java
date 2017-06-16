@@ -28,7 +28,6 @@ import com.google.android.youtube.player.YouTubePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -72,17 +71,16 @@ public class ClassDetailViewModel extends ViewModel {
     final MessageHelper messageHelper;
     @NonNull
     final Navigator navigator;
-    //    @NonNull
-//    final  HelperFactory helperFactory;
     @Setter
     ClassDetailActivity.UiHelper uiHelper;
 
-    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked,
+    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, openConnectTnT, openConnectBnS, openConnectFP;
 
     public boolean isInWishlist = false;
 
-    public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final String classId) {
+    public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
+                                @NonNull final Navigator navigator, final String classId) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -337,16 +335,21 @@ public class ClassDetailViewModel extends ViewModel {
 
         ;
         onGetTutor = new
-
                 Action() {
                     @Override
                     public void run() throws Exception {
                         helperFactory.createDialogHelper().showCustomView(R.layout.content_contact_admin_dailog, new ContactAdminDialogViewModel(messageHelper, navigator, classId), false);
 
                     }
-                }
+                };
+        getQuoteClicked = new
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        helperFactory.createDialogHelper().showCustomView(R.layout.content_contact_admin_dailog, new ContactAdminDialogViewModel(messageHelper, navigator, classId), false);
 
-        ;
+                    }
+                };
         //Edited By Vikas Godara
 
     }

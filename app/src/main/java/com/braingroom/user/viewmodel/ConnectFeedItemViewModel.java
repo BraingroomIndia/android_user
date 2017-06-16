@@ -7,7 +7,6 @@ import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -18,7 +17,6 @@ import com.braingroom.user.model.response.LikeResp;
 import com.braingroom.user.model.response.ReportResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
-import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -138,6 +136,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
                     Bundle bundle = new Bundle();
                     bundle.putString("categoryId", data.getCategoryId());
                     bundle.putString("segmentId", data.getSegId());
+                    bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                     navigator.navigateActivity(ClassListActivity.class, bundle);
                     return;
                 }

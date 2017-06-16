@@ -123,6 +123,17 @@ public class ClassListResp extends BaseResp {
         //Edited By Vikas Goodara
         @SerializedName(value = "vendorClasseLevelDetail", alternate = "VendorClasseLevelDetail")
         public List<ClassLevel> classLevels; //Edited by Vikas Godara
+
+        @SerializedName("catalog_description")
+        private String catalogDescription;
+
+        @SerializedName("class_provider")
+        private String classProvider;
+
+        @SerializedName("catalog_locations")
+        private List<String> catalogLocations;
+
+
     }
 
     @Data
