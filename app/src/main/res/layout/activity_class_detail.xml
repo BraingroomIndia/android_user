@@ -19,8 +19,8 @@
 
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <android.support.design.widget.CoordinatorLayout
 
@@ -112,7 +112,6 @@
                     </LinearLayout>
 
                 </android.support.design.widget.AppBarLayout>
-
                 <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -505,20 +504,25 @@
 
                 </android.support.v4.widget.NestedScrollView>
 
+
             </android.support.design.widget.CoordinatorLayout>
 
             <include
+                android:id="@+id/shimmer_container"
                 layout="@layout/class_detail_shimmer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:visible="@{vm.isShimmerOn}" />
-
             <include
                 layout="@layout/content_internet_connectivity"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
                 android:layout_alignParentBottom="true"
+                android:layout_below="@id/shimmer_container"
                 app:vm="@{vm.connectivityViewmodel}" />
+
+
 
         </RelativeLayout>
 </layout>

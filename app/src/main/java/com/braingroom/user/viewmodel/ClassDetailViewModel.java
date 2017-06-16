@@ -129,9 +129,16 @@ public class ClassDetailViewModel extends ViewModel {
         }).flatMap(new Function<Integer, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getClassDetail(classId).map(new Function<ClassData, ObservableSource<?>>() {
+                return apiService.getClassDetail(classId).onErrorReturn(new Function<Throwable, ClassData>() {
+                    @Override
+                    public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return new ClassData() ;
+                    }
+                }).map(new Function<ClassData, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(@io.reactivex.annotations.NonNull ClassData classData) throws Exception {
+                        if (classData.getId()==null)
+                            return Observable.empty() ;
 
                         mClassData = classData;
                         if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
@@ -187,11 +194,6 @@ public class ClassDetailViewModel extends ViewModel {
 
                         return Observable.empty();
 
-                    }
-                }).onErrorReturn(new Function<Throwable, ObservableSource<?>>() {
-                    @Override
-                    public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return Observable.empty();
                     }
                 });
             }
@@ -405,7 +407,7 @@ public class ClassDetailViewModel extends ViewModel {
     @Override
     public void retry(){
         connectivityViewmodel.isConnected.set(true);
-        callAgain.set(callAgain.get());
+        callAgain.set(callAgain.get()+1);
     }
 
     @Override
