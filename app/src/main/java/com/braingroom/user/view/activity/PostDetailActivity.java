@@ -16,6 +16,7 @@ import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
 import com.braingroom.user.viewmodel.ConnectFeedDetailViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
 
 public class PostDetailActivity extends BaseActivity implements ConnectUiHelper {
 
@@ -78,4 +79,7 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
         popBackstack();
     }
 
+    @Override
+    public void retry() {
+    }
 }

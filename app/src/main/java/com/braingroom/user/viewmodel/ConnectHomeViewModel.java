@@ -23,14 +23,14 @@ import io.reactivex.functions.Action;
 public class ConnectHomeViewModel extends ViewModel {
 
     //    public GroupDataViewModel groupVm;
-    public  GroupDataViewModel catSegVm;
+    public GroupDataViewModel catSegVm;
 
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final ObservableField<String> searchQuery = new ObservableField();
 
-//    public final Observable<List<ViewModel>> feedItems;
+    //    public final Observable<List<ViewModel>> feedItems;
 //    public final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
     public final Action onSearchClicked, onFilterClicked, onPostClicked;
 
@@ -42,6 +42,12 @@ public class ConnectHomeViewModel extends ViewModel {
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         this.userEmail.set(pref.getString(Constants.EMAIL, null));
         this.uiHelper = uiHelper;
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+            }
+        });
 //        this.filterData = new ConnectFilterData();
 //        feedDataMapFunction = new Function<ConnectFeedResp, List<ViewModel>>() {
 //            @Override
@@ -76,14 +82,15 @@ public class ConnectHomeViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (!loggedIn.get()) {
-                    Bundle data =new Bundle();
+                    Bundle data = new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
-                    messageHelper.showLoginRequireDialog("To create new content, you need to log in",data);
+                    messageHelper.showLoginRequireDialog("To create new content, you need to log in", data);
                     return;
                 }
                 uiHelper.openConnectPost();
             }
         };
+
 
     }
 
@@ -91,6 +98,24 @@ public class ConnectHomeViewModel extends ViewModel {
         List<ViewModel> result = new ArrayList<>();
         result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
         return Observable.just(result);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectivityViewmodel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        connectivityViewmodel.onPause();
+    }
+
+    @Override
+    public void retry() {
+        connectivityViewmodel.isConnected.set(true);
+        uiHelper.retry();
     }
 
 

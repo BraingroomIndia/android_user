@@ -16,11 +16,9 @@
 
     </data>
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -519,10 +517,9 @@
                 layout="@layout/content_internet_connectivity"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
                 app:vm="@{vm.connectivityViewmodel}" />
 
-
-        </LinearLayout>
-    </ScrollView>
+        </RelativeLayout>
 </layout>
 

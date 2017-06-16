@@ -2,6 +2,7 @@ package com.braingroom.user.view.activity;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -41,10 +42,12 @@ import com.braingroom.user.view.fragment.LikesFragment;
 import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
 import com.braingroom.user.view.fragment.SearchSelectListFragment;
+import com.braingroom.user.viewmodel.ConnectFeedItemViewModel;
 import com.braingroom.user.viewmodel.ConnectFilterViewModel;
 import com.braingroom.user.viewmodel.ConnectHomeViewModel;
 import com.braingroom.user.viewmodel.LocationFilterViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
 
 import lombok.Getter;
 
@@ -60,6 +63,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     public interface UiHelper {
         void updateLocationFilter();
+
     }
 
     public UiHelper uiHelper;
@@ -505,6 +509,11 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         popBackstack();
     }
 
+    @Override
+    public void retry() {
+        pagerAdapter.getFragmentAt(0).getViewModel().retry();
+        pagerAdapter.getFragmentAt(1).getViewModel().retry();
+    }
 
     private String getActivePostType() {
         String postType = null;

@@ -10,6 +10,11 @@
             name="vm"
             type="com.braingroom.user.viewmodel.ProfileViewModel" />
     </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -119,12 +124,16 @@
                 app:vm="@{vm.categoryVm}" />
             <!--Edited By Vikas Godara-->
 
-            <include
-                layout="@layout/content_internet_connectivity"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:vm="@{vm.connectivityViewmodel}" />
+
+
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            app:vm="@{vm.connectivityViewmodel}" />
+    </RelativeLayout>
 </layout>

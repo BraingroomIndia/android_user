@@ -17,6 +17,7 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ProfileActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -86,11 +87,13 @@ public class ProfileViewModel extends ViewModel {
                 return apiService.getProfile(pref.getString(Constants.BG_ID, "")).onErrorReturn(new Function<Throwable, ProfileData>() {
                     @Override
                     public ProfileData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return null;
+                        return new ProfileData();
                     }
                 }).doOnNext(new Consumer<ProfileData>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
+                        if (data.getEmail()==null)
+                            return;
                         HashMap<String, Integer> selectedGender = new HashMap<>();
                         if (!data.getGender().equals("-1"))
                             selectedGender.put(data.getGender().equals("1") ? "Male" : "Female", Integer.valueOf(data.getGender()));
@@ -199,6 +202,11 @@ public class ProfileViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
+        }).onErrorReturn(new Function<Throwable, ListDialogData1>() {
+            @Override
+            public ListDialogData1 apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                return new ListDialogData1(new LinkedHashMap<String, Integer>());
+            }
         }), new HashMap<String, Integer>(), false, cityConsumer);
         //Edited By Vikas Goodara
         categoryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Interest", messageHelper, apiService.getCategory()//zEdited By Vikas Godara
@@ -211,6 +219,11 @@ public class ProfileViewModel extends ViewModel {
                         }
                         // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                         return new ListDialogData1(itemMap);
+                    }
+                }).onErrorReturn(new Function<Throwable, ListDialogData1>() {
+                    @Override
+                    public ListDialogData1 apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return new ListDialogData1(new LinkedHashMap<String, Integer>());
                     }
                 }), new HashMap<String, Integer>(), true, categoryConsumer);
         //Edited By Vikas Goodara
@@ -237,6 +250,11 @@ public class ProfileViewModel extends ViewModel {
                 }
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
+            }
+        }).onErrorReturn(new Function<Throwable, ListDialogData1>() {
+            @Override
+            public ListDialogData1 apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                return new ListDialogData1(new LinkedHashMap<String, Integer>());
             }
         });
     }
@@ -283,6 +301,24 @@ public class ProfileViewModel extends ViewModel {
             }
         });
     }
+    @Override
+    public void retry(){
+        callAgain.set(callAgain.get()+1);
+        connectivityViewmodel.isConnected.set(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectivityViewmodel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        connectivityViewmodel.onPause();
+    }
+
 
     public void revertData() {
         editable.set(false);

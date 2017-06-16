@@ -52,7 +52,6 @@ public class HomeViewModel extends ViewModel {
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final CommunityGridViewModel communityVm;
     public final ShowcaseClassListViewModel featuredVm, trendingVm, indigenousVm;
-    public final ConnectivityViewModel connectivityViewmodel;
     public final Observable<List<ViewModel>> categories;
 
     private List<ClassLocationData> locationList = new ArrayList<>();
@@ -240,6 +239,7 @@ public class HomeViewModel extends ViewModel {
     @Override
     public void retry() {
         callAgain.set(callAgain.get()+1);
+        connectivityViewmodel.isConnected.set(true);
         featuredVm.retry();
         trendingVm.retry();
         indigenousVm.retry();

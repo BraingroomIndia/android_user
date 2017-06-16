@@ -79,7 +79,6 @@ public class ViewModel {
 
     public void retry() {
         callAgain.set(callAgain.get() + 1);
-        connectivityViewmodel.isConnected.set(true);
     }
 
     public void onPause() {

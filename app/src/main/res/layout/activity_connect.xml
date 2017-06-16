@@ -15,45 +15,56 @@
             type="com.braingroom.user.viewmodel.ConnectHomeViewModel" />
     </data>
 
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:openDrawer="start">
+        android:layout_height="wrap_content">
 
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            tools:openDrawer="start">
+
+
+            <include
+                layout="@layout/app_bar_connect"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:vm="@{vm}" />
+
+            <!--<include-->
+            <!--layout="@layout/app_bar_connect"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:visibility="@{vmConnect==null ? View.GONE : View.VISIBLE}"-->
+            <!--app:vm="@{vmConnect}" />-->
+
+
+            <FrameLayout
+                android:id="@+id/comments_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </FrameLayout>
+
+            <android.support.design.widget.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:fitsSystemWindows="true"
+                app:menu="@{vm.loggedIn ? R.menu.activity_home_drawer_loggedin : R.menu.activity_home_drawer}"
+                app:model="@{vm}" />
+
+        </android.support.v4.widget.DrawerLayout>
 
         <include
-            layout="@layout/app_bar_connect"
+            layout="@layout/content_internet_connectivity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:vm="@{vm}" />
-
-        <!--<include-->
-        <!--layout="@layout/app_bar_connect"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:visibility="@{vmConnect==null ? View.GONE : View.VISIBLE}"-->
-        <!--app:vm="@{vmConnect}" />-->
-
-
-
-        <FrameLayout
-            android:id="@+id/comments_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-
-        <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:menu="@{vm.loggedIn ? R.menu.activity_home_drawer_loggedin : R.menu.activity_home_drawer}"
-            app:model="@{vm}" />
-
-    </android.support.v4.widget.DrawerLayout>
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            app:vm="@{vm.connectivityViewmodel}" />
+    </RelativeLayout>
 
 </layout>

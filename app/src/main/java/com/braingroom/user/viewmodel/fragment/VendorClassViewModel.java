@@ -86,6 +86,12 @@ public class VendorClassViewModel extends ViewModel {
         }
     }
     @Override
+    public void retry(){
+        callAgain.set(callAgain.get()+1);
+        connectivityViewmodel.isConnected.set(true);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         connectivityViewmodel.onResume();
