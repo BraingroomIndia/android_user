@@ -127,10 +127,10 @@ public class ClassListResp extends BaseResp {
         @SerializedName("catalog_description")
         private String catalogDescription;
 
-        @SerializedName("class_provider")
+        @SerializedName("about_academy")
         private String classProvider;
 
-        @SerializedName("catalog_locations")
+        @SerializedName("locations")
         private List<String> catalogLocations;
 
 

@@ -199,7 +199,7 @@
                                         android:background="@drawable/bottom_line_drawable"
                                         android:gravity="center_vertical"
                                         android:paddingLeft="@dimen/margin_large"
-                                        android:text="About the class"
+                                        android:text="Catalog Description"
                                         android:textColor="@color/colorTextDark"
                                         android:textSize="@dimen/text_size_medium"
                                         app:font='@{@string/robotoBold}' />
@@ -211,7 +211,7 @@
                                         android:paddingLeft="@dimen/margin_large"
                                         android:paddingRight="@dimen/margin_med"
                                         android:paddingTop="@dimen/margin_med"
-                                        android:text="@{vm.description}"
+                                        android:text="@{vm.catalogDescription}"
                                         android:textColor="@color/colorTextDark"
                                         app:font='@{@string/robotoRegular}' />
                                 </LinearLayout>
@@ -220,16 +220,14 @@
 
 
                             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                                android:id="@+id/location"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_med"
-                                android:visibility="@{vm.isMapVisible? View.VISIBLE : View.GONE}"
                                 card_view:cardElevation="@dimen/elevation_small">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:orientation="vertical">
 
                                     <TextView
@@ -238,27 +236,25 @@
                                         android:background="@drawable/bottom_line_drawable"
                                         android:gravity="center_vertical"
                                         android:paddingLeft="@dimen/margin_large"
-                                        android:text="Class locations"
+                                        android:text="Class Provider"
                                         android:textColor="@color/colorTextDark"
                                         android:textSize="@dimen/text_size_medium"
                                         app:font='@{@string/robotoBold}' />
 
-                                    <android.support.v7.widget.RecyclerView
+                                    <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:nestedScrollingEnabled="false"
                                         android:paddingBottom="@dimen/margin_med"
                                         android:paddingLeft="@dimen/margin_large"
                                         android:paddingRight="@dimen/margin_med"
                                         android:paddingTop="@dimen/margin_med"
-                                        bind:items="@{vm.addresses}"
-                                        bind:layout_vertical="@{true}"
-                                        bind:view_provider="@{@layout/item_bullet_text}" />
-
-
+                                        android:text="@{vm.classProvider}"
+                                        android:textColor="@color/colorTextDark"
+                                        app:font='@{@string/robotoRegular}' />
                                 </LinearLayout>
 
                             </android.support.v7.widget.CardView>
+
 
                             <android.support.v7.widget.CardView
                                 android:layout_width="match_parent"
@@ -418,7 +414,8 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="@dimen/padding_med">
 
         </FrameLayout>
     </FrameLayout>

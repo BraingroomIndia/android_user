@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
+import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
@@ -54,6 +55,9 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
     public final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
+    public final ObservableField<String> catalogDescription = new ObservableField<>(null);
+    public final ObservableField<String> classProvider = new ObservableField<>(null);
+    public final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
@@ -144,7 +148,9 @@ public class ClassDetailViewModel extends ViewModel {
                         description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
-
+                        catalogDescription.set(classData.getCatalogDescription());
+                        classProvider.set(classData.getClassProvider());
+                        catalogLocationList.addAll(classData.getCatalogLocations());
                         if ("1".equals(classData.getWishlist()))
                             isInWishlist = true;
                         if ("fixed".equalsIgnoreCase(classData.getClassTypeData())) {
@@ -346,8 +352,7 @@ public class ClassDetailViewModel extends ViewModel {
                 Action() {
                     @Override
                     public void run() throws Exception {
-                        helperFactory.createDialogHelper().showCustomView(R.layout.content_contact_admin_dailog, new ContactAdminDialogViewModel(messageHelper, navigator, classId), false);
-
+                        uiHelper.showQuoteForm();
                     }
                 };
         //Edited By Vikas Godara
@@ -405,8 +410,9 @@ public class ClassDetailViewModel extends ViewModel {
         navigator.navigateActivity(Intent.createChooser(shareIntent, "Share link using"));
 
     }
+
     @Override
-    public void retry(){
+    public void retry() {
         connectivityViewmodel.isConnected.set(true);
         callAgain.set(callAgain.get());
     }
