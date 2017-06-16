@@ -405,6 +405,11 @@ public class ClassDetailViewModel extends ViewModel {
         navigator.navigateActivity(Intent.createChooser(shareIntent, "Share link using"));
 
     }
+    @Override
+    public void retry(){
+        connectivityViewmodel.isConnected.set(true);
+        callAgain.set(callAgain.get());
+    }
 
     @Override
     public void onResume() {

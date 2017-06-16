@@ -16,17 +16,22 @@
 
     </data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/margin_small_neg"
-        android:layout_marginLeft="@dimen/margin_small_neg"
-        android:layout_marginRight="@dimen/margin_small_neg"
-        android:background="@color/fbFeedBackground"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/padding_med"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/margin_small_neg"
+            android:layout_marginLeft="@dimen/margin_small_neg"
+            android:layout_marginRight="@dimen/margin_small_neg"
+            android:background="@color/fbFeedBackground"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/padding_med"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </RelativeLayout>
 
 </layout>
 

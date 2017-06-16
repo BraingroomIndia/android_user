@@ -44,6 +44,7 @@ public class ClassSimpleListViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 retry();
+                connectivityViewmodel.isConnected.set(true);
                 Log.d(TAG, "run: "+callAgain.get());
             }
         });
@@ -141,6 +142,11 @@ public class ClassSimpleListViewModel extends ViewModel {
     public void onPause() {
         super.onPause();
         connectivityViewmodel.onPause();
+    }
+    @Override
+    public void retry(){
+        callAgain.set(callAgain.get()+1);
+        connectivityViewmodel.isConnected.set(true);
     }
 
 }

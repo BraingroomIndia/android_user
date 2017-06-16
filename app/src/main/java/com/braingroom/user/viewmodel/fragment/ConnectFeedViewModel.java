@@ -6,6 +6,7 @@ import android.util.Log;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.response.ConnectFeedResp;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -14,6 +15,7 @@ import com.braingroom.user.view.adapters.ViewProvider;
 import com.braingroom.user.view.fragment.ConnectFeedFragment;
 import com.braingroom.user.viewmodel.ClassItemViewModel;
 import com.braingroom.user.viewmodel.ConnectFeedItemViewModel;
+import com.braingroom.user.viewmodel.ConnectivityViewModel;
 import com.braingroom.user.viewmodel.EmptyItemViewModel;
 import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ShimmerItemViewModel;
@@ -25,8 +27,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import lombok.Getter;
 
 public class ConnectFeedViewModel extends ViewModel {
@@ -36,6 +41,7 @@ public class ConnectFeedViewModel extends ViewModel {
     public ConnectFilterData filterData;
     private boolean paginationInProgress = false;
     private int nextPage = 0;
+    private int currentPage=-1;
     public final ConnectFeedFragment.FragmentUiHelper fragmentUiHelper;
 
     @Getter
@@ -60,6 +66,12 @@ public class ConnectFeedViewModel extends ViewModel {
         this.filterData.setCountryId(pref.getInt("connect_country_id", 0) == 0 ? "" : pref.getInt("connect_country_id", 0) + "");
         this.filterData.setStateId(pref.getInt("connect_state_id", 0) == 0 ? "" : pref.getInt("connect_state_id", 0) + "");
         this.filterData.setCityId(pref.getInt("connect_city_id", 0) == 0 ? "" : pref.getInt("connect_city_id", 0) + "");
+        this.connectivityViewmodel=new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+            }
+        });
 
         this.fragmentUiHelper = fragmentUiHelper;
         feedDataMapFunction = new Function<ConnectFeedResp, List<ViewModel>>() {
@@ -69,6 +81,7 @@ public class ConnectFeedViewModel extends ViewModel {
                 if (resp.getData().size() == 0) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                 } else {
+                    currentPage=nextPage;
                     nextPage = resp.getNextPage();
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
                         results.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
@@ -80,18 +93,28 @@ public class ConnectFeedViewModel extends ViewModel {
         initConnectItemObserver(filterData);
     }
 
-    public void initConnectItemObserver(ConnectFilterData filterData) {
-        this.filterData = filterData;
-        feedItems = getLoadingItems(4).mergeWith(apiService.getConnectFeed(this.filterData, 0).map(feedDataMapFunction)).doOnNext(new Consumer<List<ViewModel>>() {
+    public void initConnectItemObserver(ConnectFilterData filterData1) {
+        this.filterData = filterData1;
+        feedItems = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
-                nonReactiveItems = viewModels;
-                fragmentUiHelper.notifyDataChanged();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d("Class Fetch error", "accept: " + throwable.getMessage());
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return getLoadingItems(4).mergeWith(apiService.getConnectFeed(filterData, 0).map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                    @Override
+                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return new ArrayList<>();
+                    }
+                })).doOnNext(new Consumer<List<ViewModel>>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+                        nonReactiveItems = viewModels;
+                        fragmentUiHelper.notifyDataChanged();
+                    }
+                }).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        Log.d("Class Fetch error", "accept: " + throwable.getMessage());
+                    }
+                });
             }
         });
         feedItems.subscribe();
@@ -105,31 +128,51 @@ public class ConnectFeedViewModel extends ViewModel {
 
 
     private void initConnectItemObserverPagination() {
-        feedItems = getLoadingItems(2).mergeWith(apiService.getConnectFeed(filterData, nextPage).map(feedDataMapFunction))
-                .doOnNext(new Consumer<List<ViewModel>>() {
+        feedItems = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return currentPage<nextPage;
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return getLoadingItems(2).mergeWith(apiService.getConnectFeed(filterData, nextPage).map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                     @Override
-                    public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return new ArrayList<ViewModel>();
+                    }
+                }))
+                        .doOnNext(new Consumer<List<ViewModel>>() {
+                            @Override
+                            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
 
-                        if (viewModels.size() > 0 && viewModels.get(0) instanceof ClassItemViewModel) {
-                            Iterator<ViewModel> iter = nonReactiveItems.iterator();
-                            while (iter.hasNext()) {
-                                if (iter.next() instanceof ShimmerItemViewModel) {
-                                    iter.remove();
+                                if (viewModels.size() > 0 && viewModels.get(0) instanceof ClassItemViewModel) {
+                                    Iterator<ViewModel> iter = nonReactiveItems.iterator();
+                                    while (iter.hasNext()) {
+                                        if (iter.next() instanceof ShimmerItemViewModel) {
+                                            iter.remove();
+                                        }
+                                    }
+                                    paginationInProgress = false;
                                 }
+                                nonReactiveItems.addAll(viewModels);
+                                fragmentUiHelper.notifyDataChanged();
                             }
-                            paginationInProgress = false;
-                        }
-                        nonReactiveItems.addAll(viewModels);
-                        fragmentUiHelper.notifyDataChanged();
-                    }
-                }).doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        Log.d("Class Fetch error", "accept: " + throwable.getMessage());
-                    }
-                });
+                        }).doOnError(new Consumer<Throwable>() {
+                            @Override
+                            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                                Log.d("Class Fetch error", "accept: " + throwable.getMessage());
+                            }
+                        });
+            }
+        });
         paginationInProgress = true;
         feedItems.subscribe();
+    }
+    @Override
+    public void retry(){
+        callAgain.set(callAgain.get()+1);
+        connectivityViewmodel.isConnected.set(true);
     }
 
 

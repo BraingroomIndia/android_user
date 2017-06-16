@@ -20,6 +20,7 @@ import com.braingroom.user.viewmodel.ViewModel;
 import java.io.Serializable;
 
 import dagger.internal.Preconditions;
+import lombok.Getter;
 
 /**
  * Created by agrahari on 07/04/17.
@@ -28,6 +29,7 @@ import dagger.internal.Preconditions;
 public abstract class BaseFragment extends Fragment {
 
     public ViewDataBinding binding;
+    @Getter
     protected ViewModel vm;
     public BaseActivity activity;
 

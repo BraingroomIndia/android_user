@@ -1,5 +1,7 @@
 package com.braingroom.user.view;
 
+import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
+
 public interface ConnectUiHelper {
 
 
@@ -16,4 +18,6 @@ public interface ConnectUiHelper {
     void openConnectPost();
 
     void popFragment();
+
+     void retry();
 }
