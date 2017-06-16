@@ -155,9 +155,15 @@ public class ClassDetailViewModel extends ViewModel {
                         description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
-                        catalogDescription.set(classData.getCatalogDescription());
-                        classProvider.set(classData.getClassProvider());
-                        catalogLocationList.addAll(classData.getCatalogLocations());
+                      try {
+                          catalogDescription.set(classData.getCatalogDescription());
+                          classProvider.set(classData.getClassProvider());
+                          catalogLocationList.addAll(classData.getCatalogLocations());
+
+                      }catch (NullPointerException e){
+                          Log.d(TAG, "apply: "+e.toString());
+                      }
+
                         if ("1".equals(classData.getWishlist()))
                             isInWishlist = true;
                         if ("fixed".equalsIgnoreCase(classData.getClassTypeData())) {

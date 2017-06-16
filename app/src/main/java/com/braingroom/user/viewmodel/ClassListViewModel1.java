@@ -145,10 +145,10 @@ public class ClassListViewModel1 extends ViewModel {
         if (communityId != null || !"".equals(catalog)) {
             segmentsVisibility.set(false);
         }
-        segments = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+        segments = /*FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(filterData.getCategoryId()))
+                return*/ Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(filterData.getCategoryId()))
                         .map(new Function<SegmentResp, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(SegmentResp resp) throws Exception {
@@ -170,8 +170,8 @@ public class ClassListViewModel1 extends ViewModel {
                                 return results;
                             }
                         });
-            }
-        });
+     /*       }
+        });*/
 //
         classDataMapFunction = new Function<ClassListData, List<ViewModel>>() {
             @Override
@@ -263,7 +263,7 @@ public class ClassListViewModel1 extends ViewModel {
     }
 
     private void initClassItemObserver() {
-        classes = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+        classes = /*FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return currentPage < nextPage;
@@ -271,14 +271,14 @@ public class ClassListViewModel1 extends ViewModel {
         }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return getLoadingItems(4).mergeWith(apiService.generalFilter(filterData.getFilterReq(), 0).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                return*/ getLoadingItems(4).mergeWith(apiService.generalFilter(filterData.getFilterReq(), 0).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return nonReactiveItems;
                     }
-                }));
+                })/*);
             }
-        }).doOnNext(new Consumer<List<ViewModel>>() {
+        })*/.doOnNext(new Consumer<List<ViewModel>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
                 if (viewModels.size() < 2) {
@@ -293,7 +293,7 @@ public class ClassListViewModel1 extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 Log.d("Class Fetch error", "accept: " + throwable.getMessage());
             }
-        });
+        }));
         classes.subscribe();
     }
 
