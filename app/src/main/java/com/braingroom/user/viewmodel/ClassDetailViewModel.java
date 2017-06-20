@@ -6,6 +6,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.braingroom.user.R;
@@ -58,6 +59,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
     public final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
+    public final ObservableField<String> locationConcat = new ObservableField<>();
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
@@ -84,7 +86,7 @@ public class ClassDetailViewModel extends ViewModel {
     public boolean isInWishlist = false;
 
     public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, final String classId) {
+                                @NonNull final Navigator navigator, final String classId, boolean isCatalog) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -97,6 +99,7 @@ public class ClassDetailViewModel extends ViewModel {
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
         this.uiHelper = uiHelper;
+        isMapVisible.set(!isCatalog);
         openConnectTnT = new Action() {
             @Override
             public void run() throws Exception {
@@ -131,16 +134,17 @@ public class ClassDetailViewModel extends ViewModel {
         }).flatMap(new Function<Integer, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getClassDetail(classId).onErrorReturn(new Function<Throwable, ClassData>() {
+                // TODO: 16/06/17 place classId
+                return apiService.getClassDetail("2186").onErrorReturn(new Function<Throwable, ClassData>() {
                     @Override
                     public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return new ClassData() ;
+                        return new ClassData();
                     }
                 }).map(new Function<ClassData, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(@io.reactivex.annotations.NonNull ClassData classData) throws Exception {
-                        if (classData.getId()==null)
-                            return Observable.empty() ;
+                        if (classData.getId() == null)
+                            return Observable.empty();
 
                         mClassData = classData;
                         if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
@@ -155,14 +159,14 @@ public class ClassDetailViewModel extends ViewModel {
                         description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
-                      try {
-                          catalogDescription.set(classData.getCatalogDescription());
-                          classProvider.set(classData.getClassProvider());
-                          catalogLocationList.addAll(classData.getCatalogLocations());
-
-                      }catch (NullPointerException e){
-                          Log.d(TAG, "apply: "+e.toString());
-                      }
+                        try {
+                            catalogDescription.set(classData.getCatalogDescription());
+                            classProvider.set(classData.getClassProvider());
+                            catalogLocationList.addAll(classData.getCatalogLocations());
+                            locationConcat.set(TextUtils.join(",", classData.getCatalogLocations()));
+                        } catch (NullPointerException e) {
+                            Log.d(TAG, "apply: " + e.toString());
+                        }
 
                         if ("1".equals(classData.getWishlist()))
                             isInWishlist = true;
@@ -422,7 +426,7 @@ public class ClassDetailViewModel extends ViewModel {
     @Override
     public void retry() {
         connectivityViewmodel.isConnected.set(true);
-        callAgain.set(callAgain.get()+1);
+        callAgain.set(callAgain.get() + 1);
     }
 
     @Override
