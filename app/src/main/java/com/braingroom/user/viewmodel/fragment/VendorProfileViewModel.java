@@ -79,6 +79,7 @@ public class VendorProfileViewModel extends ViewModel {
         });
 
     }
+
     @Override
     public void onResume() {
         super.onResume();

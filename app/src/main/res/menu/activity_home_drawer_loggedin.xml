@@ -18,18 +18,7 @@
             android:id="@+id/nav_change_pass"
             android:icon="@drawable/ic_lock_open_black_24dp"
             android:title="Change Password" />
-        <item
-            android:id="@+id/nav_faq"
-            android:icon="@drawable/ic_help_black_24dp"
-            android:title="FAQ" />
-        <item
-            android:id="@+id/nav_tnc"
-            android:icon="@drawable/ic_description_black_24dp"
-            android:title="Terms &amp; Condition" />
-        <item
-            android:id="@+id/nav_contact"
-            android:icon="@drawable/ic_chat_black_24dp"
-            android:title="Contact US" />
+
         <item
             android:id="@+id/nav_catalogue"
             android:icon="@drawable/ic_class_black_24dp"
@@ -46,6 +35,19 @@
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
             android:title="Logout" />
+
+        <item
+            android:id="@+id/nav_faq"
+            android:icon="@drawable/ic_help_black_24dp"
+            android:title="FAQ" />
+        <item
+            android:id="@+id/nav_tnc"
+            android:icon="@drawable/ic_description_black_24dp"
+            android:title="Terms &amp; Condition" />
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_chat_black_24dp"
+            android:title="Contact US" />
     </group>
 
 </menu>

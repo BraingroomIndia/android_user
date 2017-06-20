@@ -4,9 +4,12 @@ import com.braingroom.user.model.request.GeneralFilterReq;
 
 import java.io.Serializable;
 
+import lombok.Getter;
+
 /**
  * Created by agrahari on 07/04/17.
  */
+@Getter
 public class FilterData implements Serializable {
 
     String keywords = "";

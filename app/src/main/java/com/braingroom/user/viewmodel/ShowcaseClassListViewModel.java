@@ -62,7 +62,9 @@ public class ShowcaseClassListViewModel extends ViewModel {
                 }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return results;
+                        List<ViewModel> result = new ArrayList<>();
+                        result.addAll(Collections.nCopies(defaultCount, new TileShimmerItemViewModel()));
+                        return result;
                     }
                 }));
 

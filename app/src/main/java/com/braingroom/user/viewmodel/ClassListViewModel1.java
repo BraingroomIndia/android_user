@@ -41,6 +41,8 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
 
+import static com.crashlytics.android.answers.Answers.TAG;
+
 public class ClassListViewModel1 extends ViewModel {
 
     public static final int LAYOUT_TYPE_ROW = -1;
@@ -88,13 +90,28 @@ public class ClassListViewModel1 extends ViewModel {
     ViewProvider viewProvider;
 
     private int nextPage = 0;
-    private int currentPage = 0;
+    private int currentPage = -1;
+    private boolean segmentAvailable = false;
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @Nullable String categoryId, @Nullable String searchQuery, @Nullable String communityId, @Nullable String segmentId,
-                               @Nullable String catalog, @Nullable String giftId, @Nullable final String origin, final ClassListActivity.UiHelper uiHelper) {
+            , @NonNull final HelperFactory helperFactory, @NonNull FilterData filterData1, HashMap<String, Integer> categoryMap,
+                               HashMap<String, Integer> segmentsMap,
+                               HashMap<String, String> cityMap,
+                               HashMap<String, String> localityMap,
+                               HashMap<String, Integer> communityMap,
+                               HashMap<String, Integer> classTypeMap,
+                               HashMap<String, Integer> classScheduleMap,
+                               HashMap<String, String> vendorListMap, @Nullable final String origin, final ClassListActivity.UiHelper uiHelper) {
 
 
+        categoryFilterMap = categoryMap;
+        segmentsFilterMap = segmentsMap;
+        cityFilterMap = cityMap;
+        localityFilterMap = localityMap;
+        communityFilterMap = communityMap;
+        classTypeFilterMap = classTypeMap;
+        classScheduleFilterMap = classScheduleMap;
+        vendorListFilterMap = vendorListMap;
         viewProvider = new ViewProvider() {
             @Override
             public int getView(ViewModel vm) {
@@ -126,12 +143,13 @@ public class ClassListViewModel1 extends ViewModel {
         layoutType = new ObservableInt(LAYOUT_TYPE_TILE);
         nonReactiveItems = new ArrayList<>();
 
-        filterData.setCategoryId(categoryId);
+        filterData = filterData1;
+/*        filterData.setCategoryId(categoryId);
         filterData.setCommunityId(communityId);
         filterData.setSegmentId(segmentId);
         filterData.setKeywords(searchQuery);
         filterData.setCatalog(catalog);
-        filterData.setGiftId(giftId);
+        filterData.setGiftId(giftId);*/
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -142,13 +160,18 @@ public class ClassListViewModel1 extends ViewModel {
         this.uiHelper = uiHelper;
         /* if coming from community click
         * hide macro selects and call */
-        if (communityId != null || !"".equals(catalog)) {
+        if (!filterData.getCommunityId().equals("") || !filterData.getCatalog().equals("") || filterData.getCategoryId().equals("")) {
             segmentsVisibility.set(false);
         }
-        segments = /*FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+        segments = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return (!segmentAvailable) && segmentsVisibility.get();
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return*/ Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(filterData.getCategoryId()))
+                return Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(filterData.getCategoryId()))
                         .map(new Function<SegmentResp, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(SegmentResp resp) throws Exception {
@@ -156,13 +179,15 @@ public class ClassListViewModel1 extends ViewModel {
                                 if (resp.getData().size() == 0) resp = getDefaultSegments();
 
                                 for (final SegmentResp.Snippet elem : resp.getData()) {
+                                    if (!elem.getId().equals("-1"))
+                                        segmentAvailable = true;
                                     results.add(new DataItemViewModel(" + " + elem.getSegmentName(), false, new MyConsumer<DataItemViewModel>() {
                                         @Override
                                         public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
                                             if (!elem.getId().equals("-1")) {
                                                 filterData.setSegmentId(elem.getId());
-                                                initClassItemObserver();
                                                 segmentSelectorSubject.onNext(viewModel);
+                                                reset();
                                             }
                                         }
                                     }, segmentSelectorSubject));
@@ -170,18 +195,19 @@ public class ClassListViewModel1 extends ViewModel {
                                 return results;
                             }
                         });
-     /*       }
-        });*/
+            }
+        });
 //
         classDataMapFunction = new Function<ClassListData, List<ViewModel>>() {
             @Override
             public List<ViewModel> apply(ClassListData resp) throws Exception {
                 List<ViewModel> results = new ArrayList<>();
+                currentPage = nextPage;
+                nextPage = resp.getNextPage();
+                Log.d(TAG, "\napply: nextPage:\t " +nextPage +"\n currentPage:\t" +currentPage);
                 if (resp.getClassDataList().size() == 0) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                 } else {
-                    currentPage = nextPage;
-                    nextPage = resp.getNextPage();
                     for (final ClassData elem : resp.getClassDataList()) {
                         //Edited By Vikas Godara
                         List<ClassLocationData> location = elem.getLocation();
@@ -208,7 +234,8 @@ public class ClassListViewModel1 extends ViewModel {
                 return results;
             }
         };
-        initClassItemObserver();
+
+        //initClassItemObserver();
 //        classes = getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq()).map(classDataMapFunction));
         sortResultConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
@@ -216,7 +243,7 @@ public class ClassListViewModel1 extends ViewModel {
                 if (sortData.values().iterator().hasNext()) {
                     String sortOrder = "" + sortData.values().iterator().next();
                     filterData.setSortOrder(sortOrder);
-                    initClassItemObserver();
+                    reset();
                 }
             }
         };
@@ -244,6 +271,7 @@ public class ClassListViewModel1 extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle bundle = new Bundle();
+                bundle.putSerializable("filterData", filterData);
                 bundle.putSerializable("category", categoryFilterMap);
                 bundle.putSerializable("segment", segmentsFilterMap);
                 bundle.putSerializable("city", cityFilterMap);
@@ -252,53 +280,14 @@ public class ClassListViewModel1 extends ViewModel {
                 bundle.putSerializable("classType", classTypeFilterMap);
                 bundle.putSerializable("classSchedule", classScheduleFilterMap);
                 bundle.putSerializable("vendorList", vendorListFilterMap);
-                bundle.putString("keywords", keywords);
+                /*bundle.putString("keywords", keywords);
                 bundle.putString("startDate", startDate);
-                bundle.putString("endDate", endDate);
+                bundle.putString("endDate", endDate);*/
 
                 navigator.navigateActivityForResult(FilterActivity.class, bundle, REQ_CODE_CHOOSE_FILTER);
             }
         };
 
-    }
-
-    private void initClassItemObserver() {
-        classes = /*FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
-            @Override
-            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return currentPage < nextPage;
-            }
-        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
-            @Override
-            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return*/ getLoadingItems(4).mergeWith(apiService.generalFilter(filterData.getFilterReq(), 0).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
-                    @Override
-                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return nonReactiveItems;
-                    }
-                })/*);
-            }
-        })*/.doOnNext(new Consumer<List<ViewModel>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
-                if (viewModels.size() < 2) {
-                    layoutType.set(LAYOUT_TYPE_ROW);
-                    uiHelper.changeLayout(layoutType.get());
-                }
-                nonReactiveItems = viewModels;
-                uiHelper.notifyDataChanged();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d("Class Fetch error", "accept: " + throwable.getMessage());
-            }
-        }));
-        classes.subscribe();
-    }
-
-    private void initClassItemObserverPagination() {
-        paginationInProgress = true;
         classes = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -307,41 +296,50 @@ public class ClassListViewModel1 extends ViewModel {
         }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return getLoadingItems(2).mergeWith(apiService.generalFilter(filterData.getFilterReq(), nextPage).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                return getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq(), nextPage).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return nonReactiveItems;
-                    }
-                }));
-            }
-        }).doOnNext(new Consumer<List<ViewModel>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
 
-                if (viewModels.size() > 0 && viewModels.get(0) instanceof ClassItemViewModel) {
-                    Iterator<ViewModel> iter = nonReactiveItems.iterator();
-                    while (iter.hasNext()) {
-                        if (iter.next() instanceof ShimmerItemViewModel) {
-                            iter.remove();
-                        }
+                        return new ArrayList<ViewModel>(0);
                     }
-                    paginationInProgress = false;
-                }
-                nonReactiveItems.addAll(viewModels);
-                uiHelper.notifyDataChanged();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d("Class Fetch error", "accept: " + throwable.getMessage());
+                })).doOnNext(new Consumer<List<ViewModel>>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+
+                        if (viewModels.size() > 0 && (viewModels.get(0) instanceof ClassItemViewModel || viewModels.get(0) instanceof EmptyItemViewModel)) {
+                            Iterator<ViewModel> iter = nonReactiveItems.iterator();
+                            while (iter.hasNext()) {
+                                if (iter.next() instanceof ShimmerItemViewModel) {
+                                    iter.remove();
+                                }
+                            }
+                            if (viewModels.size() < 2) {
+                                layoutType.set(LAYOUT_TYPE_ROW);
+                                uiHelper.changeLayout(layoutType.get());
+                            }
+                            paginationInProgress = false;
+                        }
+                        nonReactiveItems.addAll(viewModels);
+                        uiHelper.notifyDataChanged();
+                    }
+                }).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        Log.d("Class Fetch error", "accept: " + throwable.getMessage());
+                    }
+                });
             }
         });
         classes.subscribe();
+
+
     }
+
 
     public void paginate() {
         if (nextPage > 0 && !paginationInProgress) {
-            initClassItemObserverPagination();
+            paginationInProgress = true;
+            retry();
         }
     }
 
@@ -351,8 +349,13 @@ public class ClassListViewModel1 extends ViewModel {
         return new SegmentResp("", data);
     }
 
-    private Observable<List<ViewModel>> getLoadingItems(int count) {
+    private Observable<List<ViewModel>> getLoadingItems() {
         List<ViewModel> result = new ArrayList<>();
+        int count;
+        if (nextPage == 0)
+            count = 4;
+        else
+            count = 2;
         if (layoutType.get() == LAYOUT_TYPE_ROW)
             result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
         else
@@ -364,18 +367,29 @@ public class ClassListViewModel1 extends ViewModel {
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE_CHOOSE_FILTER) {
             if (data != null) {
-                HashMap<String, Integer> categoryFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("category");
-                HashMap<String, Integer> segmentsFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("segment");
-                HashMap<String, String> cityFilterMap = (HashMap<String, String>) data.getSerializableExtra("city");
-                HashMap<String, String> localityFilterMap = (HashMap<String, String>) data.getSerializableExtra("locality");
-                HashMap<String, Integer> communityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("community");
-                HashMap<String, Integer> classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classType");
-                HashMap<String, Integer> classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classSchedule");
-                HashMap<String, String> vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra("vendorList");
-                String startDate = data.getStringExtra("startDate");
+                filterData = (FilterData) data.getSerializableExtra("filterData");
+                this.categoryFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("category");
+                this.segmentsFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("segment");
+                this.cityFilterMap = (HashMap<String, String>) data.getSerializableExtra("city");
+                this.localityFilterMap = (HashMap<String, String>) data.getSerializableExtra("locality");
+                this.communityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("community");
+                this.classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classType");
+                this.classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classSchedule");
+                this.vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra("vendorList");
+
+
+                if (categoryFilterMap.isEmpty()) {
+                    segmentsVisibility.set(false);
+                } else {
+                    if (!segmentsVisibility.get()) {
+                        segmentsFilterMap.clear();
+                        segmentAvailable = false;
+                    }
+                }
+                reset();
+                       /*  String startDate = data.getStringExtra("startDate");
                 String endDate = data.getStringExtra("endDate");
                 String keywords = data.getStringExtra("keywords");
-
                 this.startDate = startDate;
                 this.endDate = endDate;
                 this.keywords = keywords;
@@ -385,19 +399,7 @@ public class ClassListViewModel1 extends ViewModel {
                 this.vendorListFilterMap = vendorListFilterMap;
                 this.cityFilterMap = cityFilterMap;
                 this.localityFilterMap = localityFilterMap;
-
-                if (!categoryFilterMap.isEmpty()) {
-                    this.categoryFilterMap = categoryFilterMap;
-                    if (!segmentsFilterMap.isEmpty())
-                        this.segmentsFilterMap = segmentsFilterMap;
-                    segmentsVisibility.set(false);
-                } else {
-                    this.categoryFilterMap = categoryFilterMap;
-                    if (!segmentsVisibility.get()) {
-                        segmentsFilterMap.clear();
-                    }
-                }
-                filterData.setCommunityId(this.communityFilterMap.isEmpty() ? "" : this.communityFilterMap.values().iterator().next() + "");
+               filterData.setCommunityId(this.communityFilterMap.isEmpty() ? "" : this.communityFilterMap.values().iterator().next() + "");
                 filterData.setClassType(this.classTypeFilterMap.isEmpty() ? "" : this.classTypeFilterMap.values().iterator().next() + "");
                 filterData.setClassSchedule(this.classScheduleFilterMap.isEmpty() ? "" : this.classScheduleFilterMap.values().iterator().next() + "");
                 filterData.setClassProvider(this.vendorListFilterMap.isEmpty() ? "" : this.vendorListFilterMap.values().iterator().next() + "");
@@ -407,9 +409,9 @@ public class ClassListViewModel1 extends ViewModel {
                 filterData.setSegmentId(this.segmentsFilterMap.isEmpty() ? "" : this.segmentsFilterMap.values().iterator().next() + "");
                 filterData.setKeywords(this.keywords);
                 filterData.setStartDate(this.startDate);
-                filterData.setEndDate(this.endDate);
+                filterData.setEndDate(this.endDate);*/
 
-                initClassItemObserver();
+
 //                if (cityFilterMap.isEmpty()) {
 //                    this.cityFilterMap.clear();
 //                } else {
@@ -462,6 +464,14 @@ public class ClassListViewModel1 extends ViewModel {
         }
     }
 
+    private void reset() {
+        nonReactiveItems = new ArrayList<>();
+        paginationInProgress = true;
+        nextPage = 0;
+        currentPage = -1;
+        callAgain.set(callAgain.get() + 1);
+    }
+
     @Override
     public void retry() {
         connectivityViewmodel.isConnected.set(true);
@@ -482,3 +492,80 @@ public class ClassListViewModel1 extends ViewModel {
 
 
 }
+
+  /*  private void initClassItemObserver() {
+        classes = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return currentPage < nextPage;
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq(), 0).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                    @Override
+                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return nonReactiveItems;
+                    }
+                }));
+            }
+        }).doOnNext(new Consumer<List<ViewModel>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+                if (viewModels.size() < 2 && nextPage == 0) {
+                    layoutType.set(LAYOUT_TYPE_ROW);
+                    uiHelper.changeLayout(layoutType.get());
+                }
+                nonReactiveItems = viewModels;
+                uiHelper.notifyDataChanged();
+            }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                Log.d("Class Fetch error", "accept: " + throwable.getMessage());
+            }
+        });
+        classes.subscribe();
+    }
+
+    private void initClassItemObserverPagination() {
+        paginationInProgress = true;
+        classes = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return currentPage < nextPage;
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq(), nextPage).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                    @Override
+                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return nonReactiveItems;
+                    }
+                }));
+            }
+        }).doOnNext(new Consumer<List<ViewModel>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+
+                if (viewModels.size() > 0 && viewModels.get(0) instanceof ClassItemViewModel) {
+                    Iterator<ViewModel> iter = nonReactiveItems.iterator();
+                    while (iter.hasNext()) {
+                        if (iter.next() instanceof ShimmerItemViewModel) {
+                            iter.remove();
+                        }
+                    }
+                    paginationInProgress = false;
+                }
+                nonReactiveItems.addAll(viewModels);
+                uiHelper.notifyDataChanged();
+            }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                Log.d("Class Fetch error", "accept: " + throwable.getMessage());
+            }
+        });
+        classes.subscribe();
+    }*/

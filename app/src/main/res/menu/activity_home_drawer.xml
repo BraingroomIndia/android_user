@@ -11,6 +11,14 @@
             android:icon="@drawable/ic_library_books_black_24dp"
             android:title="Register" />
         <item
+            android:id="@+id/nav_catalogue"
+            android:icon="@drawable/ic_class_black_24dp"
+            android:title="Catalogue" />
+        <item
+            android:id="@+id/nav_giftcard"
+            android:icon="@drawable/gift_card"
+            android:title="Giftcards &amp; Coupons" />
+        <item
             android:id="@+id/nav_faq"
             android:icon="@drawable/ic_help_black_24dp"
             android:title="FAQ" />

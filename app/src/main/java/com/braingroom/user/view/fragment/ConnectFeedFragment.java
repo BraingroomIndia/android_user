@@ -1,5 +1,6 @@
 package com.braingroom.user.view.fragment;
 
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -76,7 +77,7 @@ public class ConnectFeedFragment extends BaseFragment {
                 int totalItemCount = linearLayoutManager.getItemCount();
                 int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
-                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                if (dy > 0 && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
                     ((ConnectFeedViewModel) vm).paginate();
                 }
 
@@ -92,8 +93,14 @@ public class ConnectFeedFragment extends BaseFragment {
         FragmentUiHelper uiHelper = new FragmentUiHelper() {
             @Override
             public void notifyDataChanged() {
-                if (mAdapter != null)
-                    mAdapter.notifyDataSetChanged();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdapter != null)
+                            mAdapter.notifyDataSetChanged();
+                    }
+                });
+
             }
         };
         return new ConnectFeedViewModel(getStringArguments("majorCateg"), getStringArguments("minorCateg"), activity.getNavigator(), activity.getHelperFactory(), activity.getMessageHelper(), activity.getIntentString("id")

@@ -55,8 +55,11 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull GuestUserResp guestUserResp) throws Exception {
                         if ("1".equals(guestUserResp.getResCode())) {
-                            uiHelper.initiateGuestPayment(guestUserResp.getData().get(0).getUserId());
+                            dismissDialog();
+                            uiHelper.onGuestLoginSuccess(guestUserResp.getData().get(0).getUserId());
+
                         } else {
+                            dismissDialog();
                             messageHelper.show(guestUserResp.getResMsg());
                         }
                     }

@@ -15,6 +15,10 @@ import com.braingroom.user.view.fragment.VendorReviewFragment;
 import com.braingroom.user.viewmodel.ViewModel;
 
 public class VendorProfileActivity extends BaseActivity {
+    public interface UiHelper {
+        void retry();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class VendorProfileActivity extends BaseActivity {
             return "NO TAB";
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

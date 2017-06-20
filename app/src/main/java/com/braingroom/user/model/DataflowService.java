@@ -96,6 +96,7 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -257,8 +258,9 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<PromocodeResp> applyPromoCode(String code) {
-        return api.applyPromoCode(new PromocodeReq(new PromocodeReq.Snippet(code))).subscribeOn(Schedulers.io())
+    public Observable<PromocodeResp> applyPromoCode(PromocodeReq.Snippet snippet) {
+
+        return api.applyPromoCode(new PromocodeReq((snippet))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -720,7 +722,7 @@ public class DataflowService {
 
 
     public Observable<BaseResp> addAccept(String postId) {
-        // TODO: 06/06/17 remove hardcoded id
+
         return api.addAccept(new PostRelatedReq(new PostRelatedReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -777,7 +779,7 @@ public class DataflowService {
     }
 
     public Observable<MessageListResp> getMessages() {
-        // TODO: 21/05/17 remove hardcoded userid
+
 //        List<MessageListResp.Snippet> dataList = new ArrayList<>();
 //        MessageListResp.Snippet snippet = new MessageListResp.Snippet();
 //        snippet.setSenderId("0");
@@ -799,7 +801,7 @@ public class DataflowService {
     }
 
     public Observable<ChatListResp> getChatMessages(String senderId) {
-        // TODO: 21/05/17 remove hardcoded userid
+
 //        List<ChatListResp.Snippet> dataList = new ArrayList<>();
 //        ChatListResp.Snippet chat1 = new ChatListResp.Snippet();
 //        chat1.setText("From sender msg 1");

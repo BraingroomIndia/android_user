@@ -74,41 +74,11 @@ public class HomeActivity extends BaseActivity
                 }
             });
         } else {
-//            textView.setVisibility(View.GONE);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0,0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
             competitionBanner.setLayoutParams(params);
         }
 
 
-
-/*
-
-        ((SeekBar) findViewById(R.id.seekbar)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setProgress(progress / 100f);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-*/
-
-        Intent intent = getIntent();
-        String action = intent.getAction();
-    /*    if (!vm.loggedIn.get() && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && action != null && action.equals(Intent.ACTION_MAIN)) {
-            Log.d(TAG, "onCreate: first run");
-            getHelperFactory().createDialogHelper().showCustomView(R.layout.content_competition_banner, new CompetitionDialogViewModel(getNavigator()));
-
-
-        }*/
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -162,19 +132,26 @@ public class HomeActivity extends BaseActivity
         initNavigationDrawer();
     }
 
+
     public void initNavigationDrawer() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        ) {
+            public void onDrawerOpened(View view) {
+                hideItem();
+            }
+        };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
     }
 
     public void initMap() {
@@ -214,7 +191,21 @@ public class HomeActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
+
         return true;
+    }
+
+    private void hideItem() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        try {
+            nav_Menu.findItem(R.id.nav_location).setVisible(false);
+        } catch (NullPointerException e) {
+            String string = e.toString();
+        }
+
+
     }
 
     @Override
@@ -223,10 +214,10 @@ public class HomeActivity extends BaseActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_connect) {
-//            ((ActivityHomeBinding) binding).setVmConnect(new ConnectHomeViewModel(getMessageHelper(), getNavigator()));
+/*//            ((ActivityHomeBinding) binding).setVmConnect(new ConnectHomeViewModel(getMessageHelper(), getNavigator()));
 //            ((ActivityHomeBinding) binding).setVm(null);
 //            binding.getRoot().invalidate();
-//            initNavigationDrawer();
+//            initNavigationDrawer();*/
             Intent intent = new Intent(this, ConnectHomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             getNavigator().navigateActivity(intent);

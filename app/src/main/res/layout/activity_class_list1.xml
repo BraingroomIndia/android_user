@@ -59,7 +59,7 @@
                         android:padding="@dimen/padding_small"
                         android:src="@{ vm.layoutType == ClassListViewModel1.LAYOUT_TYPE_TILE ?  @drawable/ic_format_list_bulleted_black_24dp : @drawable/ic_border_all_black_24dp }" />
 
-                    <ImageView
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="1dp"
@@ -68,10 +68,14 @@
                         android:background="@color/white"
                         android:gravity="center"
                         android:onClick="@{vm.onSortClicked}"
+                        android:text="Sort By"
+                        android:textColor="@color/colorTextDark"
+                        app:font='@{@string/robotoRegular}'
                         android:padding="@dimen/padding_small"
-                        android:src="@drawable/ic_import_export_black_24dp" />
+                        android:drawablePadding="@dimen/padding_medium"
+                        android:drawableLeft="@drawable/ic_import_export_black_24dp" />
 
-                    <ImageView
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -79,7 +83,11 @@
                         android:gravity="center"
                         android:onClick="@{vm.onFilterClicked}"
                         android:padding="@dimen/padding_small"
-                        android:src="@drawable/ic_filter_list_black_24dp" />
+                        android:text="Filter"
+                        android:textColor="@color/colorTextDark"
+                        app:font='@{@string/robotoRegular}'
+                        android:drawablePadding="@dimen/padding_medium"
+                        android:drawableLeft="@drawable/ic_filter_list_black_24dp" />
 
                 </LinearLayout>
 

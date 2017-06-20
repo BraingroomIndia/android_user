@@ -5,6 +5,7 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
@@ -70,8 +71,9 @@ public class SearchViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                data.putString("categoryId", "");
-                data.putString("searchQuery", searchQuery.get());
+                FilterData filterData = new FilterData();
+                filterData.setKeywords(searchQuery.get());
+                data.putSerializable("filterData",filterData);
                 data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }

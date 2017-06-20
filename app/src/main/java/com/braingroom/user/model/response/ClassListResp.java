@@ -7,10 +7,12 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
 @EqualsAndHashCode(callSuper = false)
+@Getter
 public class ClassListResp extends BaseResp {
 
     @SerializedName("next_page")
@@ -21,6 +23,7 @@ public class ClassListResp extends BaseResp {
 
     @Data
     @EqualsAndHashCode(callSuper = false)
+    @Getter
     @AllArgsConstructor(suppressConstructorProperties = true)
     public static class Snippet {
 

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassLocationData;
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.utils.Constants;
@@ -19,6 +20,7 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.ExploreActivity;
+import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,7 +48,7 @@ import static com.rollbar.android.Rollbar.TAG;
 
 public class HomeViewModel extends ViewModel {
 
-    public final Action onSearchClicked, onExploreClicked, onRegister;
+    public final Action onSearchClicked, onExploreClicked, onRegister,onFilterClicked;
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
@@ -134,7 +136,9 @@ public class HomeViewModel extends ViewModel {
                                         public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                                             if (!snippet.getId().equals("-1")) {
                                                 Bundle data = new Bundle();
-                                                data.putString("categoryId", snippet.getId());
+                                                FilterData filterData =new FilterData();
+                                                filterData.setCategoryId(snippet.getId());
+                                                data.putSerializable("filterData", filterData);
                                                 data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                                 navigator.navigateActivity(ClassListActivity.class, data);
                                             }
@@ -167,6 +171,26 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 navigator.navigateActivity(ExploreActivity.class, null);
+            }
+        };
+        onFilterClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                HashMap<String, Integer> filterMap = new HashMap<>();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("category", filterMap);
+                bundle.putSerializable("segment", filterMap);
+                bundle.putSerializable("city", filterMap);
+                bundle.putSerializable("locality", filterMap);
+                bundle.putSerializable("community", filterMap);
+                bundle.putSerializable("classType", filterMap);
+                bundle.putSerializable("classSchedule", filterMap);
+                bundle.putSerializable("vendorList", filterMap);
+                bundle.putString("keywords", "");
+                bundle.putString("startDate", "");
+                bundle.putString("endDate", "");
+                bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                navigator.navigateActivity(FilterActivity.class,bundle);
             }
         };
 
@@ -223,7 +247,7 @@ public class HomeViewModel extends ViewModel {
         for (ClassLocationData location : locations) {
             latlng = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
             latSum = latSum + Double.valueOf(location.getLatitude());
-            Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());
+           /* Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());*/
             lngSum = lngSum + Double.valueOf(location.getLongitude());
             markerOption = new MarkerOptions().position(latlng).title(location.getLocationArea()).icon(getPinIcon(location));
             markerList.add(markerOption);
@@ -245,9 +269,9 @@ public class HomeViewModel extends ViewModel {
         trendingVm.retry();
         indigenousVm.retry();
         communityVm.retry();
-        Log.d(TAG, "retry: featuredVm retry:\t" + featuredVm.callAgain.get() + "\nretry: trendingVm retry:	" + indigenousVm.callAgain.get() +
+        /*Log.d(TAG, "retry: featuredVm retry:\t" + featuredVm.callAgain.get() + "\nretry: trendingVm retry:	" + indigenousVm.callAgain.get() +
                 "\nretry: indigenousVm retry:	" + indigenousVm.callAgain.get() + "\nretry: communityVm retry:	" + communityVm.callAgain.get());
-    }
+   */ }
 
     @Override
     public void onResume() {

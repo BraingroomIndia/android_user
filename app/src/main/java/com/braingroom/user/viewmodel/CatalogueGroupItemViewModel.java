@@ -4,6 +4,7 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CatalogueGroupResp;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassListActivity;
@@ -38,7 +39,10 @@ public class CatalogueGroupItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
-                bundleData.putString("catalogId", data.getId());
+                FilterData filterData = new FilterData();
+                filterData.setCatalog(data.getId());
+                bundleData.putSerializable("filterData",filterData);
+               // bundleData.putString("catalogId", data.getId());
                 bundleData.putString("origin", ClassListViewModel1.ORIGIN_CATALOG);
                 navigator.navigateActivity(ClassListActivity.class, bundleData);
             }

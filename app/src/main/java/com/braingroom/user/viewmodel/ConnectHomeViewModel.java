@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.braingroom.user.R;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -16,9 +17,12 @@ import com.braingroom.user.view.activity.SearchActivity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 
 public class ConnectHomeViewModel extends ViewModel {
 
@@ -28,7 +32,7 @@ public class ConnectHomeViewModel extends ViewModel {
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
-    public final ObservableField<String> searchQuery = new ObservableField();
+    public final ObservableField<String> searchQuery = new ObservableField("");
 
     //    public final Observable<List<ViewModel>> feedItems;
 //    public final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
@@ -65,6 +69,18 @@ public class ConnectHomeViewModel extends ViewModel {
 //        };
 //        feedItems = getLoadingItems(4).mergeWith(apiService.getConnectFeed(filterData, 0).map(feedDataMapFunction));
 //        catSegVm = new GroupDataViewModel(messageHelper, navigator);
+        FieldUtils.toObservable(searchQuery)
+                .debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<String>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull String searchQuery) throws Exception {
+                return !searchQuery.equals("");
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull String searchQuery) throws Exception {
+                uiHelper.setSearchQuery(searchQuery);
+            }
+        });
 
         onSearchClicked = new Action() {
             @Override

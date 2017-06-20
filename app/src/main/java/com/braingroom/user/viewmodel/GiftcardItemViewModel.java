@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.GiftcardResp;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassListActivity;
@@ -34,7 +35,10 @@ public class GiftcardItemViewModel extends ViewModel {
                 if (GiftCouponViewModel.GCTYPE_NGO.equals(giftcardType)) {
                     navigator.navigateActivity(NgoFormActivity.class, data);
                 } else {
-                    data.putString("giftId", cardId.get());//senderId);
+                    FilterData filterData = new FilterData();
+                    filterData.setGiftId(cardId.get());
+                    data.putSerializable("filterData",filterData);
+                   /* data.putString("giftId", cardId.get());//senderId);*/
                     data.putString("origin", ClassListViewModel1.ORIGIN_GIFT);
                     navigator.navigateActivity(ClassListActivity.class, data);
                 }
