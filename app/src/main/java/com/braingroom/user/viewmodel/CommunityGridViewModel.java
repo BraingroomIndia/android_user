@@ -4,6 +4,7 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
@@ -52,7 +53,10 @@ public class CommunityGridViewModel extends ViewModel {
                                                     if (!snippet.getId().equals("-1")) {
                                                         apiSuccessful=true;
                                                         Bundle data = new Bundle();
-                                                        data.putString("communityId", snippet.getId());
+                                                        FilterData filterData = new FilterData();
+                                                        filterData.setCommunityId(snippet.getId());
+                                                        data.putSerializable("filterData", filterData);
+                                                        data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                                         navigator.navigateActivity(destination, data);
                                                     }
                                                 }

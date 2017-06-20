@@ -107,6 +107,7 @@ dependencies {
     compile "com.hanks:htextview-scale:0.1.1"
     compile "com.hanks:htextview-line:0.1.1"
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    //compile 'com.google.guava:guava:22.0'
 
 }
 

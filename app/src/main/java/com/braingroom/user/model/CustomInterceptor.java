@@ -43,11 +43,15 @@ public class CustomInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request();
-        Response response = null;
+        Request original = chain.request();
+        Request.Builder requestBuilder = original.newBuilder()
+                .addHeader("X-App-Type", "BGUSR01")
+                .addHeader("X-App-Version", "1.2.1");
+        Request request = requestBuilder.build();
+        Response response;
         try {
             response = chain.proceed(request);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             Log.d(TAG, "intercept: no network " );
             UserApplication.getInstance().getInternetStatusBus().onNext(false);

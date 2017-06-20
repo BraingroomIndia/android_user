@@ -53,7 +53,14 @@ public class ClassListViewModel extends ViewModel {
         }
         this.uiHelper = uiHelper;
         this.navigator = navigator;
-        segments = Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(categoryId))
+        segments = Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(categoryId).onErrorReturn(new Function<Throwable, SegmentResp>() {
+            @Override
+            public SegmentResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                List<SegmentResp.Snippet> data = new ArrayList<>();
+                data.add(new SegmentResp.Snippet("-1", "loading segments...", null));
+                return new SegmentResp("", data);
+            }
+        }))
                 .map(new Function<SegmentResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(SegmentResp resp) throws Exception {

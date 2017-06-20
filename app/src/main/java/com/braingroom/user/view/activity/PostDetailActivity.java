@@ -1,5 +1,6 @@
 package com.braingroom.user.view.activity;
 
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -82,4 +83,6 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     @Override
     public void retry() {
     }
+    @Override
+    public void setSearchQuery(String a){}
 }

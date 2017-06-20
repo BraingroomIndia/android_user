@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.FragmentHelper;
@@ -39,6 +41,8 @@ public class SearchSelectListViewModel extends ViewModel {
     public final ObservableField<String> title = new ObservableField<>();
     public final Map<String, Pair<String, String>> dataMap = new HashMap<>();
     public final HashMap<String, Pair<String, String>> selectedDataMap = new HashMap<>();
+    private final FragmentHelper fragmentHelper;
+    private final MessageHelper messageHelper;
 
     PublishSubject<SearchSelectListItemViewModel> singleSelect = PublishSubject.create();
     PublishSubject<SearchSelectListItemViewModel> multipleSelect = PublishSubject.create();
@@ -52,7 +56,9 @@ public class SearchSelectListViewModel extends ViewModel {
         this.title.set(title);
         this.apiObservable = apiObservableArg;
         this.saveConsumer = saveConsumer;
-        refreshDataMap(this.apiObservable);
+        this.fragmentHelper = fragmentHelper;
+        this.messageHelper = messageHelper;
+        //refreshDataMap(this.apiObservable);
         searchResults = FieldUtils.toObservable(searchQuery)
                 .map(new Function<String, List<ViewModel>>() {
                     @Override
@@ -93,6 +99,8 @@ public class SearchSelectListViewModel extends ViewModel {
                     return;
                 }
                 fragmentHelper.show(title);
+                refreshDataMap(apiObservable);
+
             }
         };
 
@@ -149,10 +157,16 @@ public class SearchSelectListViewModel extends ViewModel {
         apiObservable.subscribe(new Consumer<HashMap<String, Pair<String, String>>>() {
             @Override
             public void accept(@NonNull HashMap<String, Pair<String, String>> map) throws Exception {
+                if (map.isEmpty()) {
+                    messageHelper.show("Not available");
+                    fragmentHelper.remove(title.get());
+                }
                 dataMap.putAll(map);
                 searchQuery.set("");
             }
-        }, new Consumer<Throwable>() {
+        }, new Consumer<Throwable>()
+
+        {
             @Override
             public void accept(@NonNull Throwable throwable) throws Exception {
                 Log.d("Search select List VM", "accept: " + throwable.getMessage());

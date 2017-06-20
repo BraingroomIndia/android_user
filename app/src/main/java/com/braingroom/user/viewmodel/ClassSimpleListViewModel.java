@@ -80,7 +80,7 @@ public class ClassSimpleListViewModel extends ViewModel {
                             public List<ViewModel> apply(List<ClassData> resp) throws Exception {
                                 List<ViewModel> results = new ArrayList<>();
                                 if (resp.size() == 0)
-                                    callAgain=null;
+                                    nextPage=-1;
                                 if (resp.size() == 0 && classes.size() == 0) {
                                     classes.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                                 }
@@ -104,12 +104,13 @@ public class ClassSimpleListViewModel extends ViewModel {
                                 paginationInProgress = false;
                                 return classes;
                             }
-                        }).mergeWith(getLoadingItems(3)).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                        }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                                throwable.printStackTrace();
                                 return classes;
                             }
-                        });
+                        }).mergeWith(getLoadingItems(3));
 
             }
         });

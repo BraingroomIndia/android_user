@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.SearchSelectListFragment;
 import com.braingroom.user.viewmodel.FilterViewModel;
@@ -39,7 +40,7 @@ public class FilterActivity extends BaseActivity {
             public void remove(String tag) {
                 popBackstack(tag);
             }
-        }, (HashMap<String, Integer>) getIntentSerializable("category")
+        }, (FilterData) getIntentSerializable("filterData"), (HashMap<String, Integer>) getIntentSerializable("category")
                 , (HashMap<String, Integer>) getIntentSerializable("segment")
                 , (HashMap<String, String>) getIntentSerializable("city")
                 , (HashMap<String, String>) getIntentSerializable("locality")
@@ -47,9 +48,9 @@ public class FilterActivity extends BaseActivity {
                 , (HashMap<String, Integer>) getIntentSerializable("classType")
                 , (HashMap<String, Integer>) getIntentSerializable("classSchedule")
                 , (HashMap<String, String>) getIntentSerializable("vendorList")
-                , getIntentString("keywords")
+                , /*getIntentString("keywords")
                 , getIntentString("startDate")
-                , getIntentString("endDate"));
+                , getIntentString("endDate"),*/getIntentString("origin"));
         return viewModel;
     }
 

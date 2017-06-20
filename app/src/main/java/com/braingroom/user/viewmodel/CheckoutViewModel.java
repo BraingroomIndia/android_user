@@ -13,6 +13,7 @@ import com.braingroom.user.model.dto.ClassLevelData;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.dto.PayUCheckoutData;
 import com.braingroom.user.model.request.PayUBookingDetailsReq;
+import com.braingroom.user.model.request.PromocodeReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
@@ -77,13 +78,14 @@ public class CheckoutViewModel extends ViewModel {
 
     public String selectedLocalityId;
 
-    public int isGuest;
+    public int isGuest = 0;
 
     ClassData classData;
     PayUCheckoutData mChekcoutData;
     public final boolean usePayU = false;
     MessageHelper messageHelper;
     Navigator navigator;
+    private String userId;
 
 
     private PayUChecksum checksum;
@@ -91,7 +93,7 @@ public class CheckoutViewModel extends ViewModel {
     final Map<String, Integer> sublevelTextMap = new HashMap<>();
 
     public interface UiHelper {
-        void initiateGuestPayment(String userId);
+        void onGuestLoginSuccess(String userId);
     }
 
     @Getter
@@ -115,11 +117,7 @@ public class CheckoutViewModel extends ViewModel {
     };
 
     public CheckoutViewModel(@NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData) {
-
-//        String temp = classData.getPricingType().equalsIgnoreCase("Group") ? classData.getLevelDetails().get(0).getGroups().get(0).getPrice() :
-//                classData.getLevelDetails().get(0).getPrice();
         totalAmount = new ObservableInt(0);
-
         totalAmountAfterPromo = new ObservableInt(0);
         couponCode = new ObservableField<>();
         appliedCouponCode = new ObservableField<>();
@@ -127,6 +125,7 @@ public class CheckoutViewModel extends ViewModel {
         appliedPromoCode = new ObservableField<>();
         this.uiHelper = uiHelper;
         this.classData = classData;
+        userId = pref.getString(Constants.BG_ID, "");
 
         this.messageHelper = messageHelper;
         this.navigator = navigator;
@@ -191,23 +190,21 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.show("Select locality for class");
                     return;
                 }
-                if (!loggedIn.get()) {
+                if (!loggedIn.get() && isGuest == 0) {
                     helperFactory.createDialogHelper()
-                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData,messageHelper, navigator, new UiHelper() {
+                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
                                 @Override
-                                public void initiateGuestPayment(String userId) {
+                                public void onGuestLoginSuccess(String userId) {
                                     try {
-
-                                        startPayment(userId, GUEST_USER);
                                         isGuest = 1;
+                                        startPayment(userId, GUEST_USER);
                                     } catch (JSONException e) {
                                         messageHelper.show("Something went wrong. JSON error");
                                     }
                                 }
-                            },classData.getId()), false);
+                            }, classData.getId()), false);
                     return;
                 }
-                isGuest = 0;
                 startPayment(pref.getString(Constants.BG_ID, ""), REGISTERED_USER);
 
             }
@@ -217,10 +214,30 @@ public class CheckoutViewModel extends ViewModel {
         onOpenPromoCode = new Action() {
             @Override
             public void run() throws Exception {
-                promoCode.set("");
-                appliedPromoCode.set(null);
-                appliedPromoAmount = 0;
-                dataChangeAction.run();
+                if (!loggedIn.get()&& isGuest ==0) {
+                    helperFactory.createDialogHelper()
+                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
+                                @Override
+                                public void onGuestLoginSuccess(String id) {
+                                    userId = id;
+                                    isGuest = 1;
+                                    promoCode.set("");
+                                    appliedPromoCode.set(null);
+                                    appliedPromoAmount = 0;
+                                    try {
+                                        dataChangeAction.run();
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            }, classData.getId()), false);
+
+                } else {
+                    promoCode.set("");
+                    appliedPromoCode.set(null);
+                    appliedPromoAmount = 0;
+                    dataChangeAction.run();
+                }
+
 
             }
         };
@@ -236,7 +253,19 @@ public class CheckoutViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (promoCode != null && promoCode.get().length() > 3) {
-                    apiService.applyPromoCode(promoCode.get()).subscribe(new Consumer<PromocodeResp>() {
+                    PromocodeReq.Snippet snippet = new PromocodeReq.Snippet();
+                    List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
+                    snippet.setClassId(classData.getId());
+                    for (ViewModel nonReactiveItem : nonReactiveItems) {
+                        if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                            levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
+                        }
+                    }
+                    snippet.setTotalTicket("{\"tickets\":" + gson.toJson(levelsList) + "}");
+                    snippet.setCode(promoCode.get());
+                    snippet.setIsGuest(isGuest);
+                    snippet.setUserId(userId);
+                    apiService.applyPromoCode(snippet).subscribe(new Consumer<PromocodeResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull PromocodeResp resp) throws Exception {
                             if (resp.getData().size() > 0) {
@@ -271,7 +300,6 @@ public class CheckoutViewModel extends ViewModel {
             snippet.setClassId(classData.getId());
             snippet.setLocalityId(selectedLocalityId);
             snippet.setIsGuest(isGuest);
-            // TODO remove hardcoded
             snippet.setUserId(userId);
             JSONArray levels = new JSONArray();
             JSONObject levelObj;
@@ -395,19 +423,13 @@ public class CheckoutViewModel extends ViewModel {
         RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
         snippet.setAmount("" + totalAmountAfterPromo.get());
         snippet.setClassId(classData.getId());
-        // TODO remove hardcoding
         snippet.setUserId(mChekcoutData.getUdf1());
         snippet.setLocalityId(selectedLocalityId);
         snippet.setTxnid(razorpayId);
         snippet.setUserEmail(mChekcoutData.getEmail());
         snippet.setUserMobile(mChekcoutData.getPhone());
-        // TODO: 19/04/17 remove hardcoded user id
         snippet.setUserId(mChekcoutData.getUdf1());
         snippet.setIsGuest(isGuest);
-
-        Log.d(TAG, "\n\n\nhandleRazorpaySuccess: amount\t:\t" + totalAmountAfterPromo.get() + "\nclassID\t:\t" + classData.getId() +
-                "\nUserID\t:\t" + pref.getString(Constants.BG_ID, "") + "LocalityId\t:\t" + selectedLocalityId + "\n TxnId\t:\t" + razorpayId +
-                "\nEmailId\t:\t" + mChekcoutData.getEmail() + "\nPhoneNo.\t:\t" + mChekcoutData.getPhone() + "\n\n\n");
 
         class tickets {
             public tickets(List<RazorSuccessReq.Levels> levelsList) {
@@ -526,12 +548,12 @@ public class CheckoutViewModel extends ViewModel {
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE_LOGIN) {
             if (data != null && data.hasExtra("classId")) {
-                String classId =data.getStringExtra("classId");
+                String classId = data.getStringExtra("classId");
 
                 apiService.getClassDetail(classId).subscribe(new Consumer<ClassData>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull ClassData data) throws Exception {
-                        classData=data;
+                        classData = data;
 
                     }
                 });

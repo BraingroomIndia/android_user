@@ -52,7 +52,7 @@
     <string name="action_tutors_article">Tutors Article</string>
 
     <string name="action_message">Message</string>
-    <string name="action_notification">Edit</string>
+    <string name="action_notification">Notification</string>
 
     <string-array name="main_category_list">
         <item>Fun &amp; Recreation</item>
@@ -96,7 +96,7 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="post_type_tips_tricks">tips_tricks</string>
     <string name="post_type_bug_sell">bug_sell</string>
     <string name="post_type_activity_request">activity_request</string>
-
+    <string name="action_connect">Connect</string>
 
 
     <!--Edited By Vikas Godara-->

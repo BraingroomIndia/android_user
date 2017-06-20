@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Pair;
 
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
@@ -15,6 +16,7 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
 
@@ -36,7 +38,7 @@ public class FilterViewModel extends ViewModel {
 
     public static final int CLASS_SCHECULE_FIXED = 2;
     public static final int CLASS_SCHECULE_FLEXIBLE = 1;
-
+    private final String origin;
     public final ObservableField<String> keywords;
     public final ListDialogViewModel1 categoryVm, segmentsVm, communityVm, classTypeVm, classScheduleVm;
     public final DatePickerViewModel startDateVm, endDateVm;
@@ -49,23 +51,38 @@ public class FilterViewModel extends ViewModel {
     public Observable<HashMap<String, Pair<String, String>>> cityApiObservable, localityApiObservable, vendorlistApiObservable;
 
     public FilterViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, FragmentHelper fragmentHelper
-            , HashMap<String, Integer> categoryFilterMap,
+           ,FilterData filterData , HashMap<String, Integer> categoryFilterMap,
                            HashMap<String, Integer> segmentsFilterMap,
                            HashMap<String, String> cityFilterMap,
                            HashMap<String, String> localityFilterMap,
                            HashMap<String, Integer> communityFilterMap,
                            HashMap<String, Integer> classTypeMap,
                            HashMap<String, Integer> classScheduleMap,
-                           HashMap<String, String> vendorListMap,
-                           String keywords,
+                           HashMap<String, String> vendorListMap
+                     /*      String keywords,
                            String startDate,
-                           String endDate
+                           String endDate*/
 
-    ) {
-        this.keywords = new ObservableField<>(keywords);
+            , final String origin) {
+        this.origin = origin;
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+            }
+        });
+        segmentsFilterMap= segmentsFilterMap!=null?segmentsFilterMap:new HashMap<String, Integer>();
+        categoryFilterMap= categoryFilterMap!=null?categoryFilterMap:new HashMap<String, Integer>();
+        communityFilterMap= communityFilterMap!=null?communityFilterMap:new HashMap<String, Integer>();
+        classTypeMap= classTypeMap!=null?classTypeMap:new HashMap<String, Integer>();
+        classScheduleMap= classScheduleMap!=null?classScheduleMap:new HashMap<String, Integer>();
+        vendorListMap= vendorListMap!=null?vendorListMap:new HashMap<String, String>();
+        cityFilterMap=cityFilterMap!=null?cityFilterMap:new HashMap<String, String>();
+        localityFilterMap=localityFilterMap!=null?localityFilterMap:new HashMap<String, String>();
+        this.keywords = new ObservableField<>(filterData!=null ? filterData.getKeywords() : "" );
         this.navigator = navigator;
-        startDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "Start", startDate);
-        endDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "End", endDate);
+        startDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "Start", filterData!=null ? filterData.getStartDate() : "YYYY-MM-DD" );
+        endDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "End", filterData!=null ? filterData.getEndDate() : "YYYY-MM-DD" );
         categoryConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
@@ -89,7 +106,7 @@ public class FilterViewModel extends ViewModel {
                 }), categoryFilterMap, false, categoryConsumer);
 
 
-        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable("-1"), segmentsFilterMap, false, null);
+        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable(filterData!=null ? filterData.getCategoryId() : null ), segmentsFilterMap, false, null);
 
 
         cityConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
@@ -259,21 +276,55 @@ public class FilterViewModel extends ViewModel {
     }
 
     public void apply() {
+        FilterData filterData = new FilterData();
         Intent resultIntent = new Intent();
+        filterData.setCommunityId(communityVm.selectedItemsMap.isEmpty() ? "" : communityVm.selectedItemsMap.values().iterator().next() + "");
+        filterData.setClassType(classTypeVm.selectedItemsMap.isEmpty() ? "" : classTypeVm.selectedItemsMap.values().iterator().next() + "");
+        filterData.setClassSchedule(classScheduleVm.selectedItemsMap.isEmpty() ? "" : classScheduleVm.selectedItemsMap.values().iterator().next() + "");
+        filterData.setClassProvider(getHashMap(vendorListVm.selectedDataMap).isEmpty() ? "" : getHashMap(vendorListVm.selectedDataMap).values().iterator().next() + "");
+        filterData.setCity(getHashMap(cityVm.selectedDataMap).isEmpty() ? "" : getHashMap(cityVm.selectedDataMap).values().iterator().next() + "");
+        filterData.setLocationId(getHashMap(localityVm.selectedDataMap).isEmpty() ? "" : getHashMap(localityVm.selectedDataMap).values().iterator().next() + "");
+        filterData.setCategoryId(categoryVm.selectedItemsMap.isEmpty() ? "" : categoryVm.selectedItemsMap.values().iterator().next() + "");
+        filterData.setSegmentId(segmentsVm.selectedItemsMap.isEmpty() ? "" : segmentsVm.selectedItemsMap.values().iterator().next() + "");
+        filterData.setKeywords(keywords.get());
+        filterData.setStartDate(startDateVm.date.get().equals("YYYY-MM-DD") ? "" : startDateVm.date.get());
+        filterData.setEndDate(endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());
         Bundle bundle = new Bundle();
         bundle.putSerializable("category", categoryVm.selectedItemsMap);
         bundle.putSerializable("segment", segmentsVm.selectedItemsMap);
         bundle.putSerializable("city", getHashMap(cityVm.selectedDataMap));
         bundle.putSerializable("locality", getHashMap(localityVm.selectedDataMap));
         bundle.putSerializable("community", communityVm.selectedItemsMap);
-        bundle.putSerializable("keywords", keywords.get());
         bundle.putSerializable("classType", classTypeVm.selectedItemsMap);
         bundle.putSerializable("classSchedule", classScheduleVm.selectedItemsMap);
         bundle.putSerializable("vendorList", getHashMap(vendorListVm.selectedDataMap));
+        /*bundle.putSerializable("keywords", keywords.get());
         bundle.putString("startDate", startDateVm.date.get().equals("YYYY-MM-DD") ? "" : startDateVm.date.get());
-        bundle.putString("endDate", endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());
+        bundle.putString("endDate", endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());*/
         bundle.putBoolean("clearFlag", clearFlag);
+        bundle.putSerializable("filterData",filterData);
         resultIntent.putExtras(bundle);
-        navigator.finishActivity(resultIntent);
+        if (origin != null && origin.equals("HOME")) {
+            bundle.putString("origin", "HOME");
+            navigator.navigateActivity(ClassListActivity.class, bundle);
+        } else
+            navigator.finishActivity(resultIntent);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectivityViewmodel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        connectivityViewmodel.onPause();
+    }
+
+    @Override
+    public void retry() {
+        connectivityViewmodel.isConnected.set(true);
+        callAgain.set(callAgain.get()+1);
     }
 }

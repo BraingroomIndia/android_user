@@ -9,11 +9,14 @@ import android.support.v7.widget.RecyclerView;
 
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.ActivityClassList1Binding;
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.view.SpacingDecoration;
 import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
+
+import java.util.HashMap;
 
 public class ClassListActivity extends BaseActivity {
 
@@ -91,7 +94,7 @@ public class ClassListActivity extends BaseActivity {
                     int totalItemCount = gridLayoutManager.getItemCount();
                     int firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
 
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                    if (dy > 0 && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
                         ((ClassListViewModel1) vm).paginate();
                     }
 
@@ -117,9 +120,21 @@ public class ClassListActivity extends BaseActivity {
                     mAdapter.notifyDataSetChanged();
             }
         };
-        return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(), getIntentString("categoryId"),
+        FilterData filterData = new FilterData();
+        filterData = (FilterData) getIntentSerializable("filterData");
+        return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(), filterData,
+                (HashMap<String, Integer>) getIntentSerializable("category")
+                , (HashMap<String, Integer>) getIntentSerializable("segment")
+                , (HashMap<String, String>) getIntentSerializable("city")
+                , (HashMap<String, String>) getIntentSerializable("locality")
+                , (HashMap<String, Integer>) getIntentSerializable("community")
+                , (HashMap<String, Integer>) getIntentSerializable("classType")
+                , (HashMap<String, Integer>) getIntentSerializable("classSchedule")
+                , (HashMap<String, String>) getIntentSerializable("vendorList"),
+                /*getIntentString("categoryId"),
                 getIntentString("searchQuery"), getIntentString("communityId"), getIntentString("segmentId"),
-                getIntentString("catalogId"), getIntentString("giftId"), getIntentString("origin"), uiHelper);
+                getIntentString("catalogId"), getIntentString("giftId"),*/
+                getIntentString("origin"), uiHelper);
     }
 /*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {

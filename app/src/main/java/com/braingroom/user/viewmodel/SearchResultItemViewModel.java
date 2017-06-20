@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassListActivity;
 
@@ -23,8 +24,10 @@ public class SearchResultItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                data.putString("categoryId", item.categoryId);
-                data.putString("searchQuery", item.query);
+                FilterData filterData = new FilterData();
+                filterData.setCategoryId(item.categoryId);
+                filterData.setKeywords(item.query);
+                data.putSerializable("filterData",filterData);
                 data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }

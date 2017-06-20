@@ -10,6 +10,7 @@ import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,7 +64,10 @@ public class ListDialogViewModel1 extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull ListDialogData1 items) throws Exception {
                 messageHelper.dismissActiveProgress();
                 dialogData = items;
-                if (isMultiSelect)
+                if (dialogData.getItems().isEmpty()) {
+                    dialogHelper.showListDialog(title, new ArrayList<String>(Arrays.asList("Not Available")));
+
+                } else if (isMultiSelect)
                     dialogHelper.showMultiselectList(title, new ArrayList<>(dialogData.getItems().keySet())
                             , getSelectedIndex());
                 else
@@ -113,10 +117,12 @@ public class ListDialogViewModel1 extends ViewModel {
     }
 
     public void setSelectedItemsText() {
+
         List<String> itemList = new ArrayList<>(selectedItemsMap.keySet());
         if (itemList.size() == 0) selectedItemsText.set("select item/items");
         else if (itemList.size() == 1) selectedItemsText.set(itemList.get(0));
         else selectedItemsText.set(itemList.get(0) + " & " + (itemList.size() - 1) + " others");
+
     }
 
     public void setSelectedItems(Integer[] idxs) {
@@ -144,7 +150,7 @@ public class ListDialogViewModel1 extends ViewModel {
             if (resultConsumer != null)
                 resultConsumer.accept(selectedItemsMap);
         } catch (Exception e) {
-            Log.e(TAG,e.getLocalizedMessage());
+            Log.e(TAG, e.getLocalizedMessage());
         }
     }
 

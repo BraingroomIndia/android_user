@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -169,6 +170,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                         mBottomNav.setItemTextColor(greenList);
                         mBottomNav.setItemIconTintList(greenList);
                         mBottomNav.setSelectedItemId(learnerForumSelectedNav);
+                        ((ConnectHomeViewModel) vm).searchQuery.set("");
                         break;
                     case 1:
                         mAppBar.setBackgroundResource(R.color.colorAccent);
@@ -179,6 +181,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                         mBottomNav.setItemTextColor(blueList);
                         mBottomNav.setItemIconTintList(blueList);
                         mBottomNav.setSelectedItemId(tutorTalkSelectedNav);
+                        ((ConnectHomeViewModel) vm).searchQuery.set("");
                         break;
                 }
             }
@@ -271,6 +274,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                 setLocationData();
                 updateFilter();
             }
+
+
         };
         return new ConnectHomeViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), this);
     }
@@ -445,7 +450,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
     public void updateFilter() {
-        pagerAdapter.getFragmentAt(pager.getCurrentItem()).getViewModel().initConnectItemObserver(pager.getCurrentItem() == 0 ? learnersFilter : tutorsFilter);
+        pagerAdapter.getFragmentAt(pager.getCurrentItem()).getViewModel().reset(pager.getCurrentItem() == 0 ? learnersFilter : tutorsFilter);
     }
 
     private void initFilters() {
@@ -514,6 +519,28 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         pagerAdapter.getFragmentAt(0).getViewModel().retry();
         pagerAdapter.getFragmentAt(1).getViewModel().retry();
     }
+    @Override
+    public void setSearchQuery(String searchQuery) {
+        if (pager.getCurrentItem() == 0)
+            learnersFilter.setSearchQuery(searchQuery);
+        else
+            tutorsFilter.setSearchQuery(searchQuery);
+        updateFilter();
+
+    }
+
+    @Override
+    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId) {
+        learnersFilter.setSearchQuery(keyword);
+        learnersFilter.setCategId(categoryId);
+        learnersFilter.setSegId(segmentId);
+        if ("".equals(myGroupId))
+            tutorsFilter.setGroupId(allGroupId);
+        else
+            tutorsFilter.setGroupId(myGroupId);
+        tutorsFilter.setSearchQuery(keyword);
+        updateFilter();
+    }
 
     private String getActivePostType() {
         String postType = null;
@@ -563,16 +590,5 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             mFragement.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId) {
-        learnersFilter.setSearchQuery(keyword);
-        learnersFilter.setCategId(categoryId);
-        learnersFilter.setSegId(segmentId);
-        if ("".equals(myGroupId))
-            tutorsFilter.setGroupId(allGroupId);
-        else
-            tutorsFilter.setGroupId(myGroupId);
-        tutorsFilter.setSearchQuery(keyword);
-        updateFilter();
-    }
+
 }

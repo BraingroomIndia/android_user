@@ -16,8 +16,19 @@ public class PromocodeReq {
     Snippet data;
 
     @Data
-    @AllArgsConstructor(suppressConstructorProperties = true)
     public static class Snippet {
+        @SerializedName("user_id")
+        String userId;
+
+        @SerializedName("class_id")
+        String classId;
+
+        @SerializedName("total_ticket")
+        String totalTicket;
+
+        @SerializedName("is_guest")
+        int isGuest;
+
         @SerializedName("promocode")
         String code;
     }
