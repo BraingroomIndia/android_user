@@ -251,11 +251,11 @@ public class SignUpViewModelCompetition extends ViewModel {
                         }
                     });
                     signUpSnippet.setCountry(selectedId);
-                    stateVm.refreshDataMap(stateApiObservable);
-                    cityVm.refreshDataMap(null);
+                    stateVm.changeDataSource(stateApiObservable);
+                    cityVm.changeDataSource(null);
                 } else {
-                    stateVm.refreshDataMap(null);
-                    cityVm.refreshDataMap(null);
+                    stateVm.changeDataSource(null);
+                    cityVm.changeDataSource(null);
                 }
             }
         };
@@ -291,9 +291,9 @@ public class SignUpViewModelCompetition extends ViewModel {
                         }
                     });
                     signUpSnippet.setState(selectedId);
-                    cityVm.refreshDataMap(cityApiObservable);
+                    cityVm.changeDataSource(cityApiObservable);
                 } else {
-                    cityVm.refreshDataMap(null);
+                    cityVm.changeDataSource(null);
                 }
             }
         };
@@ -318,9 +318,9 @@ public class SignUpViewModelCompetition extends ViewModel {
                         }
                     });
                     signUpSnippet.setCityId(selectedId);
-                    localityVM.refreshDataMap(localityApiObservable);
+                    localityVM.changeDataSource(localityApiObservable);
                 } else {
-                    localityVM.refreshDataMap(null);
+                    localityVM.changeDataSource(null);
                 }
             }
         };

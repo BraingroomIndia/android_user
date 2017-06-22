@@ -64,7 +64,8 @@ public class ConnectFeedViewModel extends ViewModel {
         }
     };
 
-    public ConnectFeedViewModel(String majorCateg, String minorCateg, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper, String vendorId
+    public ConnectFeedViewModel(String majorCateg, String minorCateg, @NonNull final Navigator navigator,
+                                @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper, String vendorId
             , @NonNull final ConnectUiHelper uiHelper, final ConnectFeedFragment.FragmentUiHelper fragmentUiHelper) {
         this.filterData = new ConnectFilterData();
         this.filterData.setMajorCateg(majorCateg);
@@ -106,7 +107,8 @@ public class ConnectFeedViewModel extends ViewModel {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
-                return getLoadingItems().mergeWith(apiService.getConnectFeed(filterData, nextPage).map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                return getLoadingItems().mergeWith(apiService.getConnectFeed(filterData, nextPage)
+                        .map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ArrayList<ViewModel>();
@@ -146,7 +148,8 @@ public class ConnectFeedViewModel extends ViewModel {
         feedItems = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return getLoadingItems().mergeWith(apiService.getConnectFeed(filterData, 0).map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                return getLoadingItems().mergeWith(apiService.getConnectFeed(filterData, 0)
+                        .map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ArrayList<>();
@@ -196,7 +199,8 @@ public class ConnectFeedViewModel extends ViewModel {
         }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return getLoadingItems().mergeWith(apiService.getConnectFeed(filterData, nextPage).map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                return getLoadingItems().mergeWith(apiService.getConnectFeed(filterData, nextPage).map(feedDataMapFunction)
+                        .onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ArrayList<ViewModel>();

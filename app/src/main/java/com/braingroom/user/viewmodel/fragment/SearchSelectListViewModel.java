@@ -98,7 +98,6 @@ public class SearchSelectListViewModel extends ViewModel {
                     messageHelper.show(dependencySelectMessage);
                     return;
                 }
-                fragmentHelper.show(title);
                 refreshDataMap(apiObservable);
 
             }
@@ -147,6 +146,9 @@ public class SearchSelectListViewModel extends ViewModel {
         searchQuery.set("");
         selectedItemsText.set("select items");
     }
+    public void changeDataSource(final Observable<HashMap<String, Pair<String, String>>> dataSource){
+        this.apiObservable=dataSource;
+    }
 
     /*populates dataMap*/
     public void refreshDataMap(final Observable<HashMap<String, Pair<String, String>>> dataSource) {
@@ -161,8 +163,10 @@ public class SearchSelectListViewModel extends ViewModel {
                     messageHelper.show("Not available");
                     fragmentHelper.remove(title.get());
                 }
+                else {
+                fragmentHelper.show(title.get());
                 dataMap.putAll(map);
-                searchQuery.set("");
+                searchQuery.set("");}
             }
         }, new Consumer<Throwable>()
 

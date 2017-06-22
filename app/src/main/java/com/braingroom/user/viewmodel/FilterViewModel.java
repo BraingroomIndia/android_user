@@ -125,9 +125,9 @@ public class FilterViewModel extends ViewModel {
                             return resMap;
                         }
                     });
-                    localityVm.refreshDataMap(localityApiObservable);
+                    localityVm.changeDataSource(localityApiObservable);
                 } else {
-                    localityVm.refreshDataMap(null);
+                    localityVm.changeDataSource(null);
                 }
             }
         };
@@ -257,7 +257,7 @@ public class FilterViewModel extends ViewModel {
         categoryVm.reset();
         segmentsVm.reset();
         cityVm.clearSelectedValue();
-        localityVm.refreshDataMap(null);
+        localityVm.changeDataSource(null);
         communityVm.reset();
         classTypeVm.reset();
         classScheduleVm.reset();

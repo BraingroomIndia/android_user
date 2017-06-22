@@ -29,5 +29,6 @@
     <dimen name="elevation_small">0dp</dimen>
     <dimen name="elevation_med">3dp</dimen>
     <dimen name="elevation_large">5dp</dimen>
+    <dimen name="badge_text_size">12sp</dimen>
 
 </resources>

@@ -43,6 +43,9 @@ public class UserApplication extends Application {
     PublishSubject<Boolean> internetStatusBus;
 
     @Getter
+    PublishSubject<Boolean> newNotificationBus;
+
+    @Getter
     public TypedArray classPlaceholder;
 
     @Getter
@@ -76,7 +79,7 @@ public class UserApplication extends Application {
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this, BASE_URL)).build();
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
         internetStatusBus = PublishSubject.create();
-
+        newNotificationBus= PublishSubject.create();
     }
 
     public static UserApplication getInstance() {

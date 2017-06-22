@@ -3,6 +3,7 @@ package com.braingroom.user.model;
 
 import com.braingroom.user.model.request.ArticleAndVideosPostReq;
 import com.braingroom.user.model.request.BuyAndSellPostReq;
+import com.braingroom.user.model.request.ChangeNotificationStatusReq;
 import com.braingroom.user.model.request.ChangePasswordReq;
 import com.braingroom.user.model.request.ChatMessageReq;
 import com.braingroom.user.model.request.CityReq;
@@ -67,6 +68,7 @@ import com.braingroom.user.model.response.LikedUsersListResp;
 import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.model.response.MarkerDataResp;
 import com.braingroom.user.model.response.MessageListResp;
+import com.braingroom.user.model.response.NotificationCountResp;
 import com.braingroom.user.model.response.NotificationListResp;
 import com.braingroom.user.model.response.PayUBookingDetailsResp;
 import com.braingroom.user.model.response.PayUHashResp;
@@ -294,6 +296,12 @@ public interface UserApiService {
 
     @POST("getUserNotifications")
     Observable<NotificationListResp> getUserNotifications(@Body CommonUserIdReq req);
+
+    @POST("changeNotificationStatus")
+    Observable<BaseResp> changeNotificationStatus(@Body ChangeNotificationStatusReq req);
+
+    @POST("getUnreadNotificationCount")
+    Observable<NotificationCountResp>  getUnreadNotificationCount(@Body CommonUserIdReq req);
 
     @POST("getFeedsByPostID")
     Observable<ConnectFeedResp> getFeedsByPostID(@Body ConnectPostByIdReq req);

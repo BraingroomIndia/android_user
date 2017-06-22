@@ -12,6 +12,7 @@ import com.braingroom.user.model.dto.ProfileData;
 import com.braingroom.user.model.dto.VendorProfileData;
 import com.braingroom.user.model.request.ArticleAndVideosPostReq;
 import com.braingroom.user.model.request.BuyAndSellPostReq;
+import com.braingroom.user.model.request.ChangeNotificationStatusReq;
 import com.braingroom.user.model.request.ChangePasswordReq;
 import com.braingroom.user.model.request.ChatMessageReq;
 import com.braingroom.user.model.request.CityReq;
@@ -76,6 +77,7 @@ import com.braingroom.user.model.response.LikedUsersListResp;
 import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.model.response.MarkerDataResp;
 import com.braingroom.user.model.response.MessageListResp;
+import com.braingroom.user.model.response.NotificationCountResp;
 import com.braingroom.user.model.response.NotificationListResp;
 import com.braingroom.user.model.response.PayUBookingDetailsResp;
 import com.braingroom.user.model.response.PayUHashResp;
@@ -765,6 +767,14 @@ public class DataflowService {
 
     public Observable<NotificationListResp> getNotifications() {
         return api.getUserNotifications(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<BaseResp> changeNotificationStatus(ChangeNotificationStatusReq.Snippet snippet){
+        return api.changeNotificationStatus(new ChangeNotificationStatusReq(snippet)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<NotificationCountResp> getUnreadNotificationCount(){
+        return api.getUnreadNotificationCount(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

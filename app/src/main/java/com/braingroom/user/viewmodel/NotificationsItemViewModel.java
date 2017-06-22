@@ -3,6 +3,8 @@ package com.braingroom.user.viewmodel;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.braingroom.user.model.request.ChangeNotificationStatusReq;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.PostDetailActivity;
 
@@ -19,6 +21,7 @@ public class NotificationsItemViewModel extends ViewModel {
     public final boolean readStatus;
 
     public NotificationsItemViewModel(@NonNull final Navigator navigator,
+                                      @NonNull final String notificationId,
                                       @NonNull final String title, @NonNull final String postId,
                                       @NonNull String classId, @NonNull boolean readStatus) {
 
@@ -30,6 +33,8 @@ public class NotificationsItemViewModel extends ViewModel {
         onClicked = new Action() {
             @Override
             public void run() throws Exception {
+                apiService.changeNotificationStatus(new ChangeNotificationStatusReq.Snippet(pref.getString(Constants.BG_ID,""),notificationId))
+                        .subscribe();
                 Bundle data = new Bundle();
                 data.putString("postId", postId);
                 navigator.navigateActivity(PostDetailActivity.class, data);

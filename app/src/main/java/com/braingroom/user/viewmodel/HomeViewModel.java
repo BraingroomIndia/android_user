@@ -7,10 +7,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.braingroom.user.R;
+import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.ExploreResp;
+import com.braingroom.user.model.response.NotificationCountResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
@@ -21,6 +23,7 @@ import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.ExploreActivity;
 import com.braingroom.user.view.activity.FilterActivity;
+import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,9 +39,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -48,7 +53,7 @@ import static com.rollbar.android.Rollbar.TAG;
 
 public class HomeViewModel extends ViewModel {
 
-    public final Action onSearchClicked, onExploreClicked, onRegister,onFilterClicked;
+    public final Action onSearchClicked, onExploreClicked, onRegister, onFilterClicked;
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
@@ -60,6 +65,9 @@ public class HomeViewModel extends ViewModel {
     private List<MarkerOptions> markerList = new ArrayList<>();
 
     Observable<ExploreResp> exploreObservable;
+    private Disposable notificationDisposable;
+    private Integer newNotification;
+
     public GoogleMap mGoogleMap; //Edited by Vikas Godara
     private Map<String, Integer> pinColorMap = new HashMap<>();
     private DialogHelper dialogHelper;
@@ -72,7 +80,8 @@ public class HomeViewModel extends ViewModel {
             R.drawable.main_category_5, //Edited By Vikas Godara
             R.drawable.main_category_6};
 
-    public HomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final DialogHelper dialogHelper) {
+    public HomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
+                         @NonNull final DialogHelper dialogHelper, @NonNull final HomeActivity.UiHelper uiHelper) {
         this.communityVm = new CommunityGridViewModel(messageHelper, navigator, ClassListActivity.class);
         this.featuredVm = new ShowcaseClassListViewModel("Fast Tracked - Education & Skill Development", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
         this.trendingVm = new ShowcaseClassListViewModel("People's Choice - Hobbies & Sports", messageHelper, navigator, apiService.getTrendingClass(), ClassDetailActivity.class);
@@ -85,7 +94,7 @@ public class HomeViewModel extends ViewModel {
             public void run() throws Exception {
                 retry();
                 connectivityViewmodel.isConnected.set(true);
-                Log.d(TAG, "run internet: " +connectivityViewmodel.isConnected.get());
+                Log.d(TAG, "run internet: " + connectivityViewmodel.isConnected.get());
             }
         });
         this.dialogHelper = dialogHelper;
@@ -136,7 +145,7 @@ public class HomeViewModel extends ViewModel {
                                         public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                                             if (!snippet.getId().equals("-1")) {
                                                 Bundle data = new Bundle();
-                                                FilterData filterData =new FilterData();
+                                                FilterData filterData = new FilterData();
                                                 filterData.setCategoryId(snippet.getId());
                                                 data.putSerializable("filterData", filterData);
                                                 data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
@@ -155,6 +164,25 @@ public class HomeViewModel extends ViewModel {
                             }
                         });
 
+            }
+        });
+        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
+            @Override
+            public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return apiService.getUnreadNotificationCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
+                    @Override
+                    public NotificationCountResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return null;
+                    }
+                });
+            }
+        }).subscribe(new Consumer<NotificationCountResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
+                if (resp != null && resp.getData() != null) {
+                    uiHelper.changeNotificationCount(5);
+
+                }
             }
         });
 
@@ -190,7 +218,7 @@ public class HomeViewModel extends ViewModel {
                 bundle.putString("startDate", "");
                 bundle.putString("endDate", "");
                 bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-                navigator.navigateActivity(FilterActivity.class,bundle);
+                navigator.navigateActivity(FilterActivity.class, bundle);
             }
         };
 
@@ -263,25 +291,46 @@ public class HomeViewModel extends ViewModel {
 
     @Override
     public void retry() {
-        callAgain.set(callAgain.get()+1);
+        callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
         featuredVm.retry();
         trendingVm.retry();
         indigenousVm.retry();
         communityVm.retry();
-        /*Log.d(TAG, "retry: featuredVm retry:\t" + featuredVm.callAgain.get() + "\nretry: trendingVm retry:	" + indigenousVm.callAgain.get() +
-                "\nretry: indigenousVm retry:	" + indigenousVm.callAgain.get() + "\nretry: communityVm retry:	" + communityVm.callAgain.get());
-   */ }
+    }
+
+    public void notificationResume() {
+        notificationDisposable = UserApplication.getInstance().getNewNotificationBus().subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean isNewNotification) {
+                if (!isNewNotification)
+                    callAgain.set(callAgain.get() + 1);
+
+                Log.d("Notification", "accept: " + isNewNotification);
+            }
+        });
+    }
+
+    private void safelyDispose(Disposable... disposables) {
+        for (Disposable subscription : disposables) {
+            if (subscription != null && !subscription.isDisposed()) {
+                subscription.dispose();
+            }
+        }
+    }
 
     @Override
     public void onResume() {
         super.onResume();
+        notificationResume();
         connectivityViewmodel.onResume();
     }
+
 
     @Override
     public void onPause() {
         super.onPause();
         connectivityViewmodel.onPause();
+        safelyDispose(notificationDisposable);
     }
 }

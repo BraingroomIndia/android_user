@@ -57,9 +57,9 @@ public class ConnectFilterViewModel extends ViewModel {
                             return resMap;
                         }
                     });
-                    segmentsVm.refreshDataMap(segmentsApiObservable);
+                    segmentsVm.changeDataSource(segmentsApiObservable);
                 } else {
-                    segmentsVm.refreshDataMap(null);
+                    segmentsVm.changeDataSource(null);
                 }
             }
         };
@@ -153,7 +153,7 @@ public class ConnectFilterViewModel extends ViewModel {
         emptyHashMap.put("","");*/
         keywords.set("");
         categoryVm.clearSelectedValue();
-        segmentsVm.refreshDataMap(null);
+        segmentsVm.changeDataSource(null);
         segmentsVm.clearSelectedValue();
         myGroups.clearSelectedValue();
         allGroups.clearSelectedValue();

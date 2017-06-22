@@ -116,7 +116,8 @@ public class CheckoutViewModel extends ViewModel {
         }
     };
 
-    public CheckoutViewModel(@NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData) {
+    public CheckoutViewModel(@NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper,
+                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData) {
         totalAmount = new ObservableInt(0);
         totalAmountAfterPromo = new ObservableInt(0);
         couponCode = new ObservableField<>();
@@ -214,7 +215,7 @@ public class CheckoutViewModel extends ViewModel {
         onOpenPromoCode = new Action() {
             @Override
             public void run() throws Exception {
-                if (!loggedIn.get()&& isGuest ==0) {
+                if (!loggedIn.get() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
                                 @Override

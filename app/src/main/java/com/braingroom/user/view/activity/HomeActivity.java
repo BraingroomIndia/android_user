@@ -1,10 +1,13 @@
 package com.braingroom.user.view.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +28,7 @@ import android.widget.SeekBar;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
+import com.braingroom.user.utils.BadgeDrawable;
 import com.braingroom.user.viewmodel.HomeViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.google.android.gms.location.LocationRequest;
@@ -57,17 +61,23 @@ public class HomeActivity extends BaseActivity
     private static final String TAG = HomeActivity.class.getSimpleName();
     private HTextView textView;
     private RelativeLayout competitionBanner;
+    private MenuItem itemNotification;
+
+    public interface UiHelper {
+        void changeNotificationCount(int count);
+    }
 
 
     @Override
     @SuppressWarnings({"MissingPermission"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Observable observable = Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread());
 
         competitionBanner = (RelativeLayout) findViewById(R.id.competition_banner);
         textView = (HTextView) findViewById(R.id.textview);
         if (!vm.loggedIn.get()) {
-            Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
+            observable.subscribe(new Consumer<Long>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
                     animate((int) (aLong % 2));
@@ -151,7 +161,6 @@ public class HomeActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
     }
 
     public void initMap() {
@@ -169,7 +178,12 @@ public class HomeActivity extends BaseActivity
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new HomeViewModel(getMessageHelper(), getNavigator(), getHelperFactory().createDialogHelper());
+        return new HomeViewModel(getMessageHelper(), getNavigator(), getHelperFactory().createDialogHelper(), new UiHelper() {
+            @Override
+            public void changeNotificationCount(int count) {
+                setBadgeCount(HomeActivity.this, count);
+            }
+        });
     }
 
     @Override
@@ -191,8 +205,7 @@ public class HomeActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
-
-
+        itemNotification = menu.findItem(R.id.action_notifications);
         return true;
     }
 
@@ -319,5 +332,24 @@ public class HomeActivity extends BaseActivity
 
     public void animate(int index) {
         textView.animateText(sentences[index]);
+    }
+
+
+    public void setBadgeCount(Context context, int count) {
+
+        if (itemNotification != null) {
+            BadgeDrawable badge;
+            LayerDrawable icon = (LayerDrawable) itemNotification.getIcon();
+            Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+            if (reuse != null && reuse instanceof BadgeDrawable) {
+                badge = (BadgeDrawable) reuse;
+            } else {
+                badge = new BadgeDrawable(context);
+            }
+
+            badge.setCount(count);
+            icon.mutate();
+            icon.setDrawableByLayerId(R.id.ic_badge, badge);
+        }
     }
 }

@@ -24,7 +24,7 @@ public class NotificationViewModel extends ViewModel {
                     public List<ViewModel> apply(NotificationListResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         for (final NotificationListResp.Snippet elem : resp.getData()) {
-                            results.add(new NotificationsItemViewModel(navigator, elem.getDescription(), elem.getPostId(),
+                            results.add(new NotificationsItemViewModel(navigator, elem.getNotificationId(),elem.getDescription(), elem.getPostId(),
                                     "", "1".equals(elem.getStatus())));
                         }
                         return results;

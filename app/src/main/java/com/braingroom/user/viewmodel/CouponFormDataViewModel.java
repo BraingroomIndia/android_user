@@ -13,11 +13,12 @@ import com.braingroom.user.view.Navigator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
 public class CouponFormDataViewModel extends ViewModel {
 
-    public final ObservableBoolean mailMe = new ObservableBoolean();
+    public final ObservableBoolean mailMe = new ObservableBoolean(true);
     public final ObservableBoolean removable = new ObservableBoolean();
     public final DataItemViewModel emailAddress;
     public final DataItemViewModel denomination;
@@ -26,6 +27,7 @@ public class CouponFormDataViewModel extends ViewModel {
     public final DataItemViewModel mobileNumber;
     public final DataItemViewModel personalisedMsg;
     public final ListDialogViewModel1 categoryVm;
+    public final Action changeView;
 
     public final MyConsumer<CouponFormDataViewModel> removeThisFragment;
 
@@ -51,6 +53,21 @@ public class CouponFormDataViewModel extends ViewModel {
         }), new HashMap<String, Integer>(), true, null);
 
         this.removeThisFragment = removeThisFragment;
+        changeView = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (mailMe.get()) {
+                    recipientsName.s_1.set(null);
+                    mobileNumber.s_1.set(null);
+                    personalisedMsg.s_1.set(null);
+                }
+                else {
+                    recipientsName.s_1.set("");
+                    mobileNumber.s_1.set("");
+                    personalisedMsg.s_1.set("");
+                }
+            }
+        };
     }
 
 
