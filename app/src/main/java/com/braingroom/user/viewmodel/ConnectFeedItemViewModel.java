@@ -89,7 +89,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     public final String postType;
 
-    public final boolean isActivityRequest, isBuyAndSell;
+    public final boolean isActivityRequest, isVendor;
 
     public ObservableInt categoryImg = new ObservableInt();
 
@@ -122,7 +122,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
         this.postType = data.getPostType();
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
-        this.isBuyAndSell = "group_post".equalsIgnoreCase(postType);
+        this.isVendor = "vendor_article".equalsIgnoreCase(postType);
         this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
         this.numAccepts = new ObservableInt(data.getNumAccepted());
         this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwner()));

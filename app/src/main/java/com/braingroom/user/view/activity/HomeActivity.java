@@ -29,6 +29,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.utils.BadgeDrawable;
+import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.HomeViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.google.android.gms.location.LocationRequest;
@@ -62,9 +63,10 @@ public class HomeActivity extends BaseActivity
     private HTextView textView;
     private RelativeLayout competitionBanner;
     private MenuItem itemNotification;
+    private MenuItem itemMessage;
 
     public interface UiHelper {
-        void changeNotificationCount(int count);
+        void setCount(int notificationCount, int messageCount);
     }
 
 
@@ -73,68 +75,131 @@ public class HomeActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Observable observable = Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread());
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
 
-        competitionBanner = (RelativeLayout) findViewById(R.id.competition_banner);
-        textView = (HTextView) findViewById(R.id.textview);
-        if (!vm.loggedIn.get()) {
-            observable.subscribe(new Consumer<Long>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
-                    animate((int) (aLong % 2));
-                }
-            });
-        } else {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
-            competitionBanner.setLayoutParams(params);
-        }
+        if (bundle != null) {
+            Bundle data = new Bundle();
+            String postId=bundle.getString("post_id");
+            String classId =bundle.getString("class_id");
+            String messageSenderId = bundle.getString("sender_id");
+            String messageSenderName = bundle.getString("sender_name");
+            if (postId != null) {
+                data.putString("postId",postId);
+                getNavigator().navigateActivity(PostDetailActivity.class,data);
 
-
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash :  \t", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            else if(classId!=null) {
+                data.putString("id",classId);
+                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                getNavigator().navigateActivity(ClassDetailActivity.class,data);
+
+            }
+            else if (messageSenderId!=null){
+                data.putString("sender_id",messageSenderId);
+                data.putString("sender_name",messageSenderName);
+                getNavigator().navigateActivity(MessagesThreadActivity.class,data);
+            }
+
         }
-        initMap();
-        rxLocation = new RxLocation(this);
-        locationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setNumUpdates(2)
-                .setInterval(5000);
+        /*for (String key : bundle.keySet()) {
+            Object value = bundle.get(key);
+            Log.d(TAG, "extras " +String.format("%s %s (%s)", key,
+                    value.toString(), value.getClass().getName()));
+    }*/
 
+    competitionBanner =(RelativeLayout)
 
-        rxPermissions = new RxPermissions(this);
-        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION).subscribe(new Consumer<Boolean>() {
+    findViewById(R.id.competition_banner);
+
+    textView =(HTextView)
+
+    findViewById(R.id.textview);
+        if(!vm.loggedIn.get())
+
+    {
+        observable.subscribe(new Consumer<Long>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull Boolean granted) throws Exception {
-                if (granted) {
-                    rxLocation.location().updates(locationRequest).subscribe(new Consumer<Location>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception {
-                            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            MarkerOptions markerOption = new MarkerOptions().position(myLocation).title("Your Location").
-                                    icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_0));
-                            ((HomeViewModel) vm).mGoogleMap.addMarker(markerOption).setTag(myLocation.latitude + "," + myLocation.longitude);
-                            ((HomeViewModel) vm).refreshMapPinsToNewLocation("" + location.getLatitude(), "" + location.getLongitude());
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                            Log.d("Location", "accept: ");
-                        }
-                    });
-                } else {
-                    getMessageHelper().show("Showing default location as chennai");
-                }
+            public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
+                animate((int) (aLong % 2));
             }
         });
+    } else
+
+    {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
+        competitionBanner.setLayoutParams(params);
     }
+
+        try
+
+    {
+        PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
+        for (Signature signature : info.signatures) {
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            md.update(signature.toByteArray());
+            Log.d("KeyHash :  \t", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+        }
+    } catch(
+    PackageManager.NameNotFoundException e)
+
+    {
+        e.printStackTrace();
+    } catch(
+    NoSuchAlgorithmException e)
+
+    {
+        e.printStackTrace();
+    }
+
+    initMap();
+
+    rxLocation =new
+
+    RxLocation(this);
+
+    locationRequest =LocationRequest.create()
+            .
+
+    setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .
+
+    setNumUpdates(2)
+                .
+
+    setInterval(5000);
+
+
+    rxPermissions =new
+
+    RxPermissions(this);
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION).
+
+    subscribe(new Consumer<Boolean>() {
+        @Override
+        public void accept (@io.reactivex.annotations.NonNull Boolean granted) throws Exception {
+            if (granted) {
+                rxLocation.location().updates(locationRequest).subscribe(new Consumer<Location>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception {
+                        LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                        MarkerOptions markerOption = new MarkerOptions().position(myLocation).title("Your Location").
+                                icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_0));
+                        ((HomeViewModel) vm).mGoogleMap.addMarker(markerOption).setTag(myLocation.latitude + "," + myLocation.longitude);
+                        ((HomeViewModel) vm).refreshMapPinsToNewLocation("" + location.getLatitude(), "" + location.getLongitude());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        Log.d("Location", "accept: ");
+                    }
+                });
+            } else {
+                getMessageHelper().show("Showing default location as chennai");
+            }
+        }
+    });
+}
 
     @Override
     protected void onStart() {
@@ -180,8 +245,9 @@ public class HomeActivity extends BaseActivity
     protected ViewModel createViewModel() {
         return new HomeViewModel(getMessageHelper(), getNavigator(), getHelperFactory().createDialogHelper(), new UiHelper() {
             @Override
-            public void changeNotificationCount(int count) {
-                setBadgeCount(HomeActivity.this, count);
+            public void setCount(int notificationCount, int messageCount) {
+                setBadgeCount(itemNotification, HomeActivity.this, notificationCount);
+                setBadgeCount(itemMessage, HomeActivity.this, messageCount);
             }
         });
     }
@@ -206,6 +272,9 @@ public class HomeActivity extends BaseActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         itemNotification = menu.findItem(R.id.action_notifications);
+        itemMessage = menu.findItem(R.id.action_messages);
+        setBadgeCount(itemNotification, this, ((HomeViewModel) vm).notificationCount);
+        setBadgeCount(itemMessage, this, ((HomeViewModel) vm).messageCount);
         return true;
     }
 
@@ -335,11 +404,11 @@ public class HomeActivity extends BaseActivity
     }
 
 
-    public void setBadgeCount(Context context, int count) {
+    public void setBadgeCount(MenuItem item, Context context, int count) {
 
-        if (itemNotification != null) {
+        if (item != null && vm.loggedIn.get()) {
             BadgeDrawable badge;
-            LayerDrawable icon = (LayerDrawable) itemNotification.getIcon();
+            LayerDrawable icon = (LayerDrawable) item.getIcon();
             Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
             if (reuse != null && reuse instanceof BadgeDrawable) {
                 badge = (BadgeDrawable) reuse;

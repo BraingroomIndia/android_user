@@ -78,10 +78,10 @@ public class SignUpViewModelCompetition extends ViewModel {
 
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
-        LinkedHashMap<String, Integer> ClassTypeApiData = new LinkedHashMap<>();
-        ClassTypeApiData.put("Male", TYPE_MALE);
-        ClassTypeApiData.put("Female", TYPE_FEMALE);
-        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), new HashMap<String, Integer>(), false, null);
+        LinkedHashMap<String, Integer> GenderTypeApiData = new LinkedHashMap<>();
+        GenderTypeApiData.put("Male", TYPE_MALE);
+        GenderTypeApiData.put("Female", TYPE_FEMALE);
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null);
         communityClassVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Community", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommunityResp categoryResp) throws Exception {

@@ -8,12 +8,12 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_messages"
-        android:icon="@drawable/ic_textsms_white_24dp"
+        android:icon="@drawable/ic_menu_message"
         android:title="@string/action_message"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_connect"
-        android:icon="@drawable/ic_vector_circle_white_24dp"
+        android:icon="@drawable/ic_group_add_white_24dp"
         android:title="@string/action_connect"
         app:showAsAction="always|withText" />
 

@@ -93,7 +93,8 @@ public class ConnectPostViewModel extends ViewModel {
     public final ObservableBoolean categoryField = new ObservableBoolean(false);
 
 
-    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, final String postType1, final ConnectPostFragment.UiHelper uiHelper) {
+    public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory,
+                                final String postType1, final ConnectPostFragment.UiHelper uiHelper) {
         this.navigator = navigator;
         this.helperFactory = helperFactory;
         this.postType = postType1;
@@ -466,6 +467,7 @@ public class ConnectPostViewModel extends ViewModel {
                     }
                     decideAndDiscussSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     decideAndDiscussSnippet.setPostType("user_post");
+                    decideAndDiscussSnippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedIndex()));
                     decideAndDiscussSnippet.setSegmentId(android.text.TextUtils.join(",", segmentsVm.getSelectedIndex()));
                     decideAndDiscussSnippet.setPostTitle(title.s_1.get());
                     decideAndDiscussSnippet.setPostSummary(description.get());

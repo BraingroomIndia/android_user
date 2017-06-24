@@ -88,6 +88,7 @@
                     android:paddingRight="@dimen/padding_med"
                     android:paddingTop="@dimen/padding_small"
                     android:text="SUBMIT"
+                    android:onClick="@{vm.onSubmit}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_large"
                     app:font='@{@string/robotoRegular}' />

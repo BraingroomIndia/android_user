@@ -3,8 +3,11 @@ package com.braingroom.user.viewmodel;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.braingroom.user.R;
+import com.braingroom.user.UserApplication;
+import com.braingroom.user.model.response.NotificationCountResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
@@ -20,8 +23,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
 public class ConnectHomeViewModel extends ViewModel {
@@ -34,6 +39,10 @@ public class ConnectHomeViewModel extends ViewModel {
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final ObservableField<String> searchQuery = new ObservableField("");
 
+
+    private Disposable notificationDisposable;
+    public int notificationCount=0;
+    public int messageCount=0;
     //    public final Observable<List<ViewModel>> feedItems;
 //    public final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
     public final Action onSearchClicked, onFilterClicked, onPostClicked;
@@ -69,6 +78,58 @@ public class ConnectHomeViewModel extends ViewModel {
 //        };
 //        feedItems = getLoadingItems(4).mergeWith(apiService.getConnectFeed(filterData, 0).map(feedDataMapFunction));
 //        catSegVm = new GroupDataViewModel(messageHelper, navigator);
+        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return loggedIn.get();
+            }
+        }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
+            @Override
+            public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return apiService.getUnreadMessageCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
+                    @Override
+                    public NotificationCountResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return null;
+                    }
+                });
+            }
+        }).subscribe(new Consumer<NotificationCountResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
+                if (resp != null && resp.getData() != null) {
+                    messageCount = resp.getData().get(0).getCount();
+                    //uiHelper.setCount(notificationCount,messageCount);
+
+                }
+            }
+        });
+
+        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return loggedIn.get();
+            }
+        }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
+            @Override
+            public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return apiService.getUnreadNotificationCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
+                    @Override
+                    public NotificationCountResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return null;
+                    }
+                });
+            }
+        }).subscribe(new Consumer<NotificationCountResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
+                if (resp != null && resp.getData() != null) {
+                    notificationCount = resp.getData().get(0).getCount();
+                    uiHelper.setCount(notificationCount,messageCount);
+
+                }
+            }
+        });
+
         FieldUtils.toObservable(searchQuery)
                 .debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<String>() {
             @Override
@@ -91,7 +152,7 @@ public class ConnectHomeViewModel extends ViewModel {
         onFilterClicked = new Action() {
             @Override
             public void run() throws Exception {
-                helperFactory.createDialogHelper().showCustomView(R.layout.content_group_data, catSegVm, false);
+                uiHelper.openFilter();
             }
         };
         onPostClicked = new Action() {
@@ -119,12 +180,14 @@ public class ConnectHomeViewModel extends ViewModel {
     @Override
     public void onResume() {
         super.onResume();
+        notificationResume();
         connectivityViewmodel.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        safelyDispose(notificationDisposable);
         connectivityViewmodel.onPause();
     }
 
@@ -134,5 +197,24 @@ public class ConnectHomeViewModel extends ViewModel {
         uiHelper.retry();
     }
 
+    public void notificationResume() {
+        notificationDisposable = UserApplication.getInstance().getNewNotificationBus().subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean isNewNotification) {
+                if (isNewNotification)
+                    callAgain.set(callAgain.get() + 1);
+
+                Log.d("Notification", "accept: " + isNewNotification);
+            }
+        });
+    }
+
+    private void safelyDispose(Disposable... disposables) {
+        for (Disposable subscription : disposables) {
+            if (subscription != null && !subscription.isDisposed()) {
+                subscription.dispose();
+            }
+        }
+    }
 
 }

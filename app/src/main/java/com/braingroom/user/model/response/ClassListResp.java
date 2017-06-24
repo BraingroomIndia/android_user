@@ -39,7 +39,7 @@ public class ClassListResp extends BaseResp {
         @SerializedName("detail_class_link")
         private String classWebUrl;
 
-        @SerializedName("class_provided_by")
+        @SerializedName("class_provided")
         private String teacher;
 
         @SerializedName("class_provider_id")
@@ -118,7 +118,7 @@ public class ClassListResp extends BaseResp {
         @SerializedName("price_type")
         private String pricingType;
 
-        @SerializedName("locality")
+        @SerializedName("locality ")
         private String locality;
         //Edited By Vikas Goodara
         @SerializedName(value = "location", alternate = {"vendorClasseLocationDetail", "VendorClasseLocationDetail"})
@@ -130,10 +130,10 @@ public class ClassListResp extends BaseResp {
         @SerializedName("catalog_description")
         private String catalogDescription;
 
-        @SerializedName("about_academy")
+        @SerializedName("class_provided_by")
         private String classProvider;
 
-        @SerializedName("locations")
+        @SerializedName("localities")
         private List<String> catalogLocations;
 
 

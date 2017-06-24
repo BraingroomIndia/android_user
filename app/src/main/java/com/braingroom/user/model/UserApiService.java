@@ -29,6 +29,7 @@ import com.braingroom.user.model.request.LearningPartnerPostReq;
 import com.braingroom.user.model.request.LikeReq;
 import com.braingroom.user.model.request.LocalityReq;
 import com.braingroom.user.model.request.LoginReq;
+import com.braingroom.user.model.request.LogoutReq;
 import com.braingroom.user.model.request.MarkerDataReq;
 import com.braingroom.user.model.request.MessageListReq;
 import com.braingroom.user.model.request.MessageReplyReq;
@@ -37,6 +38,7 @@ import com.braingroom.user.model.request.PayUHashGenReq;
 import com.braingroom.user.model.request.PostRelatedReq;
 import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.request.PromocodeReq;
+import com.braingroom.user.model.request.QuoteReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.request.ReportReq;
 import com.braingroom.user.model.request.SearchReq;
@@ -115,6 +117,9 @@ public interface UserApiService {
     @POST("BuyerRegistration")
     Observable<SignUpResp> BuyerRegistration(@Body SignUpReq req);
 
+    @POST("logout")
+    Observable<BaseResp> logout(@Body LogoutReq req);
+
     @POST("getCommunity")
     Observable<CommunityResp> getCommunity();
 
@@ -144,6 +149,9 @@ public interface UserApiService {
 
     @POST("contactAdmin")
     Observable<BaseResp> contactAdmin(@Body ContactAdmin req);
+
+    @POST("getQuote")
+    Observable<BaseResp> getQuote(@Body QuoteReq req);
 
     @POST("getProfile")
     Observable<ProfileResp> getProfile(@Body CommonIdReq req);
@@ -302,6 +310,9 @@ public interface UserApiService {
 
     @POST("getUnreadNotificationCount")
     Observable<NotificationCountResp>  getUnreadNotificationCount(@Body CommonUserIdReq req);
+
+    @POST("getUnreadMessageCount")
+    Observable<NotificationCountResp>  getUnreadMessageCount(@Body CommonUserIdReq req);
 
     @POST("getFeedsByPostID")
     Observable<ConnectFeedResp> getFeedsByPostID(@Body ConnectPostByIdReq req);

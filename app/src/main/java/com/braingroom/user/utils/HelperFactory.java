@@ -82,7 +82,7 @@ public class HelperFactory {
 
 
             @Override
-            public void showSingleSelectList(String title, List<String> items, final Integer[] selectedItems) {
+            public void showSingleSelectList(String title, List<String> items, final Integer[] selectedItems,String positiveText) {
                 new MaterialDialog.Builder(activity)
                         .title(title)
                         .items(items)
@@ -94,7 +94,7 @@ public class HelperFactory {
 
                             }
                         })
-                        .positiveText("Done")
+                        .positiveText(positiveText)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {

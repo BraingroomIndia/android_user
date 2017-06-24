@@ -23,5 +23,9 @@ public interface ConnectUiHelper {
 
     void popFragment();
 
+    void setCount(int notificationCount,int messageCount);
+
      void retry();
+
+     void openFilter();
 }

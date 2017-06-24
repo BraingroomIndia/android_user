@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -12,7 +13,11 @@ import android.util.Log;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassLocationData;
+import com.braingroom.user.model.dto.ListDialogData1;
+import com.braingroom.user.model.request.DecideAndDiscussPostReq;
+import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.WishlistResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.utils.MyConsumer;
@@ -29,6 +34,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.youtube.player.YouTubePlayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -69,7 +76,16 @@ public class ClassDetailViewModel extends ViewModel {
     List<ViewModel> addressList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
     List<MarkerOptions> markerList = new ArrayList<>();
+
     public ObservableField<Integer> retry = new ObservableField<>(0);
+
+    public final DataItemViewModel title;
+    public final ObservableField<String> postDescription;
+
+    public final ListDialogViewModel1 phoneNumber;
+    LinkedHashMap<String, Integer> PhoneListApiData = new LinkedHashMap<>();
+    public Consumer<HashMap<String, Integer>> callConsumer;
+
 
     private GoogleMap mGoogleMap;
     YouTubePlayer youTubePlayer;
@@ -81,12 +97,12 @@ public class ClassDetailViewModel extends ViewModel {
     ClassDetailActivity.UiHelper uiHelper;
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
-            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, openConnectTnT, openConnectBnS, openConnectFP;
+            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, openConnectTnT, openConnectBnS, openConnectFP , openCateglogLocationList;
 
     public boolean isInWishlist = false;
 
     public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, final String classId, boolean isCatalog) {
+                                @NonNull final Navigator navigator, @NonNull final String classId, final boolean isCatalog) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -94,12 +110,18 @@ public class ClassDetailViewModel extends ViewModel {
                 Log.d(TAG, "run: " + callAgain.get());
             }
         });
+        PhoneListApiData.put("044-49507392", 1);
+        PhoneListApiData.put("044-65556012", 2);
+        PhoneListApiData.put("044-65556013", 3);
+
         addresses = Observable.just(addressList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
         this.uiHelper = uiHelper;
         isMapVisible.set(!isCatalog);
+        this.title = new DataItemViewModel("");
+        this.postDescription = new ObservableField<>("");
         openConnectTnT = new Action() {
             @Override
             public void run() throws Exception {
@@ -126,6 +148,74 @@ public class ClassDetailViewModel extends ViewModel {
 
             }
         };
+        openCateglogLocationList=new Action() {
+            @Override
+            public void run() throws Exception {
+                messageHelper.showDismissInfo("Locations",TextUtils.join("\n",catalogLocationList));
+
+            }
+        };
+        onQueryClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.postQueryForm();
+
+            }
+        };
+        onSubmitPostClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                DecideAndDiscussPostReq.Snippet decideAndDiscussSnippet = new DecideAndDiscussPostReq.Snippet();
+                if (title.s_1.get().equals("")) {
+                    messageHelper.show("Please enter Post title");
+                    return;
+                }
+                if (description.get().equals("")) {
+                    messageHelper.show("Please enter description");
+                    return;
+                }
+                decideAndDiscussSnippet.setUuid(pref.getString(Constants.UUID, ""));
+                decideAndDiscussSnippet.setPostType("user_post");
+                decideAndDiscussSnippet.setSegmentId("");
+                decideAndDiscussSnippet.setCategoryId("");
+                decideAndDiscussSnippet.setPostTitle(title.s_1.get());
+                decideAndDiscussSnippet.setPostSummary(postDescription.get());
+                apiService.postDecideDiscuss(decideAndDiscussSnippet).subscribe(new Consumer<BaseResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+                        messageHelper.show(baseResp.getResMsg());
+                        Bundle data = new Bundle();
+                        data.putString("defMajorCateg", "tutors_talk");
+                        data.putString("defMinorCateg", "user_post");
+                        navigator.navigateActivity(ConnectHomeActivity.class, data);
+
+                    }
+                });
+
+            }
+        };
+
+        callConsumer = new Consumer<HashMap<String, Integer>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
+                String number = null;
+                if (selectedMap.values().iterator().hasNext()) {
+                    number = android.text.TextUtils.join("", selectedMap.keySet());
+
+                }
+                if (number != null) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + number));
+                    Log.d(TAG, "accept: " + number);
+                    navigator.navigateActivity(intent);
+                }
+            }
+
+        };
+
+
+        phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer);
+        phoneNumber.setPositiveText("Call");
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -135,7 +225,7 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 // TODO: 16/06/17 place classId
-                return apiService.getClassDetail("2186").onErrorReturn(new Function<Throwable, ClassData>() {
+                return apiService.getClassDetail(classId).onErrorReturn(new Function<Throwable, ClassData>() {
                     @Override
                     public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ClassData();
@@ -159,13 +249,13 @@ public class ClassDetailViewModel extends ViewModel {
                         description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
-                        try {
+                        postDescription.set(classTopic.get() + "\n");
+                        if (isCatalog) {
                             catalogDescription.set(classData.getCatalogDescription());
                             classProvider.set(classData.getClassProvider());
                             catalogLocationList.addAll(classData.getCatalogLocations());
-                            locationConcat.set(TextUtils.join(",", classData.getCatalogLocations()));
-                        } catch (NullPointerException e) {
-                            Log.d(TAG, "apply: " + e.toString());
+                             locationConcat.set(TextUtils.join(",", classData.getCatalogLocations()));
+
                         }
 
                         if ("1".equals(classData.getWishlist()))

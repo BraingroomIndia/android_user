@@ -46,7 +46,7 @@ public class CustomInterceptor implements Interceptor {
         Request original = chain.request();
         Request.Builder requestBuilder = original.newBuilder()
                 .addHeader("X-App-Type", "BGUSR01")
-                .addHeader("X-App-Version", "1.2.1");
+                .addHeader("X-App-Version", "1.2");
         Request request = requestBuilder.build();
         Response response;
         try {

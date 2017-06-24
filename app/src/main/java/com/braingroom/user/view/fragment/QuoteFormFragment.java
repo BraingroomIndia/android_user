@@ -19,6 +19,10 @@ public class QuoteFormFragment extends BaseFragment {
         return new QuoteFormFragment();
     }
 
+    public interface UiHelper{
+        void popFragment();
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -28,7 +32,13 @@ public class QuoteFormFragment extends BaseFragment {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new QuoteFormViewModel(activity.getMessageHelper(), activity.getNavigator(), activity.getHelperFactory());
+        return new QuoteFormViewModel(activity.getMessageHelper() ,new UiHelper(){
+            @Override
+            public void popFragment(){
+                getActivity().onBackPressed();
+
+            }
+        },activity.getHelperFactory());
     }
 
     @Override

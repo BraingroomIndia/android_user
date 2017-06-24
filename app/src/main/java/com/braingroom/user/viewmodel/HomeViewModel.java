@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,8 +66,10 @@ public class HomeViewModel extends ViewModel {
     private List<MarkerOptions> markerList = new ArrayList<>();
 
     Observable<ExploreResp> exploreObservable;
+
     private Disposable notificationDisposable;
-    private Integer newNotification;
+    public int notificationCount=0;
+    public int messageCount=0;
 
     public GoogleMap mGoogleMap; //Edited by Vikas Godara
     private Map<String, Integer> pinColorMap = new HashMap<>();
@@ -166,7 +169,38 @@ public class HomeViewModel extends ViewModel {
 
             }
         });
-        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
+        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return loggedIn.get();
+            }
+        }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
+            @Override
+            public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return apiService.getUnreadMessageCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
+                    @Override
+                    public NotificationCountResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        return null;
+                    }
+                });
+            }
+        }).subscribe(new Consumer<NotificationCountResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
+                if (resp != null && resp.getData() != null) {
+                    messageCount = resp.getData().get(0).getCount();
+                    //uiHelper.setCount(notificationCount,messageCount);
+
+                }
+            }
+        });
+
+        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return loggedIn.get();
+            }
+        }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
             public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return apiService.getUnreadNotificationCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
@@ -180,12 +214,12 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
                 if (resp != null && resp.getData() != null) {
-                    uiHelper.changeNotificationCount(5);
+                    notificationCount = resp.getData().get(0).getCount();
+                    uiHelper.setCount(notificationCount,messageCount);
 
                 }
             }
         });
-
 
         refreshMapPinsToNewLocation("13.0826802", "80.2707184");
         onSearchClicked = new Action() {
@@ -303,7 +337,7 @@ public class HomeViewModel extends ViewModel {
         notificationDisposable = UserApplication.getInstance().getNewNotificationBus().subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean isNewNotification) {
-                if (!isNewNotification)
+                if (isNewNotification)
                     callAgain.set(callAgain.get() + 1);
 
                 Log.d("Notification", "accept: " + isNewNotification);
