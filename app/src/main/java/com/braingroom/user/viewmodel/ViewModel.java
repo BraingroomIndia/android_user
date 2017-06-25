@@ -62,7 +62,12 @@ public class ViewModel {
     }
 
     public void logOut() {
-        editor.clear().commit();
+        String fcmToken = pref.getString(Constants.FCM_TOKEN,"");
+        Log.d("Firebase", "fcm Token: " + fcmToken);
+        apiService.logout().subscribe();
+        editor.clear();
+        editor.putString(Constants.FCM_TOKEN,fcmToken);
+        editor.commit();
         loggedIn.set(false);
 
     }

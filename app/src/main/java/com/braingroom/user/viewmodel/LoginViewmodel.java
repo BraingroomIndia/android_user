@@ -103,7 +103,7 @@ public class LoginViewmodel extends ViewModel {
     }
 
     public void emailLogin() {
-        Observable<LoginResp> myObserb = apiService.login(email.get(), password.get(), pref.getString(Constants.FCM_TOKEN, ""));
+        Observable<LoginResp> myObserb = apiService.login(email.get(), password.get(), pref.getString(Constants.FCM_TOKEN, "1234"));
         myObserb.subscribe(new Consumer<LoginResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
@@ -141,7 +141,10 @@ public class LoginViewmodel extends ViewModel {
                 } else
 
                 {
+                    String fcmToken = pref.getString(Constants.FCM_TOKEN,"");
                     editor.clear();
+                    editor.putString(Constants.FCM_TOKEN,fcmToken);
+                    editor.commit();
                     messageHelper.show(loginResp.getResMsg());
 
                 }
@@ -224,7 +227,9 @@ public class LoginViewmodel extends ViewModel {
                         navigator.finishActivity();
                     }
                 } else {
+                    String fcmToken = pref.getString(Constants.FCM_TOKEN,"");
                     editor.clear();
+                    editor.putString(Constants.FCM_TOKEN,fcmToken);
                     editor.commit();
                     messageHelper.show(loginResp.getResMsg());
                 }

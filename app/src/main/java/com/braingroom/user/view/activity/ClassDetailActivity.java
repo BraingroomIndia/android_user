@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.braingroom.user.R;
+import com.braingroom.user.view.fragment.ClassQueryFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
@@ -38,6 +39,9 @@ public class ClassDetailActivity extends BaseActivity {
         void stopShimmer();
 
         void showQuoteForm();
+
+        void postQueryForm();
+        void next();
 
     }
 
@@ -103,6 +107,16 @@ public class ClassDetailActivity extends BaseActivity {
                 transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance()).addToBackStack(null).commit();
             }
 
+            @Override
+            public void postQueryForm() {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.fragment_container, ClassQueryFragment.newInstance()).addToBackStack(null).commit();
+            }
+            @Override
+            public void next(){
+                onBackPressed();
+            }
+
         };
         return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"), ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin")));
     }
@@ -122,6 +136,11 @@ public class ClassDetailActivity extends BaseActivity {
             menu.findItem(R.id.action_wishlist).setIcon(R.drawable.ic_favorite_white_24dp);
         return true;
     }
+
+    public ClassDetailViewModel getViewModel() {
+        return (ClassDetailViewModel) vm;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -30,6 +30,7 @@ public class ListDialogViewModel extends DialogViewModel {
     MessageHelper messageHelper;
     DialogHelper dialogHelper;
     Consumer<List<String>> resultConsumer;
+    private String positiveText;
 
     public ListDialogViewModel(@NonNull final DialogHelper dialogHelper, final String title, @NonNull final MessageHelper messageHelper, Observable<ListDialogData> sourceObservable, final boolean isMultiSelect,@Nullable Consumer<List<String>> resultConsumer) {
         super(dialogHelper, title);
@@ -52,7 +53,7 @@ public class ListDialogViewModel extends DialogViewModel {
                 if (isMultiSelect)
                     dialogHelper.showMultiselectList(title, listItems, selectedIndexes.toArray(new Integer[0]));
                 else
-                    dialogHelper.showSingleSelectList(title, listItems, selectedIndexes.toArray(new Integer[0]));
+                    dialogHelper.showSingleSelectList(title, listItems, selectedIndexes.toArray(new Integer[0]),positiveText!=null?positiveText:"Done");
             }
         }).doOnError(new Consumer<Throwable>() {
             @Override

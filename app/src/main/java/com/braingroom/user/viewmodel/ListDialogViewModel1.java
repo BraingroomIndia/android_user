@@ -18,6 +18,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import lombok.Setter;
 
 public class ListDialogViewModel1 extends ViewModel {
 
@@ -36,6 +37,8 @@ public class ListDialogViewModel1 extends ViewModel {
     public final ObservableField<String> selectedItemsText = new ObservableField<>("");
     public final Action onOpenerClick;
     private String TAG = getClass().getCanonicalName();
+    @Setter
+    private String positiveText = null;
 
     public ListDialogViewModel1(@NonNull final DialogHelper dialogHelper, final String title, @NonNull final MessageHelper messageHelper
             , Observable<ListDialogData1> sourceObservable, @NonNull HashMap<String, Integer> selectedItemsMap, final boolean isMultiSelect
@@ -72,7 +75,7 @@ public class ListDialogViewModel1 extends ViewModel {
                             , getSelectedIndex());
                 else
                     dialogHelper.showSingleSelectList(title, new ArrayList<>(dialogData.getItems().keySet())
-                            , getSelectedIndex());
+                            , getSelectedIndex(), positiveText != null ? positiveText : "Done");
             }
         }).doOnError(new Consumer<Throwable>() {
             @Override
@@ -122,6 +125,7 @@ public class ListDialogViewModel1 extends ViewModel {
         if (itemList.size() == 0) selectedItemsText.set("select item/items");
         else if (itemList.size() == 1) selectedItemsText.set(itemList.get(0));
         else selectedItemsText.set(itemList.get(0) + " & " + (itemList.size() - 1) + " others");
+
 
     }
 

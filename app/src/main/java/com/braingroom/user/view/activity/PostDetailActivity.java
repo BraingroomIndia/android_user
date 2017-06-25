@@ -83,6 +83,15 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     @Override
     public void retry() {
     }
+
     @Override
-    public void setSearchQuery(String a){}
+    public void setSearchQuery(String a) {
+    }
+
+    @Override
+    public void setCount(int notificationCount, int messageCount) {
+    }
+
+    public void openFilter() {
+    }
 }

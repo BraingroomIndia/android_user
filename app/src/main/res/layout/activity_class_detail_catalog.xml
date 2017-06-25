@@ -282,6 +282,7 @@
                                         android:layout_height="wrap_content"
                                         android:ellipsize="end"
                                         android:maxLines="3"
+                                        android:onClick="@{vm.openCateglogLocationList}"
                                         android:paddingBottom="@dimen/margin_med"
                                         android:paddingLeft="@dimen/margin_large"
                                         android:paddingRight="@dimen/margin_med"
@@ -309,29 +310,6 @@
 
 
                             </android.support.v7.widget.CardView>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/search_height"
-                                android:layout_marginTop="@dimen/cardview_compat_inset_shadow"
-                                android:background="@color/colorTextGray"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:background="@color/white"
-                                    android:gravity="center"
-                                    android:onClick="@{vm.onGetTutor}"
-                                    android:paddingLeft="@dimen/padding_med"
-                                    android:paddingRight="@dimen/padding_med"
-                                    android:text="Get your own Tutor for this class"
-                                    android:textColor="@color/materialGreen"
-                                    app:font='@{@string/robotoBold}' />
-
-
-                            </LinearLayout>
 
 
                             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -369,62 +347,7 @@
 
                             </android.support.v7.widget.CardView>
                             <!--Edited By Vikas Godara-->
-                            <android.support.v7.widget.CardView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/search_height"
-                                android:layout_marginTop="5dp">
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/search_height"
-                                    android:background="@color/colorTextGray"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="1"
-                                        android:background="@color/white"
-                                        android:ellipsize="end"
-                                        android:gravity="center"
-                                        android:onClick="@{vm.openConnectTnT}"
-                                        android:paddingLeft="@dimen/padding_med"
-                                        android:paddingRight="@dimen/padding_med"
-                                        android:text="Tips &amp; Tricks"
-                                        android:textColor="@color/materialGreen"
-                                        app:font='@{@string/robotoBold}' />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginLeft="0.5dp"
-                                        android:layout_weight="1"
-                                        android:background="@color/white"
-                                        android:gravity="center"
-                                        android:onClick="@{vm.openConnectBnS}"
-                                        android:paddingLeft="@dimen/padding_med"
-                                        android:paddingRight="@dimen/padding_med"
-                                        android:text="Buy &amp; Sell"
-                                        android:textColor="@color/materialGreen"
-                                        app:font='@{@string/robotoBold}' />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginLeft="0.5dp"
-                                        android:layout_weight="1"
-                                        android:background="@color/white"
-                                        android:gravity="center"
-                                        android:onClick="@{vm.openConnectFP}"
-                                        android:paddingLeft="@dimen/padding_med"
-                                        android:paddingRight="@dimen/padding_med"
-                                        android:text="Learning Partners"
-                                        android:textColor="@color/materialGreen"
-                                        app:font='@{@string/robotoBold}' />
-
-                                </LinearLayout>
-
-                            </android.support.v7.widget.CardView>
                             <!--Edited By Vikas Godara-->
                         </LinearLayout>
 

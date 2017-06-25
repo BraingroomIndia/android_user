@@ -54,7 +54,10 @@ public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                         if (baseResp.getResCode().equals("0")) {
+                            String fcmToken = pref.getString(Constants.FCM_TOKEN,"");
                             editor.clear();
+                            editor.putString(Constants.FCM_TOKEN,fcmToken);
+                            editor.commit();
                             messageHelper.show(baseResp.getResMsg());
                         } else {
                             editor.putBoolean(Constants.LOGGED_IN, true);
@@ -84,7 +87,9 @@ public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        String fcmToken = pref.getString(Constants.FCM_TOKEN,"");
                         editor.clear();
+                        editor.putString(Constants.FCM_TOKEN,fcmToken);
                         editor.commit();
                         messageHelper.show("some Error occurred");
 

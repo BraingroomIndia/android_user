@@ -21,6 +21,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <android.support.design.widget.CoordinatorLayout
 
@@ -91,7 +94,7 @@
                             android:onClick="@{vm.onGiftClicked}"
                             android:paddingLeft="@dimen/padding_med"
                             android:paddingRight="@dimen/padding_med"
-                            android:text="Gift This Class"
+                            android:text="GIFT THIS CLASS"
                             android:textColor="@color/materialGreen"
                             app:font='@{@string/robotoBold}' />
 
@@ -378,6 +381,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:padding="@dimen/margin_large"
+                                android:onClick="@{vm.phoneNumber.onOpenerClick}"
                                 android:text="@string/booking_related_help"
                                 android:textSize="@dimen/text_size_medium" />
 
@@ -386,14 +390,14 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/search_height"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/cardview_compat_inset_shadow"
                             android:background="@color/colorTextGray"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
                                 android:layout_weight="1"
                                 android:background="@color/white"
                                 android:gravity="center"
@@ -402,7 +406,23 @@
                                 android:paddingRight="@dimen/padding_med"
                                 android:text="Get your own Tutor for this class"
                                 android:textColor="@color/materialGreen"
+                                android:textSize="@dimen/text_size_large"
                                 app:font='@{@string/robotoBold}' />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:gravity="center"
+                                android:onClick="@{vm.onQueryClicked}"
+                                android:paddingLeft="@dimen/padding_med"
+                                android:paddingRight="@dimen/padding_med"
+                                android:text="Post query"
+                                android:textSize="@dimen/text_size_large"
+                                android:textColor="@color/materialGreen"
+                                app:font='@{@string/robotoBold}' />
+
 
 
                         </LinearLayout>
@@ -506,6 +526,13 @@
 
 
             </android.support.design.widget.CoordinatorLayout>
+
+                <FrameLayout
+                    android:id="@+id/fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </FrameLayout>
+            </FrameLayout>
 
             <include
                 android:id="@+id/shimmer_container"

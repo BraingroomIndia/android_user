@@ -84,11 +84,11 @@ public class ConnectFeedViewModel extends ViewModel {
             @Override
             public List<ViewModel> apply(ConnectFeedResp resp) throws Exception {
                 List<ViewModel> results = new ArrayList<>();
-                if (resp.getData().size() == 0) {
-                    results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
+                currentPage = nextPage;
+                nextPage = resp.getNextPage();
+                if (resp.getData().size() == 0 && nextPage<1) {
+                    results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
                 } else {
-                    currentPage = nextPage;
-                    nextPage = resp.getNextPage();
                     Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
                         results.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
@@ -117,7 +117,7 @@ public class ConnectFeedViewModel extends ViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
 
-                        if (viewModels.size() > 0 && viewModels.get(0) instanceof ConnectFeedItemViewModel) {
+                        if (viewModels.size() > 0 && (viewModels.get(0) instanceof ConnectFeedItemViewModel || nextPage==-1)) {
                             Iterator<ViewModel> iter = nonReactiveItems.iterator();
                             while (iter.hasNext()) {
                                 if (iter.next() instanceof RowShimmerItemViewModel) {

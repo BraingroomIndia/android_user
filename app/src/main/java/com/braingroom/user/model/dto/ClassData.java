@@ -24,7 +24,7 @@ public class ClassData implements Serializable {
     @SerializedName("featured_status")
     private String featuredStatus;
 
-    @SerializedName("class_provided_by")
+    @SerializedName("class_provided")
     private String teacher;
 
     @SerializedName("class_provider_id")
@@ -115,10 +115,10 @@ public class ClassData implements Serializable {
     @SerializedName("catalog_description")
     private String catalogDescription;
 
-    @SerializedName("class_provider")
+    @SerializedName("class_provided_by")
     private String classProvider;
 
-    @SerializedName("catalog_locations")
+    @SerializedName("localities")
     private List<String> catalogLocations;
 
 
