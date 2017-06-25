@@ -118,7 +118,7 @@ public class ClassDetailActivity extends BaseActivity {
             }
 
         };
-        return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"), ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin")));
+        return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"), getIntentString("origin"));
     }
 
     @Override

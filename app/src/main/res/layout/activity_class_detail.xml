@@ -17,13 +17,13 @@
     </data>
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.CoordinatorLayout
 
@@ -79,16 +79,14 @@
 
                     </android.support.design.widget.CollapsingToolbarLayout>
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/search_height"
-                        android:background="@color/colorTextGray"
-                        android:orientation="horizontal">
+                        android:background="@color/colorTextGray">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
                             android:background="@color/white"
                             android:gravity="center"
                             android:onClick="@{vm.onGiftClicked}"
@@ -96,13 +94,13 @@
                             android:paddingRight="@dimen/padding_med"
                             android:text="GIFT THIS CLASS"
                             android:textColor="@color/materialGreen"
+                            android:textSize="@dimen/text_size_large"
+                            android:visibility="@{vm.isGift ? View.VISIBLE : View.GONE}"
                             app:font='@{@string/robotoBold}' />
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="0.5dp"
-                            android:layout_weight="1"
                             android:background="@color/white"
                             android:gravity="center"
                             android:onClick="@{vm.onBookClicked}"
@@ -110,11 +108,14 @@
                             android:paddingRight="@dimen/padding_med"
                             android:text="BOOK NOW"
                             android:textColor="@color/materialGreen"
+                            android:textSize="@dimen/text_size_large"
+                            android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
                             app:font='@{@string/robotoBold}' />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                 </android.support.design.widget.AppBarLayout>
+
                 <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -380,8 +381,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:padding="@dimen/margin_large"
                                 android:onClick="@{vm.phoneNumber.onOpenerClick}"
+                                android:padding="@dimen/margin_large"
                                 android:text="@string/booking_related_help"
                                 android:textSize="@dimen/text_size_medium" />
 
@@ -419,10 +420,9 @@
                                 android:paddingLeft="@dimen/padding_med"
                                 android:paddingRight="@dimen/padding_med"
                                 android:text="Post query"
-                                android:textSize="@dimen/text_size_large"
                                 android:textColor="@color/materialGreen"
+                                android:textSize="@dimen/text_size_large"
                                 app:font='@{@string/robotoBold}' />
-
 
 
                         </LinearLayout>
@@ -527,30 +527,29 @@
 
             </android.support.design.widget.CoordinatorLayout>
 
-                <FrameLayout
-                    android:id="@+id/fragment_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </FrameLayout>
-            </FrameLayout>
-
-            <include
-                android:id="@+id/shimmer_container"
-                layout="@layout/class_detail_shimmer"
+            <FrameLayout
+                android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:visible="@{vm.isShimmerOn}" />
-            <include
-                layout="@layout/content_internet_connectivity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@id/shimmer_container"
-                app:vm="@{vm.connectivityViewmodel}" />
+                android:layout_height="wrap_content"></FrameLayout>
+        </FrameLayout>
+
+        <include
+            android:id="@+id/shimmer_container"
+            layout="@layout/class_detail_shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:visible="@{vm.isShimmerOn}" />
+
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/shimmer_container"
+            android:layout_marginTop="50dp"
+            app:vm="@{vm.connectivityViewmodel}" />
 
 
-
-        </RelativeLayout>
+    </RelativeLayout>
 </layout>
 

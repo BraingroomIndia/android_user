@@ -7,6 +7,7 @@ import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.WishlistResp;
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
@@ -66,7 +68,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
     public final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
-    public final ObservableField<String> locationConcat = new ObservableField<>();
+    public final ObservableField<Spanned> locationConcat = new ObservableField<>();
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
@@ -86,6 +88,8 @@ public class ClassDetailViewModel extends ViewModel {
     LinkedHashMap<String, Integer> PhoneListApiData = new LinkedHashMap<>();
     public Consumer<HashMap<String, Integer>> callConsumer;
 
+    public boolean isGift;
+
 
     private GoogleMap mGoogleMap;
     YouTubePlayer youTubePlayer;
@@ -102,7 +106,7 @@ public class ClassDetailViewModel extends ViewModel {
     public boolean isInWishlist = false;
 
     public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, @NonNull final String classId, final boolean isCatalog) {
+                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -119,9 +123,11 @@ public class ClassDetailViewModel extends ViewModel {
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
         this.uiHelper = uiHelper;
-        isMapVisible.set(!isCatalog);
+        isMapVisible.set(!ClassListViewModel1.ORIGIN_CATALOG.equals(origin));
         this.title = new DataItemViewModel("");
         this.postDescription = new ObservableField<>("");
+
+        isGift = ClassListViewModel1.ORIGIN_GIFT.equals(origin);
         openConnectTnT = new Action() {
             @Override
             public void run() throws Exception {
@@ -250,11 +256,11 @@ public class ClassDetailViewModel extends ViewModel {
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
                         postDescription.set(classTopic.get() + "\n");
-                        if (isCatalog) {
+                        if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin)) {
                             catalogDescription.set(classData.getCatalogDescription());
                             classProvider.set(classData.getClassProvider());
                             catalogLocationList.addAll(classData.getCatalogLocations());
-                            locationConcat.set(TextUtils.join(",", classData.getCatalogLocations()));
+                            locationConcat.set(CommonUtils.fromHtml(TextUtils.join("&emsp;&#9679; ", classData.getCatalogLocations())));
 
                         }
 

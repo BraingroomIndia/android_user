@@ -98,8 +98,9 @@
                                 android:onClick="@{vm.getQuoteClicked}"
                                 android:paddingLeft="@dimen/padding_med"
                                 android:paddingRight="@dimen/padding_med"
-                                android:text="Get quotation for this class"
+                                android:text="GET QUOTATION FOR THIS CLASS"
                                 android:textColor="@color/materialGreen"
+                                android:textSize="@dimen/text_size_medium"
                                 app:font='@{@string/robotoBold}' />
 
                         </LinearLayout>
