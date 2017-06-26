@@ -44,7 +44,6 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,13 +89,15 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
             }
         };
-        return new CheckoutViewModel(getHelperFactory(), getMessageHelper(), getNavigator(), uiHelper, (ClassData) getIntentSerializable("classData"));
+        return new CheckoutViewModel(getHelperFactory(), getMessageHelper(), getNavigator(),
+                uiHelper, (ClassData) getIntentSerializable("classData"), "gift".equals(getIntentString("checkoutType")));
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_checkout;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -123,9 +124,8 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 //                getMessageHelper().show("paymemt failure");
             }
         }
-        if (requestCode== vm.REQ_CODE_LOGIN)
-        {
-            vm.handleActivityResult(requestCode,resultCode,data);
+        if (requestCode == vm.REQ_CODE_LOGIN) {
+            vm.handleActivityResult(requestCode, resultCode, data);
         }
 //        if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
 //            if (classData != null) {

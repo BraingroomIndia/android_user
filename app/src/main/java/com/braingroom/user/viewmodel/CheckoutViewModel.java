@@ -73,6 +73,7 @@ public class CheckoutViewModel extends ViewModel {
     public final ObservableField<String> classDate;
     public final CheckoutActivity.UiHelper uiHelper;
     public final ObservableBoolean isLocation = new ObservableBoolean(true);
+    public final ObservableBoolean isGift = new ObservableBoolean(false);
 
     public final List<String> pricingTableList = new ArrayList<>();
 
@@ -85,6 +86,7 @@ public class CheckoutViewModel extends ViewModel {
     public final boolean usePayU = false;
     MessageHelper messageHelper;
     Navigator navigator;
+    HelperFactory helperFactory;
     private String userId;
 
 
@@ -94,6 +96,8 @@ public class CheckoutViewModel extends ViewModel {
 
     public interface UiHelper {
         void onGuestLoginSuccess(String userId);
+
+        void onCollectGiftDetail(String name, String email, String personalMsg);
     }
 
     @Getter
@@ -117,7 +121,7 @@ public class CheckoutViewModel extends ViewModel {
     };
 
     public CheckoutViewModel(@NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper,
-                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData) {
+                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final boolean isGift) {
         totalAmount = new ObservableInt(0);
         totalAmountAfterPromo = new ObservableInt(0);
         couponCode = new ObservableField<>();
@@ -130,6 +134,8 @@ public class CheckoutViewModel extends ViewModel {
 
         this.messageHelper = messageHelper;
         this.navigator = navigator;
+        this.helperFactory = helperFactory;
+
         if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
             isLocation.set(false);
         classImage = new ObservableField<>(classData.getImage());
@@ -140,6 +146,7 @@ public class CheckoutViewModel extends ViewModel {
         } else {
             classDate = new ObservableField<>();
         }
+        this.isGift.set(isGift);
 
         LinkedHashMap<String, Integer> locationsData = new LinkedHashMap<>();
         if (isLocation.get())
@@ -198,15 +205,26 @@ public class CheckoutViewModel extends ViewModel {
                                 public void onGuestLoginSuccess(String userId) {
                                     try {
                                         isGuest = 1;
-                                        startPayment(userId, GUEST_USER);
+                                        if (isGift) {
+                                            collectGiftingDetails(userId, GUEST_USER);
+                                        } else
+                                            startPayment(userId, GUEST_USER, "", "", "");
                                     } catch (JSONException e) {
                                         messageHelper.show("Something went wrong. JSON error");
                                     }
                                 }
+
+                                @Override
+                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
+
+                                }
                             }, classData.getId()), false);
                     return;
                 }
-                startPayment(pref.getString(Constants.BG_ID, ""), REGISTERED_USER);
+                if (isGift) {
+                    collectGiftingDetails(pref.getString(Constants.BG_ID, ""), REGISTERED_USER);
+                } else
+                    startPayment(pref.getString(Constants.BG_ID, ""), REGISTERED_USER, "", "", "");
 
             }
         };
@@ -229,6 +247,11 @@ public class CheckoutViewModel extends ViewModel {
                                         dataChangeAction.run();
                                     } catch (Exception e) {
                                     }
+                                }
+
+                                @Override
+                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
+
                                 }
                             }, classData.getId()), false);
 
@@ -293,7 +316,7 @@ public class CheckoutViewModel extends ViewModel {
 
     }
 
-    public void startPayment(String userId, int isGuest) throws JSONException {
+    public void startPayment(String userId, int isGuest, String giftRecepientEmail, String giftRecepientName, String giftPersonalMsg) throws JSONException {
         if (totalAmountAfterPromo.get() != 0) {
             PayUBookingDetailsReq.Snippet snippet = new PayUBookingDetailsReq.Snippet();
             snippet.setTxnId(UUID.randomUUID().toString());
@@ -321,40 +344,6 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     mChekcoutData = chekcoutData;
                     if (usePayU) {
-
-//                                PaymentParams mPaymentParams = new PaymentParams();
-//                                mPaymentParams.setKey(chekcoutData.getKey());
-//                                mPaymentParams.setKey("TmRBpDL0");
-//                                mPaymentParams.setAmount(chekcoutData.getAmount());
-//                                mPaymentParams.setProductInfo(chekcoutData.getProductinfo());
-//                                mPaymentParams.setFirstName(chekcoutData.getFirstname());
-//                                mPaymentParams.setEmail(chekcoutData.getEmail());
-//                                mPaymentParams.setPhone(chekcoutData.getPhone());
-//                                mPaymentParams.setTxnId(chekcoutData.getTxnId());
-//                                mPaymentParams.setTxnId("" + System.currentTimeMillis());
-//                                mPaymentParams.setSurl(chekcoutData.getSurl());
-//                                mPaymentParams.setFurl(chekcoutData.getFurl());
-//                                mPaymentParams.setUdf1("udf1");
-//                                mPaymentParams.setUdf2("udf2");
-//                                mPaymentParams.setUdf3("udf3");
-//                                mPaymentParams.setUdf4("udf4");
-//                                mPaymentParams.setUdf5("udf5");
-//                                mPaymentParams.setUdf1(chekcoutData.getUdf1());
-//                                mPaymentParams.setUdf2(chekcoutData.getUdf2());
-//                                mPaymentParams.setUdf3(chekcoutData.getUdf3());
-//                                mPaymentParams.setUdf4(chekcoutData.getUdf4());
-//                                mPaymentParams.setUserCredentials(chekcoutData.getKey() + ":" + chekcoutData.getEmail());
-//                                mPaymentParams.setHash(chekcoutData.getVasMobileSdkHash());
-
-//                                PayuConfig payuConfig = new PayuConfig();
-//                                payuConfig.setEnvironment(PayuConstants.STAGING_ENV);
-//                                PayuHashes hashes = new PayuHashes();
-//                                hashes.setPaymentHash(chekcoutData.getPaymentHash());
-//                                hashes.setVasForMobileSdkHash(chekcoutData.getVasMobileSdkHash());
-//                                hashes.setSaveCardHash(chekcoutData.getUserCardHash());
-//                                hashes.setPaymentRelatedDetailsForMobileSdkHash(chekcoutData.getPaymentMobileSdkHash());
-//                                String salt = "v7DfI78GT5";
-
                         PayUmoneySdkInitilizer.PaymentParam.Builder builder = new
                                 PayUmoneySdkInitilizer.PaymentParam.Builder()
                                 .setMerchantId("5513008")
@@ -416,6 +405,25 @@ public class CheckoutViewModel extends ViewModel {
             sublevelTextMap.put(levelName, newLevel);
             return "Level " + newLevel;
         }
+    }
+
+    public void collectGiftingDetails(final String userId, final int type) {
+        helperFactory.createDialogHelper()
+                .showCustomView(R.layout.content_gift_details_dialog, new GiftingDetailsDialogViewModel(new UiHelper() {
+                    @Override
+                    public void onGuestLoginSuccess(String userId) {
+
+                    }
+
+                    @Override
+                    public void onCollectGiftDetail(String name, String email, String personalMsg) {
+                        try {
+                            startPayment(userId, type, email, name, personalMsg);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }), false);
     }
 
     public void handleRazorpaySuccess(String razorpayId) {

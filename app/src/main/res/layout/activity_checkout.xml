@@ -87,9 +87,9 @@
 
                 <include
                     layout="@layout/item_list_dialog_opener"
+                    android:visibility="@{vm.isLocation? View.VISIBLE : View.GONE}"
                     app:editable="@{true}"
-                    app:vm="@{vm.locationsVm}"
-                    android:visibility="@{vm.isLocation? View.VISIBLE : View.GONE}"/>
+                    app:vm="@{vm.locationsVm}" />
 
             </android.support.v7.widget.CardView>
 
@@ -200,6 +200,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_med"
+                android:visibility="@{vm.isGift ?  View.GONE : View.VISIBLE}"
                 card_view:cardElevation="@dimen/elevation_small">
 
                 <TextView
