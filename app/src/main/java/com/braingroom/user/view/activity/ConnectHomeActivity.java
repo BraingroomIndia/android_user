@@ -551,7 +551,6 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
         int itemId = tutorTalkSelectedNav;
         if (pager.getCurrentItem() == 0) itemId = learnerForumSelectedNav;
-
         if (itemId == R.id.action_tips_tricks) {
             postType = "action_tips_tricks";
         }
@@ -561,11 +560,11 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         if (itemId == R.id.action_find_partners) {
             postType = "action_find_partners";
         }
-        if (itemId == R.id.action_discuss_n_decide) {
-            postType = "action_discuss_n_decide";
+        if (itemId == R.id.action_all && pager.getCurrentItem() != 0) {
+            postType = "tutor_talks";
         }
         if (itemId == R.id.action_tutors_article) {
-            postType = "action_tutors_article";
+            postType = "tutor_talks";
         }
 
         return postType;

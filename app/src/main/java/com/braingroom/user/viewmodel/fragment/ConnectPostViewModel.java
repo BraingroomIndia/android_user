@@ -78,6 +78,7 @@ public class ConnectPostViewModel extends ViewModel {
     public final ListDialogViewModel1 postTypeVm, groupVm, countryVm, stateVm, cityVm, localityVm, privacyVm, activityVm, categoryVm, segmentsVm;
     public final Action onSubmitClicked, changeDateText;
     public Navigator navigator;
+    public MessageHelper messageHelper;
     private String postType;
     private Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer, localityConsumer, postConsumer, groupConsumer, categoryConsumer;
 
@@ -97,6 +98,7 @@ public class ConnectPostViewModel extends ViewModel {
                                 final String postType1, final ConnectPostFragment.UiHelper uiHelper) {
         this.navigator = navigator;
         this.helperFactory = helperFactory;
+        this.messageHelper = messageHelper;
         this.postType = postType1;
         title = new DataItemViewModel("");
         description = new ObservableField<>("");
@@ -141,10 +143,7 @@ public class ConnectPostViewModel extends ViewModel {
             mSelectedPostType.put("Buy & sell", POST_TYPE_BUY_N_SELL);
         else if ("action_find_partners".equalsIgnoreCase(postType))
             mSelectedPostType.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
-        else if ("action_tutors_article".equalsIgnoreCase(postType)) {
-            postTypeApiData = postTypeTutorApiData;
-            mSelectedPostType.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
-        } else if ("action_discuss_n_decide".equalsIgnoreCase(postType)) {
+        else if ("tutor_talks".equals(postType)) {
             postTypeApiData = postTypeTutorApiData;
             mSelectedPostType.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
         }
@@ -340,6 +339,10 @@ public class ConnectPostViewModel extends ViewModel {
         onSubmitClicked = new Action() {
             @Override
             public void run() throws Exception {
+                if (postTypeVm.selectedItemsMap.isEmpty()) {
+                    messageHelper.show("Select a post Type ");
+                    return;
+                }
                 if (postTypeVm.selectedItemsMap.values().iterator().next() == POST_TYPE_BUY_N_SELL) {
                     if (!groupVm.selectedItemsMap.values().iterator().hasNext()) {
                         messageHelper.show("Please select a Group");
@@ -576,13 +579,17 @@ public class ConnectPostViewModel extends ViewModel {
         if ((requestCode == REQ_CODE_CHOOSE_IMAGE)
                 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri fileUri = data.getData();
-            imageUploadVm.imageUpload(fileUri,postType);
+            if (postType != null)
+                imageUploadVm.imageUpload(fileUri, postType);
+            else messageHelper.show("Select post type ");
             Log.d(TAG, "fileuri: " + fileUri);
 
         } else if (((requestCode == REQ_CODE_CHOOSE_VIDEO)
                 && resultCode == RESULT_OK && data != null && data.getData() != null)) {
             Uri fileUri = data.getData();
-            videoUploadVm.uploadVideo(fileUri,postType);
+            if (postType != null)
+                videoUploadVm.uploadVideo(fileUri, postType);
+            else messageHelper.show("Select post type ");
             Log.d(TAG, "fileuri: " + fileUri);
 
         }
