@@ -113,7 +113,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.numLikes = new ObservableInt("".equals(data.getNumLikes()) ? 0 : Integer.parseInt(data.getNumLikes()));
         this.numComments = new ObservableField<>(data.getNumComments());
         this.vendorName = new ObservableField<>(data.getVendorName());
-        this.vendorCollege = new ObservableField<>(data.getInstituteName());
+        this.vendorCollege = new ObservableField<>(data.getInstituteName().equals("") ? null : data.getInstituteName());
         this.image = new ObservableField<>("".equals(data.getImage()) ? null : data.getImage());
         this.video = new ObservableField<>(getVideoId(data.getVideo()));
         this.videoThumb = new ObservableField<>(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");

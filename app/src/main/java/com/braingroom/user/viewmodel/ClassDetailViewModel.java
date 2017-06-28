@@ -28,6 +28,7 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
+import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -164,7 +165,15 @@ public class ClassDetailViewModel extends ViewModel {
         onQueryClicked = new Action() {
             @Override
             public void run() throws Exception {
-                uiHelper.postQueryForm();
+                if (loggedIn.get())
+                    uiHelper.postQueryForm();
+                else {
+                    Bundle data = new Bundle();
+                    data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
+                    data.putSerializable("id", classId);
+                    messageHelper.showLoginRequireDialog("Please login to post a query", data);
+                    navigator.navigateActivity(LoginActivity.class, data);
+                }
 
             }
         };
@@ -182,8 +191,8 @@ public class ClassDetailViewModel extends ViewModel {
                 }
                 decideAndDiscussSnippet.setUuid(pref.getString(Constants.UUID, ""));
                 decideAndDiscussSnippet.setPostType("user_post");
-                decideAndDiscussSnippet.setSegmentId("");
-                decideAndDiscussSnippet.setCategoryId("");
+                decideAndDiscussSnippet.setSegmentId(mClassData.getSegmentId());
+                decideAndDiscussSnippet.setCategoryId(mClassData.getCategoryId());
                 decideAndDiscussSnippet.setPostTitle(title.s_1.get());
                 decideAndDiscussSnippet.setPostSummary(postDescription.get());
                 apiService.postDecideDiscuss(decideAndDiscussSnippet).subscribe(new Consumer<BaseResp>() {
@@ -255,7 +264,7 @@ public class ClassDetailViewModel extends ViewModel {
                         description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
-                        postDescription.set(classTopic.get() + "\n");
+                        title.s_1.set(classTopic.get() + "\n");
                         if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin)) {
                             catalogDescription.set(classData.getCatalogDescription());
                             classProvider.set(classData.getClassProvider());

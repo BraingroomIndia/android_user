@@ -51,8 +51,15 @@ public class ClassListResp extends BaseResp {
         @SerializedName("category")
         private String category;
 
+        @SerializedName("category_id")
+        private String categoryId;
+
         @SerializedName("segment")
         private String segment;
+
+        @SerializedName("segment_id")
+        private String segmentId;
+
 
         @SerializedName(value = "class_type_data")
         private String classTypeData;

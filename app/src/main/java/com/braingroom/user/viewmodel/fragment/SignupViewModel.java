@@ -54,7 +54,7 @@ public class SignupViewModel extends ViewModel {
 
     public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM  ;
     public final DynamicSearchSelectListViewModel ugInstituteVm,pgInstituteVm;
-    public Observable<HashMap<String, Pair<String, String>>> instituteUGVm, stateApiObservable, cityApiObservable, localityApiObservable, instituteApiObservable;
+    public Observable<HashMap<String, Pair<String, String>>> countryApiObservable, stateApiObservable, cityApiObservable, localityApiObservable, instituteApiObservable;
 
     private SignUpReq.Snippet signUpSnippet;
 
@@ -277,7 +277,7 @@ public class SignupViewModel extends ViewModel {
                 }
             }
         };
-        instituteUGVm = apiService.getCountry().map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+        countryApiObservable = apiService.getCountry().map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
             @Override
             public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
@@ -288,7 +288,7 @@ public class SignupViewModel extends ViewModel {
                 return resMap;
             }
         });
-        countryVm = new SearchSelectListViewModel(SignupActivity.FRAGMENT_TITLE_COUNTRY, messageHelper, navigator, "search for country", false, instituteUGVm, "", countryConsumer, fragmentHelper);
+        countryVm = new SearchSelectListViewModel(SignupActivity.FRAGMENT_TITLE_COUNTRY, messageHelper, navigator, "search for country", false, countryApiObservable, "", countryConsumer, fragmentHelper);
 
 
         stateConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {

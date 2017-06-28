@@ -5,10 +5,14 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created by agrahari on 26/03/17.
  */
-
+@Getter
+@Setter
 public class ClassData implements Serializable {
 
 
@@ -36,8 +40,14 @@ public class ClassData implements Serializable {
     @SerializedName("category")
     private String category;
 
+    @SerializedName("category_id")
+    private String categoryId;
+
     @SerializedName("segment")
     private String segment;
+
+    @SerializedName("segment_id")
+    private String segmentId;
 
     @SerializedName("class_type_data")
     private String classTypeData;

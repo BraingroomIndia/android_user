@@ -133,7 +133,7 @@ public class LoginViewmodel extends ViewModel {
                             Bundle data = new Bundle();
                             data.putString("userId", thirdPartyUserId);
                             navigator.navigateActivity(ThirdPartyViewActivity.class, data);
-                        }else {
+                        } else {
                             navigator.navigateActivity(HomeActivity.class, null);
                         }
                         navigator.finishActivity();
@@ -141,9 +141,9 @@ public class LoginViewmodel extends ViewModel {
                 } else
 
                 {
-                    String fcmToken = pref.getString(Constants.FCM_TOKEN,"");
+                    String fcmToken = pref.getString(Constants.FCM_TOKEN, "");
                     editor.clear();
-                    editor.putString(Constants.FCM_TOKEN,fcmToken);
+                    editor.putString(Constants.FCM_TOKEN, fcmToken);
                     editor.commit();
                     messageHelper.show(loginResp.getResMsg());
 
@@ -227,9 +227,9 @@ public class LoginViewmodel extends ViewModel {
                         navigator.finishActivity();
                     }
                 } else {
-                    String fcmToken = pref.getString(Constants.FCM_TOKEN,"");
+                    String fcmToken = pref.getString(Constants.FCM_TOKEN, "");
                     editor.clear();
-                    editor.putString(Constants.FCM_TOKEN,fcmToken);
+                    editor.putString(Constants.FCM_TOKEN, fcmToken);
                     editor.commit();
                     messageHelper.show(loginResp.getResMsg());
                 }

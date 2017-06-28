@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel" />
@@ -11,6 +13,7 @@
         <variable
             name="editable"
             type="boolean" />
+
 
 
     </data>

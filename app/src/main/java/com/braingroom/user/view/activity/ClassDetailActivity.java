@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SeekBar;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
@@ -26,6 +27,7 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 public class ClassDetailActivity extends BaseActivity {
 
     YouTubePlayerFragment youTubePlayerFragment;
+    YouTubePlayer youTubePlayer;
     MyPlaybackEventListener myPlaybackEventListener;
     UiHelper uiHelper;
     SupportMapFragment mapFragment;
@@ -41,6 +43,7 @@ public class ClassDetailActivity extends BaseActivity {
         void showQuoteForm();
 
         void postQueryForm();
+
         void next();
 
     }
@@ -78,8 +81,10 @@ public class ClassDetailActivity extends BaseActivity {
             public void initYoutube() {
                 youTubePlayerFragment.initialize("AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", new YouTubePlayer.OnInitializedListener() {
                     @Override
-                    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
-                        //youTubePlayer.setPlaybackEventListener(myPlaybackEventListener);
+                    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
+                        youTubePlayer = player;
+                        youTubePlayer.setPlaybackEventListener(myPlaybackEventListener);
+                        youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
                         ((ClassDetailViewModel) vm).setYoutubePlayer(youTubePlayer);
                     }
 
@@ -112,8 +117,9 @@ public class ClassDetailActivity extends BaseActivity {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(R.id.fragment_container, ClassQueryFragment.newInstance()).addToBackStack(null).commit();
             }
+
             @Override
-            public void next(){
+            public void next() {
                 onBackPressed();
             }
 

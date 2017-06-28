@@ -43,6 +43,7 @@ import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.view.fragment.ConnectFeedFragment;
 import com.braingroom.user.view.fragment.ConnectFilterFragment;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
+import com.braingroom.user.view.fragment.DynamicSearchSelectListFragment;
 import com.braingroom.user.view.fragment.LikesFragment;
 import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
@@ -63,6 +64,13 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     public static final String FRAGMENT_TITLE_SEGMENT = "Segments";
     public static final String FRAGMENT_TITLE_MY_GROUPS = "My Groups";
     public static final String FRAGMENT_TITLE_ALL_GROUPS = "All Groups";
+
+    public static final String FRAGMENT_TITLE_COUNTRY = "country";
+    public static final String FRAGMENT_TITLE_STATE = "state";
+    public static final String FRAGMENT_TITLE_CITY = "city";
+    public static final String FRAGMENT_TITLE_LOCALITY = "locality";
+
+    public static final String FRAGMENT_TITLE_COLLEGE = "College";
 
     private MenuItem itemNotification;
     private MenuItem itemMessage;
@@ -120,8 +128,13 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         connectFilterViewModel = new ConnectFilterViewModel(getMessageHelper(), getNavigator(), new FragmentHelper() {
             @Override
             public void show(String tag) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.comments_container, SearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
+                if (!tag.equals(FRAGMENT_TITLE_COLLEGE)) {
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.add(R.id.comments_container, SearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
+                } else {
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.add(R.id.comments_container, DynamicSearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
+                }
             }
 
             @Override
@@ -196,6 +209,10 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                 if (pager.getCurrentItem() == 0) learnerForumSelectedNav = itemId;
                 else tutorTalkSelectedNav = itemId;
 
+                if (itemId==R.id.action_all){
+                    learnersFilter.setMinorCateg("");
+                    tutorsFilter.setMinorCateg("");
+                }
                 if (itemId == R.id.action_tips_tricks) {
                     learnersFilter.setMinorCateg("tips_tricks");
                 }
@@ -573,6 +590,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
 
     private void setPageTutorTalk() {
+        connectFilterViewModel.isLearnerForum.set(false);
         mAppBar.setBackgroundResource(R.color.colorAccent);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
         mBottomNav.getMenu().clear();
@@ -584,6 +602,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
     private void setPagerLearnerForum() {
+        connectFilterViewModel.isLearnerForum.set(true);
         mAppBar.setBackgroundResource(R.color.colorPrimary);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
         fab.setVisibility(View.VISIBLE);
@@ -623,6 +642,16 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             return connectFilterViewModel.categoryVm;
         if (FRAGMENT_TITLE_SEGMENT.equals(title))
             return connectFilterViewModel.segmentsVm;
+        if (FRAGMENT_TITLE_COUNTRY.equals(title))
+            return connectFilterViewModel.countryVm;
+        if (FRAGMENT_TITLE_STATE.equals(title))
+            return connectFilterViewModel.stateVm;
+        if (FRAGMENT_TITLE_CITY.equals(title))
+            return connectFilterViewModel.cityVm;
+        if (FRAGMENT_TITLE_LOCALITY.equals(title))
+            return connectFilterViewModel.localityVM;
+        if (FRAGMENT_TITLE_COLLEGE.equals(title))
+            return connectFilterViewModel.instituteVm;
         return null;
     }
 
