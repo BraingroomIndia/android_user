@@ -4,6 +4,7 @@ import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.dto.ListDialogData1;
+import com.braingroom.user.model.request.SaveGiftCouponReq;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.utils.MyConsumer;
@@ -60,14 +61,25 @@ public class CouponFormDataViewModel extends ViewModel {
                     recipientsName.s_1.set(null);
                     mobileNumber.s_1.set(null);
                     personalisedMsg.s_1.set(null);
-                }
-                else {
+                } else {
                     recipientsName.s_1.set("");
                     mobileNumber.s_1.set("");
                     personalisedMsg.s_1.set("");
                 }
             }
         };
+    }
+
+    public SaveGiftCouponReq.Snippet getformData() {
+        SaveGiftCouponReq.Snippet data = new SaveGiftCouponReq.Snippet();
+        data.setCatId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
+        data.setDenomination(denomination.s_1.get());
+        data.setEmailId(emailAddress.s_1.get());
+        data.setNoCoupons(nosCoupons.s_1.get());
+        data.setRecipientName(recipientsName.s_1.get() == null ? "" : recipientsName.s_1.get());
+        data.setComment(personalisedMsg.s_1.get() == null ? "" : personalisedMsg.s_1.get());
+        data.setMobile(mobileNumber.s_1.get() == null ? "" : mobileNumber.s_1.get());
+        return data;
     }
 
 

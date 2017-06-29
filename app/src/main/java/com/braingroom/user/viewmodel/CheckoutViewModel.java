@@ -218,7 +218,7 @@ public class CheckoutViewModel extends ViewModel {
                                 public void onCollectGiftDetail(String name, String email, String personalMsg) {
 
                                 }
-                            }, classData.getId()), false);
+                            }, classData.getId(),CheckoutActivity.class.getSimpleName()), false);
                     return;
                 }
                 if (isGift) {
@@ -253,7 +253,7 @@ public class CheckoutViewModel extends ViewModel {
                                 public void onCollectGiftDetail(String name, String email, String personalMsg) {
 
                                 }
-                            }, classData.getId()), false);
+                            }, classData.getId(),CheckoutActivity.class.getSimpleName()), false);
 
                 } else {
                     promoCode.set("");

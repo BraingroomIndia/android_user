@@ -48,8 +48,10 @@ import com.braingroom.user.model.request.PostRelatedReq;
 import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.request.PromocodeReq;
 import com.braingroom.user.model.request.QuoteReq;
+import com.braingroom.user.model.request.RazorBuySuccessReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.request.ReportReq;
+import com.braingroom.user.model.request.SaveGiftCouponReq;
 import com.braingroom.user.model.request.SearchReq;
 import com.braingroom.user.model.request.SegmentReq;
 import com.braingroom.user.model.request.SignUpReq;
@@ -87,6 +89,7 @@ import com.braingroom.user.model.response.ProfileResp;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.model.response.SaveGiftCouponResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.model.response.ThirdPartyProfileResp;
@@ -100,7 +103,6 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -187,10 +189,10 @@ public class DataflowService {
         return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<BaseResp> logout(){
-        LogoutReq.Snippet snippet =new LogoutReq.Snippet();
-        snippet.setUserId(pref.getString(Constants.BG_ID,""));
-        snippet.setDeviceId(pref.getString(Constants.FCM_TOKEN,""));
+    public Observable<BaseResp> logout() {
+        LogoutReq.Snippet snippet = new LogoutReq.Snippet();
+        snippet.setUserId(pref.getString(Constants.BG_ID, ""));
+        snippet.setDeviceId(pref.getString(Constants.FCM_TOKEN, ""));
         return api.logout(new LogoutReq(snippet)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -438,7 +440,7 @@ public class DataflowService {
         return api.contactAdmin(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<BaseResp> getQuote(QuoteReq.Snippet snippet){
+    public Observable<BaseResp> getQuote(QuoteReq.Snippet snippet) {
         return api.getQuote(new QuoteReq(snippet)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -782,16 +784,19 @@ public class DataflowService {
         return api.getUserNotifications(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<BaseResp> changeNotificationStatus(ChangeNotificationStatusReq.Snippet snippet){
+
+    public Observable<BaseResp> changeNotificationStatus(ChangeNotificationStatusReq.Snippet snippet) {
         return api.changeNotificationStatus(new ChangeNotificationStatusReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<NotificationCountResp> getUnreadNotificationCount(){
-        return api.getUnreadNotificationCount(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
+
+    public Observable<NotificationCountResp> getUnreadNotificationCount() {
+        return api.getUnreadNotificationCount(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<NotificationCountResp> getUnreadMessageCount(){
-        return api.getUnreadMessageCount(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID,"")))).subscribeOn(Schedulers.io())
+
+    public Observable<NotificationCountResp> getUnreadMessageCount() {
+        return api.getUnreadMessageCount(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -925,6 +930,15 @@ public class DataflowService {
 
     public Observable<CommonIdResp> getNgoCategories(String giftcardId) {
         return api.getNgoSegments(new CommonIdReq(new CommonIdReq.Snippet(giftcardId))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<SaveGiftCouponResp> saveGiftCoupon(SaveGiftCouponReq req) {
+        return api.saveGiftCoupon(req).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<BaseResp> updateCouponPaymentSuccess(RazorBuySuccessReq req) {
+        return api.updateCouponPaymentSuccess(req).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }
