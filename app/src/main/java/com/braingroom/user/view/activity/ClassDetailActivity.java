@@ -59,7 +59,6 @@ public class ClassDetailActivity extends BaseActivity {
                 ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
             }
         });
-        youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_fragment);
         shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_container);
         shimmerFrameLayout.startShimmerAnimation();
 //        ((ClassDetailViewModel) vm).setUiHelper(uiHelper);
@@ -79,21 +78,6 @@ public class ClassDetailActivity extends BaseActivity {
         uiHelper = new UiHelper() {
             @Override
             public void initYoutube() {
-                youTubePlayerFragment.initialize("AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", new YouTubePlayer.OnInitializedListener() {
-                    @Override
-                    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
-                        youTubePlayer = player;
-                        youTubePlayer.setPlaybackEventListener(myPlaybackEventListener);
-                        youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                        ((ClassDetailViewModel) vm).setYoutubePlayer(youTubePlayer);
-                    }
-
-                    @Override
-                    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-                        Log.d("Youtube player error", "onInitializationFailure: ");
-                    }
-                });
-
             }
 
             @Override

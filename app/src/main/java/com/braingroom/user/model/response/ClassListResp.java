@@ -60,6 +60,8 @@ public class ClassListResp extends BaseResp {
         @SerializedName("segment_id")
         private String segmentId;
 
+        @SerializedName("is_couple_class")
+        private int isCoupleClass;
 
         @SerializedName(value = "class_type_data")
         private String classTypeData;

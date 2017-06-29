@@ -66,11 +66,12 @@ public class QuoteFormViewModel extends ViewModel {
                 snippet.setMobile(mobileNumber.s_1.get());
                 snippet.setExplainCatalogueClass(classNeedDetail.s_1.get());
                 snippet.setDescription(description.s_1.get());
+                uiHelper.popFragment();
                 apiService.getQuote(snippet).subscribe(new Consumer<BaseResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                         messageHelper.show(baseResp.getResMsg());
-                            uiHelper.popFragment();
+
 
                     }
                 });

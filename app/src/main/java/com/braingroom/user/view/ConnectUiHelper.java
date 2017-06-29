@@ -4,6 +4,8 @@ import android.databinding.ObservableField;
 
 import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
 
+import java.util.List;
+
 public interface ConnectUiHelper {
 
 
@@ -15,7 +17,7 @@ public interface ConnectUiHelper {
 
     void openAcceptedUsersFragment(String postId);
 
-    void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId);
+    void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId, List<String> location);
 
     void setSearchQuery(String searchQuery);
 

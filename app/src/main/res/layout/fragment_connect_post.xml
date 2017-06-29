@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.braingroom.user.R" />
 
         <import type="android.view.View" />
 

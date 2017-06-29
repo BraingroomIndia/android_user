@@ -155,7 +155,7 @@ public abstract class BaseActivity extends MvvmActivity {
                 @Override
                 public void openStandaloneVideo(String videoId) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoId));
-                    intent.setDataAndType(Uri.parse(videoId), "video/mp4");
+                    intent.setDataAndType(Uri.parse(videoId), "video/*");
                     startActivity(intent);
                 }
 

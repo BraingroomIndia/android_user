@@ -94,7 +94,8 @@ public class ClassListViewModel1 extends ViewModel {
     private boolean segmentAvailable = false;
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @NonNull FilterData filterData1, HashMap<String, Integer> categoryMap,
+            , @NonNull final HelperFactory helperFactory, @NonNull FilterData filterData1,
+                               HashMap<String, Integer> categoryMap,
                                HashMap<String, Integer> segmentsMap,
                                HashMap<String, String> cityMap,
                                HashMap<String, String> localityMap,
@@ -160,7 +161,7 @@ public class ClassListViewModel1 extends ViewModel {
         this.uiHelper = uiHelper;
         /* if coming from community click
         * hide macro selects and call */
-        if (!filterData.getCommunityId().equals("") || !filterData.getCatalog().equals("") || filterData.getCategoryId().equals("")) {
+        if (filterData != null && (!filterData.getCommunityId().equals("") || !filterData.getCatalog().equals("") || filterData.getCategoryId().equals(""))) {
             segmentsVisibility.set(false);
         }
         segments = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
@@ -204,7 +205,7 @@ public class ClassListViewModel1 extends ViewModel {
                 List<ViewModel> results = new ArrayList<>();
                 currentPage = nextPage;
                 nextPage = resp.getNextPage();
-                Log.d(TAG, "\napply: nextPage:\t " +nextPage +"\n currentPage:\t" +currentPage);
+                Log.d(TAG, "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                 if (resp.getClassDataList().size() == 0) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                 } else {

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.LikeResp;
@@ -100,10 +101,11 @@ public class ConnectFeedItemViewModel extends ViewModel {
             R.drawable.main_category_5, //Edited By Vikas Godara
             R.drawable.main_category_6};
 
-    public ConnectFeedItemViewModel(final ConnectFeedResp.Snippet data, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
-            , final MessageHelper messageHelper, final Navigator navigator) {
-        data.setCategoryId("2");
-        categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - 1]);
+    public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
+            ,@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
+        data.setCategoryId(data.getCategoryId()!=null?data.getCategoryId():"1");
+        data.setSegId(data.getSegId()!=null?data.getSegId():"1");
+        categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - Integer.parseInt(data.getCategoryId()!=null?data.getCategoryId():"0")]);
         this.navigator = navigator;
         this.vendorImage = new ObservableField<>(data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
@@ -113,12 +115,16 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.numLikes = new ObservableInt("".equals(data.getNumLikes()) ? 0 : Integer.parseInt(data.getNumLikes()));
         this.numComments = new ObservableField<>(data.getNumComments());
         this.vendorName = new ObservableField<>(data.getVendorName());
-        this.vendorCollege = new ObservableField<>(data.getInstituteName().equals("") ? null : data.getInstituteName());
+        if (data.getInstituteName().equals(""))
+            this.vendorCollege = null;
+        else
+            this.vendorCollege = new ObservableField<>(data.getInstituteName());
+
         this.image = new ObservableField<>("".equals(data.getImage()) ? null : data.getImage());
         this.video = new ObservableField<>(getVideoId(data.getVideo()));
         this.videoThumb = new ObservableField<>(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
         this.liked = new ObservableBoolean(data.getLiked() == 0 ? false : true);
-       // Log.d(TAG, "ConnectFeedItemViewModel: \n videoUrl \t " + video.get() + "\n videoThumb \t" + videoThumb.get() + "\n");
+        // Log.d(TAG, "ConnectFeedItemViewModel: \n videoUrl \t " + video.get() + "\n videoThumb \t" + videoThumb.get() + "\n");
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
         this.postType = data.getPostType();
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
@@ -134,8 +140,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
             public void run() throws Exception {
                 if (!data.getCategoryId().equals("-1")) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("categoryId", data.getCategoryId());
-                    bundle.putString("segmentId", data.getSegId());
+                    FilterData filterData = new FilterData();
+                    filterData.setCategoryId(data.getCategoryId());
+                    filterData.setSegmentId(data.getSegId());
+                    bundle.putSerializable("filterData", filterData);
                     bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                     navigator.navigateActivity(ClassListActivity.class, bundle);
                     return;
@@ -244,7 +252,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         playAction = new Action() {
             @Override
             public void run() throws Exception {
-                    navigator.openStandaloneYoutube(video.get());
+                navigator.openStandaloneYoutube(video.get());
 
             }
         };
@@ -349,7 +357,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     private String getVideoId(String videoUrl) {
         if (videoUrl == null) return null;
         try {
-                return videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
+            return videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
         } catch (IndexOutOfBoundsException iobe) {
             return null;
         }

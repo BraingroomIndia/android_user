@@ -55,6 +55,8 @@ import com.braingroom.user.viewmodel.LocationFilterViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
 
+import java.util.List;
+
 import lombok.Getter;
 
 
@@ -209,7 +211,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                 if (pager.getCurrentItem() == 0) learnerForumSelectedNav = itemId;
                 else tutorTalkSelectedNav = itemId;
 
-                if (itemId==R.id.action_all){
+                if (itemId == R.id.action_all) {
                     learnersFilter.setMinorCateg("");
                     tutorsFilter.setMinorCateg("");
                 }
@@ -542,15 +544,23 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
     @Override
-    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId) {
-        learnersFilter.setSearchQuery(keyword);
-        learnersFilter.setCategId(categoryId);
-        learnersFilter.setSegId(segmentId);
-        if ("".equals(myGroupId))
-            tutorsFilter.setGroupId(allGroupId);
-        else
-            tutorsFilter.setGroupId(myGroupId);
-        tutorsFilter.setSearchQuery(keyword);
+    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId, List<String> location) {
+        if (pager.getCurrentItem() == 0) {
+            learnersFilter.setSearchQuery(keyword);
+            learnersFilter.setGroupId(allGroupId);
+            learnersFilter.setCountryId(location.get(0));
+            learnersFilter.setStateId(location.get(1));
+            learnersFilter.setCityId(location.get(2));
+            learnersFilter.setLocalityId(location.get(3));
+        } else {
+            tutorsFilter.setSearchQuery(keyword);
+            tutorsFilter.setCategId(categoryId);
+            tutorsFilter.setSegId(segmentId);
+            tutorsFilter.setCountryId(location.get(0));
+            tutorsFilter.setStateId(location.get(1));
+            tutorsFilter.setCityId(location.get(2));
+            tutorsFilter.setLocalityId(location.get(3));
+        }
         updateFilter();
     }
 
@@ -591,6 +601,10 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     private void setPageTutorTalk() {
         connectFilterViewModel.isLearnerForum.set(false);
+        connectFilterViewModel.reset();
+        learnersFilter= new ConnectFilterData();
+        learnersFilter.setMajorCateg("learners_forum");
+        setLocationData();
         mAppBar.setBackgroundResource(R.color.colorAccent);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
         mBottomNav.getMenu().clear();
@@ -603,6 +617,9 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     private void setPagerLearnerForum() {
         connectFilterViewModel.isLearnerForum.set(true);
+        connectFilterViewModel.reset();
+        tutorsFilter=new ConnectFilterData();
+        tutorsFilter.setMajorCateg("tutors_talk");
         mAppBar.setBackgroundResource(R.color.colorPrimary);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
         fab.setVisibility(View.VISIBLE);

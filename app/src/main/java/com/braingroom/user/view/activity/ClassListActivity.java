@@ -120,9 +120,8 @@ public class ClassListActivity extends BaseActivity {
                     mAdapter.notifyDataSetChanged();
             }
         };
-        FilterData filterData = new FilterData();
-        filterData = (FilterData) getIntentSerializable("filterData");
-        return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(), filterData,
+        return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(),
+                (FilterData) getIntentSerializable("filterData"),
                 (HashMap<String, Integer>) getIntentSerializable("category")
                 , (HashMap<String, Integer>) getIntentSerializable("segment")
                 , (HashMap<String, String>) getIntentSerializable("city")

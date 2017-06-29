@@ -53,28 +53,17 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:fitsSystemWindows="true"
                                 android:scaleType="centerCrop"
-                                android:visibility="@{vm.videoId==null ? View.VISIBLE : View.GONE}"
-                                app:imageUrl="@{vm.imagePath}" />
+                                app:imageUrl="@{vm.imagePath ?? vm.videoThumb }"
+                                app:placeHolder="@{R.drawable.video_generic_thumb}"/>
 
-                            <FrameLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:visibility="@{vm.videoId!=null ? View.VISIBLE : View.GONE}">
-
-                                <fragment
-                                    android:id="@+id/youtube_fragment"
-                                    android:name="com.google.android.youtube.player.YouTubePlayerFragment"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent" />
-
-                                <VideoView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:visibility="@{vm.isYouTube ? View.GONE : View.VISIBLE}"
-                                    app:videoUrl="@{vm.videoId}" />
-                            </FrameLayout>
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerInParent="true"
+                                android:onClick="@{vm.playAction}"
+                                android:src="@drawable/play_button"
+                                android:visibility="@{vm.videoThumb==null ? View.GONE : View.VISIBLE}" />
                         </RelativeLayout>
 
                     </android.support.design.widget.CollapsingToolbarLayout>

@@ -13,6 +13,7 @@ import com.braingroom.user.view.Navigator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -54,7 +55,10 @@ public class CommunityGridViewModel extends ViewModel {
                                                         apiSuccessful=true;
                                                         Bundle data = new Bundle();
                                                         FilterData filterData = new FilterData();
+                                                        HashMap<String, Integer> communityFilterMap = new HashMap<String, Integer>();
+                                                        communityFilterMap.put(snippet.getName(),Integer.parseInt(snippet.getId()));
                                                         filterData.setCommunityId(snippet.getId());
+                                                        data.putSerializable("community",communityFilterMap);
                                                         data.putSerializable("filterData", filterData);
                                                         data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                                         navigator.navigateActivity(destination, data);

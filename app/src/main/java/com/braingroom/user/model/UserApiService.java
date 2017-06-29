@@ -22,6 +22,7 @@ import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.ExploreReq;
 import com.braingroom.user.model.request.FirstSocialLoginReq;
 import com.braingroom.user.model.request.GeneralFilterReq;
+import com.braingroom.user.model.request.GiftCouponReq;
 import com.braingroom.user.model.request.GuestUserReq;
 import com.braingroom.user.model.request.InstituteReq;
 import com.braingroom.user.model.request.KnowledgeNuggetsPostReq;
@@ -325,6 +326,9 @@ public interface UserApiService {
 
     @POST("getGiftCatagories")
     Observable<GiftcardResp> getGiftcards();
+
+    @POST("saveGiftCoupon")
+    Observable<BaseResp> saveGiftCoupon(@Body GiftCouponReq req);
 
 //    @POST("getCorporateGiftcards")
 //    @Headers("X-App-Type: BGUSR01")

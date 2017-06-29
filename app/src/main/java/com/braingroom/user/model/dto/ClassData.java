@@ -49,6 +49,9 @@ public class ClassData implements Serializable {
     @SerializedName("segment_id")
     private String segmentId;
 
+    @SerializedName("is_couple_class")
+    private int isCoupleClass;
+
     @SerializedName("class_type_data")
     private String classTypeData;
 

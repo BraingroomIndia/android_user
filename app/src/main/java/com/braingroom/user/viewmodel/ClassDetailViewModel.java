@@ -56,8 +56,12 @@ public class ClassDetailViewModel extends ViewModel {
 
     public ClassData mClassData;
 
+    private static String PRICE_TYPE_PER_PERSON = "perPerson";
+    private static String PRICE_TYPE_GROUP = "Group";
+
     String defaultLink = "https://www.braingroom.com/Vendor/defult_pic.jpg";
     public final ObservableField<String> imagePath = new ObservableField<>(null);
+    public final ObservableField<String> videoThumb =new ObservableField<>(null);
     public final ObservableField<String> rating = new ObservableField<>("");
     public final ObservableField<String> price = new ObservableField<>(null);
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
@@ -102,7 +106,7 @@ public class ClassDetailViewModel extends ViewModel {
     ClassDetailActivity.UiHelper uiHelper;
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
-            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, openConnectTnT, openConnectBnS, openConnectFP, openCateglogLocationList;
+            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, openConnectTnT, openConnectBnS, openConnectFP, openCateglogLocationList,playAction;
 
     public boolean isInWishlist = false;
 
@@ -257,8 +261,13 @@ public class ClassDetailViewModel extends ViewModel {
                         vendorId = classData.getTeacherId();
                         imagePath.set(classData.getImage()); //Edited by Vikas Godara
                         rating.set("" + classData.getRating());
-                        price.set(classData.getLevelDetails().get(0).getPrice() == null ?
-                                classData.getLevelDetails().get(0).getGroups().get(1).getPrice() : classData.getLevelDetails().get(0).getPrice());
+                        if (classData.getIsCoupleClass() != 1)
+                            if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON))
+                                price.set(classData.getLevelDetails().get(0).getPrice());
+                            else
+                                price.set(classData.getLevelDetails().get(0).getGroups().get(1).getPrice());
+                        else
+                            price.set(classData.getLevelDetails().get(0).getGroups().get(0).getPrice());
                         teacherPic.set(classData.getTeacherPic());
                         teacherName.set(classData.getTeacher());
                         description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
@@ -295,8 +304,10 @@ public class ClassDetailViewModel extends ViewModel {
                             if (classData.getVideoId().contains("www.youtube.com/embed")) {
                                 isYouTube.set(true);
                                 videoId.set(classData.getVideoId().substring(classData.getVideoId().lastIndexOf('/') + 1));
-                            } else {
+                                videoThumb.set(videoId.get() == null ? null : "http://img.youtube.com/vi/" + videoId.get() + "/hqdefault.jpg");
+                            } else if (classData.getVideoId()!=null && !classData.getVideoId().equals("")){
                                 isYouTube.set(false);
+                                videoThumb.set("");
                                 videoId.set(classData.getVideoId());
                             }
                         }
@@ -307,10 +318,6 @@ public class ClassDetailViewModel extends ViewModel {
                             if (mGoogleMap != null && markerList.size() == 0)
                                 populateMarkers(locationList);
                         uiHelper.invalidateMenu();
-                        if (youTubePlayer == null && videoId.get() != null && isYouTube.get()) {
-                            uiHelper.initYoutube();
-                        }
-
                         return Observable.empty();
 
                     }
@@ -404,6 +411,17 @@ public class ClassDetailViewModel extends ViewModel {
                         uiHelper.showQuoteForm();
                     }
                 };
+
+        playAction = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (videoId.get() != null && isYouTube.get()) {
+                    navigator.openStandaloneYoutube(videoId.get());
+                }
+                else if (videoId.get()!=null)
+                    navigator.openStandaloneVideo(videoId.get());
+            }
+        };
         //Edited By Vikas Godara
 
     }
@@ -423,13 +441,17 @@ public class ClassDetailViewModel extends ViewModel {
         LatLng latlng = null;
         MarkerOptions markerOption;
         for (ClassLocationData location : locations) {
-            latlng = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
-            markerOption = new MarkerOptions().position(latlng).title(location.getLocationArea());
-            markerList.add(markerOption);
-            mGoogleMap.addMarker(markerOption);
+            try {
+                latlng = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
+                markerOption = new MarkerOptions().position(latlng).title(location.getLocationArea());
+                markerList.add(markerOption);
+                mGoogleMap.addMarker(markerOption);
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10.0f));
+            }catch (Exception e){
+                Log.d(TAG, "populateMarkers: " +e.toString());}
         }
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10.0f));
-    }
+
+        }
 
     public void releaseYoutube() {
         if (youTubePlayer != null) {

@@ -18,7 +18,9 @@ import com.braingroom.user.view.activity.SignupActivity;
 import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
@@ -307,7 +309,32 @@ public class ConnectFilterViewModel extends ViewModel {
         if (!allGroups.selectedDataMap.isEmpty())
             allGroupId = allGroups.selectedDataMap.values().iterator().next().first;
 
-        this.uiHelper.setFilterData(keyword, categoryId, segmentId, myGroupId, allGroupId);
+        String countryId="";
+
+        String stateId="";
+
+        String cityId ="";
+
+        String localityId="";
+        if (!countryVm.selectedDataMap.isEmpty())
+        {
+            countryId=countryVm.selectedDataMap.values().iterator().next().first;
+            if (!stateVm.selectedDataMap.isEmpty()){
+                stateId=stateVm.selectedDataMap.values().iterator().next().first;
+                if (!cityVm.selectedDataMap.isEmpty())
+                {
+                    cityId=cityVm.selectedDataMap.values().iterator().next().first;
+                    if (!localityVM.selectedDataMap.isEmpty())
+                        localityId=localityVM.selectedDataMap.values().iterator().next().first;
+                }
+            }
+        }
+        List<String> location= new ArrayList<>();
+        location.add(countryId);
+        location.add(stateId);
+        location.add(cityId);
+        location.add(localityId);
+        this.uiHelper.setFilterData(keyword, categoryId, segmentId, myGroupId, allGroupId,location);
         uiHelper.popFragment();
     }
 }

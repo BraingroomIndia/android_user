@@ -19,6 +19,8 @@ import com.braingroom.user.viewmodel.ConnectFeedDetailViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
 
+import java.util.List;
+
 public class PostDetailActivity extends BaseActivity implements ConnectUiHelper {
 
 
@@ -71,7 +73,7 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     }
 
     @Override
-    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId) {
+    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId, List<String> location) {
 
     }
 

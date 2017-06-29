@@ -101,21 +101,25 @@
                                 android:orientation="vertical"
                                 android:visibility="@{vm.isLearnerForum ?  View.VISIBLE : View.GONE}">
                                 <!--Learner Forum -->
+                                <!--<include
+                                    layout="@layout/item_list_fragment_opener"
+                                    app:editable="@{true}"
+                                    app:vm="@{vm.myGroups}" />-->
                                 <include
                                     layout="@layout/item_list_fragment_opener"
                                     app:editable="@{true}"
-                                    app:vm="@{vm.myGroups}" />
+                                    app:vm="@{vm.categoryVm}" />
 
                                 <include
                                     layout="@layout/item_list_fragment_opener"
                                     app:editable="@{true}"
                                     app:vm="@{vm.allGroups}" />
 
-
+<!--
                                 <include
                                     layout="@layout/item_list_searchable_fragment_opener"
                                     app:editable="@{true}"
-                                    app:vm="@{vm.instituteVm}" />
+                                    app:vm="@{vm.instituteVm}" />-->
                                 <!--Learner Forum -->
                             </LinearLayout>
 

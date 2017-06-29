@@ -35,9 +35,9 @@ public class FCMService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             Log.d(TAG, "Message Notification Title: " + remoteMessage.getNotification().getTitle());
-            sendNotification(remoteMessage);
-        }
 
+        }
+        sendNotification(remoteMessage);
     }
 
     private void sendNotification(RemoteMessage remoteMessage) {

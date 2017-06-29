@@ -148,8 +148,11 @@ public class HomeViewModel extends ViewModel {
                                         public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                                             if (!snippet.getId().equals("-1")) {
                                                 Bundle data = new Bundle();
+                                                HashMap<String, Integer> categoryMap = new HashMap<String, Integer>();
+                                                categoryMap.put(snippet.getCategoryName(),Integer.parseInt(snippet.getId()));
                                                 FilterData filterData = new FilterData();
                                                 filterData.setCategoryId(snippet.getId());
+                                                data.putSerializable("category",categoryMap);
                                                 data.putSerializable("filterData", filterData);
                                                 data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                                                 navigator.navigateActivity(ClassListActivity.class, data);
@@ -279,6 +282,7 @@ public class HomeViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                Log.d(TAG, "populateMarkers: "+throwable.toString());
 
             }
         });
@@ -309,7 +313,7 @@ public class HomeViewModel extends ViewModel {
         for (ClassLocationData location : locations) {
             latlng = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
             latSum = latSum + Double.valueOf(location.getLatitude());
-           /* Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());*/
+           // Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());
             lngSum = lngSum + Double.valueOf(location.getLongitude());
             markerOption = new MarkerOptions().position(latlng).title(location.getLocationArea()).icon(getPinIcon(location));
             markerList.add(markerOption);
