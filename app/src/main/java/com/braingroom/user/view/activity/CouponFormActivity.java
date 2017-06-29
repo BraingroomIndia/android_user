@@ -1,5 +1,7 @@
 package com.braingroom.user.view.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -18,6 +20,11 @@ import com.braingroom.user.view.fragment.CouponFormFragment;
 import com.braingroom.user.viewmodel.CouponFormDataViewModel;
 import com.braingroom.user.viewmodel.CouponFormViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.payUMoney.sdk.PayUmoneySdkInitilizer;
+import com.payUMoney.sdk.SdkConstants;
+import com.razorpay.Checkout;
+
+import org.json.JSONObject;
 
 import io.reactivex.functions.Action;
 
@@ -26,6 +33,12 @@ public class CouponFormActivity extends BaseActivity {
     ViewPager pager;
     public PagerAdapter pagerAdapter;
     public CouponFormViewModel viewmodel;
+
+    public interface UiHelper {
+        void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);
+
+        void startRazorpayPayment(JSONObject options);
+    }
 
     public CouponFormDataViewModel getViewmodel(int i) {
         return viewmodel.formDataList.get(i);
@@ -48,12 +61,33 @@ public class CouponFormActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
+
+        UiHelper uiHelper = new UiHelper() {
+            @Override
+            public void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param) {
+                PayUmoneySdkInitilizer.startPaymentActivityForResult(CouponFormActivity.this, param);
+            }
+
+            @Override
+            public void startRazorpayPayment(JSONObject options) {
+                final Activity activity = CouponFormActivity.this;
+                final Checkout co = new Checkout();
+                try {
+                    co.open(activity, options);
+                } catch (Exception e) {
+                    getMessageHelper().show("Error in payment: " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
         viewmodel = new CouponFormViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new Action() {
             @Override
             public void run() throws Exception {
                 pagerAdapter.notifyDataSetChanged();
             }
-        });
+        }, uiHelper);
         return viewmodel;
     }
 
@@ -125,6 +159,28 @@ public class CouponFormActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode ==
+                PayUmoneySdkInitilizer.PAYU_SDK_PAYMENT_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                String paymentId =
+                        data.getStringExtra(SdkConstants.PAYMENT_ID);
+                if (paymentId != null)
+                    ((CouponFormViewModel) vm).updatePaymentSuccess(paymentId);
+            } else if (resultCode == RESULT_CANCELED) {
+                getMessageHelper().show("paymemt cancelled");
+            } else if (resultCode == PayUmoneySdkInitilizer.RESULT_FAILED) {
+                getMessageHelper().show("paymemt failure");
+            } else if (resultCode == PayUmoneySdkInitilizer.RESULT_BACK) {
+//                getMessageHelper().show("paymemt failure");
+            }
+        }
+        if (requestCode == vm.REQ_CODE_LOGIN) {
+            vm.handleActivityResult(requestCode, resultCode, data);
+        }
     }
 
 }

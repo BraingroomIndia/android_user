@@ -7,7 +7,6 @@ import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.response.GuestUserResp;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 
 import io.reactivex.functions.Action;
@@ -21,7 +20,7 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
     public final Action onClickLogin, onClickGuestPay;
 
     public GuestPaymentDialogViewModel(final ClassData classData, @NonNull final MessageHelper messageHelper,
-                                       @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper, String classId) {
+                                       @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper, String classId, final String activitySimpleName) {
         emailVm = new DataItemViewModel("");
         mobileVm = new DataItemViewModel("");
         nameVm = new DataItemViewModel("");
@@ -29,7 +28,7 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                data.putString("backStackActivity", CheckoutActivity.class.getSimpleName());
+                data.putString("backStackActivity", activitySimpleName);
                 data.putSerializable("classData", classData);
                 navigator.navigateActivity(LoginActivity.class, data);
                 navigator.finishActivity();

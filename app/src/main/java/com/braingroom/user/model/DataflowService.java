@@ -49,8 +49,10 @@ import com.braingroom.user.model.request.PostRelatedReq;
 import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.request.PromocodeReq;
 import com.braingroom.user.model.request.QuoteReq;
+import com.braingroom.user.model.request.RazorBuySuccessReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.request.ReportReq;
+import com.braingroom.user.model.request.SaveGiftCouponReq;
 import com.braingroom.user.model.request.SearchReq;
 import com.braingroom.user.model.request.SegmentReq;
 import com.braingroom.user.model.request.SignUpReq;
@@ -88,6 +90,7 @@ import com.braingroom.user.model.response.ProfileResp;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.model.response.SaveGiftCouponResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.model.response.ThirdPartyProfileResp;
@@ -101,7 +104,6 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -933,6 +935,15 @@ public class DataflowService {
 
     public Observable<CommonIdResp> getNgoCategories(String giftcardId) {
         return api.getNgoSegments(new CommonIdReq(new CommonIdReq.Snippet(giftcardId))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<SaveGiftCouponResp> saveGiftCoupon(SaveGiftCouponReq req) {
+        return api.saveGiftCoupon(req).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<BaseResp> updateCouponPaymentSuccess(RazorBuySuccessReq req) {
+        return api.updateCouponPaymentSuccess(req).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }

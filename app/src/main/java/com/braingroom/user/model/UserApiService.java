@@ -40,8 +40,10 @@ import com.braingroom.user.model.request.PostRelatedReq;
 import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.request.PromocodeReq;
 import com.braingroom.user.model.request.QuoteReq;
+import com.braingroom.user.model.request.RazorBuySuccessReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.request.ReportReq;
+import com.braingroom.user.model.request.SaveGiftCouponReq;
 import com.braingroom.user.model.request.SearchReq;
 import com.braingroom.user.model.request.SegmentReq;
 import com.braingroom.user.model.request.SignUpReq;
@@ -79,6 +81,7 @@ import com.braingroom.user.model.response.ProfileResp;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.model.response.SaveGiftCouponResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.model.response.ThirdPartyProfileResp;
@@ -310,10 +313,10 @@ public interface UserApiService {
     Observable<BaseResp> changeNotificationStatus(@Body ChangeNotificationStatusReq req);
 
     @POST("getUnreadNotificationCount")
-    Observable<NotificationCountResp>  getUnreadNotificationCount(@Body CommonUserIdReq req);
+    Observable<NotificationCountResp> getUnreadNotificationCount(@Body CommonUserIdReq req);
 
     @POST("getUnreadMessageCount")
-    Observable<NotificationCountResp>  getUnreadMessageCount(@Body CommonUserIdReq req);
+    Observable<NotificationCountResp> getUnreadMessageCount(@Body CommonUserIdReq req);
 
     @POST("getFeedsByPostID")
     Observable<ConnectFeedResp> getFeedsByPostID(@Body ConnectPostByIdReq req);
@@ -343,5 +346,11 @@ public interface UserApiService {
 
     @POST("getCategoriesByNGOCatagory")
     Observable<CommonIdResp> getNgoSegments(@Body CommonIdReq req);
+
+    @POST("saveGiftCoupon")
+    Observable<SaveGiftCouponResp> saveGiftCoupon(@Body SaveGiftCouponReq req);
+
+    @POST("razorBuySuccess")
+    Observable<BaseResp> updateCouponPaymentSuccess(@Body RazorBuySuccessReq req);
 
 }
