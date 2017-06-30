@@ -233,7 +233,7 @@ public class ClassDetailViewModel extends ViewModel {
         };
 
 
-        phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer);
+        phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer,"");
         phoneNumber.setPositiveText("Call");
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override

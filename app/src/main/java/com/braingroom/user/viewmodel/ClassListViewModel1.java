@@ -251,7 +251,7 @@ public class ClassListViewModel1 extends ViewModel {
         LinkedHashMap<String, Integer> sortApiData = new LinkedHashMap<>();
         sortApiData.put("Price - High to Low", SORT_ORDER_HIGH_TO_LOW);
         sortApiData.put("Price - Low to High", SORT_ORDER_LOW_TO_HIGH);
-        sortDialogVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "SORT BY", messageHelper, Observable.just(new ListDialogData1(sortApiData)), new LinkedHashMap<String, Integer>(), false, this.sortResultConsumer);
+        sortDialogVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "SORT BY", messageHelper, Observable.just(new ListDialogData1(sortApiData)), new LinkedHashMap<String, Integer>(), false, this.sortResultConsumer,"");
 
         onViewChangeClicked = new Action() {
             @Override

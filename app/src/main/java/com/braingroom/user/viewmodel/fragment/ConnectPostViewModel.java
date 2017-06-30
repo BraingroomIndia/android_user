@@ -217,11 +217,11 @@ public class ConnectPostViewModel extends ViewModel {
         }
         privacyVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Privacy", messageHelper
                 , Observable.just(new ListDialogData1(privacyTypeApiData))
-                , new HashMap<String, Integer>(), false, null);
+                , new HashMap<String, Integer>(), false, null,"");
 
         postTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Post type", messageHelper
                 , Observable.just(new ListDialogData1(postTypeApiData))
-                , mSelectedPostType, false, postConsumer);
+                , mSelectedPostType, false, postConsumer,"");
 
         countryConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
@@ -243,7 +243,7 @@ public class ConnectPostViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), false, countryConsumer);
+        }), new HashMap<String, Integer>(), false, countryConsumer,"");
 
         stateConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
@@ -298,13 +298,13 @@ public class ConnectPostViewModel extends ViewModel {
             }
         };
 
-        stateVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "State", messageHelper, getStateApiObservable("-1"), new HashMap<String, Integer>(), false, stateConsumer);
-        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), new HashMap<String, Integer>(), false, cityConsumer);
-        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Localities", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, localityConsumer);
+        stateVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "State", messageHelper, getStateApiObservable("-1"), new HashMap<String, Integer>(), false, stateConsumer,"select a country first");
+        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), new HashMap<String, Integer>(), false, cityConsumer,"select a state first");
+        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Localities", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, localityConsumer,"select a city first");
 
 
         activityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Activity", messageHelper, getgetGroupActivitiesApiObservable("-1")
-                , new HashMap<String, Integer>(), false, null);
+                , new HashMap<String, Integer>(), false, null,"select a group first");
 
 
         groupVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Groups", messageHelper, apiService.getGroups().map(new Function<GroupResp, ListDialogData1>() {
@@ -317,7 +317,7 @@ public class ConnectPostViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, groupConsumer);
+        }), new HashMap<String, Integer>(), true, groupConsumer,"");
 
         categoryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Category", messageHelper, apiService.getCategory()
                 .map(new Function<CategoryResp, ListDialogData1>() {
@@ -330,10 +330,10 @@ public class ConnectPostViewModel extends ViewModel {
                         // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                         return new ListDialogData1(itemMap);
                     }
-                }), new HashMap<String, Integer>(), true, categoryConsumer);
+                }), new HashMap<String, Integer>(), true, categoryConsumer,"");
 
 
-        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable("-1"), new HashMap<String, Integer>(), false, null);
+        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable("-1"), new HashMap<String, Integer>(), false, null,"select a category first");
 
 
         onSubmitClicked = new Action() {

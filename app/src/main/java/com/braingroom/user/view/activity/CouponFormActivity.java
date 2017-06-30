@@ -127,8 +127,8 @@ public class CouponFormActivity extends BaseActivity {
             super.destroyItem(container, position, object);
         }
 
-        public ConnectFeedFragment getFragmentAt(int position) {
-            return (ConnectFeedFragment) registeredFragments.get(position);
+        public CouponFormFragment getFragmentAt(int position) {
+            return (CouponFormFragment) registeredFragments.get(position);
         }
     }
 

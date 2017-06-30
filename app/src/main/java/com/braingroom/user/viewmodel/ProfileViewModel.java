@@ -79,7 +79,7 @@ public class ProfileViewModel extends ViewModel {
         final LinkedHashMap<String, Integer> GenderTypeApiData = new LinkedHashMap<>();
         GenderTypeApiData.put("Male", TYPE_MALE);
         GenderTypeApiData.put("Female", TYPE_FEMALE);
-        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null);
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null,"");
 
         getProfileObservable = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<ProfileData>>() {
             @Override
@@ -207,7 +207,7 @@ public class ProfileViewModel extends ViewModel {
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 return new ListDialogData1(new LinkedHashMap<String, Integer>());
             }
-        }), new HashMap<String, Integer>(), false, cityConsumer);
+        }), new HashMap<String, Integer>(), false, cityConsumer,"");
         //Edited By Vikas Goodara
         categoryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Interest", messageHelper, apiService.getCategory()//zEdited By Vikas Godara
                 .map(new Function<CategoryResp, ListDialogData1>() {
@@ -225,10 +225,10 @@ public class ProfileViewModel extends ViewModel {
                     public ListDialogData1 apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ListDialogData1(new LinkedHashMap<String, Integer>());
                     }
-                }), new HashMap<String, Integer>(), true, categoryConsumer);
+                }), new HashMap<String, Integer>(), true, categoryConsumer,"");
         //Edited By Vikas Goodara
 
-        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Locality", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, null);
+        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Locality", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, null,"select a city first");
 
         onBackClicked = new Action() {
             @Override

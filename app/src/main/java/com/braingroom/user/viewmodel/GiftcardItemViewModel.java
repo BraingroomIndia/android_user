@@ -31,16 +31,17 @@ public class GiftcardItemViewModel extends ViewModel {
         onClicked = new Action() {
             @Override
             public void run() throws Exception {
-                Bundle data = new Bundle();
+                Bundle bundle = new Bundle();
                 if (GiftCouponViewModel.GCTYPE_NGO.equals(giftcardType)) {
-                    navigator.navigateActivity(NgoFormActivity.class, data);
+                    bundle.putString("giftcardId",data.getId());
+                    navigator.navigateActivity(NgoFormActivity.class, bundle);
                 } else {
                     FilterData filterData = new FilterData();
                     filterData.setGiftId(cardId.get());
-                    data.putSerializable("filterData",filterData);
+                    bundle.putSerializable("filterData",filterData);
                    /* data.putString("giftId", cardId.get());//senderId);*/
-                    data.putString("origin", ClassListViewModel1.ORIGIN_GIFT);
-                    navigator.navigateActivity(ClassListActivity.class, data);
+                    bundle.putString("origin", ClassListViewModel1.ORIGIN_GIFT);
+                    navigator.navigateActivity(ClassListActivity.class, bundle);
                 }
             }
         };

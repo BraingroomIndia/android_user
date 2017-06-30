@@ -39,10 +39,11 @@ public class ListDialogViewModel1 extends ViewModel {
     private String TAG = getClass().getCanonicalName();
     @Setter
     private String positiveText = null;
+    private final String dependencyMessage;
 
     public ListDialogViewModel1(@NonNull final DialogHelper dialogHelper, final String title, @NonNull final MessageHelper messageHelper
             , Observable<ListDialogData1> sourceObservable, @NonNull HashMap<String, Integer> selectedItemsMap, final boolean isMultiSelect
-            , @Nullable Consumer<HashMap<String, Integer>> resultConsumer) {
+            , @Nullable Consumer<HashMap<String, Integer>> resultConsumer, @NonNull String dependencyMessage) {
         dialogHelper.setViewModel(this);
         this.title = title;
         this.messageHelper = messageHelper;
@@ -50,6 +51,7 @@ public class ListDialogViewModel1 extends ViewModel {
         this.dialogHelper = dialogHelper;
         this.resultConsumer = resultConsumer;
         this.isMultiSelect = isMultiSelect;
+        this.dependencyMessage=dependencyMessage;
         setSourceObservable(sourceObservable);
         onOpenerClick = new Action() {
             @Override
@@ -62,6 +64,10 @@ public class ListDialogViewModel1 extends ViewModel {
     }
 
     public void setSourceObservable(Observable<ListDialogData1> sourceObservable) {
+        if (sourceObservable == null) {
+            messageHelper.show(dependencyMessage);
+            return;
+        }
         source = sourceObservable.doOnNext(new Consumer<ListDialogData1>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ListDialogData1 items) throws Exception {

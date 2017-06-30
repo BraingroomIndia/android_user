@@ -118,7 +118,7 @@ public class CouponFormViewModel extends ViewModel {
     }
 
     public void removeNewFormData(CouponFormDataViewModel vm) throws Exception {
-//        if (formDataList.indexOf(vm) == 0) return;
+        if (formDataList.indexOf(vm) == 0) return;
         boolean status = formDataList.remove(vm);
         notifyAdapter.run();
 

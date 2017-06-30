@@ -25,6 +25,8 @@ import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ListDialogViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -78,7 +80,7 @@ public class SignupViewModel extends ViewModel {
         LinkedHashMap<String, Integer> ClassTypeApiData = new LinkedHashMap<>();
         ClassTypeApiData.put("Male", TYPE_MALE);
         ClassTypeApiData.put("Female", TYPE_FEMALE);
-        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), new HashMap<String, Integer>(), false, null);
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), new HashMap<String, Integer>(), false, null,"");
         communityClassVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Community", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommunityResp categoryResp) throws Exception {
@@ -89,7 +91,7 @@ public class SignupViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null);
+        }), new HashMap<String, Integer>(), true, null,"");
 
         onBackClicked = new Action() {
             @Override
@@ -356,7 +358,7 @@ public class SignupViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null);
+        }), new HashMap<String, Integer>(), true, null,"");
 
 
         instituteApiObservable = apiService.getInstitute("").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
@@ -377,10 +379,12 @@ public class SignupViewModel extends ViewModel {
     }
 
 
+    @Contract("null -> false")
     public static boolean isValidEmail(String target) {
         return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
+    @Contract("null -> false")
     public static boolean isValidPhone(String target) {
         return target != null && Patterns.PHONE.matcher(target).matches();
     }

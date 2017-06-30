@@ -28,18 +28,18 @@ public class CouponFormDataViewModel extends ViewModel {
     public final DataItemViewModel mobileNumber;
     public final DataItemViewModel personalisedMsg;
     public final ListDialogViewModel1 categoryVm;
-    public final Action changeView;
+    public final Action changeView,remove;
 
     public final MyConsumer<CouponFormDataViewModel> removeThisFragment;
 
     public CouponFormDataViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
-                                   @NonNull HelperFactory helperFactory, MyConsumer<CouponFormDataViewModel> removeThisFragment, int index) {
+                                   @NonNull HelperFactory helperFactory, final MyConsumer<CouponFormDataViewModel> removeThisFragment, int index) {
         emailAddress = new DataItemViewModel("");
         denomination = new DataItemViewModel("");
         nosCoupons = new DataItemViewModel("");
-        recipientsName = new DataItemViewModel("");
-        mobileNumber = new DataItemViewModel("");
-        personalisedMsg = new DataItemViewModel("");
+        recipientsName = new DataItemViewModel(null);
+        mobileNumber = new DataItemViewModel(null);
+        personalisedMsg = new DataItemViewModel(null);
         if (index > 0) removable.set(true);
         categoryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Category", messageHelper, apiService.getCategory().map(new Function<CategoryResp, ListDialogData1>() {
             @Override
@@ -51,9 +51,16 @@ public class CouponFormDataViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null);
+        }), new HashMap<String, Integer>(), true, null,"");
 
         this.removeThisFragment = removeThisFragment;
+        remove = new Action() {
+            @Override
+            public void run() throws Exception {
+                removeThisFragment.accept(CouponFormDataViewModel.this);
+            }
+        };
+
         changeView = new Action() {
             @Override
             public void run() throws Exception {

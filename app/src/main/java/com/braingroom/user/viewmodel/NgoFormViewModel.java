@@ -40,7 +40,7 @@ public class NgoFormViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), false, null);
+        }), new HashMap<String, Integer>(), false, null,"");
 
         classTopicVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, apiService.getNgoCategories(giftcardId).map(new Function<CommonIdResp, ListDialogData1>() {
             @Override
@@ -52,7 +52,7 @@ public class NgoFormViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), false, null);
+        }), new HashMap<String, Integer>(), false, null,"");
 
     }
 

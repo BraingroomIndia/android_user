@@ -163,7 +163,7 @@ public class CheckoutViewModel extends ViewModel {
                     selectedLocalityId = "" + selectedData.values().iterator().next();
                 }
             }
-        });
+        },"");
         if (!isLocation.get())
             selectedLocalityId = "-1";
 

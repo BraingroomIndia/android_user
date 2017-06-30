@@ -44,7 +44,7 @@
                 layout="@layout/floating_label_edit_text"
                 app:data="@{vm.recipientsName}"
                 app:editable="@{true}"
-                app:hintText='@{"Recipients name"}' />
+                app:hintText='@{"Sender&#39;s name"}' />
 
             <include
                 layout="@layout/floating_label_edit_text"

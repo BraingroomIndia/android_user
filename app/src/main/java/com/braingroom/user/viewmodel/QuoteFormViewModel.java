@@ -47,7 +47,7 @@ public class QuoteFormViewModel extends ViewModel {
         classModeData.put("Classes", 4);
         classModeData.put("Learning events & activities", 5);
         classModeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class mode", messageHelper,
-                Observable.just(new ListDialogData1(classModeData)), new HashMap<String, Integer>(), false, null);
+                Observable.just(new ListDialogData1(classModeData)), new HashMap<String, Integer>(), false, null,"");
         dateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "Date", "choose");
         onSubmit =new Action() {
             @Override

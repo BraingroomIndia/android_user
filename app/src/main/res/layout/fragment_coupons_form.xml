@@ -36,7 +36,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="@dimen/margin_med"
-                    android:onClick="@{() -> vm.removeThisFragment.accept(vm)}"
+                    android:onClick="@{vm.remove}"
                     android:paddingBottom="@dimen/padding_small"
                     android:paddingLeft="@dimen/padding_med"
                     android:paddingRight="@dimen/padding_med"

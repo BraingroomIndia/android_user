@@ -103,10 +103,10 @@ public class FilterViewModel extends ViewModel {
                         // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                         return new ListDialogData1(itemMap);
                     }
-                }), categoryFilterMap, false, categoryConsumer);
+                }), categoryFilterMap, false, categoryConsumer,"");
 
 
-        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable(filterData!=null ? filterData.getCategoryId() : null ), segmentsFilterMap, false, null);
+        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable(filterData!=null ? filterData.getCategoryId() : null ), segmentsFilterMap, false, null,"select a catgory first");
 
 
         cityConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
@@ -174,7 +174,7 @@ public class FilterViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), communityFilterMap, false, null);
+        }), communityFilterMap, false, null,"");
 
 //        vendorListVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class providers", messageHelper, apiService.getVendors().map(new Function<CommonIdResp, ListDialogData1>() {
 //            @Override
@@ -194,12 +194,12 @@ public class FilterViewModel extends ViewModel {
         ClassTypeApiData.put("Webinar", CLASS_TYPE_WEBINAR);
         ClassTypeApiData.put("Workshops", CLASS_TYPE_WORKSHOP);
         ClassTypeApiData.put("Learning events & activities", CLASS_TYPE_ACTIVITY);
-        classTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Type", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), classTypeMap, false, null);
+        classTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Type", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), classTypeMap, false, null,"");
 
         LinkedHashMap<String, Integer> ClassScheduleApiData = new LinkedHashMap<>();
         ClassScheduleApiData.put("Fixed", CLASS_SCHECULE_FIXED);
         ClassScheduleApiData.put("Flexible", CLASS_SCHECULE_FLEXIBLE);
-        classScheduleVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Schedule", messageHelper, Observable.just(new ListDialogData1(ClassScheduleApiData)), classScheduleMap, false, null);
+        classScheduleVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Schedule", messageHelper, Observable.just(new ListDialogData1(ClassScheduleApiData)), classScheduleMap, false, null,"");
 
         onBackClicked = new Action() {
             @Override

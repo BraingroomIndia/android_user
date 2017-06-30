@@ -81,7 +81,7 @@ public class SignUpViewModelCompetition extends ViewModel {
         LinkedHashMap<String, Integer> GenderTypeApiData = new LinkedHashMap<>();
         GenderTypeApiData.put("Male", TYPE_MALE);
         GenderTypeApiData.put("Female", TYPE_FEMALE);
-        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null);
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null,"");
         communityClassVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Community", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommunityResp categoryResp) throws Exception {
@@ -92,7 +92,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null);
+        }), new HashMap<String, Integer>(), true, null,"");
 
         onBackClicked = new Action() {
             @Override
@@ -340,7 +340,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null);
+        }), new HashMap<String, Integer>(), true, null,"");
 
 
         instituteApiObservable = apiService.getSchools("").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {

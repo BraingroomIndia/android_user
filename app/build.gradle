@@ -109,6 +109,7 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     //compile 'com.google.guava:guava:22.0'
 
+    compile 'org.jetbrains:annotations-java5:15.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
