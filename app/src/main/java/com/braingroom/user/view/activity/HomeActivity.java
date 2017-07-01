@@ -106,47 +106,31 @@ public class HomeActivity extends BaseActivity
                     value.toString(), value.getClass().getName()));
     }*/
 
-        competitionBanner = (RelativeLayout)
+        competitionBanner = (RelativeLayout) findViewById(R.id.competition_banner);
 
-                findViewById(R.id.competition_banner);
-
-        textView = (HTextView)
-
-                findViewById(R.id.textview);
-        if (!vm.loggedIn.get())
-
-        {
+        textView = (HTextView) findViewById(R.id.textview);
+        if (!vm.loggedIn.get()) {
             observable.subscribe(new Consumer<Long>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
                     animate((int) (aLong % 2));
                 }
             });
-        } else
-
-        {
+        } else {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
             competitionBanner.setLayoutParams(params);
         }
 
-        try
-
-        {
+        try {
             PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 Log.d("KeyHash :  \t", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        } catch (
-                PackageManager.NameNotFoundException e)
-
-        {
+        } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-        } catch (
-                NoSuchAlgorithmException e)
-
-        {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
