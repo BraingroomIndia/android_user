@@ -224,7 +224,6 @@ public class LoginViewmodel extends ViewModel {
 
 
                         navigator.finishActivity();
-                        navigator.finishActivity();
                     }
                 } else {
                     String fcmToken = pref.getString(Constants.FCM_TOKEN, "");

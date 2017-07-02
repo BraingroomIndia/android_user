@@ -49,6 +49,7 @@ import com.braingroom.user.model.request.SegmentReq;
 import com.braingroom.user.model.request.SignUpReq;
 import com.braingroom.user.model.request.SocialLoginReq;
 import com.braingroom.user.model.request.StateReq;
+import com.braingroom.user.model.request.SubmitOTPReq;
 import com.braingroom.user.model.request.VendorReviewReq;
 import com.braingroom.user.model.request.WishlistReq;
 import com.braingroom.user.model.response.BaseResp;
@@ -352,5 +353,8 @@ public interface UserApiService {
 
     @POST("razorBuySuccess")
     Observable<BaseResp> updateCouponPaymentSuccess(@Body RazorBuySuccessReq req);
+
+    @POST("")
+    Observable<BaseResp>submitOTP(@Body SubmitOTPReq req);
 
 }

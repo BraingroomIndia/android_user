@@ -15,6 +15,7 @@ import com.braingroom.user.view.fragment.Signup2Fragment;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.SignupViewModel;
 
+import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
 
 public class SignupActivity extends BaseActivity {
@@ -26,9 +27,14 @@ public class SignupActivity extends BaseActivity {
     public static final String FRAGMENT_UG_COLLEGE = "UG College";
     public static final String FRAGMENT_PG_COLLEGE = "PG Collage";
 
+
     public interface UiHelper {
 
-        void next();
+        void firstFragment();
+
+        void secondFragment();
+
+        void thirdFragment();
 
         void back();
 
@@ -43,9 +49,20 @@ public class SignupActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 //        getSupportActionBar().setElevation(0);
         viewModel = new SignupViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new UiHelper() {
+
             @Override
-            public void next() {
+            public void firstFragment() {
+                changeToFirstFragment();
+            }
+
+            @Override
+            public void secondFragment() {
                 changeToSecondFragment();
+            }
+
+            @Override
+            public void thirdFragment() {
+                changeToThirdFragment();
             }
 
             @Override
@@ -86,10 +103,23 @@ public class SignupActivity extends BaseActivity {
 
     }
 
+
+    public void changeToFirstFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+        transaction.replace(R.id.fragment_container, Signup1Fragment.newInstance()).addToBackStack(null).commit();
+    }
+
     public void changeToSecondFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
         transaction.replace(R.id.fragment_container, Signup2Fragment.newInstance()).addToBackStack(null).commit();
+    }
+
+    public void changeToThirdFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+        transaction.replace(R.id.fragment_container, Signup1Fragment.newInstance()).addToBackStack(null).commit();
     }
 
 //    public void changeToFirstFragment() {

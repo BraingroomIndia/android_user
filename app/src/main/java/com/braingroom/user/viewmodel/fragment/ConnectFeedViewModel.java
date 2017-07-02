@@ -89,7 +89,7 @@ public class ConnectFeedViewModel extends ViewModel {
                 if (resp.getData().size() == 0 && nextPage<1) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
                 } else {
-                    Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
+                  //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
                         results.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
                     }

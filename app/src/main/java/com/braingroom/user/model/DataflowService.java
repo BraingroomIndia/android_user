@@ -58,6 +58,7 @@ import com.braingroom.user.model.request.SegmentReq;
 import com.braingroom.user.model.request.SignUpReq;
 import com.braingroom.user.model.request.SocialLoginReq;
 import com.braingroom.user.model.request.StateReq;
+import com.braingroom.user.model.request.SubmitOTPReq;
 import com.braingroom.user.model.request.WishlistReq;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.BookingHistoryResp;
@@ -188,6 +189,9 @@ public class DataflowService {
 
     public Observable<SignUpResp> signUp(SignUpReq signUpReq) {
         return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<BaseResp> submitOTP(SubmitOTPReq req){
+        return api.submitOTP(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<BaseResp> logout() {

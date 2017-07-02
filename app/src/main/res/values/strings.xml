@@ -98,6 +98,16 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="post_type_activity_request">activity_request</string>
     <string name="action_connect">Connect</string>
 
+    <string name="msg_enter_mobile">Enter your mobile number to get started!</string>
+    <string name="lbl_name">Name</string>
+    <string name="lbl_email">Email</string>
+    <string name="lbl_mobile">Mobile</string>
+    <string name="lbl_next">NEXT</string>
+    <string name="msg_sit_back">Sit back &amp; Relax! while we verify your mobile number</string>
+    <string name="msg_manual_otp">(Enter the OTP below in case if we fail to detect the SMS automatically)</string>
+    <string name="lbl_enter_otp">Enter OTP</string>
+    <string name="lbl_submit">SUBMIT</string>
+
 
     <!--Edited By Vikas Godara-->
 </resources>

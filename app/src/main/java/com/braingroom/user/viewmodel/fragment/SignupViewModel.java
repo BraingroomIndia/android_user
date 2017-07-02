@@ -1,19 +1,27 @@
 package com.braingroom.user.viewmodel.fragment;
 
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.Pair;
 import android.util.Patterns;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
+import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.SignUpReq;
+import com.braingroom.user.model.request.SubmitOTPReq;
+import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
+import com.braingroom.user.utils.SmsReceiver;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -31,6 +39,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -39,6 +48,9 @@ public class SignupViewModel extends ViewModel {
 
     public static final int TYPE_MALE = 1;
     public static final int TYPE_FEMALE = 2;
+    public final ObservableField<String> OTP;
+
+    private Disposable otpDisposable;
 
     public final DataItemViewModel fullName, emailId, password, confirmPassword, mobileNumber, referralCodeVm, passoutYear;
     public final ListDialogViewModel1 interestAreaVm;
@@ -50,12 +62,12 @@ public class SignupViewModel extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked,onSkipAndSignupClicked;
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP;
 
     public final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
-    public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM  ;
-    public final DynamicSearchSelectListViewModel ugInstituteVm,pgInstituteVm;
+    public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM;
+    public final DynamicSearchSelectListViewModel ugInstituteVm, pgInstituteVm;
     public Observable<HashMap<String, Pair<String, String>>> countryApiObservable, stateApiObservable, cityApiObservable, localityApiObservable, instituteApiObservable;
 
     private SignUpReq.Snippet signUpSnippet;
@@ -74,13 +86,14 @@ public class SignupViewModel extends ViewModel {
         signUpSnippet.setLatitude("");
         signUpSnippet.setLongitude("");
         signUpSnippet.setProfileImage("");
+        OTP = new ObservableField<>("");
 
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
         LinkedHashMap<String, Integer> ClassTypeApiData = new LinkedHashMap<>();
         ClassTypeApiData.put("Male", TYPE_MALE);
         ClassTypeApiData.put("Female", TYPE_FEMALE);
-        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), new HashMap<String, Integer>(), false, null,"");
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), new HashMap<String, Integer>(), false, null, "");
         communityClassVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Community", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommunityResp categoryResp) throws Exception {
@@ -91,7 +104,7 @@ public class SignupViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null,"");
+        }), new HashMap<String, Integer>(), true, null, "");
 
         onBackClicked = new Action() {
             @Override
@@ -125,12 +138,13 @@ public class SignupViewModel extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
-                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
+                            uiHelper.thirdFragment();
+/*                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                                     navigator.navigateActivity(HomeActivity.class, null);
                                 }
-                            });
+                            });*/
                         } else {
                             messageHelper.show(signUpResp.getResMsg());
                             uiHelper.back();
@@ -190,12 +204,14 @@ public class SignupViewModel extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
-                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
+
+                            uiHelper.thirdFragment();
+                          /*  messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                                     navigator.navigateActivity(HomeActivity.class, null);
                                 }
-                            });
+                            });*/
                         } else {
                             messageHelper.show(signUpResp.getResMsg());
                         }
@@ -249,8 +265,42 @@ public class SignupViewModel extends ViewModel {
                     signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first);
                     signUpSnippet.setInstitutePoy1(passoutYear.s_1.get());
                 }
-                uiHelper.next();
+                uiHelper.secondFragment();
 
+            }
+        };
+
+        submitOTP = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (OTP.get().equals("")) {
+                    messageHelper.show("Please enter OTP");
+                    return;
+                }
+                SubmitOTPReq.Snippet snippet = new SubmitOTPReq.Snippet();
+                snippet.setMobileNo(mobileNumber.s_1.get());
+                snippet.setOTP(OTP.get());
+                apiService.submitOTP(new SubmitOTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
+                        if (resp.getResCode().equals("1"))
+                            apiService.login(emailId.s_1.get(), password.s_1.get(), pref.getString(Constants.FCM_TOKEN, ""))
+                                    .subscribe(new Consumer<LoginResp>() {
+                                        @Override
+                                        public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
+                                            if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
+                                                editor.putBoolean(Constants.LOGGED_IN, true);
+                                                editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
+                                                editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
+                                                editor.commit();
+                                                navigator.navigateActivity(HomeActivity.class, null);
+                                            }
+
+                                        }
+                                    });
+
+                    }
+                });
             }
         };
 
@@ -358,7 +408,7 @@ public class SignupViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null,"");
+        }), new HashMap<String, Integer>(), true, null, "");
 
 
         instituteApiObservable = apiService.getInstitute("").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
@@ -380,19 +430,51 @@ public class SignupViewModel extends ViewModel {
 
 
     @Contract("null -> false")
-    public static boolean isValidEmail(String target) {
+    private static boolean isValidEmail(String target) {
         return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
     @Contract("null -> false")
-    public static boolean isValidPhone(String target) {
+    private static boolean isValidPhone(String target) {
         return target != null && Patterns.PHONE.matcher(target).matches();
     }
 
-    public static boolean isValidYear(String traget) {
+    private static boolean isValidYear(String traget) {
 
         return traget.length() == 4 && !traget.contains("[a-zA-Z]+");
 
+    }
+
+    private void safelyDispose(Disposable... disposables) {
+        for (Disposable subscription : disposables) {
+            if (subscription != null && !subscription.isDisposed()) {
+                subscription.dispose();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        otpDisposable = UserApplication.getInstance().getOtpArrived().subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean isOtpAvailable) {
+                if (isOtpAvailable) {
+                    try {
+                        OTP.set(SmsReceiver.getVerificationCode());
+                        if (!OTP.get().equals("")) {
+                            submitOTP.run();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        safelyDispose(otpDisposable);
     }
 
 }

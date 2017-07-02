@@ -214,7 +214,6 @@
 
                     <include
                         layout="@layout/floating_label_edit_text"
-                        android:visibility="@{vm.videoField ? View.VISIBLE : View.GONE}"
                         app:data="@{vm.proposedLocation}"
                         app:editable="@{true}"
                         app:hintText='@{"Proposed Location"}' />

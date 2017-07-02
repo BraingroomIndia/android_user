@@ -59,6 +59,7 @@
                         android:hint="@string/searchBlogHint"
                         android:paddingLeft="@dimen/padding_large"
                         android:text="@={vm.searchQuery}"
+                        android:imeOptions="actionSearch"
                         android:textColor="@color/colorTextDark"
                         android:textColorHint="@color/colorTextGray"
                         app:font='@{@string/robotoRegular}' />
