@@ -19,10 +19,9 @@ import com.braingroom.user.view.fragment.Signup1Fragment;
 import com.braingroom.user.view.fragment.Signup2Fragment;
 import com.braingroom.user.view.fragment.Signup3Fragment;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.braingroom.user.viewmodel.fragment.SignupViewModel;
+import com.braingroom.user.viewmodel.SignupViewModel;
 
 import io.reactivex.functions.Consumer;
-import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
 
 public class SignupActivity extends BaseActivity {

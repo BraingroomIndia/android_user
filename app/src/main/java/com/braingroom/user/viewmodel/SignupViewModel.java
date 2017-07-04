@@ -1,4 +1,4 @@
-package com.braingroom.user.viewmodel.fragment;
+package com.braingroom.user.viewmodel;
 
 import android.content.DialogInterface;
 import android.databinding.ObservableField;
@@ -35,6 +35,8 @@ import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ListDialogViewModel1;
 import com.braingroom.user.viewmodel.OTPReq;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
+import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
 
 import org.jetbrains.annotations.Contract;
 
