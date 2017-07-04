@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.braingroom.user">
 
+
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="25"
@@ -16,6 +17,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
 
+
     <application
         android:name=".UserApplication"
         android:allowBackup="true"
@@ -24,6 +26,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
@@ -39,6 +44,14 @@
         <!-- <meta-data -->
         <!-- android:name="com.razorpay.ApiKey" -->
         <!-- android:value="rzp_live_SN4tYAqDnzHHem" /> -->
+
+        <!-- Branch init -->
+        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_ebEqU6gF7p2M7SLSz6rSyclbqAirvt2Q" />
+        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_powBI4byZjXN0VMRt0s3MldcuCfqyv3W" />
+
+        <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
+        <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -68,6 +81,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
+
         </activity>
         <activity
             android:name=".view.activity.HomeActivity"
@@ -78,6 +92,23 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
+            <intent-filter>
+                <data android:scheme="branchsters" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
+            <!-- AppLink config -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="braingroom.test-app.link" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".view.activity.SearchActivity"
@@ -243,6 +274,15 @@
                 android:value="com.braingroom.user.view.activity.GiftcardCouponActivity" />
 
         </activity>
+
+        <!-- Branch install referrer tracking -->
+        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+
     </application>
 
 </manifest>

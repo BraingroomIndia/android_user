@@ -59,7 +59,7 @@ public class ClassDetailViewModel extends ViewModel {
     private static String PRICE_TYPE_PER_PERSON = "perPerson";
     private static String PRICE_TYPE_GROUP = "Group";
 
-    String defaultLink = "https://www.braingroom.com/Vendor/defult_pic.jpg";
+    private String defaultLink = "https://www.braingroom.com/Vendor/defult_pic.jpg";
     public final ObservableField<String> imagePath = new ObservableField<>(null);
     public final ObservableField<String> videoThumb =new ObservableField<>(null);
     public final ObservableField<String> rating = new ObservableField<>("");
@@ -68,16 +68,16 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> teacherName = new ObservableField<>(null);
     public final ObservableField<String> description = new ObservableField<>(null); //Edited By Vikas Godara
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
-    public final ObservableField<String> videoId = new ObservableField<>(null);
+    private final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
-    public final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
+    private final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
     public final ObservableField<Spanned> locationConcat = new ObservableField<>();
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
-    public ObservableBoolean isYouTube = new ObservableBoolean(true);
-    public String vendorId;
+    private ObservableBoolean isYouTube = new ObservableBoolean(true);
+    private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
     List<ViewModel> addressList = new ArrayList<>();
@@ -90,8 +90,8 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> postDescription;
 
     public final ListDialogViewModel1 phoneNumber;
-    LinkedHashMap<String, Integer> PhoneListApiData = new LinkedHashMap<>();
-    public Consumer<HashMap<String, Integer>> callConsumer;
+    private LinkedHashMap<String, Integer> PhoneListApiData = new LinkedHashMap<>();
+    private Consumer<HashMap<String, Integer>> callConsumer;
 
     public boolean isGift;
 

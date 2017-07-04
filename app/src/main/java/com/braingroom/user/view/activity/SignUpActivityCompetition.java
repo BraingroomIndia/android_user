@@ -12,6 +12,7 @@ import com.braingroom.user.view.fragment.DynamicSearchSelectListFragment;
 import com.braingroom.user.view.fragment.SearchSelectListFragment;
 import com.braingroom.user.view.fragment.SignUpCompetition1Fragment;
 import com.braingroom.user.view.fragment.SignUpCompetition2Fragment;
+import com.braingroom.user.view.fragment.Signup3Fragment;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.SignUpViewModelCompetition;
 
@@ -92,7 +93,7 @@ public class SignUpActivityCompetition extends BaseActivity {
     public void changeToSecondFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
-        transaction.replace(R.id.fragment_container, SignUpCompetition2Fragment.newInstance()).addToBackStack(null).commit();
+        transaction.replace(R.id.fragment_container, Signup3Fragment.newInstance()).addToBackStack(null).commit();
     }
 
 //    public void changeToFirstFragment() {

@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.FilterViewModel" />
@@ -61,6 +63,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_med"
                                 android:gravity="center"
+                                android:visibility="@{vm.isCatalogue ? View.GONE : View.VISIBLE}"
                                 android:orientation="horizontal">
 
                                 <include
@@ -85,10 +88,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_med">
 
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:visibility="@{vm.isCatalogue ? View.GONE : View.VISIBLE}">
 
                                 <include
                                     layout="@layout/item_list_dialog_opener"
@@ -129,6 +134,33 @@
                                     layout="@layout/item_list_fragment_opener"
                                     app:editable="@{true}"
                                     app:vm="@{vm.vendorListVm}" />
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="@{vm.isCatalogue ? View.VISIBLE : View.GONE}">
+
+
+                                <include
+                                    layout="@layout/item_list_fragment_opener"
+                                    app:editable="@{true}"
+                                    app:vm="@{vm.cityVm}" />
+
+                                <include
+                                    layout="@layout/item_list_fragment_opener"
+                                    app:editable="@{true}"
+                                    app:vm="@{vm.localityVm}" />
+
+                                <include
+                                    layout="@layout/item_list_dialog_opener"
+                                    app:editable="@{true}"
+                                    app:vm="@{vm.classTypeVm}" />
+
 
 
                             </LinearLayout>

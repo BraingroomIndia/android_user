@@ -110,6 +110,7 @@ dependencies {
     //compile 'com.google.guava:guava:22.0'
 
     compile 'org.jetbrains:annotations-java5:15.0'
+    compile 'io.branch.sdk.android:library:2.+'
 }
 
 apply plugin: 'com.google.gms.google-services'

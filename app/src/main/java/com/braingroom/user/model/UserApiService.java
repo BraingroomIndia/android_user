@@ -91,6 +91,7 @@ import com.braingroom.user.model.response.UploadResp;
 import com.braingroom.user.model.response.VendorProfileResp;
 import com.braingroom.user.model.response.VendorReviewResp;
 import com.braingroom.user.model.response.WishlistResp;
+import com.braingroom.user.viewmodel.OTPReq;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -139,6 +140,9 @@ public interface UserApiService {
 
     @POST("getCity")
     Observable<CommonIdResp> getCityList(@Body CityReq req);
+
+    @POST("getCatalogueCities")
+    Observable<CommonIdResp> getCatalogueCities();
 
     @POST("getVendor")
     Observable<CommonIdResp> getVendors();
@@ -354,7 +358,11 @@ public interface UserApiService {
     @POST("razorBuySuccess")
     Observable<BaseResp> updateCouponPaymentSuccess(@Body RazorBuySuccessReq req);
 
-    @POST("")
+    @POST("sendOTP")
+    Observable<BaseResp> sendOTP(@Body OTPReq req);
+
+
+    @POST("verifyOTP")
     Observable<BaseResp>submitOTP(@Body SubmitOTPReq req);
 
 }

@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.MessageListResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.FragmentHelper;
@@ -43,15 +45,17 @@ public class FilterViewModel extends ViewModel {
     public final ListDialogViewModel1 categoryVm, segmentsVm, communityVm, classTypeVm, classScheduleVm;
     public final DatePickerViewModel startDateVm, endDateVm;
     public final Action onBackClicked, onResetClicked, onApplyClicked;
-    public Navigator navigator;
+    public final Navigator navigator;
+    public final MessageHelper messageHelper;
     public Consumer<HashMap<String, Integer>> categoryConsumer;
     public Consumer<HashMap<String, Pair<String, String>>> cityConsumer;
     private boolean clearFlag = false;
     public final SearchSelectListViewModel cityVm, localityVm, vendorListVm;
     public Observable<HashMap<String, Pair<String, String>>> cityApiObservable, localityApiObservable, vendorlistApiObservable;
+    public ObservableBoolean isCatalogue;
 
     public FilterViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, FragmentHelper fragmentHelper
-           ,FilterData filterData , HashMap<String, Integer> categoryFilterMap,
+            , FilterData filterData, HashMap<String, Integer> categoryFilterMap,
                            HashMap<String, Integer> segmentsFilterMap,
                            HashMap<String, String> cityFilterMap,
                            HashMap<String, String> localityFilterMap,
@@ -64,25 +68,29 @@ public class FilterViewModel extends ViewModel {
                            String endDate*/
 
             , final String origin) {
+        isCatalogue = new ObservableBoolean(false);
         this.origin = origin;
-        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
-            @Override
-            public void run() throws Exception {
-                retry();
-            }
-        });
-        segmentsFilterMap= segmentsFilterMap!=null?segmentsFilterMap:new HashMap<String, Integer>();
-        categoryFilterMap= categoryFilterMap!=null?categoryFilterMap:new HashMap<String, Integer>();
-        communityFilterMap= communityFilterMap!=null?communityFilterMap:new HashMap<String, Integer>();
-        classTypeMap= classTypeMap!=null?classTypeMap:new HashMap<String, Integer>();
-        classScheduleMap= classScheduleMap!=null?classScheduleMap:new HashMap<String, Integer>();
-        vendorListMap= vendorListMap!=null?vendorListMap:new HashMap<String, String>();
-        cityFilterMap=cityFilterMap!=null?cityFilterMap:new HashMap<String, String>();
-        localityFilterMap=localityFilterMap!=null?localityFilterMap:new HashMap<String, String>();
-        this.keywords = new ObservableField<>(filterData!=null ? filterData.getKeywords() : "" );
+        if (origin.equals(ClassListViewModel1.ORIGIN_CATALOG))
+            isCatalogue.set(true);
+            this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+                @Override
+                public void run() throws Exception {
+                    retry();
+                }
+            });
+        segmentsFilterMap = segmentsFilterMap != null ? segmentsFilterMap : new HashMap<String, Integer>();
+        categoryFilterMap = categoryFilterMap != null ? categoryFilterMap : new HashMap<String, Integer>();
+        communityFilterMap = communityFilterMap != null ? communityFilterMap : new HashMap<String, Integer>();
+        classTypeMap = classTypeMap != null ? classTypeMap : new HashMap<String, Integer>();
+        classScheduleMap = classScheduleMap != null ? classScheduleMap : new HashMap<String, Integer>();
+        vendorListMap = vendorListMap != null ? vendorListMap : new HashMap<String, String>();
+        cityFilterMap = cityFilterMap != null ? cityFilterMap : new HashMap<String, String>();
+        localityFilterMap = localityFilterMap != null ? localityFilterMap : new HashMap<String, String>();
+        this.keywords = new ObservableField<>(filterData != null ? filterData.getKeywords() : "");
         this.navigator = navigator;
-        startDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "Start", filterData!=null ? filterData.getStartDate() : "YYYY-MM-DD" );
-        endDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "End", filterData!=null ? filterData.getEndDate() : "YYYY-MM-DD" );
+        this.messageHelper = messageHelper;
+        startDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "Start", filterData != null ? filterData.getStartDate() : "YYYY-MM-DD");
+        endDateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "End", filterData != null ? filterData.getEndDate() : "YYYY-MM-DD");
         categoryConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
@@ -103,10 +111,10 @@ public class FilterViewModel extends ViewModel {
                         // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                         return new ListDialogData1(itemMap);
                     }
-                }), categoryFilterMap, false, categoryConsumer,"");
+                }), categoryFilterMap, false, categoryConsumer, "");
 
 
-        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable(filterData!=null ? filterData.getCategoryId() : null ), segmentsFilterMap, false, null,"select a catgory first");
+        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable(filterData != null ? filterData.getCategoryId() : null), segmentsFilterMap, false, null, "select a catgory first");
 
 
         cityConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
@@ -132,17 +140,7 @@ public class FilterViewModel extends ViewModel {
             }
         };
 
-        cityApiObservable = apiService.getCityList("35").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
-            @Override
-            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
-                if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
-                for (CommonIdResp.Snippet snippet : resp.getData()) {
-                    resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
-                }
-                return resMap;
-            }
-        });
+        cityApiObservable = getCityApiObservable();
 
 
         cityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_CITY, messageHelper, navigator, "search for city", false, cityApiObservable, "", cityConsumer, fragmentHelper);
@@ -174,7 +172,7 @@ public class FilterViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), communityFilterMap, false, null,"");
+        }), communityFilterMap, false, null, "");
 
 //        vendorListVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class providers", messageHelper, apiService.getVendors().map(new Function<CommonIdResp, ListDialogData1>() {
 //            @Override
@@ -194,12 +192,12 @@ public class FilterViewModel extends ViewModel {
         ClassTypeApiData.put("Webinar", CLASS_TYPE_WEBINAR);
         ClassTypeApiData.put("Workshops", CLASS_TYPE_WORKSHOP);
         ClassTypeApiData.put("Learning events & activities", CLASS_TYPE_ACTIVITY);
-        classTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Type", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), classTypeMap, false, null,"");
+        classTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Type", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), classTypeMap, false, null, "");
 
         LinkedHashMap<String, Integer> ClassScheduleApiData = new LinkedHashMap<>();
         ClassScheduleApiData.put("Fixed", CLASS_SCHECULE_FIXED);
         ClassScheduleApiData.put("Flexible", CLASS_SCHECULE_FLEXIBLE);
-        classScheduleVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Schedule", messageHelper, Observable.just(new ListDialogData1(ClassScheduleApiData)), classScheduleMap, false, null,"");
+        classScheduleVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Schedule", messageHelper, Observable.just(new ListDialogData1(ClassScheduleApiData)), classScheduleMap, false, null, "");
 
         onBackClicked = new Action() {
             @Override
@@ -275,6 +273,33 @@ public class FilterViewModel extends ViewModel {
         return resultMap;
     }
 
+    private Observable<HashMap<String, Pair<String, String>>> getCityApiObservable() {
+        if (isCatalogue.get())
+            return apiService.getCatalogueCities().map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+                @Override
+                public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                    if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
+                    HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                    for (CommonIdResp.Snippet snippet : resp.getData()) {
+                        resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                    }
+                    return resMap;
+                }
+            });
+        else
+            return apiService.getCityList("35").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+                @Override
+                public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                    if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
+                    HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                    for (CommonIdResp.Snippet snippet : resp.getData()) {
+                        resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                    }
+                    return resMap;
+                }
+            });
+    }
+
     public void apply() {
         FilterData filterData = new FilterData();
         Intent resultIntent = new Intent();
@@ -302,14 +327,15 @@ public class FilterViewModel extends ViewModel {
         bundle.putString("startDate", startDateVm.date.get().equals("YYYY-MM-DD") ? "" : startDateVm.date.get());
         bundle.putString("endDate", endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());*/
         bundle.putBoolean("clearFlag", clearFlag);
-        bundle.putSerializable("filterData",filterData);
+        bundle.putSerializable("filterData", filterData);
         resultIntent.putExtras(bundle);
-        if (origin != null && origin.equals("HOME")) {
-            bundle.putString("origin", "HOME");
+        if (origin != null && origin.equals(ClassListViewModel1.ORIGIN_HOME)) {
+            bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
             navigator.navigateActivity(ClassListActivity.class, bundle);
         } else
             navigator.finishActivity(resultIntent);
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -325,6 +351,6 @@ public class FilterViewModel extends ViewModel {
     @Override
     public void retry() {
         connectivityViewmodel.isConnected.set(true);
-        callAgain.set(callAgain.get()+1);
+        callAgain.set(callAgain.get() + 1);
     }
 }

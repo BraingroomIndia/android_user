@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel.fragment;
 
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Pair;
 import android.util.Patterns;
@@ -9,10 +10,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.SignUpReq;
+import com.braingroom.user.model.request.SubmitOTPReq;
+import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -23,6 +28,7 @@ import com.braingroom.user.viewmodel.DataItemViewModel;
 import com.braingroom.user.viewmodel.DatePickerViewModel;
 import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ListDialogViewModel1;
+import com.braingroom.user.viewmodel.OTPReq;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.HashMap;
@@ -43,6 +49,10 @@ public class SignUpViewModelCompetition extends ViewModel {
     public static final int TYPE_FEMALE = 2;
     public static final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
+    private String userId;
+    public final ObservableField<String> OTP;
+
+    public final SignUpActivityCompetition.UiHelper uiHelper;
 
     public final DataItemViewModel fullName, emailId, password, confirmPassword, mobileNumber, referralCodeVm;
     public final ListDialogViewModel1 interestAreaVm;
@@ -54,7 +64,7 @@ public class SignUpViewModelCompetition extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked;
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked,submitOTP;
 
     public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM, ugInstituteVm;
 
@@ -65,6 +75,7 @@ public class SignUpViewModelCompetition extends ViewModel {
 
     public SignUpViewModelCompetition(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignUpActivityCompetition.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
         this.navigator = navigator;
+        this.uiHelper=uiHelper;
         fullName = new DataItemViewModel("");
         emailId = new DataItemViewModel("");
         password = new DataItemViewModel("");
@@ -75,6 +86,7 @@ public class SignUpViewModelCompetition extends ViewModel {
         signUpSnippet.setLatitude("");
         signUpSnippet.setLongitude("");
         signUpSnippet.setProfileImage("");
+        OTP = new ObservableField<>("");
 
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
@@ -217,12 +229,8 @@ public class SignUpViewModelCompetition extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
-                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                    navigator.navigateActivity(HomeActivity.class, null);
-                                }
-                            });
+                            uiHelper.next();
+
                         } else {
                             messageHelper.show(signUpResp.getResMsg());
                         }
@@ -230,6 +238,39 @@ public class SignUpViewModelCompetition extends ViewModel {
                     }
                 });
 
+            }
+        };
+        submitOTP = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (OTP.get().equals("")) {
+                    messageHelper.show("Please enter OTP");
+                    return;
+                }
+                SubmitOTPReq.Snippet snippet = new SubmitOTPReq.Snippet();
+                snippet.setUserId(userId);
+                snippet.setOTP(OTP.get());
+                apiService.submitOTP(new SubmitOTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
+                        if (resp.getResCode().equals("1"))
+                            apiService.login(emailId.s_1.get(), password.s_1.get(), pref.getString(Constants.FCM_TOKEN, ""))
+                                    .subscribe(new Consumer<LoginResp>() {
+                                        @Override
+                                        public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
+                                            if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
+                                                editor.putBoolean(Constants.LOGGED_IN, true);
+                                                editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
+                                                editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
+                                                editor.commit();
+                                                navigator.navigateActivity(HomeActivity.class, null);
+                                            }
+
+                                        }
+                                    });
+
+                    }
+                });
             }
         };
 
@@ -371,6 +412,16 @@ public class SignUpViewModelCompetition extends ViewModel {
 
         return traget.length() == 4 && !traget.contains("[a-zA-Z]+");
 
+    }
+
+    private void requestOTP(){
+        OTPReq.Snippet snippet=new OTPReq.Snippet(userId,mobileNumber.s_1.get());
+        apiService.requestOTP(new OTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
+                uiHelper.next();
+            }
+        });
     }
 
 }

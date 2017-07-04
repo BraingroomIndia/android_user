@@ -101,6 +101,7 @@ import com.braingroom.user.model.response.VendorProfileResp;
 import com.braingroom.user.model.response.VendorReviewResp;
 import com.braingroom.user.model.response.WishlistResp;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.viewmodel.OTPReq;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -190,8 +191,13 @@ public class DataflowService {
     public Observable<SignUpResp> signUp(SignUpReq signUpReq) {
         return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<BaseResp> submitOTP(SubmitOTPReq req){
+
+    public Observable<BaseResp> submitOTP(SubmitOTPReq req) {
         return api.submitOTP(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<BaseResp> requestOTP(OTPReq req) {
+        return api.sendOTP(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<BaseResp> logout() {
@@ -242,6 +248,10 @@ public class DataflowService {
     public Observable<CommonIdResp> getCityList(String stateId) {
         return api.getCityList(new CityReq(new CityReq.Snippet(stateId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<CommonIdResp> getCatalogueCities() {
+        return api.getCatalogueCities().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<CommonIdResp> getVendors() {
@@ -946,6 +956,7 @@ public class DataflowService {
         return api.saveGiftCoupon(req).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
     public Observable<BaseResp> updateCouponPaymentSuccess(RazorBuySuccessReq req) {
         return api.updateCouponPaymentSuccess(req).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

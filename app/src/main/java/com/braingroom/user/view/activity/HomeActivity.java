@@ -16,6 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -45,8 +46,13 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -75,10 +81,32 @@ public class HomeActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Observable observable = Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread());
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
-        if (bundle != null) {
+        Branch.getInstance(getApplicationContext()).initSession(new Branch.BranchUniversalReferralInitListener() {
+            @Override
+            public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
+                //If not Launched by clicking Branch link
+                if (branchUniversalObject == null) {
+                    Log.d(TAG, "onInitFinished: branchUniversalObject is null");
+                }
+                /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
+                 * Launch Monster viewer activity if a link clicked without $android_deeplink_path
+                 */
+                
+                else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
+                    getReferralCode(branchUniversalObject);
+
+
+                }
+            }
+        }, this.getIntent().getData(), this);
+        
+
+        if (bundle != null)
+
+        {
             Bundle data = new Bundle();
             String postId = bundle.getString("post_id");
             String classId = bundle.getString("class_id");
@@ -106,31 +134,47 @@ public class HomeActivity extends BaseActivity
                     value.toString(), value.getClass().getName()));
     }*/
 
-        competitionBanner = (RelativeLayout) findViewById(R.id.competition_banner);
+        competitionBanner = (RelativeLayout)
 
-        textView = (HTextView) findViewById(R.id.textview);
-        if (!vm.loggedIn.get()) {
+                findViewById(R.id.competition_banner);
+
+        textView = (HTextView)
+
+                findViewById(R.id.textview);
+        if (!vm.loggedIn.get())
+
+        {
             observable.subscribe(new Consumer<Long>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
                     animate((int) (aLong % 2));
                 }
             });
-        } else {
+        } else
+
+        {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
             competitionBanner.setLayoutParams(params);
         }
 
-        try {
+        try
+
+        {
             PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 Log.d("KeyHash :  \t", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (
+                PackageManager.NameNotFoundException e)
+
+        {
             e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (
+                NoSuchAlgorithmException e)
+
+        {
             e.printStackTrace();
         }
 
@@ -402,5 +446,23 @@ public class HomeActivity extends BaseActivity
             icon.mutate();
             icon.setDrawableByLayerId(R.id.ic_badge, badge);
         }
+    }
+
+    public String getReferralCode(BranchUniversalObject monster) {
+        String referralCode = null;
+        if (monster != null) {
+            HashMap<String, String> referringParams = monster.getMetadata();
+            if (!TextUtils.isEmpty(monster.getTitle())) {
+                referralCode = monster.getTitle();
+                Log.d(TAG, "getReferralCode_1: " + referralCode);
+            } else if (referringParams.containsKey("referral_code")) {
+                String name = referringParams.get("referral_code");
+                if (!TextUtils.isEmpty(name)) {
+                    referralCode = name;
+                    Log.d(TAG, "getReferralCode_2: " + referralCode);
+                }
+            }
+        }
+        return referralCode;
     }
 }

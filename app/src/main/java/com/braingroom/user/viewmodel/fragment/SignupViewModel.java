@@ -31,6 +31,7 @@ import com.braingroom.user.viewmodel.DataItemViewModel;
 import com.braingroom.user.viewmodel.DatePickerViewModel;
 import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ListDialogViewModel1;
+import com.braingroom.user.viewmodel.OTPReq;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import org.jetbrains.annotations.Contract;
@@ -52,10 +53,13 @@ public class SignupViewModel extends ViewModel {
 
     private Disposable otpDisposable;
 
+    private String userId;
+
     public final DataItemViewModel fullName, emailId, password, confirmPassword, mobileNumber, referralCodeVm, passoutYear;
     public final ListDialogViewModel1 interestAreaVm;
     public final Action onNextClicked;
-    public Navigator navigator;
+    public final Navigator navigator;
+    public final SignupActivity.UiHelper uiHelper;
     public Consumer<HashMap<String, Pair<String, String>>> countryConsumer, stateConsumer, cityConsumer;
 
     public final ListDialogViewModel1 genderVm, communityClassVm;
@@ -73,8 +77,11 @@ public class SignupViewModel extends ViewModel {
     private SignUpReq.Snippet signUpSnippet;
 
 
+
+
     public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
         this.navigator = navigator;
+        this.uiHelper =uiHelper;
         fullName = new DataItemViewModel("");
         emailId = new DataItemViewModel("");
         password = new DataItemViewModel("");
@@ -138,7 +145,8 @@ public class SignupViewModel extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
-                            uiHelper.thirdFragment();
+                            userId = signUpResp.getData().get(0).getUserId();
+                            requestOTP();
 /*                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
@@ -204,8 +212,8 @@ public class SignupViewModel extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
-
-                            uiHelper.thirdFragment();
+                            userId=signUpResp.getData().get(0).getUserId();
+                            requestOTP();
                           /*  messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
@@ -278,7 +286,7 @@ public class SignupViewModel extends ViewModel {
                     return;
                 }
                 SubmitOTPReq.Snippet snippet = new SubmitOTPReq.Snippet();
-                snippet.setMobileNo(mobileNumber.s_1.get());
+                snippet.setUserId(userId);
                 snippet.setOTP(OTP.get());
                 apiService.submitOTP(new SubmitOTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
                     @Override
@@ -451,6 +459,16 @@ public class SignupViewModel extends ViewModel {
                 subscription.dispose();
             }
         }
+    }
+
+    private void requestOTP(){
+        OTPReq.Snippet snippet=new OTPReq.Snippet(userId,mobileNumber.s_1.get());
+        apiService.requestOTP(new OTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
+                uiHelper.thirdFragment();
+            }
+        });
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -53,6 +54,9 @@ import io.reactivex.functions.Predicate;
 import static com.rollbar.android.Rollbar.TAG;
 
 public class HomeViewModel extends ViewModel {
+
+
+
 
     public final Action onSearchClicked, onExploreClicked, onRegister, onFilterClicked;
     public final ObservableField<String> profileImage = new ObservableField();

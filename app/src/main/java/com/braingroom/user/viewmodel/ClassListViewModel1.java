@@ -92,9 +92,11 @@ public class ClassListViewModel1 extends ViewModel {
     private int nextPage = 0;
     private int currentPage = -1;
     private boolean segmentAvailable = false;
+    private boolean isCatalogue = false;
+
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @NonNull FilterData filterData1,
+            , @NonNull final HelperFactory helperFactory, @NonNull final FilterData filterData1,
                                HashMap<String, Integer> categoryMap,
                                HashMap<String, Integer> segmentsMap,
                                HashMap<String, String> cityMap,
@@ -105,6 +107,8 @@ public class ClassListViewModel1 extends ViewModel {
                                HashMap<String, String> vendorListMap, @Nullable final String origin, final ClassListActivity.UiHelper uiHelper) {
 
 
+        if (origin != null && origin.equals(ORIGIN_CATALOG))
+            isCatalogue = true;
         categoryFilterMap = categoryMap;
         segmentsFilterMap = segmentsMap;
         cityFilterMap = cityMap;
@@ -243,15 +247,23 @@ public class ClassListViewModel1 extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> sortData) throws Exception {
                 if (sortData.values().iterator().hasNext()) {
                     String sortOrder = "" + sortData.values().iterator().next();
-                    filterData.setSortOrder(sortOrder);
+                    if (isCatalogue)
+                        filterData.setSortOrderCat(sortOrder);
+                    else
+                        filterData.setSortOrder(sortOrder);
                     reset();
                 }
             }
         };
         LinkedHashMap<String, Integer> sortApiData = new LinkedHashMap<>();
-        sortApiData.put("Price - High to Low", SORT_ORDER_HIGH_TO_LOW);
-        sortApiData.put("Price - Low to High", SORT_ORDER_LOW_TO_HIGH);
-        sortDialogVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "SORT BY", messageHelper, Observable.just(new ListDialogData1(sortApiData)), new LinkedHashMap<String, Integer>(), false, this.sortResultConsumer,"");
+        if (isCatalogue) {
+            sortApiData.put("Time - New to Old ", SORT_ORDER_HIGH_TO_LOW);
+            sortApiData.put("Time - Old to New", SORT_ORDER_LOW_TO_HIGH);
+        } else {
+            sortApiData.put("Price - High to Low", SORT_ORDER_HIGH_TO_LOW);
+            sortApiData.put("Price - Low to High", SORT_ORDER_LOW_TO_HIGH);
+        }
+        sortDialogVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "SORT BY", messageHelper, Observable.just(new ListDialogData1(sortApiData)), new LinkedHashMap<String, Integer>(), false, this.sortResultConsumer, "");
 
         onViewChangeClicked = new Action() {
             @Override
@@ -272,6 +284,7 @@ public class ClassListViewModel1 extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle bundle = new Bundle();
+                bundle.putString("origin", origin);
                 bundle.putSerializable("filterData", filterData);
                 bundle.putSerializable("category", categoryFilterMap);
                 bundle.putSerializable("segment", segmentsFilterMap);
