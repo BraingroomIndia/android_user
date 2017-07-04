@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="com.braingroom.user.viewmodel.fragment.SignupViewModel" />
+            type="com.braingroom.user.viewmodel.SignupViewModel" />
 
     </data>
     <ScrollView
