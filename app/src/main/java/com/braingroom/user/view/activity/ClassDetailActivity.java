@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SeekBar;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
@@ -16,11 +14,9 @@ import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 
@@ -31,7 +27,6 @@ public class ClassDetailActivity extends BaseActivity {
     MyPlaybackEventListener myPlaybackEventListener;
     UiHelper uiHelper;
     SupportMapFragment mapFragment;
-    ShimmerFrameLayout shimmerFrameLayout;
 
     public interface UiHelper {
         void initYoutube();
@@ -59,8 +54,8 @@ public class ClassDetailActivity extends BaseActivity {
                 ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
             }
         });
-        shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_container);
-        shimmerFrameLayout.startShimmerAnimation();
+//        shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_container);
+//        shimmerFrameLayout.startShimmerAnimation();
 //        ((ClassDetailViewModel) vm).setUiHelper(uiHelper);
     }
 
@@ -87,7 +82,7 @@ public class ClassDetailActivity extends BaseActivity {
 
             @Override
             public void stopShimmer() {
-                shimmerFrameLayout.stopShimmerAnimation();
+//                shimmerFrameLayout.stopShimmerAnimation();
             }
 
             @Override
