@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel.fragment;
 
+import android.content.DialogInterface;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ListDialogData1;
+import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.request.SignUpReq;
 import com.braingroom.user.model.request.SubmitOTPReq;
 import com.braingroom.user.model.response.BaseResp;
@@ -54,11 +56,13 @@ public class SignupViewModel extends ViewModel {
     private Disposable otpDisposable;
 
     private String userId;
+    private String uuId;
 
     public final DataItemViewModel fullName, emailId, password, confirmPassword, mobileNumber, referralCodeVm, passoutYear;
     public final ListDialogViewModel1 interestAreaVm;
     public final Action onNextClicked;
     public final Navigator navigator;
+    public final MessageHelper messageHelper;
     public final SignupActivity.UiHelper uiHelper;
     public Consumer<HashMap<String, Pair<String, String>>> countryConsumer, stateConsumer, cityConsumer;
 
@@ -66,7 +70,7 @@ public class SignupViewModel extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP;
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP,onEditMobile;
 
     public final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
@@ -77,11 +81,10 @@ public class SignupViewModel extends ViewModel {
     private SignUpReq.Snippet signUpSnippet;
 
 
-
-
     public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
         this.navigator = navigator;
-        this.uiHelper =uiHelper;
+        this.messageHelper = messageHelper;
+        this.uiHelper = uiHelper;
         fullName = new DataItemViewModel("");
         emailId = new DataItemViewModel("");
         password = new DataItemViewModel("");
@@ -146,7 +149,8 @@ public class SignupViewModel extends ViewModel {
 
                         if (signUpResp.getData().size() > 0) {
                             userId = signUpResp.getData().get(0).getUserId();
-                            requestOTP();
+                            uuId = signUpResp.getData().get(0).getUuid();
+                            requestOTP(mobileNumber.s_1.get());
 /*                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
@@ -212,8 +216,9 @@ public class SignupViewModel extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
-                            userId=signUpResp.getData().get(0).getUserId();
-                            requestOTP();
+                            userId = signUpResp.getData().get(0).getUserId();
+                            uuId = signUpResp.getData().get(0).getUuid();
+                            requestOTP(mobileNumber.s_1.get());
                           /*  messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
@@ -311,6 +316,13 @@ public class SignupViewModel extends ViewModel {
                 });
             }
         };
+        onEditMobile = new Action() {
+            @Override
+            public void run() throws Exception {
+                  uiHelper.editMobileNumber(uuId);
+            }
+        };
+
 
         countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
             @Override
@@ -461,12 +473,16 @@ public class SignupViewModel extends ViewModel {
         }
     }
 
-    private void requestOTP(){
-        OTPReq.Snippet snippet=new OTPReq.Snippet(userId,mobileNumber.s_1.get());
+    public void requestOTP(@NonNull final String mobile) {
+        OTPReq.Snippet snippet = new OTPReq.Snippet(userId, mobile);
         apiService.requestOTP(new OTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                uiHelper.thirdFragment();
+                messageHelper.show(resp.getResMsg());
+                if (mobile.equals(mobileNumber.s_1.get()))
+                    uiHelper.thirdFragment();
+                else
+                    mobileNumber.s_1.set(mobile);
             }
         });
     }
