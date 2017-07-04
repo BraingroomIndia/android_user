@@ -14,19 +14,29 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class SaveGiftCouponReq {
 
-    @SerializedName("user_id")
-    public String userId;
-    @SerializedName("gift_type")
-    public String giftType;
-    @SerializedName("gift_by")
-    public String giftBy;
+    @SerializedName("braingroom")
+    Snippet data;
 
-    @SerializedName("gift_details")
-    List<Snippet> data;
 
     @Data
     @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
+        @SerializedName("user_id")
+        public String userId;
+        @SerializedName("gift_type")
+        public String giftType;
+        @SerializedName("gift_by")
+        public String giftBy;
+        @SerializedName("is_guest")
+        public int isGuest;
+
+        @SerializedName("gift_details")
+        List<GiftDetails> giftDetails;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static class GiftDetails {
         @SerializedName("cat_id")
         private String catId;
 

@@ -17,11 +17,21 @@ public class GiftCouponViewModel extends ViewModel {
     public static final String GCTYPE_CORPORATE = "CORPORATE";
     public static final String GCTYPE_NGO = "NGO";
 
+    public static final int GIFT_TYPE_SELF = 1;
+    public static final int GIFT_TYPE_FRIEND = 2;
+
+    public static final int GIFT_BY_INDIVIDUAL = 1;
+    public static final int GIFT_BY_CORPORATE = 2;
+    public static final int GIFT_BY_NGO = 3;
+
     public final ShowcaseGiftcardListViewModel individualVm, corporateVm, ngoVm;
     public final ObservableField<String> couponValue;
 
-    public final ObservableBoolean mailMe = new ObservableBoolean(true);
-    public final ObservableBoolean forIndividual = new ObservableBoolean(true);
+    public final ObservableBoolean giftByIndividual = new ObservableBoolean(true);
+    public final ObservableBoolean giftByCorporate = new ObservableBoolean(false);
+    public final ObservableBoolean giftByNgo = new ObservableBoolean(false);
+    public final ObservableBoolean giftTypeSelf = new ObservableBoolean(true);
+    public final ObservableBoolean giftTypeFriend = new ObservableBoolean(false);
 
     public final Action openCouponForm;
 
@@ -42,8 +52,8 @@ public class GiftCouponViewModel extends ViewModel {
                 try {
                     Bundle data = new Bundle();
                     data.putInt("couponVal", Integer.parseInt(couponValue.get()));
-                    data.putBoolean("mailMe", mailMe.get());
-                    data.putBoolean("forIndividual", forIndividual.get());
+                    data.putInt("giftType", giftTypeSelf.get() ? GIFT_TYPE_SELF : GIFT_TYPE_FRIEND);
+                    data.putInt("giftBy", giftByIndividual.get() ? GIFT_BY_INDIVIDUAL : giftByCorporate.get() ? GIFT_BY_CORPORATE : GIFT_BY_NGO);
                     navigator.navigateActivity(CouponFormActivity.class, data);
                 } catch (NumberFormatException e) {
                     messageHelper.show("only numbers allowed");

@@ -31,7 +31,7 @@ public class CouponFormDataViewModel extends ViewModel {
 
     public final MyConsumer<CouponFormDataViewModel> removeThisFragment;
 
-    public CouponFormDataViewModel(int couponVal, boolean mailMe, boolean forIndividual, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
+    public CouponFormDataViewModel(int couponVal, int giftType, int giftBy, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
                                    @NonNull HelperFactory helperFactory, final MyConsumer<CouponFormDataViewModel> removeThisFragment, int index) {
         emailAddress = new DataItemViewModel("");
         denomination = new DataItemViewModel("");
@@ -61,7 +61,7 @@ public class CouponFormDataViewModel extends ViewModel {
             }
         };
 
-        if (mailMe) {
+        if (giftType == GiftCouponViewModel.GIFT_TYPE_SELF) {
             recipientsName.s_1.set(null);
             mobileNumber.s_1.set(null);
             personalisedMsg.s_1.set(null);
@@ -73,8 +73,8 @@ public class CouponFormDataViewModel extends ViewModel {
         }
     }
 
-    public SaveGiftCouponReq.Snippet getformData() {
-        SaveGiftCouponReq.Snippet data = new SaveGiftCouponReq.Snippet();
+    public SaveGiftCouponReq.GiftDetails getformData() {
+        SaveGiftCouponReq.GiftDetails data = new SaveGiftCouponReq.GiftDetails();
         data.setCatId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
         data.setDenomination(denomination.s_1.get());
         data.setEmailId(emailAddress.s_1.get());

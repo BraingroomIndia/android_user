@@ -81,7 +81,7 @@ public class CouponFormActivity extends BaseActivity {
             }
         };
 
-        viewmodel = new CouponFormViewModel(getIntentInt("couponVal"), getIntentBoolean("mailMe"), getIntentBoolean("forIndividual"), getMessageHelper(), getNavigator(), getHelperFactory(), new Action() {
+        viewmodel = new CouponFormViewModel(getIntentInt("couponVal"), getIntentInt("giftType"), getIntentInt("giftBy"), getMessageHelper(), getNavigator(), getHelperFactory(), new Action() {
             @Override
             public void run() throws Exception {
                 pagerAdapter.notifyDataSetChanged();
@@ -148,7 +148,7 @@ public class CouponFormActivity extends BaseActivity {
 
         if (id == R.id.action_add) {
             try {
-                viewmodel.addNewFormData(0, getIntentBoolean("mailMe"), getIntentBoolean("forIndividual"));
+                viewmodel.addNewFormData(0, getIntentInt("giftType"), getIntentInt("giftBy"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

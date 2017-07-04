@@ -31,15 +31,18 @@ public class CouponFormViewModel extends ViewModel {
     public final Action submitClicked, notifyAdapter;
     public CouponFormActivity.UiHelper uiHelper;
     public SaveGiftCouponResp.Snippet couponPayData;
-    public String isGuest = "0";
-    public String gUserId;
+    public int isGuest = 0;
+    public String gUserId, giftType, giftBy;
 
-    public CouponFormViewModel(int couponVal, boolean mailMe, boolean forIndividual, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory,
+    public CouponFormViewModel(int couponVal, int giftType, int giftBy, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory,
                                Action notifyAdapter, CouponFormActivity.UiHelper uiHelper) {
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.mHelperFactory = helperFactory;
         this.uiHelper = uiHelper;
+
+        this.giftType = giftType + "";
+        this.giftBy = giftBy + "";
 
         submitClicked = new Action() {
             @Override
@@ -49,7 +52,7 @@ public class CouponFormViewModel extends ViewModel {
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(null, messageHelper, navigator, new CheckoutViewModel.UiHelper() {
                                 @Override
                                 public void onGuestLoginSuccess(String id) {
-                                    isGuest = "1";
+                                    isGuest = 1;
                                     saveGiftCoupon(id);
                                 }
 
@@ -65,7 +68,7 @@ public class CouponFormViewModel extends ViewModel {
             }
         };
         try {
-            addNewFormData( couponVal,  mailMe,  forIndividual);
+            addNewFormData(couponVal, giftType, giftBy);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,17 +79,18 @@ public class CouponFormViewModel extends ViewModel {
     public void saveGiftCoupon(String userId) {
         gUserId = userId;
         SaveGiftCouponReq req = new SaveGiftCouponReq();
-        req.setUserId(userId);
-        // TODO: 29/06/17  change below hardcoded values
-        req.setGiftBy("1");
-        req.setGiftType("2");
-
-        List<SaveGiftCouponReq.Snippet> data = new ArrayList<>();
+        SaveGiftCouponReq.Snippet snippet = new SaveGiftCouponReq.Snippet();
+        snippet.setUserId(userId);
+        snippet.setGiftBy(giftBy);
+        snippet.setGiftType(giftType);
+        snippet.setIsGuest(isGuest);
+        List<SaveGiftCouponReq.GiftDetails> data = new ArrayList<>();
         for (CouponFormDataViewModel vm : formDataList) {
             data.add(vm.getformData());
         }
 
-        req.setData(data);
+        snippet.setGiftDetails(data);
+        req.setData(snippet);
         apiService.saveGiftCoupon(req).subscribe(new Consumer<SaveGiftCouponResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull SaveGiftCouponResp resp) throws Exception {
@@ -104,8 +108,8 @@ public class CouponFormViewModel extends ViewModel {
         });
     }
 
-    public void addNewFormData(int couponVal, boolean mailMe, boolean forIndividual) throws Exception {
-        formDataList.add(new CouponFormDataViewModel( couponVal,  mailMe,  forIndividual,messageHelper, navigator, mHelperFactory, new MyConsumer<CouponFormDataViewModel>() {
+    public void addNewFormData(int couponVal, int giftType, int giftBy) throws Exception {
+        formDataList.add(new CouponFormDataViewModel(couponVal, giftType, giftBy, messageHelper, navigator, mHelperFactory, new MyConsumer<CouponFormDataViewModel>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull CouponFormDataViewModel vm) {
                 try {
@@ -145,7 +149,7 @@ public class CouponFormViewModel extends ViewModel {
         RazorBuySuccessReq.Snippet req = new RazorBuySuccessReq.Snippet();
         req.setUserId(gUserId);
         req.setAmount(couponPayData.getPrice() + "");
-        req.setIsGuest(isGuest);
+        req.setIsGuest(isGuest+"");
         req.setTermId(couponPayData.getTermId());
         req.setTxnid(txnId);
         req.setUserEmail(couponPayData.getEmail());
