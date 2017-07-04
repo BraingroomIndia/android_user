@@ -11,7 +11,8 @@
     <color name="colorLightGray">#c7c7c7</color>
     <color name="colorTextDark">#333333</color>
 
-    <color name="colorShimmerGray">#c7c7c7</color>
+    <color name="colorShimmerGray">#d7d7d7</color>
+    <color name="colorShimmerGrayLight">#e7e7e7</color>
 
     <color name="materialYellow">#FFEB3B</color>
     <color name="materialGreen">#4CAF50</color>

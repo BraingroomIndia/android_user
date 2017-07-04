@@ -10,10 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.braingroom.user.R;
-import com.braingroom.user.viewmodel.ShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,8 +101,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(DataBindingViewHolder holder, int position) {
         binder.bind(holder.viewBinding, latestViewModels.get(position));
         holder.viewBinding.executePendingBindings();
-        if (latestViewModels.get(position) instanceof ShimmerItemViewModel)
-            ((ShimmerFrameLayout) (holder.viewBinding.getRoot()).findViewById(R.id.shimmer_container)).startShimmerAnimation();
+//        if (latestViewModels.get(position) instanceof ShimmerItemViewModel)
+//            ((ShimmerFrameLayout) (holder.viewBinding.getRoot()).findViewById(R.id.shimmer_container)).startShimmerAnimation();
     }
 
     @Override

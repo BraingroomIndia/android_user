@@ -9,11 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.braingroom.user.R;
 import com.braingroom.user.utils.BindingUtils;
-import com.braingroom.user.viewmodel.ShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.facebook.shimmer.ShimmerFrameLayout;
 
 
 public class NonReactiveRecyclerViewAdapter extends RecyclerView.Adapter<NonReactiveRecyclerViewAdapter.DataBindingViewHolder> {
@@ -49,8 +46,8 @@ public class NonReactiveRecyclerViewAdapter extends RecyclerView.Adapter<NonReac
     public void onBindViewHolder(DataBindingViewHolder holder, int position) {
         binder.bind(holder.viewBinding, viewModel.nonReactiveItems.get(position));
         holder.viewBinding.executePendingBindings();
-        if (viewModel.nonReactiveItems.get(position) instanceof ShimmerItemViewModel)
-            ((ShimmerFrameLayout) (holder.viewBinding.getRoot()).findViewById(R.id.shimmer_container)).startShimmerAnimation();
+//        if (viewModel.nonReactiveItems.get(position) instanceof ShimmerItemViewModel)
+//            ((ShimmerFrameLayout) (holder.viewBinding.getRoot()).findViewById(R.id.shimmer_container)).startShimmerAnimation();
     }
 
     @Override
