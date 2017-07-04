@@ -50,6 +50,7 @@ public class SignUpViewModelCompetition extends ViewModel {
     public static final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
     private String userId;
+    private String uuId;
     public final ObservableField<String> OTP;
 
     public final SignUpActivityCompetition.UiHelper uiHelper;
@@ -57,14 +58,15 @@ public class SignUpViewModelCompetition extends ViewModel {
     public final DataItemViewModel fullName, emailId, password, confirmPassword, mobileNumber, referralCodeVm;
     public final ListDialogViewModel1 interestAreaVm;
     public final Action onNextClicked;
-    public Navigator navigator;
+    public final Navigator navigator;
+    public final MessageHelper messageHelper;
     public Consumer<HashMap<String, Pair<String, String>>> countryConsumer, stateConsumer, cityConsumer;
 
     public final ListDialogViewModel1 genderVm, communityClassVm;
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked,submitOTP;
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP,onEditMobile,onResendOTP;
 
     public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM, ugInstituteVm;
 
@@ -75,7 +77,8 @@ public class SignUpViewModelCompetition extends ViewModel {
 
     public SignUpViewModelCompetition(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignUpActivityCompetition.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
         this.navigator = navigator;
-        this.uiHelper=uiHelper;
+        this.messageHelper = messageHelper;
+        this.uiHelper = uiHelper;
         fullName = new DataItemViewModel("");
         emailId = new DataItemViewModel("");
         password = new DataItemViewModel("");
@@ -93,7 +96,7 @@ public class SignUpViewModelCompetition extends ViewModel {
         LinkedHashMap<String, Integer> GenderTypeApiData = new LinkedHashMap<>();
         GenderTypeApiData.put("Male", TYPE_MALE);
         GenderTypeApiData.put("Female", TYPE_FEMALE);
-        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null,"");
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null, "");
         communityClassVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Community", messageHelper, apiService.getCommunity().map(new Function<CommunityResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommunityResp categoryResp) throws Exception {
@@ -104,7 +107,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null,"");
+        }), new HashMap<String, Integer>(), true, null, "");
 
         onBackClicked = new Action() {
             @Override
@@ -273,6 +276,18 @@ public class SignUpViewModelCompetition extends ViewModel {
                 });
             }
         };
+        onResendOTP = new Action() {
+            @Override
+            public void run() throws Exception {
+                requestOTP(mobileNumber.s_1.get());
+            }
+        };
+        onEditMobile = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.editMobileNumber(uuId);
+            }
+        };
 
         countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
             @Override
@@ -381,7 +396,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null,"");
+        }), new HashMap<String, Integer>(), true, null, "");
 
 
         instituteApiObservable = apiService.getSchools("").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
@@ -414,12 +429,16 @@ public class SignUpViewModelCompetition extends ViewModel {
 
     }
 
-    private void requestOTP(){
-        OTPReq.Snippet snippet=new OTPReq.Snippet(userId,mobileNumber.s_1.get());
+    public void requestOTP(@NonNull final String mobile) {
+        OTPReq.Snippet snippet = new OTPReq.Snippet(userId, mobile);
         apiService.requestOTP(new OTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                uiHelper.next();
+                messageHelper.show(resp.getResMsg());
+                if (mobile.equals(mobileNumber.s_1.get()))
+                    uiHelper.next();
+                else
+                    mobileNumber.s_1.set(mobile);
             }
         });
     }

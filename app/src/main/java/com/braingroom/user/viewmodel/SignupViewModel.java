@@ -72,7 +72,7 @@ public class SignupViewModel extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP,onEditMobile;
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP,onEditMobile,onResendOTP;
 
     public final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
@@ -313,9 +313,16 @@ public class SignupViewModel extends ViewModel {
 
                                         }
                                     });
+                        else messageHelper.show(resp.getResMsg());
 
                     }
                 });
+            }
+        };
+        onResendOTP = new Action() {
+            @Override
+            public void run() throws Exception {
+                requestOTP(mobileNumber.s_1.get());
             }
         };
         onEditMobile = new Action() {

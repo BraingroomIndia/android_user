@@ -1,11 +1,17 @@
 package com.braingroom.user.view.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
+import com.braingroom.user.model.request.ProfileUpdateReq;
+import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.view.fragment.DynamicSearchSelectListFragment;
@@ -16,6 +22,7 @@ import com.braingroom.user.view.fragment.Signup3Fragment;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.SignUpViewModelCompetition;
 
+import io.reactivex.functions.Consumer;
 import lombok.Getter;
 
 /**
@@ -36,6 +43,7 @@ public class SignUpActivityCompetition extends BaseActivity {
 
         void back();
 
+        void editMobileNumber(final String uuId);
     }
 
     @Getter
@@ -56,6 +64,49 @@ public class SignUpActivityCompetition extends BaseActivity {
             public void back() {
                 popBackstack();
             }
+
+            public void editMobileNumber(final String uuid) {
+                new MaterialDialog.Builder(SignUpActivityCompetition.this)
+                        .title("Contact details")
+                        .content("Please enter your mobile number")
+                        .inputType(InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_PERSON_NAME |
+                                InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                        .inputRange(10, 10)
+                        .positiveText("Done")
+                        .input("Mobile", "", false, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                if (input.length() > 10 || input.length() < 10) {
+                                    getMessageHelper().show("Mobile number must be exactly 10 characters long");
+                                } else {
+                                    final String mobile = input.toString();
+                                    ProfileUpdateReq.Snippet snippet = new ProfileUpdateReq.Snippet();
+                                    snippet.setUuid(uuid);
+                                    snippet.setMobile(mobile);
+                                    getMessageHelper().showProgressDialog("Wait", "Updating Mobile Number");
+                                    vm.apiService.updateProfile(new ProfileUpdateReq(snippet)).subscribe(new Consumer<CommonIdResp>() {
+                                        @Override
+                                        public void accept(@io.reactivex.annotations.NonNull CommonIdResp commonIdResp) throws Exception {
+                                            getMessageHelper().dismissActiveProgress();
+                                            try {
+                                                viewModel.requestOTP(mobile);
+                                            } catch (Exception e) {
+                                                Log.d("Cast error", "accept:" + e.toString());
+                                            }
+
+                                        }
+                                    });
+
+                                }
+                            }
+                        }).dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
+                    }
+                }).show();
+            }
         }, new FragmentHelper() {
             @Override
             public void show(String tag) {
@@ -69,7 +120,7 @@ public class SignUpActivityCompetition extends BaseActivity {
             public void remove(String tag) {
                 popBackstack(tag);
             }
-        },new FragmentHelper() {
+        }, new FragmentHelper() {
             @Override
             public void show(String tag) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -129,6 +180,7 @@ public class SignUpActivityCompetition extends BaseActivity {
             }
         };
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
