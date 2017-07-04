@@ -72,6 +72,20 @@ public abstract class MvvmActivity extends AppCompatActivity {
 
     }
 
+    public int getIntentInt(String key) {
+        if (extras != null) {
+            return extras.getInt(key);
+        } else return 0;
+
+    }
+
+    public boolean getIntentBoolean(String key) {
+        if (extras != null) {
+            return extras.getBoolean(key);
+        } else return false;
+
+    }
+
     public Serializable getIntentSerializable(String key) {
         if (extras != null) {
             return extras.getSerializable(key);

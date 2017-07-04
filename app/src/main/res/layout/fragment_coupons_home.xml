@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/edittext"
+            android:id="@+id/amount"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
@@ -29,10 +29,70 @@
             android:text="@={vm.couponValue}"
             app:font='@{@string/robotoRegular}' />
 
+
+        <RadioGroup
+            android:id="@+id/rg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/amount"
+            android:layout_below="@+id/amount"
+            android:layout_marginBottom="@dimen/margin_med"
+            android:layout_marginTop="@dimen/margin_med"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={vm.forIndividual}"
+                android:text="Individual" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{!vm.forIndividual}"
+                android:text="Corporate" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/rg1"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/bottom_line_drawable" />
+
+        <RadioGroup
+            android:id="@+id/rg2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/amount"
+            android:layout_below="@+id/divider"
+            android:layout_marginBottom="@dimen/margin_med"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={vm.mailMe}"
+                android:text="Buy coupon for self" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{!vm.mailMe}"
+                android:text="Buy coupon for others" />
+
+        </RadioGroup>
+
+
         <TextView
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/edittext"
+            android:layout_below="@+id/rg2"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_med"
             android:background="@drawable/solid_bg_green_rounded_corner"

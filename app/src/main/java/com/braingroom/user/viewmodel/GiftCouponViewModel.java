@@ -1,6 +1,8 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.view.MessageHelper;
@@ -17,6 +19,9 @@ public class GiftCouponViewModel extends ViewModel {
 
     public final ShowcaseGiftcardListViewModel individualVm, corporateVm, ngoVm;
     public final ObservableField<String> couponValue;
+
+    public final ObservableBoolean mailMe = new ObservableBoolean(true);
+    public final ObservableBoolean forIndividual = new ObservableBoolean(true);
 
     public final Action openCouponForm;
 
@@ -35,12 +40,16 @@ public class GiftCouponViewModel extends ViewModel {
                     return;
                 }
                 try {
-                    int couponVal = Integer.parseInt(couponValue.get());
-                    navigator.navigateActivity(CouponFormActivity.class, null);
+                    Bundle data = new Bundle();
+                    data.putInt("couponVal", Integer.parseInt(couponValue.get()));
+                    data.putBoolean("mailMe", mailMe.get());
+                    data.putBoolean("forIndividual", forIndividual.get());
+                    navigator.navigateActivity(CouponFormActivity.class, data);
                 } catch (NumberFormatException e) {
                     messageHelper.show("only numbers allowed");
                 }
             }
         };
+
     }
 }

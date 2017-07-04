@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.braingroom.user.R;
-import com.braingroom.user.view.fragment.ConnectFeedFragment;
 import com.braingroom.user.view.fragment.CouponFormFragment;
 import com.braingroom.user.viewmodel.CouponFormDataViewModel;
 import com.braingroom.user.viewmodel.CouponFormViewModel;
@@ -82,10 +81,11 @@ public class CouponFormActivity extends BaseActivity {
             }
         };
 
-        viewmodel = new CouponFormViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new Action() {
+        viewmodel = new CouponFormViewModel(getIntentInt("couponVal"), getIntentBoolean("mailMe"), getIntentBoolean("forIndividual"), getMessageHelper(), getNavigator(), getHelperFactory(), new Action() {
             @Override
             public void run() throws Exception {
                 pagerAdapter.notifyDataSetChanged();
+                pager.setCurrentItem(pagerAdapter.getCount() - 1, true);
             }
         }, uiHelper);
         return viewmodel;
@@ -130,6 +130,10 @@ public class CouponFormActivity extends BaseActivity {
         public CouponFormFragment getFragmentAt(int position) {
             return (CouponFormFragment) registeredFragments.get(position);
         }
+
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
     }
 
     @Override
@@ -144,7 +148,7 @@ public class CouponFormActivity extends BaseActivity {
 
         if (id == R.id.action_add) {
             try {
-                viewmodel.addNewFormData();
+                viewmodel.addNewFormData(0, getIntentBoolean("mailMe"), getIntentBoolean("forIndividual"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

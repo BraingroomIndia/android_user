@@ -19,7 +19,6 @@ import io.reactivex.functions.Function;
 
 public class CouponFormDataViewModel extends ViewModel {
 
-    public final ObservableBoolean mailMe = new ObservableBoolean(true);
     public final ObservableBoolean removable = new ObservableBoolean();
     public final DataItemViewModel emailAddress;
     public final DataItemViewModel denomination;
@@ -28,14 +27,15 @@ public class CouponFormDataViewModel extends ViewModel {
     public final DataItemViewModel mobileNumber;
     public final DataItemViewModel personalisedMsg;
     public final ListDialogViewModel1 categoryVm;
-    public final Action changeView,remove;
+    public final Action remove;
 
     public final MyConsumer<CouponFormDataViewModel> removeThisFragment;
 
-    public CouponFormDataViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
+    public CouponFormDataViewModel(int couponVal, boolean mailMe, boolean forIndividual, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
                                    @NonNull HelperFactory helperFactory, final MyConsumer<CouponFormDataViewModel> removeThisFragment, int index) {
         emailAddress = new DataItemViewModel("");
         denomination = new DataItemViewModel("");
+        if (couponVal > 0) denomination.s_1.set(couponVal + "");
         nosCoupons = new DataItemViewModel("");
         recipientsName = new DataItemViewModel(null);
         mobileNumber = new DataItemViewModel(null);
@@ -51,7 +51,7 @@ public class CouponFormDataViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, null,"");
+        }), new HashMap<String, Integer>(), true, null, "");
 
         this.removeThisFragment = removeThisFragment;
         remove = new Action() {
@@ -61,20 +61,16 @@ public class CouponFormDataViewModel extends ViewModel {
             }
         };
 
-        changeView = new Action() {
-            @Override
-            public void run() throws Exception {
-                if (mailMe.get()) {
-                    recipientsName.s_1.set(null);
-                    mobileNumber.s_1.set(null);
-                    personalisedMsg.s_1.set(null);
-                } else {
-                    recipientsName.s_1.set("");
-                    mobileNumber.s_1.set("");
-                    personalisedMsg.s_1.set("");
-                }
-            }
-        };
+        if (mailMe) {
+            recipientsName.s_1.set(null);
+            mobileNumber.s_1.set(null);
+            personalisedMsg.s_1.set(null);
+        } else {
+            recipientsName.s_1.set("");
+            mobileNumber.s_1.set("");
+            personalisedMsg.s_1.set("");
+//                }
+        }
     }
 
     public SaveGiftCouponReq.Snippet getformData() {

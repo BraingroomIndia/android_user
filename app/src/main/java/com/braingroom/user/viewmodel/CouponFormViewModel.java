@@ -34,7 +34,8 @@ public class CouponFormViewModel extends ViewModel {
     public String isGuest = "0";
     public String gUserId;
 
-    public CouponFormViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, Action notifyAdapter, CouponFormActivity.UiHelper uiHelper) {
+    public CouponFormViewModel(int couponVal, boolean mailMe, boolean forIndividual, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory,
+                               Action notifyAdapter, CouponFormActivity.UiHelper uiHelper) {
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.mHelperFactory = helperFactory;
@@ -64,7 +65,7 @@ public class CouponFormViewModel extends ViewModel {
             }
         };
         try {
-            addNewFormData();
+            addNewFormData( couponVal,  mailMe,  forIndividual);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,8 +104,8 @@ public class CouponFormViewModel extends ViewModel {
         });
     }
 
-    public void addNewFormData() throws Exception {
-        formDataList.add(new CouponFormDataViewModel(messageHelper, navigator, mHelperFactory, new MyConsumer<CouponFormDataViewModel>() {
+    public void addNewFormData(int couponVal, boolean mailMe, boolean forIndividual) throws Exception {
+        formDataList.add(new CouponFormDataViewModel( couponVal,  mailMe,  forIndividual,messageHelper, navigator, mHelperFactory, new MyConsumer<CouponFormDataViewModel>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull CouponFormDataViewModel vm) {
                 try {

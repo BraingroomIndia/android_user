@@ -58,29 +58,6 @@
                     android:paddingTop="@dimen/padding_med">
 
 
-                    <RadioGroup
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:layout_marginBottom="@dimen/margin_small"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@={vm.mailMe}"
-                            android:onClick="@{vm.changeView}"
-                            android:text="Buy coupon for self" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{!vm.mailMe}"
-                            android:onClick="@{vm.changeView}"
-                            android:text="Buy coupon for others" />
-
-                    </RadioGroup>
-
                     <include
                         layout="@layout/floating_label_edit_text"
                         app:data="@{vm.denomination}"
