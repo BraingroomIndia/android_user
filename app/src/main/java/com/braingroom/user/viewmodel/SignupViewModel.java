@@ -1,4 +1,4 @@
-package com.braingroom.user.viewmodel.fragment;
+package com.braingroom.user.viewmodel;
 
 import android.content.DialogInterface;
 import android.databinding.ObservableField;
@@ -35,6 +35,8 @@ import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ListDialogViewModel1;
 import com.braingroom.user.viewmodel.OTPReq;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
+import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
 
 import org.jetbrains.annotations.Contract;
 
@@ -70,7 +72,7 @@ public class SignupViewModel extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP,onEditMobile;
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP,onEditMobile,onResendOTP;
 
     public final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
@@ -311,9 +313,16 @@ public class SignupViewModel extends ViewModel {
 
                                         }
                                     });
+                        else messageHelper.show(resp.getResMsg());
 
                     }
                 });
+            }
+        };
+        onResendOTP = new Action() {
+            @Override
+            public void run() throws Exception {
+                requestOTP(mobileNumber.s_1.get());
             }
         };
         onEditMobile = new Action() {

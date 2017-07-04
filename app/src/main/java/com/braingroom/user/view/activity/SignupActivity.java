@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.response.CommonIdResp;
+import com.braingroom.user.utils.SmsReceiver;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.view.fragment.DynamicSearchSelectListFragment;
@@ -19,10 +21,9 @@ import com.braingroom.user.view.fragment.Signup1Fragment;
 import com.braingroom.user.view.fragment.Signup2Fragment;
 import com.braingroom.user.view.fragment.Signup3Fragment;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.braingroom.user.viewmodel.fragment.SignupViewModel;
+import com.braingroom.user.viewmodel.SignupViewModel;
 
 import io.reactivex.functions.Consumer;
-import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
 
 public class SignupActivity extends BaseActivity {
@@ -57,6 +58,7 @@ public class SignupActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getSupportActionBar().setElevation(0);
+        SmsReceiver smsReceiver = new SmsReceiver();
         viewModel = new SignupViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new UiHelper() {
 
             @Override
@@ -80,7 +82,7 @@ public class SignupActivity extends BaseActivity {
             }
 
             @Override
-            public void editMobileNumber(final String uuid){
+            public void editMobileNumber(final String uuid) {
                 new MaterialDialog.Builder(SignupActivity.this)
                         .title("Contact details")
                         .content("Please enter your mobile number")
@@ -95,16 +97,21 @@ public class SignupActivity extends BaseActivity {
                                 if (input.length() > 10 || input.length() < 10) {
                                     getMessageHelper().show("Mobile number must be exactly 10 characters long");
                                 } else {
-                                    final String mobile=input.toString();
+                                    final String mobile = input.toString();
                                     ProfileUpdateReq.Snippet snippet = new ProfileUpdateReq.Snippet();
                                     snippet.setUuid(uuid);
                                     snippet.setMobile(mobile);
-                                    getMessageHelper().showProgressDialog("Wait","Updating Mobile Number");
+                                    getMessageHelper().showProgressDialog("Wait", "Updating Mobile Number");
                                     vm.apiService.updateProfile(new ProfileUpdateReq(snippet)).subscribe(new Consumer<CommonIdResp>() {
                                         @Override
                                         public void accept(@io.reactivex.annotations.NonNull CommonIdResp commonIdResp) throws Exception {
                                             getMessageHelper().dismissActiveProgress();
-                                            ((SignupViewModel) vm).requestOTP(mobile);
+                                            try {
+                                                viewModel.requestOTP(mobile);
+                                            } catch (Exception e) {
+                                                Log.d("Cast error", "accept:" + e.toString());
+                                            }
+
                                         }
                                     });
 
