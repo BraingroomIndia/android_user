@@ -19,7 +19,6 @@ import io.reactivex.functions.Function;
 
 public class CouponFormDataViewModel extends ViewModel {
 
-    public final ObservableBoolean mailMe = new ObservableBoolean(true);
     public final ObservableBoolean removable = new ObservableBoolean();
     public final DataItemViewModel emailAddress;
     public final DataItemViewModel denomination;
@@ -64,15 +63,15 @@ public class CouponFormDataViewModel extends ViewModel {
         changeView = new Action() {
             @Override
             public void run() throws Exception {
-                if (mailMe.get()) {
-                    recipientsName.s_1.set(null);
-                    mobileNumber.s_1.set(null);
-                    personalisedMsg.s_1.set(null);
-                } else {
-                    recipientsName.s_1.set("");
-                    mobileNumber.s_1.set("");
-                    personalisedMsg.s_1.set("");
-                }
+//                if (mailMe.get()) {
+//                    recipientsName.s_1.set(null);
+//                    mobileNumber.s_1.set(null);
+//                    personalisedMsg.s_1.set(null);
+//                } else {
+//                    recipientsName.s_1.set("");
+//                    mobileNumber.s_1.set("");
+//                    personalisedMsg.s_1.set("");
+//                }
             }
         };
     }

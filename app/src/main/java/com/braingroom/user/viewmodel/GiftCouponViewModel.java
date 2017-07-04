@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
@@ -17,6 +18,9 @@ public class GiftCouponViewModel extends ViewModel {
 
     public final ShowcaseGiftcardListViewModel individualVm, corporateVm, ngoVm;
     public final ObservableField<String> couponValue;
+
+    public final ObservableBoolean mailMe = new ObservableBoolean(true);
+    public final ObservableBoolean forIndividual = new ObservableBoolean(true);
 
     public final Action openCouponForm;
 
@@ -42,5 +46,6 @@ public class GiftCouponViewModel extends ViewModel {
                 }
             }
         };
+
     }
 }
