@@ -16,7 +16,7 @@ import com.braingroom.user.UserApplication;
 
 public class SmsReceiver extends BroadcastReceiver {
     //TODO change sms origin key
-    public static final String SMS_ORIGIN = "ANHIVE";
+    public static final String SMS_ORIGIN = "BRAING";
     // special character to prefix the otp. Make sure this character appears only once in the sms
     public static final String OTP_DELIMITER = ":";
     static String message;
@@ -38,7 +38,7 @@ public class SmsReceiver extends BroadcastReceiver {
                         if (!senderAddress.toLowerCase().contains(SMS_ORIGIN.toLowerCase())) {
                             return;
                         } else {
-                            UserApplication.getInstance().getOtpArrived().onNext(true);
+                            UserApplication.getInstance().getOtpArrived().onNext(getVerificationCode());
                             return;
                         }
                     }
@@ -57,15 +57,14 @@ public class SmsReceiver extends BroadcastReceiver {
      *      
      */
     public static String getVerificationCode() {
-        String code;
+        String code = "";
         int index = message.indexOf(OTP_DELIMITER);
         if (index != -1) {
             int start = index + 2;
             int length = 6;
             code = message.substring(start, start + length);
             Log.e(TAG, "OTP received: " + code);
-            return code;
         }
-        return null;
+        return code;
     }
 }

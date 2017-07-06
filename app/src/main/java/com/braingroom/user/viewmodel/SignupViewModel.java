@@ -1,18 +1,19 @@
 package com.braingroom.user.viewmodel;
 
-import android.content.DialogInterface;
+/*import android.content.DialogInterface;*/
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+/*import android.util.Log;*/
 import android.util.Log;
 import android.util.Pair;
 import android.util.Patterns;
-
+/*
 import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.MaterialDialog;*/
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ListDialogData1;
-import com.braingroom.user.model.request.ProfileUpdateReq;
+/*import com.braingroom.user.model.request.ProfileUpdateReq;*/
 import com.braingroom.user.model.request.SignUpReq;
 import com.braingroom.user.model.request.SubmitOTPReq;
 import com.braingroom.user.model.response.BaseResp;
@@ -29,12 +30,12 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SignupActivity;
-import com.braingroom.user.viewmodel.DataItemViewModel;
+/*import com.braingroom.user.viewmodel.DataItemViewModel;
 import com.braingroom.user.viewmodel.DatePickerViewModel;
 import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ListDialogViewModel1;
 import com.braingroom.user.viewmodel.OTPReq;
-import com.braingroom.user.viewmodel.ViewModel;
+import com.braingroom.user.viewmodel.ViewModel;*/
 import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
 
@@ -498,12 +499,13 @@ public class SignupViewModel extends ViewModel {
 
     @Override
     public void onResume() {
-        otpDisposable = UserApplication.getInstance().getOtpArrived().subscribe(new Consumer<Boolean>() {
+        otpDisposable = UserApplication.getInstance().getOtpArrived().subscribe(new Consumer<String>() {
             @Override
-            public void accept(Boolean isOtpAvailable) {
-                if (isOtpAvailable) {
+            public void accept(@io.reactivex.annotations.NonNull String otp) throws Exception {
+                Log.d("Otp received in signup", "accept: " +otp);
+                if (!otp.equals("")) {
                     try {
-                        OTP.set(SmsReceiver.getVerificationCode());
+                        OTP.set(otp);
                         if (!OTP.get().equals("")) {
                             submitOTP.run();
                         }

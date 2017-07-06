@@ -94,15 +94,16 @@ public class HomeActivity extends BaseActivity
                 /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
                  * Launch Monster viewer activity if a link clicked without $android_deeplink_path
                  */
-                
+
                 else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                     getReferralCode(branchUniversalObject);
-
-
                 }
+                if (linkProperties!=null)
+                    Log.d(TAG, "onInitFinished: " +linkProperties.toString());
+
             }
         }, this.getIntent().getData(), this);
-        
+
 
         if (bundle != null)
 
@@ -196,35 +197,31 @@ public class HomeActivity extends BaseActivity
                         setInterval(5000);
 
 
-        rxPermissions = new
-
-                RxPermissions(this);
-        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION).
-
-                subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Boolean granted) throws Exception {
-                        if (granted) {
-                            rxLocation.location().updates(locationRequest).subscribe(new Consumer<Location>() {
-                                @Override
-                                public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception {
-                                    LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                                    MarkerOptions markerOption = new MarkerOptions().position(myLocation).title("Your Location").
-                                            icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_0));
-                                    ((HomeViewModel) vm).mGoogleMap.addMarker(markerOption).setTag(myLocation.latitude + "," + myLocation.longitude);
-                                    ((HomeViewModel) vm).refreshMapPinsToNewLocation("" + location.getLatitude(), "" + location.getLongitude());
-                                }
-                            }, new Consumer<Throwable>() {
-                                @Override
-                                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                                    Log.d("Location", "accept: ");
-                                }
-                            });
-                        } else {
-                            getMessageHelper().show("Showing default location as chennai");
+        rxPermissions = new RxPermissions(this);
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Boolean granted) throws Exception {
+                if (granted) {
+                    rxLocation.location().updates(locationRequest).subscribe(new Consumer<Location>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception {
+                            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            MarkerOptions markerOption = new MarkerOptions().position(myLocation).title("Your Location").
+                                    icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_0));
+                            ((HomeViewModel) vm).mGoogleMap.addMarker(markerOption).setTag(myLocation.latitude + "," + myLocation.longitude);
+                            ((HomeViewModel) vm).refreshMapPinsToNewLocation("" + location.getLatitude(), "" + location.getLongitude());
                         }
-                    }
-                });
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                            Log.d("Location", "accept: ");
+                        }
+                    });
+                } else {
+                    getMessageHelper().show("Showing default location as chennai");
+                }
+            }
+        });
     }
 
     @Override
@@ -452,6 +449,7 @@ public class HomeActivity extends BaseActivity
         String referralCode = null;
         if (monster != null) {
             HashMap<String, String> referringParams = monster.getMetadata();
+            Log.d(TAG, "getReferralCode: " +referringParams.toString());
             if (!TextUtils.isEmpty(monster.getTitle())) {
                 referralCode = monster.getTitle();
                 Log.d(TAG, "getReferralCode_1: " + referralCode);

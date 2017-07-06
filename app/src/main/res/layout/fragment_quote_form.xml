@@ -44,7 +44,6 @@
 
                 <include
                     layout="@layout/item_date_dialog_opener"
-                    app:editable="@{true}"
                     app:vm="@{vm.dateVm}" />
 
                 <include

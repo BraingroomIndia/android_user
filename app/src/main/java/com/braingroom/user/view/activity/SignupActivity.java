@@ -1,5 +1,6 @@
 package com.braingroom.user.view.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.braingroom.user.view.fragment.Signup2Fragment;
 import com.braingroom.user.view.fragment.Signup3Fragment;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.SignupViewModel;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
@@ -34,6 +36,8 @@ public class SignupActivity extends BaseActivity {
     public static final String FRAGMENT_TITLE_LOCALITY = "locality";
     public static final String FRAGMENT_UG_COLLEGE = "UG College";
     public static final String FRAGMENT_PG_COLLEGE = "PG Collage";
+
+    RxPermissions rxPermissions;
 
 
     public interface UiHelper {
@@ -59,7 +63,52 @@ public class SignupActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 //        getSupportActionBar().setElevation(0);
         SmsReceiver smsReceiver = new SmsReceiver();
-        viewModel = new SignupViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new UiHelper() {
+        viewModel = (SignupViewModel) vm;
+//        FrameLayout fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+        transaction.replace(R.id.fragment_container, Signup1Fragment.newInstance()).addToBackStack(null).commit();
+
+        //Sms Read permission
+        rxPermissions = new RxPermissions(this);
+        rxPermissions.request(Manifest.permission.RECEIVE_SMS).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
+                Log.d("Message permission", "accept: " +aBoolean.toString());
+            }
+        });
+
+    }
+
+
+    public void changeToFirstFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+        transaction.replace(R.id.fragment_container, Signup1Fragment.newInstance()).addToBackStack(null).commit();
+    }
+
+    public void changeToSecondFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+        transaction.replace(R.id.fragment_container, Signup2Fragment.newInstance()).addToBackStack(null).commit();
+    }
+
+    public void changeToThirdFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+        transaction.replace(R.id.fragment_container, Signup3Fragment.newInstance()).addToBackStack(null).commit();
+    }
+
+//    public void changeToFirstFragment() {
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.setCustomAnimations(R.anim.left_in, R.anim.right_out);
+//        transaction.replace(R.id.fragment_container, Signup1Fragment.newInstance()).addToBackStack(null).commit();
+//    }
+
+    @NonNull
+    @Override
+    protected ViewModel createViewModel() {
+        return new SignupViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new UiHelper() {
 
             @Override
             public void firstFragment() {
@@ -151,42 +200,6 @@ public class SignupActivity extends BaseActivity {
                 popBackstack(tag);
             }
         });
-//        FrameLayout fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
-        transaction.replace(R.id.fragment_container, Signup1Fragment.newInstance()).addToBackStack(null).commit();
-
-    }
-
-
-    public void changeToFirstFragment() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
-        transaction.replace(R.id.fragment_container, Signup1Fragment.newInstance()).addToBackStack(null).commit();
-    }
-
-    public void changeToSecondFragment() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
-        transaction.replace(R.id.fragment_container, Signup2Fragment.newInstance()).addToBackStack(null).commit();
-    }
-
-    public void changeToThirdFragment() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
-        transaction.replace(R.id.fragment_container, Signup3Fragment.newInstance()).addToBackStack(null).commit();
-    }
-
-//    public void changeToFirstFragment() {
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.setCustomAnimations(R.anim.left_in, R.anim.right_out);
-//        transaction.replace(R.id.fragment_container, Signup1Fragment.newInstance()).addToBackStack(null).commit();
-//    }
-
-    @NonNull
-    @Override
-    protected ViewModel createViewModel() {
-        return new ViewModel();
     }
 
     @Override

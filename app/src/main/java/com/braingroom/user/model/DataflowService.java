@@ -189,7 +189,18 @@ public class DataflowService {
     }
 
     public Observable<SignUpResp> signUp(SignUpReq signUpReq) {
-        return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(new Function<Throwable, SignUpResp>() {
+                    @Override
+                    public SignUpResp apply(@NonNull Throwable throwable) throws Exception {
+                        Log.d("SignUp", "apply: " + throwable.toString());
+                        List<SignUpResp.Snippet> snippet = new ArrayList<SignUpResp.Snippet>(0);
+                        SignUpResp resp = new SignUpResp(snippet);
+                        resp.setResMsg("Some error occurred ");
+                        resp.setResCode("0");
+                        return resp;
+                    }
+                });
     }
 
     public Observable<BaseResp> submitOTP(SubmitOTPReq req) {

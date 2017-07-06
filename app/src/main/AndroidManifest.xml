@@ -47,7 +47,7 @@
         <!-- android:value="rzp_live_SN4tYAqDnzHHem" /> -->
 
         <!-- Branch init -->
-        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_ebEqU6gF7p2M7SLSz6rSyclbqAirvt2Q" />
+        <!--<meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_ebEqU6gF7p2M7SLSz6rSyclbqAirvt2Q" />-->
         <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_powBI4byZjXN0VMRt0s3MldcuCfqyv3W" />
 
         <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
@@ -107,7 +107,12 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data android:scheme="https" android:host="www.braingroom.com" />
+                <data android:scheme="http" android:host="www.braingroom.com"/>
                 <data android:scheme="https" android:host="braingroom.test-app.link" />
+                <data android:scheme="braingroom" android:host="app"/>
             </intent-filter>
 
         </activity>
@@ -277,7 +282,13 @@
         </activity>
 
         <!-- Branch install referrer tracking -->
-        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+        <!--io.branch.referral.InstallListener-->
+<!--        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>-->
+        <receiver android:name=".utils.FirstInstall" android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>

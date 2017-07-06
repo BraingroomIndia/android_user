@@ -1,5 +1,6 @@
 package com.braingroom.user.view.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.braingroom.user.view.fragment.SignUpCompetition2Fragment;
 import com.braingroom.user.view.fragment.Signup3Fragment;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.SignUpViewModelCompetition;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
@@ -36,6 +38,8 @@ public class SignUpActivityCompetition extends BaseActivity {
     public static final String FRAGMENT_TITLE_CITY = "city";
     public static final String FRAGMENT_TITLE_LOCALITY = "locality";
     public static final String FRAGMENT_UG_COLLEGE = "School List ";
+
+    RxPermissions rxPermissions;
 
     public interface UiHelper {
 
@@ -142,10 +146,13 @@ public class SignUpActivityCompetition extends BaseActivity {
     }
 
     public void changeToSecondFragment() {
+        rxPermissions = new RxPermissions(this);
+        rxPermissions.request(Manifest.permission.READ_SMS).subscribe();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
         transaction.replace(R.id.fragment_container, Signup3Fragment.newInstance()).addToBackStack(null).commit();
     }
+
 
 //    public void changeToFirstFragment() {
 //        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

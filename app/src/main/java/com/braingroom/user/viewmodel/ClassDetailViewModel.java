@@ -217,6 +217,7 @@ public class ClassDetailViewModel extends ViewModel {
         callConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
+
                 String number = null;
                 if (selectedMap.values().iterator().hasNext()) {
                     number = android.text.TextUtils.join("", selectedMap.keySet());

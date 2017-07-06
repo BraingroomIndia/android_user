@@ -32,7 +32,7 @@ public class UserApplication extends Application {
 
     private static final String TAG = UserApplication.class.getSimpleName();
 
-    public static String BASE_URL = "https://dev.braingroom.com/apis/";
+    public static String BASE_URL = "https://www.braingroom.com/apis/";
     //Edited By Vikas Godara
     public static String DEV_BASE_URL = "https://dev.braingroom.com/apis/";
     //Edited By Vikas Godara
@@ -46,7 +46,7 @@ public class UserApplication extends Application {
     PublishSubject<Boolean> newNotificationBus;
 
     @Getter
-    PublishSubject<Boolean> otpArrived;
+    PublishSubject<String> otpArrived;
 
     @Getter
     public TypedArray classPlaceholder;
@@ -83,6 +83,7 @@ public class UserApplication extends Application {
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
         internetStatusBus = PublishSubject.create();
         newNotificationBus= PublishSubject.create();
+        otpArrived = PublishSubject.create();
     }
 
     public static UserApplication getInstance() {
