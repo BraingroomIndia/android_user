@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.braingroom.user">
 
-
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="25"
@@ -14,10 +13,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-
-
 
     <application
         android:name=".UserApplication"
@@ -27,9 +24,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
@@ -46,13 +40,19 @@
         <!-- android:name="com.razorpay.ApiKey" -->
         <!-- android:value="rzp_live_SN4tYAqDnzHHem" /> -->
 
+
         <!-- Branch init -->
-        <!--<meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_ebEqU6gF7p2M7SLSz6rSyclbqAirvt2Q" />-->
-        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_powBI4byZjXN0VMRt0s3MldcuCfqyv3W" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey"
+            android:value="key_live_ebEqU6gF7p2M7SLSz6rSyclbqAirvt2Q" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey.test"
+            android:value="key_test_pexsI2ytGiNEj794aRPe2mkgFsnwUtCT" />
 
         <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
-
+        <meta-data
+            android:name="io.branch.sdk.TestMode"
+            android:value="true" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -74,6 +74,43 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".view.activity.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <data android:scheme="branchsters" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
+            <!-- AppLink config -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- note that the leading "/" is required for pathPrefix -->
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data
+                    android:host="www.braingroom.com"
+                    android:scheme="https" />
+                <data
+                    android:host="www.braingroom.com"
+                    android:scheme="http" />
+                <data
+                    android:host="ht5w.test-app.link"
+                    android:scheme="https" />
+                <data
+                    android:host="app"
+                    android:scheme="braingroom" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".view.activity.LoginActivity"
             android:label="@string/app_name">
@@ -82,38 +119,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
-
         </activity>
         <activity
             android:name=".view.activity.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-
-            <intent-filter>
-                <data android:scheme="branchsters" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-
-            <!-- AppLink config -->
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- note that the leading "/" is required for pathPrefix-->
-                <!-- Accepts URIs that begin with "example://gizmos” -->
-                <data android:scheme="https" android:host="www.braingroom.com" />
-                <data android:scheme="http" android:host="www.braingroom.com"/>
-                <data android:scheme="https" android:host="braingroom.test-app.link" />
-                <data android:scheme="braingroom" android:host="app"/>
-            </intent-filter>
 
         </activity>
         <activity
@@ -265,7 +276,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
         </activity>
-        <activity android:name=".view.activity.CouponFormActivity"
+        <activity
+            android:name=".view.activity.CouponFormActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -278,17 +290,29 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.GiftcardCouponActivity" />
-
+        </activity>
+        <activity
+            android:name=".view.activity.PaySuccessActivity"
+            android:label="@string/screen_ngo_form"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.GiftcardCouponActivity" />
         </activity>
 
+
         <!-- Branch install referrer tracking -->
-        <!--io.branch.referral.InstallListener-->
-<!--        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+        <!-- io.branch.referral.InstallListener -->
+        <!--
+            <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
-        </receiver>-->
-        <receiver android:name=".utils.FirstInstall" android:exported="true">
+        </receiver>
+        -->
+        <receiver
+            android:name=".utils.FirstInstall"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>

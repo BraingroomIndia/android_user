@@ -281,6 +281,10 @@ public class ConnectFilterViewModel extends ViewModel {
         segmentsVm.clearSelectedValue();
         myGroups.clearSelectedValue();
         allGroups.clearSelectedValue();
+        countryVm.clearSelectedValue();
+        stateVm.clearSelectedValue();
+        cityVm.clearSelectedValue();
+        localityVM.clearSelectedValue();
     }
 
     private HashMap<String, String> getHashMap(HashMap<String, Pair<String, String>> source) {

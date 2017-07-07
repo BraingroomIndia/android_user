@@ -157,13 +157,14 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LoginResp> socialLogin(String name, String profileImage, String email, String id, String fcmToken, String mobile) {
+    public Observable<LoginResp> socialLogin(String name, String profileImage, String email, String id, String fcmToken, String mobile, String referralCode) {
         SocialLoginReq.Snippet snippet = new SocialLoginReq.Snippet();
         snippet.setEmail(email);
         snippet.setFirstName(name);
         snippet.setSocialId(id);
         snippet.setPhone(mobile);
         snippet.setRegId(fcmToken);
+        snippet.setReferralCode(referralCode);
         return api.socialLogin(new SocialLoginReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 

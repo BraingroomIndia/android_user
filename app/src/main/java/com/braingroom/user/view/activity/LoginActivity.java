@@ -52,6 +52,7 @@ public class LoginActivity extends BaseActivity implements
     String thirdPartyUserId;
     String parentActivity;
     Serializable classData;
+    String referralCode;
     public static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
@@ -174,8 +175,9 @@ public class LoginActivity extends BaseActivity implements
         parentActivity = getIntentString("backStackActivity");
         classData = getIntentSerializable("classData");
         classId = getIntentString("id");
+        referralCode=getIntentString("referralCode");
 
-        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData, classId, thirdPartyUserId);
+        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData, classId, thirdPartyUserId,referralCode);
     }
 
     @Override

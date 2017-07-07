@@ -1,6 +1,8 @@
 package com.braingroom.user.viewmodel;
 
 /*import android.content.DialogInterface;*/
+
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 /*import android.util.Log;*/
@@ -50,6 +52,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
+import static com.rollbar.android.Rollbar.TAG;
+
 public class SignupViewModel extends ViewModel {
 
     public static final int TYPE_MALE = 1;
@@ -73,7 +77,9 @@ public class SignupViewModel extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP,onEditMobile,onResendOTP;
+    public final ObservableBoolean referralFieldVisible = new ObservableBoolean(true);
+
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP, onEditMobile, onResendOTP;
 
     public final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
@@ -84,7 +90,7 @@ public class SignupViewModel extends ViewModel {
     private SignUpReq.Snippet signUpSnippet;
 
 
-    public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
+    public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper, String referralCode) {
         this.navigator = navigator;
         this.messageHelper = messageHelper;
         this.uiHelper = uiHelper;
@@ -95,11 +101,17 @@ public class SignupViewModel extends ViewModel {
         mobileNumber = new DataItemViewModel("");
         referralCodeVm = new DataItemViewModel("");
         passoutYear = new DataItemViewModel("");
+
         signUpSnippet = new SignUpReq.Snippet();
         signUpSnippet.setLatitude("");
         signUpSnippet.setLongitude("");
         signUpSnippet.setProfileImage("");
         OTP = new ObservableField<>("");
+        if (referralCode != null) {
+            referralCodeVm.s_1.set(null);
+            referralFieldVisible.set(false);
+            signUpSnippet.setReferalCode(referralCode);
+        }
 
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
@@ -145,7 +157,6 @@ public class SignupViewModel extends ViewModel {
                 signUpSnippet.setCommunityId(android.text.TextUtils.join(",", communityClassVm.getSelectedItemsId()));
                 signUpSnippet.setDOB(dobVm.date.get());
                 signUpSnippet.setGender(genderVm.selectedItemsText.get());
-                signUpSnippet.setReferalCode(referralCodeVm.s_1.get());
                 apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
@@ -164,6 +175,12 @@ public class SignupViewModel extends ViewModel {
                             messageHelper.show(signUpResp.getResMsg());
                             uiHelper.back();
                         }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        Log.d(TAG, "signUp: " + throwable.toString());
 
                     }
                 });
@@ -209,6 +226,8 @@ public class SignupViewModel extends ViewModel {
                 signUpSnippet.setEmail(emailId.s_1.get());
                 signUpSnippet.setPassword(password.s_1.get());
                 signUpSnippet.setMobileNo(mobileNumber.s_1.get());
+                if (referralFieldVisible.get())
+                    signUpSnippet.setReferalCode(referralCodeVm.s_1.get());
                 signUpSnippet.setCategoryId(android.text.TextUtils.join(",", interestAreaVm.getSelectedItemsId()));
                 if (!ugInstituteVm.selectedDataMap.isEmpty() && isValidYear(passoutYear.s_1.get())) {
                     signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first);
@@ -231,6 +250,12 @@ public class SignupViewModel extends ViewModel {
                         } else {
                             messageHelper.show(signUpResp.getResMsg());
                         }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        Log.d(TAG, "signUp: " + throwable.toString());
 
                     }
                 });
@@ -276,6 +301,8 @@ public class SignupViewModel extends ViewModel {
                 signUpSnippet.setEmail(emailId.s_1.get());
                 signUpSnippet.setPassword(password.s_1.get());
                 signUpSnippet.setMobileNo(mobileNumber.s_1.get());
+                if (referralFieldVisible.get())
+                    signUpSnippet.setReferalCode(referralCodeVm.s_1.get());
                 signUpSnippet.setCategoryId(android.text.TextUtils.join(",", interestAreaVm.getSelectedItemsId()));
                 if (!ugInstituteVm.selectedDataMap.isEmpty() && isValidYear(passoutYear.s_1.get())) {
                     signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first);
@@ -317,6 +344,12 @@ public class SignupViewModel extends ViewModel {
                         else messageHelper.show(resp.getResMsg());
 
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        Log.d(TAG, "submit OTP: " + throwable.toString());
+
+                    }
                 });
             }
         };
@@ -329,7 +362,7 @@ public class SignupViewModel extends ViewModel {
         onEditMobile = new Action() {
             @Override
             public void run() throws Exception {
-                  uiHelper.editMobileNumber(uuId);
+                uiHelper.editMobileNumber(uuId);
             }
         };
 
@@ -461,7 +494,7 @@ public class SignupViewModel extends ViewModel {
 
     @Contract("null -> false")
     private static boolean isValidEmail(String target) {
-        return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        return target != null && target.contains("@");
     }
 
     @Contract("null -> false")
@@ -494,6 +527,12 @@ public class SignupViewModel extends ViewModel {
                 else
                     mobileNumber.s_1.set(mobile);
             }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                Log.d(TAG, "request Otp: " + throwable.toString());
+
+            }
         });
     }
 
@@ -502,7 +541,7 @@ public class SignupViewModel extends ViewModel {
         otpDisposable = UserApplication.getInstance().getOtpArrived().subscribe(new Consumer<String>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull String otp) throws Exception {
-                Log.d("Otp received in signup", "accept: " +otp);
+                Log.d("Otp received in signup", "accept: " + otp);
                 if (!otp.equals("")) {
                     try {
                         OTP.set(otp);

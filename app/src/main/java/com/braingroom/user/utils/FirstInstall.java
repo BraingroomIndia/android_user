@@ -32,6 +32,8 @@ public class FirstInstall extends BroadcastReceiver {
     }
 
     public void onReceive(Context context, Intent intent) {
+        InstallListener listener = new InstallListener();
+        listener.onReceive(context, intent);
         Log.d("firstInstall", "onReceive: ");
         String rawReferrerString = intent.getStringExtra("referrer");
         if (rawReferrerString != null) {

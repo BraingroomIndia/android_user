@@ -71,6 +71,8 @@ public abstract class BaseActivity extends MvvmActivity {
     private Navigator navigator;
     private DialogHelper dialogHelper;
 
+    public Toast toast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,8 +239,12 @@ public abstract class BaseActivity extends MvvmActivity {
             messageHelper = new MessageHelper() {
                 @Override
                 public void show(String message) {
+                    if (toast != null) {
+                        toast.cancel();
+                    }
                     dismissActiveProgress();
-                    Toast.makeText(BaseActivity.this, message, Toast.LENGTH_SHORT).show();
+                    toast = Toast.makeText(BaseActivity.this, message, Toast.LENGTH_SHORT);
+                    toast.show();
                 }
 
                 @Override

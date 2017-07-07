@@ -48,15 +48,19 @@ public class LoginViewmodel extends ViewModel {
     String parentActivity;
     String classId;
     String thirdPartyUserId;
+    private final String referralCode;
     Serializable classData;
 
-    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity, Serializable data, String classId, String thirdPartyUserId) {
+
+    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity,
+                          Serializable data, String classId, String thirdPartyUserId, final String referralCode) {
         this.parentActivity = parentActivity;
         this.classData = data;
         this.thirdPartyUserId = thirdPartyUserId;
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.classId = classId;
+        this.referralCode = referralCode;
         onLoginClicked = new Action() {
             @Override
             public void run() throws Exception {
@@ -96,14 +100,16 @@ public class LoginViewmodel extends ViewModel {
         onSignupClicked = new Action() {
             @Override
             public void run() throws Exception {
-                navigator.navigateActivity(SignupActivity.class, null);
+                Bundle data = new Bundle();
+                data.putString("referralCode", referralCode);
+                navigator.navigateActivity(SignupActivity.class, data);
             }
         };
 
     }
 
     public void emailLogin() {
-        Observable<LoginResp> myObserb = apiService.login(email.get(), password.get(), pref.getString(Constants.FCM_TOKEN, "1234"));
+        Observable<LoginResp> myObserb = apiService.login(email.get(), password.get(), pref.getString(Constants.FCM_TOKEN, ""));
         myObserb.subscribe(new Consumer<LoginResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
@@ -182,7 +188,7 @@ public class LoginViewmodel extends ViewModel {
         fcmToken = pref.getString(Constants.FCM_TOKEN, "");
 
 
-        apiService.socialLogin(name, picture, email, socialId, fcmToken, "").subscribe(new Consumer<LoginResp>() {
+        apiService.socialLogin(name, picture, email, socialId, fcmToken, "", referralCode).subscribe(new Consumer<LoginResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
 
@@ -226,10 +232,7 @@ public class LoginViewmodel extends ViewModel {
                         navigator.finishActivity();
                     }
                 } else {
-                    String fcmToken = pref.getString(Constants.FCM_TOKEN, "");
-                    editor.clear();
-                    editor.putString(Constants.FCM_TOKEN, fcmToken);
-                    editor.commit();
+                    logOut();
                     messageHelper.show(loginResp.getResMsg());
                 }
 
@@ -237,6 +240,7 @@ public class LoginViewmodel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                logOut();
                 messageHelper.show("some error occurred");
             }
         });
@@ -268,7 +272,7 @@ public class LoginViewmodel extends ViewModel {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        return password.length() > 1;
     }
 
 

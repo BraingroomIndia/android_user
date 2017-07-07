@@ -22,22 +22,33 @@ public class SocialLoginReq {
         String userType = "2";
 
         String phone = "";
+
         @SerializedName("first_name")
         String firstName;
+
         @SerializedName("last_name")
         String lastName = "";
-        String email;
+
+        @SerializedName("email")
+        String email ="";
+
         @SerializedName("social_network_id")
         String socialId = "";
+
         @SerializedName("address_latitude")
         String latitude = "";
+
         @SerializedName("address_longitude")
         String longitude = "";
+
         @SerializedName("ip_address")
         String ipAddress = "";
 
         @SerializedName("reg_id")
         String regId = "";
+
+        @SerializedName("referralCode")
+        String referralCode;
 
     }
 

@@ -22,12 +22,14 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
+import lombok.Getter;
 
 public class CommentsViewModel extends ViewModel {
 
     public final Action onSendClicked;
     public Observable<List<ViewModel>> commentsVmObservable;
     public final PublishSubject<List<ViewModel>> commentsVm;
+
 
     public ObservableField<String> comment = new ObservableField<>();
 
@@ -59,7 +61,7 @@ public class CommentsViewModel extends ViewModel {
                     return;
                 }
 
-                if (comment.get().length() < 5) {
+                if (comment.get().length() < 1) {
                     messageHelper.show("comment must be more than 5 characters");
                     return;
                 }

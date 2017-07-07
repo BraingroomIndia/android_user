@@ -1,7 +1,9 @@
 package com.braingroom.user.viewmodel;
 
+import com.braingroom.user.model.request.ChangeNotificationStatusReq;
 import com.braingroom.user.model.response.MessageListResp;
 import com.braingroom.user.model.response.NotificationListResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -27,6 +29,10 @@ public class NotificationViewModel extends ViewModel {
                             results.add(new NotificationsItemViewModel(navigator, elem.getNotificationId(),elem.getDescription(), elem.getPostId(),
                                     "", "1".equals(elem.getStatus())));
                         }
+                        ChangeNotificationStatusReq.Snippet snippet =
+                                new ChangeNotificationStatusReq.Snippet(pref.getString(Constants.BG_ID,""),"");
+                       if (resp.getResCode().equals("1"))
+                        apiService.changeNotificationStatus(snippet).subscribe();
                         return results;
                     }
                 });

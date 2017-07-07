@@ -21,6 +21,7 @@ import com.facebook.stetho.Stetho;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.branch.referral.Branch;
 import io.fabric.sdk.android.Fabric;
 import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
@@ -32,7 +33,7 @@ public class UserApplication extends Application {
 
     private static final String TAG = UserApplication.class.getSimpleName();
 
-    public static String BASE_URL = "https://www.braingroom.com/apis/";
+    public static String BASE_URL = "https://dev.braingroom.com/apis/";
     //Edited By Vikas Godara
     public static String DEV_BASE_URL = "https://dev.braingroom.com/apis/";
     //Edited By Vikas Godara
@@ -66,6 +67,7 @@ public class UserApplication extends Application {
         super.onCreate();
         MultiDex.install(this);
         Fabric.with(this, new Crashlytics());
+        Branch.getAutoInstance(this);
 //        if (LeakCanary.isInAnalyzerProcess(this)) {
 //            return;
 //        }

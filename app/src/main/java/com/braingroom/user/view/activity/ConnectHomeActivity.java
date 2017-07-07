@@ -547,6 +547,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId, List<String> location) {
         if (pager.getCurrentItem() == 0) {
             learnersFilter.setSearchQuery(keyword);
+            learnersFilter.setCategId(categoryId);
             learnersFilter.setGroupId(allGroupId);
             learnersFilter.setCountryId(location.get(0));
             learnersFilter.setStateId(location.get(1));

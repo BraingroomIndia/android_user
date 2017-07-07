@@ -54,6 +54,8 @@ public class SignupActivity extends BaseActivity {
 
     }
 
+    private String referralCode;
+
     @Getter
     SignupViewModel viewModel;
 
@@ -64,6 +66,7 @@ public class SignupActivity extends BaseActivity {
 //        getSupportActionBar().setElevation(0);
         SmsReceiver smsReceiver = new SmsReceiver();
         viewModel = (SignupViewModel) vm;
+
 //        FrameLayout fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
@@ -74,7 +77,7 @@ public class SignupActivity extends BaseActivity {
         rxPermissions.request(Manifest.permission.RECEIVE_SMS).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
-                Log.d("Message permission", "accept: " +aBoolean.toString());
+                Log.d("Message permission", "accept: " + aBoolean.toString());
             }
         });
 
@@ -108,6 +111,7 @@ public class SignupActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
+        referralCode = getIntentString("referralCode");
         return new SignupViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new UiHelper() {
 
             @Override
@@ -199,7 +203,7 @@ public class SignupActivity extends BaseActivity {
             public void remove(String tag) {
                 popBackstack(tag);
             }
-        });
+        }, referralCode);
     }
 
     @Override

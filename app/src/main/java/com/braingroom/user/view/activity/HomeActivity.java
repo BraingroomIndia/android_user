@@ -84,25 +84,6 @@ public class HomeActivity extends BaseActivity
         final Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
-        Branch.getInstance(getApplicationContext()).initSession(new Branch.BranchUniversalReferralInitListener() {
-            @Override
-            public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
-                //If not Launched by clicking Branch link
-                if (branchUniversalObject == null) {
-                    Log.d(TAG, "onInitFinished: branchUniversalObject is null");
-                }
-                /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
-                 * Launch Monster viewer activity if a link clicked without $android_deeplink_path
-                 */
-
-                else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
-                    getReferralCode(branchUniversalObject);
-                }
-                if (linkProperties!=null)
-                    Log.d(TAG, "onInitFinished: " +linkProperties.toString());
-
-            }
-        }, this.getIntent().getData(), this);
 
 
         if (bundle != null)
@@ -346,6 +327,7 @@ public class HomeActivity extends BaseActivity
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
                 return true;
             }
+
             getNavigator().navigateActivity(NotificationActivity.class, null);
             return true;
         }
@@ -449,15 +431,14 @@ public class HomeActivity extends BaseActivity
         String referralCode = null;
         if (monster != null) {
             HashMap<String, String> referringParams = monster.getMetadata();
-            Log.d(TAG, "getReferralCode: " +referringParams.toString());
-            if (!TextUtils.isEmpty(monster.getTitle())) {
-                referralCode = monster.getTitle();
-                Log.d(TAG, "getReferralCode_1: " + referralCode);
-            } else if (referringParams.containsKey("referral_code")) {
-                String name = referringParams.get("referral_code");
+            if (referringParams.containsKey("referral")) {
+                String name = referringParams.get("referral");
                 if (!TextUtils.isEmpty(name)) {
                     referralCode = name;
-                    Log.d(TAG, "getReferralCode_2: " + referralCode);
+                    Log.d(TAG, "getReferralCode: " + referralCode);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("referralCode",referralCode);
+                    getNavigator().navigateActivity(LoginActivity.class,bundle);
                 }
             }
         }
