@@ -22,16 +22,27 @@ import com.braingroom.user.viewmodel.ViewModel;
 import com.payUMoney.sdk.PayUmoneySdkInitilizer;
 import com.payUMoney.sdk.SdkConstants;
 import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
 import io.reactivex.functions.Action;
 
-public class CouponFormActivity extends BaseActivity {
+public class CouponFormActivity extends BaseActivity implements PaymentResultListener {
 
     ViewPager pager;
     public PagerAdapter pagerAdapter;
     public CouponFormViewModel viewmodel;
+
+    @Override
+    public void onPaymentSuccess(String razorpayKey) {
+        ((CouponFormViewModel) vm).updatePaymentSuccess(razorpayKey);
+    }
+
+    @Override
+    public void onPaymentError(int i, String reason) {
+        getMessageHelper().show("Payment Failure, Reason : " + reason);
+    }
 
     public interface UiHelper {
         void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);

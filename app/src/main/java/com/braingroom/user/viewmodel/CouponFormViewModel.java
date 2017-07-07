@@ -77,6 +77,7 @@ public class CouponFormViewModel extends ViewModel {
 
 
     public void saveGiftCoupon(String userId) {
+        messageHelper.showProgressDialog("Please Wait...", "We are fetching more details");
         gUserId = userId;
         SaveGiftCouponReq req = new SaveGiftCouponReq();
         SaveGiftCouponReq.Snippet snippet = new SaveGiftCouponReq.Snippet();
@@ -96,6 +97,7 @@ public class CouponFormViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull SaveGiftCouponResp resp) throws Exception {
 
                 if ("1".equals(resp.getResCode())) {
+                    messageHelper.dismissActiveProgress();
                     couponPayData = resp.getData().get(0);
                     startPayment(resp.getData().get(0).getPrice(), resp.getData().get(0).getMobile(), resp.getData().get(0).getEmail());
                 }
@@ -103,7 +105,8 @@ public class CouponFormViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-
+                messageHelper.dismissActiveProgress();
+                messageHelper.show("some error occurred");
             }
         });
     }
@@ -146,24 +149,27 @@ public class CouponFormViewModel extends ViewModel {
     }
 
     public void updatePaymentSuccess(String txnId) {
+        messageHelper.showProgressDialog("Processing", "finalizing your purchase");
         RazorBuySuccessReq.Snippet req = new RazorBuySuccessReq.Snippet();
         req.setUserId(gUserId);
         req.setAmount(couponPayData.getPrice() + "");
-        req.setIsGuest(isGuest+"");
+        req.setIsGuest(isGuest + "");
         req.setTermId(couponPayData.getTermId());
         req.setTxnid(txnId);
         req.setUserEmail(couponPayData.getEmail());
-        req.setUserMobile(couponPayData.getMobile());
+        req.setUserMobile("" + couponPayData.getMobile());
         apiService.updateCouponPaymentSuccess(new RazorBuySuccessReq(req)).subscribe(new Consumer<BaseResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                 if ("1".equals(baseResp.getResCode())) {
+                    messageHelper.dismissActiveProgress();
                     messageHelper.show(baseResp.getResMsg());
                 }
             }
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                messageHelper.dismissActiveProgress();
                 messageHelper.show("something went wrong!");
             }
         });
