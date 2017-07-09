@@ -14,9 +14,13 @@ import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.dto.PayUCheckoutData;
 import com.braingroom.user.model.request.PayUBookingDetailsReq;
 import com.braingroom.user.model.request.PromocodeReq;
+import com.braingroom.user.model.request.RazorBuySuccessReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
+import com.braingroom.user.model.request.SaveGiftCouponReq;
+import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
+import com.braingroom.user.model.response.SaveGiftCouponResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
@@ -78,6 +82,7 @@ public class CheckoutViewModel extends ViewModel {
     public final List<String> pricingTableList = new ArrayList<>();
 
     public String selectedLocalityId;
+    String gUserId;
 
     public int isGuest = 0;
 
@@ -93,6 +98,8 @@ public class CheckoutViewModel extends ViewModel {
     private PayUChecksum checksum;
 
     final Map<String, Integer> sublevelTextMap = new HashMap<>();
+
+    public SaveGiftCouponResp.Snippet couponPayData;
 
     public interface UiHelper {
         void onGuestLoginSuccess(String userId);
@@ -163,7 +170,7 @@ public class CheckoutViewModel extends ViewModel {
                     selectedLocalityId = "" + selectedData.values().iterator().next();
                 }
             }
-        },"");
+        }, "");
         if (!isLocation.get())
             selectedLocalityId = "-1";
 
@@ -208,7 +215,7 @@ public class CheckoutViewModel extends ViewModel {
                                         if (isGift) {
                                             collectGiftingDetails(userId, GUEST_USER);
                                         } else
-                                            startPayment(userId, GUEST_USER, "", "", "");
+                                            startPayment(userId, GUEST_USER);
                                     } catch (JSONException e) {
                                         messageHelper.show("Something went wrong. JSON error");
                                     }
@@ -218,13 +225,13 @@ public class CheckoutViewModel extends ViewModel {
                                 public void onCollectGiftDetail(String name, String email, String personalMsg) {
 
                                 }
-                            }, classData.getId(),CheckoutActivity.class.getSimpleName()), false);
+                            }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
                     return;
                 }
                 if (isGift) {
                     collectGiftingDetails(pref.getString(Constants.BG_ID, ""), REGISTERED_USER);
                 } else
-                    startPayment(pref.getString(Constants.BG_ID, ""), REGISTERED_USER, "", "", "");
+                    startPayment(pref.getString(Constants.BG_ID, ""), REGISTERED_USER);
 
             }
         };
@@ -253,7 +260,7 @@ public class CheckoutViewModel extends ViewModel {
                                 public void onCollectGiftDetail(String name, String email, String personalMsg) {
 
                                 }
-                            }, classData.getId(),CheckoutActivity.class.getSimpleName()), false);
+                            }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
 
                 } else {
                     promoCode.set("");
@@ -316,7 +323,68 @@ public class CheckoutViewModel extends ViewModel {
 
     }
 
-    public void startPayment(String userId, int isGuest, String giftRecepientEmail, String giftRecepientName, String giftPersonalMsg) throws JSONException {
+    public void saveGiftClassData(String userId, int isGuest, String giftRecepientEmail, String giftRecepientName, String giftPersonalMsg) {
+
+        gUserId = userId;
+
+        SaveGiftCouponReq.GiftDetails data = new SaveGiftCouponReq.GiftDetails();
+        data.setClassId(classData.getId());
+        data.setDenomination(totalAmountAfterPromo.get() + "");
+        data.setEmailId(giftRecepientEmail);
+        data.setRecipientName(giftRecepientName);
+        data.setComment(giftPersonalMsg);
+        data.setMobile("");
+
+        List<SaveGiftCouponReq.GiftDetails> dataList = new ArrayList<>();
+        dataList.add(data);
+
+        SaveGiftCouponReq req = new SaveGiftCouponReq();
+        SaveGiftCouponReq.Snippet snippet = new SaveGiftCouponReq.Snippet();
+
+        snippet.setUserId(userId);
+        snippet.setGiftBy("");
+        snippet.setGiftType("");
+        snippet.setIsGuest(isGuest);
+
+        snippet.setGiftDetails(dataList);
+        req.setData(snippet);
+
+        apiService.saveGiftCoupon(req).subscribe(new Consumer<SaveGiftCouponResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull SaveGiftCouponResp resp) throws Exception {
+                if ("1".equals(resp.getResCode())) {
+                    messageHelper.dismissActiveProgress();
+                    couponPayData = resp.getData().get(0);
+                    startRazorpayPayment(resp.getData().get(0).getPrice(), resp.getData().get(0).getMobile(), resp.getData().get(0).getEmail());
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                messageHelper.dismissActiveProgress();
+                messageHelper.show("some error occurred");
+            }
+        });
+    }
+
+    public void startRazorpayPayment(int amount, String mobile, String email) throws JSONException {
+        JSONObject options = new JSONObject();
+        options.put("name", "Gift Coupon");
+        options.put("description", "By: Braingroom.com");
+        //You can omit the image option to fetch the image from dashboard
+        options.put("image", "https://www.braingroom.com/homepage/img/logo.jpg");
+        options.put("currency", "INR");
+        options.put("amount", "" + amount * 100);
+
+        JSONObject preFill = new JSONObject();
+        preFill.put("email", email);
+        preFill.put("contact", mobile);
+        options.put("prefill", preFill);
+        uiHelper.startRazorpayPayment(options);
+    }
+
+
+    public void startPayment(String userId, int isGuest) throws JSONException {
         if (totalAmountAfterPromo.get() != 0) {
             PayUBookingDetailsReq.Snippet snippet = new PayUBookingDetailsReq.Snippet();
             snippet.setTxnId(UUID.randomUUID().toString());
@@ -394,6 +462,7 @@ public class CheckoutViewModel extends ViewModel {
         } else {
             messageHelper.show("select classes first");
         }
+
     }
 
     public String getLevelsTitleText(String levelName) {
@@ -417,60 +486,84 @@ public class CheckoutViewModel extends ViewModel {
 
                     @Override
                     public void onCollectGiftDetail(String name, String email, String personalMsg) {
-                        try {
-                            startPayment(userId, type, email, name, personalMsg);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        saveGiftClassData(userId, type, email, name, personalMsg);
+
                     }
                 }), false);
     }
 
     public void handleRazorpaySuccess(String razorpayId) {
+        if (isGift.get()) {
+            messageHelper.showProgressDialog("Processing", "finalizing your purchase");
+            RazorBuySuccessReq.Snippet req = new RazorBuySuccessReq.Snippet();
+            req.setUserId(gUserId);
+            req.setAmount(couponPayData.getPrice() + "");
+            req.setIsGuest(isGuest + "");
+            req.setTermId(couponPayData.getTermId());
+            req.setTxnid(razorpayId);
+            req.setUserEmail(couponPayData.getEmail());
+            req.setUserMobile("" + couponPayData.getMobile());
+            apiService.updateCouponPaymentSuccess(new RazorBuySuccessReq(req)).subscribe(new Consumer<BaseResp>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+                    if ("1".equals(baseResp.getResCode())) {
+                        messageHelper.dismissActiveProgress();
+                        messageHelper.show(baseResp.getResMsg());
+                        // TODO: 09/07/17 show success screen for gift coupon 
+                    }
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show("something went wrong!");
+                }
+            });
+        } else {
+            messageHelper.showDismissInfo(null, "Processing your payment...");
+            RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
+            snippet.setAmount("" + totalAmountAfterPromo.get());
+            snippet.setClassId(classData.getId());
+            snippet.setUserId(mChekcoutData.getUdf1());
+            snippet.setLocalityId(selectedLocalityId);
+            snippet.setTxnid(razorpayId);
+            snippet.setUserEmail(mChekcoutData.getEmail());
+            snippet.setUserMobile(mChekcoutData.getPhone());
+            snippet.setUserId(mChekcoutData.getUdf1());
+            snippet.setIsGuest(isGuest);
 
-        messageHelper.showDismissInfo(null, "Processing your payment...");
-        RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
-        snippet.setAmount("" + totalAmountAfterPromo.get());
-        snippet.setClassId(classData.getId());
-        snippet.setUserId(mChekcoutData.getUdf1());
-        snippet.setLocalityId(selectedLocalityId);
-        snippet.setTxnid(razorpayId);
-        snippet.setUserEmail(mChekcoutData.getEmail());
-        snippet.setUserMobile(mChekcoutData.getPhone());
-        snippet.setUserId(mChekcoutData.getUdf1());
-        snippet.setIsGuest(isGuest);
+            class tickets {
+                public tickets(List<RazorSuccessReq.Levels> levelsList) {
+                    this.levelsList = levelsList;
+                }
 
-        class tickets {
-            public tickets(List<RazorSuccessReq.Levels> levelsList) {
-                this.levelsList = levelsList;
+                List<RazorSuccessReq.Levels> levelsList;
             }
-
-            List<RazorSuccessReq.Levels> levelsList;
+            List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
+            for (ViewModel nonReactiveItem : nonReactiveItems) {
+                if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                    levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
+                }
+            }
+            tickets ticket = new tickets(levelsList);
+            String temp = gson.toJson(levelsList);
+            temp = "{\"tickets\":" + temp + "}";
+            snippet.setTickets(temp);
+            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).subscribe(new Consumer<RazorSuccessResp>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show(resp.getResMsg());
+                    navigator.finishActivity();
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show(throwable.getMessage());
+                }
+            });
         }
-        List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
-        for (ViewModel nonReactiveItem : nonReactiveItems) {
-            if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
-                levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
-            }
-        }
-        tickets ticket = new tickets(levelsList);
-        String temp = gson.toJson(levelsList);
-        temp = "{\"tickets\":" + temp + "}";
-        snippet.setTickets(temp);
-        apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).subscribe(new Consumer<RazorSuccessResp>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
-                messageHelper.dismissActiveProgress();
-                messageHelper.show(resp.getResMsg());
-                navigator.finishActivity();
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                messageHelper.dismissActiveProgress();
-                messageHelper.show(throwable.getMessage());
-            }
-        });
     }
 
     public PayuHashes generateHashFromSDK(PaymentParams mPaymentParams, String salt) {
