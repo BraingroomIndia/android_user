@@ -93,6 +93,7 @@ public class ClassListViewModel1 extends ViewModel {
     private int currentPage = -1;
     private boolean segmentAvailable = false;
     private boolean isCatalogue = false;
+    private String origin;
 
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
@@ -107,7 +108,8 @@ public class ClassListViewModel1 extends ViewModel {
                                HashMap<String, String> vendorListMap, @Nullable final String origin, final ClassListActivity.UiHelper uiHelper) {
 
 
-        if (origin != null && origin.equals(ORIGIN_CATALOG))
+        this.origin=origin;
+        if (this.origin != null && this.origin.equals(ORIGIN_CATALOG))
             isCatalogue = true;
         categoryFilterMap = categoryMap;
         segmentsFilterMap = segmentsMap;
@@ -390,6 +392,8 @@ public class ClassListViewModel1 extends ViewModel {
                 this.classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classType");
                 this.classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classSchedule");
                 this.vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra("vendorList");
+                this.origin=data.getStringExtra("origin");
+                if (origin.equals(ORIGIN_CATALOG))
 
 
                 if (categoryFilterMap.isEmpty()) {

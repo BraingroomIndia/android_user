@@ -157,11 +157,13 @@ public class SignupViewModel extends ViewModel {
                 signUpSnippet.setCommunityId(android.text.TextUtils.join(",", communityClassVm.getSelectedItemsId()));
                 signUpSnippet.setDOB(dobVm.date.get());
                 signUpSnippet.setGender(genderVm.selectedItemsText.get());
+                messageHelper.showProgressDialog("Signup in", "Sit back while we set up your profile...");
                 apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
+                            messageHelper.dismissActiveProgress();
                             userId = signUpResp.getData().get(0).getUserId();
                             uuId = signUpResp.getData().get(0).getUuid();
                             requestOTP(mobileNumber.s_1.get());
@@ -233,11 +235,13 @@ public class SignupViewModel extends ViewModel {
                     signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first);
                     signUpSnippet.setInstitutePoy1(passoutYear.s_1.get());
                 }
+                messageHelper.showProgressDialog("Signup in", "Sit back while we set up your profile...");
                 apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
+                            messageHelper.dismissActiveProgress();
                             userId = signUpResp.getData().get(0).getUserId();
                             uuId = signUpResp.getData().get(0).getUuid();
                             requestOTP(mobileNumber.s_1.get());

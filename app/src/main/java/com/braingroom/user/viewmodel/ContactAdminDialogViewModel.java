@@ -18,7 +18,7 @@ import io.reactivex.functions.Consumer;
 public class ContactAdminDialogViewModel extends CustomDialogViewModel {
     public final DataItemViewModel nameVm, mobileVm, emailVm, dateVm;
     public final ObservableField<String> message;
-    public final Action onSubmit;
+    public final Action onSubmit,onDissmis;
 
     public ContactAdminDialogViewModel(@NonNull final MessageHelper messageHelper,
                                        @NonNull final Navigator navigator, final String classId) {
@@ -58,6 +58,12 @@ public class ContactAdminDialogViewModel extends CustomDialogViewModel {
                     }
                 });
 
+            }
+        };
+        onDissmis = new Action() {
+            @Override
+            public void run() throws Exception {
+                dismissDialog();
             }
         };
 

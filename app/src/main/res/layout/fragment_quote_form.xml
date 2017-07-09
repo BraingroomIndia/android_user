@@ -34,13 +34,13 @@
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.organizationName}"
                     app:editable="@{true}"
-                    app:hintText='@{"Organization Name"}' />
+                    app:hintText='@{"Organization Name" + vm.mandatory}' />
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.audienceStrength}"
                     app:editable="@{true}"
-                    app:hintText='@{"Expected audience strength"}' />
+                    app:hintText='@{"Expected audience strength" + vm.mandatory}' />
 
                 <include
                     layout="@layout/item_date_dialog_opener"
@@ -50,13 +50,13 @@
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.hostClassLocation}"
                     app:editable="@{true}"
-                    app:hintText='@{"Host class location"}' />
+                    app:hintText='@{"Host class location" + vm.mandatory}' />
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.mobileNumber}"
                     app:editable="@{true}"
-                    app:hintText='@{"Mobile number"}' />
+                    app:hintText='@{"Mobile number" + vm.mandatory}' />
 
                 <include
                     layout="@layout/floating_label_edit_text"

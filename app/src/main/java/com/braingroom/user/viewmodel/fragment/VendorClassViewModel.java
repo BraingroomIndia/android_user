@@ -34,14 +34,16 @@ public class VendorClassViewModel extends ViewModel {
     public VendorClassViewModel(@NonNull final Navigator navigator, final String vendorId) {
         classes = new ArrayList<>();
 
-        items = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+        items = FieldUtils.toObservable(callAgain)/*.filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return false;
             }
-        }).filter(new Predicate<Integer>() {
+        })*/.filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                if (nextPage==1)
+                    paginationInProgress=true;
                 return currentPage < nextPage;
             }
         }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
@@ -52,7 +54,7 @@ public class VendorClassViewModel extends ViewModel {
                     public List<ViewModel> apply(List<ClassData> resp) throws Exception {
                         currentPage = nextPage;
                         if (resp.size() == 0)
-                            callAgain = null;
+                            nextPage = - 1;
                         for (final ClassData elem : resp) {
                             classes.add(new ClassItemViewModel(elem, new Action() {
                                 @Override
@@ -66,12 +68,14 @@ public class VendorClassViewModel extends ViewModel {
                                 }
                             }));
                         }
+                        paginationInProgress=false;
                         return classes;
                     }
                 }).mergeWith(getLoadingItems(3));
             }
         });
     }
+
     private Observable<List<ViewModel>> getLoadingItems(int count) {
         List<ViewModel> result = new ArrayList<>();
         result.addAll(classes);
@@ -82,13 +86,15 @@ public class VendorClassViewModel extends ViewModel {
     @Override
     public void paginate() {
         if (!paginationInProgress) {
-            callAgain.set(callAgain.get() + 1);
             nextPage = nextPage + 1;
+            paginationInProgress=true;
+            callAgain.set(callAgain.get() + 1);
         }
     }
+
     @Override
-    public void retry(){
-        callAgain.set(callAgain.get()+1);
+    public void retry() {
+        callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
     }
 

@@ -93,7 +93,7 @@ public class ClassDetailViewModel extends ViewModel {
     private LinkedHashMap<String, Integer> PhoneListApiData = new LinkedHashMap<>();
     private Consumer<HashMap<String, Integer>> callConsumer;
 
-    public boolean isGift;
+    public boolean isGift =false;
 
 
     private GoogleMap mGoogleMap;
@@ -106,7 +106,8 @@ public class ClassDetailViewModel extends ViewModel {
     ClassDetailActivity.UiHelper uiHelper;
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
-            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, openConnectTnT, openConnectBnS, openConnectFP, openCateglogLocationList,playAction;
+            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, openConnectTnT,
+            openConnectBnS, openConnectFP, openCateglogLocationList,playAction,onDissmis;
 
     public boolean isInWishlist = false;
 
@@ -175,6 +176,7 @@ public class ClassDetailViewModel extends ViewModel {
                     Bundle data = new Bundle();
                     data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
                     data.putSerializable("id", classId);
+                    data.putSerializable(origin,ClassListViewModel1.ORIGIN_HOME);
                     messageHelper.showLoginRequireDialog("Please login to post a query", data);
                     navigator.navigateActivity(LoginActivity.class, data);
                 }
@@ -224,10 +226,8 @@ public class ClassDetailViewModel extends ViewModel {
 
                 }
                 if (number != null) {
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:" + number));
-                    Log.d(TAG, "accept: " + number);
-                    navigator.navigateActivity(intent);
+                    uiHelper.makeACall(number);
+
                 }
             }
 
@@ -270,7 +270,7 @@ public class ClassDetailViewModel extends ViewModel {
                         else
                             price.set(classData.getLevelDetails().get(0).getGroups().get(0).getPrice());
                         teacherPic.set(classData.getTeacherPic());
-                        teacherName.set(classData.getTeacher());
+                        teacherName.set(classData.getClassProvider());
                         description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
@@ -405,11 +405,28 @@ public class ClassDetailViewModel extends ViewModel {
 
                     }
                 };
+
+        onDissmis = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.next();
+            }
+        };
         getQuoteClicked = new
                 Action() {
                     @Override
                     public void run() throws Exception {
+                        if (loggedIn.get())
                         uiHelper.showQuoteForm();
+                        else {
+                            Bundle data = new Bundle();
+                            data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
+                            data.putSerializable("id", classId);
+                            data.putSerializable("origin",ClassListViewModel1.ORIGIN_CATALOG);
+                            messageHelper.showLoginRequireDialog("Please login to post a query", data);
+                            navigator.navigateActivity(LoginActivity.class, data);
+                        }
+
                     }
                 };
 

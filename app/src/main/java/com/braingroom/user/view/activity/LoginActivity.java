@@ -53,6 +53,7 @@ public class LoginActivity extends BaseActivity implements
     String parentActivity;
     Serializable classData;
     String referralCode;
+    String origin;
     public static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
@@ -176,8 +177,9 @@ public class LoginActivity extends BaseActivity implements
         classData = getIntentSerializable("classData");
         classId = getIntentString("id");
         referralCode=getIntentString("referralCode");
+        origin=getIntentString("origin");
 
-        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData, classId, thirdPartyUserId,referralCode);
+        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData, classId,origin, thirdPartyUserId,referralCode);
     }
 
     @Override

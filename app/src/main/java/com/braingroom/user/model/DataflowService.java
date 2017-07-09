@@ -393,27 +393,28 @@ public class DataflowService {
                         List<ClassData> dataList = new ArrayList<>();
                         //Edited by Vikas Godara
                         int i = 0;
-                        for (VendorProfileResp.Snippet.ClassDetail classDetail : resp.getData().get(i).getClasses()) {
-                            ClassData classData = new ClassData();
-                            classData.setImage(classDetail.photo);
-                            classData.setClassTopic(classDetail.classTopic);
-                            classData.setLocality(classDetail.location);
-                            classData.setPricingType("Single");
-                            classData.setPrice(classDetail.price);
-                            classData.setNoOfSession(classDetail.noOfSession);
-                            classData.setClassDuration(classDetail.classDuration);
+                        if (resp.getData().get(i).getClasses() != null)
+                            for (VendorProfileResp.Snippet.ClassDetail classDetail : resp.getData().get(i).getClasses()) {
+                                ClassData classData = new ClassData();
+                                classData.setImage(classDetail.photo);
+                                classData.setClassTopic(classDetail.classTopic);
+                                classData.setLocality(classDetail.location);
+                                classData.setPricingType("Single");
+                                classData.setPrice(classDetail.price);
+                                classData.setNoOfSession(classDetail.noOfSession);
+                                classData.setClassDuration(classDetail.classDuration);
 
 
-                            if (classDetail.classTimingId.equals("1"))
-                                classData.setClassType("Fixed");
-                            else
-                                classData.setClassType("Flexible");
-                            classData.setId(classDetail.id);
-                            //Edited by Vikas Godara
-                            dataList.add(gson.fromJson(gson.toJson(classData), ClassData.class));
-                            i++;
+                                if (classDetail.classTimingId.equals("1"))
+                                    classData.setClassType("Fixed");
+                                else
+                                    classData.setClassType("Flexible");
+                                classData.setId(classDetail.id);
+                                //Edited by Vikas Godara
+                                dataList.add(gson.fromJson(gson.toJson(classData), ClassData.class));
+                                i++;
 
-                        }
+                            }
                         return dataList;
                     }
                 });
@@ -492,7 +493,13 @@ public class DataflowService {
                     public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
                         List<ClassData> dataList = new ArrayList<>();
                         for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                            try {
+                                dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d(TAG, "apply: " + e.toString());
+                            }
+
                         }
                         return dataList;
                     }

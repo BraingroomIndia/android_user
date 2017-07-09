@@ -47,19 +47,21 @@ public class LoginViewmodel extends ViewModel {
 
     String parentActivity;
     String classId;
+    String origin;
     String thirdPartyUserId;
     private final String referralCode;
     Serializable classData;
 
 
     public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity,
-                          Serializable data, String classId, String thirdPartyUserId, final String referralCode) {
+                          Serializable data, String classId, String origin, String thirdPartyUserId, final String referralCode) {
         this.parentActivity = parentActivity;
         this.classData = data;
         this.thirdPartyUserId = thirdPartyUserId;
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.classId = classId;
+        this.origin = origin;
         this.referralCode = referralCode;
         onLoginClicked = new Action() {
             @Override
@@ -114,6 +116,7 @@ public class LoginViewmodel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
+                    messageHelper.dismissActiveProgress();
                     if ("".equals(loginResp.getData().get(0).getMobile()) || loginResp.getData().get(0).getReferralCode() == null) {
                         uiHandler.showEmailDialog(loginResp);
                     } else {
@@ -133,7 +136,7 @@ public class LoginViewmodel extends ViewModel {
                         } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();
                             data.putString("id", classId);
-                            data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                            data.putString("origin", origin);
                             navigator.navigateActivity(ClassDetailActivity.class, data);
                         } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();
