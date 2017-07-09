@@ -969,6 +969,11 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<SaveGiftCouponResp> saveGiftClass(SaveGiftCouponReq req) {
+        return api.saveGiftCoupon(req).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<BaseResp> updateCouponPaymentSuccess(RazorBuySuccessReq req) {
         return api.updateCouponPaymentSuccess(req).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

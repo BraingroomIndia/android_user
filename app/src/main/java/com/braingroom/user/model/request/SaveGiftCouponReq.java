@@ -40,6 +40,9 @@ public class SaveGiftCouponReq {
         @SerializedName("cat_id")
         private String catId;
 
+        @SerializedName("class_id")
+        private String classId;
+
         @SerializedName("denomination")
         private String denomination;
 

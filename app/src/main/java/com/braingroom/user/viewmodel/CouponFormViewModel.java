@@ -164,6 +164,7 @@ public class CouponFormViewModel extends ViewModel {
                 if ("1".equals(baseResp.getResCode())) {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(baseResp.getResMsg());
+                    // TODO: 09/07/17 show success screen 
                 }
             }
         }, new Consumer<Throwable>() {
