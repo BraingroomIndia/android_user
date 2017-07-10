@@ -177,8 +177,15 @@ public class CheckoutViewModel extends ViewModel {
         List<Integer> priceList;
         for (ClassLevelData classLevelData : classData.getLevelDetails()) {
             priceList = new ArrayList<>();
-            if ("group".equalsIgnoreCase(classData.getPricingType())) {
-                int range = 0;
+            int range = 0;
+            if (classData.getIsCoupleClass() == 1) {
+                for (int i = 0; i < 1000; i++) {
+                    if (i % 2 == 0)
+                        priceList.add(Integer.parseInt(classLevelData.getGroups().get(0).getPrice()));
+                    else
+                        priceList.add(0);
+                }
+            } else if ("group".equalsIgnoreCase(classData.getPricingType())) {
                 for (int i = 0; i < classLevelData.getGroups().size(); i++) {
                     if (i == 0) {
                         priceList.add(Integer.parseInt(classLevelData.getGroups().get(i).getPrice()));

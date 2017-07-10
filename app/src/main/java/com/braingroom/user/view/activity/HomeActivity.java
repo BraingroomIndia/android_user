@@ -228,6 +228,7 @@ public class HomeActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        hideItem();
 
 
     }
@@ -327,7 +328,7 @@ public class HomeActivity extends BaseActivity
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
                 return true;
             }
-
+            ((HomeViewModel)vm).notificationCount=0;
             getNavigator().navigateActivity(NotificationActivity.class, null);
             return true;
         }

@@ -61,7 +61,6 @@ public class ClassData implements Serializable {
     @SerializedName("sesssion_time")
     private String sessionTime;
 
-
     @SerializedName("class_type")
     private String classType;
 

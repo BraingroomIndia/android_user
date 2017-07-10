@@ -356,6 +356,7 @@ public class ConnectPostViewModel extends ViewModel {
                         messageHelper.show("Please enter Description");
                         return;
                     }
+                    buyAndSellSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedIndex()));
                     buyAndSellSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     buyAndSellSnippet.setPostType("group_post");
                     buyAndSellSnippet.setPostTitle(title.s_1.get());
@@ -383,6 +384,7 @@ public class ConnectPostViewModel extends ViewModel {
                         messageHelper.show("Please enter Description");
                         return;
                     }
+                    knowledgeNuggetsSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedIndex()));
                     knowledgeNuggetsSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     knowledgeNuggetsSnippet.setPostType("tips_tricks");
                     knowledgeNuggetsSnippet.setPostTitle(title.s_1.get());
@@ -424,6 +426,7 @@ public class ConnectPostViewModel extends ViewModel {
                     }
                     learningPartnerPostSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     learningPartnerPostSnippet.setPostType("activity_request");
+                    learningPartnerPostSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedIndex()));
                     learningPartnerPostSnippet.setActivityType(android.text.TextUtils.join(",", activityVm.getSelectedIndex()));
                     learningPartnerPostSnippet.setPostTitle(title.s_1.get());
                     learningPartnerPostSnippet.setPostSummary(description.get());

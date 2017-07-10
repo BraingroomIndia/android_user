@@ -7,6 +7,7 @@ import android.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
@@ -66,7 +67,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> price = new ObservableField<>(null);
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
     public final ObservableField<String> teacherName = new ObservableField<>(null);
-    public final ObservableField<String> description = new ObservableField<>(null); //Edited By Vikas Godara
+    public final ObservableField<Spanned> description = new ObservableField<>(null); //Edited By Vikas Godara
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
     private final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
@@ -271,7 +272,14 @@ public class ClassDetailViewModel extends ViewModel {
                             price.set(classData.getLevelDetails().get(0).getGroups().get(0).getPrice());
                         teacherPic.set(classData.getTeacherPic());
                         teacherName.set(classData.getClassProvider());
-                        description.set(classData.getClassSummary().replace("$", "\n•")); //Edited By Vikas Godara
+                        try {
+                            description.set(Html.fromHtml(classData.getClassSummary())); //Edited By Vikas Godara
+
+                        }catch (Exception e){
+                            Log.d(TAG, "description:" +e.toString());
+                            e.printStackTrace();
+                        }
+
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
                         title.s_1.set(classTopic.get() + "\n");

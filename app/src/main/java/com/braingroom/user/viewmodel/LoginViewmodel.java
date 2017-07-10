@@ -62,6 +62,7 @@ public class LoginViewmodel extends ViewModel {
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.classId = classId;
+        this.catalogueId=catalogueId;
         this.origin = origin;
         this.referralCode = referralCode;
         onLoginClicked = new Action() {
