@@ -27,6 +27,10 @@ public class SaveGiftCouponReq {
         public String giftType;
         @SerializedName("gift_by")
         public String giftBy;
+        @SerializedName("gift_card_segement_id")
+        public String giftCardSegId;
+        @SerializedName("ngo_name_1")
+        public String ngoName1;
         @SerializedName("is_guest")
         public int isGuest;
 
