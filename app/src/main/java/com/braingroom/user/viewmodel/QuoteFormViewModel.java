@@ -31,6 +31,8 @@ public class QuoteFormViewModel extends ViewModel {
     public final DatePickerViewModel dateVm;
     public final Action onSubmit;
 
+    public final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
+
 
     public QuoteFormViewModel(@NonNull final MessageHelper messageHelper, @NonNull final QuoteFormFragment.UiHelper uiHelper,
                               @NonNull HelperFactory helperFactory) {

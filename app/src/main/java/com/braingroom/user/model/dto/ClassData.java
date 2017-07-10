@@ -28,7 +28,7 @@ public class ClassData implements Serializable {
     @SerializedName("featured_status")
     private String featuredStatus;
 
-    @SerializedName("class_provided")
+    @SerializedName(value = "class_provided")
     private String teacher;
 
     @SerializedName("class_provider_id")

@@ -1,9 +1,12 @@
 package com.braingroom.user.view.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +22,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import io.reactivex.functions.Consumer;
+
+import static com.rollbar.android.Rollbar.TAG;
 
 public class ClassDetailActivity extends BaseActivity {
 
@@ -27,6 +35,7 @@ public class ClassDetailActivity extends BaseActivity {
     MyPlaybackEventListener myPlaybackEventListener;
     UiHelper uiHelper;
     SupportMapFragment mapFragment;
+    RxPermissions rxPermissions;
 
     public interface UiHelper {
         void initYoutube();
@@ -41,11 +50,14 @@ public class ClassDetailActivity extends BaseActivity {
 
         void next();
 
+        void makeACall(String phoneNumber);
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        rxPermissions = new RxPermissions(this);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -95,6 +107,26 @@ public class ClassDetailActivity extends BaseActivity {
             public void postQueryForm() {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(R.id.fragment_container, ClassQueryFragment.newInstance()).addToBackStack(null).commit();
+            }
+
+            @Override
+            public void makeACall(final String phoneNumber) {
+                if (phoneNumber != null && rxPermissions != null) ;
+                rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:" + phoneNumber));
+                        Log.d(TAG, "accept: " + phoneNumber);
+                        getNavigator().navigateActivity(intent);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                        Log.d("makeACall", "OnError: " +throwable.toString() + "\t"+ phoneNumber);
+                    }
+                });
             }
 
             @Override

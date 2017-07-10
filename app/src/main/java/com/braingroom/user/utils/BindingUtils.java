@@ -179,7 +179,7 @@ public class BindingUtils {
                     int totalItemCount = lm.getItemCount();
                     int firstVisibleItemPosition = lm.findFirstVisibleItemPosition();
 
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                    if (dy > 0 && ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount)) {
                         vm.paginate();
                     }
 

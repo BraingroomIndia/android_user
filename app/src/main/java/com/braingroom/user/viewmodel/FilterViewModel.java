@@ -54,6 +54,8 @@ public class FilterViewModel extends ViewModel {
     public Observable<HashMap<String, Pair<String, String>>> cityApiObservable, localityApiObservable, vendorlistApiObservable;
     public ObservableBoolean isCatalogue;
 
+    private final FilterData filterData;
+
     public FilterViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, FragmentHelper fragmentHelper
             , FilterData filterData, HashMap<String, Integer> categoryFilterMap,
                            HashMap<String, Integer> segmentsFilterMap,
@@ -68,16 +70,17 @@ public class FilterViewModel extends ViewModel {
                            String endDate*/
 
             , final String origin) {
+        this.filterData = filterData;
         isCatalogue = new ObservableBoolean(false);
         this.origin = origin;
         if (origin.equals(ClassListViewModel1.ORIGIN_CATALOG))
             isCatalogue.set(true);
-            this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
-                @Override
-                public void run() throws Exception {
-                    retry();
-                }
-            });
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+            }
+        });
         segmentsFilterMap = segmentsFilterMap != null ? segmentsFilterMap : new HashMap<String, Integer>();
         categoryFilterMap = categoryFilterMap != null ? categoryFilterMap : new HashMap<String, Integer>();
         communityFilterMap = communityFilterMap != null ? communityFilterMap : new HashMap<String, Integer>();
@@ -303,6 +306,7 @@ public class FilterViewModel extends ViewModel {
     public void apply() {
         FilterData filterData = new FilterData();
         Intent resultIntent = new Intent();
+        filterData.setCatalog(this.filterData.getCatalog());
         filterData.setCommunityId(communityVm.selectedItemsMap.isEmpty() ? "" : communityVm.selectedItemsMap.values().iterator().next() + "");
         filterData.setClassType(classTypeVm.selectedItemsMap.isEmpty() ? "" : classTypeVm.selectedItemsMap.values().iterator().next() + "");
         filterData.setClassSchedule(classScheduleVm.selectedItemsMap.isEmpty() ? "" : classScheduleVm.selectedItemsMap.values().iterator().next() + "");
@@ -314,6 +318,7 @@ public class FilterViewModel extends ViewModel {
         filterData.setKeywords(keywords.get());
         filterData.setStartDate(startDateVm.date.get().equals("YYYY-MM-DD") ? "" : startDateVm.date.get());
         filterData.setEndDate(endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("category", categoryVm.selectedItemsMap);
         bundle.putSerializable("segment", segmentsVm.selectedItemsMap);
@@ -323,17 +328,14 @@ public class FilterViewModel extends ViewModel {
         bundle.putSerializable("classType", classTypeVm.selectedItemsMap);
         bundle.putSerializable("classSchedule", classScheduleVm.selectedItemsMap);
         bundle.putSerializable("vendorList", getHashMap(vendorListVm.selectedDataMap));
+        bundle.putString("origin", origin);
         /*bundle.putSerializable("keywords", keywords.get());
         bundle.putString("startDate", startDateVm.date.get().equals("YYYY-MM-DD") ? "" : startDateVm.date.get());
         bundle.putString("endDate", endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());*/
         bundle.putBoolean("clearFlag", clearFlag);
         bundle.putSerializable("filterData", filterData);
         resultIntent.putExtras(bundle);
-        if (origin != null && origin.equals(ClassListViewModel1.ORIGIN_HOME)) {
-            bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-            navigator.navigateActivity(ClassListActivity.class, bundle);
-        } else
-            navigator.finishActivity(resultIntent);
+        navigator.finishActivity(resultIntent);
     }
 
     @Override
