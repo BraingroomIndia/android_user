@@ -32,7 +32,7 @@ public class ConnectFilterViewModel extends ViewModel {
 
     public final ObservableField<String> keywords = new ObservableField<>("");
     public final SearchSelectListViewModel categoryVm, segmentsVm, myGroups, allGroups, countryVm, stateVm, cityVm, localityVM;
-    public final DynamicSearchSelectListViewModel instituteVm;
+    public final DynamicSearchSelectListViewModel instituteVm,learnerVm,tutorVm;
     public final Action onBackClicked, onResetClicked, onApplyClicked;
     public Navigator navigator;
     public Consumer<HashMap<String, Pair<String, String>>> categoryConsumer, countryConsumer, stateConsumer, cityConsumer;
@@ -247,6 +247,10 @@ public class ConnectFilterViewModel extends ViewModel {
 
         instituteVm = new DynamicSearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, fragmentHelper);
 
+        learnerVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_LEARNER, messageHelper, navigator, "search for institutes... ", false, "", null, fragmentHelper);
+
+        tutorVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_Vendor, messageHelper, navigator, "search for institutes... ", false, "", null, fragmentHelper);
+
 
         allGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_ALL_GROUPS, messageHelper, navigator, "search for groups", false, allGroupsApiObservable, "", allGroupsConsumer, fragmentHelper);
 
@@ -284,6 +288,12 @@ public class ConnectFilterViewModel extends ViewModel {
         countryVm.clearSelectedValue();
         stateVm.clearSelectedValue();
         cityVm.clearSelectedValue();
+        try {
+            instituteVm.onClearClicked.run();
+            tutorVm.onClearClicked.run();
+            learnerVm.onClearClicked.run();
+        }catch (Exception e){e.printStackTrace();}
+
         localityVM.clearSelectedValue();
     }
 
@@ -294,6 +304,7 @@ public class ConnectFilterViewModel extends ViewModel {
         }
         return resultMap;
     }
+
 
     public void apply() {
         String keyword = keywords.get();
@@ -312,6 +323,18 @@ public class ConnectFilterViewModel extends ViewModel {
         String allGroupId = "";
         if (!allGroups.selectedDataMap.isEmpty())
             allGroupId = allGroups.selectedDataMap.values().iterator().next().first;
+
+        String userId ="";
+        if (!learnerVm.selectedDataMap.isEmpty())
+            userId = learnerVm.selectedDataMap.values().iterator().next().first;
+
+        String tutorId ="";
+        if (!tutorVm.selectedDataMap.isEmpty())
+            tutorId = tutorVm.selectedDataMap.values().iterator().next().first;
+
+        String instituteId ="";
+        if (!tutorVm.selectedDataMap.isEmpty())
+            tutorId = tutorVm.selectedDataMap.values().iterator().next().first;
 
         String countryId="";
 

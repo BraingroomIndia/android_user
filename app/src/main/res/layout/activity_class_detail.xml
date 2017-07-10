@@ -401,8 +401,11 @@
                                         android:layout_height="0dp"
                                         android:layout_weight="1"
                                         android:background="@color/white"
+                                        android:gravity="center_vertical"
+                                        android:drawableLeft="@drawable/ic_call_black_36dp"
                                         android:onClick="@{vm.phoneNumber.onOpenerClick}"
-                                        android:paddingLeft="@dimen/padding_med"
+                                        android:drawablePadding="@dimen/padding_med"
+                                        android:paddingLeft="@dimen/padding_medium"
                                         android:paddingRight="@dimen/padding_med"
                                         android:text="@string/booking_related_help"
                                         android:textColor="@color/materialBlue"
@@ -414,9 +417,12 @@
                                         android:layout_weight="1"
                                         android:layout_marginTop="@dimen/margin_med"
                                         android:background="@color/white"
+                                        android:gravity="center_vertical"
                                         android:onClick="@{vm.onGetTutor}"
+                                        android:drawablePadding="@dimen/padding_med"
                                         android:paddingLeft="@dimen/padding_med"
                                         android:paddingRight="@dimen/padding_med"
+                                        android:drawableLeft="@drawable/ic_teacher_black_24dp"
                                         android:text="Get your own Tutor for this class"
                                         android:textColor="@color/materialBlue"
                                         app:font='@{@string/robotoRegular}' />
@@ -428,7 +434,11 @@
                                         android:layout_marginTop="@dimen/margin_med"
                                         android:layout_weight="1"
                                         android:background="@color/white"
+                                        android:gravity="center_vertical"
+                                        android:drawableLeft="@drawable/ic_mode_edit_black_36dp"
+                                        android:drawableTint="@color/black"
                                         android:onClick="@{vm.onQueryClicked}"
+                                        android:drawablePadding="@dimen/padding_med"
                                         android:paddingLeft="@dimen/padding_med"
                                         android:paddingRight="@dimen/padding_med"
                                         android:text="Post a query about this class"
@@ -645,9 +655,8 @@
         <include
             layout="@layout/content_internet_connectivity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="50dp"
             app:vm="@{vm.connectivityViewmodel}" />
 
 

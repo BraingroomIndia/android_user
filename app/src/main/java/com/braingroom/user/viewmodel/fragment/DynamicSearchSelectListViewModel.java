@@ -37,6 +37,9 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
     public final ObservableField<String> title = new ObservableField<>();
     public final Map<String, Pair<String, String>> dataMap = new HashMap<>();
     public final HashMap<String, Pair<String, String>> selectedDataMap = new HashMap<>();
+    public static final String FRAGMENT_TITLE_COLLEGE = "College";
+    public static final String FRAGMENT_TITLE_LEARNER = "Learner";
+    public static final String FRAGMENT_TITLE_Vendor = "Tutor";
 
     PublishSubject<SearchSelectListItemViewModel> singleSelect = PublishSubject.create();
     PublishSubject<SearchSelectListItemViewModel> multipleSelect = PublishSubject.create();
@@ -54,12 +57,12 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
                 .filter(new Predicate<String>() {
                     @Override
                     public boolean test(@NonNull String s) throws Exception {
-                        return s.length() > 2;
+                        return true;
                     }
                 }).flatMap(new Function<String, Observable<List<ViewModel>>>() {
                     @Override
                     public Observable<List<ViewModel>> apply(@NonNull String keyword) throws Exception {
-                        return apiService.getInstitute(keyword).map(new Function<CommonIdResp, List<ViewModel>>() {
+                        return requestData(keyword).map(new Function<CommonIdResp, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(@NonNull CommonIdResp resp) throws Exception {
                                 HashMap<String, Pair<String, String>> resMap = new HashMap<>();
@@ -129,6 +132,16 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
         };
 
 
+    }
+
+    private Observable<CommonIdResp> requestData(String keyword) {
+        if (FRAGMENT_TITLE_COLLEGE.equals(title.get()))
+            return apiService.getInstitute(keyword);
+        if (FRAGMENT_TITLE_LEARNER.equals(title.get()))
+            return apiService.getLearner(keyword);
+        if (FRAGMENT_TITLE_Vendor.equals(title.get()))
+            return apiService.geTutor(keyword);
+        return null;
     }
 
     public void setSelectedValues(HashMap<String, String> selectedValues) {

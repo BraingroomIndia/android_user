@@ -19,6 +19,9 @@ import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Date;
+import java.util.Random;
+
 public class FCMService extends FirebaseMessagingService {
 
     public static final String TAG = "FCMService";
@@ -50,6 +53,10 @@ public class FCMService extends FirebaseMessagingService {
         String messageSenderName = remoteMessage.getData().get("sender_name");
         String title =remoteMessage.getData().get("type");
         String messageBody= remoteMessage.getData().get("message");
+
+        int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+
+
 
         if (postId != null) {
             intent = new Intent(this, PostDetailActivity.class);
@@ -87,7 +94,7 @@ public class FCMService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(m /* ID of notification */, notificationBuilder.build());
     }
 
 }

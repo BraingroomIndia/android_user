@@ -78,7 +78,7 @@ public class ConnectHomeViewModel extends ViewModel {
 //        };
 //        feedItems = getLoadingItems(4).mergeWith(apiService.getConnectFeed(filterData, 0).map(feedDataMapFunction));
 //        catSegVm = new GroupDataViewModel(messageHelper, navigator);
-        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return loggedIn.get();
@@ -104,7 +104,7 @@ public class ConnectHomeViewModel extends ViewModel {
             }
         });
 
-        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return loggedIn.get();

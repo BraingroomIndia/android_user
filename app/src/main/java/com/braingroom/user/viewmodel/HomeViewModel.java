@@ -176,7 +176,7 @@ public class HomeViewModel extends ViewModel {
 
             }
         });
-        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return loggedIn.get();
@@ -202,7 +202,7 @@ public class HomeViewModel extends ViewModel {
             }
         });
 
-        FieldUtils.toObservable(callAgain).debounce(4000, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return loggedIn.get();

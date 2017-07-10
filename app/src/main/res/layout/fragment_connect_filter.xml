@@ -92,6 +92,10 @@
                                     layout="@layout/item_list_fragment_opener"
                                     app:editable="@{true}"
                                     app:vm="@{vm.segmentsVm}" />
+                                <include
+                                    layout="@layout/item_list_searchable_fragment_opener"
+                                    app:editable="@{true}"
+                                    app:vm="@{vm.tutorVm}" />
                                 <!--Tutor Talk-->
                             </LinearLayout>
 
@@ -115,11 +119,15 @@
                                     app:editable="@{true}"
                                     app:vm="@{vm.allGroups}" />
 
-<!--
                                 <include
                                     layout="@layout/item_list_searchable_fragment_opener"
                                     app:editable="@{true}"
-                                    app:vm="@{vm.instituteVm}" />-->
+                                    app:vm="@{vm.instituteVm}" />
+
+                                <include
+                                    layout="@layout/item_list_searchable_fragment_opener"
+                                    app:editable="@{true}"
+                                    app:vm="@{vm.learnerVm}" />
                                 <!--Learner Forum -->
                             </LinearLayout>
 

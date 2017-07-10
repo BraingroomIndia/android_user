@@ -224,6 +224,8 @@ public class FilterViewModel extends ViewModel {
     }
 
     private Observable<ListDialogData1> getSegmentsApiObservable(String categoryId) {
+        if (categoryId == null)
+            return null;
         return apiService.getSegments(categoryId).map(new Function<SegmentResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull SegmentResp segmentsResp) throws Exception {
@@ -306,7 +308,8 @@ public class FilterViewModel extends ViewModel {
     public void apply() {
         FilterData filterData = new FilterData();
         Intent resultIntent = new Intent();
-        filterData.setCatalog(this.filterData.getCatalog());
+        if (this.filterData != null)
+            filterData.setCatalog(this.filterData.getCatalog());
         filterData.setCommunityId(communityVm.selectedItemsMap.isEmpty() ? "" : communityVm.selectedItemsMap.values().iterator().next() + "");
         filterData.setClassType(classTypeVm.selectedItemsMap.isEmpty() ? "" : classTypeVm.selectedItemsMap.values().iterator().next() + "");
         filterData.setClassSchedule(classScheduleVm.selectedItemsMap.isEmpty() ? "" : classScheduleVm.selectedItemsMap.values().iterator().next() + "");

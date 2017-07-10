@@ -50,6 +50,7 @@ import com.braingroom.user.model.request.SignUpReq;
 import com.braingroom.user.model.request.SocialLoginReq;
 import com.braingroom.user.model.request.StateReq;
 import com.braingroom.user.model.request.SubmitOTPReq;
+import com.braingroom.user.model.request.UserListReq;
 import com.braingroom.user.model.request.VendorReviewReq;
 import com.braingroom.user.model.request.WishlistReq;
 import com.braingroom.user.model.response.BaseResp;
@@ -242,6 +243,10 @@ public interface UserApiService {
 
     @POST("getInstitions")
     Observable<CommonIdResp> getInstitute(@Body InstituteReq req);
+
+    @POST("getUsers")
+    Observable<CommonIdResp> getUser(@Body UserListReq req);
+
 
     @POST("getSchools")
     Observable<CommonIdResp> getSchools(@Body InstituteReq req);

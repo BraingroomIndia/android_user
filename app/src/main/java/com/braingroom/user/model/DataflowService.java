@@ -59,6 +59,7 @@ import com.braingroom.user.model.request.SignUpReq;
 import com.braingroom.user.model.request.SocialLoginReq;
 import com.braingroom.user.model.request.StateReq;
 import com.braingroom.user.model.request.SubmitOTPReq;
+import com.braingroom.user.model.request.UserListReq;
 import com.braingroom.user.model.request.WishlistReq;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.BookingHistoryResp;
@@ -633,6 +634,16 @@ public class DataflowService {
 
     public Observable<CommonIdResp> getInstitute(String keyword) {
         return api.getInstitute(new InstituteReq(new InstituteReq.Snippet(keyword))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<CommonIdResp> getLearner(String keyword) {
+        return api.getUser(new UserListReq(new UserListReq.Snippet(keyword, 2, "1"))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<CommonIdResp> geTutor(String keyword) {
+        return api.getUser(new UserListReq(new UserListReq.Snippet(keyword, 1, "1"))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

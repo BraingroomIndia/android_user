@@ -73,6 +73,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     public static final String FRAGMENT_TITLE_LOCALITY = "locality";
 
     public static final String FRAGMENT_TITLE_COLLEGE = "College";
+    public static final String FRAGMENT_TITLE_LEARNER = "Learner";
+    public static final String FRAGMENT_TITLE_Vendor = "Tutor";
 
     private MenuItem itemNotification;
     private MenuItem itemMessage;
@@ -130,7 +132,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         connectFilterViewModel = new ConnectFilterViewModel(getMessageHelper(), getNavigator(), new FragmentHelper() {
             @Override
             public void show(String tag) {
-                if (!tag.equals(FRAGMENT_TITLE_COLLEGE)) {
+                if (!tag.equals(FRAGMENT_TITLE_COLLEGE) && !tag.equals(FRAGMENT_TITLE_LEARNER) && !tag.equals(FRAGMENT_TITLE_Vendor)) {
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.add(R.id.comments_container, SearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
                 } else {
@@ -670,6 +672,10 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             return connectFilterViewModel.localityVM;
         if (FRAGMENT_TITLE_COLLEGE.equals(title))
             return connectFilterViewModel.instituteVm;
+        if (FRAGMENT_TITLE_LEARNER.equals(title))
+            return connectFilterViewModel.learnerVm;
+        if (FRAGMENT_TITLE_Vendor.equals(title))
+            return connectFilterViewModel.tutorVm;
         return null;
     }
 
