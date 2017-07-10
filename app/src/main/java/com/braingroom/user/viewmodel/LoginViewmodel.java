@@ -51,10 +51,11 @@ public class LoginViewmodel extends ViewModel {
     String thirdPartyUserId;
     private final String referralCode;
     Serializable classData;
+    String catalogueId;
 
 
     public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity,
-                          Serializable data, String classId, String origin, String thirdPartyUserId, final String referralCode) {
+                          Serializable data, String classId,String catalogueId, String origin, String thirdPartyUserId, final String referralCode) {
         this.parentActivity = parentActivity;
         this.classData = data;
         this.thirdPartyUserId = thirdPartyUserId;
@@ -136,6 +137,7 @@ public class LoginViewmodel extends ViewModel {
                         } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();
                             data.putString("id", classId);
+                            data.putString("catalogueId",catalogueId);
                             data.putString("origin", origin);
                             navigator.navigateActivity(ClassDetailActivity.class, data);
                         } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {
@@ -221,6 +223,7 @@ public class LoginViewmodel extends ViewModel {
                         } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
                             Bundle data = new Bundle();
                             data.putString("id", classId);
+                            data.putString("catalogueId", catalogueId);
                             data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
                             navigator.navigateActivity(ClassDetailActivity.class, data);
                         } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {

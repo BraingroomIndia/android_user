@@ -233,6 +233,7 @@ public class ClassListViewModel1 extends ViewModel {
                                 Bundle data = new Bundle();
                                 data.putString("id", elem.getId());
                                 data.putString("origin", origin);
+                                data.putString("catalogueId",filterData.getCatalog());
                                 navigator.navigateActivity(ClassDetailActivity.class, data);
                             }
                         }));

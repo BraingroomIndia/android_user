@@ -100,7 +100,7 @@ public class ClassDetailActivity extends BaseActivity {
             @Override
             public void showQuoteForm() {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance()).addToBackStack(null).commit();
+                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance(getIntentString("catalogueId"),getIntentString("id"))).addToBackStack(null).commit();
             }
 
             @Override
@@ -135,7 +135,8 @@ public class ClassDetailActivity extends BaseActivity {
             }
 
         };
-        return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"), getIntentString("origin"));
+        return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"),
+                getIntentString("origin"),getIntentString("catalogueId"));
     }
 
     @Override

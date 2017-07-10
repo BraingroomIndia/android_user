@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by himan on 1/25/2017.
@@ -15,6 +17,7 @@ public class ConnectFeedReq {
     @SerializedName("braingroom")
     Snippet data;
 
+    @Setter
     public static class Snippet {
 
         @SerializedName("user_id")
@@ -46,6 +49,13 @@ public class ConnectFeedReq {
 
         @SerializedName("city_id")
         public String cityId;
+
+        @SerializedName("institute_id")
+        public String instituteId;
+
+        @SerializedName("author_id")
+        public String authorId;
+
 
         @SerializedName("locality_id")
         public String localityId;

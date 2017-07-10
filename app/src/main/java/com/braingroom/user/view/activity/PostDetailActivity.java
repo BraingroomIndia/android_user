@@ -73,8 +73,8 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     }
 
     @Override
-    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId, List<String> location) {
-
+    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId,
+                              String instituteId, String authorId, List<String> location) {
     }
 
     @Override

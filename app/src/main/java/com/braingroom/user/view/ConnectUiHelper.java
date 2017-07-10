@@ -17,7 +17,8 @@ public interface ConnectUiHelper {
 
     void openAcceptedUsersFragment(String postId);
 
-    void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId, List<String> location);
+    void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId,
+                       String instituteId,String authorId, List<String> location);
 
     void setSearchQuery(String searchQuery);
 

@@ -32,14 +32,14 @@ public class ConnectFilterViewModel extends ViewModel {
 
     public final ObservableField<String> keywords = new ObservableField<>("");
     public final SearchSelectListViewModel categoryVm, segmentsVm, myGroups, allGroups, countryVm, stateVm, cityVm, localityVM;
-    public final DynamicSearchSelectListViewModel instituteVm,learnerVm,tutorVm;
+    public final DynamicSearchSelectListViewModel instituteVm, learnerVm, tutorVm;
     public final Action onBackClicked, onResetClicked, onApplyClicked;
     public Navigator navigator;
     public Consumer<HashMap<String, Pair<String, String>>> categoryConsumer, countryConsumer, stateConsumer, cityConsumer;
     public Consumer<HashMap<String, Pair<String, String>>> myGroupsConsumer, allGroupsConsumer;
     private boolean clearFlag = false;
     public Observable<HashMap<String, Pair<String, String>>> segmentsApiObservable, categoryApiObservable, myGroupsApiObservable,
-            allGroupsApiObservable,countryApiObservable, stateApiObservable, cityApiObservable, localityApiObservable;
+            allGroupsApiObservable, countryApiObservable, stateApiObservable, cityApiObservable, localityApiObservable;
     ConnectUiHelper uiHelper;
     FragmentHelper fragmentHelper;
     public final ObservableBoolean isLearnerForum;
@@ -292,7 +292,9 @@ public class ConnectFilterViewModel extends ViewModel {
             instituteVm.onClearClicked.run();
             tutorVm.onClearClicked.run();
             learnerVm.onClearClicked.run();
-        }catch (Exception e){e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         localityVM.clearSelectedValue();
     }
@@ -324,44 +326,40 @@ public class ConnectFilterViewModel extends ViewModel {
         if (!allGroups.selectedDataMap.isEmpty())
             allGroupId = allGroups.selectedDataMap.values().iterator().next().first;
 
-        String userId ="";
+        String authorId = "";
         if (!learnerVm.selectedDataMap.isEmpty())
-            userId = learnerVm.selectedDataMap.values().iterator().next().first;
-
-        String tutorId ="";
+            authorId = learnerVm.selectedDataMap.values().iterator().next().first;
         if (!tutorVm.selectedDataMap.isEmpty())
-            tutorId = tutorVm.selectedDataMap.values().iterator().next().first;
+            authorId = tutorVm.selectedDataMap.values().iterator().next().first;
 
-        String instituteId ="";
-        if (!tutorVm.selectedDataMap.isEmpty())
-            tutorId = tutorVm.selectedDataMap.values().iterator().next().first;
+        String instituteId = "";
+        if (!instituteVm.selectedDataMap.isEmpty())
+            instituteId = instituteVm.selectedDataMap.values().iterator().next().first;
 
-        String countryId="";
+        String countryId = "";
 
-        String stateId="";
+        String stateId = "";
 
-        String cityId ="";
+        String cityId = "";
 
-        String localityId="";
-        if (!countryVm.selectedDataMap.isEmpty())
-        {
-            countryId=countryVm.selectedDataMap.values().iterator().next().first;
-            if (!stateVm.selectedDataMap.isEmpty()){
-                stateId=stateVm.selectedDataMap.values().iterator().next().first;
-                if (!cityVm.selectedDataMap.isEmpty())
-                {
-                    cityId=cityVm.selectedDataMap.values().iterator().next().first;
+        String localityId = "";
+        if (!countryVm.selectedDataMap.isEmpty()) {
+            countryId = countryVm.selectedDataMap.values().iterator().next().first;
+            if (!stateVm.selectedDataMap.isEmpty()) {
+                stateId = stateVm.selectedDataMap.values().iterator().next().first;
+                if (!cityVm.selectedDataMap.isEmpty()) {
+                    cityId = cityVm.selectedDataMap.values().iterator().next().first;
                     if (!localityVM.selectedDataMap.isEmpty())
-                        localityId=localityVM.selectedDataMap.values().iterator().next().first;
+                        localityId = localityVM.selectedDataMap.values().iterator().next().first;
                 }
             }
         }
-        List<String> location= new ArrayList<>();
+        List<String> location = new ArrayList<>();
         location.add(countryId);
         location.add(stateId);
         location.add(cityId);
         location.add(localityId);
-        this.uiHelper.setFilterData(keyword, categoryId, segmentId, myGroupId, allGroupId,location);
+        this.uiHelper.setFilterData(keyword, categoryId, segmentId, myGroupId, allGroupId,instituteId,authorId ,location );
         uiHelper.popFragment();
     }
 }

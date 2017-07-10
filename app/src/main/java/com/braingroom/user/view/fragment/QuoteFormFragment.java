@@ -13,9 +13,14 @@ import com.braingroom.user.viewmodel.ViewModel;
  * Created by agrahari on 07/04/17.
  */
 
+
 public class QuoteFormFragment extends BaseFragment {
 
-    public static QuoteFormFragment newInstance() {
+    public static String catalogueId;
+    public static String classId;
+    public static QuoteFormFragment newInstance(String catId,String classid) {
+        catalogueId=catId;
+        classId = classid;
         return new QuoteFormFragment();
     }
 
@@ -38,7 +43,7 @@ public class QuoteFormFragment extends BaseFragment {
                 getActivity().onBackPressed();
 
             }
-        },activity.getHelperFactory());
+        },activity.getHelperFactory(),catalogueId,classId);
     }
 
     @Override

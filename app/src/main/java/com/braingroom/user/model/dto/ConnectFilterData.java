@@ -20,6 +20,8 @@ public class ConnectFilterData implements Serializable {
     public String cityId;
     public String localityId;
     public String searchQuery;
+    public String instituteId;
+    public String authorId;
 
 
     public void setFilterData(ConnectFilterData data) {
@@ -36,6 +38,8 @@ public class ConnectFilterData implements Serializable {
         setSearchQuery(data.getSearchQuery());
     }
 
+
+
     public ConnectFeedReq getFilterReq() {
         ConnectFeedReq.Snippet snippet = new ConnectFeedReq.Snippet();
         snippet.setCategId(categId);
@@ -49,9 +53,18 @@ public class ConnectFilterData implements Serializable {
         snippet.setCityId(cityId);
         snippet.setLocalityId(localityId);
         snippet.setSearchQuery(searchQuery);
+        snippet.setInstituteId(instituteId);
+        snippet.setAuthorId(authorId);
         return new ConnectFeedReq(snippet);
     }
 
+    public void setInstituteId(String instituteId) {
+        this.instituteId = instituteId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
 
     public String getCategId() {
         return categId;

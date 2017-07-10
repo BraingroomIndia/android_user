@@ -38,8 +38,8 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
     public final Map<String, Pair<String, String>> dataMap = new HashMap<>();
     public final HashMap<String, Pair<String, String>> selectedDataMap = new HashMap<>();
     public static final String FRAGMENT_TITLE_COLLEGE = "College";
-    public static final String FRAGMENT_TITLE_LEARNER = "Learner";
-    public static final String FRAGMENT_TITLE_Vendor = "Tutor";
+    public static final String FRAGMENT_TITLE_LEARNER = "Post by";
+    public static final String FRAGMENT_TITLE_Vendor = "Posted by";
 
     PublishSubject<SearchSelectListItemViewModel> singleSelect = PublishSubject.create();
     PublishSubject<SearchSelectListItemViewModel> multipleSelect = PublishSubject.create();
@@ -140,7 +140,7 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
         if (FRAGMENT_TITLE_LEARNER.equals(title.get()))
             return apiService.getLearner(keyword);
         if (FRAGMENT_TITLE_Vendor.equals(title.get()))
-            return apiService.geTutor(keyword);
+            return apiService.geTutor(keyword).mergeWith(apiService.getLearner(keyword));
         return null;
     }
 

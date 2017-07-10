@@ -35,7 +35,7 @@ public class QuoteFormViewModel extends ViewModel {
 
 
     public QuoteFormViewModel(@NonNull final MessageHelper messageHelper, @NonNull final QuoteFormFragment.UiHelper uiHelper,
-                              @NonNull HelperFactory helperFactory) {
+                              @NonNull HelperFactory helperFactory, @NonNull final String catalogueId, final String classId) {
         organizationName = new DataItemViewModel("");
         audienceStrength = new DataItemViewModel("");
         hostClassLocation = new DataItemViewModel("");
@@ -54,10 +54,31 @@ public class QuoteFormViewModel extends ViewModel {
         onSubmit =new Action() {
             @Override
             public void run() throws Exception {
+                if (organizationName.s_1.get().equals("")){
+                    messageHelper.show("Enter organization name");
+                    return;
+                }
+                if (audienceStrength.s_1.get().equals("")){
+                    messageHelper.show("Enter audience strength");
+                    return;
+                }
+                if (dateVm.date.get().equalsIgnoreCase("choose")){
+                    messageHelper.show("Please enter a date");
+                    return;
+                }
+                if (hostClassLocation.s_1.get().equals("")){
+                    messageHelper.show("Please enter host location");
+                    return;
+                }
+                if (mobileNumber.s_1.get().equals("")){
+                    messageHelper.show("Please enter a mobile number");
+                    return;
+                }
+
                 QuoteReq.Snippet snippet = new QuoteReq.Snippet();
                 snippet.setUserId(pref.getString(Constants.BG_ID,""));
-                //TODO remove hardcoded class id
-                snippet.setClassId("2");
+                snippet.setClassId(classId);
+                snippet.setCatalogueId(catalogueId);
                 snippet.setDescriptionYes("");
                 snippet.setClassType(TextUtils.join("",classModeVm.getSelectedItemsId()));
                 snippet.setOrganization(organizationName.s_1.get());

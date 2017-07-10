@@ -51,6 +51,9 @@ public class QuoteReq {
         @SerializedName("description")
         String description;
 
+        @SerializedName("catalog_id")
+        String catalogueId;
+
 
     }
 }

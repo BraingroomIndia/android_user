@@ -54,6 +54,7 @@ import com.braingroom.user.viewmodel.ConnectHomeViewModel;
 import com.braingroom.user.viewmodel.LocationFilterViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
+import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 
 import java.util.List;
 
@@ -72,9 +73,9 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     public static final String FRAGMENT_TITLE_CITY = "city";
     public static final String FRAGMENT_TITLE_LOCALITY = "locality";
 
-    public static final String FRAGMENT_TITLE_COLLEGE = "College";
-    public static final String FRAGMENT_TITLE_LEARNER = "Learner";
-    public static final String FRAGMENT_TITLE_Vendor = "Tutor";
+    public static final String FRAGMENT_TITLE_COLLEGE = DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE;
+    public static final String FRAGMENT_TITLE_LEARNER = DynamicSearchSelectListViewModel.FRAGMENT_TITLE_LEARNER;
+    public static final String FRAGMENT_TITLE_Vendor = DynamicSearchSelectListViewModel.FRAGMENT_TITLE_Vendor;
 
     private MenuItem itemNotification;
     private MenuItem itemMessage;
@@ -546,7 +547,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
     @Override
-    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId, List<String> location) {
+    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId,
+                              String instituteId, String authorId, List<String> location) {
         if (pager.getCurrentItem() == 0) {
             learnersFilter.setSearchQuery(keyword);
             learnersFilter.setCategId(categoryId);
@@ -555,6 +557,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             learnersFilter.setStateId(location.get(1));
             learnersFilter.setCityId(location.get(2));
             learnersFilter.setLocalityId(location.get(3));
+            learnersFilter.setInstituteId(instituteId);
+            learnersFilter.setAuthorId(authorId);
         } else {
             tutorsFilter.setSearchQuery(keyword);
             tutorsFilter.setCategId(categoryId);
@@ -563,6 +567,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             tutorsFilter.setStateId(location.get(1));
             tutorsFilter.setCityId(location.get(2));
             tutorsFilter.setLocalityId(location.get(3));
+            tutorsFilter.setInstituteId(instituteId);
+            tutorsFilter.setAuthorId(authorId);
         }
         updateFilter();
     }
@@ -605,7 +611,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     private void setPageTutorTalk() {
         connectFilterViewModel.isLearnerForum.set(false);
         connectFilterViewModel.reset();
-        learnersFilter= new ConnectFilterData();
+        learnersFilter = new ConnectFilterData();
         learnersFilter.setMajorCateg("learners_forum");
         setLocationData();
         mAppBar.setBackgroundResource(R.color.colorAccent);
@@ -621,7 +627,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     private void setPagerLearnerForum() {
         connectFilterViewModel.isLearnerForum.set(true);
         connectFilterViewModel.reset();
-        tutorsFilter=new ConnectFilterData();
+        tutorsFilter = new ConnectFilterData();
         tutorsFilter.setMajorCateg("tutors_talk");
         mAppBar.setBackgroundResource(R.color.colorPrimary);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));

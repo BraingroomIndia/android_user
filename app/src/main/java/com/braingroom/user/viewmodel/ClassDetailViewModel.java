@@ -112,7 +112,7 @@ public class ClassDetailViewModel extends ViewModel {
     public boolean isInWishlist = false;
 
     public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin) {
+                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin,final String catalogueId) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -176,7 +176,7 @@ public class ClassDetailViewModel extends ViewModel {
                     Bundle data = new Bundle();
                     data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
                     data.putSerializable("id", classId);
-                    data.putSerializable(origin,ClassListViewModel1.ORIGIN_HOME);
+                    data.putSerializable("origin",ClassListViewModel1.ORIGIN_HOME);
                     messageHelper.showLoginRequireDialog("Please login to post a query", data);
                     navigator.navigateActivity(LoginActivity.class, data);
                 }
@@ -423,6 +423,7 @@ public class ClassDetailViewModel extends ViewModel {
                             data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
                             data.putSerializable("id", classId);
                             data.putSerializable("origin",ClassListViewModel1.ORIGIN_CATALOG);
+                            data.putSerializable("catalogueId",catalogueId);
                             messageHelper.showLoginRequireDialog("Please login to post a query", data);
                             navigator.navigateActivity(LoginActivity.class, data);
                         }
