@@ -23,12 +23,12 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <android.support.design.widget.CoordinatorLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
                 android:visibility="@{vm.isShimmerOn ? View.GONE : View.VISIBLE}"
                 tools:context="com.braingroom.user.view.activity.ClassDetailActivity">
 
@@ -71,13 +71,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/search_height"
-                        android:orientation="horizontal"
-                        android:background="@color/colorTextGray">
+                        android:background="@color/colorTextGray"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="match_parent"
+                            android:layout_weight="1"
                             android:background="@color/white"
                             android:gravity="center"
                             android:onClick="@{vm.onGiftClicked}"
@@ -90,9 +90,9 @@
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="1dp"
                             android:layout_height="match_parent"
+                            android:layout_marginLeft="1dp"
+                            android:layout_weight="1"
                             android:background="@color/white"
                             android:gravity="center"
                             android:onClick="@{vm.onBookClicked}"
@@ -116,7 +116,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@color/colorBackgroundGray"
                         android:orientation="vertical">
 
@@ -384,16 +384,15 @@
                                     android:text="Contact Us "
                                     android:textColor="@color/colorTextDark"
                                     android:textSize="@dimen/text_size_medium"
-                                    app:font='@{@string/robotoBold}'/>
-
+                                    app:font='@{@string/robotoBold}' />
 
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_marginTop="@dimen/margin_large"
-                                    android:layout_marginBottom="@dimen/margin_large"
-                                    android:background="@drawable/bottom_line_drawable"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/margin_large"
+                                    android:layout_marginTop="@dimen/margin_large"
+                                    android:background="@drawable/bottom_line_drawable"
                                     android:orientation="vertical">
 
                                     <TextView
@@ -401,10 +400,10 @@
                                         android:layout_height="0dp"
                                         android:layout_weight="1"
                                         android:background="@color/white"
-                                        android:gravity="center_vertical"
                                         android:drawableLeft="@drawable/ic_call_black_36dp"
-                                        android:onClick="@{vm.phoneNumber.onOpenerClick}"
                                         android:drawablePadding="@dimen/padding_med"
+                                        android:gravity="center_vertical"
+                                        android:onClick="@{vm.phoneNumber.onOpenerClick}"
                                         android:paddingLeft="@dimen/padding_medium"
                                         android:paddingRight="@dimen/padding_med"
                                         android:text="@string/booking_related_help"
@@ -414,15 +413,15 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="0dp"
-                                        android:layout_weight="1"
                                         android:layout_marginTop="@dimen/margin_med"
+                                        android:layout_weight="1"
                                         android:background="@color/white"
+                                        android:drawableLeft="@drawable/ic_teacher_black_24dp"
+                                        android:drawablePadding="@dimen/padding_med"
                                         android:gravity="center_vertical"
                                         android:onClick="@{vm.onGetTutor}"
-                                        android:drawablePadding="@dimen/padding_med"
                                         android:paddingLeft="@dimen/padding_med"
                                         android:paddingRight="@dimen/padding_med"
-                                        android:drawableLeft="@drawable/ic_teacher_black_24dp"
                                         android:text="Get your own Tutor for this class"
                                         android:textColor="@color/materialBlue"
                                         app:font='@{@string/robotoRegular}' />
@@ -434,11 +433,11 @@
                                         android:layout_marginTop="@dimen/margin_med"
                                         android:layout_weight="1"
                                         android:background="@color/white"
-                                        android:gravity="center_vertical"
                                         android:drawableLeft="@drawable/ic_mode_edit_black_36dp"
-                                        android:drawableTint="@color/black"
-                                        android:onClick="@{vm.onQueryClicked}"
                                         android:drawablePadding="@dimen/padding_med"
+                                        android:drawableTint="@color/black"
+                                        android:gravity="center_vertical"
+                                        android:onClick="@{vm.onQueryClicked}"
                                         android:paddingLeft="@dimen/padding_med"
                                         android:paddingRight="@dimen/padding_med"
                                         android:text="Post a query about this class"
@@ -450,87 +449,87 @@
 
                         </android.support.v7.widget.CardView>
 
-                    <!--    <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_small"
-                            android:elevation="@dimen/cardview_compat_inset_shadow"
-                            android:orientation="vertical"
-                            android:padding="@dimen/padding_med">
-
-                            <LinearLayout
+                        <!--    <android.support.v7.widget.CardView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/colorTextGray"
-                                android:orientation="horizontal">
+                                android:layout_marginTop="@dimen/margin_small"
+                                android:elevation="@dimen/cardview_compat_inset_shadow"
+                                android:orientation="vertical"
+                                android:padding="@dimen/padding_med">
 
-                                <TextView
-                                    android:layout_width="0dp"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:background="@color/white"
-                                    android:gravity="center"
-                                    android:onClick="@{vm.onGetTutor}"
-                                    android:paddingLeft="@dimen/padding_med"
-                                    android:paddingRight="@dimen/padding_med"
-                                    android:text="Get your own Tutor"
-                                    android:textColor="@color/materialBlue"
-                                    app:font='@{@string/robotoRegular}' />
+                                    android:background="@color/colorTextGray"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:background="@color/white"
+                                        android:gravity="center"
+                                        android:onClick="@{vm.onGetTutor}"
+                                        android:paddingLeft="@dimen/padding_med"
+                                        android:paddingRight="@dimen/padding_med"
+                                        android:text="Get your own Tutor"
+                                        android:textColor="@color/materialBlue"
+                                        app:font='@{@string/robotoRegular}' />
 
 
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="0.5dp"
-                                    android:layout_weight="1"
-                                    android:background="@color/white"
-                                    android:gravity="center"
-                                    android:onClick="@{vm.onQueryClicked}"
-                                    android:paddingLeft="@dimen/padding_med"
-                                    android:paddingRight="@dimen/padding_med"
-                                    android:text="Post a query"
-                                    android:textColor="@color/materialBlue"
-                                    app:font='@{@string/robotoRegular}' />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="0.5dp"
+                                        android:layout_weight="1"
+                                        android:background="@color/white"
+                                        android:gravity="center"
+                                        android:onClick="@{vm.onQueryClicked}"
+                                        android:paddingLeft="@dimen/padding_med"
+                                        android:paddingRight="@dimen/padding_med"
+                                        android:text="Post a query"
+                                        android:textColor="@color/materialBlue"
+                                        app:font='@{@string/robotoRegular}' />
 
-                            </LinearLayout>
-                            &lt;!&ndash;
-                                                        <TextView
+                                </LinearLayout>
+                                &lt;!&ndash;
+                                                            <TextView
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:background="@color/white"
+                                                                android:gravity="center"
+                                                                android:onClick="@{vm.onGetTutor}"
+                                                                android:paddingLeft="@dimen/padding_med"
+                                                                android:paddingRight="@dimen/padding_med"
+                                                                android:text="Get your own Tutor for this class"
+                                                                android:textColor="@color/materialGreen"
+                                                                android:textSize="@dimen/text_size_large"
+                                                                app:font='@{@string/robotoBold}' />
+                                                        </android.support.v7.widget.CardView>
+
+                                                        <android.support.v7.widget.CardView
                                                             android:layout_width="match_parent"
                                                             android:layout_height="wrap_content"
-                                                            android:background="@color/white"
-                                                            android:gravity="center"
-                                                            android:onClick="@{vm.onGetTutor}"
-                                                            android:paddingLeft="@dimen/padding_med"
-                                                            android:paddingRight="@dimen/padding_med"
-                                                            android:text="Get your own Tutor for this class"
-                                                            android:textColor="@color/materialGreen"
-                                                            android:textSize="@dimen/text_size_large"
-                                                            app:font='@{@string/robotoBold}' />
-                                                    </android.support.v7.widget.CardView>
+                                                            android:layout_marginTop="@dimen/margin_small"
+                                                            android:background="@color/colorTextGray"
+                                                            android:elevation="@dimen/cardview_compat_inset_shadow"
+                                                            android:orientation="vertical">
 
-                                                    <android.support.v7.widget.CardView
-                                                        android:layout_width="match_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_marginTop="@dimen/margin_small"
-                                                        android:background="@color/colorTextGray"
-                                                        android:elevation="@dimen/cardview_compat_inset_shadow"
-                                                        android:orientation="vertical">
-
-                                                        <TextView
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:background="@color/white"
-                                                            android:gravity="center"
-                                                            android:onClick="@{vm.onQueryClicked}"
-                                                            android:paddingLeft="@dimen/padding_med"
-                                                            android:paddingRight="@dimen/padding_med"
-                                                            android:text="Post query"
-                                                            android:textColor="@color/materialGreen"
-                                                            android:textSize="@dimen/text_size_large"
-                                                            app:font='@{@string/robotoBold}' />&ndash;&gt;
+                                                            <TextView
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:background="@color/white"
+                                                                android:gravity="center"
+                                                                android:onClick="@{vm.onQueryClicked}"
+                                                                android:paddingLeft="@dimen/padding_med"
+                                                                android:paddingRight="@dimen/padding_med"
+                                                                android:text="Post query"
+                                                                android:textColor="@color/materialGreen"
+                                                                android:textSize="@dimen/text_size_large"
+                                                                app:font='@{@string/robotoBold}' />&ndash;&gt;
 
 
-                        </android.support.v7.widget.CardView>-->
+                            </android.support.v7.widget.CardView>-->
 
                         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                             android:layout_width="match_parent"
@@ -649,8 +648,8 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:visibility="@{vm.isShimmerOn}" />
 
         <include
