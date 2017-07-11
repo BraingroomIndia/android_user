@@ -204,16 +204,28 @@ public class LoginViewmodel extends ViewModel {
         editor.commit();
         fcmToken = pref.getString(Constants.FCM_TOKEN, "");
 
+        final String emailId = email;
+
 
         apiService.socialLogin(name, picture, email, socialId, fcmToken, "", referralCode).subscribe(new Consumer<LoginResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
 
 
+
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
                     if ("".equals(loginResp.getData().get(0).getMobile())) {
                         uiHandler.showEmailDialog(loginResp);
-                    } else {
+                        return;
+                    }
+                    else if (loginResp.getData().get(0).getIsVerified()==0){
+
+                        LoginResp.Snippet data=loginResp.getData().get(0);
+                        SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(),data.getId(),emailId,data.getMobile(),password.get());
+                        uiHandler.changeToOTPFragment(snippet);
+                        return;
+                    }
+                    else {
                         editor.putBoolean(Constants.LOGGED_IN, true);
                         editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
                         editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());

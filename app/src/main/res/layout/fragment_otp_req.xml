@@ -20,7 +20,7 @@
         <LinearLayout
             android:id="@+id/layout_otp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="#f7f7f7"
             android:gravity="center_horizontal"
             android:orientation="vertical">
