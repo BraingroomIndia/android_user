@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="com.braingroom.user.viewmodel.SignupViewModel" />
+            type="com.braingroom.user.viewmodel.fragment.OTPViewModel" />
 
     </data>
 
@@ -21,6 +21,7 @@
             android:id="@+id/layout_otp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#f7f7f7"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -57,13 +58,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <EditText
                     android:id="@+id/inputOtp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/white"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
+                    android:background="@android:color/white"
                     android:gravity="center_horizontal"
                     android:hint="@string/lbl_enter_otp"
                     android:inputType="number"
@@ -75,14 +77,14 @@
 
                 <Button
                     android:id="@+id/btn_resend_otp"
-                    android:layout_toRightOf="@id/inputOtp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_med"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/margin_med"
+                    android:layout_toRightOf="@id/inputOtp"
                     android:background="@color/colorPrimaryDark"
                     android:onClick="@{vm.onResendOTP}"
-                    android:text="@string/lbl_submit"
+                    android:text="Resend"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_medium" />
 
@@ -114,9 +116,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_large"
-                    android:text="@{vm.mobileNumber.s_1}"
+                    android:text="@{vm.mobileNumber}"
                     android:textSize="@dimen/text_size_large"
-                    app:font='@{@string/robotoBold}'/>
+                    app:font='@{@string/robotoBold}' />
 
                 <ImageView
                     android:layout_width="wrap_content"

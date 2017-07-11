@@ -3,6 +3,7 @@ package com.braingroom.user.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.text.InputType;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.view.MenuItem;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.response.LoginResp;
+import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.view.fragment.OTPReqFragment;
 import com.braingroom.user.viewmodel.FirstSocialLoginDialogViewModel;
 import com.braingroom.user.viewmodel.LoginViewmodel;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -71,6 +74,8 @@ public class LoginActivity extends BaseActivity implements
         void googleLogin();
 
         void showEmailDialog(LoginResp resp);
+
+        void changeToOTPFragment(SignUpResp.Snippet snippet);
 
 
     }
@@ -166,6 +171,13 @@ public class LoginActivity extends BaseActivity implements
                 showMandatoryEmailPopup(resp);
             }
 
+            @Override
+            public void changeToOTPFragment(SignUpResp.Snippet snippet) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+                transaction.replace(R.id.fragment_container, OTPReqFragment.newInstance(snippet)).addToBackStack(null).commit();
+            }
+
         };
         ((LoginViewmodel) vm).setUiHandler(uiHandler);
     }
@@ -177,11 +189,11 @@ public class LoginActivity extends BaseActivity implements
         parentActivity = getIntentString("backStackActivity");
         classData = getIntentSerializable("classData");
         classId = getIntentString("id");
-        referralCode=getIntentString("referralCode");
-        origin=getIntentString("origin");
-        catalogueId=getIntentString("catalogueId");
+        referralCode = getIntentString("referralCode");
+        origin = getIntentString("origin");
+        catalogueId = getIntentString("catalogueId");
 
-        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData, classId,catalogueId,origin, thirdPartyUserId,referralCode);
+        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData, classId, catalogueId, origin, thirdPartyUserId, referralCode);
     }
 
     @Override
@@ -201,7 +213,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login,
-                new FirstSocialLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData),false);
+                new FirstSocialLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData), false);
         /*new MaterialDialog.Builder(LoginActivity.this)
                 .title("Contact details")
                 .content("Please enter your mobile number")

@@ -23,15 +23,27 @@ public class LoginResp extends BaseResp {
     @AllArgsConstructor(suppressConstructorProperties = true)
     @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
+
+        @SerializedName("id")
         String id;
+
+        @SerializedName("uuid")
         String uuid;
+
         @SerializedName("profile_pic")
         String profilePic;
+
         @SerializedName("city_id")
         String cityId;
+
         String name;
+
         @SerializedName("mobile")
         String mobile;
+
+        @SerializedName("is_mobile_verified")
+        int isVerified;
+
         @SerializedName("referal_code")
         String referralCode;
     }

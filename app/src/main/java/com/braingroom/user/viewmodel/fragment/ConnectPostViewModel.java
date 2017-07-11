@@ -356,7 +356,7 @@ public class ConnectPostViewModel extends ViewModel {
                         messageHelper.show("Please enter Description");
                         return;
                     }
-                    buyAndSellSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedIndex()));
+                    buyAndSellSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedItemsId()));
                     buyAndSellSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     buyAndSellSnippet.setPostType("group_post");
                     buyAndSellSnippet.setPostTitle(title.s_1.get());
@@ -384,7 +384,7 @@ public class ConnectPostViewModel extends ViewModel {
                         messageHelper.show("Please enter Description");
                         return;
                     }
-                    knowledgeNuggetsSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedIndex()));
+                    knowledgeNuggetsSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedItemsId()));
                     knowledgeNuggetsSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     knowledgeNuggetsSnippet.setPostType("tips_tricks");
                     knowledgeNuggetsSnippet.setPostTitle(title.s_1.get());
@@ -426,8 +426,8 @@ public class ConnectPostViewModel extends ViewModel {
                     }
                     learningPartnerPostSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     learningPartnerPostSnippet.setPostType("activity_request");
-                    learningPartnerPostSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedIndex()));
-                    learningPartnerPostSnippet.setActivityType(android.text.TextUtils.join(",", activityVm.getSelectedIndex()));
+                    learningPartnerPostSnippet.setGroupId(android.text.TextUtils.join(",", groupVm.getSelectedItemsId()));
+                    learningPartnerPostSnippet.setActivityType(android.text.TextUtils.join(",", activityVm.getSelectedItemsId()));
                     learningPartnerPostSnippet.setPostTitle(title.s_1.get());
                     learningPartnerPostSnippet.setPostSummary(description.get());
                     learningPartnerPostSnippet.setRequestNote(requestNote.s_1.get());
@@ -442,7 +442,7 @@ public class ConnectPostViewModel extends ViewModel {
                         learningPartnerPostSnippet.setRequestTime(proposedTime.s_1.get());
                     }
                     if (privacyVm.selectedItemsMap.values().iterator().hasNext())
-                        learningPartnerPostSnippet.setPrivacyType(android.text.TextUtils.join("", privacyVm.getSelectedIndex()));
+                        learningPartnerPostSnippet.setPrivacyType(android.text.TextUtils.join("", privacyVm.getSelectedItemsId()));
                     else
                         learningPartnerPostSnippet.setPrivacyType("-1");
                     apiService.postLearningPartner(learningPartnerPostSnippet).subscribe(new Consumer<BaseResp>() {
@@ -473,8 +473,8 @@ public class ConnectPostViewModel extends ViewModel {
                     }
                     decideAndDiscussSnippet.setUuid(pref.getString(Constants.UUID, ""));
                     decideAndDiscussSnippet.setPostType("user_post");
-                    decideAndDiscussSnippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedIndex()));
-                    decideAndDiscussSnippet.setSegmentId(android.text.TextUtils.join(",", segmentsVm.getSelectedIndex()));
+                    decideAndDiscussSnippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
+                    decideAndDiscussSnippet.setSegmentId(android.text.TextUtils.join(",", segmentsVm.getSelectedItemsId()));
                     decideAndDiscussSnippet.setPostTitle(title.s_1.get());
                     decideAndDiscussSnippet.setPostSummary(description.get());
                     decideAndDiscussSnippet.setPostThumbUpload(imageUploadVm.remoteAddress.get());

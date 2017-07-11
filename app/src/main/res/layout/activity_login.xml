@@ -11,140 +11,159 @@
             type="com.braingroom.user.viewmodel.LoginViewmodel" />
     </data>
 
-
-    <RelativeLayout
-        tools:context="com.braingroom.user.view.activity.LoginActivity"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBackgroundGray"
-        android:paddingBottom="20dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="50dp">
+        android:layout_height="wrap_content">
 
 
-        <ImageView
-            android:id="@+id/app_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_centerHorizontal="true"
-            android:adjustViewBounds="true"
-            android:src="@drawable/braingroom_logo" />
 
-        <LinearLayout
-            android:id="@+id/login_input_container"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/app_icon"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/solid_white_rounded_corner"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="@color/colorBackgroundGray"
+            android:paddingBottom="20dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="50dp"
+            tools:context="com.braingroom.user.view.activity.LoginActivity">
 
-
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:backgroundTint="@android:color/transparent"
-                android:hint="Email"
-                android:maxLines="1"
-                android:paddingLeft="15dp"
-                android:text="@={vm.email}" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/cardview_shadow_start_color" />
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:backgroundTint="@android:color/transparent"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:paddingLeft="15dp"
-                android:text="@={vm.password}" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/email_signin"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/login_input_container"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/solid_bg_green_rounded_corner"
-            android:gravity="center"
-            android:onClick="@{vm.onLoginClicked}"
-            android:text="SIGN IN"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_above="@+id/google_sign_in_container">
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/fb_login_original"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
 
             <ImageView
-                android:id="@+id/fb_login_fake"
+                android:id="@+id/app_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/braingroom_logo" />
+
+            <LinearLayout
+                android:id="@+id/login_input_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:onClick="@{vm.onFbLoginClicked}"
-                android:src="@drawable/fb_login" />
-        </FrameLayout>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/app_icon"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/solid_white_rounded_corner"
+                android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/google_sign_in_container"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_above="@+id/forgot_password"
-            android:layout_marginTop="10dp">
 
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/google_login_original"
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="Email"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:text="@={vm.email}" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/cardview_shadow_start_color" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:text="@={vm.password}" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/email_signin"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/login_input_container"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/solid_bg_green_rounded_corner"
+                android:gravity="center"
+                android:onClick="@{vm.onLoginClicked}"
+                android:text="SIGN IN"
+                android:textColor="#ffffff"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_above="@+id/google_sign_in_container">
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/fb_login_original"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/fb_login_fake"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="@{vm.onFbLoginClicked}"
+                    android:src="@drawable/fb_login" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/google_sign_in_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_above="@+id/forgot_password"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/google_login_original"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/google_login_fake"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="@{vm.onGoogleLoginClicked}"
+                    android:src="@drawable/google_login" />
+            </FrameLayout>
+
+
+
+            <TextView
+                android:id="@+id/forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:onClick="@{vm.onForgotPassClicked}"
+                android:text="Forgot password?"
+                android:textColor="@color/colorAccent" />
 
-            <ImageView
-                android:id="@+id/google_login_fake"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:onClick="@{vm.onGoogleLoginClicked}"
-                android:src="@drawable/google_login" />
+            <TextView
+                android:id="@+id/signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:onClick="@{vm.onSignupClicked}"
+                android:text="@string/sign_up"
+                android:textColor="@color/colorAccent" />
+
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f7f7"
+            android:padding="@dimen/padding_med">
+
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/forgot_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
-            android:text="Forgot password?"
-            android:onClick="@{vm.onForgotPassClicked}"
-            android:textColor="@color/colorAccent" />
 
-        <TextView
-            android:id="@+id/signup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
-            android:onClick="@{vm.onSignupClicked}"
-            android:text="@string/sign_up"
-            android:textColor="@color/colorAccent" />
-
-
-    </RelativeLayout>
+    </FrameLayout>
 
 </layout>

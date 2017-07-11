@@ -28,6 +28,14 @@ public class SignUpResp extends BaseResp{
         public String uuid;
 
         @SerializedName("user_id")
-        String userId = "";
+        String userId ;
+
+        String emailId;
+
+        String mobileNumber;
+
+        private String password;
+
+
     }
 }

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.request.LoginReq;
 import com.braingroom.user.model.response.LoginResp;
+import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -121,7 +122,15 @@ public class LoginViewmodel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     if ("".equals(loginResp.getData().get(0).getMobile()) || loginResp.getData().get(0).getReferralCode() == null) {
                         uiHandler.showEmailDialog(loginResp);
-                    } else {
+                        return;
+                    }
+                    else if (loginResp.getData().get(0).getIsVerified()==0){
+                        LoginResp.Snippet data=loginResp.getData().get(0);
+                        SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(),data.getId(),email.get(),data.getMobile(),password.get());
+                        uiHandler.changeToOTPFragment(snippet);
+                        return;
+                    }
+                    else {
                         editor.putBoolean(Constants.LOGGED_IN, true);
                         editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
                         editor.putString(Constants.PROFILE_PIC, loginResp.getData().get(0).getProfilePic());
@@ -149,6 +158,7 @@ public class LoginViewmodel extends ViewModel {
                             navigator.navigateActivity(HomeActivity.class, null);
                         }
                         navigator.finishActivity();
+                        return;
                     }
                 } else
 
@@ -158,6 +168,7 @@ public class LoginViewmodel extends ViewModel {
                     editor.putString(Constants.FCM_TOKEN, fcmToken);
                     editor.commit();
                     messageHelper.show(loginResp.getResMsg());
+                    return;
 
                 }
             }

@@ -66,7 +66,7 @@ public class SignUpViewModelCompetition extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
-    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP,onEditMobile,onResendOTP;
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked;
 
     public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM, ugInstituteVm;
 
@@ -139,18 +139,17 @@ public class SignUpViewModelCompetition extends ViewModel {
                     signUpSnippet.setLocality("");
                 else
                     signUpSnippet.setLocality("" + localityVM.selectedDataMap.values().iterator().next().first);
-                uiHelper.next();
+
                 apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
-                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                    navigator.navigateActivity(HomeActivity.class, null);
-                                }
-                            });
+                            signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
+                            signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
+                            signUpResp.getData().get(0).setPassword(password.s_1.get());
+                            uiHelper.next(signUpResp.getData().get(0));
+
                         } else {
                             messageHelper.show(signUpResp.getResMsg());
                             uiHelper.back();
@@ -192,7 +191,6 @@ public class SignUpViewModelCompetition extends ViewModel {
                 signUpSnippet.setPassword(password.s_1.get());
                 signUpSnippet.setMobileNo(mobileNumber.s_1.get());
                 signUpSnippet.setSchoolName(ugInstituteVm.selectedDataMap.values().iterator().next().first);
-                uiHelper.next();
 
             }
         };
@@ -232,7 +230,10 @@ public class SignUpViewModelCompetition extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
-                            uiHelper.next();
+                            signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
+                            signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
+                            signUpResp.getData().get(0).setPassword(password.s_1.get());
+                            uiHelper.next(signUpResp.getData().get(0));
 
                         } else {
                             messageHelper.show(signUpResp.getResMsg());
@@ -243,53 +244,7 @@ public class SignUpViewModelCompetition extends ViewModel {
 
             }
         };
-        submitOTP = new Action() {
-            @Override
-            public void run() throws Exception {
-                if (OTP.get().equals("")) {
-                    messageHelper.show("Please enter OTP");
-                    return;
-                }
-                SubmitOTPReq.Snippet snippet = new SubmitOTPReq.Snippet();
-                snippet.setUserId(userId);
-                snippet.setOTP(OTP.get());
-                apiService.submitOTP(new SubmitOTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                        if (resp.getResCode().equals("1"))
-                            apiService.login(emailId.s_1.get(), password.s_1.get(), pref.getString(Constants.FCM_TOKEN, ""))
-                                    .subscribe(new Consumer<LoginResp>() {
-                                        @Override
-                                        public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
-                                            if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
-                                                editor.putBoolean(Constants.LOGGED_IN, true);
-                                                editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
-                                                editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
-                                                editor.commit();
-                                                navigator.navigateActivity(HomeActivity.class, null);
-                                            }
-
-                                        }
-                                    });
-
-                    }
-                });
-            }
-        };
-        onResendOTP = new Action() {
-            @Override
-            public void run() throws Exception {
-                requestOTP(mobileNumber.s_1.get());
-            }
-        };
-        onEditMobile = new Action() {
-            @Override
-            public void run() throws Exception {
-                uiHelper.editMobileNumber(uuId);
-            }
-        };
-
-        countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+         countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
@@ -427,20 +382,6 @@ public class SignUpViewModelCompetition extends ViewModel {
 
         return traget.length() == 4 && !traget.contains("[a-zA-Z]+");
 
-    }
-
-    public void requestOTP(@NonNull final String mobile) {
-        OTPReq.Snippet snippet = new OTPReq.Snippet(userId, mobile);
-        apiService.requestOTP(new OTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                messageHelper.show(resp.getResMsg());
-                if (mobile.equals(mobileNumber.s_1.get()))
-                    uiHelper.next();
-                else
-                    mobileNumber.s_1.set(mobile);
-            }
-        });
     }
 
 }

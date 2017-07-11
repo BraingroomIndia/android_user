@@ -60,10 +60,8 @@ public class SignupViewModel extends ViewModel {
     public static final int TYPE_FEMALE = 2;
     public final ObservableField<String> OTP;
 
-    private Disposable otpDisposable;
 
-    private String userId;
-    private String uuId;
+
 
     public final DataItemViewModel fullName, emailId, password, confirmPassword, mobileNumber, referralCodeVm, passoutYear;
     public final ListDialogViewModel1 interestAreaVm;
@@ -79,7 +77,7 @@ public class SignupViewModel extends ViewModel {
 
     public final ObservableBoolean referralFieldVisible = new ObservableBoolean(true);
 
-    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked, submitOTP, onEditMobile, onResendOTP;
+    public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked/*, submitOTP ,onEditMobile, onResendOTP*/;
 
     public final String mandatory = " <font color=\"#ff0000\">" + "* " + "</font>";
 
@@ -164,9 +162,11 @@ public class SignupViewModel extends ViewModel {
 
                         if (signUpResp.getData().size() > 0) {
                             messageHelper.dismissActiveProgress();
-                            userId = signUpResp.getData().get(0).getUserId();
-                            uuId = signUpResp.getData().get(0).getUuid();
-                            requestOTP(mobileNumber.s_1.get());
+                            signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
+                            signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
+                            signUpResp.getData().get(0).setPassword(password.s_1.get());
+                            uiHelper.thirdFragment(signUpResp.getData().get(0));
+
 /*                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
@@ -242,9 +242,10 @@ public class SignupViewModel extends ViewModel {
 
                         if (signUpResp.getData().size() > 0) {
                             messageHelper.dismissActiveProgress();
-                            userId = signUpResp.getData().get(0).getUserId();
-                            uuId = signUpResp.getData().get(0).getUuid();
-                            requestOTP(mobileNumber.s_1.get());
+                            signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
+                            signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
+                            signUpResp.getData().get(0).setPassword(password.s_1.get());
+                            uiHelper.thirdFragment(signUpResp.getData().get(0));
                           /*  messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
@@ -316,7 +317,7 @@ public class SignupViewModel extends ViewModel {
 
             }
         };
-
+/*
         submitOTP = new Action() {
             @Override
             public void run() throws Exception {
@@ -356,11 +357,11 @@ public class SignupViewModel extends ViewModel {
                     }
                 });
             }
-        };
-        onResendOTP = new Action() {
+        };*/
+/*        onResendOTP = new Action() {
             @Override
             public void run() throws Exception {
-                requestOTP(mobileNumber.s_1.get());
+                requestOTP();
             }
         };
         onEditMobile = new Action() {
@@ -368,7 +369,7 @@ public class SignupViewModel extends ViewModel {
             public void run() throws Exception {
                 uiHelper.editMobileNumber(uuId);
             }
-        };
+        };*/
 
 
         countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
@@ -512,7 +513,9 @@ public class SignupViewModel extends ViewModel {
 
     }
 
-    private void safelyDispose(Disposable... disposables) {
+
+
+/*    private void safelyDispose(Disposable... disposables) {
         for (Disposable subscription : disposables) {
             if (subscription != null && !subscription.isDisposed()) {
                 subscription.dispose();
@@ -520,25 +523,6 @@ public class SignupViewModel extends ViewModel {
         }
     }
 
-    public void requestOTP(@NonNull final String mobile) {
-        OTPReq.Snippet snippet = new OTPReq.Snippet(userId, mobile);
-        apiService.requestOTP(new OTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                messageHelper.show(resp.getResMsg());
-                if (mobile.equals(mobileNumber.s_1.get()))
-                    uiHelper.thirdFragment();
-                else
-                    mobileNumber.s_1.set(mobile);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d(TAG, "request Otp: " + throwable.toString());
-
-            }
-        });
-    }
 
     @Override
     public void onResume() {
@@ -563,6 +547,6 @@ public class SignupViewModel extends ViewModel {
     @Override
     public void onPause() {
         safelyDispose(otpDisposable);
-    }
+    }*/
 
 }
