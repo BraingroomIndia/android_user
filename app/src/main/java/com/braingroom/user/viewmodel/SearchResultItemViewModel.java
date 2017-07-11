@@ -28,7 +28,7 @@ public class SearchResultItemViewModel extends ViewModel {
                 filterData.setCategoryId(item.categoryId);
                 filterData.setKeywords(item.query);
                 data.putSerializable("filterData",filterData);
-                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                data.putString("origin", FilterViewModel.ORIGIN_CATEGORY);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }
         };

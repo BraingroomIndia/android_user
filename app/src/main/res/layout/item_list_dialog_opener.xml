@@ -11,6 +11,9 @@
         <variable
             name="editable"
             type="boolean" />
+        <variable
+            name="isInvisible"
+            type="boolean" />
         <import type="android.view.View" />
 
 
@@ -21,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_line_drawable"
+        android:visibility="@{isInvisible ? View.GONE : View.VISIBLE}"
         android:onClick="@{editable ? vm.onOpenerClick : null}"
         android:paddingBottom="@dimen/padding_large"
         android:paddingLeft="@dimen/padding_large"

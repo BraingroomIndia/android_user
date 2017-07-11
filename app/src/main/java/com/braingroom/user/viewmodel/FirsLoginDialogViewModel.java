@@ -22,14 +22,14 @@ import io.reactivex.functions.Consumer;
  * Created by godara on 24/05/17.
  */
 
-public class FirstSocialLoginDialogViewModel extends CustomDialogViewModel {
+public class FirsLoginDialogViewModel extends CustomDialogViewModel {
     public final DataItemViewModel mobileVm, referralVm;
     public final Action onContinue;
     public final String userId;
 
-    public FirstSocialLoginDialogViewModel(@NonNull final LoginResp loginResp, @NonNull final MessageHelper messageHelper,
-                                           @NonNull final Navigator navigator,final String parentActivity,final String classId,
-                                           final Serializable classData) {
+    public FirsLoginDialogViewModel(@NonNull final LoginResp loginResp, @NonNull final MessageHelper messageHelper,
+                                    @NonNull final Navigator navigator, final String parentActivity, final String classId,
+                                    final Serializable classData) {
         mobileVm = new DataItemViewModel("");
 
         referralVm = new DataItemViewModel("");

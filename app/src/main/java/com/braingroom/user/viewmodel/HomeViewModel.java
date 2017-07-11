@@ -158,7 +158,7 @@ public class HomeViewModel extends ViewModel {
                                                 filterData.setCategoryId(snippet.getId());
                                                 data.putSerializable("category",categoryMap);
                                                 data.putSerializable("filterData", filterData);
-                                                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                                                data.putString("origin", FilterViewModel.ORIGIN_CATEGORY);
                                                 navigator.navigateActivity(ClassListActivity.class, data);
                                             }
 
@@ -258,7 +258,7 @@ public class HomeViewModel extends ViewModel {
                 bundle.putString("keywords", "");
                 bundle.putString("startDate", "");
                 bundle.putString("endDate", "");
-                bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                bundle.putString("origin", FilterViewModel.ORIGIN_HOME);
                 navigator.navigateActivity(FilterActivity.class, bundle);
             }
         };

@@ -32,7 +32,7 @@ public class SaveGiftCouponResp extends BaseResp {
         @SerializedName("name")
         private String name;
 
-        @SerializedName("mobile")
+        @SerializedName("phone")
         private String mobile;
 
         @SerializedName("email")

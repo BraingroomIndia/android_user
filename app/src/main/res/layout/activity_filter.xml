@@ -99,6 +99,7 @@
                                 <include
                                     layout="@layout/item_list_dialog_opener"
                                     app:editable="@{true}"
+                                    app:isInvisible="@{!vm.isCategoryVisible}"
                                     app:vm="@{vm.categoryVm}" />
 
                                 <include
@@ -119,6 +120,7 @@
                                 <include
                                     layout="@layout/item_list_dialog_opener"
                                     app:editable="@{true}"
+                                    app:isInvisible="@{!vm.isCommunityVisible}"
                                     app:vm="@{vm.communityVm}" />
 
                                 <include

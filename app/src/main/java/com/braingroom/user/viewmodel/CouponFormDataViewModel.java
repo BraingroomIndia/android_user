@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.SaveGiftCouponReq;
 import com.braingroom.user.model.response.CategoryResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.MessageHelper;
@@ -62,10 +63,12 @@ public class CouponFormDataViewModel extends ViewModel {
         };
 
         if (giftType == GiftCouponViewModel.GIFT_TYPE_SELF) {
+            emailAddress.s_1.set(null);
             recipientsName.s_1.set(null);
             mobileNumber.s_1.set(null);
             personalisedMsg.s_1.set(null);
         } else {
+            emailAddress.s_1.set("");
             recipientsName.s_1.set("");
             mobileNumber.s_1.set("");
             personalisedMsg.s_1.set("");

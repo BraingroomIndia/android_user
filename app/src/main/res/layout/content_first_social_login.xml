@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.braingroom.user.viewmodel.FirstSocialLoginDialogViewModel" />
+            type="com.braingroom.user.viewmodel.FirsLoginDialogViewModel" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"

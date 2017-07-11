@@ -126,7 +126,7 @@ public class ClassListViewModel1 extends ViewModel {
                     if (vm instanceof ClassItemViewModel) {
                         if (ORIGIN_CATALOG.equals(origin))
                             return R.layout.item_class_row_catalog;
-                        if (ORIGIN_HOME.equals(origin) || ORIGIN_GIFT.equals(origin))
+                        if ((origin!=null && origin.contains(ORIGIN_HOME)) || ORIGIN_GIFT.equals(origin))
                             return R.layout.item_class_row_listing;
                     } else if (vm instanceof EmptyItemViewModel)
                         return R.layout.item_empty_data;
@@ -136,7 +136,7 @@ public class ClassListViewModel1 extends ViewModel {
                     if (vm instanceof ClassItemViewModel) {
                         if (ORIGIN_CATALOG.equals(origin))
                             return R.layout.item_class_tile_catalog;
-                        if (ORIGIN_HOME.equals(origin) || ORIGIN_GIFT.equals(origin))
+                        if ((origin!=null && origin.contains(ORIGIN_HOME) || ORIGIN_GIFT.equals(origin)))
                             return R.layout.item_class_tile_listing;
                     } else if (vm instanceof EmptyItemViewModel)
                         return R.layout.item_empty_data;

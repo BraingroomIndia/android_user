@@ -354,7 +354,7 @@ public class DataflowService {
                             ClassData classData = new ClassData();
                             classData.setImage(classDetail.getPicName());
                             classData.setClassTopic(classDetail.getClassTopic());
-                            if (classDetail.getLocation() != null)
+                            if (classDetail.getLocation() != null && !classData.getLocation().isEmpty())
                                 classData.setLocality(classDetail.location.get(0).getLocality());
                             classData.setPricingType(classDetail.getPricingType());
                             if (classDetail.getClassLevels() != null)

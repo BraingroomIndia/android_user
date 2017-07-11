@@ -12,7 +12,6 @@ import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
-import com.braingroom.user.model.response.MessageListResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.FragmentHelper;
@@ -38,6 +37,10 @@ public class FilterViewModel extends ViewModel {
     public static final int CLASS_TYPE_WORKSHOP = 1;
     public static final int CLASS_TYPE_ACTIVITY = 5;
 
+    public static final String ORIGIN_COMMUNITY = "HOME Community";
+    public static final String ORIGIN_CATEGORY = "HOME Category";
+    public static final String ORIGIN_HOME = "HOME Home";
+
     public static final int CLASS_SCHECULE_FIXED = 2;
     public static final int CLASS_SCHECULE_FLEXIBLE = 1;
     private final String origin;
@@ -53,6 +56,9 @@ public class FilterViewModel extends ViewModel {
     public final SearchSelectListViewModel cityVm, localityVm, vendorListVm;
     public Observable<HashMap<String, Pair<String, String>>> cityApiObservable, localityApiObservable, vendorlistApiObservable;
     public ObservableBoolean isCatalogue;
+
+    public final boolean isCommunityVisible;
+    public final boolean isCategoryVisible;
 
     private final FilterData filterData;
 
@@ -75,6 +81,9 @@ public class FilterViewModel extends ViewModel {
         this.origin = origin;
         if (origin.equals(ClassListViewModel1.ORIGIN_CATALOG))
             isCatalogue.set(true);
+        isCommunityVisible = !(origin.equals(ORIGIN_COMMUNITY));
+        isCategoryVisible= !(origin.equals(ORIGIN_CATEGORY));
+
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -337,6 +346,10 @@ public class FilterViewModel extends ViewModel {
         bundle.putString("endDate", endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());*/
         bundle.putBoolean("clearFlag", clearFlag);
         bundle.putSerializable("filterData", filterData);
+        if (origin.equals(ORIGIN_HOME)) {
+            navigator.navigateActivity(ClassListActivity.class, bundle);
+            return;
+        }
         resultIntent.putExtras(bundle);
         navigator.finishActivity(resultIntent);
     }

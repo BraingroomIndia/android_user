@@ -14,7 +14,7 @@ import com.braingroom.user.R;
 import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.view.fragment.OTPReqFragment;
-import com.braingroom.user.viewmodel.FirstSocialLoginDialogViewModel;
+import com.braingroom.user.viewmodel.FirsLoginDialogViewModel;
 import com.braingroom.user.viewmodel.LoginViewmodel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.facebook.AccessToken;
@@ -213,7 +213,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login,
-                new FirstSocialLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData), false);
+                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData), false);
         /*new MaterialDialog.Builder(LoginActivity.this)
                 .title("Contact details")
                 .content("Please enter your mobile number")

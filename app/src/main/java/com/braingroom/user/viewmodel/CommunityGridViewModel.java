@@ -60,7 +60,7 @@ public class CommunityGridViewModel extends ViewModel {
                                                         filterData.setCommunityId(snippet.getId());
                                                         data.putSerializable("community",communityFilterMap);
                                                         data.putSerializable("filterData", filterData);
-                                                        data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                                                        data.putString("origin", FilterViewModel.ORIGIN_COMMUNITY);
                                                         navigator.navigateActivity(destination, data);
                                                     }
                                                 }
