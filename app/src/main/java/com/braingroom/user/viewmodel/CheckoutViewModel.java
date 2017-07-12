@@ -333,7 +333,12 @@ public class CheckoutViewModel extends ViewModel {
     public void saveGiftClassData(String userId, int isGuest, String giftRecepientEmail, String giftRecepientName, String giftPersonalMsg) {
 
         gUserId = userId;
-
+        List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
+        for (ViewModel nonReactiveItem : nonReactiveItems) {
+            if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
+            }
+        }
         SaveGiftCouponReq.GiftDetails data = new SaveGiftCouponReq.GiftDetails();
         data.setClassId(classData.getId());
         data.setDenomination(totalAmountAfterPromo.get() + "");
@@ -352,6 +357,7 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setGiftBy("");
         snippet.setGiftType("");
         snippet.setIsGuest(isGuest);
+        snippet.setTotalTicket("{\"tickets\":" + gson.toJson(levelsList) + "}");
 
         snippet.setGiftDetails(dataList);
         req.setData(snippet);

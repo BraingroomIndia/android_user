@@ -1,12 +1,18 @@
 package com.braingroom.user.viewmodel;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
@@ -83,7 +89,8 @@ public class ClassListViewModel1 extends ViewModel {
     public String keywords = "";
     public String startDate = "";
     public String endDate = "";
-
+    public ObservableField<String> searchQuery = new ObservableField<>("");
+    public ObservableBoolean hideSearchBar = new ObservableBoolean(true);
     PublishSubject<DataItemViewModel> segmentSelectorSubject = PublishSubject.create();
 
     @Getter
@@ -94,6 +101,8 @@ public class ClassListViewModel1 extends ViewModel {
     private boolean segmentAvailable = false;
     private boolean isCatalogue = false;
     private String origin;
+
+    public final Navigator navigator;
 
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
@@ -108,10 +117,12 @@ public class ClassListViewModel1 extends ViewModel {
                                HashMap<String, String> vendorListMap, @Nullable final String origin, final ClassListActivity.UiHelper uiHelper) {
 
 
-        this.origin=origin;
+        this.navigator=navigator;
+        this.origin = origin;
         if (this.origin != null && this.origin.equals(ORIGIN_CATALOG))
             isCatalogue = true;
         categoryFilterMap = categoryMap;
+        //searchQuery.set(filterData1.getKeywords());
         segmentsFilterMap = segmentsMap;
         cityFilterMap = cityMap;
         localityFilterMap = localityMap;
@@ -126,7 +137,7 @@ public class ClassListViewModel1 extends ViewModel {
                     if (vm instanceof ClassItemViewModel) {
                         if (ORIGIN_CATALOG.equals(origin))
                             return R.layout.item_class_row_catalog;
-                        if ((origin!=null && origin.contains(ORIGIN_HOME)) || ORIGIN_GIFT.equals(origin))
+                        if ((origin != null && origin.contains(ORIGIN_HOME)) || ORIGIN_GIFT.equals(origin))
                             return R.layout.item_class_row_listing;
                     } else if (vm instanceof EmptyItemViewModel)
                         return R.layout.item_empty_data;
@@ -136,7 +147,7 @@ public class ClassListViewModel1 extends ViewModel {
                     if (vm instanceof ClassItemViewModel) {
                         if (ORIGIN_CATALOG.equals(origin))
                             return R.layout.item_class_tile_catalog;
-                        if ((origin!=null && origin.contains(ORIGIN_HOME) || ORIGIN_GIFT.equals(origin)))
+                        if ((origin != null && origin.contains(ORIGIN_HOME) || ORIGIN_GIFT.equals(origin)))
                             return R.layout.item_class_tile_listing;
                     } else if (vm instanceof EmptyItemViewModel)
                         return R.layout.item_empty_data;
@@ -233,7 +244,7 @@ public class ClassListViewModel1 extends ViewModel {
                                 Bundle data = new Bundle();
                                 data.putString("id", elem.getId());
                                 data.putString("origin", origin);
-                                data.putString("catalogueId",filterData.getCatalog());
+                                data.putString("catalogueId", filterData.getCatalog());
                                 navigator.navigateActivity(ClassDetailActivity.class, data);
                             }
                         }));
@@ -393,18 +404,18 @@ public class ClassListViewModel1 extends ViewModel {
                 this.classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classType");
                 this.classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classSchedule");
                 this.vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra("vendorList");
-                this.origin=data.getStringExtra("origin");
+                this.origin = data.getStringExtra("origin");
                 if (origin.equals(ORIGIN_CATALOG))
 
 
-                if (categoryFilterMap.isEmpty()) {
-                    segmentsVisibility.set(false);
-                } else {
-                    if (!segmentsVisibility.get()) {
-                        segmentsFilterMap.clear();
-                        segmentAvailable = false;
+                    if (categoryFilterMap.isEmpty()) {
+                        segmentsVisibility.set(false);
+                    } else {
+                        if (!segmentsVisibility.get()) {
+                            segmentsFilterMap.clear();
+                            segmentAvailable = false;
+                        }
                     }
-                }
                 reset();
                        /*  String startDate = data.getStringExtra("startDate");
                 String endDate = data.getStringExtra("endDate");
@@ -481,6 +492,18 @@ public class ClassListViewModel1 extends ViewModel {
             }
 
         }
+    }
+
+    public boolean searchBarInput(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            filterData.setKeywords(searchQuery.get());
+            hideSearchBar.set(true);
+            navigator.hideKeyBoard(v);
+            reset();
+
+        }
+        return false;
+
     }
 
     private void reset() {

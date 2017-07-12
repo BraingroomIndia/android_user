@@ -213,8 +213,12 @@ public class LoginActivity extends BaseActivity implements
 
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
-        getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login,
-                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData), false);
+        FirsLoginDialogViewModel firsLoginDialogViewModel =
+                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData);
+        firsLoginDialogViewModel.setUiHandler(uiHandler);
+        getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login, firsLoginDialogViewModel
+                , false);
+
         /*new MaterialDialog.Builder(LoginActivity.this)
                 .title("Contact details")
                 .content("Please enter your mobile number")

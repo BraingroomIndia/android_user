@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.ActivityClassList1Binding;
@@ -103,6 +105,19 @@ public class ClassListActivity extends BaseActivity {
             mRecyclerView.clearOnScrollListeners();
             mRecyclerView.addOnScrollListener(onScrollListener);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==R.id.action_search)
+            ((ClassListViewModel1) vm).hideSearchBar.set(false);
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_class_list1, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @NonNull

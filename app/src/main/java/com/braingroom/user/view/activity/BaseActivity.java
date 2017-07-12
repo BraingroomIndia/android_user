@@ -1,6 +1,7 @@
 package com.braingroom.user.view.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -18,6 +19,7 @@ import android.view.Display;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -40,6 +42,8 @@ import javax.inject.Named;
 import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
+
+import static com.braingroom.user.R.id.view;
 
 
 public abstract class BaseActivity extends MvvmActivity {
@@ -226,6 +230,14 @@ public abstract class BaseActivity extends MvvmActivity {
                     } catch (GooglePlayServicesNotAvailableException e) {
                         Log.d("Place Api", "launchPlaceSearchIntent: " + e.getMessage());
                     }
+                }
+
+                @Override
+                public void hideKeyBoard(View view){
+                    if (view!=null)
+                    {InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);}
+
                 }
             }
 

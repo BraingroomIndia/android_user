@@ -85,7 +85,6 @@ public class HomeActivity extends BaseActivity
         Bundle bundle = intent.getExtras();
 
 
-
         if (bundle != null)
 
         {
@@ -328,7 +327,7 @@ public class HomeActivity extends BaseActivity
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
                 return true;
             }
-            ((HomeViewModel)vm).notificationCount=0;
+            ((HomeViewModel) vm).notificationCount = 0;
             getNavigator().navigateActivity(NotificationActivity.class, null);
             return true;
         }
@@ -428,21 +427,4 @@ public class HomeActivity extends BaseActivity
         }
     }
 
-    public String getReferralCode(BranchUniversalObject monster) {
-        String referralCode = null;
-        if (monster != null) {
-            HashMap<String, String> referringParams = monster.getMetadata();
-            if (referringParams.containsKey("referral")) {
-                String name = referringParams.get("referral");
-                if (!TextUtils.isEmpty(name)) {
-                    referralCode = name;
-                    Log.d(TAG, "getReferralCode: " + referralCode);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("referralCode",referralCode);
-                    getNavigator().navigateActivity(LoginActivity.class,bundle);
-                }
-            }
-        }
-        return referralCode;
-    }
 }

@@ -307,6 +307,7 @@ public class FilterViewModel extends ViewModel {
                     if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
                     HashMap<String, Pair<String, String>> resMap = new HashMap<>();
                     for (CommonIdResp.Snippet snippet : resp.getData()) {
+                        if (snippet.getId().equals("3659"))
                         resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
                     }
                     return resMap;

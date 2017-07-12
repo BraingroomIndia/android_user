@@ -20,16 +20,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.CoordinatorLayout
 
+
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context="com.braingroom.user.view.activity.ClassListActivity">
+
 
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/AppTheme.AppBarOverlay">
+
+                <EditText
+                    android:id="@+id/search_bar"
+                    android:layout_width="match_parent"
+                    android:layout_margin="@dimen/margin_med"
+                    android:textColor="@color/black"
+                    android:background="@drawable/solid_white_rounded_corner"
+                    android:layout_height="@dimen/search_height"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:visibility="@{vm.hideSearchBar ? View.GONE :View.VISIBLE}"
+                    android:text="@={vm.searchQuery}"
+                    android:focusableInTouchMode="true"
+                    android:OnEditorActionListener="@{vm.searchBarInput}"/>
+
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"

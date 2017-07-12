@@ -53,7 +53,7 @@ public class GiftCouponViewModel extends ViewModel {
                     Bundle data = new Bundle();
                     data.putInt("couponVal", Integer.parseInt(couponValue.get()));
                     data.putInt("giftType", giftTypeSelf.get() ? GIFT_TYPE_SELF : GIFT_TYPE_FRIEND);
-                    data.putInt("giftBy", giftByIndividual.get() ? GIFT_BY_INDIVIDUAL : giftByCorporate.get() ? GIFT_BY_CORPORATE : GIFT_BY_NGO);
+                    data.putInt("giftBy", giftByIndividual.get() ? GIFT_BY_INDIVIDUAL : GIFT_BY_CORPORATE);
                     navigator.navigateActivity(CouponFormActivity.class, data);
                 } catch (NumberFormatException e) {
                     messageHelper.show("only numbers allowed");

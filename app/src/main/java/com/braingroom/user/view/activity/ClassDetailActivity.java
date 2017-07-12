@@ -100,7 +100,7 @@ public class ClassDetailActivity extends BaseActivity {
             @Override
             public void showQuoteForm() {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance(getIntentString("catalogueId"),getIntentString("id"))).addToBackStack(null).commit();
+                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance(getIntentString("catalogueId"), getIntentString("id"))).addToBackStack(null).commit();
             }
 
             @Override
@@ -124,7 +124,7 @@ public class ClassDetailActivity extends BaseActivity {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         throwable.printStackTrace();
-                        Log.d("makeACall", "OnError: " +throwable.toString() + "\t"+ phoneNumber);
+                        Log.d("makeACall", "OnError: " + throwable.toString() + "\t" + phoneNumber);
                     }
                 });
             }
@@ -136,7 +136,7 @@ public class ClassDetailActivity extends BaseActivity {
 
         };
         return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"),
-                getIntentString("origin"),getIntentString("catalogueId"));
+                getIntentString("origin"), getIntentString("catalogueId"));
     }
 
     @Override
@@ -148,11 +148,15 @@ public class ClassDetailActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_class_detail, menu);
-        if (((ClassDetailViewModel) vm).isInWishlist)
-            menu.findItem(R.id.action_wishlist).setIcon(R.drawable.ic_favorite_white_24dp);
-        return true;
+        if (getLayoutId() != R.layout.activity_class_detail_catalog) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.activity_class_detail, menu);
+            if (((ClassDetailViewModel) vm).isInWishlist)
+                menu.findItem(R.id.action_wishlist).setIcon(R.drawable.ic_favorite_white_24dp);
+            return true;
+        }
+        return false;
+
     }
 
     public ClassDetailViewModel getViewModel() {

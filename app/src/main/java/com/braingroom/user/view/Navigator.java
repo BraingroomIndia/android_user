@@ -30,5 +30,7 @@ public interface Navigator {
 
     void openStandaloneVideo(String videoUrl);
 
+    void hideKeyBoard(View view);
+
     void showMenuPopup(@MenuRes int layout, View v, PopupMenu.OnMenuItemClickListener clickListner);
 }

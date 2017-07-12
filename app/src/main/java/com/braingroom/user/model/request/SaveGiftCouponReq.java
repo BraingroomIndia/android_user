@@ -33,9 +33,10 @@ public class SaveGiftCouponReq {
         public String ngoName1;
         @SerializedName("is_guest")
         public int isGuest;
-
         @SerializedName("gift_details")
         List<GiftDetails> giftDetails;
+        @SerializedName("total_ticket")
+        String totalTicket;
     }
 
     @Data
