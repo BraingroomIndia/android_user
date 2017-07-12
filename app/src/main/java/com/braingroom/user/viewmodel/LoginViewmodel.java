@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -53,6 +54,7 @@ public class LoginViewmodel extends ViewModel {
     private final String referralCode;
     Serializable classData;
     String catalogueId;
+    public final ObservableBoolean isOTP=new ObservableBoolean(false);
 
 
     public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity,

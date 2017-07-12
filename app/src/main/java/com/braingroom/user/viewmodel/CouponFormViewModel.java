@@ -83,7 +83,8 @@ public class CouponFormViewModel extends ViewModel {
         SaveGiftCouponReq.Snippet snippet = new SaveGiftCouponReq.Snippet();
         snippet.setUserId(userId);
         snippet.setGiftBy(giftBy);
-        snippet.setGiftType(giftType);
+        //Gift type 2 for Individual and corporate
+        snippet.setGiftType("2");
         snippet.setIsGuest(isGuest);
         List<SaveGiftCouponReq.GiftDetails> data = new ArrayList<>();
         for (CouponFormDataViewModel vm : formDataList) {

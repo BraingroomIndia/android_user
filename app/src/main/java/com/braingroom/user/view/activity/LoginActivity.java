@@ -173,6 +173,7 @@ public class LoginActivity extends BaseActivity implements
 
             @Override
             public void changeToOTPFragment(SignUpResp.Snippet snippet) {
+                ((LoginViewmodel) vm).isOTP.set(true);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
                 transaction.replace(R.id.fragment_container, OTPReqFragment.newInstance(snippet)).addToBackStack(null).commit();

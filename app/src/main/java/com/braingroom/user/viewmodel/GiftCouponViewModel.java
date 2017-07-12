@@ -18,7 +18,7 @@ public class GiftCouponViewModel extends ViewModel {
     public static final String GCTYPE_NGO = "NGO";
 
     public static final int GIFT_TYPE_SELF = 1;
-    public static final int GIFT_TYPE_FRIEND = 1;
+    public static final int GIFT_TYPE_FRIEND = 2;
 
     public static final int GIFT_BY_INDIVIDUAL = 1;
     public static final int GIFT_BY_CORPORATE = 2;
@@ -52,7 +52,7 @@ public class GiftCouponViewModel extends ViewModel {
                 try {
                     Bundle data = new Bundle();
                     data.putInt("couponVal", Integer.parseInt(couponValue.get()));
-                    data.putInt("giftType", 2);
+                    data.putInt("giftType", giftTypeSelf.get() ? GIFT_TYPE_SELF : GIFT_TYPE_FRIEND);
                     data.putInt("giftBy", giftByIndividual.get() ? GIFT_BY_INDIVIDUAL : giftByCorporate.get() ? GIFT_BY_CORPORATE : GIFT_BY_NGO);
                     navigator.navigateActivity(CouponFormActivity.class, data);
                 } catch (NumberFormatException e) {
