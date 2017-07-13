@@ -16,7 +16,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -46,15 +44,11 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import io.branch.indexing.BranchUniversalObject;
-import io.branch.referral.Branch;
-import io.branch.referral.BranchError;
-import io.branch.referral.util.LinkProperties;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 public class HomeActivity extends BaseActivity
@@ -70,6 +64,8 @@ public class HomeActivity extends BaseActivity
     private RelativeLayout competitionBanner;
     private MenuItem itemNotification;
     private MenuItem itemMessage;
+
+    private Disposable timerDisposable;
 
     public interface UiHelper {
         void setCount(int notificationCount, int messageCount);
@@ -122,25 +118,8 @@ public class HomeActivity extends BaseActivity
         textView = (HTextView)
 
                 findViewById(R.id.textview);
-        if (!vm.loggedIn.get())
 
-        {
-            ((HomeViewModel)vm).observable.subscribe(new Consumer<Long>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
-                    animate((int) (aLong % 2));
-                }
-            });
-        } else
-
-        {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
-            competitionBanner.setLayoutParams(params);
-        }
-
-        try
-
-        {
+        try {
             PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
@@ -210,6 +189,31 @@ public class HomeActivity extends BaseActivity
         initNavigationDrawer();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!vm.loggedIn.get()) {
+            timerDisposable = ((HomeViewModel) vm).observable.subscribe(new Consumer<Long>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
+                    animate((int) (aLong % 2));
+                }
+            });
+        } else {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
+            competitionBanner.setLayoutParams(params);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (timerDisposable != null) {
+            if (!timerDisposable.isDisposed())
+                timerDisposable.dispose();
+            timerDisposable = null;
+        }
+    }
 
     public void initNavigationDrawer() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
