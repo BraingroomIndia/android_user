@@ -125,7 +125,7 @@ public class HomeActivity extends BaseActivity
         if (!vm.loggedIn.get())
 
         {
-            observable.subscribe(new Consumer<Long>() {
+            ((HomeViewModel)vm).observable.subscribe(new Consumer<Long>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
                     animate((int) (aLong % 2));
@@ -405,6 +405,7 @@ public class HomeActivity extends BaseActivity
     String[] sentences = {"Creative kids hunt ( Inter-School Competition )", "Click to Register your kid now!"};
 
     public void animate(int index) {
+
         textView.animateText(sentences[index]);
     }
 

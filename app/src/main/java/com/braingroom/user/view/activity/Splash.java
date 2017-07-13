@@ -35,24 +35,28 @@ public class Splash extends Activity {
 
         Branch branch = Branch.getInstance();
 
-        if (branch != null)
-            branch.initSession(new Branch.BranchUniversalReferralInitListener() {
-                @Override
-                public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
-                    //If not Launched by clicking Branch link
-                    if (branchUniversalObject == null) {
-                        Log.d(TAG, "onInitFinished: branchUniversalObject is null");
-                    }
+        try {
+            if (branch != null)
+                branch.initSession(new Branch.BranchUniversalReferralInitListener() {
+                    @Override
+                    public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
+                        //If not Launched by clicking Branch link
+                        if (branchUniversalObject == null) {
+                            Log.d(TAG, "onInitFinished: branchUniversalObject is null");
+                            finish();
+                        }
                 /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
                  * Launch Monster viewer activity if a link clicked without $android_deeplink_path
                  */
-                    else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
-                        getReferralCode(branchUniversalObject);
+                        else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
+                            getReferralCode(branchUniversalObject);
+                        }
                     }
-                    if (linkProperties != null)
-                        Log.d(TAG, "onInitFinished: " + linkProperties.toString());
-                }
-            }, null, null);
+                }, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "onCreate: " + e.toString());
+        }
 
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/

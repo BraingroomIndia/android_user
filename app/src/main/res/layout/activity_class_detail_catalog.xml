@@ -18,7 +18,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ScrollView
             android:layout_width="wrap_content"
@@ -284,22 +284,7 @@
 
                             </android.support.v7.widget.CardView>
 
-                            <android.support.v7.widget.CardView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp">
 
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:padding="@dimen/margin_large"
-                                    android:text="@string/booking_related_help"
-                                    android:textSize="@dimen/text_size_medium" />
-
-
-                            </android.support.v7.widget.CardView>
 
 
                             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -355,9 +340,9 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/padding_med">
+            android:padding="@dimen/padding_med"/>
 
-        </FrameLayout>
+
         <ProgressBar
             android:id="@+id/loading"
             style="?android:attr/progressBarStyleLarge"
@@ -370,6 +355,7 @@
             layout="@layout/content_internet_connectivity"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
             app:vm="@{vm.connectivityViewmodel}" />
 
     </RelativeLayout>

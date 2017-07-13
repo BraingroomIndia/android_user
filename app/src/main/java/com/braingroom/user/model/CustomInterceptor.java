@@ -42,7 +42,7 @@ public class CustomInterceptor implements Interceptor {
 
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request original = chain.request();
         Request.Builder requestBuilder = original.newBuilder()
                 .addHeader("X-App-Type", "BGUSR01")
@@ -53,7 +53,7 @@ public class CustomInterceptor implements Interceptor {
             response = chain.proceed(request);
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(TAG, "intercept: no network " );
+            Log.d(TAG, "intercept: no network " +request.toString());
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;
         }

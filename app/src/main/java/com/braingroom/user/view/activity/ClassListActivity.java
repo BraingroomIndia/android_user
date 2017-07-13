@@ -110,7 +110,7 @@ public class ClassListActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId()==R.id.action_search)
-            ((ClassListViewModel1) vm).hideSearchBar.set(false);
+            ((ClassListViewModel1) vm).hideSearchBar.set(!((ClassListViewModel1) vm).hideSearchBar.get());
         return super.onOptionsItemSelected(item);
     }
 

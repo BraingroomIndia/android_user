@@ -98,6 +98,12 @@
         <include
             layout="@layout/content_home"
             app:vm="@{vm}" />
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            app:vm="@{vm.connectivityViewmodel}" />
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

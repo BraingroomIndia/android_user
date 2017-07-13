@@ -2,6 +2,7 @@ package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -80,6 +82,8 @@ public class HomeViewModel extends ViewModel {
     private DialogHelper dialogHelper;
     Navigator navigator;
 
+    public Observable observable;
+
     private final int[] resArray = new int[]{R.drawable.main_category_1,
             R.drawable.main_category_2, //Edited By Vikas Godara
             R.drawable.main_category_3,
@@ -107,6 +111,7 @@ public class HomeViewModel extends ViewModel {
         this.dialogHelper = dialogHelper;
         this.navigator = navigator;
 
+        observable = Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread());
 
         pinColorMap.put("#026510", R.drawable.pin_new_1);
         pinColorMap.put("#ffa0d0", R.drawable.pin_new_2);

@@ -213,7 +213,7 @@ public class BindingUtils {
         Log.d(TAG, "setImageUrl: " + url);
         if ("".equals(url)) url = null;
         Picasso picasso = Picasso.with(imageView.getContext());
-        picasso.setLoggingEnabled(true);
+        /*picasso.setLoggingEnabled(true);*/
         RequestCreator requestCreator;
         requestCreator = picasso.load(url);
         if (placeHolder != 0) {
