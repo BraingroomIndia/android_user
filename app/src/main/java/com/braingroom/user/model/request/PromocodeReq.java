@@ -29,7 +29,10 @@ public class PromocodeReq {
         @SerializedName("is_guest")
         int isGuest;
 
-        @SerializedName("promocode")
+        @SerializedName("promo_code")
         String code;
+
+        @SerializedName("total_amount")
+        String totalAmount;
     }
 }

@@ -156,7 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_med"
-                android:visibility="gone"
+                android:visibility="@{vm.isGift ?  View.GONE : View.VISIBLE}"
                 card_view:cardElevation="@dimen/elevation_small">
 
                 <TextView
@@ -164,7 +164,8 @@
                     android:layout_height="50dp"
                     android:layout_marginTop="@dimen/padding_small"
                     android:gravity="center"
-                    android:text='@{vm.appliedCouponCode == null ? "Apply a Coupon Code" : "Coupon Code : " + vm.appliedPromoCode}'
+                    android:text='@{vm.appliedCouponCode == null ? "Apply a Coupon Code" : "Coupon Code : " + vm.appliedCouponCode}'
+                    android:onClick="@{vm.onOpenCouponCode}"
                     android:textColor="@color/materialBlue"
                     android:textSize="@dimen/text_size_large"
                     android:visibility="@{vm.couponCode == null ? View.VISIBLE : View.GONE}"
@@ -187,7 +188,8 @@
                         android:layout_marginTop="@dimen/padding_small"
                         android:layout_weight="2"
                         android:gravity="center"
-                        android:text="Apply"
+                        android:text="Apply Coupon"
+                        android:onClick="@{vm.onApplyCouponCode}"
                         android:textColor="@color/materialBlue"
                         android:textSize="@dimen/text_size_large"
                         app:font='@{@string/robotoRegular}' />
@@ -200,7 +202,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_med"
-                android:visibility="@{vm.isGift ?  View.GONE : View.VISIBLE}"
                 card_view:cardElevation="@dimen/elevation_small">
 
                 <TextView
@@ -211,7 +212,7 @@
                     android:onClick="@{vm.onOpenPromoCode}"
                     android:text='@{vm.appliedPromoCode == null ? "Apply a Promo Code" : "Promo Code : " + vm.appliedPromoCode}'
                     android:textColor="@color/materialBlue"
-                    android:textSize="@dimen/text_size_large"
+                    android:textSize="@dimen/text_size_medium"
                     android:visibility="@{vm.promoCode == null || vm.appliedPromoCode != null ? View.VISIBLE : View.GONE}"
                     app:font='@{@string/robotoRegular}' />
 
@@ -227,19 +228,19 @@
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="8"
+                        android:layout_weight="7.5"
                         android:text="@={vm.promoCode}" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/padding_small"
-                        android:layout_weight="2"
+                        android:layout_weight="2.5"
                         android:gravity="center"
                         android:onClick="@{vm.onApplyPromoCode}"
-                        android:text="Apply"
+                        android:text="Apply Pomo"
                         android:textColor="@color/materialBlue"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_medium"
                         app:font='@{@string/robotoRegular}' />
 
                 </LinearLayout>

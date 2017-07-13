@@ -62,14 +62,14 @@ public class CheckoutViewModel extends ViewModel {
     public final ObservableInt totalAmount;
     public final ObservableInt totalAmountAfterPromo;
 
-    public final Action onProceedClicked, onApplyPromoCode, onOpenPromoCode, onShowPriceDetailsClicked;
+    public final Action onProceedClicked, onOpenPromoCode,onApplyPromoCode,onOpenCouponCode,onApplyCouponCode, onShowPriceDetailsClicked;
 
     public final ObservableField<String> couponCode;
     public final ObservableField<String> promoCode;
     public String appliedPromoCodeId;
     public final ObservableField<String> appliedCouponCode;
     public final ObservableField<String> appliedPromoCode;
-    public float appliedPromoAmount = 0;
+    public float appliedPromoAmount=0,appliedCouponAmount = 0;
 
     public final ObservableField<String> classImage;
     public final ObservableField<String> defaultPrice;
@@ -123,7 +123,7 @@ public class CheckoutViewModel extends ViewModel {
                 totalPrice = totalPrice + ((LevelPricingItemViewModel) nonReactiveItem).totalPrice.get();
             }
             totalAmount.set(totalPrice);
-            totalAmountAfterPromo.set((int) (totalPrice - appliedPromoAmount));
+            totalAmountAfterPromo.set((int) (totalPrice - appliedPromoAmount-appliedCouponAmount));
         }
     };
 
@@ -257,6 +257,9 @@ public class CheckoutViewModel extends ViewModel {
                                     promoCode.set("");
                                     appliedPromoCode.set(null);
                                     appliedPromoAmount = 0;
+                                    couponCode.set(null);
+                                    appliedCouponCode.set(null);
+                                    appliedCouponAmount=0;
                                     try {
                                         dataChangeAction.run();
                                     } catch (Exception e) {
@@ -273,6 +276,50 @@ public class CheckoutViewModel extends ViewModel {
                     promoCode.set("");
                     appliedPromoCode.set(null);
                     appliedPromoAmount = 0;
+                    couponCode.set(null);
+                    appliedCouponCode.set(null);
+                    appliedCouponAmount=0;
+                    dataChangeAction.run();
+                }
+
+
+            }
+        };
+        onOpenCouponCode = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (!loggedIn.get() && isGuest == 0) {
+                    helperFactory.createDialogHelper()
+                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
+                                @Override
+                                public void onGuestLoginSuccess(String id) {
+                                    userId = id;
+                                    isGuest = 1;
+                                    promoCode.set(null);
+                                    appliedPromoCode.set(null);
+                                    appliedPromoAmount = 0;
+                                    couponCode.set("");
+                                    appliedCouponCode.set(null);
+                                    appliedCouponAmount=0;
+                                    try {
+                                        dataChangeAction.run();
+                                    } catch (Exception e) {
+                                    }
+                                }
+
+                                @Override
+                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
+
+                                }
+                            }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
+
+                } else {
+                    promoCode.set(null);
+                    appliedPromoCode.set(null);
+                    appliedPromoAmount = 0;
+                    couponCode.set("");
+                    appliedCouponCode.set(null);
+                    appliedCouponAmount=0;
                     dataChangeAction.run();
                 }
 
@@ -303,13 +350,53 @@ public class CheckoutViewModel extends ViewModel {
                     snippet.setCode(promoCode.get());
                     snippet.setIsGuest(isGuest);
                     snippet.setUserId(userId);
+                    snippet.setTotalAmount(totalAmount.get()+"");
                     apiService.applyPromoCode(snippet).subscribe(new Consumer<PromocodeResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull PromocodeResp resp) throws Exception {
                             if (resp.getData().size() > 0) {
-                                appliedPromoCode.set(resp.getData().get(0).getPromoCode());
-                                appliedPromoAmount = Float.parseFloat(resp.getData().get(0).getAmount());
-                                appliedPromoCodeId = resp.getData().get(0).getId();
+                                appliedPromoCode.set(promoCode.get());
+                                appliedPromoAmount = resp.getData().get(0).getAmount();
+                                dataChangeAction.run();
+//                                promoCode.set(null);
+                            } else {
+                                messageHelper.show(resp.getResMsg());
+                            }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Throwable th) throws Exception {
+                            Log.d("Checkout ", "accept: ");
+                        }
+                    });
+                } else {
+                    messageHelper.show("code length should be more than 3");
+                }
+            }
+        };
+
+        onApplyCouponCode = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (couponCode!= null && couponCode.get().length() > 3) {
+                    PromocodeReq.Snippet snippet = new PromocodeReq.Snippet();
+                    List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
+                    snippet.setClassId(classData.getId());
+                    for (ViewModel nonReactiveItem : nonReactiveItems) {
+                        if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                            levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
+                        }
+                    }
+                    snippet.setTotalTicket("{\"tickets\":" + gson.toJson(levelsList) + "}");
+                    snippet.setCode(promoCode.get());
+                    snippet.setIsGuest(isGuest);
+                    snippet.setUserId(userId);
+                    apiService.applyPromoCode(snippet).subscribe(new Consumer<PromocodeResp>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull PromocodeResp resp) throws Exception {
+                            if (resp.getData().size() > 0) {
+                                appliedPromoCode.set(promoCode.get());
+                                appliedPromoAmount = resp.getData().get(0).getAmount();
                                 dataChangeAction.run();
 //                                promoCode.set(null);
                             } else {
