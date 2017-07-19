@@ -1,6 +1,5 @@
 package com.braingroom.user.viewmodel;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.response.BaseResp;
@@ -9,14 +8,8 @@ import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.CheckoutActivity;
-import com.braingroom.user.view.activity.ClassDetailActivity;
-import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
-import com.braingroom.user.viewmodel.fragment.OTPViewModel;
-
-import java.io.Serializable;
 
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -34,8 +27,7 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
     LoginActivity.UIHandler uiHandler;
 
     public FirsLoginDialogViewModel(@NonNull final LoginResp loginResp, @NonNull final MessageHelper messageHelper,
-                                    @NonNull final Navigator navigator, final String parentActivity, final String classId,
-                                    final Serializable classData) {
+                                    @NonNull final Navigator navigator) {
         mobileVm = new DataItemViewModel("");
 
         referralVm = new DataItemViewModel("");
@@ -63,25 +55,24 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                             logOut();
                             messageHelper.show(baseResp.getResMsg());
                         } else {
+                            if (mobileVm.s_1.get() != null) {
+                                LoginResp.Snippet data =loginResp.getData().get(0);
+                                SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), mobileVm.s_1.get(), data.getPassword());
+                                uiHandler.changeToOTPFragment(snippet);
+                                if (!data.getLoginType().equals("direct")){
+                                    editor.putBoolean(Constants.LOGGED_IN, true);
+                                    editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
+                                    editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
+                                    editor.commit();
+                                }
+                                dismissDialog();
+                                return;
+                            }
                             editor.putBoolean(Constants.LOGGED_IN, true);
                             editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
                             editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
                             editor.commit();
-                            if (CheckoutActivity.class.getSimpleName().equals(parentActivity)) {
-                                Bundle data = new Bundle();
-                                data.putSerializable("classData", classData);
-                                navigator.navigateActivity(CheckoutActivity.class, data);
-                            } else if (ConnectHomeActivity.class.getSimpleName().equals(parentActivity)) {
-                                navigator.navigateActivity(ConnectHomeActivity.class, null);
-                            } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
-                                Bundle data = new Bundle();
-                                data.putString("id", classId);
-                                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-                                navigator.navigateActivity(ClassDetailActivity.class, data);
-                            } else {
-                                navigator.navigateActivity(HomeActivity.class, null);
-                            }
-                            navigator.finishActivity();
+                            navigator.navigateActivity(HomeActivity.class, null);
                             navigator.finishActivity();
                         }
 

@@ -133,7 +133,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/bottomNavBackground"
-            android:elevation="10dp"
             app:elevation="10dp"
             app:itemIconTint="@drawable/bottom_nav_selector"
             app:itemTextColor="@drawable/bottom_nav_selector"

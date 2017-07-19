@@ -25,7 +25,7 @@
             android:background="@drawable/solid_white_rounded_corner"
             android:hint="Minimum Rs. 500"
             android:inputType="number"
-            android:paddingLeft="@dimen/padding_med"
+            android:paddingLeft="@dimen/margin_small"
             android:text="@={vm.couponValue}"
             app:font='@{@string/robotoRegular}' />
 

@@ -13,7 +13,6 @@
             type="com.braingroom.user.viewmodel.LoginViewmodel" />
     </data>
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -87,7 +86,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/_36sdp"
             android:layout_above="@+id/google_sign_in_container">
 
             <com.facebook.login.widget.LoginButton
@@ -150,7 +149,9 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:visibility="@{vm.isOTP ? View.VISIBLE: View.GONE}"
+            android:layout_height="match_parent"
+            android:clickable="true" />
 
 
     </RelativeLayout>

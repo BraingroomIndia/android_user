@@ -46,6 +46,13 @@ public class LoginResp extends BaseResp {
 
         @SerializedName("referal_code")
         String referralCode;
+
+        @SerializedName("login_type")
+        String loginType;
+
+        private String emailId;
+
+        private String password;
     }
 
 }

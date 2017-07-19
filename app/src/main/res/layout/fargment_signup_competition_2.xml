@@ -57,7 +57,7 @@
                 android:paddingBottom="20dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="@dimen/padding_med">
+                android:paddingTop="@dimen/margin_small">
 
                 <include
                     layout="@layout/item_list_dialog_opener"
@@ -72,7 +72,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_med">
+                    android:padding="@dimen/margin_small">
 
                     <include
                         layout="@layout/item_date_dialog_opener"
@@ -113,7 +113,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_med">
+                    android:padding="@dimen/margin_small">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -123,8 +123,8 @@
                         android:background="@drawable/solid_bg_green_rounded_corner"
                         android:onClick="@{vm.onBackClicked}"
                         android:paddingBottom="@dimen/padding_small"
-                        android:paddingLeft="@dimen/padding_med"
-                        android:paddingRight="@dimen/padding_med"
+                        android:paddingLeft="@dimen/margin_small"
+                        android:paddingRight="@dimen/margin_small"
                         android:paddingTop="@dimen/padding_small"
                         android:text="Back"
                         android:textColor="@color/white"
@@ -140,8 +140,8 @@
                         android:background="@drawable/solid_bg_green_rounded_corner"
                         android:onClick="@{vm.onSignupClicked}"
                         android:paddingBottom="@dimen/padding_small"
-                        android:paddingLeft="@dimen/padding_med"
-                        android:paddingRight="@dimen/padding_med"
+                        android:paddingLeft="@dimen/margin_small"
+                        android:paddingRight="@dimen/margin_small"
                         android:paddingTop="@dimen/padding_small"
                         android:text="Skip &amp; Sign up"
                         android:textColor="@color/white"

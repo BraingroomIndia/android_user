@@ -21,7 +21,7 @@ public class PromocodeResp extends BaseResp {
     @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
-        @SerializedName("promo_amount")
+        @SerializedName(value = "promo_amount", alternate = {"coupon_amount"})
         public Integer amount;
 
     }

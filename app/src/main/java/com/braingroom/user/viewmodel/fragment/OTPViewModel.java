@@ -38,7 +38,7 @@ public class OTPViewModel extends ViewModel {
     public final ObservableField<String> OTP, mobileNumber;
     public final String userId, uuid, emailId, password;
 
-    public OTPViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull SignUpResp.Snippet data, @NonNull final OTPReqFragment.UiHelper uiHelper) {
+    public OTPViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final SignUpResp.Snippet data, @NonNull final OTPReqFragment.UiHelper uiHelper) {
         this.OTP = new ObservableField<>("");
         this.mobileNumber = new ObservableField<>(data.getMobileNumber());
         this.messageHelper = messageHelper;
@@ -70,13 +70,14 @@ public class OTPViewModel extends ViewModel {
                     messageHelper.show("Please enter OTP");
                     return;
                 }
-                SubmitOTPReq.Snippet snippet = new SubmitOTPReq.Snippet();
+                final SubmitOTPReq.Snippet snippet = new SubmitOTPReq.Snippet();
                 snippet.setUserId(userId);
                 snippet.setOTP(OTP.get());
                 apiService.submitOTP(new SubmitOTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
                         if (resp.getResCode().equals("1"))
+                            if (data.getLoginType().equals("direct"))
                             apiService.login(emailId, password, pref.getString(Constants.FCM_TOKEN, ""))
                                     .subscribe(new Consumer<LoginResp>() {
                                         @Override
@@ -88,9 +89,12 @@ public class OTPViewModel extends ViewModel {
                                                 editor.commit();
                                                 navigator.navigateActivity(HomeActivity.class, null);
                                             }
+                                            else messageHelper.show(loginResp.getResMsg());
 
                                         }
                                     });
+                            else
+                                navigator.navigateActivity(HomeActivity.class, null);
                         else messageHelper.show(resp.getResMsg());
 
                     }

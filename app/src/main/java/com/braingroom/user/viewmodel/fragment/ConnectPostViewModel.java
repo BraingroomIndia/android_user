@@ -170,6 +170,7 @@ public class ConnectPostViewModel extends ViewModel {
                             proposedTimeField.set(false);
                             activityField.set(false);
                             categoryField.set(false);
+                            notifyAll();
                             break;
                         case POST_TYPE_BUY_N_SELL:
                             imageField.set(true);
@@ -180,6 +181,7 @@ public class ConnectPostViewModel extends ViewModel {
                             proposedTimeField.set(false);
                             activityField.set(false);
                             categoryField.set(false);
+                            notifyAll();
                             break;
                         case POST_TYPE_LEARNING_PARTNERS:
                             groupsField.set(true);
@@ -190,6 +192,7 @@ public class ConnectPostViewModel extends ViewModel {
                             videoField.set(false);
                             classField.set(false);
                             categoryField.set(false);
+                            notifyAll();
                             break;
                         case POST_TYPE_DISCUSS_AND_DECIDE:
                             imageField.set(true);
@@ -200,6 +203,7 @@ public class ConnectPostViewModel extends ViewModel {
                             groupsField.set(false);
                             proposedTimeField.set(false);
                             activityField.set(false);
+                            notifyAll();
                             break;
                         default:
                             break;

@@ -29,7 +29,7 @@
             android:layout_marginRight="@dimen/margin_small_neg"
             android:background="@color/fbFeedBackground"
             android:clipToPadding="false"
-            android:paddingTop="@dimen/padding_med"
+            android:paddingTop="@dimen/margin_small"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </RelativeLayout>
 

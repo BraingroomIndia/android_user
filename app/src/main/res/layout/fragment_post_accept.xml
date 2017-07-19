@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/solid_material_white_rounded_corner"
-        android:padding="@dimen/padding_med">
+        android:padding="@dimen/margin_small">
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"

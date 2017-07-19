@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/solid_material_white_rounded_corner"
-        android:padding="@dimen/padding_med">
+        android:padding="@dimen/margin_small">
 
         <LinearLayout
             android:id="@+id/header"
@@ -69,7 +69,7 @@
             android:background="@drawable/top_line_drawable_solid_white"
             android:hint="Write a reply..."
             android:minHeight="50dp"
-            android:padding="@dimen/padding_med"
+            android:padding="@dimen/margin_small"
             android:text="@={vm.reply}" />
 
         <ImageView
@@ -79,7 +79,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:onClick="@{vm.onSendClicked}"
-            android:padding="@dimen/padding_med"
+            android:padding="@dimen/margin_small"
             android:src="@drawable/ic_send_black_24dp"
             android:tint="@color/fbLikeDark" />
 

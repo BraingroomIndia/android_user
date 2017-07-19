@@ -7,6 +7,7 @@ import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -122,7 +123,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
         this.image = new ObservableField<>("".equals(data.getImage()) ? null : data.getImage());
         this.video = new ObservableField<>(getVideoId(data.getVideo()));
-        this.videoThumb = new ObservableField<>(video.get() == "" ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
+        this.videoThumb = new ObservableField<>(TextUtils.isEmpty(video.get()) ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
         this.liked = new ObservableBoolean(data.getLiked() == 0 ? false : true);
         // Log.d(TAG, "ConnectFeedItemViewModel: \n videoUrl \t " + video.get() + "\n videoThumb \t" + videoThumb.get() + "\n");
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);

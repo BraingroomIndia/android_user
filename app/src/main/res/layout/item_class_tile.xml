@@ -38,9 +38,9 @@
                 android:layout_height="0dp"
                 android:layout_weight="4"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/padding_med"
-                android:paddingLeft="@dimen/padding_med"
-                android:paddingRight="@dimen/padding_med">
+                android:paddingBottom="@dimen/margin_small"
+                android:paddingLeft="@dimen/margin_small"
+                android:paddingRight="@dimen/margin_small">
 
                 <TextView
                     android:layout_width="match_parent"

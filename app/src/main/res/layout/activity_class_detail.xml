@@ -81,8 +81,8 @@
                             android:background="@color/white"
                             android:gravity="center"
                             android:onClick="@{vm.onGiftClicked}"
-                            android:paddingLeft="@dimen/padding_med"
-                            android:paddingRight="@dimen/padding_med"
+                            android:paddingLeft="@dimen/margin_small"
+                            android:paddingRight="@dimen/margin_small"
                             android:text="GIFT THIS CLASS"
                             android:textColor="@color/materialOrange"
                             android:textSize="@dimen/text_size_large"
@@ -91,15 +91,15 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="1dp"
+                            android:layout_marginLeft="@dimen/_1sdp"
                             android:layout_weight="1"
-                            android:background="@color/white"
                             android:gravity="center"
                             android:onClick="@{vm.onBookClicked}"
-                            android:paddingLeft="@dimen/padding_med"
-                            android:paddingRight="@dimen/padding_med"
+                            android:paddingLeft="@dimen/margin_small"
+                            android:paddingRight="@dimen/margin_small"
                             android:text="BOOK NOW"
-                            android:textColor="@color/materialOrange"
+                            android:textColor="@color/white"
+                            android:background="@color/materialOrange"
                             android:textSize="@dimen/text_size_large"
                             android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
                             app:font='@{@string/robotoBold}' />
@@ -123,17 +123,17 @@
                         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            card_view:cardElevation="@dimen/elevation_zero">
+                            card_view:cardElevation="@dimen/dimen_zero">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/top_line_drawable"
                                 android:orientation="vertical"
-                                android:paddingBottom="@dimen/padding_med"
+                                android:paddingBottom="@dimen/margin_small"
                                 android:paddingLeft="@dimen/padding_large"
-                                android:paddingRight="@dimen/padding_med"
-                                android:paddingTop="@dimen/padding_med">
+                                android:paddingRight="@dimen/margin_small"
+                                android:paddingTop="@dimen/margin_small">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -169,7 +169,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:gravity="center_vertical"
-                                        android:paddingBottom="@dimen/padding_med"
+                                        android:paddingBottom="@dimen/margin_small"
                                         android:paddingRight="@dimen/padding_small"
                                         android:text="@{vm.sessionDurationInfo}"
                                         android:textColor="@color/colorTextGray"
@@ -216,7 +216,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
                             android:layout_marginTop="@dimen/margin_med"
-                            card_view:cardElevation="@dimen/elevation_small">
+                            card_view:cardElevation="@dimen/dimen_zero">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -277,7 +277,7 @@
                                     android:layout_height="50dp"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
-                                    android:padding="@dimen/padding_med"
+                                    android:padding="@dimen/margin_small"
                                     android:src="@drawable/ic_chevron_right_black_24dp"
                                     android:tint="@color/colorTextGray" />
 
@@ -289,7 +289,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_med"
-                            card_view:cardElevation="@dimen/elevation_small">
+                            card_view:cardElevation="@dimen/dimen_zero">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -298,7 +298,7 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/header_height_med"
+                                    android:layout_height="@dimen/search_height"
                                     android:background="@drawable/bottom_line_drawable"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="@dimen/margin_large"
@@ -328,7 +328,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_med"
                             android:visibility="@{vm.isMapVisible? View.VISIBLE : View.GONE}"
-                            card_view:cardElevation="@dimen/elevation_small">
+                            card_view:cardElevation="@dimen/dimen_zero">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -337,7 +337,7 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/header_height_med"
+                                    android:layout_height="@dimen/search_height"
                                     android:background="@drawable/bottom_line_drawable"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="@dimen/margin_large"
@@ -377,7 +377,7 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/header_height_med"
+                                    android:layout_height="@dimen/search_height"
                                     android:background="@drawable/bottom_line_drawable"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="@dimen/margin_large"
@@ -401,11 +401,11 @@
                                         android:layout_weight="1"
                                         android:background="@color/white"
                                         android:drawableLeft="@drawable/ic_call_black_36dp"
-                                        android:drawablePadding="@dimen/padding_med"
+                                        android:drawablePadding="@dimen/margin_small"
                                         android:gravity="center_vertical"
                                         android:onClick="@{vm.phoneNumber.onOpenerClick}"
                                         android:paddingLeft="@dimen/padding_medium"
-                                        android:paddingRight="@dimen/padding_med"
+                                        android:paddingRight="@dimen/margin_small"
                                         android:text="@string/booking_related_help"
                                         android:textColor="@color/materialBlue"
                                         app:font='@{@string/robotoRegular}' />
@@ -417,12 +417,12 @@
                                         android:layout_weight="1"
                                         android:background="@color/white"
                                         android:drawableLeft="@drawable/ic_teacher_black_24dp"
-                                        android:drawablePadding="@dimen/padding_med"
+                                        android:drawablePadding="@dimen/margin_small"
                                         android:gravity="center_vertical"
                                         android:onClick="@{vm.onGetTutor}"
-                                        android:paddingLeft="@dimen/padding_med"
-                                        android:paddingRight="@dimen/padding_med"
-                                        android:text="Get your own Tutor for this class"
+                                        android:paddingLeft="@dimen/margin_small"
+                                        android:paddingRight="@dimen/margin_small"
+                                        android:text="Get your Private tutor for this class"
                                         android:textColor="@color/materialBlue"
                                         app:font='@{@string/robotoRegular}' />
 
@@ -434,12 +434,12 @@
                                         android:layout_weight="1"
                                         android:background="@color/white"
                                         android:drawableLeft="@drawable/ic_mode_edit_black_36dp"
-                                        android:drawablePadding="@dimen/padding_med"
+                                        android:drawablePadding="@dimen/margin_small"
                                         android:drawableTint="@color/black"
                                         android:gravity="center_vertical"
                                         android:onClick="@{vm.onQueryClicked}"
-                                        android:paddingLeft="@dimen/padding_med"
-                                        android:paddingRight="@dimen/padding_med"
+                                        android:paddingLeft="@dimen/margin_small"
+                                        android:paddingRight="@dimen/margin_small"
                                         android:text="Post a query about this class"
                                         android:textColor="@color/materialBlue"
                                         app:font='@{@string/robotoRegular}' />
@@ -537,7 +537,7 @@
                             android:layout_marginBottom="@dimen/margin_med"
                             android:layout_marginTop="@dimen/margin_med"
                             android:visibility="@{vm.isMapVisible? View.VISIBLE : View.GONE}"
-                            card_view:cardElevation="@dimen/elevation_small">
+                            card_view:cardElevation="@dimen/dimen_zero">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -546,7 +546,7 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/header_height_med"
+                                    android:layout_height="@dimen/search_height"
                                     android:background="@drawable/bottom_line_drawable"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="@dimen/margin_large"
@@ -585,9 +585,9 @@
                                     android:ellipsize="end"
                                     android:gravity="center"
                                     android:onClick="@{vm.openConnectTnT}"
-                                    android:paddingLeft="@dimen/padding_med"
-                                    android:paddingRight="@dimen/padding_med"
-                                    android:text="Tips &amp; Tricks"
+                                    android:paddingLeft="@dimen/margin_small"
+                                    android:paddingRight="@dimen/margin_small"
+                                    android:text="@string/action_tips_tricks"
                                     android:textColor="@color/materialGreen"
                                     app:font='@{@string/robotoBold}' />
 
@@ -599,9 +599,9 @@
                                     android:background="@color/white"
                                     android:gravity="center"
                                     android:onClick="@{vm.openConnectBnS}"
-                                    android:paddingLeft="@dimen/padding_med"
-                                    android:paddingRight="@dimen/padding_med"
-                                    android:text="Buy &amp; Sell"
+                                    android:paddingLeft="@dimen/margin_small"
+                                    android:paddingRight="@dimen/margin_small"
+                                    android:text="@string/action_learners_forum"
                                     android:textColor="@color/materialGreen"
                                     app:font='@{@string/robotoBold}' />
 
@@ -613,9 +613,9 @@
                                     android:background="@color/white"
                                     android:gravity="center"
                                     android:onClick="@{vm.openConnectFP}"
-                                    android:paddingLeft="@dimen/padding_med"
-                                    android:paddingRight="@dimen/padding_med"
-                                    android:text="Learning Partners"
+                                    android:paddingLeft="@dimen/margin_small"
+                                    android:paddingRight="@dimen/margin_small"
+                                    android:text="@string/action_tutors_talk"
                                     android:textColor="@color/materialGreen"
                                     app:font='@{@string/robotoBold}' />
 

@@ -35,8 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:gravity="center_horizontal"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
+                android:paddingLeft="@dimen/search_height"
+                android:paddingRight="@dimen/search_height"
                 android:text="@string/msg_sit_back"
                 android:textSize="@dimen/text_size_medium"
                 app:font='@{@string/robotoBold}' />
@@ -46,8 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="25dp"
                 android:gravity="center_horizontal"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
+                android:paddingLeft="@dimen/search_height"
+                android:paddingRight="@dimen/search_height"
                 android:text="@string/msg_manual_otp"
                 android:textSize="@dimen/text_size_small"
                 app:font='@{@string/robotoRegular}' />
@@ -70,7 +70,7 @@
                     android:padding="10dp"
                     android:text="@={vm.OTP}"
                     android:textCursorDrawable="@null"
-                    android:textSize="18dp" />
+                    android:textSize="@dimen/_13sdp" />
 
                 <Button
                     android:id="@+id/btn_verify_otp"
@@ -81,8 +81,8 @@
                     android:layout_toRightOf="@id/inputOtp"
                     android:background="@color/colorPrimaryDark"
                     android:onClick="@{vm.submitOTP}"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
+                    android:paddingLeft="@dimen/margin_large"
+                    android:paddingRight="@dimen/margin_large"
                     android:text="@string/lbl_submit"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_medium" />
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/colorPrimaryDark"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="@dimen/_18sdp"
                 android:onClick="@{vm.onResendOTP}"
                 android:text="Resend OTP"
                 android:textSize="@dimen/text_size_large" />

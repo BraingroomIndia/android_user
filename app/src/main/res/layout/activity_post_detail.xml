@@ -32,14 +32,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_med"
-                    card_view:cardElevation="@dimen/elevation_small">
+                    card_view:cardElevation="@dimen/dimen_zero">
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/padding_med">
+                        android:padding="@dimen/margin_small">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -159,7 +159,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:padding="@dimen/padding_med">
+                                android:padding="@dimen/margin_small">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -197,7 +197,7 @@
                                 android:layout_margin="@dimen/margin_small"
                                 android:background="@drawable/bottom_line_drawable"
                                 android:orientation="horizontal"
-                                android:paddingBottom="@dimen/padding_med">
+                                android:paddingBottom="@dimen/margin_small">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -242,7 +242,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_margin="@dimen/margin_small"
                                 android:orientation="horizontal"
-                                android:paddingBottom="@dimen/padding_med"
+                                android:paddingBottom="@dimen/margin_small"
                                 android:visibility="@{vm.isActivityRequest ? View.VISIBLE : View.GONE}">
 
                                 <ImageView

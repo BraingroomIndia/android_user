@@ -51,7 +51,7 @@
             android:paddingBottom="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingTop="@dimen/padding_med">
+            android:paddingTop="@dimen/margin_small">
 
 
             <include

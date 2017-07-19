@@ -406,6 +406,14 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         if (id == R.id.nav_location)
             getHelperFactory().createDialogHelper().showCustomView(R.layout.dialog_location, new LocationFilterViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), uiHelper), false);
 
+        if (id == R.id.nav_catalogue) {
+            getNavigator().navigateActivity(CatalogueHomeActivity.class, null);
+//            finish();
+        }
+        if (id == R.id.nav_giftcard) {
+            getNavigator().navigateActivity(GiftcardCouponActivity.class, null);
+//            finish();
+        }
         //Edited By Vikas Godara
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -602,6 +610,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         if (itemId == R.id.action_tutors_article) {
             postType = "tutor_talks";
         }
+        if (itemId == R.id.action_discuss_n_decide)
+            postType = "tutor_talks";
 
         return postType;
 

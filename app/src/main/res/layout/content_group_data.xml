@@ -44,8 +44,8 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
-            android:paddingLeft="@dimen/padding_med"
-            android:paddingRight="@dimen/padding_med"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small"
             bind:items="@{vm.subtitleItems}"
             bind:layout_vertical="@{true}"
             bind:view_provider="@{@layout/item_icon_text_horizontal}" />

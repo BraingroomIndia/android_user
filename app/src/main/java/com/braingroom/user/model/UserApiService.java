@@ -18,6 +18,7 @@ import com.braingroom.user.model.request.ConnectDataReq;
 import com.braingroom.user.model.request.ConnectFeedReq;
 import com.braingroom.user.model.request.ConnectPostByIdReq;
 import com.braingroom.user.model.request.ContactAdmin;
+import com.braingroom.user.model.request.CouponCodeReq;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.ExploreReq;
 import com.braingroom.user.model.request.FirstSocialLoginReq;
@@ -205,6 +206,9 @@ public interface UserApiService {
 
     @POST("verifyPromoCode")
     Observable<PromocodeResp> applyPromoCode(@Body PromocodeReq req);
+
+    @POST("applyCoupon")
+    Observable<PromocodeResp> applyCouponCode(@Body CouponCodeReq req);
 
     @POST("generateHashPayu")
     Observable<PayUHashResp> generatePayUHash(@Body PayUHashGenReq req);

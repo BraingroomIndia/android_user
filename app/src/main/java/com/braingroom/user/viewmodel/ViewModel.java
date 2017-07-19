@@ -20,7 +20,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public class ViewModel {
+public class  ViewModel {
 
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
     public static final int REQ_CODE_CHOOSE_IMAGE = 1;
@@ -33,6 +33,7 @@ public class ViewModel {
 
     @Inject
     public DataflowService apiService;
+
 
     @Inject
     Gson gson;

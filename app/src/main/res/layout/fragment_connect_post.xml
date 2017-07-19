@@ -58,7 +58,7 @@
                 android:paddingBottom="20dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="@dimen/padding_med">
+                android:paddingTop="@dimen/margin_small">
 
                 <include
                     layout="@layout/item_list_dialog_opener"
@@ -105,7 +105,7 @@
                     android:gravity="top"
                     android:hint="Description"
                     android:minHeight="150dp"
-                    android:padding="@dimen/padding_med"
+                    android:padding="@dimen/margin_small"
                     android:text="@={vm.description}" />
 
                 <include
@@ -209,7 +209,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_med"
+                    android:padding="@dimen/margin_small"
                     android:visibility="@{vm.proposedTimeField ? View.VISIBLE :View.GONE}">
 
                     <include
@@ -284,8 +284,8 @@
                     android:background="@drawable/solid_bg_green_rounded_corner"
                     android:onClick="@{vm.onSubmitClicked}"
                     android:paddingBottom="@dimen/padding_small"
-                    android:paddingLeft="@dimen/padding_med"
-                    android:paddingRight="@dimen/padding_med"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
                     android:paddingTop="@dimen/padding_small"
                     android:text="Submit"
                     android:textColor="@color/white"

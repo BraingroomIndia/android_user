@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 
+import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
@@ -47,26 +48,15 @@ public class LoginViewmodel extends ViewModel {
     @Setter
     LoginActivity.UIHandler uiHandler;
 
-    String parentActivity;
-    String classId;
-    String origin;
-    String thirdPartyUserId;
     private final String referralCode;
-    Serializable classData;
-    String catalogueId;
-    public final ObservableBoolean isOTP=new ObservableBoolean(false);
+
+    public final ObservableBoolean isOTP = new ObservableBoolean(false);
 
 
-    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, String parentActivity,
-                          Serializable data, String classId,String catalogueId, String origin, String thirdPartyUserId, final String referralCode) {
-        this.parentActivity = parentActivity;
-        this.classData = data;
-        this.thirdPartyUserId = thirdPartyUserId;
+    public LoginViewmodel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, final String referralCode) {
         this.messageHelper = messageHelper;
         this.navigator = navigator;
-        this.classId = classId;
-        this.catalogueId=catalogueId;
-        this.origin = origin;
+
         this.referralCode = referralCode;
         onLoginClicked = new Action() {
             @Override
@@ -121,18 +111,18 @@ public class LoginViewmodel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
+                    loginResp.getData().get(0).setEmailId(email.get());
+                    loginResp.getData().get(0).setPassword(password.get());
                     messageHelper.dismissActiveProgress();
                     if ("".equals(loginResp.getData().get(0).getMobile()) || loginResp.getData().get(0).getReferralCode() == null) {
                         uiHandler.showEmailDialog(loginResp);
                         return;
-                    }
-                    else if (loginResp.getData().get(0).getIsVerified()==0){
-                        LoginResp.Snippet data=loginResp.getData().get(0);
-                        SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(),data.getId(),email.get(),data.getMobile(),password.get());
+                    } else if (loginResp.getData().get(0).getIsVerified() == 0) {
+                        LoginResp.Snippet data = loginResp.getData().get(0);
+                        SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), data.getMobile(), data.getPassword());
                         uiHandler.changeToOTPFragment(snippet);
                         return;
-                    }
-                    else {
+                    } else {
                         editor.putBoolean(Constants.LOGGED_IN, true);
                         editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
                         editor.putString(Constants.PROFILE_PIC, loginResp.getData().get(0).getProfilePic());
@@ -140,28 +130,10 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.NAME, loginResp.getData().get(0).getName());
                         editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
                         editor.commit();
-                        if (CheckoutActivity.class.getSimpleName().equals(parentActivity)) {
-                            Bundle data = new Bundle();
-                            data.putSerializable("classData", classData);
-                            navigator.navigateActivity(CheckoutActivity.class, data);
-                        } else if (ConnectHomeActivity.class.getSimpleName().equals(parentActivity)) {
-                            navigator.navigateActivity(ConnectHomeActivity.class, null);
-                        } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
-                            Bundle data = new Bundle();
-                            data.putString("id", classId);
-                            data.putString("catalogueId",catalogueId);
-                            data.putString("origin", origin);
-                            navigator.navigateActivity(ClassDetailActivity.class, data);
-                        } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {
-                            Bundle data = new Bundle();
-                            data.putString("userId", thirdPartyUserId);
-                            navigator.navigateActivity(ThirdPartyViewActivity.class, data);
-                        } else {
-                            navigator.navigateActivity(HomeActivity.class, null);
-                        }
-                        navigator.finishActivity();
-                        return;
+
+                        navigator.finishActivity(new Intent());
                     }
+
                 } else
 
                 {
@@ -214,55 +186,26 @@ public class LoginViewmodel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
 
 
-
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
                     if ("".equals(loginResp.getData().get(0).getMobile())) {
                         uiHandler.showEmailDialog(loginResp);
                         return;
-                    }
-                    else if (loginResp.getData().get(0).getIsVerified()==0){
+                    } else if (loginResp.getData().get(0).getIsVerified() == 0) {
 
-                        LoginResp.Snippet data=loginResp.getData().get(0);
-                        SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(),data.getId(),emailId,data.getMobile(),password.get());
+                        LoginResp.Snippet data = loginResp.getData().get(0);
+                        SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), data.getMobile(), data.getPassword());
                         uiHandler.changeToOTPFragment(snippet);
                         return;
-                    }
-                    else {
+                    } else {
                         editor.putBoolean(Constants.LOGGED_IN, true);
                         editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
                         editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
                         editor.commit();
 
-                        if (HomeActivity.class.getSimpleName().equals(parentActivity)) {
-                            navigator.navigateActivity(HomeActivity.class, null);
-                        } else {
-                            Bundle data = new Bundle();
-                            data.putSerializable("classData", classData);
-                            navigator.navigateActivity(CheckoutActivity.class, data);
-                        }
-                        if (CheckoutActivity.class.getSimpleName().equals(parentActivity)) {
-                            Bundle data = new Bundle();
-                            data.putSerializable("classData", classData);
-                            navigator.navigateActivity(CheckoutActivity.class, data);
-                        } else if (ConnectHomeActivity.class.getSimpleName().equals(parentActivity)) {
-                            navigator.navigateActivity(ConnectHomeActivity.class, null);
-                        } else if (ClassDetailActivity.class.getSimpleName().equals(parentActivity)) {
-                            Bundle data = new Bundle();
-                            data.putString("id", classId);
-                            data.putString("catalogueId", catalogueId);
-                            data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-                            navigator.navigateActivity(ClassDetailActivity.class, data);
-                        } else if (ThirdPartyViewActivity.class.getSimpleName().equals(parentActivity)) {
-                            Bundle data = new Bundle();
-                            data.putString("userId", thirdPartyUserId);
-                            navigator.navigateActivity(ThirdPartyViewActivity.class, data);
-                        } else {
-                            navigator.navigateActivity(HomeActivity.class, null);
-                        }
 
-
-                        navigator.finishActivity();
+                        navigator.finishActivity(new Intent());
                     }
+
                 } else {
                     logOut();
                     messageHelper.show(loginResp.getResMsg());

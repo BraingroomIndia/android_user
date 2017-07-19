@@ -57,7 +57,7 @@
                 android:paddingBottom="20dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="@dimen/padding_med">
+                android:paddingTop="@dimen/margin_small">
 
                 <include
                     layout="@layout/floating_label_edit_text"
@@ -100,7 +100,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_med">
+                    android:padding="@dimen/margin_small">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -110,8 +110,8 @@
                         android:background="@drawable/solid_bg_green_rounded_corner"
                         android:onClick="@{vm.onSkipAndSignupClicked}"
                         android:paddingBottom="@dimen/padding_small"
-                        android:paddingLeft="@dimen/padding_med"
-                        android:paddingRight="@dimen/padding_med"
+                        android:paddingLeft="@dimen/margin_small"
+                        android:paddingRight="@dimen/margin_small"
                         android:paddingTop="@dimen/padding_small"
                         android:text="Sign Up"
                         android:textColor="@color/white"

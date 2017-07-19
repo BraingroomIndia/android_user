@@ -204,6 +204,7 @@ public class ClassListViewModel1 extends ViewModel {
                                         public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
                                             if (!elem.getId().equals("-1")) {
                                                 filterData.setSegmentId(elem.getId());
+                                                filterData.setKeywords("");
                                                 segmentSelectorSubject.onNext(viewModel);
                                                 reset();
                                             }
@@ -299,6 +300,7 @@ public class ClassListViewModel1 extends ViewModel {
             public void run() throws Exception {
                 Bundle bundle = new Bundle();
                 bundle.putString("origin", origin);
+                filterData.setKeywords("");
                 bundle.putSerializable("filterData", filterData);
                 bundle.putSerializable("category", categoryFilterMap);
                 bundle.putSerializable("segment", segmentsFilterMap);
@@ -496,7 +498,7 @@ public class ClassListViewModel1 extends ViewModel {
 
     public boolean searchBarInput(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            filterData.setKeywords(searchQuery.get());
+            filterData.setKeywords(v.getText().toString());
             hideSearchBar.set(true);
             navigator.hideKeyBoard(v);
             reset();

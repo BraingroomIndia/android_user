@@ -1,5 +1,6 @@
 package com.braingroom.user.model.response;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -15,25 +16,31 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(suppressConstructorProperties = true)
 @EqualsAndHashCode(callSuper = false)
-public class SignUpResp extends BaseResp{
+public class SignUpResp extends BaseResp {
     @SerializedName("braingroom")
     List<Snippet> data;
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
     @EqualsAndHashCode(callSuper = false)
-    public static class Snippet{
+    public static class Snippet {
 
         @SerializedName("uuid")
         public String uuid;
 
         @SerializedName("user_id")
-        String userId ;
+        String userId;
 
+        @Expose(serialize = false)
+        String loginType;
+
+        @Expose(serialize = false)
         String emailId;
 
+        @Expose(serialize = false)
         String mobileNumber;
 
+        @Expose(serialize = false)
         private String password;
 
 

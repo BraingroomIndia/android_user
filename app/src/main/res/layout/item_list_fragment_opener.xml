@@ -26,7 +26,7 @@
         android:onClick="@{editable ? vm.onOpenClicked : null}"
         android:paddingBottom="@dimen/padding_large"
         android:paddingLeft="@dimen/padding_large"
-        android:paddingTop="@dimen/padding_med">
+        android:paddingTop="@dimen/margin_small">
 
         <TextView
             android:id="@+id/title"
@@ -58,7 +58,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/padding_med"
+            android:padding="@dimen/margin_small"
             android:src="@drawable/ic_chevron_right_black_24dp"
             android:tint="@color/colorTextGray" />
 

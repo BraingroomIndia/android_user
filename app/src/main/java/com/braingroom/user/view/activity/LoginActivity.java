@@ -187,14 +187,10 @@ public class LoginActivity extends BaseActivity implements
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        parentActivity = getIntentString("backStackActivity");
-        classData = getIntentSerializable("classData");
-        classId = getIntentString("id");
         referralCode = getIntentString("referralCode");
-        origin = getIntentString("origin");
-        catalogueId = getIntentString("catalogueId");
 
-        return new LoginViewmodel(getMessageHelper(), getNavigator(), parentActivity, classData, classId, catalogueId, origin, thirdPartyUserId, referralCode);
+
+        return new LoginViewmodel(getMessageHelper(), getNavigator(),referralCode);
     }
 
     @Override
@@ -214,7 +210,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         FirsLoginDialogViewModel firsLoginDialogViewModel =
-                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), parentActivity, classId, classData);
+                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator());
         firsLoginDialogViewModel.setUiHandler(uiHandler);
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login, firsLoginDialogViewModel
                 , false);
@@ -269,9 +265,15 @@ public class LoginActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
-            getNavigator().navigateActivity(HomeActivity.class, null);
+            onBackPressed();
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ((LoginViewmodel) vm).isOTP.set(false);
+        vm.logOut();
+    }
 }
 

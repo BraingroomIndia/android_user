@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.braingroom.user.utils.CommonUtils" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.PaySuccessViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/material_light_red"
+        android:padding="@dimen/margin_large">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/done"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:backgroundTint="@android:color/white"
+            android:tint="@color/material_light_red"
+            android:src="@drawable/fail_line"
+            android:layout_margin="@dimen/margin_med">
+        </android.support.design.widget.FloatingActionButton>
+
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_4sdp"
+            android:layout_below="@id/done"
+            android:gravity="center"
+            android:text="@string/failed"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            app:font='@{@string/robotoBold}' />
+
+        <TextView
+            android:id="@+id/success_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header"
+            android:layout_marginTop="@dimen/margin_med"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:gravity="center"
+            android:text="@string/payment_fail"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13sdp"
+            app:font='@{@string/robotoBold}' />
+
+        <TextView
+            android:id="@+id/transaction_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/success_text"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:text="@string/time"
+            android:textColor="@color/cb_dark_grey"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/_120sdp"
+            android:layout_marginStart="@dimen/_120sdp"
+            android:layout_below="@id/success_text"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@{vm.time}"
+            android:textColor="@color/cb_dark_grey"
+            app:font='@{@string/robotoRegular}' />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/transaction_time"
+            android:layout_marginTop="@dimen/margin_med"
+            android:src="@drawable/bottom_line_drawable"
+            android:tint="@color/cb_dark_grey"
+            card_view:ignore="ContentDescription" />
+
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_below="@id/transaction_time"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@string/name"
+            android:textColor="@color/cb_dark_grey"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/_120sdp"
+            android:layout_marginStart="@dimen/_120sdp"
+            android:layout_below="@id/transaction_time"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@{vm.name}"
+            android:textColor="@color/cb_dark_grey"
+            app:font='@{@string/robotoRegular}' />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_marginTop="@dimen/margin_med"
+            android:src="@drawable/bottom_line_drawable"
+            android:tint="@color/cb_dark_grey"
+            card_view:ignore="ContentDescription" />
+
+
+
+        <TextView
+            android:id="@+id/transaction_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_below="@id/name"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@string/transaction_number"
+            android:textColor="@color/cb_dark_grey"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/_120sdp"
+            android:layout_marginStart="@dimen/_120sdp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@{vm.transactionId}"
+            android:textColor="@color/cb_dark_grey"
+            app:font='@{@string/robotoRegular}' />
+
+        <ImageView
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/transaction_id"
+            android:layout_marginTop="@dimen/margin_med"
+            android:src="@drawable/bottom_line_drawable"
+            android:tint="@color/cb_dark_grey"
+            card_view:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_below="@id/line"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@string/total_amount"
+            android:textColor="@color/cb_dark_grey"
+            android:textSize="@dimen/text_size_large"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/_120sdp"
+            android:layout_marginStart="@dimen/_120sdp"
+            android:layout_below="@id/line"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@{vm.totalAmount}"
+            android:textColor="@color/cb_dark_grey"
+            android:textSize="@dimen/text_size_large"
+            app:font='@{@string/robotoRegular}' />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/_4sdp"
+            android:gravity="center"
+            android:text="Try again"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_20sdp"
+            android:layout_alignParentBottom="true" />
+
+
+    </RelativeLayout>
+
+</layout>

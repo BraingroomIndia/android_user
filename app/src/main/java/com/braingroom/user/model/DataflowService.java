@@ -27,6 +27,7 @@ import com.braingroom.user.model.request.ConnectDataReq;
 import com.braingroom.user.model.request.ConnectFeedReq;
 import com.braingroom.user.model.request.ConnectPostByIdReq;
 import com.braingroom.user.model.request.ContactAdmin;
+import com.braingroom.user.model.request.CouponCodeReq;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.ExploreReq;
 import com.braingroom.user.model.request.FirstSocialLoginReq;
@@ -302,6 +303,12 @@ public class DataflowService {
     public Observable<PromocodeResp> applyPromoCode(PromocodeReq.Snippet snippet) {
 
         return api.applyPromoCode(new PromocodeReq((snippet))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<PromocodeResp> applyCouponCode(CouponCodeReq.Snippet snippet) {
+
+        return api.applyCouponCode(new CouponCodeReq((snippet))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

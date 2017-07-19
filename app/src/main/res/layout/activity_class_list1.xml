@@ -45,7 +45,7 @@
                     android:visibility="@{vm.hideSearchBar ? View.GONE :View.VISIBLE}"
                     android:text="@={vm.searchQuery}"
                     android:focusableInTouchMode="true"
-                    android:OnEditorActionListener="@{vm.searchBarInput}"/>
+                    android:OnEditorActionListener="@{vm::searchBarInput}"/>
 
 
                 <android.support.v7.widget.RecyclerView

@@ -44,6 +44,9 @@ public class RazorSuccessReq {
 
         @SerializedName("txnid")
         public String txnid;
+
+        @SerializedName("term_id")
+        private String termId;
     }
 
     @Data
