@@ -55,7 +55,7 @@ public class InternetConnection {
             int exitValue = ipProcess.waitFor();
             return (exitValue == 0);
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
         return false;

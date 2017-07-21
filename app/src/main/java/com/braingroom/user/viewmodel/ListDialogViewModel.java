@@ -87,7 +87,7 @@ public class ListDialogViewModel extends DialogViewModel {
             if (resultConsumer != null)
                 resultConsumer.accept(getSelectedIds());
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 //        setSelectedItemsText();
     }

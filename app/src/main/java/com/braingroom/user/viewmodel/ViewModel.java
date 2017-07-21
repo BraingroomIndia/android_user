@@ -12,6 +12,7 @@ import android.util.Log;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.utils.Constants;
+import com.facebook.login.LoginManager;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class  ViewModel {
     protected
     SharedPreferences.Editor editor;
 
-    public final ObservableBoolean loggedIn = new ObservableBoolean(false);
+    public final static ObservableBoolean loggedIn = new ObservableBoolean(false);
 
     /*for non reactive adapter recycler views*/
     public
@@ -69,6 +70,7 @@ public class  ViewModel {
         editor.clear();
         editor.putString(Constants.FCM_TOKEN,fcmToken);
         editor.commit();
+        LoginManager.getInstance().logOut();
         loggedIn.set(false);
 
     }

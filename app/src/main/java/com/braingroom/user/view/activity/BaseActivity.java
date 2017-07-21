@@ -12,8 +12,11 @@ import android.os.Bundle;
 import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.MenuInflater;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.UserApplication;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -35,6 +39,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -77,9 +82,14 @@ public abstract class BaseActivity extends MvvmActivity {
 
     public Toast toast;
 
+    public DrawerLayout drawer;
+    public Toolbar toolbar;
+    public NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         UserApplication.getInstance().getMAppComponent().inject(this);
         screenDims = new ScreenDims();
@@ -103,6 +113,12 @@ public abstract class BaseActivity extends MvvmActivity {
     protected void onResume() {
         super.onResume();
         isActive = true;
+        if (drawer!=null)
+            drawer.invalidate();
+        if (toolbar!=null)
+            toolbar.invalidate();
+        if (navigationView!=null)
+            navigationView.invalidate();
         vm.onResume();
     }
 
@@ -233,10 +249,11 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
-                public void hideKeyBoard(View view){
-                    if (view!=null)
-                    {InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);}
+                public void hideKeyBoard(View view) {
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
 
                 }
             }
@@ -268,8 +285,7 @@ public abstract class BaseActivity extends MvvmActivity {
                     builder.positiveText("Okay").onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                            getNavigator().navigateActivity(LoginActivity.class, data);
-                            getNavigator().finishActivity();
+                            getNavigator().navigateActivityForResult(LoginActivity.class, data, ViewModel.REQ_CODE_LOGIN);
                         }
                     }).show();
                 }
@@ -318,8 +334,10 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         vm.handleActivityResult(requestCode, resultCode, data);
+        ViewModel.loggedIn.set(pref.getBoolean(Constants.LOGGED_IN,false));
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     @Override
     public void onBackPressed() {

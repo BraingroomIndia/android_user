@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.braingroom.user.view.MessageHelper;
 
@@ -18,7 +19,7 @@ public class GiftingDetailsDialogViewModel extends CustomDialogViewModel {
         onClickCollectDetails = new Action() {
             @Override
             public void run() throws Exception {
-                if (!emailVm.s_1.get().equals("")) {
+                if (TextUtils.isEmpty(emailVm.s_1.get())) {
                     messageHelper.show("Please Enter a email Id");
                     return;
                 }

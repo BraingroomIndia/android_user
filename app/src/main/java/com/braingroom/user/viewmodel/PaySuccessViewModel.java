@@ -15,13 +15,13 @@ import io.reactivex.functions.Action;
 public class PaySuccessViewModel extends ViewModel {
     public static String PAYMENT_SUCCESS="True";
     public static String PAYMENT_FAIL="Fail";
-    public final ObservableField<String> time;
+    public final ObservableField<String> className;
     public final ObservableField<String> name;
     public final ObservableField<String> transactionId;
     public final ObservableField<String> totalAmount;
     public final Action onDoneClicked,onTryAgainClicked;
-    public PaySuccessViewModel(@NonNull final Navigator navigator, String time, final String name, String transactionId, String totalAmount) {
-        this.time = new ObservableField<>(time);
+    public PaySuccessViewModel(@NonNull final Navigator navigator, final String name, String transactionId, String className,String totalAmount) {
+        this.className = new ObservableField<>(className);
         this.name = new ObservableField<>(name);
         this.transactionId = new ObservableField<>(transactionId);
         this.totalAmount = new ObservableField<>("\u20B9" + totalAmount);

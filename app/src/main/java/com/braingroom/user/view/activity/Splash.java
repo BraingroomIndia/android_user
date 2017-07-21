@@ -73,7 +73,7 @@ public class Splash extends AppCompatActivity {
                     }
                 }, this.getIntent().getData(), this);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             Log.d(TAG, "onCreate: " + e.toString());
         }
 

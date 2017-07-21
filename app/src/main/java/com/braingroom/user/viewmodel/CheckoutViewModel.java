@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.braingroom.user.R;
@@ -87,6 +88,9 @@ public class CheckoutViewModel extends ViewModel {
 
     public final List<String> pricingTableList = new ArrayList<>();
 
+    public final ObservableBoolean applyingPromoCode = new ObservableBoolean(false);
+    public final ObservableBoolean applyingCouponCode = new ObservableBoolean(false);
+
     public String selectedLocalityId;
     String gUserId = pref.getString(Constants.BG_ID, "");
 
@@ -124,13 +128,13 @@ public class CheckoutViewModel extends ViewModel {
         @Override
         public void run() throws Exception {
             int totalPrice = 0;
-            if (couponCode.get() != null || promoCode.get() != null) {
+            if (!TextUtils.isEmpty(couponCode.get())|| !TextUtils.isEmpty(promoCode.get())) {
                 messageHelper.showDismissInfo("Warning", "Your discount has been reset");
                 appliedCouponCode.set(null);
-                couponCode.set(null);
-                appliedCouponAmount = 0;
                 appliedPromoCode.set(null);
+                couponCode.set(null);
                 promoCode.set(null);
+                appliedCouponAmount = 0;
                 appliedPromoAmount = 0;
 
             }
@@ -156,9 +160,9 @@ public class CheckoutViewModel extends ViewModel {
         totalAmount = new ObservableInt(0);
         totalAmountAfterPromo = new ObservableInt(0);
         couponCode = new ObservableField<>();
-        appliedCouponCode = new ObservableField<>();
+        appliedCouponCode = new ObservableField<>(null);
         promoCode = new ObservableField<>();
-        appliedPromoCode = new ObservableField<>();
+        appliedPromoCode = new ObservableField<>(null);
         this.uiHelper = uiHelper;
         this.classData = classData;
         gUserId = pref.getString(Constants.BG_ID, "");
@@ -272,11 +276,13 @@ public class CheckoutViewModel extends ViewModel {
         onOpenPromoCode = new Action() {
             @Override
             public void run() throws Exception {
+                applyingPromoCode.set(true);
                 if (!loggedIn.get() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
                                 @Override
                                 public void onGuestLoginSuccess(String id) {
+
                                     gUserId = id;
                                     isGuest = 1;
                                     promoCode.set("");
@@ -313,6 +319,7 @@ public class CheckoutViewModel extends ViewModel {
         onOpenCouponCode = new Action() {
             @Override
             public void run() throws Exception {
+                applyingCouponCode.set(true);
                 if (!loggedIn.get() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
@@ -382,6 +389,7 @@ public class CheckoutViewModel extends ViewModel {
                             if (resp.getData().size() > 0) {
                                 appliedPromoCode.set(promoCode.get());
                                 appliedPromoAmount = resp.getData().get(0).getAmount();
+                                applyingPromoCode.set(false);
                                 cartAmount.run();
 //                                promoCode.set(null);
                             } else {
@@ -415,6 +423,7 @@ public class CheckoutViewModel extends ViewModel {
                             if (resp.getData().size() > 0) {
                                 appliedCouponCode.set(couponCode.get());
                                 appliedCouponAmount = resp.getData().get(0).getAmount();
+                                applyingCouponCode.set(false);
                                 cartAmount.run();
 //
                             } else {
@@ -598,6 +607,8 @@ public class CheckoutViewModel extends ViewModel {
                 .showCustomView(R.layout.content_gift_details_dialog, new GiftingDetailsDialogViewModel(messageHelper, new UiHelper() {
                     @Override
                     public void onGuestLoginSuccess(String userId) {
+                        gUserId=userId;
+                        isGuest =1;
 
                     }
 
@@ -618,20 +629,23 @@ public class CheckoutViewModel extends ViewModel {
             throw ex;
         }
         final Bundle bundle = new Bundle();
-        bundle.putString("time", date);
+        bundle.putString("className", date);
         bundle.putString("name", pref.getString(Constants.NAME, ""));
         bundle.putString("transactionId", razorpayId);
         bundle.putString("totalAmount", totalAmount.get() + "");
         if (isGift.get()) {
             messageHelper.showProgressDialog("Processing", "finalizing your purchase");
             RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
-            snippet.setUserId(gUserId);
-            snippet.setAmount(couponPayData.getPrice() + "");
-            snippet.setIsGuest(isGuest);
             snippet.setTermId(couponPayData.getTermId());
+            snippet.setAmount("" + totalAmountAfterPromo.get());
+            snippet.setClassId(classData.getId());
+            snippet.setUserId(mChekcoutData.getUdf1());
+            snippet.setLocalityId(selectedLocalityId);
             snippet.setTxnid(razorpayId);
-            snippet.setUserEmail(couponPayData.getEmail());
-            snippet.setUserMobile("" + couponPayData.getMobile());
+            snippet.setUserEmail(mChekcoutData.getEmail());
+            snippet.setUserMobile(mChekcoutData.getPhone());
+            snippet.setUserId(mChekcoutData.getUdf1());
+            snippet.setIsGuest(isGuest);
             List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
             for (ViewModel nonReactiveItem : nonReactiveItems) {
                 if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {

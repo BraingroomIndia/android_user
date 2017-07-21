@@ -504,7 +504,7 @@ public class DataflowService {
                             try {
                                 dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
                             } catch (Exception e) {
-                                e.printStackTrace();
+                              //  e.printStackTrace();
                                 Log.d(TAG, "apply: " + e.toString());
                             }
 
@@ -834,7 +834,13 @@ public class DataflowService {
 
     public Observable<NotificationListResp> getNotifications() {
         return api.getUserNotifications(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, NotificationListResp>() {
+                    @Override
+                    public NotificationListResp apply(@NonNull Throwable throwable) throws Exception {
+                        List<NotificationListResp.Snippet> snippets =new ArrayList<>();
+                        return new NotificationListResp(snippets);
+                    }
+                });
     }
 
     public Observable<BaseResp> changeNotificationStatus(ChangeNotificationStatusReq.Snippet snippet) {
@@ -844,12 +850,22 @@ public class DataflowService {
 
     public Observable<NotificationCountResp> getUnreadNotificationCount() {
         return api.getUnreadNotificationCount(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, NotificationCountResp>() {
+                    @Override
+                    public NotificationCountResp apply(@NonNull Throwable throwable) throws Exception {
+                        return new NotificationCountResp();
+                    }
+                });
     }
 
     public Observable<NotificationCountResp> getUnreadMessageCount() {
         return api.getUnreadMessageCount(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, NotificationCountResp>() {
+                    @Override
+                    public NotificationCountResp apply(@NonNull Throwable throwable) throws Exception {
+                        return new NotificationCountResp();
+                    }
+                });
     }
 
     public Observable<ConnectFeedResp> getFeedsByPostID(String postId) {

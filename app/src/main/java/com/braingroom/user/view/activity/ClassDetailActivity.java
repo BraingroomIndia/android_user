@@ -123,7 +123,7 @@ public class ClassDetailActivity extends BaseActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
+                        //throwable.printStackTrace();
                         Log.d("makeACall", "OnError: " + throwable.toString() + "\t" + phoneNumber);
                     }
                 });

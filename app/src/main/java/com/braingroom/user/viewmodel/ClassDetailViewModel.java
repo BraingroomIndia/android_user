@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Html;
@@ -108,7 +107,7 @@ public class ClassDetailViewModel extends ViewModel {
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, openConnectTnT,
-            openConnectBnS, openConnectFP, openCateglogLocationList,playAction,onDissmis;
+            openConnectBnS, openConnectFP, openCateglogLocationList,playAction, onQueryDismiss, onPostDismiss;
 
     public boolean isInWishlist = false;
 
@@ -179,20 +178,16 @@ public class ClassDetailViewModel extends ViewModel {
                     data.putSerializable("id", classId);
                     data.putSerializable("origin",ClassListViewModel1.ORIGIN_HOME);
                     messageHelper.showLoginRequireDialog("Please login to post a query", data);
-                    navigator.navigateActivity(LoginActivity.class, data);
                 }
 
             }
         };
+
         onSubmitPostClicked = new Action() {
             @Override
             public void run() throws Exception {
                 DecideAndDiscussPostReq.Snippet decideAndDiscussSnippet = new DecideAndDiscussPostReq.Snippet();
-                if (title.s_1.get().equals("")) {
-                    messageHelper.show("Please enter Post title");
-                    return;
-                }
-                if (description.get().equals("")) {
+                if (("").equals(postDescription.get())) {
                     messageHelper.show("Please enter description");
                     return;
                 }
@@ -205,6 +200,7 @@ public class ClassDetailViewModel extends ViewModel {
                 apiService.postDecideDiscuss(decideAndDiscussSnippet).subscribe(new Consumer<BaseResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
+                        onPostDismiss.run();
                         messageHelper.show(baseResp.getResMsg());
                         Bundle data = new Bundle();
                         data.putString("defMajorCateg", "tutors_talk");
@@ -214,6 +210,12 @@ public class ClassDetailViewModel extends ViewModel {
                     }
                 });
 
+            }
+        };
+        onPostDismiss = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.next();
             }
         };
 
@@ -277,7 +279,7 @@ public class ClassDetailViewModel extends ViewModel {
 
                         }catch (Exception e){
                             Log.d(TAG, "description:" +e.toString());
-                            e.printStackTrace();
+                           // e.printStackTrace();
                         }
 
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
@@ -414,7 +416,7 @@ public class ClassDetailViewModel extends ViewModel {
                     }
                 };
 
-        onDissmis = new Action() {
+        onQueryDismiss = new Action() {
             @Override
             public void run() throws Exception {
                 uiHelper.next();
@@ -485,7 +487,7 @@ public class ClassDetailViewModel extends ViewModel {
             try {
                 youTubePlayer.release();
             } catch (Exception e) {
-                e.printStackTrace();
+               // e.printStackTrace();
             }
         }
     }

@@ -56,7 +56,7 @@ public class NgoFormActivity extends BaseActivity implements PaymentResultListen
                     co.open(activity, options);
                 } catch (Exception e) {
                     getMessageHelper().show("Error in payment: " + e.getMessage());
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
 
             }

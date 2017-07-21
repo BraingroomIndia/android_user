@@ -293,7 +293,7 @@ public class ConnectFilterViewModel extends ViewModel {
             tutorVm.onClearClicked.run();
             learnerVm.onClearClicked.run();
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
         localityVM.clearSelectedValue();

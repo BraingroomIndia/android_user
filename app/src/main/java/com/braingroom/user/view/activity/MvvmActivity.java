@@ -59,7 +59,7 @@ public abstract class MvvmActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private ViewModelBinder getDefaultBinder() {
+    protected ViewModelBinder getDefaultBinder() {
         ViewModelBinder defaultBinder = BindingUtils.getDefaultBinder();
         Preconditions.checkNotNull(defaultBinder, "Default Binder");
         return defaultBinder;

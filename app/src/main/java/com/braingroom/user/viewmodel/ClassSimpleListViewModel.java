@@ -107,7 +107,7 @@ public class ClassSimpleListViewModel extends ViewModel {
                         }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                                throwable.printStackTrace();
+                              //  throwable.printStackTrace();
                                 return classes;
                             }
                         }).mergeWith(getLoadingItems(3));

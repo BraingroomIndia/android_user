@@ -334,14 +334,14 @@ public class ConnectFeedItemViewModel extends ViewModel {
                     try {
                         reportAction.run();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
                 if (item.getItemId() == R.id.action_share) {
                     try {
                         shareAction.run();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                       // e.printStackTrace();
                     }
                 }
 

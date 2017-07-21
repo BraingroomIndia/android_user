@@ -102,7 +102,7 @@ public class OTPViewModel extends ViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         Log.d(TAG, "submit OTP: " + throwable.toString());
-                        throwable.printStackTrace();
+                       // throwable.printStackTrace();
 
                     }
                 });
@@ -149,7 +149,7 @@ public class OTPViewModel extends ViewModel {
                             submitOTP.run();
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                      //  e.printStackTrace();
                     }
                 }
             }

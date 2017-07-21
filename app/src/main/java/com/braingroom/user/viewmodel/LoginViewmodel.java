@@ -172,11 +172,12 @@ public class LoginViewmodel extends ViewModel {
             email = googleAccDetails.getEmail();
             socialId = googleAccDetails.getId();
         }
+
+        fcmToken = pref.getString(Constants.FCM_TOKEN, "");
         editor.putString(Constants.NAME, name);
         editor.putString(Constants.PROFILE_PIC, picture);
         editor.putString(Constants.EMAIL, email);
         editor.commit();
-        fcmToken = pref.getString(Constants.FCM_TOKEN, "");
 
         final String emailId = email;
 
@@ -187,6 +188,7 @@ public class LoginViewmodel extends ViewModel {
 
 
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
+
                     if ("".equals(loginResp.getData().get(0).getMobile())) {
                         uiHandler.showEmailDialog(loginResp);
                         return;

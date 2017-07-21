@@ -26,7 +26,7 @@ public class ChatListResp extends BaseResp {
         @SerializedName("text")
         public String text;
 
-        @SerializedName("time")
+        @SerializedName("className")
         public String time;
 
     }

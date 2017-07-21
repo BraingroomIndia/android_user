@@ -35,7 +35,7 @@ public class ConnectivityViewModel extends ViewModel {
                             try {
                                isConnected.set(false);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                //e.printStackTrace();
                             }
                         }
 

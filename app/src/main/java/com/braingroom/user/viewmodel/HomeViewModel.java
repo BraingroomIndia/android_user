@@ -58,8 +58,6 @@ import static com.rollbar.android.Rollbar.TAG;
 public class HomeViewModel extends ViewModel {
 
 
-
-
     public final Action onSearchClicked, onExploreClicked, onRegister, onFilterClicked;
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
@@ -74,8 +72,8 @@ public class HomeViewModel extends ViewModel {
     Observable<ExploreResp> exploreObservable;
 
     private Disposable notificationDisposable;
-    public int notificationCount=0;
-    public int messageCount=0;
+    public int notificationCount = 0;
+    public int messageCount = 0;
 
     public GoogleMap mGoogleMap; //Edited by Vikas Godara
     private Map<String, Integer> pinColorMap = new HashMap<>();
@@ -158,10 +156,10 @@ public class HomeViewModel extends ViewModel {
                                             if (!snippet.getId().equals("-1")) {
                                                 Bundle data = new Bundle();
                                                 HashMap<String, Integer> categoryMap = new HashMap<String, Integer>();
-                                                categoryMap.put(snippet.getCategoryName(),Integer.parseInt(snippet.getId()));
+                                                categoryMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
                                                 FilterData filterData = new FilterData();
                                                 filterData.setCategoryId(snippet.getId());
-                                                data.putSerializable("category",categoryMap);
+                                                data.putSerializable("category", categoryMap);
                                                 data.putSerializable("filterData", filterData);
                                                 data.putString("origin", FilterViewModel.ORIGIN_CATEGORY);
                                                 navigator.navigateActivity(ClassListActivity.class, data);
@@ -189,19 +187,13 @@ public class HomeViewModel extends ViewModel {
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
             public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getUnreadMessageCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
-                    @Override
-                    public NotificationCountResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return null;
-                    }
-                });
+                return apiService.getUnreadMessageCount();
             }
         }).subscribe(new Consumer<NotificationCountResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
                 if (resp != null && resp.getData() != null) {
                     messageCount = resp.getData().get(0).getCount();
-                    //uiHelper.setCount(notificationCount,messageCount);
 
                 }
             }
@@ -215,19 +207,14 @@ public class HomeViewModel extends ViewModel {
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
             public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getUnreadNotificationCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
-                    @Override
-                    public NotificationCountResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return null;
-                    }
-                });
+                return apiService.getUnreadNotificationCount();
             }
         }).subscribe(new Consumer<NotificationCountResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
                 if (resp != null && resp.getData() != null) {
                     notificationCount = resp.getData().get(0).getCount();
-                    uiHelper.setCount(notificationCount,messageCount);
+                    uiHelper.setCount(notificationCount, messageCount);
 
                 }
             }
@@ -291,7 +278,7 @@ public class HomeViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d(TAG, "populateMarkers: "+throwable.toString());
+                Log.d(TAG, "populateMarkers: " + throwable.toString());
 
             }
         });
@@ -320,9 +307,14 @@ public class HomeViewModel extends ViewModel {
         double latSum = 0, lngSum = 0;
         int i = 0;
         for (ClassLocationData location : locations) {
-            latlng = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
-            latSum = latSum + Double.valueOf(location.getLatitude());
-           // Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());
+            try {
+                latlng = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
+
+                latSum = latSum + Double.valueOf(location.getLatitude());
+            } catch (Exception e) {
+                throw e;
+            }
+            // Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());
             lngSum = lngSum + Double.valueOf(location.getLongitude());
             markerOption = new MarkerOptions().position(latlng).title(location.getLocationArea()).icon(getPinIcon(location));
             markerList.add(markerOption);

@@ -150,7 +150,7 @@ public class ListDialogViewModel1 extends ViewModel {
             if (resultConsumer != null)
                 resultConsumer.accept(selectedItemsMap);
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
     }

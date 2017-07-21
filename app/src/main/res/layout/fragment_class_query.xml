@@ -25,46 +25,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/title_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:gravity="bottom"
-                        android:text="New Post"
-                        android:textColor="@color/white"
-                        android:textSize="24dp"
-                        app:font='@{@string/robotoRegular}' />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Create a new post"
-                        android:textColor="@color/white"
-                        app:font='@{@string/robotoRegular}' />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/dismiss"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:onClick="@{vm.onDissmis}"
-
-                    android:src="@drawable/ic_close_black_24dp" />
-            </FrameLayout>
 
             <LinearLayout
+                android:id="@+id/title_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="bottom"
+                    android:text="New Post"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"
+                    app:font='@{@string/robotoRegular}' />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Create a new post"
+                    android:textColor="@color/white"
+                    app:font='@{@string/robotoRegular}' />
+            </LinearLayout>
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title_bar"
@@ -75,28 +63,44 @@
                 android:paddingRight="20dp"
                 android:paddingTop="@dimen/margin_small">
 
-                <include
-                    layout="@layout/floating_label_edit_text"
-                    app:data="@{vm.title}"
-                    app:editable="@{true}"
-                    app:hintText='@{"Topic"}' />
 
                 <EditText
+                    android:id="@+id/query"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_med"
                     android:background="@drawable/solid_white_rounded_corner"
                     android:gravity="top"
-                    android:hint="Description"
+                    android:hint="Enter a query"
                     android:minHeight="150dp"
                     android:padding="@dimen/margin_small"
                     android:text="@={vm.postDescription}" />
 
 
+
                 <TextView
+                    android:layout_below="@id/query"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:layout_marginTop="@dimen/margin_med"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/solid_bg_red_rounded_corner"
+                    android:onClick="@{vm.onPostDismiss}"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
+                    android:paddingTop="@dimen/padding_small"
+                    android:text="@string/Cancel"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large"
+                    app:font='@{@string/robotoRegular}' />
+                <TextView
+                    android:layout_below="@id/query"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="@dimen/margin_med"
                     android:background="@drawable/solid_bg_green_rounded_corner"
                     android:onClick="@{vm.onSubmitPostClicked}"
@@ -104,11 +108,11 @@
                     android:paddingLeft="@dimen/margin_small"
                     android:paddingRight="@dimen/margin_small"
                     android:paddingTop="@dimen/padding_small"
-                    android:text="Submit"
+                    android:text="@string/lbl_submit"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_large"
                     app:font='@{@string/robotoRegular}' />
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>

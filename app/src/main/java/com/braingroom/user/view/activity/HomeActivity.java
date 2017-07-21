@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hanks.htextview.base.HTextView;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -76,7 +77,6 @@ public class HomeActivity extends BaseActivity
     @SuppressWarnings({"MissingPermission"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Observable observable = Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread());
         final Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
@@ -130,12 +130,12 @@ public class HomeActivity extends BaseActivity
                 PackageManager.NameNotFoundException e)
 
         {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (
                 NoSuchAlgorithmException e)
 
         {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
 
         initMap();
@@ -216,9 +216,9 @@ public class HomeActivity extends BaseActivity
     }
 
     public void initNavigationDrawer() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         ) {

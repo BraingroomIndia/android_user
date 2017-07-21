@@ -70,7 +70,7 @@ public class CouponFormViewModel extends ViewModel {
         try {
             addNewFormData(couponVal, giftType, giftBy);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         this.notifyAdapter = notifyAdapter;
     }
@@ -119,7 +119,7 @@ public class CouponFormViewModel extends ViewModel {
                 try {
                     removeNewFormData(vm);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                   // e.printStackTrace();
                 }
             }
         }, formDataList.size()));

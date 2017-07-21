@@ -17,8 +17,8 @@ public class PaySuccessActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new PaySuccessViewModel(getNavigator(), getIntentString("time"), getIntentString("name"),
-                getIntentString("transactionId"), getIntentString("totalAmount"));
+        return new PaySuccessViewModel(getNavigator(),  getIntentString("name"),
+                getIntentString("transactionId"),getIntentString("class_name"), getIntentString("totalAmount"));
     }
 
     @Override

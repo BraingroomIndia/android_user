@@ -264,17 +264,15 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
     public void initNavigationDrawer() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -389,8 +387,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             });
         }
         if (id == R.id.nav_login) {
-            getNavigator().navigateActivity(LoginActivity.class, null);
-            finish();
+            getNavigator().navigateActivityForResult(LoginActivity.class,null,ViewModel.REQ_CODE_LOGIN);
         }
         if (id == R.id.nav_register) {
             getNavigator().navigateActivity(SignupActivity.class, null);
@@ -543,6 +540,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         pagerAdapter.getFragmentAt(0).getViewModel().retry();
         pagerAdapter.getFragmentAt(1).getViewModel().retry();
     }
+
 
     @Override
     public void setSearchQuery(String searchQuery) {

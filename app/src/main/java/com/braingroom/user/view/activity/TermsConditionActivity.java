@@ -26,9 +26,9 @@ public class TermsConditionActivity extends AppCompatActivity {
             "<br>\n" +
             "<h3 class=\"text-primary\" style=\"font-family: serif;\">Flexible class: </h3>\n" +
             "<div class=\"fix\">\n" +
-            "<li>For these type of classes, after booking, users can call vendors and fix the class at a mutually convenient time &amp; place.</li>\n" +
+            "<li>For these type of classes, after booking, users can call vendors and fix the class at a mutually convenient className &amp; place.</li>\n" +
             "<li>As per the policy, vendor should start a flexible class within one month from the class booking date. </li>\n" +
-            "<li>Flexible classes will be valid (or live in Braingroom) from “Class validity date-from” to “Class validity date – to”. This time period cannot be more than 6 months.</li>\n" +
+            "<li>Flexible classes will be valid (or live in Braingroom) from “Class validity date-from” to “Class validity date – to”. This className period cannot be more than 6 months.</li>\n" +
             "</div>\n" +
             "<br>\n" +
             "<h4 class=\"text-primary\">Catalogue Class Listings related:</h4>\n" +
@@ -84,7 +84,7 @@ public class TermsConditionActivity extends AppCompatActivity {
             "<li>Rescheduled classes should be notified to Braingroom before the user attends the class for ease of making payments.</li>\n" +
             "<br>\n" +
             "<h4 class=\"text-primary\">Refunds related:</h4>\n" +
-            "<li>Refund is possible only in the case where tutor/academy is cancelling the class before / in between or not conducting the classes for the mentioned time period.</li>\n" +
+            "<li>Refund is possible only in the case where tutor/academy is cancelling the class before / in between or not conducting the classes for the mentioned className period.</li>\n" +
             "<li>If a vendor fails to start a flexible class within one month, then the learner is eligible for refund and vendor will be placed in the red list for further investigation.</li>\n" +
             "<li>If a vendor cancels three consecutive classes, then his account &amp; associated email ids will be deactivated from braingroom.com, until further investigations are carried out and Braingroom reserves right to decide if the vendor account will be reactivated or otherwise.</li>\n" +
             "<li>Tutors &amp; Academies should make sure the 10% (normal classes) &amp; 15% (catalogue classes) commissions deducted from every BrainGroom class booking is from the listing price and is not over and above the listing price.</li>\n" +
@@ -93,7 +93,7 @@ public class TermsConditionActivity extends AppCompatActivity {
             "<br>\n" +
             "<h4 class=\"text-primary\">Featured listing related:</h4>\n" +
             "<li>Tutors/Academies can promote their Classes in featured list in home page &amp; category page by making payments accordingly.</li>\n" +
-            "<li>Payments for home page &amp; category page featured listings will be different and will change from time to time based on demand so vendor should check that under “Promote Class” tab before booking.</li>\n" +
+            "<li>Payments for home page &amp; category page featured listings will be different and will change from className to className based on demand so vendor should check that under “Promote Class” tab before booking.</li>\n" +
             "<li>Classes will be listed in featured lists through a bidding system. Slots will be allocated based on availability and first come first served basis.</li>\n" +
             "<li>For unsuccessful bids, money will be refunded in three to five days.</li>\n" +
             "<br>\n" +
@@ -107,15 +107,15 @@ public class TermsConditionActivity extends AppCompatActivity {
             "<br>\n" +
             "<h4 class=\"text-primary\">Issue Resolution related:</h4>\n" +
             "<li>Any issue raised on the vendor by user or the ones raised on the user by vendor will all be closed within thirty days.</li>\n" +
-            "<li>All the issues related to class timing / attendance should be raised within 3 to 5 days of the occurrence. Issues raised after this time period will be considered null &amp; void.</li>\n" +
+            "<li>All the issues related to class timing / attendance should be raised within 3 to 5 days of the occurrence. Issues raised after this className period will be considered null &amp; void.</li>\n" +
             "<li>Only issues related to class timings, vendor / user attendance, discrepancy in vendor details provided in profile information (for verified vendors) will be accepted by BrainGroom helpdesk.</li>\n" +
             "<li>During the issue resolution, payment will be parked at BrainGroom account.</li>\n" +
             "<br>\n" +
             "<h4 class=\"text-primary\">Promocode / Offers related:</h4>\n" +
             "<li>There is a maximum discount amount or the value per transaction with the promo codes on the total transaction amount, whichever is lower.</li>\n" +
             "<li>The discount code is valid only on Class Bookings and can be redeemed on Braingroom mobile app and website. </li>\n" +
-            "<li>The offer is valid for a limited time period only!</li>\n" +
-            "<li>Braingroom reserves the right to withdraw or modify this offer at any time and without prior notice. In case of any dispute, the decision of Braingroom will be final.</li>\n" +
+            "<li>The offer is valid for a limited className period only!</li>\n" +
+            "<li>Braingroom reserves the right to withdraw or modify this offer at any className and without prior notice. In case of any dispute, the decision of Braingroom will be final.</li>\n" +
             "<li>This offer cannot be combined with any other Offers/Coupons/Promotions at Braingroom.</li>\n" +
             "<br>\n" +
             "<h2 class=\"main\">Connect Discussion Forums and Groups</h2>\n" +

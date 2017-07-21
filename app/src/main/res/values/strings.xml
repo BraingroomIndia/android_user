@@ -106,11 +106,11 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="msg_sit_back">Sit back &amp; Relax! while we verify your mobile number</string>
     <string name="msg_manual_otp">(Enter the OTP below in case if we fail to detect the SMS automatically)</string>
     <string name="lbl_enter_otp">Enter OTP</string>
-    <string name="lbl_submit">SUBMIT</string>
+    <string name="lbl_submit">Submit</string>
     <string name="done">Done</string>
     <string name="name">Name</string>
     <string name="success">Success</string>
-    <string name="time">Time</string>
+    <string name="classs_name">Class Name</string>
     <string name="total_amount">Total Amount</string>
     <string name="transaction_number">Transaction Number</string>
     <string name="payment_success">Your payment has been processed successfully</string>

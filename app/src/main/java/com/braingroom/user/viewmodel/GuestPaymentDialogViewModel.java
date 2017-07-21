@@ -30,8 +30,9 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", activitySimpleName);
                 data.putSerializable("classData", classData);
+                dismissDialog();
                 navigator.navigateActivityForResult(LoginActivity.class, data,REQ_CODE_LOGIN);
-                navigator.finishActivity();
+
             }
         };
 

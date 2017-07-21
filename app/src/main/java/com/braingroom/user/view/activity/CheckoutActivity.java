@@ -84,7 +84,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
                     co.open(activity, options);
                 } catch (Exception e) {
                     getMessageHelper().show("Error in payment: " + e.getMessage());
-                    e.printStackTrace();
+                   // e.printStackTrace();
                 }
 
             }
@@ -123,9 +123,6 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
             } else if (resultCode == PayUmoneySdkInitilizer.RESULT_BACK) {
 //                getMessageHelper().show("paymemt failure");
             }
-        }
-        if (requestCode == vm.REQ_CODE_LOGIN) {
-            vm.handleActivityResult(requestCode, resultCode, data);
         }
 //        if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
 //            if (classData != null) {

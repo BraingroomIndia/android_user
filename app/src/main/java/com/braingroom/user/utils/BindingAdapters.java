@@ -72,7 +72,7 @@ public class BindingAdapters {
                     try {
                         listener.run();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                       // e.printStackTrace();
                     }
                 }
             };

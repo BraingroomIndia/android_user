@@ -168,13 +168,13 @@
                     android:text='@{vm.appliedCouponCode == null ? "Apply a Coupon Code" : "Coupon Code Discount : " + vm.appliedCouponAmount}'
                     android:textColor="@color/materialBlue"
                     android:textSize="@dimen/text_size_large"
-                    android:visibility="@{vm.couponCode == null || vm.appliedCouponCode != null ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{vm.applyingCouponCode ?  View.GONE: View.VISIBLE}"
                     app:font='@{@string/robotoRegular}' />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:visibility="@{vm.couponCode == null || vm.appliedCouponCode != null ?  View.GONE: View.VISIBLE}">
+                    android:visibility="@{vm.applyingCouponCode ?  View.VISIBLE: View.GONE}">
 
                     <EditText
                         android:layout_width="0dp"
@@ -213,7 +213,7 @@
                     android:text='@{vm.appliedPromoCode == null ? "Apply a Promo Code" : "Promo Code Discount : " + vm.appliedPromoAmount}'
                     android:textColor="@color/materialBlue"
                     android:textSize="@dimen/text_size_large"
-                    android:visibility="@{vm.promoCode == null || vm.appliedPromoCode != null ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{vm.applyingPromoCode ?  View.GONE : View.VISIBLE}"
                     app:font='@{@string/robotoRegular}' />
 
                 <LinearLayout
@@ -223,7 +223,7 @@
                     android:paddingLeft="@dimen/margin_small"
                     android:paddingRight="@dimen/margin_small"
                     android:paddingTop="@dimen/padding_small"
-                    android:visibility="@{vm.promoCode == null || vm.appliedPromoCode != null ?  View.GONE : View.VISIBLE}">
+                    android:visibility="@{vm.applyingPromoCode ?  View.VISIBLE : View.GONE}">
 
                     <EditText
                         android:layout_width="0dp"

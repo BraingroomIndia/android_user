@@ -46,6 +46,7 @@ public class CouponFormDataViewModel extends ViewModel {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CategoryResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
+                itemMap.put("General",-1);
                 for (CategoryResp.Snippet snippet : resp.getData()) {
                     itemMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
                 }

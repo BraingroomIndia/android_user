@@ -321,13 +321,6 @@
             </intent-filter>
         </receiver>
         -->
-        <receiver
-            android:name=".utils.FirstInstall"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
         <!-- SMS Receiver -->
         <receiver android:name=".utils.SmsReceiver">

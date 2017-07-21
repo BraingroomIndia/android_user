@@ -211,21 +211,23 @@ public class BindingUtils {
     @BindingAdapter(value = {"imageUrl", "placeHolder", "errorUrl", "scaleWidth", "scaleHeight"}, requireAll = false)
     public static void setImageUrl(ImageView imageView, String url, int placeHolder, int errorUrl, int scaleWidth, int scaleHeight) {
         Log.d(TAG, "setImageUrl: " + url);
-        if ("".equals(url)) url = null;
-        Picasso picasso = Picasso.with(imageView.getContext());
-        /*picasso.setLoggingEnabled(true);*/
-        RequestCreator requestCreator;
-        requestCreator = picasso.load(url);
-        if (placeHolder != 0) {
-            requestCreator = requestCreator.placeholder(placeHolder);
-        }
-        if (errorUrl != 0) {
-            requestCreator.error(errorUrl);
-        }
-        if (scaleWidth == 0) scaleWidth = 250;
-        if (scaleHeight == 0) scaleHeight = 250;
-        requestCreator.centerCrop()
-                .fit().into(imageView);
+
+            if ("".equals(url)) url = null;
+            Picasso picasso = Picasso.with(imageView.getContext());
+            picasso.setLoggingEnabled(false);
+            RequestCreator requestCreator;
+            requestCreator = picasso.load(url);
+            if (placeHolder != 0) {
+                requestCreator = requestCreator.placeholder(placeHolder);
+            }
+            if (errorUrl != 0) {
+                requestCreator.error(errorUrl);
+            }
+            if (scaleWidth == 0) scaleWidth = 250;
+            if (scaleHeight == 0) scaleHeight = 250;
+            requestCreator.centerCrop()
+                    .fit().into(imageView);
+
     }
 
 
