@@ -19,6 +19,7 @@ import com.braingroom.user.view.fragment.Signup2Fragment;
 import com.braingroom.user.view.fragment.OTPReqFragment;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.SignupViewModel;
+import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
@@ -201,9 +202,9 @@ public class SignupActivity extends BaseActivity {
             return viewModel.cityVm;
         if (FRAGMENT_TITLE_LOCALITY.equals(title))
             return viewModel.localityVM;
-        if (FRAGMENT_UG_COLLEGE.equals(title))
+        if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE.equals(title))
             return viewModel.ugInstituteVm;
-        if (FRAGMENT_PG_COLLEGE.equals(title))
+        if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE.equals(title))
             return viewModel.pgInstituteVm;
         return null;
     }

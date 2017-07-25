@@ -1,6 +1,7 @@
 package com.braingroom.user.view.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -164,7 +165,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
                 @Override
                 public void finishActivity(Intent resultData) {
-                    setResult(RESULT_OK, resultData);
+                    setResult(Activity.RESULT_OK, resultData);
                     finish();
                 }
 
@@ -333,9 +334,10 @@ public abstract class BaseActivity extends MvvmActivity {
 
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         vm.handleActivityResult(requestCode, resultCode, data);
         vm.loggedIn.set(pref.getBoolean(Constants.LOGGED_IN,false));
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
 

@@ -85,28 +85,16 @@ public class HomeActivity extends BaseActivity
 
         {
             Bundle data = new Bundle();
-            String postId = bundle.getString("post_id");
-            String classId = bundle.getString("class_id");
-            String messageSenderId = bundle.getString("sender_id");
-            String messageSenderName = bundle.getString("sender_name");
-            if (postId != null) {
-                data.putString("postId", postId);
-                getNavigator().navigateActivity(PostDetailActivity.class, data);
-
-            } else if (classId != null) {
-                data.putString("id", classId);
-                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-                getNavigator().navigateActivity(ClassDetailActivity.class, data);
-
-            } else if (messageSenderId != null && vm.loggedIn.get()) {
-                data.putString("sender_id", messageSenderId);
-                data.putString("sender_name", messageSenderName);
-                getNavigator().navigateActivity(MessagesThreadActivity.class, data);
+            String referralCode = getIntentString("referralCode");
+            if (referralCode != null) {
+                data.putString("referralCode", referralCode);
+                getNavigator().navigateActivityForResult(LoginActivity.class, data, ViewModel.REQ_CODE_LOGIN);
             }
 
+
         }
-        /*for (String key : bundle.keySet()) {
-            Object value = bundle.get(key);
+        /*for (String key : bundleReceived.keySet()) {
+            Object value = bundleReceived.get(key);
             Log.d(TAG, "extras " +String.format("%s %s (%s)", key,
                     value.toString(), value.getClass().getName()));
     }*/
@@ -135,7 +123,7 @@ public class HomeActivity extends BaseActivity
                 NoSuchAlgorithmException e)
 
         {
-          //  e.printStackTrace();
+            //  e.printStackTrace();
         }
 
         initMap();
@@ -436,8 +424,10 @@ public class HomeActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        navigationView.getMenu().clear();
-        if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
-        else navigationView.inflateMenu(R.menu.activity_home_drawer);
+        if (navigationView != null) {
+            navigationView.getMenu().clear();
+            if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
+            else navigationView.inflateMenu(R.menu.activity_home_drawer);
+        }
     }
 }

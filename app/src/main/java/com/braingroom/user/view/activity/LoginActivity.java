@@ -188,6 +188,7 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected ViewModel createViewModel() {
         referralCode = getIntentString("referralCode");
+        Log.d("LoginActivity", "referralCode " +referralCode);
 
 
         return new LoginViewmodel(getMessageHelper(), getNavigator(),referralCode);

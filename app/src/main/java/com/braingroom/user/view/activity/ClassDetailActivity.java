@@ -1,6 +1,7 @@
 package com.braingroom.user.view.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,14 +12,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.braingroom.user.R;
+import com.braingroom.user.utils.WrapContentHeightViewPager;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
 import com.braingroom.user.view.fragment.DemoPostFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
@@ -48,7 +52,7 @@ public class ClassDetailActivity extends BaseActivity {
     SupportMapFragment mapFragment;
     RxPermissions rxPermissions;
 
-    ViewPager pager;
+    WrapContentHeightViewPager pager;
     PostPagerAdapter pagerAdapter;
 
     public interface UiHelper {
@@ -68,6 +72,8 @@ public class ClassDetailActivity extends BaseActivity {
 
 
     }
+
+
 
     private class PostPagerAdapter extends FragmentStatePagerAdapter {
         SparseArray<Fragment> registeredFragments = new SparseArray<>();
@@ -135,7 +141,7 @@ public class ClassDetailActivity extends BaseActivity {
         });
         if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))){
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-            pager = (ViewPager) findViewById(R.id.pager);
+            pager = (WrapContentHeightViewPager) findViewById(R.id.pager);
             pagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
             pager.setAdapter(pagerAdapter);
             tabLayout.setupWithViewPager(pager);

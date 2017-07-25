@@ -1,20 +1,15 @@
 package com.braingroom.user.view.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.databinding.generated.callback.OnClickListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.braingroom.user.R;
-import com.braingroom.user.viewmodel.ViewModel;
+import com.braingroom.user.viewmodel.ClassListViewModel1;
 
 import java.util.HashMap;
 
@@ -26,6 +21,14 @@ import io.branch.referral.util.LinkProperties;
 import static com.braingroom.user.FCMInstanceIdService.TAG;
 
 public class Splash extends AppCompatActivity {
+
+    Bundle bundleReceived = new Bundle();
+    Bundle bundleSend = new Bundle();
+    String referralCode = "";
+    String postId;
+    String classId;
+    String messageSenderId;
+    String messageSenderName;
 
     /**
      * Duration of wait
@@ -39,11 +42,18 @@ public class Splash extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash);
+        bundleReceived = getIntent().getExtras();
+        if (bundleReceived != null) {
+            postId = bundleReceived.getString("post_id");
+            classId = bundleReceived.getString("class_id");
+            messageSenderId = bundleReceived.getString("sender_id");
+            messageSenderName = bundleReceived.getString("sender_name");
+        }
 
         Branch branch = Branch.getInstance();
 
 
-        final int SPLASH_DISPLAY_LENGTH = 3000;
+        final int SPLASH_DISPLAY_LENGTH = 4000;
         try {
             if (branch != null)
                 branch.initSession(new Branch.BranchUniversalReferralInitListener() {
@@ -59,19 +69,12 @@ public class Splash extends AppCompatActivity {
                         else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                             HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
                             if (referringParams.containsKey("referral")) {
-                                String name = referringParams.get("referral");
-                                if (!TextUtils.isEmpty(name)) {
-                                    Log.d(TAG, "getReferralCode: " + name);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("referralCode", name);
-                                    navigateActivity(LoginActivity.class, bundle);
-                                    finish();
-
-                                }
+                                referralCode = referringParams.get("referral");
+                                bundleSend.putString("referralCode", referralCode);
                             }
                         }
                     }
-                }, this.getIntent().getData(), this);
+                }, null, this);
         } catch (Exception e) {
             //e.printStackTrace();
             Log.d(TAG, "onCreate: " + e.toString());
@@ -82,8 +85,22 @@ public class Splash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
-                navigateActivity(HomeActivity.class, null);
+                if (postId != null) {
+                    bundleSend.putString("postId", postId);
+                    navigateActivity(PostDetailActivity.class, bundleSend);
+
+                } else if (classId != null) {
+                    bundleSend.putString("id", classId);
+                    bundleSend.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                    navigateActivity(ClassDetailActivity.class, bundleSend);
+
+                } else if (messageSenderId != null) {
+                    bundleSend.putString("sender_id", messageSenderId);
+                    bundleSend.putString("sender_name", messageSenderName);
+                    navigateActivity(MessagesThreadActivity.class, bundleSend);
+                } else
+                    navigateActivity(HomeActivity.class, bundleSend);
+                finish();
             }
         }, SPLASH_DISPLAY_LENGTH);
     }

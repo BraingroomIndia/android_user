@@ -360,19 +360,6 @@
 
                     </android.support.v7.widget.CardView>
 
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tab_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:tabGravity="fill"
-                        app:tabIndicatorColor="@color/white"
-                        app:tabIndicatorHeight="2dp"
-                        app:tabMode="scrollable" />
-
-                    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/pager"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp" />
 
                     <FrameLayout
                         android:id="@+id/fragment_container"
@@ -467,6 +454,34 @@
 
                     </android.support.v7.widget.CardView>
 
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_med">
+
+                        <android.support.design.widget.TabLayout
+                            android:id="@+id/tab_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:tabGravity="fill"
+                            app:tabIndicatorColor="@color/white"
+                            app:tabIndicatorHeight="@dimen/elevation_med"
+                            app:tabMode="scrollable" />
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bottom_line_drawable">
+
+                        <view
+                            android:id="@+id/pager"
+                            class="com.braingroom.user.utils.WrapContentHeightViewPager"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:tabSelectedTextColor="@color/colorAccent"/>
+
+                    </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/google_maps"
@@ -488,6 +503,8 @@
                                 android:background="@drawable/bottom_line_drawable"
                                 android:gravity="center_vertical"
                                 android:paddingLeft="@dimen/margin_large"
+                                android:paddingRight="@dimen/margin_large"
+                                android:paddingStart="@dimen/margin_large"
                                 android:text="Locations on map"
                                 android:textColor="@color/colorTextDark"
                                 android:textSize="@dimen/text_size_medium"
@@ -579,6 +596,7 @@
 
                     <!--Edited By Vikas Godara-->
                 </LinearLayout>
+
 
             </android.support.v4.widget.NestedScrollView>
 

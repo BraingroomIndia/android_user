@@ -493,8 +493,8 @@ public class SignupViewModel extends ViewModel {
                 return resMap;
             }
         });
-        ugInstituteVm = new DynamicSearchSelectListViewModel(SignupActivity.FRAGMENT_UG_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
-        pgInstituteVm = new DynamicSearchSelectListViewModel(SignupActivity.FRAGMENT_PG_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
+        ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
+        pgInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
 
 
     }

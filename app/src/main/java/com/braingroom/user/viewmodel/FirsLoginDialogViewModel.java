@@ -62,13 +62,14 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                                 uiHandler.changeToOTPFragment(snippet);
                                 if (!data.getLoginType().equals("direct")){
                                     login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
-                                    navigator.finishActivity(new Intent());
                                 }
                                 dismissDialog();
-                                return;
                             }
-                            login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
-                            navigator.finishActivity(new Intent());
+                            else {
+                                login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
+                                navigator.finishActivity(new Intent());
+                            }
+
                         }
 
                     }

@@ -128,6 +128,7 @@ public class ConnectHomeViewModel extends ViewModel {
         }).subscribe(new Consumer<String>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull String searchQuery) throws Exception {
+                lastSearchQuery=searchQuery;
                 uiHelper.setSearchQuery(searchQuery);
             }
         });

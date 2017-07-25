@@ -143,6 +143,7 @@ public class LoginViewmodel extends ViewModel {
         {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                throwable.printStackTrace();
                 messageHelper.show("some error occurred");
             }
         });
@@ -206,6 +207,7 @@ public class LoginViewmodel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 logOut();
+                throwable.printStackTrace();
                 messageHelper.show("some error occurred");
             }
         });
