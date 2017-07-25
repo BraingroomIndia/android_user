@@ -118,7 +118,7 @@ public class ConnectPostViewModel extends ViewModel {
         learningPartnerPostSnippet = new LearningPartnerPostReq.Snippet();
         decideAndDiscussSnippet = new DecideAndDiscussPostReq.Snippet();
 
-        LinkedHashMap<String, Integer> postTypeApiData = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> postTypeApiData;
 
         LinkedHashMap<String, Integer> postTypeLearnerApiData = new LinkedHashMap<>();
 
@@ -150,6 +150,8 @@ public class ConnectPostViewModel extends ViewModel {
 
 
         Log.d(TAG, "postType: " + postType);
+
+
 
 
         postConsumer = new Consumer<HashMap<String, Integer>>() {
@@ -227,6 +229,8 @@ public class ConnectPostViewModel extends ViewModel {
                 , Observable.just(new ListDialogData1(postTypeApiData))
                 , mSelectedPostType, false, postConsumer,"");
 
+        mSelectedPostType.put("Find learning partners",POST_TYPE_LEARNING_PARTNERS);
+        postTypeVm.setSelectedItemsMap(mSelectedPostType);
         countryConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
