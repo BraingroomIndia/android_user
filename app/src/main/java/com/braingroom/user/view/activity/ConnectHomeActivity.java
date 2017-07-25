@@ -317,8 +317,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         getMenuInflater().inflate(R.menu.home_connect, menu);
         itemNotification = menu.findItem(R.id.action_notifications);
         itemMessage = menu.findItem(R.id.action_messages);
-        setBadgeCount(itemNotification, this, ((ConnectHomeViewModel) vm).notificationCount);
-        setBadgeCount(itemMessage, this, ((ConnectHomeViewModel) vm).messageCount);
+        setBadgeCount(itemNotification, this, ViewModel.notificationCount);
+        setBadgeCount(itemMessage, this, ViewModel.messageCount);
         return true;
     }
 
@@ -341,7 +341,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                 getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
                 return true;
             } else {
-                ((ConnectHomeViewModel) vm).messageCount = 0;
+                ViewModel.messageCount = 0;
                 getNavigator().navigateActivity(MessageActivity.class, null);
             }
 //            vm.retry();
@@ -354,7 +354,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
                 return true;
             } else {
-                ((ConnectHomeViewModel) vm).notificationCount = 0;
+                ViewModel.notificationCount = 0;
                 getNavigator().navigateActivity(NotificationActivity.class, null);
                 return true;
             }

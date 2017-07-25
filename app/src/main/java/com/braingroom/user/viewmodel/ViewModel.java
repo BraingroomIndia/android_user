@@ -51,6 +51,9 @@ public class  ViewModel {
 
     public final static ObservableBoolean loggedIn = new ObservableBoolean(false);
 
+    public static int notificationCount=0;
+    public static int messageCount=0;
+
     /*for non reactive adapter recycler views*/
     public
     @NonNull

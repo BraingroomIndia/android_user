@@ -69,7 +69,7 @@ public class HomeActivity extends BaseActivity
     private Disposable timerDisposable;
 
     public interface UiHelper {
-        void setCount(int notificationCount, int messageCount);
+        void setCount();
     }
 
 
@@ -253,9 +253,9 @@ public class HomeActivity extends BaseActivity
     protected ViewModel createViewModel() {
         return new HomeViewModel(getMessageHelper(), getNavigator(), getHelperFactory().createDialogHelper(), new UiHelper() {
             @Override
-            public void setCount(int notificationCount, int messageCount) {
-                setBadgeCount(itemNotification, HomeActivity.this, notificationCount);
-                setBadgeCount(itemMessage, HomeActivity.this, messageCount);
+            public void setCount() {
+                setBadgeCount(itemNotification, HomeActivity.this, ViewModel.notificationCount);
+                setBadgeCount(itemMessage, HomeActivity.this, ViewModel.messageCount);
             }
         });
     }
@@ -281,8 +281,8 @@ public class HomeActivity extends BaseActivity
         getMenuInflater().inflate(R.menu.home, menu);
         itemNotification = menu.findItem(R.id.action_notifications);
         itemMessage = menu.findItem(R.id.action_messages);
-        setBadgeCount(itemNotification, this, ((HomeViewModel) vm).notificationCount);
-        setBadgeCount(itemMessage, this, ((HomeViewModel) vm).messageCount);
+        setBadgeCount(itemNotification, this, ViewModel.notificationCount);
+        setBadgeCount(itemMessage, this, ViewModel.messageCount);
         return true;
     }
 
@@ -314,25 +314,25 @@ public class HomeActivity extends BaseActivity
             return true;
         }
         if (id == R.id.action_messages) {
-            if (!vm.loggedIn.get()) {
+            if (!ViewModel.loggedIn.get()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", HomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
                 return true;
             }
-            ((HomeViewModel) vm).messageCount = 0;
+            ViewModel.messageCount = 0;
             getNavigator().navigateActivity(MessageActivity.class, null);
 //            vm.retry();
             return true;
         }
         if (id == R.id.action_notifications) {
-            if (!vm.loggedIn.get()) {
+            if (!ViewModel.loggedIn.get()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", HomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
                 return true;
             }
-            ((HomeViewModel) vm).notificationCount = 0;
+            ViewModel.notificationCount = 0;
             getNavigator().navigateActivity(NotificationActivity.class, null);
             return true;
         }
@@ -417,7 +417,7 @@ public class HomeActivity extends BaseActivity
 
     public void setBadgeCount(MenuItem item, Context context, int count) {
 
-        if (item != null && vm.loggedIn.get()) {
+        if (item != null && ViewModel.loggedIn.get()) {
             BadgeDrawable badge;
             LayerDrawable icon = (LayerDrawable) item.getIcon();
             Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);

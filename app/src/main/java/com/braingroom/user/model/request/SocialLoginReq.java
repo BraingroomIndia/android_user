@@ -47,7 +47,7 @@ public class SocialLoginReq {
         @SerializedName("reg_id")
         String regId = "";
 
-        @SerializedName("referralCode")
+        @SerializedName("referal_code")
         String referralCode;
 
     }

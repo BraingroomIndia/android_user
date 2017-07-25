@@ -38,11 +38,11 @@ public class ConnectHomeViewModel extends ViewModel {
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final ObservableField<String> searchQuery = new ObservableField("");
+    private String lastSearchQuery="";
 
 
     private Disposable notificationDisposable;
-    public int notificationCount=0;
-    public int messageCount=0;
+
     //    public final Observable<List<ViewModel>> feedItems;
 //    public final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
     public final Action onSearchClicked, onFilterClicked, onPostClicked;
@@ -86,19 +86,13 @@ public class ConnectHomeViewModel extends ViewModel {
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
             public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getUnreadMessageCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
-                    @Override
-                    public NotificationCountResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return null;
-                    }
-                });
+                return apiService.getUnreadMessageCount();
             }
         }).subscribe(new Consumer<NotificationCountResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
                 if (resp != null && resp.getData() != null) {
                     messageCount = resp.getData().get(0).getCount();
-                    //uiHelper.setCount(notificationCount,messageCount);
 
                 }
             }
@@ -112,19 +106,14 @@ public class ConnectHomeViewModel extends ViewModel {
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
             public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getUnreadNotificationCount().onErrorReturn(new Function<Throwable, NotificationCountResp>() {
-                    @Override
-                    public NotificationCountResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return null;
-                    }
-                });
+                return apiService.getUnreadNotificationCount();
             }
         }).subscribe(new Consumer<NotificationCountResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
                 if (resp != null && resp.getData() != null) {
                     notificationCount = resp.getData().get(0).getCount();
-                    uiHelper.setCount(notificationCount,messageCount);
+                    uiHelper.setCount(notificationCount, messageCount);
 
                 }
             }
@@ -134,7 +123,7 @@ public class ConnectHomeViewModel extends ViewModel {
                 .debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<String>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull String searchQuery) throws Exception {
-                return !searchQuery.equals("");
+                return !(("").equals(searchQuery) && ("").equals(lastSearchQuery));
             }
         }).subscribe(new Consumer<String>() {
             @Override

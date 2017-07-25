@@ -72,8 +72,6 @@ public class HomeViewModel extends ViewModel {
     Observable<ExploreResp> exploreObservable;
 
     private Disposable notificationDisposable;
-    public int notificationCount = 0;
-    public int messageCount = 0;
 
     public GoogleMap mGoogleMap; //Edited by Vikas Godara
     private Map<String, Integer> pinColorMap = new HashMap<>();
@@ -214,7 +212,7 @@ public class HomeViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
                 if (resp != null && resp.getData() != null) {
                     notificationCount = resp.getData().get(0).getCount();
-                    uiHelper.setCount(notificationCount, messageCount);
+                    uiHelper.setCount();
 
                 }
             }
