@@ -707,8 +707,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             mFragement.onActivityResult(requestCode, resultCode, data);
 
         navigationView.getMenu().clear();
-        if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
-        else navigationView.inflateMenu(R.menu.activity_home_drawer);
+//        if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
+//        else navigationView.inflateMenu(R.menu.activity_home_drawer);
 
     }
 
