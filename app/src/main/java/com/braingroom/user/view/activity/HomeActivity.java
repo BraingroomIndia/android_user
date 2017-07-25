@@ -28,6 +28,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.utils.BadgeDrawable;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.HomeViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -79,6 +80,7 @@ public class HomeActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         final Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
 
         if (bundle != null)
@@ -362,8 +364,7 @@ public class HomeActivity extends BaseActivity
         if (id == R.id.nav_login) {
             Bundle data = new Bundle();
             data.putString("backStackActivity", HomeActivity.class.getSimpleName());
-            getNavigator().navigateActivity(LoginActivity.class, data);
-            finish();
+            getNavigator().navigateActivityForResult(LoginActivity.class, data, ViewModel.REQ_CODE_LOGIN);
         }
         if (id == R.id.nav_register) {
             getNavigator().navigateActivity(SignupActivity.class, null);
@@ -424,10 +425,11 @@ public class HomeActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (navigationView != null) {
-            navigationView.getMenu().clear();
-            if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
-            else navigationView.inflateMenu(R.menu.activity_home_drawer);
-        }
+        ((HomeViewModel) vm).profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
+        ((HomeViewModel) vm).userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
+        ((HomeViewModel) vm).userEmail.set(pref.getString(Constants.EMAIL, null));
+        navigationView.getMenu().clear();
+//            if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
+//            else navigationView.inflateMenu(R.menu.activity_home_drawer);
     }
 }

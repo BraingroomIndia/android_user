@@ -89,7 +89,7 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
+        // ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         UserApplication.getInstance().getMAppComponent().inject(this);
         screenDims = new ScreenDims();
@@ -113,11 +113,11 @@ public abstract class BaseActivity extends MvvmActivity {
     protected void onResume() {
         super.onResume();
         isActive = true;
-        if (drawer!=null)
+        if (drawer != null)
             drawer.invalidate();
-        if (toolbar!=null)
+        if (toolbar != null)
             toolbar.invalidate();
-        if (navigationView!=null)
+        if (navigationView != null)
             navigationView.invalidate();
         invalidateOptionsMenu();
         vm.onResume();
@@ -334,9 +334,9 @@ public abstract class BaseActivity extends MvvmActivity {
 
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         vm.handleActivityResult(requestCode, resultCode, data);
-        vm.loggedIn.set(pref.getBoolean(Constants.LOGGED_IN,false));
+        vm.loggedIn.set(pref.getBoolean(Constants.LOGGED_IN, false));
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 

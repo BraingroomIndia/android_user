@@ -61,12 +61,28 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                                 SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), mobileVm.s_1.get(), data.getPassword());
                                 uiHandler.changeToOTPFragment(snippet);
                                 if (!data.getLoginType().equals("direct")){
-                                    login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
+                                    //login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
+                                    editor.putBoolean(Constants.LOGGED_IN, true);
+                                    editor.putString(Constants.NAME, data.getName());
+                                    editor.putString(Constants.EMAIL, data.getEmailId());
+                                    editor.putString(Constants.PROFILE_PIC,data.getProfilePic());
+                                    editor.putString(Constants.BG_ID, data.getId());
+                                    editor.putString(Constants.UUID, data.getUuid());
+                                    editor.commit();
+                                    loggedIn.set(true);
                                 }
                                 dismissDialog();
                             }
                             else {
-                                login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
+                               // login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
+                                editor.putBoolean(Constants.LOGGED_IN, true);
+                                editor.putString(Constants.NAME, data.getName());
+                                editor.putString(Constants.EMAIL, data.getEmailId());
+                                editor.putString(Constants.PROFILE_PIC,data.getProfilePic());
+                                editor.putString(Constants.BG_ID, data.getId());
+                                editor.putString(Constants.UUID, data.getUuid());
+                                editor.commit();
+                                loggedIn.set(true);
                                 navigator.finishActivity(new Intent());
                             }
 

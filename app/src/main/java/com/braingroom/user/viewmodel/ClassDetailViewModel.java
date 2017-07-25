@@ -452,7 +452,7 @@ public class ClassDetailViewModel extends ViewModel {
                             data.putSerializable("origin",ClassListViewModel1.ORIGIN_CATALOG);
                             data.putSerializable("catalogueId",catalogueId);
                             messageHelper.showLoginRequireDialog("Please login to post a query", data);
-                            navigator.navigateActivity(LoginActivity.class, data);
+                            navigator.navigateActivityForResult(LoginActivity.class, data,ViewModel.REQ_CODE_LOGIN);
                         }
 
                     }

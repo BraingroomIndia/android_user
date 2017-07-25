@@ -85,7 +85,15 @@ public class OTPViewModel extends ViewModel {
                                             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
                                                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
                                                     LoginResp.Snippet data = loginResp.getData().get(0);
-                                                    login(data.getName(), data.getEmailId(), data.getProfilePic(), data.getId(), data.getUuid());
+                                                    //login(data.getName(), data.getEmailId(), data.getProfilePic(), data.getId(), data.getUuid());
+                                                    editor.putBoolean(Constants.LOGGED_IN, true);
+                                                    editor.putString(Constants.NAME, data.getName());
+                                                    editor.putString(Constants.EMAIL, data.getEmailId());
+                                                    editor.putString(Constants.PROFILE_PIC,data.getProfilePic());
+                                                    editor.putString(Constants.BG_ID, data.getId());
+                                                    editor.putString(Constants.UUID, data.getUuid());
+                                                    editor.commit();
+                                                    loggedIn.set(true);
                                                     navigator.finishActivity(new Intent());
                                                 } else {
                                                     messageHelper.show(loginResp.getResMsg());
