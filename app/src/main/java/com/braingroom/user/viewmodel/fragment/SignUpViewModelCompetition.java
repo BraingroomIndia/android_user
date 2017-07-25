@@ -148,6 +148,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                             signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
                             signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
                             signUpResp.getData().get(0).setPassword(password.s_1.get());
+                            signUpResp.getData().get(0).setLoginType("direct");
                             uiHelper.next(signUpResp.getData().get(0));
 
                         } else {
@@ -233,6 +234,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                             signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
                             signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
                             signUpResp.getData().get(0).setPassword(password.s_1.get());
+                            signUpResp.getData().get(0).setLoginType("direct");
                             uiHelper.next(signUpResp.getData().get(0));
 
                         } else {

@@ -78,7 +78,7 @@ public class ConnectFeedFragment extends BaseFragment {
                 int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
                 if (dy > 0 && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
-                    ((ConnectFeedViewModel) vm).paginate();
+                     vm.paginate();
                 }
 
             }

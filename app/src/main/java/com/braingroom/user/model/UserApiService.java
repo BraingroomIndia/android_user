@@ -332,6 +332,9 @@ public interface UserApiService {
     @POST("getUnreadMessageCount")
     Observable<NotificationCountResp> getUnreadMessageCount(@Body CommonUserIdReq req);
 
+    @POST("changeMessageThreadStatus")
+    Observable<BaseResp> changeMessageThreadStatus(@Body ChatMessageReq req);
+
     @POST("getFeedsByPostID")
     Observable<ConnectFeedResp> getFeedsByPostID(@Body ConnectPostByIdReq req);
 

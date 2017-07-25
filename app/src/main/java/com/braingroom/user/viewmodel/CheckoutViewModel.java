@@ -63,8 +63,6 @@ import static com.braingroom.user.FCMInstanceIdService.TAG;
 
 public class CheckoutViewModel extends ViewModel {
 
-    public final int GUEST_USER = 1;
-    public final int REGISTERED_USER = 0;
     public final ListDialogViewModel1 locationsVm;
     public final ObservableInt totalAmount;
     public final ObservableInt totalAmountAfterPromo;
@@ -277,6 +275,13 @@ public class CheckoutViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 applyingPromoCode.set(true);
+                applyingCouponCode.set(false);
+                promoCode.set("");
+                appliedPromoCode.set(null);
+                appliedPromoAmount = 0;
+                couponCode.set(null);
+                appliedCouponCode.set(null);
+                appliedCouponAmount = 0;
                 if (!loggedIn.get() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
@@ -285,12 +290,7 @@ public class CheckoutViewModel extends ViewModel {
 
                                     gUserId = id;
                                     isGuest = 1;
-                                    promoCode.set("");
-                                    appliedPromoCode.set(null);
-                                    appliedPromoAmount = 0;
-                                    couponCode.set(null);
-                                    appliedCouponCode.set(null);
-                                    appliedCouponAmount = 0;
+
                                     try {
                                         cartAmount.run();
                                     } catch (Exception e) {
@@ -320,6 +320,13 @@ public class CheckoutViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 applyingCouponCode.set(true);
+                applyingPromoCode.set(false);
+                promoCode.set(null);
+                appliedPromoCode.set(null);
+                appliedPromoAmount = 0;
+                couponCode.set("");
+                appliedCouponCode.set(null);
+                appliedCouponAmount = 0;
                 if (!loggedIn.get() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
@@ -327,12 +334,6 @@ public class CheckoutViewModel extends ViewModel {
                                 public void onGuestLoginSuccess(String id) {
                                     gUserId = id;
                                     isGuest = 1;
-                                    promoCode.set(null);
-                                    appliedPromoCode.set(null);
-                                    appliedPromoAmount = 0;
-                                    couponCode.set("");
-                                    appliedCouponCode.set(null);
-                                    appliedCouponAmount = 0;
                                     try {
                                         cartAmount.run();
                                     } catch (Exception e) {
@@ -421,6 +422,7 @@ public class CheckoutViewModel extends ViewModel {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull PromocodeResp resp) throws Exception {
                             if (resp.getData().size() > 0) {
+
                                 appliedCouponCode.set(couponCode.get());
                                 appliedCouponAmount = resp.getData().get(0).getAmount();
                                 applyingCouponCode.set(false);
@@ -622,17 +624,9 @@ public class CheckoutViewModel extends ViewModel {
 
     public void handleRazorpaySuccess(final String razorpayId) {
         String date;
-        try {
 
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        } catch (Exception ex) {
-            throw ex;
-        }
         final Bundle bundle = new Bundle();
-        bundle.putString("className", date);
-        bundle.putString("name", pref.getString(Constants.NAME, ""));
         bundle.putString("transactionId", razorpayId);
-        bundle.putString("totalAmount", totalAmount.get() + "");
         if (isGift.get()) {
             messageHelper.showProgressDialog("Processing", "finalizing your purchase");
             RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
@@ -646,6 +640,10 @@ public class CheckoutViewModel extends ViewModel {
             snippet.setUserMobile(mChekcoutData.getPhone());
             snippet.setUserId(mChekcoutData.getUdf1());
             snippet.setIsGuest(isGuest);
+            snippet.setCouponCode(appliedCouponCode.get());
+            snippet.setCouponAmount(appliedCouponAmount +"");
+            snippet.setPromoCode(appliedPromoCode.get());
+            snippet.setPromoAmount(appliedPromoAmount + "");
             List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
             for (ViewModel nonReactiveItem : nonReactiveItems) {
                 if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
@@ -696,6 +694,10 @@ public class CheckoutViewModel extends ViewModel {
                 public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(resp.getResMsg());
+
+                    bundle.putString("class_name",resp.getData().get(0).className);
+                    bundle.putString("name",resp.getData().get(0).getUserName());
+                    bundle.putString("totalAmount",resp.getData().get(0).getTotalAmount());
                     bundle.putString("success", PaySuccessViewModel.PAYMENT_SUCCESS);
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
 
@@ -790,6 +792,10 @@ public class CheckoutViewModel extends ViewModel {
         checksum.setVar1(var1);
         checksum.setSalt(salt);
         return checksum.getHash();
+    }
+
+    public void afterPayment(Bundle data){
+        navigator.navigateActivity(PaySuccessActivity.class,data);
     }
 
 

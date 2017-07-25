@@ -201,9 +201,8 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (vm.loggedIn.get()) {
-            getNavigator().navigateActivity(HomeActivity.class, null);
-            finish();
+        if (ViewModel.loggedIn.get()) {
+            getNavigator().finishActivity(new Intent());
         }
     }
 

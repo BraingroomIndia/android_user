@@ -47,12 +47,14 @@ public class FCMService extends FirebaseMessagingService {
 
         Intent intent;
         Bundle data = new Bundle();
+        String notificationId = remoteMessage.getData().get("notification_id");
         String postId=remoteMessage.getData().get("post_id");
         String classId =remoteMessage.getData().get("class_id");
         String messageSenderId = remoteMessage.getData().get("sender_id");
         String messageSenderName = remoteMessage.getData().get("sender_name");
         String title =remoteMessage.getData().get("type");
         String messageBody= remoteMessage.getData().get("message");
+        data.putString("notification_id",notificationId);
 
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 

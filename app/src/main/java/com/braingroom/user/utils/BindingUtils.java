@@ -15,6 +15,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -212,21 +213,21 @@ public class BindingUtils {
     public static void setImageUrl(ImageView imageView, String url, int placeHolder, int errorUrl, int scaleWidth, int scaleHeight) {
         Log.d(TAG, "setImageUrl: " + url);
 
-            if ("".equals(url)) url = null;
-            Picasso picasso = Picasso.with(imageView.getContext());
-            picasso.setLoggingEnabled(false);
-            RequestCreator requestCreator;
-            requestCreator = picasso.load(url);
-            if (placeHolder != 0) {
-                requestCreator = requestCreator.placeholder(placeHolder);
-            }
-            if (errorUrl != 0) {
-                requestCreator.error(errorUrl);
-            }
-            if (scaleWidth == 0) scaleWidth = 250;
-            if (scaleHeight == 0) scaleHeight = 250;
-            requestCreator.centerCrop()
-                    .fit().into(imageView);
+        if (TextUtils.isEmpty(url)&& placeHolder==0) return;
+        Picasso picasso = Picasso.with(imageView.getContext());
+        picasso.setLoggingEnabled(false);
+        RequestCreator requestCreator;
+        requestCreator = picasso.load(url);
+        if (placeHolder != 0) {
+            requestCreator = requestCreator.placeholder(placeHolder);
+        }
+        if (errorUrl != 0) {
+            requestCreator.error(errorUrl);
+        }
+        if (scaleWidth == 0) scaleWidth = 250;
+        if (scaleHeight == 0) scaleHeight = 250;
+        requestCreator.centerCrop()
+                .fit().into(imageView);
 
     }
 

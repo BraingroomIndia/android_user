@@ -4,11 +4,14 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.request.ChangeNotificationStatusReq;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
@@ -27,6 +30,9 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     @NonNull
     @Override
     protected ViewModel createViewModel() {
+        String notificationId = getIntentString("notification_id");
+        if (ViewModel.loggedIn.get() && !TextUtils.isEmpty(notificationId))
+            vm.apiService.changeNotificationStatus(notificationId).subscribe();
         return new ConnectFeedDetailViewModel(getIntentString("postId"), this, getHelperFactory(), getMessageHelper(), getNavigator());
     }
 

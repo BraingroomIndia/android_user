@@ -5,14 +5,23 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
+import com.braingroom.user.view.fragment.ConnectFeedFragment;
+import com.braingroom.user.view.fragment.DemoPostFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
@@ -25,7 +34,11 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
+import retrofit2.http.POST;
 
+import static com.braingroom.user.R.string.action_learners_forum;
+import static com.braingroom.user.R.string.action_tips_tricks;
+import static com.braingroom.user.R.string.action_tutors_talk;
 import static com.rollbar.android.Rollbar.TAG;
 
 public class ClassDetailActivity extends BaseActivity {
@@ -36,6 +49,9 @@ public class ClassDetailActivity extends BaseActivity {
     UiHelper uiHelper;
     SupportMapFragment mapFragment;
     RxPermissions rxPermissions;
+
+    ViewPager pager;
+    PostPagerAdapter pagerAdapter;
 
     public interface UiHelper {
         void initYoutube();
@@ -52,6 +68,59 @@ public class ClassDetailActivity extends BaseActivity {
 
         void makeACall(String phoneNumber);
 
+
+    }
+
+    private class PostPagerAdapter extends FragmentStatePagerAdapter {
+        SparseArray<Fragment> registeredFragments = new SparseArray<>();
+
+         PostPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    ((ClassDetailViewModel) vm).connectFilterData.setMinorCateg("tips_tricks");
+                   break;
+                case 1:
+                    ((ClassDetailViewModel) vm).connectFilterData.setMinorCateg("group_post");
+                    break;
+                case 2:
+                    ((ClassDetailViewModel) vm).connectFilterData.setMinorCateg("group_post");
+                    break;
+                default:
+                    ((ClassDetailViewModel) vm).connectFilterData.setMinorCateg("");
+                    break;
+            }
+            return DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterData);
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if (position == 0) return getString(action_tips_tricks);
+            if (position == 1) return getString(action_learners_forum);
+            if (position == 2) return getString(action_tutors_talk);
+            return "NO TAB";
+        }
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            registeredFragments.put(position, fragment);
+            return fragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            registeredFragments.remove(position);
+            super.destroyItem(container, position, object);
+        }
     }
 
     @Override
@@ -66,6 +135,14 @@ public class ClassDetailActivity extends BaseActivity {
                 ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
             }
         });
+        if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))){
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+            pager = (ViewPager) findViewById(R.id.pager);
+            pagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
+            pager.setAdapter(pagerAdapter);
+            tabLayout.setupWithViewPager(pager);
+        }
+
 //        shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_container);
 //        shimmerFrameLayout.startShimmerAnimation();
 //        ((ClassDetailViewModel) vm).setUiHelper(uiHelper);
@@ -111,28 +188,29 @@ public class ClassDetailActivity extends BaseActivity {
 
             @Override
             public void makeACall(final String phoneNumber) {
-                if (phoneNumber != null && rxPermissions != null) ;
-                rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
-                        Intent intent = new Intent(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:" + phoneNumber));
-                        Log.d(TAG, "accept: " + phoneNumber);
-                        getNavigator().navigateActivity(intent);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        //throwable.printStackTrace();
-                        Log.d("makeACall", "OnError: " + throwable.toString() + "\t" + phoneNumber);
-                    }
-                });
+                if (phoneNumber != null && rxPermissions != null)
+                    rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + phoneNumber));
+                            Log.d(TAG, "accept: " + phoneNumber);
+                            getNavigator().navigateActivity(intent);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                            //throwable.printStackTrace();
+                            Log.d("makeACall", "OnError: " + throwable.toString() + "\t" + phoneNumber);
+                        }
+                    });
             }
 
             @Override
             public void next() {
                 onBackPressed();
             }
+
 
         };
         return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"),
@@ -169,7 +247,7 @@ public class ClassDetailActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_wishlist) {
-            if (vm.loggedIn.get()) {
+            if (ViewModel.loggedIn.get()) {
                 ((ClassDetailViewModel) vm).addToWishlist();
             } else {
                 Bundle data = new Bundle();

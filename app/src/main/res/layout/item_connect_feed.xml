@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/margin_small">
+            android:padding="@dimen/margin_med">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -37,7 +37,8 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginRight="@dimen/margin_small"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:onClick="@{vm.showthirdpartyProfile}"
                     android:scaleType="centerCrop"
                     app:imageUrl="@{vm.vendorImage}" />
@@ -68,7 +69,7 @@
                     android:padding="5dp"
                     android:src="@drawable/ic_textsms_white_24dp"
                     android:tint="@color/fbLikeDark"
-                    android:visibility="@{!(vm.isVendor || vm.isPostOwner) ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{(vm.isVendor || vm.isPostOwner) ? View.GONE : View.VISIBLE}" />
 
                 <LinearLayout
                     android:id="@+id/institute"
@@ -137,7 +138,8 @@
                         android:layout_width="15dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_marginLeft="@dimen/margin_med"
+                        android:visibility="@{vm.isSegmentAvailable ? View.VISIBLE : View.GONE}"
                         android:onClick="@{vm.openSegment}"
                         android:tint="@color/colorTextGray"
                         app:placeHolder="@{vm.categoryImg}" />
@@ -146,6 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/margin_med"
+                        android:visibility="@{vm.isSegmentAvailable ? View.VISIBLE : View.GONE}"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:lines="1"
@@ -162,7 +165,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:paddingRight="@dimen/_5sdp"
+                    android:paddingBottom="@dimen/_5sdp"
                     android:layout_margin="@dimen/margin_med"
                     android:onClick="@{(v) -> vm.showMenuPopup(v)}"
                     android:src="@drawable/vert_more_dots"

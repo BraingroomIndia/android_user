@@ -35,6 +35,12 @@ public class RazorSuccessResp extends BaseResp {
 
         @SerializedName("email")
         public String email;
+
+        @SerializedName("user_name")
+        String userName;
+
+        @SerializedName("total_amount")
+        String totalAmount;
     }
 
 }

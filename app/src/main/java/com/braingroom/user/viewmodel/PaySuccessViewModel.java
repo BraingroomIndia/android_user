@@ -24,7 +24,7 @@ public class PaySuccessViewModel extends ViewModel {
         this.className = new ObservableField<>(className);
         this.name = new ObservableField<>(name);
         this.transactionId = new ObservableField<>(transactionId);
-        this.totalAmount = new ObservableField<>("\u20B9" + totalAmount);
+        this.totalAmount = new ObservableField<>("\u20B9   " + totalAmount);
         onDoneClicked = new Action() {
             @Override
             public void run() throws Exception {

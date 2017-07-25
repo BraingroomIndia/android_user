@@ -47,6 +47,18 @@ public class RazorSuccessReq {
 
         @SerializedName("term_id")
         private String termId;
+
+        @SerializedName("coupon_id")
+        private String couponCode;
+
+        @SerializedName("coupon_value")
+        private String couponAmount;
+
+        @SerializedName("promo_id")
+        private String promoCode;
+
+        @SerializedName("promo_value")
+        private String promoAmount;
     }
 
     @Data

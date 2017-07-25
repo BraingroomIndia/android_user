@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableField;
+import android.text.TextUtils;
 
 import com.braingroom.user.model.request.MessageReplyReq;
 import com.braingroom.user.model.response.BaseResp;
@@ -30,12 +31,14 @@ public class MessagesThreadViewModel extends ViewModel {
 
     public MessagesThreadViewModel(final String senderId, final MessageHelper messageHelper, final Navigator navigator, final MessagesThreadActivity.UiHelper uiHelper) {
         final String myUserId = pref.getString(Constants.BG_ID,"");
+        apiService.changeMessageThreadStatus(senderId).subscribe();
         messageVmObservable = apiService.getChatMessages(senderId)
                 .map(new Function<ChatListResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(ChatListResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         for (final ChatListResp.Snippet elem : resp.getData()) {
+                            elem.setTime(TextUtils.isEmpty(elem.getTime()) ? "": elem.getTime());
                             results.add(new MessagesThreadItemViewModel(myUserId.equals(elem.getUserId()), elem.getText(), elem.getTime()));
                         }
                         return results;

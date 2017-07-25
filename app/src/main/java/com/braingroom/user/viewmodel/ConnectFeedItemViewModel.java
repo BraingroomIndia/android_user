@@ -83,6 +83,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public final ObservableBoolean accepted;
 
     @NonNull
+    public final ObservableBoolean isSegmentAvailable = new ObservableBoolean(true);
+
+    @NonNull
     public final Action likeAction, commentAction, reportAction,
             likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile, onMessageClick, openSegment;
 
@@ -96,17 +99,19 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public ObservableInt categoryImg = new ObservableInt();
 
     public final int[] resArray = new int[]{R.drawable.main_category_1,
-            R.drawable.main_category_2, //Edited By Vikas Godara
+            R.drawable.main_category_5, //Edited By Vikas Godara
             R.drawable.main_category_3,
             R.drawable.main_category_4,
-            R.drawable.main_category_5, //Edited By Vikas Godara
+            R.drawable.main_category_2, //Edited By Vikas Godara
             R.drawable.main_category_6};
 
     public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
             ,@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
-        data.setCategoryId(data.getCategoryId()!=null?data.getCategoryId():"1");
-        data.setSegId(data.getSegId()!=null?data.getSegId():"1");
-        categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - Integer.parseInt(data.getCategoryId()!=null?data.getCategoryId():"0")]);
+        if (data.getCategoryId()==null && data.getSegId()==null)
+            isSegmentAvailable.set(false);
+
+        if (data.getCategoryId()!=null)
+        categoryImg.set(resArray[Integer.parseInt(data.getCategoryId())-1]);
         this.navigator = navigator;
         this.vendorImage = new ObservableField<>(data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
@@ -121,7 +126,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         else
             this.vendorCollege = new ObservableField<>(data.getInstituteName());
 
-        this.image = new ObservableField<>("".equals(data.getImage()) ? null : data.getImage());
+        this.image = new ObservableField<>(TextUtils.isEmpty(data.getImage()) ? null : data.getImage());
         this.video = new ObservableField<>(getVideoId(data.getVideo()));
         this.videoThumb = new ObservableField<>(TextUtils.isEmpty(video.get()) ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
         this.liked = new ObservableBoolean(data.getLiked() == 0 ? false : true);
@@ -373,7 +378,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
             Date netDate = (new Date(time));
             return sdf.format(netDate);
         } catch (Exception ex) {
-            return "xx";
+            return "";
         }
     }
 

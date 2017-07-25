@@ -113,34 +113,26 @@ public class LoginViewmodel extends ViewModel {
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
                     loginResp.getData().get(0).setEmailId(email.get());
                     loginResp.getData().get(0).setPassword(password.get());
+                    LoginResp.Snippet data = loginResp.getData().get(0);
                     messageHelper.dismissActiveProgress();
                     if ("".equals(loginResp.getData().get(0).getMobile()) || loginResp.getData().get(0).getReferralCode() == null) {
                         uiHandler.showEmailDialog(loginResp);
                         return;
                     } else if (loginResp.getData().get(0).getIsVerified() == 0) {
-                        LoginResp.Snippet data = loginResp.getData().get(0);
+
                         SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), data.getMobile(), data.getPassword());
                         uiHandler.changeToOTPFragment(snippet);
                         return;
                     } else {
-                        editor.putBoolean(Constants.LOGGED_IN, true);
-                        editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
-                        editor.putString(Constants.PROFILE_PIC, loginResp.getData().get(0).getProfilePic());
-                        editor.putString(Constants.CITY_ID, loginResp.getData().get(0).getCityId());
-                        editor.putString(Constants.NAME, loginResp.getData().get(0).getName());
-                        editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
-                        editor.commit();
-
+                        login(data.getName(), data.getEmailId(), data.getProfilePic(), data.getId(), data.getUuid());
                         navigator.finishActivity(new Intent());
+                        return;
                     }
 
                 } else
 
                 {
-                    String fcmToken = pref.getString(Constants.FCM_TOKEN, "");
-                    editor.clear();
-                    editor.putString(Constants.FCM_TOKEN, fcmToken);
-                    editor.commit();
+                    logOut();
                     messageHelper.show(loginResp.getResMsg());
                     return;
 
@@ -174,12 +166,11 @@ public class LoginViewmodel extends ViewModel {
         }
 
         fcmToken = pref.getString(Constants.FCM_TOKEN, "");
-        editor.putString(Constants.NAME, name);
-        editor.putString(Constants.PROFILE_PIC, picture);
-        editor.putString(Constants.EMAIL, email);
-        editor.commit();
+
 
         final String emailId = email;
+        final String userName = name;
+        final String profilePic = picture;
 
 
         apiService.socialLogin(name, picture, email, socialId, fcmToken, "", referralCode).subscribe(new Consumer<LoginResp>() {
@@ -188,29 +179,26 @@ public class LoginViewmodel extends ViewModel {
 
 
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
-
+                    LoginResp.Snippet data = loginResp.getData().get(0);
                     if ("".equals(loginResp.getData().get(0).getMobile())) {
+                        login(userName, emailId, profilePic, data.getId(), data.getUuid());
                         uiHandler.showEmailDialog(loginResp);
                         return;
                     } else if (loginResp.getData().get(0).getIsVerified() == 0) {
-
-                        LoginResp.Snippet data = loginResp.getData().get(0);
                         SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), data.getMobile(), data.getPassword());
+                        login(userName, emailId, profilePic, data.getId(), data.getUuid());
                         uiHandler.changeToOTPFragment(snippet);
                         return;
                     } else {
-                        editor.putBoolean(Constants.LOGGED_IN, true);
-                        editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
-                        editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
-                        editor.commit();
-
-
+                        login(userName, emailId, profilePic, data.getId(), data.getUuid());
                         navigator.finishActivity(new Intent());
+                        return;
                     }
 
                 } else {
                     logOut();
                     messageHelper.show(loginResp.getResMsg());
+                    return;
                 }
 
             }

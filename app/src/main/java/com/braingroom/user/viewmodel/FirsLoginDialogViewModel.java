@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.response.BaseResp;
@@ -55,35 +56,26 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                             logOut();
                             messageHelper.show(baseResp.getResMsg());
                         } else {
+                            LoginResp.Snippet data =loginResp.getData().get(0);
                             if (mobileVm.s_1.get() != null) {
-                                LoginResp.Snippet data =loginResp.getData().get(0);
                                 SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), mobileVm.s_1.get(), data.getPassword());
                                 uiHandler.changeToOTPFragment(snippet);
                                 if (!data.getLoginType().equals("direct")){
-                                    editor.putBoolean(Constants.LOGGED_IN, true);
-                                    editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
-                                    editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
-                                    editor.commit();
+                                    login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
+                                    navigator.finishActivity(new Intent());
                                 }
                                 dismissDialog();
                                 return;
                             }
-                            editor.putBoolean(Constants.LOGGED_IN, true);
-                            editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
-                            editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
-                            editor.commit();
-                            navigator.navigateActivity(HomeActivity.class, null);
-                            navigator.finishActivity();
+                            login(data.getName(),data.getEmailId(),data.getProfilePic(),data.getId(),data.getUuid());
+                            navigator.finishActivity(new Intent());
                         }
 
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        String fcmToken = pref.getString(Constants.FCM_TOKEN, "");
-                        editor.clear();
-                        editor.putString(Constants.FCM_TOKEN, fcmToken);
-                        editor.commit();
+                        logOut();
                         messageHelper.show("some Error occurred");
 
                     }

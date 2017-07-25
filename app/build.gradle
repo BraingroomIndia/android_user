@@ -52,7 +52,7 @@ dependencies {
     })
     compile project(':payUMoneysdk')
     compile project(':sdkui')
-    compile project (':Mobilisten')
+   // compile project (':Mobilisten')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }

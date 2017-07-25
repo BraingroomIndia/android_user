@@ -165,6 +165,8 @@ public class SignupViewModel extends ViewModel {
                             signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
                             signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
                             signUpResp.getData().get(0).setPassword(password.s_1.get());
+                            signUpResp.getData().get(0).setLoginType("direct");
+
                             uiHelper.thirdFragment(signUpResp.getData().get(0));
 
 /*                            messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
@@ -245,6 +247,7 @@ public class SignupViewModel extends ViewModel {
                             signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
                             signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
                             signUpResp.getData().get(0).setPassword(password.s_1.get());
+                            signUpResp.getData().get(0).setLoginType("direct");
                             uiHelper.thirdFragment(signUpResp.getData().get(0));
                           /*  messageHelper.showAcceptableInfo("Successful", signUpResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                                 @Override

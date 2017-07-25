@@ -26,13 +26,11 @@ public class NotificationViewModel extends ViewModel {
                     public List<ViewModel> apply(NotificationListResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         for (final NotificationListResp.Snippet elem : resp.getData()) {
-                            results.add(new NotificationsItemViewModel(navigator, elem.getNotificationId(),elem.getDescription(), elem.getPostId(),
+                            results.add(new NotificationsItemViewModel(navigator, elem.getNotificationId(), elem.getDescription(), elem.getPostId(),
                                     "", "1".equals(elem.getStatus())));
                         }
-                        ChangeNotificationStatusReq.Snippet snippet =
-                                new ChangeNotificationStatusReq.Snippet(pref.getString(Constants.BG_ID,""),"");
-                       if (resp.getResCode().equals("1"))
-                        apiService.changeNotificationStatus(snippet).subscribe();
+                        if (resp.getResCode().equals("1"))
+                            apiService.changeNotificationStatus("").subscribe();
                         return results;
                     }
                 });

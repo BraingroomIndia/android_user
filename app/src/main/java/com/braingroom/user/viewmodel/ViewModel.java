@@ -64,6 +64,7 @@ public class  ViewModel {
     }
 
     public void logOut() {
+        loggedIn.set(false);
         String fcmToken = pref.getString(Constants.FCM_TOKEN,"");
         Log.d("Firebase", "fcm Token: " + fcmToken);
         apiService.logout().subscribe();
@@ -71,9 +72,22 @@ public class  ViewModel {
         editor.putString(Constants.FCM_TOKEN,fcmToken);
         editor.commit();
         LoginManager.getInstance().logOut();
-        loggedIn.set(false);
+
 
     }
+    public void login(String name, String email,String profilePic,String userId,String uuid){
+        editor.putBoolean(Constants.LOGGED_IN, true);
+        editor.putString(Constants.NAME, name);
+        editor.putString(Constants.EMAIL, email);
+        editor.putString(Constants.PROFILE_PIC,profilePic);
+        editor.putString(Constants.BG_ID, userId);
+        editor.putString(Constants.UUID, uuid);
+        editor.commit();
+        loggedIn.set(true);
+
+    }
+
+
 
     public void init() {
     }

@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel.fragment;
 
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -78,31 +79,34 @@ public class OTPViewModel extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
                         if (resp.getResCode().equals("1"))
                             if (data.getLoginType().equals("direct"))
-                            apiService.login(emailId, password, pref.getString(Constants.FCM_TOKEN, ""))
-                                    .subscribe(new Consumer<LoginResp>() {
-                                        @Override
-                                        public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
-                                            if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
-                                                editor.putBoolean(Constants.LOGGED_IN, true);
-                                                editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
-                                                editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
-                                                editor.commit();
-                                                navigator.navigateActivity(HomeActivity.class, null);
-                                            }
-                                            else messageHelper.show(loginResp.getResMsg());
+                                apiService.login(emailId, password, pref.getString(Constants.FCM_TOKEN, ""))
+                                        .subscribe(new Consumer<LoginResp>() {
+                                            @Override
+                                            public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
+                                                if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
+                                                    LoginResp.Snippet data = loginResp.getData().get(0);
+                                                    login(data.getName(), data.getEmailId(), data.getProfilePic(), data.getId(), data.getUuid());
+                                                    navigator.finishActivity(new Intent());
+                                                } else {
+                                                    messageHelper.show(loginResp.getResMsg());
+                                                }
 
-                                        }
-                                    });
+                                            }
+                                        });
                             else
-                                navigator.navigateActivity(HomeActivity.class, null);
-                        else messageHelper.show(resp.getResMsg());
+                                navigator.finishActivity(new Intent());
+                        else {
+                            logOut();
+                            messageHelper.show(resp.getResMsg());
+                        }
 
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        logOut();
                         Log.d(TAG, "submit OTP: " + throwable.toString());
-                       // throwable.printStackTrace();
+                        // throwable.printStackTrace();
 
                     }
                 });
@@ -149,7 +153,7 @@ public class OTPViewModel extends ViewModel {
                             submitOTP.run();
                         }
                     } catch (Exception e) {
-                      //  e.printStackTrace();
+                        //  e.printStackTrace();
                     }
                 }
             }

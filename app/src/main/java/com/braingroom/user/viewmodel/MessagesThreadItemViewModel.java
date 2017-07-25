@@ -14,19 +14,20 @@ public class MessagesThreadItemViewModel extends ViewModel {
     public MessagesThreadItemViewModel(@NonNull final boolean isMyMessage,
                                        @NonNull String message, @NonNull String sentDate) {
 
+
         this.message = message;
-        this.sentDate = getHumanDate(Long.valueOf(sentDate));
+        this.sentDate = getHumanDate(sentDate);
         this.isMyMessage = isMyMessage;
     }
 
-    private String getHumanDate(long timeStamp) {
+    private String getHumanDate(String timeStamp) {
 
         try {
             DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            Date netDate = (new Date(timeStamp));
+            Date netDate = (new Date(Long.valueOf(timeStamp)));
             return sdf.format(netDate);
         } catch (Exception ex) {
-            return "xx";
+            return "";
         }
     }
 }

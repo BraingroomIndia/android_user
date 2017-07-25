@@ -103,7 +103,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     ViewPager pager;
     public ConnectPagerAdapter pagerAdapter;
-    ConnectFilterData learnersFilter, tutorsFilter;
+    ConnectFilterData learnersFilter, tutorsFilter, connectFilterData;
 
     @Getter
     ConnectFilterViewModel connectFilterViewModel;
@@ -120,8 +120,16 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        defMajorCateg = getIntentString("defMajorCateg") != null ? getIntentString("defMajorCateg") : "learners_forum";
-        defMinorCateg = getIntentString("defMinorCateg") != null ? getIntentString("defMinorCateg") : "";
+        connectFilterData = (ConnectFilterData) getIntentSerializable("connectFilterData");
+
+        if (connectFilterData != null) {
+            defMajorCateg = connectFilterData.getMajorCateg() != null ? connectFilterData.getMajorCateg() : "learners_forum";
+            defMinorCateg = connectFilterData.getMinorCateg() != null ? connectFilterData.getMinorCateg() : "";
+        } else {
+            defMajorCateg = "learners_forum";
+            defMinorCateg = "";
+        }
+
         greenList = new ColorStateList(states, new int[]{
                 ContextCompat.getColor(this, R.color.bottomNavSelectedGreen),
                 ContextCompat.getColor(this, R.color.bottomNavUnSelected)
@@ -158,19 +166,16 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         pager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(pager);
 
-        if ("tips_tricks".equals(defMinorCateg)) {
+        if ("tips_tricks".equals(defMinorCateg))
             learnerForumSelectedNav = R.id.action_tips_tricks;
-        }
-        if ("group_post".equals(defMinorCateg)) {
+        if ("group_post".equals(defMinorCateg))
             learnerForumSelectedNav = R.id.action_buy_sell;
-        }
         if ("activity_request".equals(defMinorCateg))
             learnerForumSelectedNav = R.id.action_find_partners;
-        if ("user_post".equals(defMinorCateg)) tutorTalkSelectedNav = R.id.action_discuss_n_decide;
-        if ("vendor_article".equals(defMinorCateg)) {
+        if ("user_post".equals(defMinorCateg))
+            tutorTalkSelectedNav = R.id.action_discuss_n_decide;
+        if ("vendor_article".equals(defMinorCateg))
             tutorTalkSelectedNav = R.id.action_tutors_article;
-        }
-
         if ("learners_forum".equals(defMajorCateg)) {
             pager.setCurrentItem(0);
             setPagerLearnerForum();
@@ -330,25 +335,29 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         }
         if (id == R.id.action_messages) {
 
-            if (!vm.loggedIn.get()) {
+            if (!ViewModel.loggedIn.get()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
                 return true;
+            } else {
+                ((ConnectHomeViewModel) vm).messageCount = 0;
+                getNavigator().navigateActivity(MessageActivity.class, null);
             }
-            getNavigator().navigateActivity(MessageActivity.class, null);
 //            vm.retry();
             return true;
         }
         if (id == R.id.action_notifications) {
-            if (!vm.loggedIn.get()) {
+            if (!ViewModel.loggedIn.get()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
                 return true;
+            } else {
+                ((ConnectHomeViewModel) vm).notificationCount = 0;
+                getNavigator().navigateActivity(NotificationActivity.class, null);
+                return true;
             }
-            getNavigator().navigateActivity(NotificationActivity.class, null);
-            return true;
         }
 
 
@@ -387,7 +396,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             });
         }
         if (id == R.id.nav_login) {
-            getNavigator().navigateActivityForResult(LoginActivity.class,null,ViewModel.REQ_CODE_LOGIN);
+            getNavigator().navigateActivityForResult(LoginActivity.class, null, ViewModel.REQ_CODE_LOGIN);
         }
         if (id == R.id.nav_register) {
             getNavigator().navigateActivity(SignupActivity.class, null);
@@ -468,8 +477,10 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
     private void initFilters() {
-        learnersFilter = new ConnectFilterData();
-        learnersFilter.setMajorCateg("learners_forum");
+        if (connectFilterData == null) {
+            learnersFilter = new ConnectFilterData();
+            learnersFilter.setMajorCateg("learners_forum");
+        } else learnersFilter = connectFilterData;
         tutorsFilter = new ConnectFilterData();
         tutorsFilter.setMajorCateg("tutors_talk");
         setLocationData();

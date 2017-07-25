@@ -44,33 +44,34 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_toLeftOf="@+id/filter"
-                    >
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_weight="16"
                         android:layout_height="@dimen/search_height"
-
+                        android:layout_margin="@dimen/margin_med"
                         android:background="@drawable/solid_white_rounded_corner"
+                        android:drawableLeft="@drawable/search_new"
+                        android:drawableStart="@drawable/search_new"
+                        android:drawablePadding="@dimen/_13sdp"
                         android:gravity="center_vertical"
+                        android:padding="@dimen/margin_small"
+                        android:textColor="@color/colorTextGray"
+                        app:font='@{@string/robotoRegular}'
                         android:hint="@string/searchBlogHint"
-                        android:paddingLeft="@dimen/padding_large"
-                        android:text="@={vm.searchQuery}"
-                        android:imeOptions="actionSearch"
-                        android:textColor="@color/colorTextDark"
-                        android:textColorHint="@color/colorTextGray"
-                        app:font='@{@string/robotoRegular}' />
+                        android:text="@={vm.searchQuery}"/>
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/search_height"
                         android:layout_weight="2"
+                        android:layout_height="@dimen/search_height"
+                        android:layout_marginTop="@dimen/margin_med"
+                        android:padding="@dimen/_4sdp"
+                        android:layout_marginLeft="@dimen/margin_small_neg"
+                        android:layout_marginRight="@dimen/_4sdp"
                         android:onClick="@{vm.onFilterClicked}"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp"
                         android:src="@drawable/filter_funnel" />
                     <!--android:layout_toLeftOf="@+id/search"-->
 

@@ -38,4 +38,10 @@ public class PaySuccessActivity extends BaseActivity {
         else
             return R.layout.activity_pay_failure;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

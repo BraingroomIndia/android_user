@@ -41,7 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hanks.htextview.base.HTextView;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.zoho.salesiqembed.ZohoSalesIQ;
+//import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -320,6 +320,7 @@ public class HomeActivity extends BaseActivity
                 getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
                 return true;
             }
+            ((HomeViewModel) vm).messageCount = 0;
             getNavigator().navigateActivity(MessageActivity.class, null);
 //            vm.retry();
             return true;

@@ -14,6 +14,7 @@ import android.util.Log;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassLocationData;
+import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.response.BaseResp;
@@ -30,6 +31,7 @@ import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
+import com.braingroom.user.viewmodel.fragment.ClassDetailDemoPostViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -105,6 +107,12 @@ public class ClassDetailViewModel extends ViewModel {
     @Setter
     ClassDetailActivity.UiHelper uiHelper;
 
+    public ConnectFilterData connectFilterData = new ConnectFilterData();
+
+
+    @Setter
+    public final ObservableField<ClassDetailDemoPostViewModel> postVm;
+
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, openConnectTnT,
             openConnectBnS, openConnectFP, openCateglogLocationList,playAction, onQueryDismiss, onPostDismiss;
@@ -120,10 +128,14 @@ public class ClassDetailViewModel extends ViewModel {
                 Log.d(TAG, "run: " + callAgain.get());
             }
         });
+        connectFilterData.setMajorCateg("learners_forum");
+        connectFilterData.setMinorCateg("tips_tricks");
+
+        postVm = new ObservableField<>(new ClassDetailDemoPostViewModel(navigator,connectFilterData));
         PhoneListApiData.put("044-49507392", 1);
         PhoneListApiData.put("044-65556012", 2);
         PhoneListApiData.put("044-65556013", 3);
-
+        connectFilterData.setMajorCateg("learners_forum");
         addresses = Observable.just(addressList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
@@ -138,6 +150,7 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
+                connectFilterData.setMinorCateg("tips_tricks");
                 data.putString("defMinorCateg", "tips_tricks");
                 navigator.navigateActivity(ConnectHomeActivity.class, data);
             }
@@ -146,6 +159,7 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
+                connectFilterData.setMinorCateg("group_post");
                 data.putString("defMinorCateg", "group_post");
                 navigator.navigateActivity(ConnectHomeActivity.class, data);
 
@@ -155,6 +169,7 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
+                connectFilterData.setMinorCateg("activity_request");
                 data.putString("defMinorCateg", "activity_request");
                 navigator.navigateActivity(ConnectHomeActivity.class, data);
 
@@ -259,6 +274,8 @@ public class ClassDetailViewModel extends ViewModel {
                         if (classData.getId() == null)
                             return Observable.empty();
 
+                        connectFilterData.setCategId(classData.getCategoryId());
+                        connectFilterData.setSegId(classData.getSegmentId());
                         mClassData = classData;
                         if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
                             isMapVisible.set(false);

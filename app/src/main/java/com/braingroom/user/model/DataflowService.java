@@ -159,7 +159,7 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LoginResp> socialLogin(String name, String profileImage, final String email, String id, String fcmToken, String mobile, String referralCode) {
+    public Observable<LoginResp> socialLogin(final String name,final String profileImage, final String email, final String id, String fcmToken, String mobile, String referralCode) {
         SocialLoginReq.Snippet snippet = new SocialLoginReq.Snippet();
         snippet.setEmail(email);
         snippet.setFirstName(name);
@@ -843,8 +843,8 @@ public class DataflowService {
                 });
     }
 
-    public Observable<BaseResp> changeNotificationStatus(ChangeNotificationStatusReq.Snippet snippet) {
-        return api.changeNotificationStatus(new ChangeNotificationStatusReq(snippet)).subscribeOn(Schedulers.io())
+    public Observable<BaseResp> changeNotificationStatus(String notificationId) {
+        return api.changeNotificationStatus(new ChangeNotificationStatusReq(new ChangeNotificationStatusReq.Snippet(pref.getString(Constants.BG_ID,""),notificationId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -856,6 +856,11 @@ public class DataflowService {
                         return new NotificationCountResp();
                     }
                 });
+    }
+
+    public Observable<BaseResp> changeMessageThreadStatus(String senderId) {
+        return api.changeMessageThreadStatus(new ChatMessageReq(new ChatMessageReq.Snippet(senderId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<NotificationCountResp> getUnreadMessageCount() {

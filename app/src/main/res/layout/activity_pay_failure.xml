@@ -59,46 +59,14 @@
             app:font='@{@string/robotoBold}' />
 
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/success_text"
-            android:layout_marginLeft="@dimen/_4sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginTop="@dimen/margin_large"
-            android:text="@string/name"
-            android:textColor="@color/cb_dark_grey"
-            app:font='@{@string/robotoRegular}' />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/success_text"
-            android:layout_marginLeft="@dimen/_120sdp"
-            android:layout_marginStart="@dimen/_120sdp"
-            android:layout_marginTop="@dimen/margin_large"
-            android:text="@{vm.name}"
-            android:textColor="@color/cb_dark_grey"
-            app:font='@{@string/robotoRegular}' />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/name"
-            android:layout_marginTop="@dimen/margin_med"
-            android:src="@drawable/bottom_line_drawable"
-            android:tint="@color/cb_dark_grey"
-            card_view:ignore="ContentDescription" />
 
 
         <TextView
             android:id="@+id/transaction_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/name"
+            android:layout_below="@id/success_text"
             android:layout_marginLeft="@dimen/_4sdp"
             android:layout_marginStart="@dimen/_4sdp"
             android:layout_marginTop="@dimen/margin_large"
@@ -111,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@id/name"
+            android:layout_below="@id/success_text"
             android:layout_marginLeft="@dimen/_120sdp"
             android:layout_marginStart="@dimen/_120sdp"
             android:layout_marginTop="@dimen/margin_large"
@@ -119,56 +87,27 @@
             android:textColor="@color/cb_dark_grey"
             app:font='@{@string/robotoRegular}' />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/transaction_id"
-            android:layout_marginTop="@dimen/margin_med"
-            android:src="@drawable/bottom_line_drawable"
-            android:tint="@color/cb_dark_grey"
-            card_view:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/class_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/transaction_id"
-            android:layout_marginLeft="@dimen/_4sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginTop="@dimen/margin_large"
-            android:text="@string/classs_name"
-            android:textColor="@color/cb_dark_grey"
-            app:font='@{@string/robotoRegular}' />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/transaction_id"
-            android:layout_marginLeft="@dimen/_120sdp"
-            android:layout_marginStart="@dimen/_120sdp"
-            android:layout_marginTop="@dimen/margin_large"
-            android:text="@{vm.className}"
-            android:textColor="@color/cb_dark_grey"
-            app:font='@{@string/robotoRegular}' />
+
 
         <ImageView
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/class_name"
+            android:layout_below="@id/transaction_id"
             android:layout_marginTop="@dimen/margin_med"
             android:src="@drawable/bottom_line_drawable"
             android:tint="@color/cb_dark_grey"
             card_view:ignore="ContentDescription" />
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/line"
             android:layout_marginLeft="@dimen/_4sdp"
             android:layout_marginStart="@dimen/_4sdp"
+            android:layout_below="@id/line"
             android:layout_marginTop="@dimen/margin_large"
             android:text="@string/total_amount"
             android:textColor="@color/cb_dark_grey"
@@ -180,9 +119,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@id/line"
             android:layout_marginLeft="@dimen/_120sdp"
             android:layout_marginStart="@dimen/_120sdp"
+            android:layout_below="@id/line"
             android:layout_marginTop="@dimen/margin_large"
             android:text="@{vm.totalAmount}"
             android:textColor="@color/cb_dark_grey"

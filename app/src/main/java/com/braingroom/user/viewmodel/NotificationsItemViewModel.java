@@ -33,8 +33,6 @@ public class NotificationsItemViewModel extends ViewModel {
         onClicked = new Action() {
             @Override
             public void run() throws Exception {
-                apiService.changeNotificationStatus(new ChangeNotificationStatusReq.Snippet(pref.getString(Constants.BG_ID,""),notificationId))
-                        .subscribe();
                 Bundle data = new Bundle();
                 data.putString("postId", postId);
                 navigator.navigateActivity(PostDetailActivity.class, data);
