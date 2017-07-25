@@ -314,7 +314,7 @@ public class HomeActivity extends BaseActivity
             return true;
         }
         if (id == R.id.action_messages) {
-            if (!ViewModel.loggedIn.get()) {
+            if (!vm.loggedIn.get()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", HomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
@@ -326,7 +326,7 @@ public class HomeActivity extends BaseActivity
             return true;
         }
         if (id == R.id.action_notifications) {
-            if (!ViewModel.loggedIn.get()) {
+            if (!vm.loggedIn.get()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", HomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
@@ -417,7 +417,7 @@ public class HomeActivity extends BaseActivity
 
     public void setBadgeCount(MenuItem item, Context context, int count) {
 
-        if (item != null && ViewModel.loggedIn.get()) {
+        if (item != null && vm.loggedIn.get()) {
             BadgeDrawable badge;
             LayerDrawable icon = (LayerDrawable) item.getIcon();
             Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
@@ -433,4 +433,11 @@ public class HomeActivity extends BaseActivity
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        navigationView.getMenu().clear();
+        if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
+        else navigationView.inflateMenu(R.menu.activity_home_drawer);
+    }
 }
