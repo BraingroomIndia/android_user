@@ -1,17 +1,10 @@
 package com.braingroom.user.view.activity;
 
-import android.databinding.ObservableField;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.braingroom.user.R;
-import com.braingroom.user.model.request.ChangeNotificationStatusReq;
-import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
@@ -20,7 +13,6 @@ import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
 import com.braingroom.user.viewmodel.ConnectFeedDetailViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
 
 import java.util.List;
 
@@ -31,7 +23,7 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     @Override
     protected ViewModel createViewModel() {
         String notificationId = getIntentString("notification_id");
-        if (ViewModel.loggedIn.get() && !TextUtils.isEmpty(notificationId))
+        if (vm.loggedIn.get() && !TextUtils.isEmpty(notificationId))
             vm.apiService.changeNotificationStatus(notificationId).subscribe();
         return new ConnectFeedDetailViewModel(getIntentString("postId"), this, getHelperFactory(), getMessageHelper(), getNavigator());
     }

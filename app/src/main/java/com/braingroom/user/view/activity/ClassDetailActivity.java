@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
-import com.braingroom.user.view.fragment.ConnectFeedFragment;
 import com.braingroom.user.view.fragment.DemoPostFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
@@ -34,7 +33,6 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
-import retrofit2.http.POST;
 
 import static com.braingroom.user.R.string.action_learners_forum;
 import static com.braingroom.user.R.string.action_tips_tricks;
@@ -247,7 +245,7 @@ public class ClassDetailActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_wishlist) {
-            if (ViewModel.loggedIn.get()) {
+            if (vm.loggedIn.get()) {
                 ((ClassDetailViewModel) vm).addToWishlist();
             } else {
                 Bundle data = new Bundle();

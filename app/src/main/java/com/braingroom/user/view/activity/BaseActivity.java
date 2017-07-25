@@ -39,7 +39,6 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-//import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,7 +47,7 @@ import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
 
-import static com.braingroom.user.R.id.view;
+//import com.zoho.salesiqembed.ZohoSalesIQ;
 
 
 public abstract class BaseActivity extends MvvmActivity {
@@ -335,7 +334,7 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         vm.handleActivityResult(requestCode, resultCode, data);
-        ViewModel.loggedIn.set(pref.getBoolean(Constants.LOGGED_IN,false));
+        vm.loggedIn.set(pref.getBoolean(Constants.LOGGED_IN,false));
         super.onActivityResult(requestCode, resultCode, data);
     }
 
