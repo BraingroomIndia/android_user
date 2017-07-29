@@ -52,6 +52,8 @@ import com.braingroom.user.model.request.PromocodeReq;
 import com.braingroom.user.model.request.QuoteReq;
 import com.braingroom.user.model.request.RazorBuySuccessReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
+import com.braingroom.user.model.request.ReferralCodeReq;
+import com.braingroom.user.model.request.RegisterUserDeviceReq;
 import com.braingroom.user.model.request.ReportReq;
 import com.braingroom.user.model.request.SaveGiftCouponReq;
 import com.braingroom.user.model.request.SearchReq;
@@ -92,6 +94,7 @@ import com.braingroom.user.model.response.PayUHashResp;
 import com.braingroom.user.model.response.ProfileResp;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
+import com.braingroom.user.model.response.ReferralCodeResp;
 import com.braingroom.user.model.response.ReportResp;
 import com.braingroom.user.model.response.SaveGiftCouponResp;
 import com.braingroom.user.model.response.SegmentResp;
@@ -149,6 +152,16 @@ public class DataflowService {
 
     }
 
+    public Observable<BaseResp> registerUserDevice() {
+        return api.registerUserDevice(new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""))))
+                .onErrorReturn(new Function<Throwable, BaseResp>() {
+                    @Override
+                    public BaseResp apply(@NonNull Throwable throwable) throws Exception {
+                        return new BaseResp();
+                    }
+                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
 
     public Observable<LoginResp> login(String email, String password, String fcmToken) {
         LoginReq.Snippet snippet = new LoginReq.Snippet();
@@ -159,7 +172,7 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LoginResp> socialLogin(final String name,final String profileImage, final String email, final String id, String fcmToken, String mobile, String referralCode) {
+    public Observable<LoginResp> socialLogin(final String name, final String profileImage, final String email, final String id, String fcmToken, String mobile, String referralCode) {
         SocialLoginReq.Snippet snippet = new SocialLoginReq.Snippet();
         snippet.setEmail(email);
         snippet.setFirstName(name);
@@ -204,6 +217,16 @@ public class DataflowService {
                         return resp;
                     }
                 });
+    }
+
+    public Observable<ReferralCodeResp> checkReferal(String code){
+     return  api.checkReferal(new ReferralCodeReq(new ReferralCodeReq.Snippet(code))).subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, ReferralCodeResp>() {
+            @Override
+            public ReferralCodeResp apply(@NonNull Throwable throwable) throws Exception {
+                return new ReferralCodeResp();
+            }
+        });
     }
 
     public Observable<BaseResp> submitOTP(SubmitOTPReq req) {
@@ -361,7 +384,7 @@ public class DataflowService {
                             ClassData classData = new ClassData();
                             classData.setImage(classDetail.getPicName());
                             classData.setClassTopic(classDetail.getClassTopic());
-                            if (classDetail.getLocation() != null && !classData.getLocation().isEmpty())
+                            if (classDetail.getLocation() != null && !classDetail.getLocation().isEmpty())
                                 classData.setLocality(classDetail.location.get(0).getLocality());
                             classData.setPricingType(classDetail.getPricingType());
                             if (classDetail.getClassLevels() != null)
@@ -460,9 +483,9 @@ public class DataflowService {
                 });
     }
 
-    public Observable<ClassData> getClassDetail(final String classId) {
+    public Observable<ClassData> getClassDetail(final String classId, final int isCatalogue) {
 
-        return api.getClassDetail(new ClassDetailReq(new ClassDetailReq.Snippet(classId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
+        return api.getClassDetail(new ClassDetailReq(new ClassDetailReq.Snippet(classId, pref.getString(Constants.BG_ID, ""), isCatalogue))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, ClassData>() {
                     @Override
                     public ClassData apply(@NonNull ClassListResp resp) throws Exception {
@@ -504,7 +527,7 @@ public class DataflowService {
                             try {
                                 dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
                             } catch (Exception e) {
-                              //  e.printStackTrace();
+                                //  e.printStackTrace();
                                 Log.d(TAG, "apply: " + e.toString());
                             }
 
@@ -837,14 +860,14 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, NotificationListResp>() {
                     @Override
                     public NotificationListResp apply(@NonNull Throwable throwable) throws Exception {
-                        List<NotificationListResp.Snippet> snippets =new ArrayList<>();
+                        List<NotificationListResp.Snippet> snippets = new ArrayList<>();
                         return new NotificationListResp(snippets);
                     }
                 });
     }
 
     public Observable<BaseResp> changeNotificationStatus(String notificationId) {
-        return api.changeNotificationStatus(new ChangeNotificationStatusReq(new ChangeNotificationStatusReq.Snippet(pref.getString(Constants.BG_ID,""),notificationId))).subscribeOn(Schedulers.io())
+        return api.changeNotificationStatus(new ChangeNotificationStatusReq(new ChangeNotificationStatusReq.Snippet(pref.getString(Constants.BG_ID, ""), notificationId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -859,7 +882,7 @@ public class DataflowService {
     }
 
     public Observable<BaseResp> changeMessageThreadStatus(String senderId) {
-        return api.changeMessageThreadStatus(new ChatMessageReq(new ChatMessageReq.Snippet(senderId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
+        return api.changeMessageThreadStatus(new ChatMessageReq(new ChatMessageReq.Snippet( pref.getString(Constants.BG_ID, ""),senderId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

@@ -23,8 +23,10 @@ import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.LoginResp;
+import com.braingroom.user.model.response.ReferralCodeResp;
 import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.utils.SmsReceiver;
 import com.braingroom.user.view.FragmentHelper;
@@ -45,12 +47,15 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 import static com.rollbar.android.Rollbar.TAG;
 
@@ -58,9 +63,8 @@ public class SignupViewModel extends ViewModel {
 
     public static final int TYPE_MALE = 1;
     public static final int TYPE_FEMALE = 2;
+    public static final int REFERRAL_CODE_LENGTH = 14;
     public final ObservableField<String> OTP;
-
-
 
 
     public final DataItemViewModel fullName, emailId, password, confirmPassword, mobileNumber, referralCodeVm, passoutYear;
@@ -75,7 +79,9 @@ public class SignupViewModel extends ViewModel {
     public final DatePickerViewModel dobVm;
     public final ImageUploadViewModel imageUploadVm;
 
+
     public final ObservableBoolean referralFieldVisible = new ObservableBoolean(true);
+
 
     public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked/*, submitOTP ,onEditMobile, onResendOTP*/;
 
@@ -88,7 +94,7 @@ public class SignupViewModel extends ViewModel {
     private SignUpReq.Snippet signUpSnippet;
 
 
-    public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper, String referralCode) {
+    public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper, final String referralCode) {
         this.navigator = navigator;
         this.messageHelper = messageHelper;
         this.uiHelper = uiHelper;
@@ -110,6 +116,29 @@ public class SignupViewModel extends ViewModel {
             referralFieldVisible.set(false);
             signUpSnippet.setReferalCode(referralCode);
         }
+        FieldUtils.toObservable(referralCodeVm.s_1).filter(new Predicate<String>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull String referralCode) throws Exception {
+                if (referralCode.length() <= REFERRAL_CODE_LENGTH)
+                referralCodeVm.errorMessage.set("");
+                return referralCode.length() > REFERRAL_CODE_LENGTH;
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull String referralCode) throws Exception {
+                apiService.checkReferal(referralCode).subscribe(new Consumer<ReferralCodeResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull ReferralCodeResp resp) throws Exception {
+                        if (resp.getData() != null && resp.getData().isEmpty())
+                        referralCodeVm.errorMessage.set(resp.getResMsg());
+                           else
+                               referralCodeVm.errorMessage.set("");
+
+
+                    }
+                });
+            }
+        });
 
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);

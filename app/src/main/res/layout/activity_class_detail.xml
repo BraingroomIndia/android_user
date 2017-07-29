@@ -51,7 +51,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            app:imageUrl="@{vm.imagePath ?? vm.videoThumb }"
+                            app:imageUrl="@{vm.videoThumb ?? vm.imagePath}"
                             app:placeHolder="@{R.drawable.video_generic_thumb}" />
 
                         <ImageView
@@ -75,13 +75,13 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@color/white"
+                        android:background="#FF29540B"
                         android:gravity="center"
                         android:onClick="@{vm.onGiftClicked}"
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
                         android:text="GIFT THIS CLASS"
-                        android:textColor="@color/materialOrange"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
                         app:font='@{@string/robotoBold}' />
 
@@ -464,9 +464,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:tabGravity="fill"
-                            app:tabIndicatorColor="@color/white"
+                            app:tabIndicatorColor="@color/colorAccent"
                             app:tabIndicatorHeight="@dimen/elevation_med"
                             app:tabMode="scrollable" />
+
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
@@ -479,7 +480,7 @@
                             class="com.braingroom.user.utils.WrapContentHeightViewPager"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:tabSelectedTextColor="@color/colorAccent"/>
+                            />
 
                     </android.support.v7.widget.CardView>
 

@@ -34,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
+        app:errorText="@{data.errorMessage}"
         android:hint="@{Html.fromHtml(hintText)}"
         android:visibility="@{data.s_1 == null ? View.GONE : View.VISIBLE}">
 
@@ -42,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="@{editable}"
-            android:inputType="@{password ? (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) : (number ? InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER: InputType.TYPE_CLASS_TEXT)}"
+            android:inputType="@{password ? (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) : (number ? InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER: InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)}"
             android:text="@={data.s_1}"
             android:textColor="@color/colorTextDark"
             app:font='@{@string/robotoRegular}' />

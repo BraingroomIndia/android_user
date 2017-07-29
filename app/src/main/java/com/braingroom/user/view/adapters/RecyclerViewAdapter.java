@@ -77,12 +77,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void reSubscribe() {
-        source.subscribe();
+        source.subscribe(new Consumer<List<ViewModel>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                throwable.printStackTrace();
+            }
+        });
     }
 
     public void paginate(@NonNull Observable<List<ViewModel>> viewModels) {
         initSource(viewModels);
-        source.subscribe();
+        source.subscribe(new Consumer<List<ViewModel>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                throwable.printStackTrace();
+            }
+        });;
     }
 
 

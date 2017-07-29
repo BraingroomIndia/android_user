@@ -1,5 +1,6 @@
 package com.braingroom.user.view.activity;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -19,13 +20,19 @@ import java.util.List;
 public class PostDetailActivity extends BaseActivity implements ConnectUiHelper {
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        String notificationId = getIntentString("notification_id");
+        if (vm.getLoggedIn() && !TextUtils.isEmpty(notificationId))
+            vm.apiService.changeNotificationStatus(notificationId).subscribe();
+    }
+
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        String notificationId = getIntentString("notification_id");
-        if (vm.loggedIn.get() && !TextUtils.isEmpty(notificationId))
-            vm.apiService.changeNotificationStatus(notificationId).subscribe();
         return new ConnectFeedDetailViewModel(getIntentString("postId"), this, getHelperFactory(), getMessageHelper(), getNavigator());
+
     }
 
     @Override

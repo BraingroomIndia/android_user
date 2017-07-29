@@ -13,7 +13,6 @@ import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.fragment.OTPReqFragment;
 import com.braingroom.user.viewmodel.OTPReq;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -93,7 +92,6 @@ public class OTPViewModel extends ViewModel {
                                                     editor.putString(Constants.BG_ID, data.getId());
                                                     editor.putString(Constants.UUID, data.getUuid());
                                                     editor.commit();
-                                                    loggedIn.set(true);
                                                     navigator.finishActivity(new Intent());
                                                 } else {
                                                     messageHelper.show(loginResp.getResMsg());

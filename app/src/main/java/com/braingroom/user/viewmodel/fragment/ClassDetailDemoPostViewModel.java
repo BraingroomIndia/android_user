@@ -75,6 +75,7 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
                     data.setVideo(getVideoId(data.getVideo()));
                     vendorImage.set(data.getVendorImage());
                     vendorName.set(data.getVendorName());
+                    title.set(data.getTitle());
                     vendorCollege.set(data.getInstituteName());
                     date.set(getHumanDate(data.getDate()));
                     description.set(data.getDescription());

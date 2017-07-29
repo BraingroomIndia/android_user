@@ -106,6 +106,9 @@ public class ClassData implements Serializable {
     @SerializedName("Description")
     private String description;
 
+    @SerializedName("about_academy")
+    private String aboutAcademy;
+
     @SerializedName("expert_level_id")
     private String expertLevelId;
 

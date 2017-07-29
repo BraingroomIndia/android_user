@@ -1,7 +1,6 @@
 package com.braingroom.user.view.activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,14 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.braingroom.user.R;
@@ -35,6 +31,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import io.reactivex.functions.Consumer;
 
@@ -72,6 +70,7 @@ public class ClassDetailActivity extends BaseActivity {
 
 
     }
+    TabLayout tabLayout;
 
 
 
@@ -84,21 +83,22 @@ public class ClassDetailActivity extends BaseActivity {
 
         @Override
         public Fragment getItem(int position) {
+            Fragment fragment;
             switch (position) {
                 case 0:
-                    ((ClassDetailViewModel) vm).connectFilterData.setMinorCateg("tips_tricks");
+                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataKNN);
                    break;
                 case 1:
-                    ((ClassDetailViewModel) vm).connectFilterData.setMinorCateg("group_post");
+                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataBNS);
                     break;
                 case 2:
-                    ((ClassDetailViewModel) vm).connectFilterData.setMinorCateg("group_post");
+                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataFP);
                     break;
                 default:
-                    ((ClassDetailViewModel) vm).connectFilterData.setMinorCateg("");
+                    fragment= null;
                     break;
             }
-            return DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterData);
+            return fragment;
         }
 
         @Override
@@ -130,6 +130,10 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
+        } catch (Exception e){e.printStackTrace();}
+//        ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
         rxPermissions = new RxPermissions(this);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -139,13 +143,9 @@ public class ClassDetailActivity extends BaseActivity {
                 ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
             }
         });
-        if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))){
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-            pager = (WrapContentHeightViewPager) findViewById(R.id.pager);
-            pagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
-            pager.setAdapter(pagerAdapter);
-            tabLayout.setupWithViewPager(pager);
-        }
+        if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin")))
+            tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
 
 //        shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_container);
 //        shimmerFrameLayout.startShimmerAnimation();
@@ -175,6 +175,12 @@ public class ClassDetailActivity extends BaseActivity {
 
             @Override
             public void stopShimmer() {
+                if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))){
+                    pager = (WrapContentHeightViewPager) findViewById(R.id.pager);
+                    pagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
+                    pager.setAdapter(pagerAdapter);
+                    tabLayout.setupWithViewPager(pager);
+                }
 //                shimmerFrameLayout.stopShimmerAnimation();
             }
 
@@ -251,7 +257,7 @@ public class ClassDetailActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_wishlist) {
-            if (vm.loggedIn.get()) {
+            if (vm.getLoggedIn()) {
                 ((ClassDetailViewModel) vm).addToWishlist();
             } else {
                 Bundle data = new Bundle();

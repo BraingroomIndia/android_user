@@ -8,6 +8,8 @@ import com.braingroom.user.R;
 import com.braingroom.user.view.activity.BaseActivity;
 import com.braingroom.user.viewmodel.PaySuccessViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.salesiqembed.ZohoSalesIQ;
 
 /**
  * Created by godara on 07/07/17.
@@ -25,6 +27,9 @@ public class PaySuccessActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar=getSupportActionBar();
+        try {
+            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
+        } catch (Exception e){e.printStackTrace();}
         if (actionBar!=null)
             actionBar.hide();
     }

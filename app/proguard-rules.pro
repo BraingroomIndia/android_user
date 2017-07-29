@@ -23,7 +23,17 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-optimizationpasses 1
 
+-dontusemixedcaseclassnames
+
+-dontskipnonpubliclibraryclasses
+
+-dontpreverify
+
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+-verbose
 ######### retrofit
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
@@ -79,4 +89,35 @@
 ########## Gson files
 
 -keep class com.braingroom.user.model.** {*;}
+-keep class com.braingroom.user.viewmodel.CheckoutViewModel
+-keep class com.braingroom.user.view.activity.CheckoutActivity
 
+
+
+
+
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+#####
+
+-injars :Mobilisten.aar
+
+-keep class com.zoho.*
+
+-keep public class com.zoho.**
+
+-keep public class com.zoho.** {
+  public protected *;
+}
+
+
+-keep class com.facebook.applinks.** { *; }
+-keepclassmembers class com.facebook.applinks.** { *; }
+-keep class com.facebook.FacebookSdk { *; }
+-keep class com.google.android.gms.ads.identifier.** { *; }

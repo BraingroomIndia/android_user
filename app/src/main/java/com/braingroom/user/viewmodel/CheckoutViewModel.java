@@ -17,10 +17,8 @@ import com.braingroom.user.model.dto.PayUCheckoutData;
 import com.braingroom.user.model.request.CouponCodeReq;
 import com.braingroom.user.model.request.PayUBookingDetailsReq;
 import com.braingroom.user.model.request.PromocodeReq;
-import com.braingroom.user.model.request.RazorBuySuccessReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.request.SaveGiftCouponReq;
-import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.SaveGiftCouponResp;
@@ -38,16 +36,14 @@ import com.payu.india.Model.PayuHashes;
 import com.payu.india.Model.PostData;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
+import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -62,6 +58,12 @@ import lombok.Getter;
 import static com.braingroom.user.FCMInstanceIdService.TAG;
 
 public class CheckoutViewModel extends ViewModel {
+    @Override
+    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
+        super.handleActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_LOGIN)
+            gUserId = pref.getString(Constants.BG_ID, "");
+    }
 
     public final ListDialogViewModel1 locationsVm;
     public final ObservableInt totalAmount;
@@ -126,7 +128,7 @@ public class CheckoutViewModel extends ViewModel {
         @Override
         public void run() throws Exception {
             int totalPrice = 0;
-            if (!TextUtils.isEmpty(couponCode.get())|| !TextUtils.isEmpty(promoCode.get())) {
+            if (!TextUtils.isEmpty(couponCode.get()) || !TextUtils.isEmpty(promoCode.get())) {
                 messageHelper.showDismissInfo("Warning", "Your discount has been reset");
                 appliedCouponCode.set(null);
                 appliedPromoCode.set(null);
@@ -165,6 +167,7 @@ public class CheckoutViewModel extends ViewModel {
         this.classData = classData;
         gUserId = pref.getString(Constants.BG_ID, "");
 
+        ZohoSalesIQ.Tracking.setPageTitle("Booking Page " +classData.getClassTopic());
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.helperFactory = helperFactory;
@@ -238,7 +241,7 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.show("Select locality for class");
                     return;
                 }
-                if (!loggedIn.get() && isGuest == 0) {
+                if (!getLoggedIn() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
                                 @Override
@@ -282,7 +285,7 @@ public class CheckoutViewModel extends ViewModel {
                 couponCode.set(null);
                 appliedCouponCode.set(null);
                 appliedCouponAmount = 0;
-                if (!loggedIn.get() && isGuest == 0) {
+                if (!getLoggedIn() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
                                 @Override
@@ -327,7 +330,7 @@ public class CheckoutViewModel extends ViewModel {
                 couponCode.set("");
                 appliedCouponCode.set(null);
                 appliedCouponAmount = 0;
-                if (!loggedIn.get() && isGuest == 0) {
+                if (!getLoggedIn() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
                                 @Override
@@ -538,7 +541,7 @@ public class CheckoutViewModel extends ViewModel {
                     , appliedPromoCodeId != null ? appliedPromoCode.get() : null).subscribe(new Consumer<PayUCheckoutData>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull PayUCheckoutData chekcoutData) throws Exception {
-                    messageHelper.dismissActiveProgress();
+
                     mChekcoutData = chekcoutData;
                     if (usePayU) {
                         PayUmoneySdkInitilizer.PaymentParam.Builder builder = new
@@ -560,6 +563,7 @@ public class CheckoutViewModel extends ViewModel {
                                 .setUdf4(chekcoutData.getUdf4());
                         PayUmoneySdkInitilizer.PaymentParam param = builder.build();
                         param.setMerchantHash(chekcoutData.getPaymentHash());
+                        messageHelper.dismissActiveProgress();
                         uiHelper.startPayUPayment(param);
                     } else {
                         JSONObject options = new JSONObject();
@@ -576,6 +580,7 @@ public class CheckoutViewModel extends ViewModel {
                         Log.d(TAG, "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
                                 + "\namount\t:\t" + Integer.parseInt(chekcoutData.getAmount()) * 100 + "\nemail\t:\t" + chekcoutData.getEmail()
                                 + "\ncontact\t:\t" + chekcoutData.getPhone());
+                        messageHelper.dismissActiveProgress();
                         uiHelper.startRazorpayPayment(options);
                     }
 
@@ -609,8 +614,8 @@ public class CheckoutViewModel extends ViewModel {
                 .showCustomView(R.layout.content_gift_details_dialog, new GiftingDetailsDialogViewModel(messageHelper, new UiHelper() {
                     @Override
                     public void onGuestLoginSuccess(String userId) {
-                        gUserId=userId;
-                        isGuest =1;
+                        gUserId = userId;
+                        isGuest = 1;
 
                     }
 
@@ -633,15 +638,16 @@ public class CheckoutViewModel extends ViewModel {
             snippet.setTermId(couponPayData.getTermId());
             snippet.setAmount("" + totalAmountAfterPromo.get());
             snippet.setClassId(classData.getId());
-            snippet.setUserId(mChekcoutData.getUdf1());
+            snippet.setUserId(gUserId);
             snippet.setLocalityId(selectedLocalityId);
             snippet.setTxnid(razorpayId);
-            snippet.setUserEmail(mChekcoutData.getEmail());
-            snippet.setUserMobile(mChekcoutData.getPhone());
-            snippet.setUserId(mChekcoutData.getUdf1());
+            snippet.setUserEmail(couponPayData.getEmail());
+            snippet.setUserMobile(couponPayData.getMobile());
+            snippet.setUserEmail(couponPayData.getEmail());
+            snippet.setUserMobile(couponPayData.getMobile());
             snippet.setIsGuest(isGuest);
             snippet.setCouponCode(appliedCouponCode.get());
-            snippet.setCouponAmount(appliedCouponAmount +"");
+            snippet.setCouponAmount(appliedCouponAmount + "");
             snippet.setPromoCode(appliedPromoCode.get());
             snippet.setPromoAmount(appliedPromoAmount + "");
             List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
@@ -656,8 +662,12 @@ public class CheckoutViewModel extends ViewModel {
             apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
-                    messageHelper.dismissActiveProgress();
                     messageHelper.show(resp.getResMsg());
+                    bundle.putString("class_name", resp.getData().get(0).className);
+                    bundle.putString("name", resp.getData().get(0).getUserName());
+                    bundle.putString("totalAmount", resp.getData().get(0).getTotalAmount());
+                    bundle.putString("success", PaySuccessViewModel.PAYMENT_SUCCESS);
+                    messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
                     navigator.finishActivity();
                 }
@@ -692,13 +702,13 @@ public class CheckoutViewModel extends ViewModel {
             apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(resp.getResMsg());
 
-                    bundle.putString("class_name",resp.getData().get(0).className);
-                    bundle.putString("name",resp.getData().get(0).getUserName());
-                    bundle.putString("totalAmount",resp.getData().get(0).getTotalAmount());
+                    messageHelper.show(resp.getResMsg());
+                    bundle.putString("class_name", resp.getData().get(0).className);
+                    bundle.putString("name", resp.getData().get(0).getUserName());
+                    bundle.putString("totalAmount", resp.getData().get(0).getTotalAmount());
                     bundle.putString("success", PaySuccessViewModel.PAYMENT_SUCCESS);
+                    messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
 
                 }
@@ -794,8 +804,8 @@ public class CheckoutViewModel extends ViewModel {
         return checksum.getHash();
     }
 
-    public void afterPayment(Bundle data){
-        navigator.navigateActivity(PaySuccessActivity.class,data);
+    public void afterPayment(Bundle data) {
+        navigator.navigateActivity(PaySuccessActivity.class, data);
     }
 
 

@@ -32,6 +32,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import org.json.JSONObject;
 
@@ -84,6 +86,9 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
+        } catch (Exception e){e.printStackTrace();}
         mFbLogin = (LoginButton) findViewById(R.id.fb_login_original);
         callbackManager = CallbackManager.Factory.create();
         mFbLogin.setReadPermissions("email");
@@ -202,7 +207,7 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (vm.loggedIn.get()) {
+        if (vm.getLoggedIn()) {
             getNavigator().finishActivity(new Intent());
         }
     }

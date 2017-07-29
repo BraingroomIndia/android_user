@@ -31,12 +31,13 @@ import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
-import com.braingroom.user.viewmodel.fragment.ClassDetailDemoPostViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.youtube.player.YouTubePlayer;
+import com.zoho.salesiqembed.ZohoSalesIQ;
+import com.zoho.wms.common.pex.PEXException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
     private final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
+    public final ObservableField<String> aboutAcademy= new ObservableField<>("");
     public final ObservableField<Spanned> locationConcat = new ObservableField<>();
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
@@ -107,15 +109,15 @@ public class ClassDetailViewModel extends ViewModel {
     @Setter
     ClassDetailActivity.UiHelper uiHelper;
 
+    public ConnectFilterData connectFilterDataKNN= new ConnectFilterData();
+    public ConnectFilterData connectFilterDataBNS = new ConnectFilterData();
+    public ConnectFilterData connectFilterDataFP = new ConnectFilterData();
     public ConnectFilterData connectFilterData = new ConnectFilterData();
 
 
-    @Setter
-    public final ObservableField<ClassDetailDemoPostViewModel> postVm;
-
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
-            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, openConnectTnT,
-            openConnectBnS, openConnectFP, openCateglogLocationList,playAction, onQueryDismiss, onPostDismiss;
+            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
+            openConnectBnS, openConnectFP,*/ openCateglogLocationList,playAction, onQueryDismiss, onPostDismiss;
 
     public boolean isInWishlist = false;
 
@@ -128,14 +130,18 @@ public class ClassDetailViewModel extends ViewModel {
                 Log.d(TAG, "run: " + callAgain.get());
             }
         });
-        connectFilterData.setMajorCateg("learners_forum");
-        connectFilterData.setMinorCateg("tips_tricks");
 
-        postVm = new ObservableField<>(new ClassDetailDemoPostViewModel(navigator,connectFilterData));
+        connectFilterData.setMajorCateg("learners_forum");
+        connectFilterDataKNN.setMajorCateg("learners_forum");
+        connectFilterDataBNS.setMajorCateg("learners_forum");
+        connectFilterDataFP.setMajorCateg("learners_forum");
+        connectFilterDataKNN.setMinorCateg("tips_tricks");
+        connectFilterDataBNS.setMinorCateg("group_post");
+        connectFilterDataFP.setMinorCateg("activity_request");
+
         PhoneListApiData.put("044-49507392", 1);
         PhoneListApiData.put("044-65556012", 2);
-        PhoneListApiData.put("044-65556013", 3);
-        connectFilterData.setMajorCateg("learners_forum");
+        PhoneListApiData.put("044-65556013", 3);;
         addresses = Observable.just(addressList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
@@ -146,7 +152,7 @@ public class ClassDetailViewModel extends ViewModel {
         this.postDescription = new ObservableField<>("");
 
         isGift = ClassListViewModel1.ORIGIN_GIFT.equals(origin);
-        openConnectTnT = new Action() {
+       /* openConnectTnT = new Action() {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
@@ -174,7 +180,7 @@ public class ClassDetailViewModel extends ViewModel {
                 navigator.navigateActivity(ConnectHomeActivity.class, data);
 
             }
-        };
+        };*/
         openCateglogLocationList = new Action() {
             @Override
             public void run() throws Exception {
@@ -185,7 +191,7 @@ public class ClassDetailViewModel extends ViewModel {
         onQueryClicked = new Action() {
             @Override
             public void run() throws Exception {
-                if (loggedIn.get())
+                if (getLoggedIn())
                     uiHelper.postQueryForm();
                 else {
                     Bundle data = new Bundle();
@@ -263,7 +269,10 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 // TODO: 16/06/17 place classId
-                return apiService.getClassDetail(classId).onErrorReturn(new Function<Throwable, ClassData>() {
+                int isCatalogue = 0;
+                if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin))
+                    isCatalogue =1;
+                return apiService.getClassDetail(classId,isCatalogue).onErrorReturn(new Function<Throwable, ClassData>() {
                     @Override
                     public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ClassData();
@@ -274,8 +283,14 @@ public class ClassDetailViewModel extends ViewModel {
                         if (classData.getId() == null)
                             return Observable.empty();
 
-                        connectFilterData.setCategId(classData.getCategoryId());
-                        connectFilterData.setSegId(classData.getSegmentId());
+                        ZohoSalesIQ.Tracking.setPageTitle(classData.getClassTopic());
+
+                        connectFilterDataKNN.setCategId(classData.getCategoryId());
+                        connectFilterDataKNN.setSegId(classData.getSegmentId());
+                        connectFilterDataBNS.setCategId(classData.getCategoryId());
+                        connectFilterDataBNS.setSegId(classData.getSegmentId());
+                        connectFilterDataFP.setCategId(classData.getCategoryId());
+                        connectFilterDataFP.setSegId(classData.getSegmentId());
                         mClassData = classData;
                         if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
                             isMapVisible.set(false);
@@ -302,7 +317,11 @@ public class ClassDetailViewModel extends ViewModel {
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
                         title.s_1.set(classTopic.get() + "\n");
+
                         if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin)) {
+
+
+                            aboutAcademy.set(classData.getAboutAcademy());
                             catalogDescription.set(classData.getCatalogDescription());
                             classProvider.set(classData.getClassProvider());
                             catalogLocationList.addAll(classData.getCatalogLocations());
@@ -443,7 +462,7 @@ public class ClassDetailViewModel extends ViewModel {
                 Action() {
                     @Override
                     public void run() throws Exception {
-                        if (loggedIn.get())
+                        if (getLoggedIn())
                         uiHelper.showQuoteForm();
                         else {
                             Bundle data = new Bundle();

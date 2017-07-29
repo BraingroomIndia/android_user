@@ -47,7 +47,7 @@ public class CouponFormViewModel extends ViewModel {
         submitClicked = new Action() {
             @Override
             public void run() throws Exception {
-                if (!loggedIn.get()) {
+                if (!getLoggedIn()) {
                     mHelperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(null, messageHelper, navigator, new CheckoutViewModel.UiHelper() {
                                 @Override

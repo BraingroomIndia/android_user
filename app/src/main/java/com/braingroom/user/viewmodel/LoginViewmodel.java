@@ -13,18 +13,11 @@ import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.CheckoutActivity;
-import com.braingroom.user.view.activity.ClassDetailActivity;
-import com.braingroom.user.view.activity.ConnectHomeActivity;
-import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.SignupActivity;
-import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONObject;
-
-import java.io.Serializable;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
@@ -132,7 +125,6 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.BG_ID, data.getId());
                         editor.putString(Constants.UUID, data.getUuid());
                         editor.commit();
-                        loggedIn.set(true);
                         navigator.finishActivity(new Intent());
                         return;
                     }
@@ -198,7 +190,6 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.BG_ID, data.getId());
                         editor.putString(Constants.UUID, data.getUuid());
                         editor.commit();
-                        loggedIn.set(true);
                         uiHandler.showEmailDialog(loginResp);
                         return;
                     } else if (loginResp.getData().get(0).getIsVerified() == 0) {
@@ -211,7 +202,6 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.BG_ID, data.getId());
                         editor.putString(Constants.UUID, data.getUuid());
                         editor.commit();
-                        loggedIn.set(true);
                         uiHandler.changeToOTPFragment(snippet);
                         return;
                     } else {
@@ -223,7 +213,6 @@ public class LoginViewmodel extends ViewModel {
                         editor.putString(Constants.BG_ID, data.getId());
                         editor.putString(Constants.UUID, data.getUuid());
                         editor.commit();
-                        loggedIn.set(true);
                         navigator.finishActivity(new Intent());
                         return;
                     }

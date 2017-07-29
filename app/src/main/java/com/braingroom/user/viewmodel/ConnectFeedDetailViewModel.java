@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.LikeResp;
@@ -20,9 +21,13 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
+import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
+import com.zoho.salesiqembed.ZohoSalesIQ;
+import com.zoho.wms.common.pex.PEXException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,6 +42,9 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
     @NonNull
     public final ObservableField<String> vendorName = new ObservableField<>();
+
+    @NonNull
+    public final ObservableField<String> vendorCollege = new ObservableField<>();
 
     @NonNull
     public String userId;
@@ -88,6 +96,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public Boolean isVendor = false;
 
 
+
     @NonNull
     public ObservableBoolean acceptVisibility;
 
@@ -95,11 +104,27 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public ObservableBoolean accepted = new ObservableBoolean(false);
 
     @NonNull
-    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile;
+    public final ObservableBoolean isSegmentAvailable = new ObservableBoolean(true);
+
+    @NonNull
+    public ObservableInt categoryImg = new ObservableInt();
+
+    @NonNull
+    public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, acceptAction, shareAction,
+            showAcceptedUsers, showthirdpartyProfile, onMessageClick, openSegment;
 
     public ObservableBoolean isActivityRequest = new ObservableBoolean(false);
 
+    private String categoryId, segmentId;
+
     public final Navigator navigator;
+    public final int[] resArray = new int[]{R.drawable.main_category_1,
+            R.drawable.main_category_5, //Edited By Vikas Godara
+            R.drawable.main_category_3,
+            R.drawable.main_category_4,
+            R.drawable.main_category_2, //Edited By Vikas Godara
+            R.drawable.main_category_6};
+
 
     public final ObservableField<String> shareUrl = new ObservableField<>("");
 
@@ -110,9 +135,20 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             , final MessageHelper messageHelper, final Navigator navigator) {
         this.navigator = navigator;
 
+
         apiService.getFeedsByPostID(postId).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull ConnectFeedResp resp) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull final ConnectFeedResp resp) throws Exception {
+
+                if (resp.getData().get(0).getCategoryId() == null && resp.getData().get(0).getSegId() == null)
+                    isSegmentAvailable.set(false);
+
+                ZohoSalesIQ.Tracking.setPageTitle(resp.getData().get(0).getTitle() + " by " + resp.getData().get(0).getVendorName());
+                categoryId = resp.getData().get(0).getCategoryId();
+                segmentId = resp.getData().get(0).getSegId();
+
+                if (resp.getData().get(0).getCategoryId() != null)
+                    categoryImg.set(resArray[Integer.parseInt(resp.getData().get(0).getCategoryId()) - 1]);
 
                 vendorImage.set(resp.getData().get(0).getVendorImage());
                 userId = resp.getData().get(0).getPostOwner();
@@ -135,6 +171,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 accepted.set(resp.getData().get(0).getIsAccepted() == 1);
                 isMediaAvailable.set((resp.getData().get(0).getVideo() != null || !resp.getData().get(0).getImage().equals("")));
                 shareUrl.set(resp.getData().get(0).getShareUrl());
+                vendorCollege.set(resp.getData().get(0).getInstituteName());
 
             }
         }, new Consumer<Throwable>() {
@@ -143,16 +180,65 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
             }
         });
+
+        openSegment = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (categoryId != null) {
+                    Bundle bundle = new Bundle();
+                    FilterData filterData = new FilterData();
+                    filterData.setCategoryId(categoryId);
+                    filterData.setSegmentId(segmentId);
+                    bundle.putSerializable("filterData", filterData);
+                    bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                    try {
+                        ZohoSalesIQ.Tracking.setCustomAction("Find relevant classes clicked from post detail page categoryId \t" +categoryId + "segmentId\t" +segmentId );
+                    } catch (PEXException e) {
+                        e.printStackTrace();
+                    }
+                    navigator.navigateActivity(ClassListActivity.class, bundle);
+                    return;
+                }
+                return;
+            }
+        };
+
+        onMessageClick = new Action() {
+            @Override
+            public void run() throws Exception {
+                try {
+                    ZohoSalesIQ.Tracking.setCustomAction("Message Icon clicked from post detail");
+                } catch (PEXException e) {
+                    e.printStackTrace();
+                }
+
+                if (!getLoggedIn()) {
+                    Bundle data = new Bundle();
+                    data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
+                    messageHelper.showLoginRequireDialog("Only logged in users can send a message", data);
+                    return;
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString("sender_id", userId);
+                bundle.putString("sender_name", vendorName.get());
+                navigator.navigateActivity(MessagesThreadActivity.class, bundle);
+
+            }
+        };
         showthirdpartyProfile = new Action() {
             @Override
             public void run() throws Exception {
+                try {
+                    ZohoSalesIQ.Tracking.setCustomAction("Third party clicked from post detail page");
+                } catch (PEXException e) {
+                    e.printStackTrace();
+                }
                 Bundle bundleData = new Bundle();
                 if (!isVendor) {
                     bundleData.putString("userId", userId);
                     navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
                     navigator.finishActivity();
-                }
-                else {
+                } else {
 
                     bundleData.putString("id", userId);
                     navigator.navigateActivity(VendorProfileActivity.class, bundleData);
@@ -165,7 +251,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
 
-                if (!loggedIn.get()) {
+                if (!getLoggedIn()) {
                     Bundle data = new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
                     messageHelper.showLoginRequireDialog("Only logged in users can like a post", data);
@@ -213,7 +299,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
         acceptAction = new Action() {
             @Override
             public void run() throws Exception {
-                if (!loggedIn.get()) {
+                if (!getLoggedIn()) {
                     Bundle data = new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
                     messageHelper.showLoginRequireDialog("Only logged in users can accept a request", data);
@@ -237,6 +323,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
             }
         };
+
         showAcceptedUsers = new Action() {
             @Override
             public void run() throws Exception {
@@ -254,7 +341,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
         reportAction = new Action() {
             @Override
             public void run() throws Exception {
-                if (!loggedIn.get()) {
+                if (!getLoggedIn()) {
                     Bundle data = new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
                     messageHelper.showLoginRequireDialog("Only logged in users can report a post", data);
@@ -300,7 +387,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                     try {
                         reportAction.run();
                     } catch (Exception e) {
-                       // e.printStackTrace();
+                        // e.printStackTrace();
                     }
                 }
                 if (item.getItemId() == R.id.action_share) {

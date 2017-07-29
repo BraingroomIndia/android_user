@@ -81,7 +81,7 @@ public class NgoFormViewModel extends ViewModel {
     }
 
     public void onSubmitClicked() {
-        if (!loggedIn.get()) {
+        if (!getLoggedIn()) {
             mHelperFactory.createDialogHelper()
                     .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(null, messageHelper, mNavigator, new CheckoutViewModel.UiHelper() {
                         @Override

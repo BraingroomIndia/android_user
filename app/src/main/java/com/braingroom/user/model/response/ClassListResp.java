@@ -127,6 +127,9 @@ public class ClassListResp extends BaseResp {
         @SerializedName("price_type")
         private String pricingType;
 
+        @SerializedName("about_academy")
+        private String aboutAcademy;
+
         @SerializedName("locality ")
         private String locality;
         //Edited By Vikas Goodara

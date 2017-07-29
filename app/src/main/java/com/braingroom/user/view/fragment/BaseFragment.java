@@ -1,6 +1,7 @@
 package com.braingroom.user.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -8,11 +9,13 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.braingroom.user.utils.BindingUtils;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.activity.BaseActivity;
 import com.braingroom.user.view.adapters.ViewModelBinder;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -74,11 +77,26 @@ public abstract class BaseFragment extends Fragment {
         return defaultBinder;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
     @NonNull
     protected abstract ViewModel createViewModel();
 
     @LayoutRes
     protected abstract int getLayoutId();
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+       vm.setLoggedIn();
+        vm.onResume();
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

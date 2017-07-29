@@ -50,7 +50,7 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:onClick="@{vm.onViewChangeClicked}"
-                    android:padding="@dimen/padding_small"
+                    android:padding="@dimen/_6sdp"
                     android:src="@{ vm.tileView ?  @drawable/ic_format_list_bulleted_black_24dp : @drawable/ic_border_all_black_24dp }" />
 
                 <ImageView
@@ -62,7 +62,7 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:onClick="@{vm.onSortClicked}"
-                    android:padding="@dimen/padding_small"
+                    android:padding="@dimen/_6sdp"
                     android:src="@drawable/ic_import_export_black_24dp" />
 
                 <ImageView
@@ -72,7 +72,7 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:onClick="@{vm.onFilterClicked}"
-                    android:padding="@dimen/padding_small"
+                    android:padding="@dimen/_6sdp"
                     android:src="@drawable/ic_filter_list_black_24dp" />
 
             </LinearLayout>

@@ -1,43 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/screen">
 
-        <variable
-            name="vm"
-            type="com.braingroom.user.viewmodel.ViewModel" />
+    <TextView
+        android:id="@+id/catalouge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_9sdp"
+        android:layout_centerHorizontal="true"
+        android:drawablePadding="@dimen/_6sdp"
+        android:drawableLeft="@drawable/ic_splash_catalogue"
+        android:drawableStart="@drawable/ic_splash_catalogue"
+        android:gravity="center"
+        app:font='@{@string/robotoRegular}'
+        android:text="Schools &amp; Colleges"
+        android:textColor="@color/orange"
+        android:textSize="@dimen/_20sdp" />
+    <TextView
+        android:id="@+id/connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/catalouge"
+        android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/ic_splash_connect"
+        android:drawablePadding="@dimen/_6sdp"
+        android:drawableStart="@drawable/ic_splash_connect"
+        android:gravity="center"
+        android:text="Social Learning"
+        app:font='@{@string/robotoRegular}'
+        android:textColor="@color/orange"
+        android:textSize="@dimen/_20sdp" />
 
-    </data>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/screen">
+    <TextView
+        android:id="@+id/find"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/connect"
+        android:drawableLeft="@drawable/ic_splash_find"
+        android:drawablePadding="@dimen/_6sdp"
+        android:drawableStart="@drawable/ic_splash_find"
+        android:gravity="center"
+        android:text="Find Classes"
+        app:font='@{@string/robotoRegular}'
+        android:textColor="@color/orange"
+        android:textSize="@dimen/_20sdp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/margin_large"
-            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/home"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="goHome"
-                android:src="@drawable/ic_find_text" />
 
-            <ImageView
-                android:id="@+id/connect"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="goConnect"
-                android:src="@drawable/ic_connect_text" />
-        </LinearLayout>
-    </RelativeLayout>
+
+</RelativeLayout>
+
 </layout>

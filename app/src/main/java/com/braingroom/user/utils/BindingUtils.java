@@ -8,6 +8,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -213,10 +214,12 @@ public class BindingUtils {
     public static void setImageUrl(ImageView imageView, String url, int placeHolder, int errorUrl, int scaleWidth, int scaleHeight) {
         Log.d(TAG, "setImageUrl: " + url);
 
-        if (TextUtils.isEmpty(url)&& placeHolder==0) return;
+        if (TextUtils.isEmpty(url) && placeHolder == 0) return;
         Picasso picasso = Picasso.with(imageView.getContext());
         picasso.setLoggingEnabled(false);
         RequestCreator requestCreator;
+        if (TextUtils.isEmpty(url))
+            url = null;
         requestCreator = picasso.load(url);
         if (placeHolder != 0) {
             requestCreator = requestCreator.placeholder(placeHolder);
@@ -300,10 +303,14 @@ public class BindingUtils {
 //    }
 
 
-//    @BindingAdapter("app:errorText")
-//    public static void setErrorMessage(TextInputLayout view, String errorMessage) {
-//        view.setError(errorMessage);
-//    }
+    @BindingAdapter("app:errorText")
+    public static void setErrorMessage(TextInputLayout view, String errorMessage) {
+        if (!TextUtils.isEmpty(errorMessage)) {
+            view.setErrorEnabled(true);
+            view.setError(errorMessage);
+        } else view.setErrorEnabled(false);
+    }
+
 
     @BindingAdapter({"bind:model"})
     public static void loadHeader(NavigationView view, HomeViewModel model) {

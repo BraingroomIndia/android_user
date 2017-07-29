@@ -7,9 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.braingroom.user.R;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.zoho.commons.ChatComponent;
+import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import java.util.HashMap;
 
@@ -41,9 +48,16 @@ public class Splash extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
+
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         bundleReceived = getIntent().getExtras();
         if (bundleReceived != null) {
+            bundleSend.putBoolean("pushNotification", true);
             postId = bundleReceived.getString("post_id");
             classId = bundleReceived.getString("class_id");
             messageSenderId = bundleReceived.getString("sender_id");
@@ -79,6 +93,11 @@ public class Splash extends AppCompatActivity {
             //e.printStackTrace();
             Log.d(TAG, "onCreate: " + e.toString());
         }
+        try {
+            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/
@@ -113,6 +132,8 @@ public class Splash extends AppCompatActivity {
     public void goConnect(View view) {
         navigateActivity(ConnectHomeActivity.class, null);
     }
+
+
 
     public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
         Intent intent = new Intent(Splash.this, destination);

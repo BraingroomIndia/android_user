@@ -2,7 +2,9 @@ package com.braingroom.user;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.databinding.ObservableBoolean;
 import android.graphics.Typeface;
 import android.support.multidex.MultiDex;
 import android.widget.TextView;
@@ -51,6 +53,9 @@ public class UserApplication extends Application {
 
     @Getter
     public TypedArray classPlaceholder;
+
+    public  boolean loggedIn = false;
+
 
     @Getter
     private AppComponent mAppComponent;

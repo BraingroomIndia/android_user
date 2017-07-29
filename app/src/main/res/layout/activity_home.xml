@@ -46,7 +46,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:menu="@{vm.loggedIn ? R.menu.activity_home_drawer_loggedin : R.menu.activity_home_drawer}"
             app:model="@{vm}" />
 
     </android.support.v4.widget.DrawerLayout>

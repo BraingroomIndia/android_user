@@ -38,17 +38,22 @@ public class PostApiImageUploadViewModel extends ViewModel {
 
     }
 
-    public void imageUpload(Uri fileUri,String postType) {
-        messageHelper.show("uploading...");
-        apiService.uploadPostApiImage(
-                FileUtils.getPath(UserApplication.getInstance(), fileUri)
-                , UserApplication.getInstance().getContentResolver().getType(fileUri)
-                , postType
-        )
+    public void imageUpload(Uri fileUri, String postType) {
+        messageHelper.showProgressDialog("Upload", "Please wait while we upload the file to server");
+        String filePath = FileUtils.getPath(UserApplication.getInstance(), fileUri);
+        String fileType = UserApplication.getInstance().getContentResolver().getType(fileUri);
+        if (filePath == null || fileType == null) {
+            messageHelper.show("Sorry we are unable to upload the file");
+            Log.d(TAG, "\nimageUpload: File Path" + filePath + "\nFile type" + fileType);
+            return;
+        }
+        apiService.uploadPostApiImage(filePath, fileType, postType)
                 .subscribe(new Consumer<UploadPostApiResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {
+                        messageHelper.dismissActiveProgress();
                         if (resp.getResCode().equals("1")) {
+
                             messageHelper.show("image upload success");
                             remoteAddress.set(resp.getData().get(0).getUrl());
                             Log.d(TAG, "getImgPath: " + resp.getData());
@@ -62,7 +67,10 @@ public class PostApiImageUploadViewModel extends ViewModel {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        messageHelper.dismissActiveProgress();
                         messageHelper.show("image upload FAIlURE");
+                        Log.d("Image upload", "accept: ");
+                        throwable.printStackTrace();
                     }
                 });
 

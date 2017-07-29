@@ -18,6 +18,8 @@ import com.payUMoney.sdk.PayUmoneySdkInitilizer;
 import com.payUMoney.sdk.SdkConstants;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
+import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import org.json.JSONObject;
 
@@ -46,7 +48,11 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+      //  ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
         super.onCreate(savedInstanceState);
+        try {
+            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
+        } catch (Exception e){e.printStackTrace();}
         getSupportActionBar().setElevation(0);
         mRecyclerView = ((ActivityCheckoutBinding) binding).pricingRecyclerview;
         mAdapter = new NonReactiveRecyclerViewAdapter(vm, ((CheckoutViewModel) vm).getViewProvider());
@@ -73,11 +79,17 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
             @Override
             public void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param) {
+                try {
+                    ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
+                } catch (Exception e){e.printStackTrace();}
                 PayUmoneySdkInitilizer.startPaymentActivityForResult(CheckoutActivity.this, param);
             }
 
             @Override
             public void startRazorpayPayment(JSONObject options) {
+                try {
+                    ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
+                } catch (Exception e){e.printStackTrace();}
                 final Activity activity = CheckoutActivity.this;
                 final Checkout co = new Checkout();
                 try {
@@ -108,6 +120,10 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        try {
+            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
+        } catch (Exception e){e.printStackTrace();}
 
         if (requestCode ==
                 PayUmoneySdkInitilizer.PAYU_SDK_PAYMENT_REQUEST_CODE) {

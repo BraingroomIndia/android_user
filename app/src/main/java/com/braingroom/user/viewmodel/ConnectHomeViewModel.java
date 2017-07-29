@@ -1,11 +1,11 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.NotificationCountResp;
 import com.braingroom.user.utils.Constants;
@@ -39,8 +39,7 @@ public class ConnectHomeViewModel extends ViewModel {
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final ObservableField<String> searchQuery = new ObservableField("");
     private String lastSearchQuery="";
-
-
+    public ObservableBoolean loggedIn;
     private Disposable notificationDisposable;
 
     //    public final Observable<List<ViewModel>> feedItems;
@@ -51,6 +50,7 @@ public class ConnectHomeViewModel extends ViewModel {
 //    public final ConnectFilterData filterData;
 
     public ConnectHomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, @NonNull final ConnectUiHelper uiHelper) {
+        this.loggedIn=new ObservableBoolean(getLoggedIn());
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         this.userEmail.set(pref.getString(Constants.EMAIL, null));
@@ -81,7 +81,7 @@ public class ConnectHomeViewModel extends ViewModel {
         FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return loggedIn.get();
+                return getLoggedIn();
             }
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
@@ -101,7 +101,7 @@ public class ConnectHomeViewModel extends ViewModel {
         FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return loggedIn.get();
+                return getLoggedIn();
             }
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
@@ -148,7 +148,7 @@ public class ConnectHomeViewModel extends ViewModel {
         onPostClicked = new Action() {
             @Override
             public void run() throws Exception {
-                if (!loggedIn.get()) {
+                if (!getLoggedIn()) {
                     Bundle data = new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
                     messageHelper.showLoginRequireDialog("To create new content, you need to log in", data);
@@ -170,6 +170,10 @@ public class ConnectHomeViewModel extends ViewModel {
     @Override
     public void onResume() {
         super.onResume();
+        loggedIn.set(getLoggedIn());
+        this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
+        this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
+        this.userEmail.set(pref.getString(Constants.EMAIL, null));
         notificationResume();
         connectivityViewmodel.onResume();
     }
@@ -177,6 +181,7 @@ public class ConnectHomeViewModel extends ViewModel {
     @Override
     public void onPause() {
         super.onPause();
+
         safelyDispose(notificationDisposable);
         connectivityViewmodel.onPause();
     }

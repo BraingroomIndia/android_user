@@ -41,12 +41,14 @@ public class PostApiVideoUploadViewModel extends ViewModel {
 
 
     public void uploadVideo(Uri fileUri, String postType) {
-        messageHelper.show("uploading...");
-        apiService.uploadPostApiVideo(
-                FileUtils.getPath(UserApplication.getInstance(), fileUri)
-                , UserApplication.getInstance().getContentResolver().getType(fileUri)
-                , postType
-        )
+        messageHelper.showProgressDialog("Upload", "Please wait while we upload the file to server");
+        String filePath = FileUtils.getPath(UserApplication.getInstance(), fileUri);
+        String fileType = UserApplication.getInstance().getContentResolver().getType(fileUri);
+        if (filePath == null || fileType == null) {
+            messageHelper.show("Sorry we are unable to upload the file");
+            Log.d(TAG, "\nvideoUpload: File Path" + filePath + "\nFile type" + fileType);
+        }
+        apiService.uploadPostApiVideo(filePath, fileType, postType)
                 .subscribe(new Consumer<UploadPostApiResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {
@@ -66,6 +68,8 @@ public class PostApiVideoUploadViewModel extends ViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         messageHelper.show("video upload FAIlURE");
+                        Log.d("Video upload", "accept: ");
+                        throwable.printStackTrace();
                     }
                 });
 

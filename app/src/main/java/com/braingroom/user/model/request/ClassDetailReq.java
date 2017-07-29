@@ -24,5 +24,8 @@ public class ClassDetailReq {
         @SerializedName("user_id")
         String userid = "";
 
+        @SerializedName("is_Catalogue")
+        int isCatalogue;
+
     }
 }

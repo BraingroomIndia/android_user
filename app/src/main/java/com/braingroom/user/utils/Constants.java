@@ -11,6 +11,7 @@ public class Constants {
     public static final String EMAIL = "email";
     public static final String BG_ID = "BG_ID";
     public static final String FCM_TOKEN = "FCM_TOKEN";
+    public static final String NEW_FCM="new_FCM";
 
     public static final String FONT_REGULAR = "Roboto-Regular.ttf";
     public static final String FONT_BOLD = "Roboto-Bold.ttf";

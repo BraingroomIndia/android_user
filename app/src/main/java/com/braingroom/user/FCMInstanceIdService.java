@@ -31,6 +31,7 @@ public class FCMInstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
+        editor.putBoolean(Constants.NEW_FCM,true);
         editor.putString(Constants.FCM_TOKEN,refreshedToken).commit();
     }
 

@@ -238,7 +238,7 @@
                                         android:paddingLeft="@dimen/margin_large"
                                         android:paddingRight="@dimen/margin_med"
                                         android:paddingTop="@dimen/margin_med"
-                                        android:text="@{vm.classProvider}"
+                                        android:text="@{vm.aboutAcademy}"
                                         android:textColor="@color/colorTextDark"
                                         app:font='@{@string/robotoRegular}' />
                                 </LinearLayout>

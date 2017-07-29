@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.databinding.ObservableField;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,7 +31,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.utils.BadgeDrawable;
 import com.braingroom.user.utils.Constants;
-import com.braingroom.user.viewmodel.ClassListViewModel1;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.viewmodel.HomeViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.google.android.gms.location.LocationRequest;
@@ -46,10 +48,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
@@ -60,6 +59,7 @@ public class HomeActivity extends BaseActivity
     RxPermissions rxPermissions;
     RxLocation rxLocation;
     LocationRequest locationRequest;
+
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     private HTextView textView;
@@ -109,7 +109,7 @@ public class HomeActivity extends BaseActivity
 
                 findViewById(R.id.textview);
 
-        try {
+       /* try {
             PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
@@ -127,7 +127,7 @@ public class HomeActivity extends BaseActivity
         {
             //  e.printStackTrace();
         }
-
+*/
         initMap();
 
         rxLocation = new
@@ -177,12 +177,14 @@ public class HomeActivity extends BaseActivity
     protected void onStart() {
         super.onStart();
         initNavigationDrawer();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!vm.loggedIn.get()) {
+
+        if (!vm.getLoggedIn()) {
             timerDisposable = ((HomeViewModel) vm).observable.subscribe(new Consumer<Long>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
@@ -193,6 +195,7 @@ public class HomeActivity extends BaseActivity
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
             competitionBanner.setLayoutParams(params);
         }
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -210,21 +213,22 @@ public class HomeActivity extends BaseActivity
         setSupportActionBar(toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        ) {
-            public void onDrawerOpened(View view) {
-                hideItem();
-            }
-        };
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getMenu().clear();
+        if (vm.getLoggedIn())
+            navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
+        else
+            navigationView.inflateMenu(R.menu.activity_home_drawer);
         navigationView.setNavigationItemSelectedListener(this);
-        hideItem();
+        //  hideItem();
 
 
     }
+
 
     public void initMap() {
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -266,8 +270,13 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //  initNavigationDrawer();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         itemNotification = menu.findItem(R.id.action_notifications);
         itemMessage = menu.findItem(R.id.action_messages);
@@ -304,7 +313,7 @@ public class HomeActivity extends BaseActivity
             return true;
         }
         if (id == R.id.action_messages) {
-            if (!vm.loggedIn.get()) {
+            if (!vm.getLoggedIn()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", HomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
@@ -316,7 +325,7 @@ public class HomeActivity extends BaseActivity
             return true;
         }
         if (id == R.id.action_notifications) {
-            if (!vm.loggedIn.get()) {
+            if (!vm.getLoggedIn()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", HomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
@@ -355,7 +364,7 @@ public class HomeActivity extends BaseActivity
                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                     vm.logOut();
                     Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
 
                 }
@@ -384,10 +393,10 @@ public class HomeActivity extends BaseActivity
             getNavigator().navigateActivity(CatalogueHomeActivity.class, null);
 //            finish();
         }
-        if (id == R.id.nav_giftcard) {
+       /* if (id == R.id.nav_giftcard) {
             getNavigator().navigateActivity(GiftcardCouponActivity.class, null);
 //            finish();
-        }
+        }*/
 
         //Edited By Vikas Godara
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -405,8 +414,7 @@ public class HomeActivity extends BaseActivity
 
 
     public void setBadgeCount(MenuItem item, Context context, int count) {
-
-        if (item != null && vm.loggedIn.get()) {
+        if (item != null && vm.getLoggedIn()) {
             BadgeDrawable badge;
             LayerDrawable icon = (LayerDrawable) item.getIcon();
             Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
@@ -428,8 +436,10 @@ public class HomeActivity extends BaseActivity
         ((HomeViewModel) vm).profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
         ((HomeViewModel) vm).userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         ((HomeViewModel) vm).userEmail.set(pref.getString(Constants.EMAIL, null));
-        navigationView.getMenu().clear();
-//            if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
+        if (vm.getLoggedIn())
+            navigationView.getMenu().clear();
+
+//            if (vm.getLoggedIn()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
 //            else navigationView.inflateMenu(R.menu.activity_home_drawer);
     }
 }

@@ -90,63 +90,46 @@
                     app:data="@{vm.mobileNumber}"
                     app:editable="@{true}"
                     app:hintText='@{"Mobile number" + vm.mandatory }'
-                    app:number= "@{true}"/>
+                    app:number="@{true}" />
 
                 <include
                     layout="@layout/item_list_searchable_fragment_opener"
                     app:editable="@{true}"
                     app:vm="@{vm.ugInstituteVm}" />
+
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.passoutYear}"
                     app:editable="@{true}"
-                    app:number="@{true}"
-                    app:hintText='@{"Passout Year"}' />
+                    app:hintText='@{"Passout Year"}'
+                    app:number="@{true}" />
 
-
-<!--                <include
+                <include
                     layout="@layout/floating_label_edit_text"
-                    app:data="@{vm.referralCodeVm}"
-                    app:editable="@{true}"
-                    app:hintText='@{"Referral Code"}' />-->
-
-
-
-                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_small">
+                    app:data="@{vm.referralCodeVm}"
+                    app:editable="@{true}"
+                    app:hintText='@{"Referral Code"}' />
 
-                    <include
-                        android:id="@+id/referral_code"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        layout="@layout/floating_label_edit_text"
-                        app:data="@{vm.referralCodeVm}"
-                        app:editable="@{true}"
-                        app:hintText='@{"Referral Code"}' />
+
+                <!--                <include
+                                    layout="@layout/floating_label_edit_text"
+                                    app:data="@{vm.referralCodeVm}"
+                                    app:editable="@{true}"
+                                    app:hintText='@{"Referral Code"}' />-->
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="@dimen/margin_med"
-                        android:background="@drawable/solid_bg_green_rounded_corner"
-                        android:onClick="@{null}"
-                        android:paddingBottom="@dimen/padding_small"
-                        android:paddingLeft="@dimen/margin_small"
-                        android:paddingRight="@dimen/margin_small"
-                        android:paddingTop="@dimen/padding_small"
-                        android:visibility="@{vm.referralFieldVisible ? View.VISIBLE : View.GONE}"
-                        android:text="Apply"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_large"
-                        app:font='@{@string/robotoRegular}' />
-
-                    <TextView
-                        android:layout_below="@id/referral_code"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_marginTop="@dimen/margin_med"
                         android:background="@drawable/solid_bg_green_rounded_corner"
                         android:onClick="@{vm.onSkipAndSignupClicked}"
@@ -163,8 +146,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/referral_code"
-                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/margin_med"
                         android:background="@drawable/solid_bg_green_rounded_corner"
                         android:onClick="@{vm.onNextClicked}"
@@ -176,7 +159,9 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
                         app:font='@{@string/robotoRegular}' />
-                </RelativeLayout>
+                </LinearLayout>
+
+
             </LinearLayout>
 
         </LinearLayout>

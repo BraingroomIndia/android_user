@@ -9,7 +9,6 @@ import com.braingroom.user.model.response.SignUpResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 
 import io.reactivex.functions.Action;
@@ -69,7 +68,6 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                                     editor.putString(Constants.BG_ID, data.getId());
                                     editor.putString(Constants.UUID, data.getUuid());
                                     editor.commit();
-                                    loggedIn.set(true);
                                 }
                                 dismissDialog();
                             }
@@ -82,7 +80,6 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                                 editor.putString(Constants.BG_ID, data.getId());
                                 editor.putString(Constants.UUID, data.getUuid());
                                 editor.commit();
-                                loggedIn.set(true);
                                 navigator.finishActivity(new Intent());
                             }
 

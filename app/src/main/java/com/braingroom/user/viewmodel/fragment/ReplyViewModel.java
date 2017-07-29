@@ -46,7 +46,7 @@ public class ReplyViewModel extends ViewModel {
         onSendClicked = new Action() {
             @Override
             public void run() throws Exception {
-                if (!loggedIn.get()) {
+                if (!getLoggedIn()) {
 
                     Bundle data =new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());

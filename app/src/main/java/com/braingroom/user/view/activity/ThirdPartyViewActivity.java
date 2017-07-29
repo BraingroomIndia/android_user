@@ -70,7 +70,7 @@ public class ThirdPartyViewActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_messages) {
 
-            if (!vm.loggedIn.get()) {
+            if (!vm.getLoggedIn()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", ThirdPartyViewActivity.class.getSimpleName());
                 data.putString("thirdPartyUserId", userid);

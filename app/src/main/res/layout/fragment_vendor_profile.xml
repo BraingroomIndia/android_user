@@ -40,56 +40,78 @@
 
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.name}"
                 app:hintText='@{"Name"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.locality}"
                 app:hintText='@{"Locality"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.city}"
                 app:hintText='@{"City"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.interest}"
                 app:hintText='@{"Interest"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.institution}"
                 app:hintText='@{"Institution"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.regId}"
                 app:hintText='@{"Reg. Id"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.expertise}"
                 app:hintText='@{"Expertise area"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.address}"
                 app:hintText='@{"Address"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.description}"
                 app:hintText='@{"Description"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.experience}"
                 app:hintText='@{"Experience"}' />
             <include
                 layout="@layout/floating_label_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:editable="@{false}"
                 app:data="@{vm.gender}"
                 app:hintText='@{"Gender"}' />

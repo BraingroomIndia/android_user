@@ -277,8 +277,6 @@ public class ConnectFilterViewModel extends ViewModel {
 
 
     public void reset() {
-       /* HashMap<String,String> emptyHashMap= new HashMap<>();
-        emptyHashMap.put("","");*/
         keywords.set("");
         categoryVm.clearSelectedValue();
         segmentsVm.changeDataSource(null);

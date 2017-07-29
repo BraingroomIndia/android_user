@@ -19,7 +19,7 @@
         android:background="@color/white">
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -28,6 +28,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/heading"
                 android:background="@color/colorAccent"
                 android:orientation="vertical"
                 android:paddingLeft="20dp">
@@ -50,8 +51,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/edit_fields"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@id/heading"
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingBottom="20dp"
@@ -107,47 +110,52 @@
 
 
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_small">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginTop="@dimen/margin_med"
-                        android:background="@drawable/solid_bg_green_rounded_corner"
-                        android:onClick="@{vm.onBackClicked}"
-                        android:paddingBottom="@dimen/padding_small"
-                        android:paddingLeft="@dimen/margin_small"
-                        android:paddingRight="@dimen/margin_small"
-                        android:paddingTop="@dimen/padding_small"
-                        android:text="Back"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_large"
-                        app:font='@{@string/robotoRegular}' />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="@dimen/margin_med"
-                        android:background="@drawable/solid_bg_green_rounded_corner"
-                        android:onClick="@{vm.onSignupClicked}"
-                        android:paddingBottom="@dimen/padding_small"
-                        android:paddingLeft="@dimen/margin_small"
-                        android:paddingRight="@dimen/margin_small"
-                        android:paddingTop="@dimen/padding_small"
-                        android:text="Skip &amp; Sign up"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_large"
-                        app:font='@{@string/robotoRegular}' />
-                </RelativeLayout>
             </LinearLayout>
 
-        </LinearLayout>
+            <RelativeLayout
+                android:layout_below="@id/edit_fields"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="@dimen/margin_small">
+
+                <TextView
+                    android:id="@+id/back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_med"
+                    android:background="@drawable/solid_bg_green_rounded_corner"
+                    android:onClick="@{vm.onBackClicked}"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
+                    android:paddingTop="@dimen/padding_small"
+                    android:text="Back"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large"
+                    app:font='@{@string/robotoRegular}' />
+
+
+                <TextView
+                    android:layout_toRightOf="@id/back_button"
+                    android:layout_toEndOf="@id/back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_med"
+                    android:background="@drawable/solid_bg_green_rounded_corner"
+                    android:onClick="@{vm.onSignupClicked}"
+                    android:layout_marginLeft="@dimen/margin_med"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
+                    android:paddingTop="@dimen/padding_small"
+                    android:text="Sign up"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large"
+                    app:font='@{@string/robotoRegular}' />
+            </RelativeLayout>
+        </RelativeLayout>
     </ScrollView>
 
 

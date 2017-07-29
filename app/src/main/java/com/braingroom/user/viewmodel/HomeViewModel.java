@@ -1,8 +1,8 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,7 +27,6 @@ import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -35,7 +34,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,6 +71,8 @@ public class HomeViewModel extends ViewModel {
 
     private Disposable notificationDisposable;
 
+    public ObservableBoolean loggedIn;
+
     public GoogleMap mGoogleMap; //Edited by Vikas Godara
     private Map<String, Integer> pinColorMap = new HashMap<>();
     private DialogHelper dialogHelper;
@@ -89,6 +89,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
                          @NonNull final DialogHelper dialogHelper, @NonNull final HomeActivity.UiHelper uiHelper) {
+        this.loggedIn = new ObservableBoolean(getLoggedIn());
         this.communityVm = new CommunityGridViewModel(messageHelper, navigator, ClassListActivity.class);
         this.featuredVm = new ShowcaseClassListViewModel("Fast Tracked - Education & Skill Development", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
         this.trendingVm = new ShowcaseClassListViewModel("People's Choice - Hobbies & Sports", messageHelper, navigator, apiService.getTrendingClass(), ClassDetailActivity.class);
@@ -177,10 +178,10 @@ public class HomeViewModel extends ViewModel {
 
             }
         });
-        FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return loggedIn.get();
+                return getLoggedIn();
             }
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
@@ -192,15 +193,16 @@ public class HomeViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
                 if (resp != null && resp.getData() != null) {
                     messageCount = resp.getData().get(0).getCount();
+                    uiHelper.setCount();
 
                 }
             }
         });
 
-        FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return loggedIn.get();
+                return getLoggedIn();
             }
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
@@ -252,6 +254,8 @@ public class HomeViewModel extends ViewModel {
                 navigator.navigateActivity(FilterActivity.class, bundle);
             }
         };
+
+
 
     }
 
@@ -360,6 +364,10 @@ public class HomeViewModel extends ViewModel {
     public void onResume() {
         super.onResume();
         notificationResume();
+        this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
+        userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
+        userEmail.set(pref.getString(Constants.EMAIL, null));
+        loggedIn.set(getLoggedIn());
         connectivityViewmodel.onResume();
     }
 

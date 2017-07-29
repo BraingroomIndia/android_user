@@ -112,6 +112,7 @@ public class ConnectPostViewModel extends ViewModel {
         imageUploadVm = new PostApiImageUploadViewModel(messageHelper, navigator, R.drawable.image_placeholder, null);
         videoUploadVm = new PostApiVideoUploadViewModel(messageHelper, navigator, R.drawable.video_placeholder, null);
 
+
         //request
         buyAndSellSnippet = new BuyAndSellPostReq.Snippet();
         knowledgeNuggetsSnippet = new KnowledgeNuggetsPostReq.Snippet();
@@ -136,22 +137,25 @@ public class ConnectPostViewModel extends ViewModel {
 
         postTypeApiData = postTypeLearnerApiData;
 
+        showAP();
         HashMap<String, Integer> mSelectedPostType = new HashMap<String, Integer>();
-        if ("action_tips_tricks".equalsIgnoreCase(postType))
+    /*    if ("action_tips_tricks".equalsIgnoreCase(postType1)) {
             mSelectedPostType.put("Knowledge nuggets", POST_TYPE_KNOWLEDGE_NUGGETS);
-        else if ("action_buy_sell".equalsIgnoreCase(postType))
+            showKNN();
+        } else if ("action_buy_sell".equalsIgnoreCase(postType1)) {
             mSelectedPostType.put("Buy & sell", POST_TYPE_BUY_N_SELL);
-        else if ("action_find_partners".equalsIgnoreCase(postType))
+            showBNS();
+        } else if ("action_find_partners".equalsIgnoreCase(postType1)) {
             mSelectedPostType.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
-        else if ("tutor_talks".equals(postType)) {
+            showAP();
+        } else*/ if ("tutor_talks".equals(postType1)) {
             postTypeApiData = postTypeTutorApiData;
             mSelectedPostType.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
+            showDND();
         }
 
 
         Log.d(TAG, "postType: " + postType);
-
-
 
 
         postConsumer = new Consumer<HashMap<String, Integer>>() {
@@ -162,50 +166,18 @@ public class ConnectPostViewModel extends ViewModel {
                 videoUploadVm.thumbUrl.set(null);
                 if (selectedMap.values().iterator().hasNext())
                     switch (selectedMap.values().iterator().next()) {
+
                         case POST_TYPE_KNOWLEDGE_NUGGETS:
-                            videoField.set(true);
-                            postType = "tips_tricks";
-                            imageField.set(true);
-                            classField.set(true);
-                            groupsField.set(true);
-                            dateField.set(false);
-                            proposedTimeField.set(false);
-                            activityField.set(false);
-                            categoryField.set(false);
-                            notifyAll();
+                            showKNN();
                             break;
                         case POST_TYPE_BUY_N_SELL:
-                            imageField.set(true);
-                            postType = "group_post";
-                            groupsField.set(true);
-                            videoField.set(false);
-                            classField.set(false);
-                            proposedTimeField.set(false);
-                            activityField.set(false);
-                            categoryField.set(false);
-                            notifyAll();
+                            showBNS();
                             break;
                         case POST_TYPE_LEARNING_PARTNERS:
-                            groupsField.set(true);
-                            postType = "activity_request";
-                            proposedTimeField.set(true);
-                            activityField.set(true);
-                            imageField.set(false);
-                            videoField.set(false);
-                            classField.set(false);
-                            categoryField.set(false);
-                            notifyAll();
+                            showAP();
                             break;
                         case POST_TYPE_DISCUSS_AND_DECIDE:
-                            imageField.set(true);
-                            postType = "user_post";
-                            categoryField.set(true);
-                            videoField.set(false);
-                            classField.set(false);
-                            groupsField.set(false);
-                            proposedTimeField.set(false);
-                            activityField.set(false);
-                            notifyAll();
+                            showDND();
                             break;
                         default:
                             break;
@@ -223,14 +195,14 @@ public class ConnectPostViewModel extends ViewModel {
         }
         privacyVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Privacy", messageHelper
                 , Observable.just(new ListDialogData1(privacyTypeApiData))
-                , new HashMap<String, Integer>(), false, null,"");
+                , new HashMap<String, Integer>(), false, null, "");
 
         postTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Post type", messageHelper
                 , Observable.just(new ListDialogData1(postTypeApiData))
-                , mSelectedPostType, false, postConsumer,"");
+                , mSelectedPostType, false, postConsumer, "");
 
-        mSelectedPostType.put("Find learning partners",POST_TYPE_LEARNING_PARTNERS);
-        postTypeVm.setSelectedItemsMap(mSelectedPostType);
+
+        //  postTypeVm.setSelectedItemsMap(mSelectedPostType);
         countryConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
@@ -251,7 +223,7 @@ public class ConnectPostViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), false, countryConsumer,"");
+        }), new HashMap<String, Integer>(), false, countryConsumer, "");
 
         stateConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
@@ -306,13 +278,13 @@ public class ConnectPostViewModel extends ViewModel {
             }
         };
 
-        stateVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "State", messageHelper, getStateApiObservable("-1"), new HashMap<String, Integer>(), false, stateConsumer,"select a country first");
-        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), new HashMap<String, Integer>(), false, cityConsumer,"select a state first");
-        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Localities", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, localityConsumer,"select a city first");
+        stateVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "State", messageHelper, getStateApiObservable("-1"), new HashMap<String, Integer>(), false, stateConsumer, "select a country first");
+        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), new HashMap<String, Integer>(), false, cityConsumer, "select a state first");
+        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Localities", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, localityConsumer, "select a city first");
 
 
         activityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Activity", messageHelper, getgetGroupActivitiesApiObservable("-1")
-                , new HashMap<String, Integer>(), false, null,"select a group first");
+                , new HashMap<String, Integer>(), false, null, "select a group first");
 
 
         groupVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Groups", messageHelper, apiService.getGroups().map(new Function<GroupResp, ListDialogData1>() {
@@ -325,7 +297,7 @@ public class ConnectPostViewModel extends ViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), new HashMap<String, Integer>(), true, groupConsumer,"");
+        }), new HashMap<String, Integer>(), true, groupConsumer, "");
 
         categoryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Category", messageHelper, apiService.getCategory()
                 .map(new Function<CategoryResp, ListDialogData1>() {
@@ -338,10 +310,10 @@ public class ConnectPostViewModel extends ViewModel {
                         // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                         return new ListDialogData1(itemMap);
                     }
-                }), new HashMap<String, Integer>(), true, categoryConsumer,"");
+                }), new HashMap<String, Integer>(), true, categoryConsumer, "");
 
 
-        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable("-1"), new HashMap<String, Integer>(), false, null,"select a category first");
+        segmentsVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Segments", messageHelper, getSegmentsApiObservable("-1"), new HashMap<String, Integer>(), false, null, "select a category first");
 
 
         onSubmitClicked = new Action() {
@@ -653,5 +625,50 @@ public class ConnectPostViewModel extends ViewModel {
     private void setCategory(String id) {
         decideAndDiscussSnippet.setCategoryId(id);
         decideAndDiscussSnippet.setSegmentId(null);
+    }
+
+    private void showKNN() {
+        videoField.set(true);
+        postType = "tips_tricks";
+        imageField.set(true);
+        classField.set(true);
+        groupsField.set(true);
+        dateField.set(false);
+        proposedTimeField.set(false);
+        activityField.set(false);
+        categoryField.set(false);
+    }
+
+    private void showBNS() {
+        imageField.set(true);
+        postType = "group_post";
+        groupsField.set(true);
+        videoField.set(false);
+        classField.set(false);
+        proposedTimeField.set(false);
+        activityField.set(false);
+        categoryField.set(false);
+    }
+
+    private void showAP() {
+        groupsField.set(true);
+        postType = "activity_request";
+        proposedTimeField.set(true);
+        activityField.set(true);
+        imageField.set(false);
+        videoField.set(false);
+        classField.set(false);
+        categoryField.set(false);
+    }
+
+    private void showDND() {
+        imageField.set(true);
+        postType = "user_post";
+        categoryField.set(true);
+        videoField.set(false);
+        classField.set(false);
+        groupsField.set(false);
+        proposedTimeField.set(false);
+        activityField.set(false);
     }
 }

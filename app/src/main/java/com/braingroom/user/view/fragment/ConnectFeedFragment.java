@@ -15,6 +15,7 @@ import com.braingroom.user.databinding.FragmentConnectFeedBinding;
 import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.SpacingDecoration;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
@@ -55,7 +56,13 @@ public class ConnectFeedFragment extends BaseFragment {
         mAdapter = new NonReactiveRecyclerViewAdapter(vm, ((ConnectFeedViewModel) vm).getViewProvider());
         mRecyclerView.setHasFixedSize(true);
         setupRecyclerView();
+        if(((ConnectHomeActivity)activity).connectFilterData!=null)
+        {
+            ((ConnectHomeActivity)activity).updateFilter();
+            ((ConnectHomeActivity)activity).connectFilterData=null;
+        }
         return binding.getRoot();
+
     }
 
     private void setupRecyclerView() {
@@ -105,6 +112,7 @@ public class ConnectFeedFragment extends BaseFragment {
         };
         return new ConnectFeedViewModel(getStringArguments("majorCateg"), getStringArguments("minorCateg"), activity.getNavigator(), activity.getHelperFactory(), activity.getMessageHelper(), activity.getIntentString("id")
                 , ((ConnectUiHelper) activity), uiHelper);
+
     }
 
     @Override

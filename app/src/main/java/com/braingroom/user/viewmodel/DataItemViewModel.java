@@ -13,6 +13,7 @@ import io.reactivex.subjects.PublishSubject;
 public class DataItemViewModel extends ViewModel {
 
     public final ObservableField<String> s_1 = new ObservableField<>();
+    public final ObservableField<String> errorMessage = new ObservableField<>();
     public final ObservableBoolean isSelected = new ObservableBoolean();
 
     @Nullable
@@ -44,6 +45,10 @@ public class DataItemViewModel extends ViewModel {
 
     public void toggleSelected() {
         isSelected.set(!isSelected.get());
+    }
+
+    public void setErrorMessage(String message){
+        errorMessage.set(message);
     }
 
     public void setSelected(DataItemViewModel viewModel) {

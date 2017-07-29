@@ -43,6 +43,8 @@ import com.braingroom.user.model.request.PromocodeReq;
 import com.braingroom.user.model.request.QuoteReq;
 import com.braingroom.user.model.request.RazorBuySuccessReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
+import com.braingroom.user.model.request.ReferralCodeReq;
+import com.braingroom.user.model.request.RegisterUserDeviceReq;
 import com.braingroom.user.model.request.ReportReq;
 import com.braingroom.user.model.request.SaveGiftCouponReq;
 import com.braingroom.user.model.request.SearchReq;
@@ -83,6 +85,7 @@ import com.braingroom.user.model.response.PayUHashResp;
 import com.braingroom.user.model.response.ProfileResp;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
+import com.braingroom.user.model.response.ReferralCodeResp;
 import com.braingroom.user.model.response.ReportResp;
 import com.braingroom.user.model.response.SaveGiftCouponResp;
 import com.braingroom.user.model.response.SegmentResp;
@@ -107,7 +110,10 @@ import retrofit2.http.Path;
 import retrofit2.http.Url;
 
 public interface UserApiService {
-    @Headers("X-App-Type: BGUSR01")
+
+
+    @POST("registerUserDevice")
+    Observable <BaseResp> registerUserDevice(@Body RegisterUserDeviceReq req);
 
 
     @POST("login")
@@ -124,6 +130,9 @@ public interface UserApiService {
 
     @POST("BuyerRegistration")
     Observable<SignUpResp> BuyerRegistration(@Body SignUpReq req);
+
+    @POST("checkReferal")
+    Observable<ReferralCodeResp> checkReferal(@Body ReferralCodeReq req);
 
     @POST("logout")
     Observable<BaseResp> logout(@Body LogoutReq req);

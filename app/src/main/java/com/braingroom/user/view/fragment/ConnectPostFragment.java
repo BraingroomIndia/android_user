@@ -25,7 +25,7 @@ public class ConnectPostFragment extends BaseFragment {
         return new ConnectPostFragment();
     }
 
-    public static Fragment newInstanceByPostType(String postType) {
+    public static BaseFragment newInstanceByPostType(String postType) {
         ConnectPostFragment mFragment = new ConnectPostFragment();
         Bundle args = new Bundle();
         args.putString(POST_TYPE, postType);

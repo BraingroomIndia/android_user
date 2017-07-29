@@ -22,7 +22,6 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
-import lombok.Getter;
 
 public class CommentsViewModel extends ViewModel {
 
@@ -53,7 +52,7 @@ public class CommentsViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
 
-                if (!loggedIn.get()) {
+                if (!getLoggedIn()) {
 
                     Bundle data =new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());

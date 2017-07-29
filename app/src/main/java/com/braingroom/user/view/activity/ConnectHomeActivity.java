@@ -3,6 +3,7 @@ package com.braingroom.user.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.databinding.ObservableField;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -35,8 +36,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.utils.BadgeDrawable;
+import com.braingroom.user.utils.Constants;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.FragmentHelper;
+import com.braingroom.user.view.fragment.BaseFragment;
 import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.view.fragment.ConnectFeedFragment;
 import com.braingroom.user.view.fragment.ConnectFilterFragment;
@@ -53,7 +57,10 @@ import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.IntFunction;
 import lombok.Getter;
 
 
@@ -99,15 +106,16 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     ViewPager pager;
     public ConnectPagerAdapter pagerAdapter;
-    ConnectFilterData learnersFilter, tutorsFilter, connectFilterData;
+    public ConnectFilterData learnersFilter, tutorsFilter, connectFilterData;
 
     @Getter
     ConnectFilterViewModel connectFilterViewModel;
 
-    Fragment mFragement;
+    BaseFragment mFragement;
 
     String defMajorCateg;
     String defMinorCateg;
+    final ObservableField<Integer> updateFilter = new ObservableField<>(0);
 
     private AppBarLayout mAppBar;
     private FloatingActionButton fab;
@@ -274,6 +282,11 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getMenu().clear();
+        if (vm.getLoggedIn())
+            navigationView.inflateMenu(R.menu.activity_connect_drawer_loggedin);
+        else
+            navigationView.inflateMenu(R.menu.activity_home_drawer);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -331,7 +344,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         }
         if (id == R.id.action_messages) {
 
-            if (!vm.loggedIn.get()) {
+            if (!vm.getLoggedIn()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can send a message", data);
@@ -344,7 +357,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             return true;
         }
         if (id == R.id.action_notifications) {
-            if (!vm.loggedIn.get()) {
+            if (!vm.getLoggedIn()) {
                 Bundle data = new Bundle();
                 data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
                 getMessageHelper().showLoginRequireDialog("Only logged in users can see notification", data);
@@ -385,8 +398,9 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                     vm.logOut();
                     Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
+                    finish();
 
                 }
             });
@@ -412,10 +426,10 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             getNavigator().navigateActivity(CatalogueHomeActivity.class, null);
 //            finish();
         }
-        if (id == R.id.nav_giftcard) {
+/*        if (id == R.id.nav_giftcard) {
             getNavigator().navigateActivity(GiftcardCouponActivity.class, null);
 //            finish();
-        }
+        }*/
         //Edited By Vikas Godara
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -657,7 +671,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     public void setBadgeCount(MenuItem item, Context context, int count) {
 
-        if (item != null && vm.loggedIn.get()) {
+        if (item != null && vm.getLoggedIn()) {
             BadgeDrawable badge;
             LayerDrawable icon = (LayerDrawable) item.getIcon();
             Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
@@ -701,13 +715,21 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        // navigationView.getMenu().clear();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (vm.getLoggedIn())
+            navigationView.getMenu().clear();
         if (mFragement != null && !mFragement.isDetached())
             mFragement.onActivityResult(requestCode, resultCode, data);
 
-        navigationView.getMenu().clear();
-//        if (vm.loggedIn.get()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
+//        if (vm.getLoggedIn()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
 //        else navigationView.inflateMenu(R.menu.activity_home_drawer);
 
     }

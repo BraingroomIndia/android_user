@@ -2,6 +2,7 @@ package com.braingroom.user.view.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.MenuInflater;
@@ -48,7 +50,12 @@ import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
 
-//import com.zoho.salesiqembed.ZohoSalesIQ;
+import com.zoho.commons.ChatComponent;
+import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.livechat.android.ZohoLiveChat;
+import com.zoho.salesiqembed.ZohoSalesIQ;
+
+import java.util.List;
 
 
 public abstract class BaseActivity extends MvvmActivity {
@@ -63,7 +70,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
     @Inject
     @Named("defaultPref")
-    SharedPreferences pref;
+    public SharedPreferences pref;
 
     @Inject
     @Named("defaultPrefEditor")
@@ -85,18 +92,25 @@ public abstract class BaseActivity extends MvvmActivity {
     public DrawerLayout drawer;
     public Toolbar toolbar;
     public NavigationView navigationView;
+    Boolean pushNotification;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
+        try {
+            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
+        } catch (Exception e){e.printStackTrace();}
+
+        pushNotification = getIntentBoolean("pushNotification");
+        String notificationId = getIntentString("notification_id");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         UserApplication.getInstance().getMAppComponent().inject(this);
         screenDims = new ScreenDims();
         Point size = new Point();
         WindowManager w = getWindowManager();
-
-
+        if (pushNotification && !TextUtils.isEmpty(notificationId))
+            vm.apiService.changeNotificationStatus(notificationId).subscribe();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             w.getDefaultDisplay().getSize(size);
             screenDims.width = size.x;
@@ -106,20 +120,17 @@ public abstract class BaseActivity extends MvvmActivity {
             screenDims.width = d.getWidth();
             screenDims.height = d.getHeight();
         }
-
     }
+
+    public void initNavigationDrawer() {
+    }
+
+    ;
 
     @Override
     protected void onResume() {
         super.onResume();
         isActive = true;
-        if (drawer != null)
-            drawer.invalidate();
-        if (toolbar != null)
-            toolbar.invalidate();
-        if (navigationView != null)
-            navigationView.invalidate();
-        invalidateOptionsMenu();
         vm.onResume();
     }
 
@@ -141,6 +152,7 @@ public abstract class BaseActivity extends MvvmActivity {
             navigator = new Navigator() {
                 @Override
                 public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
+                    getMessageHelper().dismissActiveProgress();
                     Intent intent = new Intent(BaseActivity.this, destination);
                     intent.putExtra("classData", bundle);
                     startActivity(intent);
@@ -323,6 +335,7 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
 
+
                 @Override
                 public void dismissActiveProgress() {
                     if (progressDialog != null && progressDialog.isShowing())
@@ -335,7 +348,7 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         vm.handleActivityResult(requestCode, resultCode, data);
-        vm.loggedIn.set(pref.getBoolean(Constants.LOGGED_IN, false));
+        vm.setLoggedIn();
         super.onActivityResult(requestCode, resultCode, data);
 
     }
@@ -345,6 +358,16 @@ public abstract class BaseActivity extends MvvmActivity {
     public void onBackPressed() {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
+        try {
+
+            if (pushNotification && !this.getClass().getSimpleName().equals(HomeActivity.class.getSimpleName())) {
+                getNavigator().navigateActivity(HomeActivity.class, null);
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
 
         if (count == 0) {
             super.onBackPressed();
@@ -369,8 +392,10 @@ public abstract class BaseActivity extends MvvmActivity {
         }
     }
 
+
     public ViewModel getFragmentViewmodel(String title) {
         return new ViewModel();
     }
+
 
 }

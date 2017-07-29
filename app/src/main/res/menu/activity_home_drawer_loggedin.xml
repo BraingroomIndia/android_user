@@ -23,14 +23,14 @@
             android:id="@+id/nav_catalogue"
             android:icon="@drawable/ic_class_black_24dp"
             android:title="Catalogue" />
-        <item
+<!--        <item
             android:id="@+id/nav_giftcard"
             android:icon="@drawable/gift_card"
-            android:title="Giftcards &amp; Coupons" />
-        <item
+            android:title="Giftcards &amp; Coupons" />-->
+<!--        <item
             android:id="@+id/nav_location"
             android:icon="@drawable/pin"
-            android:title="Location Settings" />
+            android:title="Location Settings" />-->
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
