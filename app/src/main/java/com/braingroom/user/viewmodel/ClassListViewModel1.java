@@ -30,8 +30,8 @@ import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
-import com.zoho.salesiqembed.ZohoSalesIQ;
-import com.zoho.wms.common.pex.PEXException;
+/*import com.zoho.salesiqembed.ZohoSalesIQ;
+import com.zoho.wms.common.pex.PEXException;*/
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -225,14 +225,14 @@ public class ClassListViewModel1 extends ViewModel {
                 List<ViewModel> results = new ArrayList<>();
                 currentPage = nextPage;
                 nextPage = resp.getNextPage();
-                if (nextPage<2)
+                /*if (nextPage<2)
                     ZohoSalesIQ.Tracking.setPageTitle("CategoryId: " +filterData.getCategoryId() +"\tSegmentId: " +filterData.getSegmentId() +"\tCatalogueId: " +filterData.getCatalog() );
                 else
                     try {
                         ZohoSalesIQ.Tracking.setCustomAction("Page number" + nextPage);
                     } catch (PEXException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 Log.d(TAG, "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                 if (resp.getClassDataList().size() == 0 && currentPage ==1) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));

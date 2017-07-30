@@ -8,8 +8,10 @@ import android.view.View;
 import com.braingroom.user.R;
 import com.braingroom.user.viewmodel.QuoteFormViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
+/*
 import com.zoho.livechat.android.MbedableComponent;
 import com.zoho.salesiqembed.ZohoSalesIQ;
+*/
 
 /**
  * Created by agrahari on 07/04/17.
@@ -33,9 +35,9 @@ public class QuoteFormFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        try {
-            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
-        } catch (Exception e){e.printStackTrace();}
+        /*try {
+         //   ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
+        } catch (Exception e){e.printStackTrace();}*/
         binding.getRoot().requestFocus();
     }
 

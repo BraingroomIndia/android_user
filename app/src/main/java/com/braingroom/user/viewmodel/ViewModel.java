@@ -71,7 +71,7 @@ public class ViewModel {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
                     if (resp.getResCode()!=null)
-                        editor.putBoolean(Constants.NEW_FCM,false);
+                        editor.putBoolean(Constants.NEW_FCM,false).commit();
 
                 }
             });

@@ -28,8 +28,10 @@ import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
+/*
 import com.zoho.salesiqembed.ZohoSalesIQ;
 import com.zoho.wms.common.pex.PEXException;
+*/
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -153,11 +155,11 @@ public class ConnectFeedItemViewModel extends ViewModel {
                     filterData.setSegmentId(data.getSegId());
                     bundle.putSerializable("filterData", filterData);
                     bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-                    try {
-                        ZohoSalesIQ.Tracking.setCustomAction("Find relevant classes clicked from connect page categoryId \t" +data.getCategoryId() + "segmentId\t" +data.getSegId() );
+/*                    try {
+                     //   ZohoSalesIQ.Tracking.setCustomAction("Find relevant classes clicked from connect page categoryId \t" +data.getCategoryId() + "segmentId\t" +data.getSegId() );
                     } catch (PEXException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                     navigator.navigateActivity(ClassListActivity.class, bundle);
                     return;
                 }
@@ -188,11 +190,11 @@ public class ConnectFeedItemViewModel extends ViewModel {
                 Bundle bundle = new Bundle();
                 bundle.putString("sender_id", data.getPostOwner());
                 bundle.putString("sender_name", data.getVendorName());
-                try {
-                    ZohoSalesIQ.Tracking.setCustomAction("Message Icon clicked from connect page");
+/*                try {
+                  //  ZohoSalesIQ.Tracking.setCustomAction("Message Icon clicked from connect page");
                 } catch (PEXException e) {
                     e.printStackTrace();
-                }
+                }*/
 
                 navigator.navigateActivity(MessagesThreadActivity.class, bundle);
 
@@ -203,11 +205,11 @@ public class ConnectFeedItemViewModel extends ViewModel {
         showthirdpartyProfile = new Action() {
             @Override
             public void run() throws Exception {
-                try {
-                    ZohoSalesIQ.Tracking.setCustomAction("Third party clicked from connect page");
+             /*   try {
+                  //  ZohoSalesIQ.Tracking.setCustomAction("Third party clicked from connect page");
                 } catch (PEXException e) {
                     e.printStackTrace();
-                }
+                }*/
                 Bundle bundleData = new Bundle();
                 if (data.getPostType().equalsIgnoreCase("vendor_article")) {
                     bundleData.putString("id", data.getPostOwner());
@@ -280,11 +282,11 @@ public class ConnectFeedItemViewModel extends ViewModel {
             public void run() throws Exception {
                 navigator.openStandaloneYoutube(video.get());
 
-                try {
+ /*               try {
                     ZohoSalesIQ.Tracking.setCustomAction("Video played from \t" +data.getId());
                 } catch (PEXException e) {
                     e.printStackTrace();
-                }
+                }*/
 
             }
         };

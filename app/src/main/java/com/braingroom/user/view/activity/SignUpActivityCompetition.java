@@ -23,8 +23,8 @@ import com.braingroom.user.view.fragment.OTPReqFragment;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.SignUpViewModelCompetition;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.zoho.livechat.android.MbedableComponent;
-import com.zoho.salesiqembed.ZohoSalesIQ;
+/*import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.salesiqembed.ZohoSalesIQ;*/
 
 import io.reactivex.functions.Consumer;
 import lombok.Getter;

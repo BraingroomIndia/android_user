@@ -26,8 +26,8 @@ import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
-import com.zoho.salesiqembed.ZohoSalesIQ;
-import com.zoho.wms.common.pex.PEXException;
+/*import com.zoho.salesiqembed.ZohoSalesIQ;
+import com.zoho.wms.common.pex.PEXException;*/
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -143,7 +143,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 if (resp.getData().get(0).getCategoryId() == null && resp.getData().get(0).getSegId() == null)
                     isSegmentAvailable.set(false);
 
-                ZohoSalesIQ.Tracking.setPageTitle(resp.getData().get(0).getTitle() + " by " + resp.getData().get(0).getVendorName());
+              //  ZohoSalesIQ.Tracking.setPageTitle(resp.getData().get(0).getTitle() + " by " + resp.getData().get(0).getVendorName());
                 categoryId = resp.getData().get(0).getCategoryId();
                 segmentId = resp.getData().get(0).getSegId();
 
@@ -191,11 +191,11 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                     filterData.setSegmentId(segmentId);
                     bundle.putSerializable("filterData", filterData);
                     bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-                    try {
+                 /*   try {
                         ZohoSalesIQ.Tracking.setCustomAction("Find relevant classes clicked from post detail page categoryId \t" +categoryId + "segmentId\t" +segmentId );
                     } catch (PEXException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                     navigator.navigateActivity(ClassListActivity.class, bundle);
                     return;
                 }
@@ -206,11 +206,11 @@ public class ConnectFeedDetailViewModel extends ViewModel {
         onMessageClick = new Action() {
             @Override
             public void run() throws Exception {
-                try {
+              /*  try {
                     ZohoSalesIQ.Tracking.setCustomAction("Message Icon clicked from post detail");
                 } catch (PEXException e) {
                     e.printStackTrace();
-                }
+                }*/
 
                 if (!getLoggedIn()) {
                     Bundle data = new Bundle();
@@ -228,11 +228,11 @@ public class ConnectFeedDetailViewModel extends ViewModel {
         showthirdpartyProfile = new Action() {
             @Override
             public void run() throws Exception {
-                try {
+               /* try {
                     ZohoSalesIQ.Tracking.setCustomAction("Third party clicked from post detail page");
                 } catch (PEXException e) {
                     e.printStackTrace();
-                }
+                }*/
                 Bundle bundleData = new Bundle();
                 if (!isVendor) {
                     bundleData.putString("userId", userId);

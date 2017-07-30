@@ -79,7 +79,7 @@ public class UserApplication extends Application {
 //        mRefWatcher = LeakCanary.install(this);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        Stetho.initializeWithDefaults(this);
+       // Stetho.initializeWithDefaults(this);
 //        if (BuildConfig.DEBUG) {
 //            Timber.plant(new Timber.DebugTree());
 //        } else {

@@ -31,8 +31,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.zoho.livechat.android.MbedableComponent;
-import com.zoho.salesiqembed.ZohoSalesIQ;
+/*import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.salesiqembed.ZohoSalesIQ;*/
 
 import io.reactivex.functions.Consumer;
 
@@ -130,9 +130,9 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
+/*        try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
-        } catch (Exception e){e.printStackTrace();}
+        } catch (Exception e){e.printStackTrace();}*/
 //        ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
         rxPermissions = new RxPermissions(this);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()

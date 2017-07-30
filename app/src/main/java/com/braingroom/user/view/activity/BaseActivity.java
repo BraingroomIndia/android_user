@@ -49,11 +49,13 @@ import javax.inject.Named;
 import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
+/*
 
 import com.zoho.commons.ChatComponent;
 import com.zoho.livechat.android.MbedableComponent;
 import com.zoho.livechat.android.ZohoLiveChat;
 import com.zoho.salesiqembed.ZohoSalesIQ;
+*/
 
 import java.util.List;
 
@@ -98,9 +100,9 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
+/*        try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
-        } catch (Exception e){e.printStackTrace();}
+        } catch (Exception e){e.printStackTrace();}*/
 
         pushNotification = getIntentBoolean("pushNotification");
         String notificationId = getIntentString("notification_id");

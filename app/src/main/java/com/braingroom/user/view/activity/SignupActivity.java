@@ -21,8 +21,8 @@ import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.SignupViewModel;
 import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.zoho.livechat.android.MbedableComponent;
-import com.zoho.salesiqembed.ZohoSalesIQ;
+/*import com.zoho.livechat.android.MbedableComponent;
+import com.zoho.salesiqembed.ZohoSalesIQ;*/
 
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
@@ -63,9 +63,9 @@ public class SignupActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
        // ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
 //        getSupportActionBar().setElevation(0);
-        try {
-            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
-        } catch (Exception e){e.printStackTrace();}
+/*        try {
+          //  ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
+        } catch (Exception e){e.printStackTrace();}*/
         SmsReceiver smsReceiver = new SmsReceiver();
         viewModel = (SignupViewModel) vm;
 

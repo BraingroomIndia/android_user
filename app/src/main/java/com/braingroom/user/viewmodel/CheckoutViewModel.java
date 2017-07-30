@@ -36,7 +36,7 @@ import com.payu.india.Model.PayuHashes;
 import com.payu.india.Model.PostData;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
-import com.zoho.salesiqembed.ZohoSalesIQ;
+/*import com.zoho.salesiqembed.ZohoSalesIQ;*/
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -167,7 +167,7 @@ public class CheckoutViewModel extends ViewModel {
         this.classData = classData;
         gUserId = pref.getString(Constants.BG_ID, "");
 
-        ZohoSalesIQ.Tracking.setPageTitle("Booking Page " +classData.getClassTopic());
+     //   ZohoSalesIQ.Tracking.setPageTitle("Booking Page " +classData.getClassTopic());
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.helperFactory = helperFactory;

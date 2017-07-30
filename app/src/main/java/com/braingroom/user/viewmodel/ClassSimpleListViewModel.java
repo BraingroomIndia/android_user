@@ -129,7 +129,6 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     private Observable<List<ViewModel>> getLoadingItems(int count) {
         List<ViewModel> result = new ArrayList<>();
-        result.addAll(classes);
         result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
         return Observable.just(result);
     }

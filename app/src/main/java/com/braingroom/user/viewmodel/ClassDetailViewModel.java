@@ -36,8 +36,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.zoho.salesiqembed.ZohoSalesIQ;
-import com.zoho.wms.common.pex.PEXException;
+/*import com.zoho.salesiqembed.ZohoSalesIQ;
+import com.zoho.wms.common.pex.PEXException;*/
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -283,7 +283,7 @@ public class ClassDetailViewModel extends ViewModel {
                         if (classData.getId() == null)
                             return Observable.empty();
 
-                        ZohoSalesIQ.Tracking.setPageTitle(classData.getClassTopic());
+                      //  ZohoSalesIQ.Tracking.setPageTitle(classData.getClassTopic());
 
                         connectFilterDataKNN.setCategId(classData.getCategoryId());
                         connectFilterDataKNN.setSegId(classData.getSegmentId());

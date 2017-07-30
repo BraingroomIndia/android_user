@@ -23,7 +23,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--optimizationpasses 1
+-optimizationpasses 5
 
 -dontusemixedcaseclassnames
 
@@ -31,7 +31,7 @@
 
 -dontpreverify
 
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+##-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
 -verbose
 ######### retrofit
@@ -89,12 +89,10 @@
 ########## Gson files
 
 -keep class com.braingroom.user.model.** {*;}
--keep class com.braingroom.user.viewmodel.CheckoutViewModel
--keep class com.braingroom.user.view.activity.CheckoutActivity
 
+-dontwarn com.crashlytics.android.answers.shim.**
 
-
-
+-keep class com.google.firebase.**{*;}
 
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
@@ -106,15 +104,16 @@
 }
 #####
 
--injars :Mobilisten.aar
+##-injars :Mobilisten.aar
 
--keep class com.zoho.*
+#-keep class com.zoho.commons.ChatComponent.class
+#-keep class com.zoho.*
 
--keep public class com.zoho.**
+#-keep public class com.zoho.**
 
--keep public class com.zoho.** {
-  public protected *;
-}
+#-keep public class com.zoho.** {
+ # public protected *;
+#}
 
 
 -keep class com.facebook.applinks.** { *; }
