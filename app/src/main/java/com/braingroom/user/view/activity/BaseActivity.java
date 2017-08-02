@@ -43,19 +43,14 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
-/*
 
-import com.zoho.commons.ChatComponent;
-import com.zoho.livechat.android.MbedableComponent;
-import com.zoho.livechat.android.ZohoLiveChat;
-import com.zoho.salesiqembed.ZohoSalesIQ;
-*/
 
 import java.util.List;
 
@@ -100,11 +95,11 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*        try {
+       /* try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
         } catch (Exception e){e.printStackTrace();}*/
 
-        pushNotification = getIntentBoolean("pushNotification");
+        pushNotification = getIntentBoolean("splash");
         String notificationId = getIntentString("notification_id");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         UserApplication.getInstance().getMAppComponent().inject(this);
@@ -363,7 +358,8 @@ public abstract class BaseActivity extends MvvmActivity {
         try {
 
             if (pushNotification && !this.getClass().getSimpleName().equals(HomeActivity.class.getSimpleName())) {
-                getNavigator().navigateActivity(HomeActivity.class, null);
+                getNavigator().navigateActivity(HomeActivity.class,null);
+                finish();
                 return;
             }
         } catch (Exception e) {

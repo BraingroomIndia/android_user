@@ -80,6 +80,10 @@ public class ConnectFeedViewModel extends ViewModel {
             }
         });
         this.fragmentUiHelper = fragmentUiHelper;
+        if (callAgain==null)
+            callAgain = new ObservableField<>(0);
+        if (callAgain.get()==null)
+        callAgain.set(0);
         feedDataMapFunction = new Function<ConnectFeedResp, List<ViewModel>>() {
             @Override
             public List<ViewModel> apply(ConnectFeedResp resp) throws Exception {

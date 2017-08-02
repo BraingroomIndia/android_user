@@ -134,6 +134,6 @@ public class ViewModel {
         UserApplication.getInstance().loggedIn=pref.getBoolean(Constants.LOGGED_IN, false);
     }
     public boolean getLoggedIn(){
-       return UserApplication.getInstance().loggedIn;
+       return pref.getBoolean(Constants.LOGGED_IN, false);
     }
 }

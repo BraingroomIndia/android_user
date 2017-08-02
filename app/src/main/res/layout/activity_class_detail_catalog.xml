@@ -292,7 +292,7 @@
                                 android:layout_height="300dp"
                                 android:layout_marginBottom="@dimen/margin_med"
                                 android:layout_marginTop="@dimen/margin_med"
-                                android:visibility="@{vm.isMapVisible? View.VISIBLE : View.GONE}"
+                                android:visibility="@{View.GONE}"
                                 card_view:cardElevation="@dimen/dimen_zero">
 
                                 <LinearLayout

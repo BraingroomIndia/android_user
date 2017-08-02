@@ -99,7 +99,7 @@ public class FCMService extends FirebaseMessagingService {
                 .setContentTitle(title == null ? "" : title)
                 .setContentText(messageBody)
                 .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getBitmapfromUrl(image)))
-                .setAutoCancel(false)
+                .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
         else
@@ -107,7 +107,7 @@ public class FCMService extends FirebaseMessagingService {
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(title == null ? "" : title)
                 .setContentText(messageBody)
-                .setAutoCancel(false)
+                .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 

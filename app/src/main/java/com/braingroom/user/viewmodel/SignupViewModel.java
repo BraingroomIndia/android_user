@@ -116,29 +116,30 @@ public class SignupViewModel extends ViewModel {
             referralFieldVisible.set(false);
             signUpSnippet.setReferalCode(referralCode);
         }
-        FieldUtils.toObservable(referralCodeVm.s_1).filter(new Predicate<String>() {
-            @Override
-            public boolean test(@io.reactivex.annotations.NonNull String referralCode) throws Exception {
-                if (referralCode.length() <= REFERRAL_CODE_LENGTH)
-                referralCodeVm.errorMessage.set("");
-                return referralCode.length() > REFERRAL_CODE_LENGTH;
-            }
-        }).subscribe(new Consumer<String>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull String referralCode) throws Exception {
-                apiService.checkReferal(referralCode).subscribe(new Consumer<ReferralCodeResp>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull ReferralCodeResp resp) throws Exception {
-                        if (resp.getData() != null && resp.getData().isEmpty())
-                        referralCodeVm.errorMessage.set(resp.getResMsg());
-                           else
-                               referralCodeVm.errorMessage.set("");
+        if (referralCodeVm.s_1.get() != null)
+            FieldUtils.toObservable(referralCodeVm.s_1).filter(new Predicate<String>() {
+                @Override
+                public boolean test(@io.reactivex.annotations.NonNull String referralCode) throws Exception {
+                    if (referralCode.length() <= REFERRAL_CODE_LENGTH)
+                        referralCodeVm.errorMessage.set("");
+                    return referralCode.length() > REFERRAL_CODE_LENGTH;
+                }
+            }).subscribe(new Consumer<String>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull String referralCode) throws Exception {
+                    apiService.checkReferal(referralCode).subscribe(new Consumer<ReferralCodeResp>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull ReferralCodeResp resp) throws Exception {
+                            if (resp.getData() != null && resp.getData().isEmpty())
+                                referralCodeVm.errorMessage.set(resp.getResMsg());
+                            else
+                                referralCodeVm.errorMessage.set("");
 
 
-                    }
-                });
-            }
-        });
+                        }
+                    });
+                }
+            });
 
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);

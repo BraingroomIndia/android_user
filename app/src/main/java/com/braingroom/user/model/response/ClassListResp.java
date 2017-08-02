@@ -33,6 +33,9 @@ public class ClassListResp extends BaseResp {
         @SerializedName("wishlist")
         private String wishlist;
 
+        @SerializedName("group_id")
+        private String groupId;
+
         @SerializedName("featured_status")
         private String featuredStatus;
 

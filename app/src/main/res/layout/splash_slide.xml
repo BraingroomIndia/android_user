@@ -10,4 +10,12 @@
         android:layout_gravity="center"
         android:src="@drawable/find_background"
         android:scaleType="centerCrop"/>
+   <!-- <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_19sdp"
+        android:text="Find Classes"/>-->
 </FrameLayout>

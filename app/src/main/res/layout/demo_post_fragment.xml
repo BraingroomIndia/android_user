@@ -164,7 +164,7 @@
             android:layout_gravity="end"
             android:paddingLeft="@dimen/margin_large"
             android:paddingRight="@dimen/margin_large"
-            android:text="view details"
+            android:text="view more posts"
             android:textColor="@color/materialBlue"
             android:textSize="@dimen/text_size_medium"
             app:font='@{@string/robotoRegular}' />

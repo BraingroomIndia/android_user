@@ -22,6 +22,10 @@ public class ClassData implements Serializable {
     @SerializedName("wishlist")
     private String wishlist;
 
+
+    @SerializedName("group_id")
+    private String groupId;
+
     @SerializedName("detail_class_link")
     private String classWebUrl;
 

@@ -44,7 +44,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hanks.htextview.base.HTextView;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-//import com.zoho.salesiqembed.ZohoSalesIQ;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -88,7 +87,7 @@ public class HomeActivity extends BaseActivity
         {
             Bundle data = new Bundle();
             String referralCode = getIntentString("referralCode");
-            if (referralCode != null) {
+            if (referralCode != null&& !vm.getLoggedIn()) {
                 data.putString("referralCode", referralCode);
                 getNavigator().navigateActivityForResult(LoginActivity.class, data, ViewModel.REQ_CODE_LOGIN);
             }
@@ -271,7 +270,6 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        //  initNavigationDrawer();
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -285,17 +283,8 @@ public class HomeActivity extends BaseActivity
         return true;
     }
 
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        try {
-            nav_Menu.findItem(R.id.nav_location).setVisible(false);
-        } catch (NullPointerException e) {
-            String string = e.toString();
-        }
 
 
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -363,7 +352,7 @@ public class HomeActivity extends BaseActivity
                 @Override
                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                     vm.logOut();
-                    Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                    Intent i = new Intent(HomeActivity.this,HomeActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
 
@@ -393,6 +382,8 @@ public class HomeActivity extends BaseActivity
             getNavigator().navigateActivity(CatalogueHomeActivity.class, null);
 //            finish();
         }
+        if (id==R.id.nav_competition)
+            getNavigator().navigateActivity(CompetitionWebPage.class,null);
        /* if (id == R.id.nav_giftcard) {
             getNavigator().navigateActivity(GiftcardCouponActivity.class, null);
 //            finish();

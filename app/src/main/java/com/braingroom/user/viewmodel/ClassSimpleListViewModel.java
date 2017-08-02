@@ -64,9 +64,9 @@ public class ClassSimpleListViewModel extends ViewModel {
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return currentPage<nextPage;
             }
-        }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
-            public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
                 Log.d(TAG, "apply: " +callAgain.get());
                 if ("wishlist".equalsIgnoreCase(listType))

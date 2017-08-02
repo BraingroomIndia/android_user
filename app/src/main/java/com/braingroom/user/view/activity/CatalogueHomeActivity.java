@@ -1,6 +1,7 @@
 package com.braingroom.user.view.activity;
 
 import android.support.annotation.NonNull;
+import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.viewmodel.CatalogueHomeViewModel;
@@ -18,4 +19,14 @@ public class CatalogueHomeActivity extends BaseActivity {
     protected int getLayoutId() {
         return R.layout.activity_catalogue_home;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
+    }
 }
+

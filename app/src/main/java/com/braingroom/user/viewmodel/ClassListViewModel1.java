@@ -30,8 +30,6 @@ import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
-/*import com.zoho.salesiqembed.ZohoSalesIQ;
-import com.zoho.wms.common.pex.PEXException;*/
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -225,10 +223,10 @@ public class ClassListViewModel1 extends ViewModel {
                 List<ViewModel> results = new ArrayList<>();
                 currentPage = nextPage;
                 nextPage = resp.getNextPage();
-                /*if (nextPage<2)
-                    ZohoSalesIQ.Tracking.setPageTitle("CategoryId: " +filterData.getCategoryId() +"\tSegmentId: " +filterData.getSegmentId() +"\tCatalogueId: " +filterData.getCatalog() );
+               /* if (nextPage<2)
+//                    ZohoSalesIQ.Tracking.setPageTitle("CategoryId: " +filterData.getCategoryId() +"\tSegmentId: " +filterData.getSegmentId() +"\tCatalogueId: " +filterData.getCatalog() );
                 else
-                    try {
+                    *//*try {
                         ZohoSalesIQ.Tracking.setCustomAction("Page number" + nextPage);
                     } catch (PEXException e) {
                         e.printStackTrace();

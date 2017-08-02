@@ -20,6 +20,9 @@ public class CouponCodeReq {
         @SerializedName("class_id")
         String classId;
 
+        @SerializedName("total_ticket")
+        String totalTicket;
+
 
         @SerializedName("is_guest")
         int isGuest;

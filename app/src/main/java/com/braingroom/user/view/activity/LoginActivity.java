@@ -32,8 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-/*import com.zoho.livechat.android.MbedableComponent;
-import com.zoho.salesiqembed.ZohoSalesIQ;*/
+
 
 import org.json.JSONObject;
 
@@ -86,7 +85,7 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*        try {
+       /* try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
         } catch (Exception e){e.printStackTrace();}*/
         mFbLogin = (LoginButton) findViewById(R.id.fb_login_original);
@@ -215,7 +214,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         FirsLoginDialogViewModel firsLoginDialogViewModel =
-                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator());
+                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(),referralCode);
         firsLoginDialogViewModel.setUiHandler(uiHandler);
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login, firsLoginDialogViewModel
                 , false);
@@ -262,6 +261,8 @@ public class LoginActivity extends BaseActivity implements
                 getMessageHelper().show("Unable to sign into google");
             }
         }
+        if (vm.getLoggedIn())
+            getNavigator().finishActivity(new Intent());
         callbackManager.onActivityResult(requestCode, responseCode, data);
 
 
@@ -273,6 +274,7 @@ public class LoginActivity extends BaseActivity implements
             onBackPressed();
         return true;
     }
+
 
     @Override
     public void onBackPressed() {

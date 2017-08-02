@@ -31,12 +31,12 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
-            <meta-data
+        <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_SN4tYAqDnzHHem" />
-<!--        <meta-data
-            android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_OqXUgMZBz4WkBL" />-->
+<!--                <meta-data
+                    android:name="com.razorpay.ApiKey"
+                    android:value="rzp_test_OqXUgMZBz4WkBL" />-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -46,7 +46,6 @@
         <meta-data
             android:name="android.support.VERSION"
             android:value="25.3.1" />
-
 
 
         <!-- Branch init -->
@@ -84,8 +83,8 @@
 
         <activity
             android:name=".view.activity.Splash"
-            android:theme="@style/SplashTheme">
-            >
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -134,7 +133,7 @@
         <activity
             android:name=".view.activity.HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.activity.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -308,6 +307,15 @@
                 android:value="com.braingroom.user.view.activity.GiftcardCouponActivity" />
         </activity>
 
+        <activity
+            android:name=".view.activity.CompetitionWebPage"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.HomeActivity" />
+        </activity>
+
+
         <!-- Branch install referrer tracking -->
         <!-- io.branch.referral.InstallListener -->
         <!--
@@ -326,7 +334,7 @@
             </intent-filter>
         </receiver>
 
-     <!--   <activity android:name=".view.activity.ChatActivity"></activity>-->
+        <!--   <activity android:name=".view.activity.ChatActivity"></activity>-->
     </application>
 
 </manifest>

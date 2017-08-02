@@ -79,6 +79,7 @@ import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ExploreResp;
+import com.braingroom.user.model.response.FirstSocialLoginResp;
 import com.braingroom.user.model.response.GiftcardResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.GuestUserResp;
@@ -172,20 +173,19 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LoginResp> socialLogin(final String name, final String profileImage, final String email, final String id, String fcmToken, String mobile, String referralCode) {
+    public Observable<LoginResp> socialLogin(final String name, final String profileImage, final String email, final String id, String fcmToken, String mobile) {
         SocialLoginReq.Snippet snippet = new SocialLoginReq.Snippet();
         snippet.setEmail(email);
         snippet.setFirstName(name);
         snippet.setSocialId(id);
         snippet.setPhone(mobile);
         snippet.setRegId(fcmToken);
-        snippet.setReferralCode(referralCode);
         return api.socialLogin(new SocialLoginReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
 
-    public Observable<BaseResp> firstSocialLogin(String userId, String mobile, String referralCode) {
+    public Observable<FirstSocialLoginResp> firstSocialLogin(String userId, String mobile, String referralCode) {
         FirstSocialLoginReq req = new FirstSocialLoginReq(new FirstSocialLoginReq.Snippet(userId, mobile, referralCode));
         return api.firstSocialLogin(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 

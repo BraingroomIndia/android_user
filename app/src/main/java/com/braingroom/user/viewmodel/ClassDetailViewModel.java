@@ -36,8 +36,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.youtube.player.YouTubePlayer;
-/*import com.zoho.salesiqembed.ZohoSalesIQ;
-import com.zoho.wms.common.pex.PEXException;*/
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -283,14 +281,14 @@ public class ClassDetailViewModel extends ViewModel {
                         if (classData.getId() == null)
                             return Observable.empty();
 
-                      //  ZohoSalesIQ.Tracking.setPageTitle(classData.getClassTopic());
+//                        ZohoSalesIQ.Tracking.setPageTitle(classData.getClassTopic());
 
                         connectFilterDataKNN.setCategId(classData.getCategoryId());
-                        connectFilterDataKNN.setSegId(classData.getSegmentId());
+                        connectFilterDataKNN.setGroupId(classData.getGroupId());
                         connectFilterDataBNS.setCategId(classData.getCategoryId());
-                        connectFilterDataBNS.setSegId(classData.getSegmentId());
+                        //connectFilterDataBNS.setSegId(classData.getSegmentId());
                         connectFilterDataFP.setCategId(classData.getCategoryId());
-                        connectFilterDataFP.setSegId(classData.getSegmentId());
+                      //  connectFilterDataFP.setSegId(classData.getSegmentId());
                         mClassData = classData;
                         if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
                             isMapVisible.set(false);

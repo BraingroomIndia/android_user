@@ -36,7 +36,7 @@ import com.payu.india.Model.PayuHashes;
 import com.payu.india.Model.PostData;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
-/*import com.zoho.salesiqembed.ZohoSalesIQ;*/
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -167,7 +167,7 @@ public class CheckoutViewModel extends ViewModel {
         this.classData = classData;
         gUserId = pref.getString(Constants.BG_ID, "");
 
-     //   ZohoSalesIQ.Tracking.setPageTitle("Booking Page " +classData.getClassTopic());
+//        ZohoSalesIQ.Tracking.setPageTitle("Booking Page " +classData.getClassTopic());
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.helperFactory = helperFactory;
@@ -421,6 +421,13 @@ public class CheckoutViewModel extends ViewModel {
                     snippet.setCode(couponCode.get());
                     snippet.setIsGuest(isGuest);
                     snippet.setUserId(gUserId);
+                    List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
+                    for (ViewModel nonReactiveItem : nonReactiveItems) {
+                        if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                            levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
+                        }
+                    }
+                    snippet.setTotalTicket("{\"tickets\":" + gson.toJson(levelsList) + "}");
                     apiService.applyCouponCode(snippet).subscribe(new Consumer<PromocodeResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull PromocodeResp resp) throws Exception {
@@ -428,6 +435,8 @@ public class CheckoutViewModel extends ViewModel {
 
                                 appliedCouponCode.set(couponCode.get());
                                 appliedCouponAmount = resp.getData().get(0).getAmount();
+                                if (appliedCouponAmount>=totalAmount.get())
+                                    appliedCouponAmount=totalAmount.get()-1;
                                 applyingCouponCode.set(false);
                                 cartAmount.run();
 //
@@ -690,6 +699,10 @@ public class CheckoutViewModel extends ViewModel {
             snippet.setUserMobile(mChekcoutData.getPhone());
             snippet.setUserId(mChekcoutData.getUdf1());
             snippet.setIsGuest(isGuest);
+            snippet.setCouponCode(appliedCouponCode.get());
+            snippet.setCouponAmount(appliedCouponAmount + "");
+            snippet.setPromoCode(appliedPromoCode.get());
+            snippet.setPromoAmount(appliedPromoAmount + "");
             List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
             for (ViewModel nonReactiveItem : nonReactiveItems) {
                 if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {

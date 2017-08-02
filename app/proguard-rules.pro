@@ -25,11 +25,6 @@
 #-renamesourcefileattribute SourceFile
 -optimizationpasses 5
 
--dontusemixedcaseclassnames
-
--dontskipnonpubliclibraryclasses
-
--dontpreverify
 
 ##-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 

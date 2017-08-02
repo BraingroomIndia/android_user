@@ -70,6 +70,7 @@ import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ExploreResp;
+import com.braingroom.user.model.response.FirstSocialLoginResp;
 import com.braingroom.user.model.response.GiftcardResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.GuestUserResp;
@@ -226,7 +227,7 @@ public interface UserApiService {
     Observable<PayUBookingDetailsResp> getBookingDetails(@Body PayUBookingDetailsReq req);
 
     @POST("saveMandatoryData")
-    Observable<BaseResp> firstSocialLogin(@Body FirstSocialLoginReq req);
+    Observable<FirstSocialLoginResp> firstSocialLogin(@Body FirstSocialLoginReq req);
 
     @POST("razorPaySuccess")
     Observable<RazorSuccessResp> postRazorPaySuccess(@Body RazorSuccessReq req);
