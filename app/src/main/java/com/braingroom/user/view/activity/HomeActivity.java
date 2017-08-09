@@ -85,9 +85,10 @@ public class HomeActivity extends BaseActivity
         if (bundle != null)
 
         {
+
             Bundle data = new Bundle();
             String referralCode = getIntentString("referralCode");
-            if (referralCode != null&& !vm.getLoggedIn()) {
+            if (referralCode != null && !vm.getLoggedIn()) {
                 data.putString("referralCode", referralCode);
                 getNavigator().navigateActivityForResult(LoginActivity.class, data, ViewModel.REQ_CODE_LOGIN);
             }
@@ -100,13 +101,7 @@ public class HomeActivity extends BaseActivity
                     value.toString(), value.getClass().getName()));
     }*/
 
-        competitionBanner = (RelativeLayout)
 
-                findViewById(R.id.competition_banner);
-
-        textView = (HTextView)
-
-                findViewById(R.id.textview);
 
        /* try {
             PackageInfo info = getPackageManager().getPackageInfo("com.braingroom.user", PackageManager.GET_SIGNATURES);
@@ -182,29 +177,13 @@ public class HomeActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (!vm.getLoggedIn()) {
-            timerDisposable = ((HomeViewModel) vm).observable.subscribe(new Consumer<Long>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
-                    animate((int) (aLong % 2));
-                }
-            });
-        } else {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
-            competitionBanner.setLayoutParams(params);
-        }
         invalidateOptionsMenu();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (timerDisposable != null) {
-            if (!timerDisposable.isDisposed())
-                timerDisposable.dispose();
-            timerDisposable = null;
-        }
+
     }
 
     public void initNavigationDrawer() {
@@ -284,8 +263,6 @@ public class HomeActivity extends BaseActivity
     }
 
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -352,7 +329,7 @@ public class HomeActivity extends BaseActivity
                 @Override
                 public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                     vm.logOut();
-                    Intent i = new Intent(HomeActivity.this,HomeActivity.class);
+                    Intent i = new Intent(HomeActivity.this, HomeActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
 
@@ -382,8 +359,8 @@ public class HomeActivity extends BaseActivity
             getNavigator().navigateActivity(CatalogueHomeActivity.class, null);
 //            finish();
         }
-        if (id==R.id.nav_competition)
-            getNavigator().navigateActivity(CompetitionWebPage.class,null);
+        if (id == R.id.nav_competition)
+            getNavigator().navigateActivity(CompetitionWebPage.class, null);
        /* if (id == R.id.nav_giftcard) {
             getNavigator().navigateActivity(GiftcardCouponActivity.class, null);
 //            finish();
@@ -393,14 +370,6 @@ public class HomeActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    int index = 0;
-    String[] sentences = {"Creative kids hunt ( Inter-School Competition )", "Click to Register your kid now!"};
-
-    public void animate(int index) {
-
-        textView.animateText(sentences[index]);
     }
 
 

@@ -9,6 +9,7 @@
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.HomeViewModel" />
+
         <import type="android.view.View" />
     </data>
 
@@ -30,79 +31,41 @@
                 android:background="@color/colorBackgroundGray"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/category_container_height"
-                    android:background="@color/colorPrimary"
-                    android:nestedScrollingEnabled="false"
-                    android:scrollbars="none"
-                    bind:items="@{vm.categories}"
-                    bind:layout_vertical="@{false}"
-                    bind:view_provider="@{@layout/item_category_home}" />
+                <include
+                    layout="@layout/content_typical_grid"
+                    app:vm="@{vm.categoryVm}" />
 
-                <RelativeLayout
-                    android:id="@+id/competition_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_med"
-                    android:background="@color/colorAccent"
-                    android:onClick="@{vm.onRegister}"
-                    android:padding="@dimen/margin_small">
-
-
-                    <com.hanks.htextview.scale.ScaleTextView
-                        android:id="@+id/textview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/margin_small"
-                        android:textSize="@dimen/text_size_medium"
-                        android:layout_centerVertical="true"
-                        android:gravity="center"
-                        android:onClick="@{vm.onRegister}"
-                        android:textColor="@color/white"
-                        app:font='@{@string/robotoBold}'/>
-<!--
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-
-                        android:layout_toLeftOf="@+id/register"
-                        android:gravity="center_horizontal"
-                        android:text="Register your kid now."
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_medium"
-                        app:font='@{@string/robotoRegular}' />-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/register"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_alignParentRight="true"-->
-                        <!--android:background="@drawable/solid_material_blue_rounded_corner"-->
-                        <!--android:padding="@dimen/padding_small"-->
-                        <!--android:text="Register Now"-->
-                        <!--android:textColor="@color/white"-->
-                        <!--app:font='@{@string/robotoRegular}' />-->
-                </RelativeLayout>
+                <!--       <android.support.v7.widget.RecyclerView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_marginBottom="@dimen/margin_small_neg"
+                           android:layout_marginLeft="@dimen/margin_small_neg"
+                           android:layout_marginRight="@dimen/margin_small_neg"
+                           bind:items="@{vm.categories}"
+                           bind:layout_grid_vertical="@{true}"
+                           bind:span_count="@{3}"
+                           bind:view_provider="@{@layout/icon_text_cardview}" />-->
 
 
                 <include
                     layout="@layout/content_showcase_list_1"
                     app:vm="@{vm.trendingVm}" />
 
-                <include
-                    layout="@layout/content_typical_grid"
-                    app:vm="@{vm.communityVm}" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                <include
-                    layout="@layout/content_showcase_list_1"
-                    app:vm="@{vm.featuredVm}" />
+                    <include
+                        layout="@layout/icon_text_cardview"
+                        app:vm="@{vm.onlineClassVm}" />
 
-                <include
-                    layout="@layout/content_showcase_list_1"
-                    app:vm="@{vm.indigenousVm}" />
+                    <include
+                        layout="@layout/icon_text_cardview"
+                        app:vm="@{vm.communityVm}" />
+
+                </LinearLayout>
+
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
@@ -162,7 +125,6 @@
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
-
 
 
     </RelativeLayout>

@@ -115,3 +115,4 @@
 -keepclassmembers class com.facebook.applinks.** { *; }
 -keep class com.facebook.FacebookSdk { *; }
 -keep class com.google.android.gms.ads.identifier.** { *; }
+-printmapping mapping.txt

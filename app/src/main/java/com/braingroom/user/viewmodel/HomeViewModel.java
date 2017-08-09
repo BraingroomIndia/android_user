@@ -22,10 +22,12 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
+import com.braingroom.user.view.activity.CommunityListActivity;
 import com.braingroom.user.view.activity.ExploreActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
+import com.braingroom.user.view.activity.SegmentListActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,7 +38,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,9 @@ public class HomeViewModel extends ViewModel {
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
-    public final CommunityGridViewModel communityVm;
+    public final GridViewModel categoryVm;
+    public final IconTextItemViewModel communityVm;
+    public final IconTextItemViewModel onlineClassVm;
     public final ShowcaseClassListViewModel featuredVm, trendingVm, indigenousVm;
     public final Observable<List<ViewModel>> categories;
 
@@ -80,17 +83,19 @@ public class HomeViewModel extends ViewModel {
 
     public Observable observable;
 
+/*
     private final int[] resArray = new int[]{R.drawable.main_category_1,
             R.drawable.main_category_2, //Edited By Vikas Godara
             R.drawable.main_category_3,
             R.drawable.main_category_4,
             R.drawable.main_category_5, //Edited By Vikas Godara
             R.drawable.main_category_6};
+*/
 
     public HomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
                          @NonNull final DialogHelper dialogHelper, @NonNull final HomeActivity.UiHelper uiHelper) {
         this.loggedIn = new ObservableBoolean(getLoggedIn());
-        this.communityVm = new CommunityGridViewModel(messageHelper, navigator, ClassListActivity.class);
+
         this.featuredVm = new ShowcaseClassListViewModel("Fast Tracked - Education & Skill Development", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
         this.trendingVm = new ShowcaseClassListViewModel("People's Choice - Hobbies & Sports", messageHelper, navigator, apiService.getTrendingClass(), ClassDetailActivity.class);
         this.indigenousVm = new ShowcaseClassListViewModel("Featured - Classes & Activities", messageHelper, navigator, apiService.getIndigeneousClass(), ClassDetailActivity.class);
@@ -124,6 +129,23 @@ public class HomeViewModel extends ViewModel {
                 navigator.navigateActivity(SignUpActivityCompetition.class, null);
             }
         };
+        communityVm = new IconTextItemViewModel(R.drawable.mas_icon, "Community Group", new MyConsumer<IconTextItemViewModel>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
+                navigator.navigateActivity(CommunityListActivity.class, null);
+            }
+        });
+        onlineClassVm = new IconTextItemViewModel(R.drawable.icon_card, "Online Class", new MyConsumer<IconTextItemViewModel>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
+                FilterData filterData = new FilterData();
+                filterData.setClassType(FilterViewModel.CLASS_TYPE_WEBINAR + "");
+                Bundle data = new Bundle();
+                data.putSerializable("filterData", filterData);
+                data.putString("origin", FilterViewModel.ORIGIN_HOME);
+                navigator.navigateActivity(ClassListActivity.class, data);
+            }
+        });
         categories = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -132,65 +154,55 @@ public class HomeViewModel extends ViewModel {
         }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-
-                return apiService.getCategory()
-                        //Edited By Vikas Godara
-                        .map(new Function<CategoryResp, List<CategoryResp.Snippet>>() {
-                            @Override
-                            public List<CategoryResp.Snippet> apply(@io.reactivex.annotations.NonNull CategoryResp categoryResp) throws Exception {
-                                List<CategoryResp.Snippet> snippetList = categoryResp.getData();
-                                Collections.swap(snippetList, 1, 4);
-                                return snippetList;
-                            }
-                        })
-                        //Edited by Vikas Godara
-                        .map(new Function<List<CategoryResp.Snippet>, List<ViewModel>>() {
-                            @Override
-                            public List<ViewModel> apply(List<CategoryResp.Snippet> resp) throws Exception {
-                                List<ViewModel> results = new ArrayList<>();
-                                for (final CategoryResp.Snippet snippet : resp) {
-                                    results.add(new IconTextItemViewModel(resArray[Integer.parseInt(snippet.getId()) - 1], snippet.getCategoryName(), new MyConsumer<IconTextItemViewModel>() {
+                return apiService.getCategory().map(new Function<CategoryResp, List<ViewModel>>() {
+                    @Override
+                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull CategoryResp categoryResp) throws Exception {
+                        List<CategoryResp.Snippet> snippetList = categoryResp.getData();
+                        final List<ViewModel> results = new ArrayList<>();
+                        for (final CategoryResp.Snippet snippet : snippetList) {
+                            results.add(new IconTextItemViewModel(snippet.getCategoryImage(), snippet.getCategoryName(),
+                                    new MyConsumer<IconTextItemViewModel>() {
                                         @Override
                                         public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                                             if (!snippet.getId().equals("-1")) {
                                                 Bundle data = new Bundle();
                                                 HashMap<String, Integer> categoryMap = new HashMap<String, Integer>();
                                                 categoryMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
-                                                FilterData filterData = new FilterData();
-                                                filterData.setCategoryId(snippet.getId());
-                                                data.putSerializable("category", categoryMap);
-                                                data.putSerializable("filterData", filterData);
-                                                data.putString("origin", FilterViewModel.ORIGIN_CATEGORY);
-                                                navigator.navigateActivity(ClassListActivity.class, data);
+                                                data.putSerializable("categoryMap", categoryMap);
+                                                navigator.navigateActivity(SegmentListActivity.class, data);
                                             }
-
                                         }
                                     }));
-                                }
-                                return results;
-                            }
-                        }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
-                            @Override
-                            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                                return new ArrayList<>();
-                            }
-                        });
-
+                        }
+                        return results;
+                    }
+                });
+            }
+        }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+            @Override
+            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable
+                                                 throwable) throws Exception {
+                return new ArrayList<>();
             }
         });
+
+        this.categoryVm = new GridViewModel(categories, "Learn new skills or pick up a new hobby");
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
-            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws
+                    Exception {
                 return getLoggedIn();
             }
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
-            public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+            public Observable<NotificationCountResp> apply
+                    (@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return apiService.getUnreadMessageCount();
             }
         }).subscribe(new Consumer<NotificationCountResp>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws
+                    Exception {
                 if (resp != null && resp.getData() != null) {
                     messageCount = resp.getData().get(0).getCount();
                     uiHelper.setCount();
@@ -199,62 +211,77 @@ public class HomeViewModel extends ViewModel {
             }
         });
 
+
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
-            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws
+                    Exception {
                 return getLoggedIn();
             }
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
-            public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+            public Observable<NotificationCountResp> apply
+                    (@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return apiService.getUnreadNotificationCount();
             }
         }).subscribe(new Consumer<NotificationCountResp>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws
+                    Exception {
                 if (resp != null && resp.getData() != null) {
                     notificationCount = resp.getData().get(0).getCount();
                     uiHelper.setCount();
-
                 }
             }
         });
 
         refreshMapPinsToNewLocation("13.0826802", "80.2707184");
-        onSearchClicked = new Action() {
-            @Override
-            public void run() throws Exception {
-                navigator.navigateActivity(SearchActivity.class, null);
-            }
-        };
 
-        onExploreClicked = new Action() {
-            @Override
-            public void run() throws Exception {
-                navigator.navigateActivity(ExploreActivity.class, null);
-            }
-        };
-        onFilterClicked = new Action() {
-            @Override
-            public void run() throws Exception {
-                HashMap<String, Integer> filterMap = new HashMap<>();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("category", filterMap);
-                bundle.putSerializable("segment", filterMap);
-                bundle.putSerializable("city", filterMap);
-                bundle.putSerializable("locality", filterMap);
-                bundle.putSerializable("community", filterMap);
-                bundle.putSerializable("classType", filterMap);
-                bundle.putSerializable("classSchedule", filterMap);
-                bundle.putSerializable("vendorList", filterMap);
-                bundle.putString("keywords", "");
-                bundle.putString("startDate", "");
-                bundle.putString("endDate", "");
-                bundle.putString("origin", FilterViewModel.ORIGIN_HOME);
-                navigator.navigateActivity(FilterActivity.class, bundle);
-            }
-        };
+        onSearchClicked = new
 
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        navigator.navigateActivity(SearchActivity.class, null);
+                    }
+                }
+
+        ;
+
+        onExploreClicked = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        navigator.navigateActivity(ExploreActivity.class, null);
+                    }
+                }
+
+        ;
+        onFilterClicked = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        HashMap<String, Integer> filterMap = new HashMap<>();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("category", filterMap);
+                        bundle.putSerializable("segment", filterMap);
+                        bundle.putSerializable("city", filterMap);
+                        bundle.putSerializable("locality", filterMap);
+                        bundle.putSerializable("community", filterMap);
+                        bundle.putSerializable("classType", filterMap);
+                        bundle.putSerializable("classSchedule", filterMap);
+                        bundle.putSerializable("vendorList", filterMap);
+                        bundle.putString("keywords", "");
+                        bundle.putString("startDate", "");
+                        bundle.putString("endDate", "");
+                        bundle.putString("origin", FilterViewModel.ORIGIN_HOME);
+                        navigator.navigateActivity(FilterActivity.class, bundle);
+                    }
+                }
+
+        ;
 
 
     }
@@ -275,7 +302,8 @@ public class HomeViewModel extends ViewModel {
                     cld.setColorCode(snippet.getColorCode());
                     locationList.add(cld);
                 }
-                if (mGoogleMap != null && markerList.size() == 0) populateMarkers(locationList);
+                if (mGoogleMap != null && markerList.size() == 0)
+                    populateMarkers(locationList);
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -337,7 +365,7 @@ public class HomeViewModel extends ViewModel {
         featuredVm.retry();
         trendingVm.retry();
         indigenousVm.retry();
-        communityVm.retry();
+        categoryVm.retry();
     }
 
     public void notificationResume() {

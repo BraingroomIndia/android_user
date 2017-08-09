@@ -56,10 +56,9 @@ public class ConnectFeedFragment extends BaseFragment {
         mAdapter = new NonReactiveRecyclerViewAdapter(vm, ((ConnectFeedViewModel) vm).getViewProvider());
         mRecyclerView.setHasFixedSize(true);
         setupRecyclerView();
-        if(((ConnectHomeActivity)activity).connectFilterData!=null)
-        {
-            ((ConnectHomeActivity)activity).updateFilter();
-            ((ConnectHomeActivity)activity).connectFilterData=null;
+        if (((ConnectHomeActivity) activity).connectFilterData != null) {
+            ((ConnectHomeActivity) activity).updateFilter();
+            ((ConnectHomeActivity) activity).connectFilterData = null;
         }
         return binding.getRoot();
 
@@ -85,7 +84,7 @@ public class ConnectFeedFragment extends BaseFragment {
                 int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
                 if (dy > 0 && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
-                     vm.paginate();
+                    vm.paginate();
                 }
 
             }
@@ -100,13 +99,19 @@ public class ConnectFeedFragment extends BaseFragment {
         FragmentUiHelper uiHelper = new FragmentUiHelper() {
             @Override
             public void notifyDataChanged() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdapter != null)
-                            mAdapter.notifyDataSetChanged();
-                    }
-                });
+                try {
+                    if (getActivity() != null)
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mAdapter != null)
+                                    mAdapter.notifyDataSetChanged();
+                            }
+                        });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
 
             }
         };

@@ -37,11 +37,6 @@
                 android:fitsSystemWindows="true"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal">-->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -49,53 +44,31 @@
 
                     <EditText
                         android:layout_width="0dp"
-                        android:layout_weight="16"
                         android:layout_height="@dimen/search_height"
                         android:layout_margin="@dimen/margin_med"
+                        android:layout_weight="16"
                         android:background="@drawable/solid_white_rounded_corner"
                         android:drawableLeft="@drawable/search_new"
-                        android:drawableStart="@drawable/search_new"
                         android:drawablePadding="@dimen/_13sdp"
+                        android:drawableStart="@drawable/search_new"
                         android:gravity="center_vertical"
-                        android:padding="@dimen/margin_small"
-                        android:textColor="@color/colorTextGray"
-                        app:font='@{@string/robotoRegular}'
                         android:hint="@string/searchBlogHint"
-                        android:text="@={vm.searchQuery}"/>
+                        android:padding="@dimen/margin_small"
+                        android:text="@={vm.searchQuery}"
+                        android:textColor="@color/colorTextGray"
+                        app:font='@{@string/robotoRegular}' />
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
                         android:layout_height="@dimen/search_height"
-                        android:layout_marginTop="@dimen/margin_med"
-                        android:padding="@dimen/_4sdp"
                         android:layout_marginLeft="@dimen/margin_small_neg"
                         android:layout_marginRight="@dimen/_4sdp"
+                        android:layout_marginTop="@dimen/margin_med"
+                        android:layout_weight="2"
                         android:onClick="@{vm.onFilterClicked}"
+                        android:padding="@dimen/_4sdp"
                         android:src="@drawable/filter_funnel" />
-                    <!--android:layout_toLeftOf="@+id/search"-->
 
-                    <!--<ImageView-->
-                    <!--android:id="@+id/search"-->
-                    <!--android:layout_width="40dp"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:onClick="@{vm.onSearchClicked}"-->
-                    <!--android:padding="@dimen/padding_small"-->
-                    <!--android:src="@drawable/ic_arrow_forward_black_24dp"-->
-                    <!--android:tint="@color/colorTextDark" />-->
-                    <!--</RelativeLayout>-->
-                    <!--
-                                <ImageView
-                                android:id="@+id/filter"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:onClick="@{vm.onFilterClicked}"
-                                android:padding="@dimen/padding_med"
-                                android:scaleType="centerInside"
-                                android:src="@drawable/controls" />-->
                 </LinearLayout>
             </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -111,22 +84,11 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-
-        <!--</FrameLayout>-->
-
         <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
-        <!--<include-->
-        <!--layout="@layout/fragment_connect_feed"-->
-        <!--app:vm="@{vm}" />-->
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation"

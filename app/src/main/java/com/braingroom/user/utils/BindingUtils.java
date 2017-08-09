@@ -107,6 +107,7 @@ public class BindingUtils {
         bindAdapter(recyclerView, adapter);
     }
 
+
     @BindingAdapter({"items", "view_provider"})
     public static void bindAdapterWithDefaultBinder(@NonNull ViewPager viewPager, @Nullable Observable<List<ViewModel>> items, @Nullable ViewProvider viewProvider) {
         ViewPagerAdapter adapter = null;
@@ -292,7 +293,7 @@ public class BindingUtils {
 //        return (String) pAppCompatSpinner.getSelectedItem();
 //    }
 
-    @BindingAdapter("app:menu")
+    @BindingAdapter("menu")
     public static void setMenu(NavigationView navigationView, int id) {
         navigationView.inflateMenu(id);
     }
@@ -303,7 +304,7 @@ public class BindingUtils {
 //    }
 
 
-    @BindingAdapter("app:errorText")
+    @BindingAdapter("errorText")
     public static void setErrorMessage(TextInputLayout view, String errorMessage) {
         if (!TextUtils.isEmpty(errorMessage)) {
             view.setErrorEnabled(true);
@@ -312,7 +313,7 @@ public class BindingUtils {
     }
 
 
-    @BindingAdapter({"bind:model"})
+    @BindingAdapter({"model"})
     public static void loadHeader(NavigationView view, HomeViewModel model) {
         NavHeaderHomeBinding binding = NavHeaderHomeBinding.inflate(LayoutInflater.from(view.getContext()));
         binding.setVm(model);
@@ -320,7 +321,7 @@ public class BindingUtils {
         view.addHeaderView(binding.getRoot());
     }
 
-    @BindingAdapter({"bind:model"})
+    @BindingAdapter({"model"})
     public static void loadHeader(NavigationView view, ConnectHomeViewModel model) {
         NavHeaderConnectBinding binding = NavHeaderConnectBinding.inflate(LayoutInflater.from(view.getContext()));
         binding.setVm(model);

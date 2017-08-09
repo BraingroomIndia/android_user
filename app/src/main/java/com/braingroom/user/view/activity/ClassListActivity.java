@@ -109,8 +109,14 @@ public class ClassListActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==R.id.action_search)
+        if (item.getItemId() == R.id.action_search) {
             ((ClassListViewModel1) vm).hideSearchBar.set(!((ClassListViewModel1) vm).hideSearchBar.get());
+            return true;
+        }
+        if (item.getItemId() == R.id.home) {
+            onBackPressed();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -137,11 +143,11 @@ public class ClassListActivity extends BaseActivity {
         };
         return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(),
                 (FilterData) getIntentSerializable("filterData"),
-                (HashMap<String, Integer>) getIntentSerializable("category")
-                , (HashMap<String, Integer>) getIntentSerializable("segment")
+                (HashMap<String, Integer>) getIntentSerializable("categoryMap")
+                , (HashMap<String, Integer>) getIntentSerializable("segmentMap")
                 , (HashMap<String, String>) getIntentSerializable("city")
                 , (HashMap<String, String>) getIntentSerializable("locality")
-                , (HashMap<String, Integer>) getIntentSerializable("community")
+                , (HashMap<String, Integer>) getIntentSerializable("communityMap")
                 , (HashMap<String, Integer>) getIntentSerializable("classType")
                 , (HashMap<String, Integer>) getIntentSerializable("classSchedule")
                 , (HashMap<String, String>) getIntentSerializable("vendorList"),

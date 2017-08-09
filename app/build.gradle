@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-
+apply plugin: 'com.google.gms.google-services'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
@@ -29,25 +29,28 @@ android {
 
 
     }
+    signingConfigs {
+
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
     buildTypes {
+
         release {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        debug {
-
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
     }
     dataBinding {
         enabled = true
-    }
-    android {
-        compileOptions.incremental = false
     }
 
 }
@@ -71,8 +74,8 @@ dependencies {
     //debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     //compile 'com.google.guava:guava:22.0'
 
-    compile 'com.google.android.gms:play-services-auth:10.2.1'
-    compile 'com.google.android.gms:play-services-maps:10.2.1'
+    compile 'com.google.android.gms:play-services-auth:11.0.4'
+    compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -97,13 +100,13 @@ dependencies {
     compile 'com.google.dagger:dagger:2.10'
     compile 'com.afollestad.material-dialogs:core:0.9.4.2'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
-    compile 'com.google.firebase:firebase-auth:10.2.1'
-    compile 'com.google.firebase:firebase-core:10.2.1'
-    compile 'com.google.firebase:firebase-messaging:10.2.1'
-    compile 'com.google.firebase:firebase-crash:10.2.1'
-   // compile 'com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1'
+    compile 'com.google.firebase:firebase-auth:11.0.4'
+    compile 'com.google.firebase:firebase-core:11.0.4'
+    compile 'com.google.firebase:firebase-messaging:11.0.4'
+    compile 'com.google.firebase:firebase-crash:11.0.4'
+    // compile 'com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1'
     compile 'com.razorpay:checkout:1.3.1'
-    compile 'com.google.android.gms:play-services-places:10.2.1'
+    compile 'com.google.android.gms:play-services-places:11.0.4'
     compile 'com.patloew.rxlocation:rxlocation:1.0.3'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.github.pwittchen:reactivenetwork-rx2:0.9.1'
@@ -125,11 +128,9 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     annotationProcessor 'org.projectlombok:lombok:1.12.6'
     provided 'org.projectlombok:lombok:1.12.6'
-    compile 'com.fujiyuu75:sequent:0.2.1'
-    compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'me.relex:circleindicator:1.2.2@aar'
+    compile 'com.google.firebase:firebase-core:11.0.4'
 
 }
 configurations.all {
@@ -137,7 +138,7 @@ configurations.all {
         def requested = details.requested
         if (requested.group == 'com.android.support') {
             if (!requested.name.startsWith("multidex")) {
-                details.useVersion '25.3.0'
+                details.useVersion '25.3.1'
             }
         }
     }
