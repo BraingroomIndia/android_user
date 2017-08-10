@@ -15,8 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_med"
+        android:background="@color/colorBackgroundGray"
         app:cardPreventCornerOverlap="true"
-        app:cardElevation="@dimen/_4sdp"
+        app:cardElevation="@dimen/_1sdp"
         card_view:cardCornerRadius="4dp">
 
         <LinearLayout

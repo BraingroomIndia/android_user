@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_all"
-        android:enabled="true"
-        android:icon="@drawable/ic_view_headline_white_24dp"
-        android:title="@string/action_feed_main"
-        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/action_tips_tricks"
         android:enabled="true"
@@ -24,4 +19,15 @@
         android:enabled="true"
         android:icon="@drawable/ic_record_voice_over_white_24dp"
         android:title="@string/action_tutors_talk" />
+    <item
+        android:id="@+id/action_tutors_article"
+        android:enabled="true"
+        android:icon="@drawable/ic_people_white_24dp"
+        android:title="@string/action_tutors_article"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_discuss_n_decide"
+        android:enabled="true"
+        android:icon="@drawable/ic_record_voice_over_white_24dp"
+        android:title="@string/action_discuss_n_decide" />
 </menu>

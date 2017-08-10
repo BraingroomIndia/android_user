@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_med"
-        card_view:cardElevation="@dimen/dimen_zero">
+        card_view:cardElevation="@dimen/margin_small_neg">
 
 
         <LinearLayout
@@ -167,10 +167,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:paddingRight="@dimen/_5sdp"
-                    android:paddingBottom="@dimen/_5sdp"
-                    android:layout_margin="@dimen/margin_med"
+                    android:layout_margin="@dimen/margin_small"
                     android:onClick="@{(v) -> vm.showMenuPopup(v)}"
                     android:src="@drawable/ic_more_vert_black_24dp"
                     android:tint="@color/colorTextGray" />

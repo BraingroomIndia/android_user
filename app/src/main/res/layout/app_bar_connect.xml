@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -15,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true">
+
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
@@ -37,58 +39,66 @@
                 android:fitsSystemWindows="true"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal">
 
-                    <EditText
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/search_height"
-                        android:layout_margin="@dimen/margin_med"
-                        android:layout_weight="16"
-                        android:background="@drawable/solid_white_rounded_corner"
-                        android:drawableLeft="@drawable/search_new"
-                        android:drawablePadding="@dimen/_13sdp"
-                        android:drawableStart="@drawable/search_new"
-                        android:gravity="center_vertical"
-                        android:hint="@string/searchBlogHint"
-                        android:padding="@dimen/margin_small"
-                        android:text="@={vm.searchQuery}"
-                        android:textColor="@color/colorTextGray"
-                        app:font='@{@string/robotoRegular}' />
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/search_height"
-                        android:layout_marginLeft="@dimen/margin_small_neg"
-                        android:layout_marginRight="@dimen/_4sdp"
-                        android:layout_marginTop="@dimen/margin_med"
-                        android:layout_weight="2"
-                        android:onClick="@{vm.onFilterClicked}"
-                        android:padding="@dimen/_4sdp"
-                        android:src="@drawable/filter_funnel" />
-
-                </LinearLayout>
             </android.support.design.widget.CollapsingToolbarLayout>
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_layout"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@color/white"
-                app:tabIndicatorHeight="2dp"
-                app:tabMode="fixed" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/search_height"
+                    android:layout_margin="@dimen/margin_med"
+                    android:layout_weight="16"
+                    android:background="@drawable/solid_white_rounded_corner"
+                    android:drawableLeft="@drawable/search_new"
+                    android:drawablePadding="@dimen/_13sdp"
+                    android:drawableStart="@drawable/search_new"
+                    android:gravity="center_vertical"
+                    android:hint="@string/searchBlogHint"
+                    android:padding="@dimen/margin_small"
+                    android:text="@={vm.searchQuery}"
+                    android:textColor="@color/colorTextGray"
+                    app:font='@{@string/robotoRegular}' />
 
 
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/search_height"
+                    android:layout_marginLeft="@dimen/margin_small_neg"
+                    android:layout_marginRight="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/margin_med"
+                    android:layout_weight="2"
+                    android:onClick="@{vm.onFilterClicked}"
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/filter_funnel" />
+
+            </LinearLayout>
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/pager"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/class_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_marginTop="@dimen/_4sdp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            bind:divider_decoration='@{"line_divider"}'
+            bind:items="@{vm.feedItems}"
+            bind:layout_vertical="@{true}"
+            bind:paginate="@{true}"
+            bind:view_provider="@{@layout/item_connect_feed}"
+            bind:viewmodel="@{vm}"
+            tools:context="com.braingroom.user.view.activity.ConnectHomeActivity" />
+
+
+        <!--        <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation"
@@ -99,7 +109,9 @@
             app:elevation="10dp"
             app:itemIconTint="@drawable/bottom_nav_selector"
             app:itemTextColor="@drawable/bottom_nav_selector"
-            app:layout_behavior="com.braingroom.user.utils.BottomNavigationBehavior" />
+            app:layout_behavior="com.braingroom.user.utils.BottomNavigationBehavior">
+
+        </android.support.design.widget.BottomNavigationView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
+import com.braingroom.user.model.dto.ConnectFilterData;
+import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.NotificationCountResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
@@ -16,9 +19,11 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
+import com.braingroom.user.view.adapters.ViewProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +33,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import lombok.Getter;
 
 public class ConnectHomeViewModel extends ViewModel {
 
@@ -38,9 +44,17 @@ public class ConnectHomeViewModel extends ViewModel {
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final ObservableField<String> searchQuery = new ObservableField("");
-    private String lastSearchQuery="";
-    public ObservableBoolean loggedIn;
+    private String lastSearchQuery = "";
+    private ObservableBoolean loggedIn;
     private Disposable notificationDisposable;
+
+    public Observable<List<ViewModel>> feedItems;
+    private final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
+    @Getter
+    private ConnectFilterData filterData;
+    private boolean paginationInProgress = false;
+    private int nextPage = 0;
+    private int currentPage = -1;
 
     //    public final Observable<List<ViewModel>> feedItems;
 //    public final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
@@ -49,8 +63,25 @@ public class ConnectHomeViewModel extends ViewModel {
     public final ConnectUiHelper uiHelper;
 //    public final ConnectFilterData filterData;
 
-    public ConnectHomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory, @NonNull final ConnectUiHelper uiHelper) {
-        this.loggedIn=new ObservableBoolean(getLoggedIn());
+    @Getter
+    ViewProvider viewProvider = new ViewProvider() {
+        @Override
+        public int getView(ViewModel vm) {
+            if (vm instanceof ConnectFeedItemViewModel)
+                return R.layout.item_connect_feed;
+            else if (vm instanceof EmptyItemViewModel)
+                return R.layout.item_empty_data;
+            else if (vm instanceof RowShimmerItemViewModel)
+                return R.layout.item_shimmer_row;
+            return 0;
+        }
+    };
+
+    public ConnectHomeViewModel(@NonNull final ConnectFilterData connectFilterData,
+                                @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
+                                @NonNull final HelperFactory helperFactory, @NonNull final ConnectUiHelper uiHelper) {
+        this.filterData = connectFilterData;
+        this.loggedIn = new ObservableBoolean(getLoggedIn());
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         this.userEmail.set(pref.getString(Constants.EMAIL, null));
@@ -61,6 +92,58 @@ public class ConnectHomeViewModel extends ViewModel {
                 retry();
             }
         });
+        //New Changes
+        this.filterData.setCountryId(pref.getInt("connect_country_id", 0) == 0 ? "" : pref.getInt("connect_country_id", 0) + "");
+        this.filterData.setStateId(pref.getInt("connect_state_id", 0) == 0 ? "" : pref.getInt("connect_state_id", 0) + "");
+        this.filterData.setCityId(pref.getInt("connect_city_id", 0) == 0 ? "" : pref.getInt("connect_city_id", 0) + "");
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+            }
+        });
+        if (callAgain == null)
+            callAgain = new ObservableField<>(0);
+        if (callAgain.get() == null)
+            callAgain.set(0);
+        feedDataMapFunction = new Function<ConnectFeedResp, List<ViewModel>>() {
+            @Override
+            public List<ViewModel> apply(ConnectFeedResp resp) throws Exception {
+                currentPage = nextPage;
+                nextPage = resp.getNextPage();
+                if (resp.getData().size() == 0 && nextPage < 1) {
+                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
+                } else {
+                    //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
+                    for (final ConnectFeedResp.Snippet elem : resp.getData()) {
+                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
+                    }
+                }
+
+                paginationInProgress = false;
+                return nonReactiveItems;
+            }
+        };
+        feedItems = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return currentPage < nextPage;
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                paginationInProgress = true;
+                return apiService.getConnectFeed(filterData, nextPage)
+                        .map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                            @Override
+                            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                                throwable.printStackTrace();
+                                return nonReactiveItems;
+                            }
+                        }).mergeWith(getLoadingItems());
+            }
+        });
+        //New Changes
 //        this.filterData = new ConnectFilterData();
 //        feedDataMapFunction = new Function<ConnectFeedResp, List<ViewModel>>() {
 //            @Override
@@ -78,7 +161,7 @@ public class ConnectHomeViewModel extends ViewModel {
 //        };
 //        feedItems = getLoadingItems(4).mergeWith(apiService.getConnectFeed(filterData, 0).map(feedDataMapFunction));
 //        catSegVm = new GroupDataViewModel(messageHelper, navigator);
-        FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return getLoggedIn();
@@ -93,12 +176,13 @@ public class ConnectHomeViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
                 if (resp != null && resp.getData() != null) {
                     messageCount = resp.getData().get(0).getCount();
+                    uiHelper.setCount(notificationCount, messageCount);
 
                 }
             }
         });
 
-        FieldUtils.toObservable(callAgain).debounce(200, TimeUnit.MILLISECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return getLoggedIn();
@@ -128,8 +212,9 @@ public class ConnectHomeViewModel extends ViewModel {
         }).subscribe(new Consumer<String>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull String searchQuery) throws Exception {
-                lastSearchQuery=searchQuery;
-                uiHelper.setSearchQuery(searchQuery);
+                lastSearchQuery = searchQuery;
+                connectFilterData.setSearchQuery(searchQuery);
+                setFilterData(connectFilterData);
             }
         });
 
@@ -161,8 +246,14 @@ public class ConnectHomeViewModel extends ViewModel {
 
     }
 
-    private Observable<List<ViewModel>> getLoadingItems(int count) {
+    private Observable<List<ViewModel>> getLoadingItems() {
+        int count;
+        if (nonReactiveItems.isEmpty())
+            count = 4;
+        else
+            count = 2;
         List<ViewModel> result = new ArrayList<>();
+        result.addAll(nonReactiveItems);
         result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
         return Observable.just(result);
     }
@@ -187,12 +278,21 @@ public class ConnectHomeViewModel extends ViewModel {
     }
 
     @Override
+    public void paginate() {
+        if (nextPage > -1 && !paginationInProgress) {
+            nextPage = nextPage + 1;
+            callAgain.set(callAgain.get() + 1);
+
+        }
+    }
+
+    @Override
     public void retry() {
         connectivityViewmodel.isConnected.set(true);
         uiHelper.retry();
     }
 
-    public void notificationResume() {
+    private void notificationResume() {
         notificationDisposable = UserApplication.getInstance().getNewNotificationBus().subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean isNewNotification) {
@@ -210,6 +310,19 @@ public class ConnectHomeViewModel extends ViewModel {
                 subscription.dispose();
             }
         }
+    }
+
+    public void setFilterData(ConnectFilterData connectFilterData) {
+        this.filterData = connectFilterData;
+        rest();
+    }
+
+    private void rest() {
+        nonReactiveItems = new ArrayList<>();
+        nextPage = 0;
+        currentPage = -1;
+        paginationInProgress = false;
+        callAgain.set(callAgain.get() + 1);
     }
 
 }
