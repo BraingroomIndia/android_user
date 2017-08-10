@@ -125,7 +125,7 @@
                     android:layout_gravity="center_vertical"
                     android:onClick="@{vm.onEditMobile}"
                     android:src="@drawable/ic_edit_mobile"
-                    android:tint="@color/actionbar_background" />
+                    android:tint="@color/primary_blue" />
             </LinearLayout>
         </LinearLayout>
 </layout>

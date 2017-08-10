@@ -41,13 +41,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.hanks.htextview.base.HTextView;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
@@ -61,7 +56,7 @@ public class HomeActivity extends BaseActivity
 
 
     private static final String TAG = HomeActivity.class.getSimpleName();
-    private HTextView textView;
+    //private HTextView textView;
     private RelativeLayout competitionBanner;
     private MenuItem itemNotification;
     private MenuItem itemMessage;

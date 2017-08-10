@@ -19,8 +19,6 @@ import com.braingroom.user.view.fragment.CouponFormFragment;
 import com.braingroom.user.viewmodel.CouponFormDataViewModel;
 import com.braingroom.user.viewmodel.CouponFormViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.payUMoney.sdk.PayUmoneySdkInitilizer;
-import com.payUMoney.sdk.SdkConstants;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -45,7 +43,8 @@ public class CouponFormActivity extends BaseActivity implements PaymentResultLis
     }
 
     public interface UiHelper {
-        void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);
+//        removed payumoney
+//        void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);
 
         void startRazorpayPayment(JSONObject options);
     }
@@ -73,10 +72,11 @@ public class CouponFormActivity extends BaseActivity implements PaymentResultLis
     protected ViewModel createViewModel() {
 
         UiHelper uiHelper = new UiHelper() {
-            @Override
+//            removed payumoney
+            /* @Override
             public void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param) {
                 PayUmoneySdkInitilizer.startPaymentActivityForResult(CouponFormActivity.this, param);
-            }
+            }*/
 
             @Override
             public void startRazorpayPayment(JSONObject options) {
@@ -177,7 +177,7 @@ public class CouponFormActivity extends BaseActivity implements PaymentResultLis
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+/*       removed payumoney
         if (requestCode ==
                 PayUmoneySdkInitilizer.PAYU_SDK_PAYMENT_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
@@ -192,7 +192,7 @@ public class CouponFormActivity extends BaseActivity implements PaymentResultLis
             } else if (resultCode == PayUmoneySdkInitilizer.RESULT_BACK) {
 //                getMessageHelper().show("paymemt failure");
             }
-        }
+        }*/
         if (requestCode == vm.REQ_CODE_LOGIN) {
             vm.handleActivityResult(requestCode, resultCode, data);
         }

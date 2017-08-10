@@ -29,13 +29,7 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.PaySuccessActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
-import com.payUMoney.sdk.PayUmoneySdkInitilizer;
-import com.payu.india.Extras.PayUChecksum;
-import com.payu.india.Model.PaymentParams;
-import com.payu.india.Model.PayuHashes;
-import com.payu.india.Model.PostData;
-import com.payu.india.Payu.PayuConstants;
-import com.payu.india.Payu.PayuErrors;
+
 
 
 import org.json.JSONArray;
@@ -104,7 +98,7 @@ public class CheckoutViewModel extends ViewModel {
     HelperFactory helperFactory;
 
 
-    private PayUChecksum checksum;
+    //private PayUChecksum checksum;
 
     final Map<String, Integer> sublevelTextMap = new HashMap<>();
 
@@ -553,7 +547,7 @@ public class CheckoutViewModel extends ViewModel {
 
                     mChekcoutData = chekcoutData;
                     if (usePayU) {
-                        PayUmoneySdkInitilizer.PaymentParam.Builder builder = new
+                    /*    PayUmoneySdkInitilizer.PaymentParam.Builder builder = new
                                 PayUmoneySdkInitilizer.PaymentParam.Builder()
                                 .setMerchantId("5513008")
                                 .setKey(chekcoutData.getKey())
@@ -573,7 +567,7 @@ public class CheckoutViewModel extends ViewModel {
                         PayUmoneySdkInitilizer.PaymentParam param = builder.build();
                         param.setMerchantHash(chekcoutData.getPaymentHash());
                         messageHelper.dismissActiveProgress();
-                        uiHelper.startPayUPayment(param);
+                        uiHelper.startPayUPayment(param);*/
                     } else {
                         JSONObject options = new JSONObject();
                         options.put("name", classData.getClassTopic());
@@ -736,7 +730,7 @@ public class CheckoutViewModel extends ViewModel {
             });
         }
     }
-
+/*
     public PayuHashes generateHashFromSDK(PaymentParams mPaymentParams, String salt) {
         PayuHashes payuHashes = new PayuHashes();
         PostData postData = new PostData();
@@ -815,7 +809,7 @@ public class CheckoutViewModel extends ViewModel {
         checksum.setVar1(var1);
         checksum.setSalt(salt);
         return checksum.getHash();
-    }
+    }*/
 
     public void afterPayment(Bundle data) {
         navigator.navigateActivity(PaySuccessActivity.class, data);

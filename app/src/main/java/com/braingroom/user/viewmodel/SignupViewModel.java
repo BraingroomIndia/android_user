@@ -43,7 +43,6 @@ import com.braingroom.user.viewmodel.ViewModel;*/
 import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
 
-import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -57,7 +56,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
-import static com.rollbar.android.Rollbar.TAG;
 
 public class SignupViewModel extends ViewModel {
 
@@ -530,12 +528,11 @@ public class SignupViewModel extends ViewModel {
     }
 
 
-    @Contract("null -> false")
     private static boolean isValidEmail(String target) {
         return target != null && target.contains("@");
     }
 
-    @Contract("null -> false")
+
     private static boolean isValidPhone(String target) {
         return target != null && Patterns.PHONE.matcher(target).matches();
     }

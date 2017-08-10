@@ -129,7 +129,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static com.rollbar.android.Rollbar.TAG;
+import static android.content.ContentValues.TAG;
 
 public class DataflowService {
 
@@ -359,7 +359,6 @@ public class DataflowService {
 
                         for (ClassListResp.Snippet snippet : classListResp.getData()) {
                             dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                            Log.d(TAG, "apply: " + snippet.toString());
                         }
                         ClassListData dataWrapper = new ClassListData();
                         dataWrapper.setNextPage(classListResp.getNextPage());

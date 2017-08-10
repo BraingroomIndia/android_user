@@ -81,8 +81,7 @@
                 android:layout_gravity="top|right"
                 android:onClick="@{vm.onDissmis}"
                 android:padding="@dimen/_9sdp"
-                android:src="@drawable/close"
-                android:tint="@color/black" />
+                android:src="@drawable/ic_close_black_36dp" />
         </FrameLayout>
 
 

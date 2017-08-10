@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import com.braingroom.user.R;
 import com.braingroom.user.utils.SplashViewPager;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 
@@ -191,7 +192,7 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        FirebaseApp.initializeApp(this);
     }
 
     @Override

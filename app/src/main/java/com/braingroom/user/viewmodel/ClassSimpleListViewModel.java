@@ -22,7 +22,6 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
-import static com.rollbar.android.Rollbar.TAG;
 
 public class ClassSimpleListViewModel extends ViewModel {
 

@@ -41,6 +41,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.google.firebase.FirebaseApp;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 
@@ -91,6 +92,8 @@ public abstract class BaseActivity extends MvvmActivity {
     public NavigationView navigationView;
     Boolean pushNotification;
 
+    public final String TAG = this.getClass().getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,7 @@ public abstract class BaseActivity extends MvvmActivity {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
         } catch (Exception e){e.printStackTrace();}*/
 
+        FirebaseApp.initializeApp(this);
         pushNotification = getIntentBoolean("splash");
         String notificationId = getIntentString("notification_id");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import com.braingroom.user.R;
 import com.braingroom.user.viewmodel.NgoFormViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.payUMoney.sdk.PayUmoneySdkInitilizer;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -28,7 +27,8 @@ public class NgoFormActivity extends BaseActivity implements PaymentResultListen
     }
 
     public interface UiHelper {
-        void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);
+//        removed payumoney
+//        void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);
 
         void startRazorpayPayment(JSONObject options);
     }
@@ -43,10 +43,11 @@ public class NgoFormActivity extends BaseActivity implements PaymentResultListen
     @Override
     protected ViewModel createViewModel() {
         UiHelper uiHelper = new UiHelper() {
+/*           removed payumoney
             @Override
             public void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param) {
                 PayUmoneySdkInitilizer.startPaymentActivityForResult(NgoFormActivity.this, param);
-            }
+            }*/
 
             @Override
             public void startRazorpayPayment(JSONObject options) {

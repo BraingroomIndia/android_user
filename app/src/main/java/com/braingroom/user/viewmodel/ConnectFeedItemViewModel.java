@@ -95,7 +95,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     public final String postType;
 
-    public final boolean isActivityRequest, isVendor;
+    public final boolean isActivityRequest;
+    public final ObservableBoolean isVendor = new ObservableBoolean(false);
 
     public ObservableInt categoryImg = new ObservableInt();
 
@@ -108,9 +109,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
             ,@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
+
         if (data.getCategoryId()==null && data.getSegId()==null)
             isSegmentAvailable.set(false);
-
         if (data.getCategoryId()!=null)
         categoryImg.set(resArray[Integer.parseInt(data.getCategoryId())-1]);
         this.navigator = navigator;
@@ -135,7 +136,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
         this.postType = data.getPostType();
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
-        this.isVendor = "vendor_article".equalsIgnoreCase(postType);
+        this.isVendor.set("vendor_article".equalsIgnoreCase(postType));
         this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
         this.numAccepts = new ObservableInt(data.getNumAccepted());
         this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwner()));

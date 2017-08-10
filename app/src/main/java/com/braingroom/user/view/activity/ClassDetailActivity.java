@@ -3,6 +3,7 @@ package com.braingroom.user.view.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -37,7 +38,6 @@ import io.reactivex.functions.Consumer;
 import static com.braingroom.user.R.string.action_learners_forum;
 import static com.braingroom.user.R.string.action_tips_tricks;
 import static com.braingroom.user.R.string.action_tutors_talk;
-import static com.rollbar.android.Rollbar.TAG;
 
 public class ClassDetailActivity extends BaseActivity {
 

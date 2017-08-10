@@ -21,7 +21,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-import static com.rollbar.android.Rollbar.TAG;
 
 /**
  * Created by godara on 11/07/17.

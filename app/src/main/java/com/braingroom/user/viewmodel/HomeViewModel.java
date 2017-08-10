@@ -52,7 +52,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
-import static com.rollbar.android.Rollbar.TAG;
+import static android.content.ContentValues.TAG;
+
 
 public class HomeViewModel extends ViewModel {
 
@@ -129,17 +130,17 @@ public class HomeViewModel extends ViewModel {
                 navigator.navigateActivity(SignUpActivityCompetition.class, null);
             }
         };
-        communityVm = new IconTextItemViewModel(R.drawable.mas_icon, "Community Group", new MyConsumer<IconTextItemViewModel>() {
+        communityVm = new IconTextItemViewModel(R.drawable.ic_account_circle_black_24dp, "Community Group", new MyConsumer<IconTextItemViewModel>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                 navigator.navigateActivity(CommunityListActivity.class, null);
             }
         });
-        onlineClassVm = new IconTextItemViewModel(R.drawable.icon_card, "Online Class", new MyConsumer<IconTextItemViewModel>() {
+        onlineClassVm = new IconTextItemViewModel(R.drawable.ic_account_circle_black_24dp, "Online Class", new MyConsumer<IconTextItemViewModel>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                 FilterData filterData = new FilterData();
-                filterData.setClassType(FilterViewModel.CLASS_TYPE_WEBINAR + "");
+                filterData.setClassType(FilterViewModel.CLASS_TYPE_SEMINAR + "");
                 Bundle data = new Bundle();
                 data.putSerializable("filterData", filterData);
                 data.putString("origin", FilterViewModel.ORIGIN_HOME);

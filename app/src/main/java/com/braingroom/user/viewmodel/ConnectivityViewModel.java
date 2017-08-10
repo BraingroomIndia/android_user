@@ -6,13 +6,9 @@ import android.util.Log;
 
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class ConnectivityViewModel extends ViewModel {
 

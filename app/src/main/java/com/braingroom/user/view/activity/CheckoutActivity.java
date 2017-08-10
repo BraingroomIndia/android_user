@@ -14,8 +14,6 @@ import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
 import com.braingroom.user.viewmodel.CheckoutViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.payUMoney.sdk.PayUmoneySdkInitilizer;
-import com.payUMoney.sdk.SdkConstants;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -38,7 +36,8 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
     }
 
     public interface UiHelper {
-        void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);
+//        Removed payumoney
+        //void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param);
 
         void startRazorpayPayment(JSONObject options);
     }
@@ -75,14 +74,15 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 //                startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
 //            }
 
-            @Override
+           /* Removed payumoney
+           @Override
             public void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param) {
-           /*    try {
+           *//*    try {
                     ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
-                } catch (Exception e){e.printStackTrace();}*/
+                } catch (Exception e){e.printStackTrace();}*//*
                 PayUmoneySdkInitilizer.startPaymentActivityForResult(CheckoutActivity.this, param);
             }
-
+*/
             @Override
             public void startRazorpayPayment(JSONObject options) {
             /*    try {
@@ -123,7 +123,8 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
         } catch (Exception e){e.printStackTrace();}*/
 
-        if (requestCode ==
+//removed payumoney
+    /*    if (requestCode ==
                 PayUmoneySdkInitilizer.PAYU_SDK_PAYMENT_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 String paymentId =
@@ -137,7 +138,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
             } else if (resultCode == PayUmoneySdkInitilizer.RESULT_BACK) {
 //                getMessageHelper().show("paymemt failure");
             }
-        }
+        }*/
 //        if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
 //            if (classData != null) {
 //                String response = classData.getStringExtra("payu_response");

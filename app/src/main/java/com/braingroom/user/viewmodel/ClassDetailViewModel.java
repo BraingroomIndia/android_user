@@ -51,7 +51,6 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.observables.ConnectableObservable;
 import lombok.Setter;
 
-import static com.rollbar.android.Rollbar.TAG;
 
 public class ClassDetailViewModel extends ViewModel {
 

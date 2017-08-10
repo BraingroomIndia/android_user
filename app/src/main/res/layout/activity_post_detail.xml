@@ -184,7 +184,7 @@
                                 android:paddingBottom="@dimen/_5sdp"
                                 android:layout_margin="@dimen/margin_med"
                                 android:onClick="@{(v) -> vm.showMenuPopup(v)}"
-                                android:src="@drawable/vert_more_dots"
+                                android:src="@drawable/ic_more_vert_black_24dp"
                                 android:tint="@color/colorTextGray" />
                         </RelativeLayout>
 

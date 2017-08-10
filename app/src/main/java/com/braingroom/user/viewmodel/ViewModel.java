@@ -37,6 +37,8 @@ public class ViewModel {
     @Inject
     public DataflowService apiService;
 
+    public final String TAG;
+
 
     @Inject
     Gson gson;
@@ -66,6 +68,7 @@ public class ViewModel {
     public ViewModel() {
         UserApplication.getInstance().getMAppComponent().inject(this);
         setLoggedIn();
+        TAG = this.getClass().getSimpleName();
         if (pref.getBoolean(Constants.NEW_FCM, false)) {
             apiService.registerUserDevice().subscribe(new Consumer<BaseResp>() {
                 @Override

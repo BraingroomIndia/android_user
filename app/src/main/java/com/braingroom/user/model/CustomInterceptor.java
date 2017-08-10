@@ -25,7 +25,8 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 
-import static com.rollbar.android.Rollbar.TAG;
+import static android.content.ContentValues.TAG;
+
 
 public class CustomInterceptor implements Interceptor {
 
