@@ -2,7 +2,7 @@ package com.braingroom.user.view;
 
 import android.databinding.ObservableField;
 
-import com.braingroom.user.viewmodel.fragment.ConnectFeedViewModel;
+
 
 import java.util.List;
 

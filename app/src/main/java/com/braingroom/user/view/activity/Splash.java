@@ -1,6 +1,7 @@
 package com.braingroom.user.view.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.braingroom.user.R;
+import com.braingroom.user.UserApplication;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.SplashViewPager;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.google.firebase.FirebaseApp;
@@ -22,6 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -45,13 +51,16 @@ public class Splash extends AppCompatActivity {
     private static final Integer[] XMEN = {R.drawable.find_background, R.drawable.connect_background, R.drawable.catalouge_background};
     private ArrayList<Integer> imageArray = new ArrayList<Integer>();
     private ArrayList<String> textArray = new ArrayList<>();
-    final int SPLASH_DISPLAY_LENGTH = 2000;
+    final int SPLASH_DISPLAY_LENGTH = 3000;
     final int SPLASH_MENU_LENGTH = 9000;
     public boolean isClicked = false;
     private boolean isBackground = false;
 
     Handler handler;
     Runnable Update;
+    @Inject
+    @Named("defaultPref")
+    public SharedPreferences pref;
 
 
     /**
@@ -64,9 +73,9 @@ public class Splash extends AppCompatActivity {
      */
     @Override
     public void onCreate(Bundle icicle) {
+        UserApplication.getInstance().getMAppComponent().inject(this);
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash);
-
         init();
         final RelativeLayout splashScreen = (RelativeLayout) findViewById(R.id.splash);
         splashScreen.setVisibility(View.INVISIBLE);
@@ -127,7 +136,6 @@ public class Splash extends AppCompatActivity {
                                 isClicked = true;
                                 if (!TextUtils.isEmpty(referralCode))
                                     navigateActivity(HomeActivity.class, bundleSend);
-                                finish();
                             }
                         }
                     }
@@ -163,20 +171,10 @@ public class Splash extends AppCompatActivity {
                 if (!isBackground) {
                     currentPage = mPager.getCurrentItem();
                     ++currentPage;
-                    mPager.setCurrentItem(currentPage, true);
                     if (currentPage > 2)
                         currentPage = 0;
-                    if (mPager.getCurrentItem() == 2) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!isClicked && !isBackground) {
-                                    navigateActivity(HomeActivity.class, bundleSend);
-                                    finish();
-                                }
-                            }
-                        }, SPLASH_MENU_LENGTH / 3);
-                    }
+                    mPager.setCurrentItem(currentPage, true);
+
                 }
             }
         };
@@ -211,19 +209,19 @@ public class Splash extends AppCompatActivity {
     public void goHome(View view) {
         isClicked = true;
         navigateActivity(HomeActivity.class, bundleSend);
-        finish();
     }
 
     public void goConnect(View view) {
         isClicked = true;
-        navigateActivity(ConnectHomeActivity.class, bundleSend);
-        finish();
+        if (pref.getBoolean(Constants.HIDE_CONNECT_SECTIONS, false))
+            navigateActivity(ConnectHomeActivity.class, bundleSend);
+        else
+            navigateActivity(ConnectSectionListActivity.class, bundleSend);
     }
 
     public void goCatalogue(View view) {
         isClicked = true;
         navigateActivity(CatalogueHomeActivity.class, bundleSend);
-        finish();
     }
 
 
@@ -232,7 +230,5 @@ public class Splash extends AppCompatActivity {
         Intent intent = new Intent(Splash.this, destination);
         intent.putExtra("classData", bundle);
         startActivity(intent);
-        handler.removeCallbacks(Update);
-        finish();
     }
 }

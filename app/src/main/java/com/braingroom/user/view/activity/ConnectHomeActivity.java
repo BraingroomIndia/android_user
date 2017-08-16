@@ -13,21 +13,15 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -38,7 +32,6 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.BaseFragment;
 import com.braingroom.user.view.fragment.CommentFragment;
-import com.braingroom.user.view.fragment.ConnectFeedFragment;
 import com.braingroom.user.view.fragment.ConnectFilterFragment;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.view.fragment.DynamicSearchSelectListFragment;
@@ -106,9 +99,6 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     @IdRes
     int selectedBottomNav = R.id.action_tips_tricks;
-    // ViewPager pager;
-    // public ConnectPagerAdapter pagerAdapter;
-    public ConnectFilterData learnersFilter, tutorsFilter, connectFilterData;
 
     @Getter
     ConnectFilterViewModel connectFilterViewModel;
@@ -127,17 +117,6 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         super.onCreate(savedInstanceState);
 
         vm = (ConnectHomeViewModel) vm;
-
-        connectFilterData = (ConnectFilterData) getIntentSerializable("connectFilterData");
-
-        if (connectFilterData != null) {
-            defMajorCateg = connectFilterData.getMajorCateg() != null ? connectFilterData.getMajorCateg() : "learners_forum";
-            defMinorCateg = connectFilterData.getMinorCateg() != null ? connectFilterData.getMinorCateg() : "";
-        } else {
-            defMajorCateg = "learners_forum";
-            defMinorCateg = "";
-        }
-
         greenList = new ColorStateList(states, new int[]{
                 ContextCompat.getColor(this, R.color.bottomNavSelectedGreen),
                 ContextCompat.getColor(this, R.color.bottomNavUnSelected)
@@ -163,7 +142,6 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
                 popBackstack(tag);
             }
         }, this);
-        initFilters();
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mBottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -184,47 +162,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                selectedBottomNav = itemId;
-
-                if (itemId == R.id.action_tips_tricks) {
-                    ConnectFilterData connectFilterData = new ConnectFilterData();
-                    connectFilterData.setMajorCateg(LEARNER_FORUM);
-                    connectFilterData.setMinorCateg(TIPS_TRICKS);
-                    if (!connectFilterData.equals(((ConnectHomeViewModel) vm).getFilterData()))
-                        ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-                }
-                if (itemId == R.id.action_buy_sell) {
-                    ConnectFilterData connectFilterData = new ConnectFilterData();
-                    connectFilterData.setMajorCateg(LEARNER_FORUM);
-                    connectFilterData.setMinorCateg(BUY_SELL);
-                    if (!connectFilterData.equals(((ConnectHomeViewModel) vm).getFilterData()))
-                        ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-                }
-                if (itemId == R.id.action_find_partners) {
-                    ConnectFilterData connectFilterData = new ConnectFilterData();
-                    connectFilterData.setMajorCateg(LEARNER_FORUM);
-                    connectFilterData.setMinorCateg(FIND_PARTNERS);
-                    if (!connectFilterData.equals(((ConnectHomeViewModel) vm).getFilterData()))
-                        ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-                }
-
-                if (itemId == R.id.action_discuss_n_decide) {
-                    ConnectFilterData connectFilterData = new ConnectFilterData();
-                    connectFilterData.setMajorCateg(TUTORS_TALK);
-                    connectFilterData.setMinorCateg(DISCUSS_DECIDE);
-                    if (!connectFilterData.equals(((ConnectHomeViewModel) vm).getFilterData()))
-                        ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-                }
-                if (itemId == R.id.action_tutors_article) {
-                    fab.setVisibility(View.INVISIBLE);
-                    ConnectFilterData connectFilterData = new ConnectFilterData();
-                    connectFilterData.setMajorCateg(TUTORS_TALK);
-                    connectFilterData.setMinorCateg(TUTORS_ARTICLE);
-                    if (!connectFilterData.equals(((ConnectHomeViewModel) vm).getFilterData()))
-                        ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-                } else {
-                    fab.setVisibility(View.VISIBLE);
-                }
+                updateBottomNavigation(itemId);
                 return true;
             }
         });
@@ -267,8 +205,6 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         uiHelper = new UiHelper() {
             @Override
             public void updateLocationFilter() {
-                setLocationData();
-                updateFilter();
             }
 
 
@@ -407,7 +343,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         return true;
     }
 
-    public class ConnectPagerAdapter extends FragmentStatePagerAdapter {
+    /*public class ConnectPagerAdapter extends FragmentStatePagerAdapter {
         SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
         public ConnectPagerAdapter(FragmentManager fm) {
@@ -450,30 +386,12 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         }
 
 
-    }
+    }*/
 
-    public void updateFilter() {
+   /* public void updateFilter() {
         //pagerAdapter.getFragmentAt(pager.getCurrentItem()).getViewModel().reset(pager.getCurrentItem() == 0 ? learnersFilter : tutorsFilter);
-    }
+    }*/
 
-    private void initFilters() {
-        if (connectFilterData == null) {
-            learnersFilter = new ConnectFilterData();
-            learnersFilter.setMajorCateg("learners_forum");
-        } else learnersFilter = connectFilterData;
-        tutorsFilter = new ConnectFilterData();
-        tutorsFilter.setMajorCateg("tutors_talk");
-        setLocationData();
-    }
-
-    public void setLocationData() {
-        learnersFilter.setCountryId(pref.getInt("connect_country_id", 0) == 0 ? "" : pref.getInt("connect_country_id", 0) + "");
-        learnersFilter.setStateId(pref.getInt("connect_state_id", 0) == 0 ? "" : pref.getInt("connect_state_id", 0) + "");
-        learnersFilter.setCityId(pref.getInt("connect_city_id", 0) == 0 ? "" : pref.getInt("connect_city_id", 0) + "");
-        tutorsFilter.setCountryId(pref.getInt("connect_country_id", 0) == 0 ? "" : pref.getInt("connect_country_id", 0) + "");
-        tutorsFilter.setStateId(pref.getInt("connect_state_id", 0) == 0 ? "" : pref.getInt("connect_state_id", 0) + "");
-        tutorsFilter.setCityId(pref.getInt("connect_city_id", 0) == 0 ? "" : pref.getInt("connect_city_id", 0) + "");
-    }
 
     @Override
     public void openCommentsFragment(String postId) {
@@ -527,46 +445,32 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     @Override
     public void retry() {
-        //   pagerAdapter.getFragmentAt(0).getViewModel().retry();
-//        pagerAdapter.getFragmentAt(1).getViewModel().retry();
+        vm.retry();
     }
 
 
     @Override
     public void setSearchQuery(String searchQuery) {
-        //  if (pager.getCurrentItem() == 0)
-        learnersFilter.setSearchQuery(searchQuery);
-        //  else
-        tutorsFilter.setSearchQuery(searchQuery);
-        //   updateFilter();
+
 
     }
 
     @Override
     public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId,
                               String instituteId, String authorId, List<String> location) {
-       /* if (pager.getCurrentItem() == 0) {
-            learnersFilter.setSearchQuery(keyword);
-            learnersFilter.setCategId(categoryId);
-            learnersFilter.setGroupId(allGroupId);
-            learnersFilter.setCountryId(location.get(0));
-            learnersFilter.setStateId(location.get(1));
-            learnersFilter.setCityId(location.get(2));
-            learnersFilter.setLocalityId(location.get(3));
-            learnersFilter.setInstituteId(instituteId);
-            learnersFilter.setAuthorId(authorId);
-        } else {
-            tutorsFilter.setSearchQuery(keyword);
-            tutorsFilter.setCategId(categoryId);
-            tutorsFilter.setSegId(segmentId);
-            tutorsFilter.setCountryId(location.get(0));
-            tutorsFilter.setStateId(location.get(1));
-            tutorsFilter.setCityId(location.get(2));
-            tutorsFilter.setLocalityId(location.get(3));
-            tutorsFilter.setInstituteId(instituteId);
-            tutorsFilter.setAuthorId(authorId);
-        }*/
-        updateFilter();
+
+        ((ConnectHomeViewModel) vm).getFilterData().setSearchQuery(keyword);
+        ((ConnectHomeViewModel) vm).getFilterData().setCategId(categoryId);
+        ((ConnectHomeViewModel) vm).getFilterData().setGroupId(allGroupId);
+        ((ConnectHomeViewModel) vm).getFilterData().setSegId(segmentId);
+        ((ConnectHomeViewModel) vm).getFilterData().setCountryId(location.get(0));
+        ((ConnectHomeViewModel) vm).getFilterData().setStateId(location.get(1));
+        ((ConnectHomeViewModel) vm).getFilterData().setCityId(location.get(2));
+        ((ConnectHomeViewModel) vm).getFilterData().setLocalityId(location.get(3));
+        ((ConnectHomeViewModel) vm).getFilterData().setInstituteId(instituteId);
+        ((ConnectHomeViewModel) vm).getFilterData().setAuthorId(authorId);
+        ((ConnectHomeViewModel) vm).rest();
+       /* updateFilter();*/
     }
 
     @Override
@@ -686,7 +590,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     @Override
     protected void onResume() {
         super.onResume();
-
+        int id = mBottomNav.getSelectedItemId();
+        updateBottomNavigation(id);
         // navigationView.getMenu().clear();
     }
 
@@ -701,6 +606,48 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 //        if (vm.getLoggedIn()) navigationView.inflateMenu(R.menu.activity_home_drawer_loggedin);
 //        else navigationView.inflateMenu(R.menu.activity_home_drawer);
 
+    }
+
+    private void updateBottomNavigation(int itemId) {
+        if (itemId == R.id.action_tips_tricks) {
+            ConnectFilterData connectFilterData = new ConnectFilterData();
+            connectFilterData.setMajorCateg(LEARNER_FORUM);
+            connectFilterData.setMinorCateg(TIPS_TRICKS);
+            if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
+                ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
+        }
+        if (itemId == R.id.action_buy_sell) {
+            ConnectFilterData connectFilterData = new ConnectFilterData();
+            connectFilterData.setMajorCateg(LEARNER_FORUM);
+            connectFilterData.setMinorCateg(BUY_SELL);
+            if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
+                ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
+        }
+        if (itemId == R.id.action_find_partners) {
+            ConnectFilterData connectFilterData = new ConnectFilterData();
+            connectFilterData.setMajorCateg(LEARNER_FORUM);
+            connectFilterData.setMinorCateg(FIND_PARTNERS);
+            if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
+                ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
+        }
+
+        if (itemId == R.id.action_discuss_n_decide) {
+            ConnectFilterData connectFilterData = new ConnectFilterData();
+            connectFilterData.setMajorCateg(TUTORS_TALK);
+            connectFilterData.setMinorCateg(DISCUSS_DECIDE);
+            if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
+                ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
+        }
+        if (itemId == R.id.action_tutors_article) {
+            fab.setVisibility(View.INVISIBLE);
+            ConnectFilterData connectFilterData = new ConnectFilterData();
+            connectFilterData.setMajorCateg(TUTORS_TALK);
+            connectFilterData.setMinorCateg(TUTORS_ARTICLE);
+            if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
+                ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
     }
 
 

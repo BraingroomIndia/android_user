@@ -13,8 +13,8 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.braingroom.user.R;
+import com.braingroom.user.view.fragment.BaseFragment;
 import com.braingroom.user.view.fragment.ClassSimpleListFragment;
-import com.braingroom.user.view.fragment.ConnectFeedFragment;
 import com.braingroom.user.view.fragment.ThirdPartyInfoFragment;
 import com.braingroom.user.viewmodel.ThirdPartyViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -128,8 +128,8 @@ public class ThirdPartyViewActivity extends BaseActivity {
             super.destroyItem(container, position, object);
         }
 
-        public ConnectFeedFragment getFragmentAt(int position) {
-            return (ConnectFeedFragment) registeredFragments.get(position);
+        public BaseFragment getFragmentAt(int position) {
+            return (BaseFragment) registeredFragments.get(position);
         }
 
 

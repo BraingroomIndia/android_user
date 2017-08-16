@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
@@ -48,7 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public void initSource(@NonNull Observable<List<ViewModel>> viewModels) {
-        source = viewModels
+        source = viewModels.observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<List<ViewModel>>() {
                     @Override
                     public void accept(List<ViewModel> viewModels) throws Exception {
@@ -102,7 +103,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 throwable.printStackTrace();
             }
-        });;
+        });
+        ;
     }
 
 

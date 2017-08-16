@@ -87,7 +87,7 @@ public class OTPViewModel extends ViewModel {
                                                     editor.putBoolean(Constants.LOGGED_IN, true);
                                                     editor.putString(Constants.NAME, data.getName());
                                                     editor.putString(Constants.EMAIL, data.getEmailId());
-                                                    editor.putString(Constants.PROFILE_PIC,data.getProfilePic());
+                                                    editor.putString(Constants.PROFILE_PIC, data.getProfilePic());
                                                     editor.putString(Constants.BG_ID, data.getId());
                                                     editor.putString(Constants.UUID, data.getUuid());
                                                     editor.commit();
@@ -98,8 +98,10 @@ public class OTPViewModel extends ViewModel {
 
                                             }
                                         });
-                            else
+                            else {
+                                editor.putBoolean(Constants.LOGGED_IN, true);
                                 navigator.finishActivity(new Intent());
+                            }
                         else {
                             logOut();
                             messageHelper.show(resp.getResMsg());

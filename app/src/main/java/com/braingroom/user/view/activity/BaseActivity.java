@@ -184,7 +184,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
                 @Override
                 public void openStandaloneYoutube(String videoId) {
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(BaseActivity.this, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId);
+                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(BaseActivity.this, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId, 100, true, true);
                     startActivity(intent);
                 }
 
@@ -336,7 +336,6 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
 
-
                 @Override
                 public void dismissActiveProgress() {
                     if (progressDialog != null && progressDialog.isShowing())
@@ -359,17 +358,17 @@ public abstract class BaseActivity extends MvvmActivity {
     public void onBackPressed() {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
-        try {
+        /*try {
 
-            if (pushNotification && !this.getClass().getSimpleName().equals(HomeActivity.class.getSimpleName())) {
-                getNavigator().navigateActivity(HomeActivity.class,null);
+            if (pushNotification && !this.getClass().getSimpleName().equals(Splash.class.getSimpleName())) {
+                getNavigator().navigateActivity(Splash.class, null);
                 finish();
                 return;
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        }
+        }*/
 
         if (count == 0) {
             super.onBackPressed();

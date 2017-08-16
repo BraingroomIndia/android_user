@@ -23,18 +23,20 @@ import lombok.Setter;
  */
 
 public class FirsLoginDialogViewModel extends CustomDialogViewModel {
-    public final DataItemViewModel mobileVm, referralVm;
+    public final DataItemViewModel emailVm, mobileVm, referralVm;
     public final Action onContinue;
     public final String userId;
+    public String emailId;
     @Setter
     LoginActivity.UIHandler uiHandler;
 
     public FirsLoginDialogViewModel(@NonNull final LoginResp loginResp, @NonNull final MessageHelper messageHelper,
                                     @NonNull final Navigator navigator, @Nullable final String referralCode) {
+        emailVm = new DataItemViewModel("");
         mobileVm = new DataItemViewModel("");
-
         referralVm = new DataItemViewModel("");
         this.userId = loginResp.getData().get(0).getId();
+        this.emailId = loginResp.getData().get(0).getEmailId();
 
         if (loginResp.getData().get(0).getReferralCode().equals("1") || !TextUtils.isEmpty(referralCode))
             referralVm.s_1.set(null);
@@ -42,16 +44,24 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
         if (loginResp.getData().get(0).getMobile() != null && !loginResp.getData().get(0).getMobile().equals(""))
             mobileVm.s_1.set(null);
 
+        if (!TextUtils.isEmpty(emailId))
+            emailVm.s_1.set("");
 
         onContinue = new Action() {
             @Override
             public void run() throws Exception {
-                if (!isValidPhoneNo(mobileVm.s_1.get())) {
+                if (TextUtils.isEmpty(emailId)) {
+                    emailId = emailVm.s_1.get();
+                    if (!isValidEmail(emailId)) {
+                        messageHelper.show("Enter a vaild email Id");
+                    }
+                }
+                if (TextUtils.isEmpty(loginResp.getData().get(0).getMobile()) && !isValidPhoneNo(mobileVm.s_1.get())) {
                     messageHelper.show("Enter a valid mobile number");
                     return;
                 }
 
-                apiService.firstSocialLogin(userId, mobileVm.s_1.get(), referralVm.s_1.get() != null ? referralVm.s_1.get() : referralCode).
+                apiService.firstSocialLogin(userId, emailId, mobileVm.s_1.get(), referralVm.s_1.get() != null ? referralVm.s_1.get() : referralCode).
                         subscribe(new Consumer<FirstSocialLoginResp>() {
                             @Override
                             public void accept(@io.reactivex.annotations.NonNull FirstSocialLoginResp resp) throws Exception {
@@ -98,6 +108,10 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
 
             }
         };
+    }
+
+    private static boolean isValidEmail(String target) {
+        return target != null && target.contains("@");
     }
 
 

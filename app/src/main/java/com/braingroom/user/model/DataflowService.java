@@ -185,8 +185,8 @@ public class DataflowService {
 
     }
 
-    public Observable<FirstSocialLoginResp> firstSocialLogin(String userId, String mobile, String referralCode) {
-        FirstSocialLoginReq req = new FirstSocialLoginReq(new FirstSocialLoginReq.Snippet(userId, mobile, referralCode));
+    public Observable<FirstSocialLoginResp> firstSocialLogin(String userId, String emailId, String mobile, String referralCode) {
+        FirstSocialLoginReq req = new FirstSocialLoginReq(new FirstSocialLoginReq.Snippet(userId, emailId, mobile, referralCode));
         return api.firstSocialLogin(req).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
     }
@@ -219,8 +219,8 @@ public class DataflowService {
                 });
     }
 
-    public Observable<ReferralCodeResp> checkReferal(String code){
-     return  api.checkReferal(new ReferralCodeReq(new ReferralCodeReq.Snippet(code))).subscribeOn(Schedulers.io()).
+    public Observable<ReferralCodeResp> checkReferal(String code) {
+        return api.checkReferal(new ReferralCodeReq(new ReferralCodeReq.Snippet(code))).subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, ReferralCodeResp>() {
             @Override
             public ReferralCodeResp apply(@NonNull Throwable throwable) throws Exception {
@@ -881,7 +881,7 @@ public class DataflowService {
     }
 
     public Observable<BaseResp> changeMessageThreadStatus(String senderId) {
-        return api.changeMessageThreadStatus(new ChatMessageReq(new ChatMessageReq.Snippet( pref.getString(Constants.BG_ID, ""),senderId))).subscribeOn(Schedulers.io())
+        return api.changeMessageThreadStatus(new ChatMessageReq(new ChatMessageReq.Snippet(pref.getString(Constants.BG_ID, ""), senderId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

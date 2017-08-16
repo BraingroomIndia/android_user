@@ -82,7 +82,7 @@ public class FilterViewModel extends ViewModel {
         if (origin.equals(ClassListViewModel1.ORIGIN_CATALOG))
             isCatalogue.set(true);
         isCommunityVisible = !(origin.equals(ORIGIN_COMMUNITY));
-        isCategoryVisible= !(origin.equals(ORIGIN_CATEGORY));
+        isCategoryVisible = !(origin.equals(ORIGIN_CATEGORY));
 
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
@@ -308,7 +308,7 @@ public class FilterViewModel extends ViewModel {
                     HashMap<String, Pair<String, String>> resMap = new HashMap<>();
                     for (CommonIdResp.Snippet snippet : resp.getData()) {
                         if (snippet.getId().equals("3659"))
-                        resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                            resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
                     }
                     return resMap;
                 }
@@ -349,10 +349,12 @@ public class FilterViewModel extends ViewModel {
         bundle.putSerializable("filterData", filterData);
         if (origin.equals(ORIGIN_HOME)) {
             navigator.navigateActivity(ClassListActivity.class, bundle);
+            navigator.finishActivity();
             return;
         }
         resultIntent.putExtras(bundle);
         navigator.finishActivity(resultIntent);
+        navigator.finishActivity();
     }
 
     @Override

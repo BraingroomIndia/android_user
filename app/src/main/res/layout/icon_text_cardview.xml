@@ -14,21 +14,22 @@
     <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_med"
-        android:background="@color/colorBackgroundGray"
-        app:cardPreventCornerOverlap="true"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_small"
+        android:onClick="@{() -> vm.onClicked.accept(vm)}"
         app:cardElevation="@dimen/_1sdp"
+        app:cardPreventCornerOverlap="true"
         card_view:cardCornerRadius="4dp">
 
         <LinearLayout
             android:layout_width="@dimen/_140sdp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> vm.onClicked.accept(vm)}"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_90sdp"
+                android:layout_height="@dimen/_140sdp"
                 android:contentDescription="@{vm.title}"
                 app:imageUrl="@{vm.image}"
                 app:placeHolder="@{vm.placeHolder}" />
@@ -36,10 +37,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingRight="@dimen/_10sdp"
+                android:layout_gravity="center"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:lines="2"
+                android:maxLines="2"
+                android:padding="@dimen/_5sdp"
                 android:text="@{vm.title}"
                 android:textColor="@color/colorTextDark"
                 android:textSize="@dimen/text_size_medium"

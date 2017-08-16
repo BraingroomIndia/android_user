@@ -289,7 +289,7 @@ public class ConnectHomeViewModel extends ViewModel {
     @Override
     public void retry() {
         connectivityViewmodel.isConnected.set(true);
-        uiHelper.retry();
+        callAgain.set(callAgain.get() + 1);
     }
 
     private void notificationResume() {
@@ -317,7 +317,7 @@ public class ConnectHomeViewModel extends ViewModel {
         rest();
     }
 
-    private void rest() {
+    public void rest() {
         nonReactiveItems = new ArrayList<>();
         nextPage = 0;
         currentPage = -1;

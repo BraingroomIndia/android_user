@@ -11,7 +11,7 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import com.braingroom.user.R;
-import com.braingroom.user.view.fragment.ConnectFeedFragment;
+import com.braingroom.user.view.fragment.BaseFragment;
 import com.braingroom.user.view.fragment.CouponHomeFragment;
 import com.braingroom.user.view.fragment.GiftcardHomeFragment;
 import com.braingroom.user.viewmodel.GiftCouponViewModel;
@@ -89,8 +89,8 @@ public class GiftcardCouponActivity extends BaseActivity {
             super.destroyItem(container, position, object);
         }
 
-        public ConnectFeedFragment getFragmentAt(int position) {
-            return (ConnectFeedFragment) registeredFragments.get(position);
+        public BaseFragment getFragmentAt(int position) {
+            return (BaseFragment) registeredFragments.get(position);
         }
 
 

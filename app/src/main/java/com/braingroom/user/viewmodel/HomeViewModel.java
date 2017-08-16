@@ -52,8 +52,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
-import static android.content.ContentValues.TAG;
-
 
 public class HomeViewModel extends ViewModel {
 
@@ -63,8 +61,9 @@ public class HomeViewModel extends ViewModel {
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final GridViewModel categoryVm;
-    public final IconTextItemViewModel communityVm;
-    public final IconTextItemViewModel onlineClassVm;
+    public final IconTextItemViewModel community;
+    public final IconTextItemViewModel onlineClass;
+    public final GridViewModel gridViewModel;
     public final ShowcaseClassListViewModel featuredVm, trendingVm, indigenousVm;
     public final Observable<List<ViewModel>> categories;
 
@@ -75,13 +74,15 @@ public class HomeViewModel extends ViewModel {
 
     private Disposable notificationDisposable;
 
+    private String temp1 = "https://www.braingroom.com/img/category_image/201707111154200856274001499774060.jpg";
+    private String temp2 = "https://www.braingroom.com/img/category_image/201707111155160426418001499774116.jpg";
+
     public ObservableBoolean loggedIn;
 
     public GoogleMap mGoogleMap; //Edited by Vikas Godara
     private Map<String, Integer> pinColorMap = new HashMap<>();
     private DialogHelper dialogHelper;
     Navigator navigator;
-
     public Observable observable;
 
 /*
@@ -130,13 +131,13 @@ public class HomeViewModel extends ViewModel {
                 navigator.navigateActivity(SignUpActivityCompetition.class, null);
             }
         };
-        communityVm = new IconTextItemViewModel(R.drawable.ic_account_circle_black_24dp, "Community Group", new MyConsumer<IconTextItemViewModel>() {
+        community = new IconTextItemViewModel(temp1, "Community Group", new MyConsumer<IconTextItemViewModel>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                 navigator.navigateActivity(CommunityListActivity.class, null);
             }
         });
-        onlineClassVm = new IconTextItemViewModel(R.drawable.ic_account_circle_black_24dp, "Online Class", new MyConsumer<IconTextItemViewModel>() {
+        onlineClass = new IconTextItemViewModel(temp2, "Online Class", new MyConsumer<IconTextItemViewModel>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                 FilterData filterData = new FilterData();
@@ -147,6 +148,12 @@ public class HomeViewModel extends ViewModel {
                 navigator.navigateActivity(ClassListActivity.class, data);
             }
         });
+
+        List<ViewModel> temp = new ArrayList<>();
+        temp.add(community);
+        temp.add(onlineClass);
+        gridViewModel = new GridViewModel(Observable.just(temp),"");
+
         categories = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {

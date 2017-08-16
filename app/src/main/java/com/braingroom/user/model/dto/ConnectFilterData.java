@@ -23,6 +23,21 @@ public class ConnectFilterData implements Serializable {
     public String instituteId;
     public String authorId;
 
+    public ConnectFilterData() {
+        this.categId = "";
+        this.segId = "";
+        this.groupId = "";
+        this.isMyGroup = 0;
+        this.majorCateg = "";
+        this.minorCateg = "";
+        this.countryId = "";
+        this.stateId = "";
+        this.cityId = "";
+        this.localityId = "";
+        this.searchQuery = "";
+        this.instituteId = "";
+        this.authorId = "";
+    }
 
     public void setFilterData(ConnectFilterData data) {
         setCategId(data.getCategId());
@@ -37,7 +52,6 @@ public class ConnectFilterData implements Serializable {
         setLocalityId(data.getLocalityId());
         setSearchQuery(data.getSearchQuery());
     }
-
 
 
     public ConnectFeedReq getFilterReq() {
@@ -56,6 +70,17 @@ public class ConnectFilterData implements Serializable {
         snippet.setInstituteId(instituteId);
         snippet.setAuthorId(authorId);
         return new ConnectFeedReq(snippet);
+    }
+
+    public boolean isEqual(ConnectFilterData filterData) {
+        try {
+            return this.majorCateg.equals(filterData.majorCateg) &&
+                    this.minorCateg.equals(filterData.minorCateg);
+
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     public void setInstituteId(String instituteId) {

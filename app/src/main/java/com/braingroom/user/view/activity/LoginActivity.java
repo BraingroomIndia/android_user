@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.fragment.OTPReqFragment;
 import com.braingroom.user.viewmodel.FirsLoginDialogViewModel;
 import com.braingroom.user.viewmodel.LoginViewmodel;
@@ -192,10 +193,10 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected ViewModel createViewModel() {
         referralCode = getIntentString("referralCode");
-        Log.d("LoginActivity", "referralCode " +referralCode);
+        Log.d("LoginActivity", "referralCode " + referralCode);
 
 
-        return new LoginViewmodel(getMessageHelper(), getNavigator(),referralCode);
+        return new LoginViewmodel(getMessageHelper(), getNavigator(), referralCode);
     }
 
     @Override
@@ -214,7 +215,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         FirsLoginDialogViewModel firsLoginDialogViewModel =
-                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(),referralCode);
+                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), referralCode);
         firsLoginDialogViewModel.setUiHandler(uiHandler);
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login, firsLoginDialogViewModel
                 , false);
@@ -275,6 +276,13 @@ public class LoginActivity extends BaseActivity implements
         return true;
     }
 
+
+    @Override
+    protected void onStop() {
+        if (!pref.getBoolean(Constants.LOGGED_IN, false))
+            vm.logOut();
+        super.onStop();
+    }
 
     @Override
     public void onBackPressed() {

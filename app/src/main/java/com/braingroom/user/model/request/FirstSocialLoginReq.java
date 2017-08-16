@@ -19,6 +19,9 @@ public class FirstSocialLoginReq {
         @SerializedName("user_id")
         String userId;
 
+        @SerializedName("email")
+        String emailId;
+
         @SerializedName("mobile")
         String mobile;
 

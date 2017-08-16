@@ -108,9 +108,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- note that the leading "/" is required for pathPrefix -->
                 <!-- Accepts URIs that begin with "example://gizmos” -->
-<!--                <data
-                    android:host="www.braingroom.com"
-                    android:scheme="https" />-->
+                <!--                <data
+                                    android:host="www.braingroom.com"
+                                    android:scheme="https" />-->
                 <data
                     android:host="www.braingroom.com"
                     android:scheme="http" />
@@ -324,6 +324,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activity.HomeActivity" />
+        </activity>
+        <activity android:name=".view.activity.ConnectSectionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.Splash" />
         </activity>
 
 

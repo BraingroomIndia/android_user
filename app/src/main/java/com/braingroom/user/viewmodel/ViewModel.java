@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.IntFunction;
 
 public class ViewModel {
 
@@ -73,8 +74,8 @@ public class ViewModel {
             apiService.registerUserDevice().subscribe(new Consumer<BaseResp>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                    if (resp.getResCode()!=null)
-                        editor.putBoolean(Constants.NEW_FCM,false).commit();
+                    if (resp.getResCode() != null)
+                        editor.putBoolean(Constants.NEW_FCM, false).commit();
 
                 }
             });
@@ -133,10 +134,12 @@ public class ViewModel {
         }
         return false;
     }
-    public void setLoggedIn(){
-        UserApplication.getInstance().loggedIn=pref.getBoolean(Constants.LOGGED_IN, false);
+
+    public void setLoggedIn() {
+        UserApplication.getInstance().loggedIn = pref.getBoolean(Constants.LOGGED_IN, false);
     }
-    public boolean getLoggedIn(){
-       return pref.getBoolean(Constants.LOGGED_IN, false);
+
+    public boolean getLoggedIn() {
+        return pref.getBoolean(Constants.LOGGED_IN, false);
     }
 }
