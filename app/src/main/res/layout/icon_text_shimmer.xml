@@ -28,6 +28,7 @@
 
             <TextView
                 android:layout_width="match_parent"
+                android:background="@drawable/solid_shimmer_light_rounded_corner"
                 android:layout_height="@dimen/_140sdp" />
 
             <TextView
