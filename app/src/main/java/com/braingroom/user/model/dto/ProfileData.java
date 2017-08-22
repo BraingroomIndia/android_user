@@ -71,14 +71,14 @@ public class ProfileData {
     @SerializedName("uuid")
     public String uuid;
 
-    @SerializedName("follower_count")
-    String follower_count;
+    @SerializedName("follower_cnt")
+    long follower_count;
 
-    @SerializedName("following_count")
-    String following_count;
+    @SerializedName("following_cnt")
+    long following_count;
 
-    @SerializedName("post_count")
-    String post_count;
+    @SerializedName("post_cnt")
+    long post_count;
 
 
 }

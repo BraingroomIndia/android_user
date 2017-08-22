@@ -29,11 +29,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:background="@color/white"
                     android:orientation="horizontal">
 
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_margin="@dimen/margin_med"
                         android:layout_weight="1">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -48,6 +50,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/dp"
+                            android:layout_marginTop="@dimen/margin_small"
                             android:ellipsize="end"
                             android:gravity="center_horizontal"
                             android:maxLines="1"
@@ -71,16 +74,25 @@
 
                             <include
                                 layout="@layout/item_profile_count_detail"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 app:count="@{vm.postCount.s_1}"
                                 app:name='@{"Posts"}' />
 
                             <include
                                 layout="@layout/item_profile_count_detail"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 app:count="@{vm.followerCount.s_1}"
                                 app:name='@{"Followers"}' />
 
                             <include
                                 layout="@layout/item_profile_count_detail"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 app:count="@{vm.followingCount.s_1}"
                                 app:name='@{"Following"}' />
                         </LinearLayout>
@@ -101,8 +113,9 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_med"
                     android:background="@color/white"
-                    bind:items="@{vm.profileDetailsList}"
+                    bind:items="@{vm.profileDetailsListVms}"
                     bind:layout_vertical="@{true}"
                     bind:view_provider="@{@layout/item_profile_detail}" />
             </LinearLayout>
