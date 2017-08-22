@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,7 +158,7 @@ public class HomeViewModel extends ViewModel {
         categories = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return !apiSuccessful;
+                return true;
             }
         }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
@@ -192,7 +193,7 @@ public class HomeViewModel extends ViewModel {
                                                  throwable) throws Exception {
                 return new ArrayList<>();
             }
-        });
+        }).mergeWith(getGridLoadingItems(6));
 
         this.categoryVm = new GridViewModel(categories, "Learn new skills or pick up a new hobby");
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
@@ -364,6 +365,12 @@ public class HomeViewModel extends ViewModel {
 
     private BitmapDescriptor getPinIcon(ClassLocationData data) {
         return BitmapDescriptorFactory.fromResource(pinColorMap.get(data.getColorCode()));
+    }
+
+    private Observable<List<ViewModel>> getGridLoadingItems(int count) {
+        List<ViewModel> result = new ArrayList<>();
+        result.addAll(Collections.nCopies(count, new TileShimmerItemViewModel()));
+        return Observable.just(result);
     }
 
     @Override

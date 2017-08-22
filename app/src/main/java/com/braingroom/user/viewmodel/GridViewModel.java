@@ -3,6 +3,8 @@ package com.braingroom.user.viewmodel;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -17,7 +19,9 @@ public class GridViewModel extends ViewModel {
         this.title.set(title);
     }
 
+
 }
+
 ;/*FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {

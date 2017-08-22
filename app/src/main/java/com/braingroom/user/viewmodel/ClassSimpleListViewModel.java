@@ -31,7 +31,7 @@ public class ClassSimpleListViewModel extends ViewModel {
     private boolean nextPageAvailable = true;
     private final String listType;
     private final String userId;
-    Observable<List<ClassData>> apiObservable = null;
+    private Observable<List<ClassData>> apiObservable = null;
 
     public Observable<List<ViewModel>> result;
     private List<ViewModel> classes;

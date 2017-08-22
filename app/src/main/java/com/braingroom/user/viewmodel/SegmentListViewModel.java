@@ -12,6 +12,7 @@ import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.SegmentListActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +77,20 @@ public class SegmentListViewModel extends ViewModel {
                     }
                 });
             }
-        });
+        }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+            @Override
+            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable
+                                                 throwable) throws Exception {
+                return new ArrayList<>();
+            }
+        }).mergeWith(getGridLoadingItems(6));
+        ;
         gridViewModel = new GridViewModel(segments, categoryName);
+    }
+
+    private Observable<List<ViewModel>> getGridLoadingItems(int count) {
+        List<ViewModel> result = new ArrayList<>();
+        result.addAll(Collections.nCopies(count, new TileShimmerItemViewModel()));
+        return Observable.just(result);
     }
 }
