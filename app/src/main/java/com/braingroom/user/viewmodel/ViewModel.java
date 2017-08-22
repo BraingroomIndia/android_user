@@ -2,7 +2,7 @@ package com.braingroom.user.viewmodel;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.databinding.ObservableBoolean;
+import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -22,9 +22,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.IntFunction;
 
-public class ViewModel {
+public class ViewModel extends BaseObservable{
 
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
     public static final int REQ_CODE_CHOOSE_IMAGE = 1;

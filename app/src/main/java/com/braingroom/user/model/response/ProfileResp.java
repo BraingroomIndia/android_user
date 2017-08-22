@@ -81,6 +81,15 @@ public class ProfileResp extends BaseResp {
         @SerializedName("uuid")
         public String uuid;
 
+        @SerializedName("follower_count")
+        public String follower_count;
+
+        @SerializedName("following_count")
+        public String following_count;
+
+        @SerializedName("post_count")
+        public String post_count;
+
 
     }
 }
