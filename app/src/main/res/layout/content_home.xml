@@ -37,9 +37,9 @@
                     layout="@layout/content_typical_grid"
                     app:vm="@{vm.categoryVm}" />
 
-                <include
+  <!--              <include
                     layout="@layout/content_typical_grid"
-                    app:vm="@{vm.gridViewModel}" />
+                    app:vm="@{vm.gridViewModel}" />-->
 
 
 

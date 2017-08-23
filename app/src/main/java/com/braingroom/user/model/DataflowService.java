@@ -267,14 +267,7 @@ public class DataflowService {
 
     public Observable<SegmentResp> getSegments(String categoryId) {
         return api.getSegments(new SegmentReq(new SegmentReq.Snippet(categoryId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, SegmentResp>() {
-                    @Override
-                    public SegmentResp apply(@NonNull Throwable throwable) throws Exception {
-                        List<SegmentResp.Snippet> data = new ArrayList<>();
-                        data.add(new SegmentResp.Snippet("-1", "loading segments...", null));
-                        return new SegmentResp("", data);
-                    }
-                });
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<UploadResp> uploadImage(String filePath, String type) {

@@ -2,6 +2,7 @@ package com.braingroom.user.viewmodel;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
@@ -38,47 +39,16 @@ public class ConnectSectionListViewModel extends ViewModel {
 
     public ConnectSectionListViewModel(@NonNull final Navigator navigator) {
         this.navigator = navigator;
+        gridViewModel = new GridViewModel(navigator, GridViewModel.CONNECT, null);
 
-        Observable<List<ViewModel>> connectSectionList = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
-            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return !apiSuccessful;
-            }
-        }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
-            @Override
-            public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getCategory().map(new Function<CategoryResp, List<ViewModel>>() {
-                    @Override
-                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull CategoryResp categoryResp) throws Exception {
-                        List<CategoryResp.Snippet> snippetList = categoryResp.getData();
-                        final List<ViewModel> results = new ArrayList<>();
-                        for (final CategoryResp.Snippet snippet : snippetList) {
-                            results.add(new IconTextItemViewModel(snippet.getCategoryImage(), snippet.getCategoryName(),
-                                    new MyConsumer<IconTextItemViewModel>() {
-                                        @Override
-                                        public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
-                                            if (!snippet.getId().equals("-1")) {
-                                                Bundle data = new Bundle();
-                                                ConnectFilterData connectFilterData = new ConnectFilterData();
-                                                connectFilterData.setMajorCateg(ConnectHomeActivity.LEARNER_FORUM);
-                                                connectFilterData.setMinorCateg(ConnectHomeActivity.TIPS_TRICKS);
-                                                data.putSerializable("connectFilterData", connectFilterData);
-                                                navigator.navigateActivity(ConnectHomeActivity.class, data);
-                                            }
-                                        }
-                                    }));
-                        }
-                        return results;
-                    }
-                });
-            }
-        }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
-            @Override
-            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                return new ArrayList<>();
+            public void run() throws Exception {
+                gridViewModel.retry();
+                connectivityViewmodel.isConnected.set(true);
+                Log.d(TAG, "run internet: " + connectivityViewmodel.isConnected.get());
             }
         });
-        gridViewModel = new GridViewModel(connectSectionList, "");
 
         hideThisPage = new Action() {
             @Override
