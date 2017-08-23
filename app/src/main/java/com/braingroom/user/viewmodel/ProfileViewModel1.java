@@ -17,6 +17,7 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ProfileActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -39,9 +40,9 @@ public class ProfileViewModel1 extends ViewModel {
     public final DataItemViewModel email = new DataItemViewModel("");
     public final DataItemViewModel name = new DataItemViewModel("...");
     public final DataItemViewModel contact = new DataItemViewModel("");
-    public final DataItemViewModel postCount = new DataItemViewModel("");
-    public final DataItemViewModel followerCount = new DataItemViewModel("");
-    public final DataItemViewModel followingCount = new DataItemViewModel("");
+    public final DataItemViewModel postCount = new DataItemViewModel("...");
+    public final DataItemViewModel followerCount = new DataItemViewModel("...");
+    public final DataItemViewModel followingCount = new DataItemViewModel("...");
     public final ListDialogViewModel1 cityVm;
     public final ListDialogViewModel1 localityVm;
     public final ListDialogViewModel1 categoryVm; //Edited By Vikas Godara
@@ -62,7 +63,8 @@ public class ProfileViewModel1 extends ViewModel {
     public Consumer<HashMap<String, Integer>> categoryConsumer; //Edited By Vikas Goodara
 
     Observable<ProfileData> getProfileObservable;
-    public final PublishSubject<List<IconTextItemViewModel>> profileDetailsList = PublishSubject.create();
+    public final PublishSubject<List<IconTextItemViewModel>> profileDetailsListVms = PublishSubject.create();
+    public List<IconTextItemViewModel> dataList;
     public final ProfileActivity.UiHelper uiHelper;
     public final MessageHelper messageHelper;
     private final ObservableBoolean observableBoolean = new ObservableBoolean(false);
@@ -101,10 +103,11 @@ public class ProfileViewModel1 extends ViewModel {
                         HashMap<String, Integer> selectedGender = new HashMap<>();
                         if (!data.getGender().equals("-1"))
                             selectedGender.put(data.getGender().equals("1") ? "Male" : "Female", Integer.valueOf(data.getGender()));
+
                         name.s_1.set(data.getName());
-                        postCount.s_1.set(data.getPost_count());
-                        followerCount.s_1.set(data.getFollower_count());
-                        followingCount.s_1.set(data.getFollowing_count());
+                        postCount.s_1.set("" + data.getPost_count());
+                        followerCount.s_1.set("" + data.getFollower_count());
+                        followingCount.s_1.set("" + data.getFollowing_count());
                         email.s_1.set(data.getEmail());
                         contact.s_1.set(data.getContactNo());
                         dobVm.date.set(data.getDob());
@@ -134,6 +137,16 @@ public class ProfileViewModel1 extends ViewModel {
                                 selectedInterestMap.put(categoryName.get(i), categoryId.get(i));
                             categoryVm.setSelectedItemsMap(selectedInterestMap);
                         }
+                        dataList = new ArrayList<>();
+                        addProfileData(R.drawable.ic_email_black_24dp, data.getEmail(), dataList);
+                        addProfileData(R.drawable.ic_phone_black_24dp, data.getContactNo(), dataList);
+                        addProfileData(R.drawable.ic_cake_black_24dp, data.getDob(), dataList);
+                        addProfileData(R.drawable.ic_domain_black_24dp, "".equals(data.getUgInstituteName()) ? "" : data.getUgInstituteName() + " | " + data.getUgInstitutePassingYear(), dataList);
+                        addProfileData(R.drawable.ic_school_black_24dp, "".equals(data.getPgInstituteName()) ? "" : data.getPgInstituteName() + " | " + data.getPgInstitutePassingYear(), dataList);
+                        addProfileData(R.drawable.ic_domain_black_24dp, data.getCity(), dataList);
+                        addProfileData(R.drawable.ic_domain_black_24dp, data.getLocality(), dataList);
+                        addProfileData(R.drawable.ic_domain_black_24dp, data.getCategoryName(), dataList);
+                        profileDetailsListVms.onNext(dataList);
                         uiHelper.invalidateMenu();
                     }
                 }).doOnError(new Consumer<Throwable>() {
@@ -351,5 +364,10 @@ public class ProfileViewModel1 extends ViewModel {
         }
 
         return b;
+    }
+
+    private void addProfileData(int icon, String name, List<IconTextItemViewModel> dataList) {
+        if (!"".equals(name))
+            dataList.add(new IconTextItemViewModel(icon, name, null));
     }
 }
