@@ -36,8 +36,8 @@ public class ThirdPartyViewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle("Profile");
+//        getSupportActionBar().setElevation(0);
+//        getSupportActionBar().setTitle("Profile");
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         pager = (ViewPager) findViewById(R.id.pager);
@@ -50,7 +50,7 @@ public class ThirdPartyViewActivity extends BaseActivity {
     @Override
     protected ViewModel createViewModel() {
         userid = getIntentString("userId");
-        viewModel = new ThirdPartyViewModel(userid, getMessageHelper(), getNavigator());
+        viewModel = new ThirdPartyViewModel(userid, getMessageHelper(), getNavigator(),getHelperFactory());
         return viewModel;
     }
 

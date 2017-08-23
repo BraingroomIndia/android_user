@@ -33,6 +33,6 @@ public class ThirdPartyInfoFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_thirdparty_profile;
+        return R.layout.fragment_thirdparty_profile_1;
     }
 }
