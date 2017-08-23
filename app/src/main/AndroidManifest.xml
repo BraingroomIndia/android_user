@@ -165,6 +165,14 @@
         <activity
             android:name=".view.activity.ProfileActivity"
             android:label="@string/screen_profile"
+            android:parentActivityName=".view.activity.ProfileDisplayActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.ProfileDisplayActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.ProfileDisplayActivity"
+            android:label="@string/screen_profile"
             android:parentActivityName=".view.activity.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

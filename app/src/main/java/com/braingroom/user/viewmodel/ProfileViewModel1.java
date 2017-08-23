@@ -16,6 +16,7 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ProfileActivity;
+import com.braingroom.user.view.activity.ProfileDisplayActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,19 +59,19 @@ public class ProfileViewModel1 extends ViewModel {
     public final DatePickerViewModel dobVm;
 
 
-    public final Action onBackClicked;
+    public final Action onBackClicked, onEditClicked;
     public Consumer<HashMap<String, Integer>> cityConsumer;
     public Consumer<HashMap<String, Integer>> categoryConsumer; //Edited By Vikas Goodara
 
     Observable<ProfileData> getProfileObservable;
     public final PublishSubject<List<IconTextItemViewModel>> profileDetailsListVms = PublishSubject.create();
     public List<IconTextItemViewModel> dataList;
-    public final ProfileActivity.UiHelper uiHelper;
+    public final ProfileDisplayActivity.UiHelper uiHelper;
     public final MessageHelper messageHelper;
     private final ObservableBoolean observableBoolean = new ObservableBoolean(false);
 
     public ProfileViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @NonNull final ProfileActivity.UiHelper uiHelper) {
+            , @NonNull final HelperFactory helperFactory, @NonNull final ProfileDisplayActivity.UiHelper uiHelper) {
         followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_EDIT);
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
@@ -80,6 +81,13 @@ public class ProfileViewModel1 extends ViewModel {
         });
         this.uiHelper = uiHelper;
         this.messageHelper = messageHelper;
+
+        onEditClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                navigator.navigateActivity(ProfileActivity.class, null);
+            }
+        };
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
         dobVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "D.O.B", "choose");
         final LinkedHashMap<String, Integer> GenderTypeApiData = new LinkedHashMap<>();
