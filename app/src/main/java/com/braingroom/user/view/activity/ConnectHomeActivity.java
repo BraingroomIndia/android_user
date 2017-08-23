@@ -287,7 +287,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         int id = item.getItemId();
 
         if (id == R.id.nav_my_profile) {
-            getNavigator().navigateActivity(ProfileActivity.class, null);
+            getNavigator().navigateActivity(ProfileDisplayActivity.class, null);
         }
         if (id == R.id.nav_wishlist) {
             Bundle data = new Bundle();

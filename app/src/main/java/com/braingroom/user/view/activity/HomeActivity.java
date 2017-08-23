@@ -3,27 +3,19 @@ package com.braingroom.user.view.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.databinding.ObservableField;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -31,7 +23,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.utils.BadgeDrawable;
 import com.braingroom.user.utils.Constants;
-import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.viewmodel.HomeViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.google.android.gms.location.LocationRequest;
@@ -43,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
@@ -307,7 +299,7 @@ public class HomeActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_profile) {
-            getNavigator().navigateActivity(ProfileActivity.class, null);
+            getNavigator().navigateActivity(ProfileDisplayActivity.class, null);
         }
         if (id == R.id.nav_wishlist) {
             Bundle data = new Bundle();

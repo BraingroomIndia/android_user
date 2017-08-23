@@ -17,14 +17,12 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ProfileActivity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -34,7 +32,7 @@ public class ProfileViewModel extends ViewModel {
     public static final int TYPE_MALE = 1;
     public static final int TYPE_FEMALE = 2;
 
-    public final ObservableBoolean editable = new ObservableBoolean(false);//observableBoolean;
+    public final ObservableBoolean editable = new ObservableBoolean(true);//observableBoolean;
     public final DataItemViewModel name = new DataItemViewModel("");
     public final DataItemViewModel email = new DataItemViewModel("");
     public final DataItemViewModel contact = new DataItemViewModel("");
@@ -79,7 +77,7 @@ public class ProfileViewModel extends ViewModel {
         final LinkedHashMap<String, Integer> GenderTypeApiData = new LinkedHashMap<>();
         GenderTypeApiData.put("Male", TYPE_MALE);
         GenderTypeApiData.put("Female", TYPE_FEMALE);
-        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null,"");
+        genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null, "");
 
         getProfileObservable = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<ProfileData>>() {
             @Override
@@ -92,7 +90,7 @@ public class ProfileViewModel extends ViewModel {
                 }).doOnNext(new Consumer<ProfileData>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
-                        if (data.getEmail()==null)
+                        if (data.getEmail() == null)
                             return;
                         HashMap<String, Integer> selectedGender = new HashMap<>();
                         if (!data.getGender().equals("-1"))
@@ -207,7 +205,7 @@ public class ProfileViewModel extends ViewModel {
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 return new ListDialogData1(new LinkedHashMap<String, Integer>());
             }
-        }), new HashMap<String, Integer>(), false, cityConsumer,"");
+        }), new HashMap<String, Integer>(), false, cityConsumer, "");
         //Edited By Vikas Goodara
         categoryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Interest", messageHelper, apiService.getCategory()//zEdited By Vikas Godara
                 .map(new Function<CategoryResp, ListDialogData1>() {
@@ -225,10 +223,10 @@ public class ProfileViewModel extends ViewModel {
                     public ListDialogData1 apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ListDialogData1(new LinkedHashMap<String, Integer>());
                     }
-                }), new HashMap<String, Integer>(), true, categoryConsumer,"");
+                }), new HashMap<String, Integer>(), true, categoryConsumer, "");
         //Edited By Vikas Goodara
 
-        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Locality", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, null,"select a city first");
+        localityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Locality", messageHelper, getLocalityApiObservable("-1"), new HashMap<String, Integer>(), false, null, "select a city first");
 
         onBackClicked = new Action() {
             @Override
@@ -301,9 +299,10 @@ public class ProfileViewModel extends ViewModel {
             }
         });
     }
+
     @Override
-    public void retry(){
-        callAgain.set(callAgain.get()+1);
+    public void retry() {
+        callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
     }
 
@@ -326,7 +325,6 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void handleMenuStates(Menu menu) {
-        menu.findItem(R.id.action_edit).setVisible(!editable.get());
         menu.findItem(R.id.action_done).setVisible(editable.get());
         menu.findItem(R.id.action_discard).setVisible(editable.get());
     }
