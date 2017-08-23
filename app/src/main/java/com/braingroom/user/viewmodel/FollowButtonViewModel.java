@@ -10,11 +10,14 @@ import android.support.v4.content.ContextCompat;
 import com.braingroom.user.BR;
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
+import com.braingroom.user.model.response.FollowResp;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 public class FollowButtonViewModel extends ViewModel {
 
@@ -48,6 +51,22 @@ public class FollowButtonViewModel extends ViewModel {
                         break;
                     case STATE_FOLLOW:
                         messageHelper.show("follow");
+                        changeButtonState(STATE_LOADING);
+//                        TODO remove hardcoded userId
+                        apiService.follow(1331 + "").subscribe(new Consumer<FollowResp>() {
+                            @Override
+                            public void accept(@NonNull FollowResp resp) throws Exception {
+                                if (resp.getData().isEmpty()) {
+                                    messageHelper.show(resp.getResMsg());
+                                    changeButtonState(STATE_FOLLOW);
+                                } else currentState.set(STATE_FOLLOWED);
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(@NonNull Throwable throwable) throws Exception {
+                                changeButtonState(STATE_FOLLOW);
+                            }
+                        });
                         break;
                     case STATE_FOLLOWED:
                         messageHelper.show("followed");

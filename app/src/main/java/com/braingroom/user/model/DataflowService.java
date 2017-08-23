@@ -31,6 +31,7 @@ import com.braingroom.user.model.request.CouponCodeReq;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.ExploreReq;
 import com.braingroom.user.model.request.FirstSocialLoginReq;
+import com.braingroom.user.model.request.FollowReq;
 import com.braingroom.user.model.request.GeneralFilterReq;
 import com.braingroom.user.model.request.GiftCouponReq;
 import com.braingroom.user.model.request.GuestUserReq;
@@ -80,6 +81,7 @@ import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.FirstSocialLoginResp;
+import com.braingroom.user.model.response.FollowResp;
 import com.braingroom.user.model.response.GiftcardResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.GuestUserResp;
@@ -1038,5 +1040,10 @@ public class DataflowService {
     public Observable<BaseResp> updateCouponPaymentSuccess(RazorBuySuccessReq req) {
         return api.updateCouponPaymentSuccess(req).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<FollowResp> follow(String userId) {
+        return api.follow(new FollowReq(new FollowReq.Snippet(userId, pref.getString(Constants.BG_ID, ""))))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 }
