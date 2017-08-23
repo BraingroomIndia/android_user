@@ -22,6 +22,7 @@ import com.braingroom.user.model.request.CouponCodeReq;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.ExploreReq;
 import com.braingroom.user.model.request.FirstSocialLoginReq;
+import com.braingroom.user.model.request.FollowReq;
 import com.braingroom.user.model.request.GeneralFilterReq;
 import com.braingroom.user.model.request.GiftCouponReq;
 import com.braingroom.user.model.request.GuestUserReq;
@@ -71,6 +72,7 @@ import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.FirstSocialLoginResp;
+import com.braingroom.user.model.response.FollowResp;
 import com.braingroom.user.model.response.GiftcardResp;
 import com.braingroom.user.model.response.GroupResp;
 import com.braingroom.user.model.response.GuestUserResp;
@@ -386,5 +388,8 @@ public interface UserApiService {
 
     @POST("verifyOTP")
     Observable<BaseResp>submitOTP(@Body SubmitOTPReq req);
+
+    @POST("followUser")
+    Observable<FollowResp>follow(@Body FollowReq req);
 
 }

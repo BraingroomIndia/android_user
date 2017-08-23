@@ -39,6 +39,7 @@ import com.braingroom.user.view.adapters.ViewProvider;
 import com.braingroom.user.viewmodel.ConnectHomeViewModel;
 import com.braingroom.user.viewmodel.EmptyItemViewModel;
 import com.braingroom.user.viewmodel.HomeViewModel;
+import com.braingroom.user.viewmodel.IconTextShimmerItemViewModel;
 import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
 import com.braingroom.user.viewmodel.TileShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -130,6 +131,8 @@ public class BindingUtils {
                     return R.layout.item_shimmer_tile;
                 if (vm instanceof EmptyItemViewModel)
                     return R.layout.item_empty_data;
+                if (vm instanceof IconTextShimmerItemViewModel)
+                    return  R.layout.icon_text_shimmer;
                 return layoutId;
             }
         };

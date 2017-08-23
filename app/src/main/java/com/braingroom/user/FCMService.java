@@ -11,6 +11,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.braingroom.user.view.activity.ClassDetailActivity;
@@ -25,7 +26,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
-import java.util.Random;
 
 public class FCMService extends FirebaseMessagingService {
 
@@ -52,39 +52,35 @@ public class FCMService extends FirebaseMessagingService {
 
         Intent intent;
         Bundle data = new Bundle();
+        String title = remoteMessage.getData().get("title");
+        String shortDescription = remoteMessage.getData().get("short_description");
+        String detailDescription = remoteMessage.getData().get("detail_description");
+        String imageUrl = remoteMessage.getData().get("image");
         String notificationId = remoteMessage.getData().get("notification_id");
-        String postId=remoteMessage.getData().get("post_id");
-        String classId =remoteMessage.getData().get("class_id");
+        String postId = remoteMessage.getData().get("post_id");
+        String classId = remoteMessage.getData().get("class_id");
         String messageSenderId = remoteMessage.getData().get("sender_id");
         String messageSenderName = remoteMessage.getData().get("sender_name");
-        String title =remoteMessage.getData().get("type");
-        String messageBody= remoteMessage.getData().get("message");
-        String image = remoteMessage.getData().get("image");
-        data.putString("notification_id",notificationId);
-        data.putBoolean("pushNotification",true);
-
+        data.putString("notification_id", notificationId);
+        data.putBoolean("pushNotification", true);
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
-
 
 
         if (postId != null) {
             intent = new Intent(this, PostDetailActivity.class);
-            data.putString("postId",postId);
+            data.putString("postId", postId);
 
-        }
-        else if(classId!=null) {
+        } else if (classId != null) {
             intent = new Intent(this, ClassDetailActivity.class);
-            data.putString("id",classId);
+            data.putString("id", classId);
             data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
 
-        }
-        else if (messageSenderId!=null){
-            intent= new Intent(this, MessagesThreadActivity.class);
-            data.putString("sender_id",messageSenderId);
-            data.putString("sender_name",messageSenderName);
-        }
-        else {
-            intent = new Intent(this,HomeActivity.class);
+        } else if (messageSenderId != null) {
+            intent = new Intent(this, MessagesThreadActivity.class);
+            data.putString("sender_id", messageSenderId);
+            data.putString("sender_name", messageSenderName);
+        } else {
+            intent = new Intent(this, HomeActivity.class);
         }
         intent.putExtra("classData", data);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -93,23 +89,10 @@ public class FCMService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder;
-        if (image!=null)
-        notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle(title == null ? "" : title)
-                .setContentText(messageBody)
-                .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getBitmapfromUrl(image)))
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+        if (TextUtils.isEmpty(imageUrl))
+            notificationBuilder = createBigTextStyleNotification(title, shortDescription, detailDescription, pendingIntent);
         else
-        notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle(title == null ? "" : title)
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+            notificationBuilder = createBigPictureStyleNotification(title, imageUrl, shortDescription, pendingIntent);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -136,4 +119,36 @@ public class FCMService extends FirebaseMessagingService {
         }
     }
 
+    private NotificationCompat.Builder createBigTextStyleNotification(String title, String shortDescription, String detailDescription, PendingIntent pendingIntent) {
+        NotificationCompat.Builder builder;
+        builder = new NotificationCompat.Builder(this);
+        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle(builder);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        style.bigText(detailDescription).setBigContentTitle(title);
+        builder.setContentTitle(title).
+                setSmallIcon(R.mipmap.ic_launcher).
+                setContentText(shortDescription).
+                setStyle(style).
+                setAutoCancel(true).
+                setSound(defaultSoundUri).
+                setContentIntent(pendingIntent);
+        ;
+        return builder;
+    }
+
+    private NotificationCompat.Builder createBigPictureStyleNotification(String title, String imageUrl, String shortDescription, PendingIntent pendingIntent) {
+        NotificationCompat.Builder builder;
+        builder = new NotificationCompat.Builder(this);
+        NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle(builder);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        style.setBigContentTitle(title).setSummaryText(shortDescription).bigPicture(getBitmapfromUrl(imageUrl));
+        builder.setContentTitle(title).
+                setContentText(shortDescription).
+                setSmallIcon(R.mipmap.ic_launcher).
+                setStyle(style).
+                setAutoCancel(true).
+                setSound(defaultSoundUri).
+                setContentIntent(pendingIntent);
+        return builder;
+    }
 }

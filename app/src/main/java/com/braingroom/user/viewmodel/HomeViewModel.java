@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +64,8 @@ public class HomeViewModel extends ViewModel {
     public final GridViewModel categoryVm;
     public final IconTextItemViewModel community;
     public final IconTextItemViewModel onlineClass;
-    public final GridViewModel gridViewModel;
+   // public final GridViewModel gridViewModel;
     public final ShowcaseClassListViewModel featuredVm, trendingVm, indigenousVm;
-    public final Observable<List<ViewModel>> categories;
 
     private List<ClassLocationData> locationList = new ArrayList<>();
     private List<MarkerOptions> markerList = new ArrayList<>();
@@ -149,52 +149,8 @@ public class HomeViewModel extends ViewModel {
             }
         });
 
-        List<ViewModel> temp = new ArrayList<>();
-        temp.add(community);
-        temp.add(onlineClass);
-        gridViewModel = new GridViewModel(Observable.just(temp),"");
 
-        categories = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
-            @Override
-            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return !apiSuccessful;
-            }
-        }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
-            @Override
-            public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getCategory().map(new Function<CategoryResp, List<ViewModel>>() {
-                    @Override
-                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull CategoryResp categoryResp) throws Exception {
-                        List<CategoryResp.Snippet> snippetList = categoryResp.getData();
-                        final List<ViewModel> results = new ArrayList<>();
-                        for (final CategoryResp.Snippet snippet : snippetList) {
-                            results.add(new IconTextItemViewModel(snippet.getCategoryImage(), snippet.getCategoryName(),
-                                    new MyConsumer<IconTextItemViewModel>() {
-                                        @Override
-                                        public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
-                                            if (!snippet.getId().equals("-1")) {
-                                                Bundle data = new Bundle();
-                                                HashMap<String, Integer> categoryMap = new HashMap<String, Integer>();
-                                                categoryMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
-                                                data.putSerializable("categoryMap", categoryMap);
-                                                navigator.navigateActivity(SegmentListActivity.class, data);
-                                            }
-                                        }
-                                    }));
-                        }
-                        return results;
-                    }
-                });
-            }
-        }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
-            @Override
-            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable
-                                                 throwable) throws Exception {
-                return new ArrayList<>();
-            }
-        });
-
-        this.categoryVm = new GridViewModel(categories, "Learn new skills or pick up a new hobby");
+        this.categoryVm = new GridViewModel(navigator, GridViewModel.CATEGORY,null);
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws
@@ -364,6 +320,12 @@ public class HomeViewModel extends ViewModel {
 
     private BitmapDescriptor getPinIcon(ClassLocationData data) {
         return BitmapDescriptorFactory.fromResource(pinColorMap.get(data.getColorCode()));
+    }
+
+    private Observable<List<ViewModel>> getGridLoadingItems(int count) {
+        List<ViewModel> result = new ArrayList<>();
+        result.addAll(Collections.nCopies(count, new TileShimmerItemViewModel()));
+        return Observable.just(result);
     }
 
     @Override

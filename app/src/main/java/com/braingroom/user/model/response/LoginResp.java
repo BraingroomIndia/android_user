@@ -50,6 +50,7 @@ public class LoginResp extends BaseResp {
         @SerializedName("login_type")
         String loginType;
 
+        @SerializedName("email")
         private String emailId;
 
         private String password;

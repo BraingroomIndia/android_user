@@ -47,6 +47,7 @@ public class PostApiVideoUploadViewModel extends ViewModel {
         if (filePath == null || fileType == null) {
             messageHelper.show("Sorry we are unable to upload the file");
             Log.d(TAG, "\nvideoUpload: File Path" + filePath + "\nFile type" + fileType);
+            return;
         }
         apiService.uploadPostApiVideo(filePath, fileType, postType)
                 .subscribe(new Consumer<UploadPostApiResp>() {
