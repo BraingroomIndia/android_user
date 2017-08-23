@@ -14,6 +14,7 @@ import com.braingroom.user.model.response.FollowResp;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ProfileActivity;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
@@ -46,9 +47,9 @@ public class FollowButtonViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 switch (currentState.get()) {
-                    case STATE_LOADING:
-                        messageHelper.show("loading");
-                        break;
+//                    case STATE_LOADING:
+////                        messageHelper.show("loading");
+//                        break;
                     case STATE_FOLLOW:
                         messageHelper.show("follow");
                         changeButtonState(STATE_LOADING);
@@ -69,10 +70,11 @@ public class FollowButtonViewModel extends ViewModel {
                         });
                         break;
                     case STATE_FOLLOWED:
-                        messageHelper.show("followed");
+//                        messageHelper.show("followed");
                         break;
                     case STATE_EDIT:
-                        messageHelper.show("edit");
+//                        messageHelper.show("edit");
+                        navigator.navigateActivity(ProfileActivity.class, null);
                         break;
                 }
 

@@ -2,12 +2,10 @@ package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
-import android.view.Menu;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.dto.ProfileData;
-import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.utils.Constants;
@@ -287,48 +285,48 @@ public class ProfileViewModel1 extends ViewModel {
         });
     }
 
-    public void update() {
-        ProfileUpdateReq.Snippet snippet = new ProfileUpdateReq.Snippet();
-/*
-        if (dobVm.date.get().equals("choose")) {
-            messageHelper.show("Please enter your Date of Birth");
-            return;
-        }*/
-        if (genderVm.selectedItemsMap.isEmpty()) {
-            snippet.setGender("");
-        } else
-            snippet.setGender(genderVm.selectedItemsText.get());
-        // TODO: 23/04/17 change hardcoded uuid
-        snippet.setUuid(pref.getString(Constants.UUID, ""));
-        snippet.setFirstName(name.s_1.get());
-        snippet.setEmail(email.s_1.get());
-        snippet.setMobile(contact.s_1.get());
-        snippet.setCityId(cityVm.getSelectedItemsId().size() > 0 ? cityVm.getSelectedItemsId().get(0) : "");
-        snippet.setLocalityId(localityVm.getSelectedItemsId().size() > 0 ? localityVm.getSelectedItemsId().get(0) : "");
-        snippet.setCategoryId(categoryVm.getSelectedItemsId().size() > 0 ? categoryVm.getSelectedItemsId().get(0) : "");
-        snippet.setInstitutionName("");
-        snippet.setUgInstitutePassingYear(ugPassoutYear.s_1.get());
-        snippet.setPgInstituteName(pgInstitution.s_1.get());
-        snippet.setDob(dobVm.date.get());
-        snippet.setGender(genderVm.getSelectedItemsId().size() > 0 ? genderVm.getSelectedItemsId().get(0) : "");
-        snippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
-        snippet.setCommunityId(communityClass.s_1.get());
-        snippet.setProfileImage(imageUploadVm.remoteAddress.get());
-        messageHelper.showProgressDialog(null, "Updating your profile...");
-        apiService.updateProfile(new ProfileUpdateReq(snippet)).subscribe(new Consumer<CommonIdResp>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull CommonIdResp commonIdResp) throws Exception {
-                messageHelper.dismissActiveProgress();
-                messageHelper.show(commonIdResp.getResMsg());
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                messageHelper.dismissActiveProgress();
-                messageHelper.show("error : " + throwable.getMessage());
-            }
-        });
-    }
+//    public void update() {
+//        ProfileUpdateReq.Snippet snippet = new ProfileUpdateReq.Snippet();
+///*
+//        if (dobVm.date.get().equals("choose")) {
+//            messageHelper.show("Please enter your Date of Birth");
+//            return;
+//        }*/
+//        if (genderVm.selectedItemsMap.isEmpty()) {
+//            snippet.setGender("");
+//        } else
+//            snippet.setGender(genderVm.selectedItemsText.get());
+//        // TODO: 23/04/17 change hardcoded uuid
+//        snippet.setUuid(pref.getString(Constants.UUID, ""));
+//        snippet.setFirstName(name.s_1.get());
+//        snippet.setEmail(email.s_1.get());
+//        snippet.setMobile(contact.s_1.get());
+//        snippet.setCityId(cityVm.getSelectedItemsId().size() > 0 ? cityVm.getSelectedItemsId().get(0) : "");
+//        snippet.setLocalityId(localityVm.getSelectedItemsId().size() > 0 ? localityVm.getSelectedItemsId().get(0) : "");
+//        snippet.setCategoryId(categoryVm.getSelectedItemsId().size() > 0 ? categoryVm.getSelectedItemsId().get(0) : "");
+//        snippet.setInstitutionName("");
+//        snippet.setUgInstitutePassingYear(ugPassoutYear.s_1.get());
+//        snippet.setPgInstituteName(pgInstitution.s_1.get());
+//        snippet.setDob(dobVm.date.get());
+//        snippet.setGender(genderVm.getSelectedItemsId().size() > 0 ? genderVm.getSelectedItemsId().get(0) : "");
+//        snippet.setCategoryId(android.text.TextUtils.join(",", categoryVm.getSelectedItemsId()));
+//        snippet.setCommunityId(communityClass.s_1.get());
+//        snippet.setProfileImage(imageUploadVm.remoteAddress.get());
+//        messageHelper.showProgressDialog(null, "Updating your profile...");
+//        apiService.updateProfile(new ProfileUpdateReq(snippet)).subscribe(new Consumer<CommonIdResp>() {
+//            @Override
+//            public void accept(@io.reactivex.annotations.NonNull CommonIdResp commonIdResp) throws Exception {
+//                messageHelper.dismissActiveProgress();
+//                messageHelper.show(commonIdResp.getResMsg());
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+//                messageHelper.dismissActiveProgress();
+//                messageHelper.show("error : " + throwable.getMessage());
+//            }
+//        });
+//    }
 
     @Override
     public void retry() {
@@ -349,22 +347,21 @@ public class ProfileViewModel1 extends ViewModel {
     }
 
 
-    public void revertData() {
-        editable.set(false);
-        getProfileObservable.subscribe();
-    }
-
-    public void handleMenuStates(Menu menu) {
-        menu.findItem(R.id.action_edit).setVisible(!editable.get());
-        menu.findItem(R.id.action_done).setVisible(editable.get());
-        menu.findItem(R.id.action_discard).setVisible(editable.get());
-    }
-
-    public void edit() {
-        editable.set(true);
-        uiHelper.invalidateMenu();
-    }
-
+//    public void revertData() {
+//        editable.set(false);
+//        getProfileObservable.subscribe();
+//    }
+//
+//    public void handleMenuStates(Menu menu) {
+//        menu.findItem(R.id.action_done).setVisible(editable.get());
+//        menu.findItem(R.id.action_discard).setVisible(editable.get());
+//    }
+//
+//    public void edit() {
+//        editable.set(true);
+//        uiHelper.invalidateMenu();
+//    }
+//
     public static Integer[] stringToIntArray(String[] a) {
         Integer[] b = new Integer[a.length];
         for (int i = 0; i < a.length; i++) {

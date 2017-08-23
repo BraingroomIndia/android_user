@@ -8,7 +8,6 @@ import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.viewmodel.ProfileViewModel;
-import com.braingroom.user.viewmodel.ProfileViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
 
 public class ProfileActivity extends BaseActivity {
@@ -37,7 +36,7 @@ public class ProfileActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_profile_1;
+        return R.layout.activity_profile;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class ProfileActivity extends BaseActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_profile, menu);
-        ((ProfileViewModel1) vm).handleMenuStates(menu);
+        ((ProfileViewModel) vm).handleMenuStates(menu);
         return true;
     }
 
