@@ -44,5 +44,10 @@ public class SegmentListViewModel extends ViewModel {
         });
     }
 
+    @Override
+    public void onResume() {
+        connectivityViewmodel.onResume();
+    }
+
 
 }

@@ -10,23 +10,26 @@
             type="com.braingroom.user.viewmodel.SegmentListViewModel" />
     </data>
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <include
-            layout="@layout/content_typical_grid"
-            app:vm="@{vm.gridViewModel}" />
+            android:layout_height="match_parent">
+
             <include
-                layout="@layout/content_internet_connectivity"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                app:vm="@{vm.connectivityViewmodel}" />
-        </RelativeLayout>
-    </ScrollView>
+                layout="@layout/content_typical_grid"
+                app:vm="@{vm.gridViewModel}" />
+        </ScrollView>
+
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            app:vm="@{vm.connectivityViewmodel}" />
+
+    </FrameLayout>
 
 </layout>
