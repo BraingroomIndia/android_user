@@ -269,6 +269,7 @@
         <activity android:name=".view.activity.PostDetailActivity" />
         <activity
             android:name=".view.activity.ThirdPartyViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".view.activity.CatalogueHomeActivity"
