@@ -64,7 +64,7 @@ public class HomeViewModel extends ViewModel {
     public final GridViewModel categoryVm;
     public final IconTextItemViewModel community;
     public final IconTextItemViewModel onlineClass;
-   // public final GridViewModel gridViewModel;
+    // public final GridViewModel gridViewModel;
     public final ShowcaseClassListViewModel featuredVm, trendingVm, indigenousVm;
 
     private List<ClassLocationData> locationList = new ArrayList<>();
@@ -150,7 +150,7 @@ public class HomeViewModel extends ViewModel {
         });
 
 
-        this.categoryVm = new GridViewModel(navigator, GridViewModel.CATEGORY,null);
+        this.categoryVm = new GridViewModel(navigator, GridViewModel.CATEGORY, null);
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws
@@ -306,7 +306,7 @@ public class HomeViewModel extends ViewModel {
 
                 latSum = latSum + Double.valueOf(location.getLatitude());
             } catch (Exception e) {
-                throw e;
+                e.printStackTrace();
             }
             // Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());
             lngSum = lngSum + Double.valueOf(location.getLongitude());
@@ -338,7 +338,7 @@ public class HomeViewModel extends ViewModel {
         categoryVm.retry();
     }
 
-    public void notificationResume() {
+    private void notificationResume() {
         notificationDisposable = UserApplication.getInstance().getNewNotificationBus().subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean isNewNotification) {

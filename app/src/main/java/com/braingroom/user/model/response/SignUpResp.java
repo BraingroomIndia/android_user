@@ -44,6 +44,5 @@ public class SignUpResp extends BaseResp {
         private String password;
 
 
-
     }
 }

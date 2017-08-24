@@ -270,10 +270,10 @@ public class ClassDetailActivity extends BaseActivity {
             ((ClassDetailViewModel) vm).share();
             return true;
         }
-        if (id == android.R.id.home) {
+/*        if (id == android.R.id.home) {
             onBackPressed();
             return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 

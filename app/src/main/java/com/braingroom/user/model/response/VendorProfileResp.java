@@ -169,6 +169,7 @@ public class VendorProfileResp extends BaseResp {
 
 
         }
+
         public static class Review {
 
             @SerializedName("text")
@@ -179,7 +180,6 @@ public class VendorProfileResp extends BaseResp {
 
         }
         //Edited By Vikas Godara
-
 
 
     }

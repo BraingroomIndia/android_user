@@ -10,32 +10,45 @@
             type="com.braingroom.user.viewmodel.ConnectSectionListViewModel" />
     </data>
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-
-            <include
-                layout="@layout/content_typical_grid"
-                app:vm="@{vm.gridViewModel}" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:onClick="@{vm.hideThisPage}"
-                android:text="Don't show this page again"
-                app:font='@{@string/robotoRegular}'
-                android:textColor="@color/blue"/>
-        </LinearLayout>
-    </ScrollView>
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:orientation="vertical">
+
+
+                <include
+                    layout="@layout/content_typical_grid"
+                    app:vm="@{vm.gridViewModel}" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:onClick="@{vm.hideThisPage}"
+                    android:text="Don't show this page again"
+                    android:textColor="@color/blue"
+                    app:font='@{@string/robotoRegular}' />
+            </LinearLayout>
+        </ScrollView>
+
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            app:vm="@{vm.connectivityViewmodel}" />
+
+    </FrameLayout>
 
 
 </layout>

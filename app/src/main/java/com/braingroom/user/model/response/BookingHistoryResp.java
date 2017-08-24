@@ -126,7 +126,7 @@ public class BookingHistoryResp {
 
         @Getter
         @EqualsAndHashCode(callSuper = false)
-        public class  Location {
+        public class Location {
 
             @SerializedName("locality_id")
 

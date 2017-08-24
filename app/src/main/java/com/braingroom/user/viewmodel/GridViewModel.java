@@ -5,14 +5,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.ConnectFeedResp;
+import com.braingroom.user.model.response.ConnectSectionResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassListActivity;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.SegmentListActivity;
 
 import java.util.ArrayList;
@@ -22,14 +26,15 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 public class GridViewModel extends ViewModel {
-    public final static int CATEGORY = 1;
-    public final static int COMMUNITY = 2;
-    public final static int SEGMENT = 3;
-    public final static int CONNECT = 4;
+    protected final static int CATEGORY = 1;
+    protected final static int COMMUNITY = 2;
+    protected final static int SEGMENT = 3;
+    protected final static int CONNECT = 4;
+
 
     public final Observable<List<ViewModel>> gridItems;
     public final ObservableField<String> title = new ObservableField<>("");
@@ -37,7 +42,7 @@ public class GridViewModel extends ViewModel {
     public final Navigator navigator;
     public final int type;
 
-    public GridViewModel(@NonNull Navigator navigator,@NonNull int type, @Nullable final HashMap<String, Integer> categoryMap1) {
+    public GridViewModel(@NonNull Navigator navigator, int type, @Nullable final HashMap<String, Integer> categoryMap1) {
         this.navigator = navigator;
         this.type = type;
         this.categoryMap = categoryMap1 != null ? categoryMap1 : new HashMap<String, Integer>();
@@ -47,21 +52,27 @@ public class GridViewModel extends ViewModel {
                 return getGridItems(categoryMap);
             }
         });
-        this.title.set("");
     }
 
     private Observable<List<ViewModel>> getGridItems(@NonNull HashMap<String, Integer> categoryMap) {
+        final String categoryTitle = "Learn new skills or pick up a new hobby";
+        final String segmentTitle = "Segments";
+        final String connectSection = "Connect Section";
         switch (type) {
             case CATEGORY:
+                title.set(categoryTitle);
                 return getCategory().mergeWith(Observable.just(getGridLoadingItems(6)));
             case COMMUNITY:
+                getCommunity().mergeWith(Observable.just(getGridLoadingItems(9)));
                 break;
             case SEGMENT:
+                title.set(segmentTitle);
                 if (!categoryMap.isEmpty())
                     return getSegment(categoryMap).mergeWith(Observable.just(getGridLoadingItems(6)));
                 else return Observable.just(getGridLoadingItems(6));
             case CONNECT:
-                return getCategory().mergeWith(Observable.just(getGridLoadingItems(5)));
+                title.set(connectSection);
+                return getConnectSection().mergeWith(Observable.just(getGridLoadingItems(5)));
             default:
                 return Observable.just(getGridLoadingItems(6));
 
@@ -189,7 +200,32 @@ public class GridViewModel extends ViewModel {
     }
 
     private Observable<List<ViewModel>> getConnectSection() {
-        return null;
+        return apiService.getConnectSections().map(new Function<ConnectSectionResp, List<ViewModel>>() {
+            @Override
+            public List<ViewModel> apply(@io.reactivex.annotations.NonNull ConnectSectionResp resp) throws Exception {
+                List<ViewModel> results = new ArrayList<>();
+                if (resp.getData().isEmpty()) return getGridLoadingItems(5);
+                for (final ConnectSectionResp.Snippet snippet : resp.getData()) {
+                    results.add(new IconTextItemViewModel(snippet.getImgUrl(), snippet.getName(), new MyConsumer<IconTextItemViewModel>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
+                            Bundle data = new Bundle();
+                            ConnectFilterData connectFilterData = new ConnectFilterData();
+                            connectFilterData.setMajorCateg(snippet.getMajorCategory());
+                            connectFilterData.setMinorCateg(snippet.getMinorCategory());
+                            data.putSerializable("connectFilterData", connectFilterData);
+                            navigator.navigateActivity(ConnectHomeActivity.class, data);
+                        }
+                    }));
+                }
+                return results;
+            }
+        }).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+            @Override
+            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                return getGridLoadingItems(5);
+            }
+        });
     }
 
     private CommunityResp getDefaultResponse() {

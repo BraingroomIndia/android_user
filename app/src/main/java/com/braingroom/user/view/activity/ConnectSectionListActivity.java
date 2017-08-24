@@ -1,6 +1,7 @@
 package com.braingroom.user.view.activity;
 
 import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.braingroom.user.R;
@@ -24,12 +25,5 @@ public class ConnectSectionListActivity extends BaseActivity {
         return R.layout.activity_connect_section_list;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
 }

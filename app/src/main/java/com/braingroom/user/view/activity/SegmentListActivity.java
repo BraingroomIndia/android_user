@@ -24,14 +24,14 @@ public class SegmentListActivity extends BaseActivity {
         return new SegmentListViewModel(getNavigator(), categoryMap);//new GridViewModel(getMessageHelper(),getNavigator(),ClassListActivity.class);
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.home)
             onBackPressed();
         return super.onOptionsItemSelected(item);
 
-    }
+    }*/
 
     @Override
     protected int getLayoutId() {

@@ -151,7 +151,7 @@ public class SignUpActivityCompetition extends BaseActivity {
     }
 */
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -159,7 +159,7 @@ public class SignUpActivityCompetition extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public ViewModel getFragmentViewmodel(String title) {

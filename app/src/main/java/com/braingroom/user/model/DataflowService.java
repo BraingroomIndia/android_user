@@ -79,6 +79,7 @@ import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
+import com.braingroom.user.model.response.ConnectSectionResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.FirstSocialLoginResp;
 import com.braingroom.user.model.response.FollowResp;
@@ -745,6 +746,10 @@ public class DataflowService {
             }
         });
 
+    }
+
+    public Observable<ConnectSectionResp> getConnectSections() {
+        return api.getConnectSections().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<ConnectFeedResp> getConnectFeed(ConnectFilterData connectFilterData, int pageIndex) {

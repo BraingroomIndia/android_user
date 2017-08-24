@@ -57,5 +57,10 @@ public class ConnectSectionListViewModel extends ViewModel {
             }
         };
     }
+
+    @Override
+    public void onResume() {
+        connectivityViewmodel.onResume();
+    }
 }
 

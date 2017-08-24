@@ -70,6 +70,7 @@ import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
+import com.braingroom.user.model.response.ConnectSectionResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.FirstSocialLoginResp;
 import com.braingroom.user.model.response.FollowResp;
@@ -396,5 +397,8 @@ public interface UserApiService {
 
     @POST("getFollowingUsers")
     Observable<FollowResp>getFollowingUsers(@Body CommonUserIdReq req);
+
+    @POST("getConnectSections")
+    Observable<ConnectSectionResp> getConnectSections();
 
 }

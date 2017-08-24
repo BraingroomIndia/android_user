@@ -7,6 +7,7 @@ package com.braingroom.user.viewmodel;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CommunityResp;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
@@ -35,6 +37,14 @@ public class CommunityListViewModel extends ViewModel {
 
     public CommunityListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
 
+        this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
+            @Override
+            public void run() throws Exception {
+                retry();
+                connectivityViewmodel.isConnected.set(true);
+                Log.d(TAG, "run internet: " + connectivityViewmodel.isConnected.get());
+            }
+        });
         gridItems = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -87,6 +97,11 @@ public class CommunityListViewModel extends ViewModel {
 
     private CommunityResp getDefaultResponse() {
         return new CommunityResp(Collections.nCopies(defaultCount, new CommunityResp.Snippet("-1", "", null)));
+    }
+
+    @Override
+    public void onResume() {
+        connectivityViewmodel.onResume();
     }
 }
 

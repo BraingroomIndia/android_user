@@ -24,7 +24,7 @@ public class CommonIdResp extends BaseResp {
         @SerializedName("id")
         String id;
 
-        @SerializedName(value = "name", alternate = {"college_name", "activity_name", "school_name", "ngo_name", "segment_name","city_name","first_name"})
+        @SerializedName(value = "name", alternate = {"college_name", "activity_name", "school_name", "ngo_name", "segment_name", "city_name", "first_name"})
         String textValue;
     }
 }

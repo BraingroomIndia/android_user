@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class BaseResp {
 
-    @SerializedName(value = "res_code",alternate = {"res_id"})
+    @SerializedName(value = "res_code", alternate = {"res_id"})
     String resCode;
 
     @SerializedName("res_msg")
@@ -20,7 +20,8 @@ public class BaseResp {
         this.resCode = resCode;
         this.resMsg = resMsg;
     }
-    public String getResCode(){
+
+    public String getResCode() {
         return resCode;
     }
 }

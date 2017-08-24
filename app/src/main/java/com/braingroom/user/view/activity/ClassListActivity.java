@@ -113,10 +113,10 @@ public class ClassListActivity extends BaseActivity {
             ((ClassListViewModel1) vm).hideSearchBar.set(!((ClassListViewModel1) vm).hideSearchBar.get());
             return true;
         }
-        if (item.getItemId() == R.id.home) {
+/*        if (item.getItemId() == R.id.home) {
             onBackPressed();
             return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
