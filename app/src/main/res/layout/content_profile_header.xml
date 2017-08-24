@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -28,89 +29,158 @@
             name="follower_count"
             type="String" />
 
+        <variable
+            name="nameIcon"
+            type="int" />
+
+        <variable
+            name="detailIcon1"
+            type="int" />
+
+        <variable
+            name="detailIcon2"
+            type="int" />
+
+        <variable
+            name="detailIcon3"
+            type="int" />
+
+        <variable
+            name="detailIcon4"
+            type="int" />
+
+        <variable
+            name="detail1"
+            type="String" />
+
+        <variable
+            name="detail2"
+            type="String" />
+
+        <variable
+            name="detail3"
+            type="String" />
+
+        <variable
+            name="detail4"
+            type="String" />
+
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_med"
-            android:layout_weight="1">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/dp"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerInParent="true"
-                app:imageUrl="@{imageUploadVm.remoteAddress}"
-                app:placeHolder="@{imageUploadVm.placeHolder}" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/dp"
-                android:layout_marginTop="@dimen/margin_small"
-                android:ellipsize="end"
-                android:gravity="center_horizontal"
-                android:maxLines="1"
-                android:text="@{name}"
-                android:textColor="@color/colorTextDark"
-                android:textSize="@dimen/text_size_medium"
-                app:font='@{@string/robotoRegular}' />
-
-        </RelativeLayout>
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/margin_med"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <include
-                    layout="@layout/item_profile_count_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:count="@{post_count}"
-                    app:name='@{"Posts"}' />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:imageUrl="@{imageUploadVm.remoteAddress}"
+                    app:placeHolder="@{imageUploadVm.placeHolder}" />
 
-                <include
-                    layout="@layout/item_profile_count_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:count="@{follower_count}"
-                    app:name='@{"Followers"}' />
-
-                <include
-                    layout="@layout/item_profile_count_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:count="@{following_count}"
-                    app:name='@{"Following"}' />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:maxLines="1"
+                    android:text="@{name}"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/text_size_medium"
+                    app:font='@{@string/robotoRegular}' />
 
                 <include
                     layout="@layout/button_follow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
                     app:vm="@{followButtonVm}" />
 
-            </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <!--<include-->
+                <!--layout="@layout/item_profile_detail"-->
+                <!--app:icon="@{nameIcon}"-->
+                <!--app:title="@{name}" />-->
+
+                <include
+                    layout="@layout/item_profile_detail"
+                    app:icon="@{detailIcon1}"
+                    app:title="@{detail1}" />
+
+                <include
+                    layout="@layout/item_profile_detail"
+                    app:icon="@{detailIcon2}"
+                    app:title="@{detail2}" />
+
+                <include
+                    layout="@layout/item_profile_detail"
+                    app:icon="@{detailIcon3}"
+                    app:title="@{detail3}" />
+
+                <include
+                    layout="@layout/item_profile_detail"
+                    app:icon="@{detailIcon4}"
+                    app:title="@{detail4}" />
+
+
+            </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <include
+                layout="@layout/item_profile_count_detail"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:count="@{post_count}"
+                app:name='@{"Posts"}' />
+
+            <include
+                layout="@layout/item_profile_count_detail"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:count="@{follower_count}"
+                app:name='@{"Followers"}' />
+
+            <include
+                layout="@layout/item_profile_count_detail"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:count="@{following_count}"
+                app:name='@{"Following"}' />
+        </LinearLayout>
+
+
     </LinearLayout>
 </layout>

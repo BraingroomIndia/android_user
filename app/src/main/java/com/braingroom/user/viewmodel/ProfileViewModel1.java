@@ -68,6 +68,8 @@ public class ProfileViewModel1 extends ViewModel {
     public final MessageHelper messageHelper;
     private final ObservableBoolean observableBoolean = new ObservableBoolean(false);
 
+    public final int nameIcon,detailIcon1, detailIcon2, detailIcon3, detailIcon4;
+
     public ProfileViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @NonNull final ProfileDisplayActivity.UiHelper uiHelper) {
         followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_EDIT);
@@ -79,6 +81,12 @@ public class ProfileViewModel1 extends ViewModel {
         });
         this.uiHelper = uiHelper;
         this.messageHelper = messageHelper;
+
+        nameIcon = R.drawable.ic_account_circle_black_24dp;
+        detailIcon1 = R.drawable.ic_email_black_24dp;
+        detailIcon2 = R.drawable.ic_domain_black_24dp;
+        detailIcon3 = R.drawable.ic_domain_black_24dp;
+        detailIcon4 = R.drawable.ic_domain_black_24dp;
 
         onEditClicked = new Action() {
             @Override
@@ -347,7 +355,7 @@ public class ProfileViewModel1 extends ViewModel {
     }
 
 
-//    public void revertData() {
+    //    public void revertData() {
 //        editable.set(false);
 //        getProfileObservable.subscribe();
 //    }
