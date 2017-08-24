@@ -28,6 +28,15 @@
 
                 <include
                     layout="@layout/content_profile_header"
+                    app:nameIcon="@{vm.nameIcon}"
+                    app:detailIcon1="@{vm.detailIcon1}"
+                    app:detailIcon2="@{vm.detailIcon2}"
+                    app:detailIcon3="@{vm.detailIcon3}"
+                    app:detailIcon4="@{vm.detailIcon4}"
+                    app:detail1="@{vm.name.s_1}"
+                    app:detail2="@{vm.name.s_1}"
+                    app:detail3="@{vm.name.s_1}"
+                    app:detail4="@{vm.name.s_1}"
                     app:followButtonVm="@{vm.followButtonVm}"
                     app:followerCount="@{vm.followerCount.s_1}"
                     app:followingCount="@{vm.followingCount.s_1}"
