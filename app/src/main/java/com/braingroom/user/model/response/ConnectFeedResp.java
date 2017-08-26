@@ -89,5 +89,8 @@ public class ConnectFeedResp extends BaseResp {
 
         @SerializedName("share_url")
         private String shareUrl;
+
+        @SerializedName("follow_status")
+        private int followStatus;
     }
 }

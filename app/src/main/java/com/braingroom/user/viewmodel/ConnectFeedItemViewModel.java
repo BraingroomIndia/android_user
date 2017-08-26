@@ -107,13 +107,16 @@ public class ConnectFeedItemViewModel extends ViewModel {
             R.drawable.main_category_2, //Edited By Vikas Godara
             R.drawable.main_category_6};
 
-    public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
-            ,@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
+    public final FollowButtonViewModel followButtonVm;
 
-        if (data.getCategoryId()==null && data.getSegId()==null)
+    public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
+            , @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
+        followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator,
+                data.getFollowStatus() == 0 ? FollowButtonViewModel.STATE_FOLLOW : FollowButtonViewModel.STATE_FOLLOWED);
+        if (data.getCategoryId() == null && data.getSegId() == null)
             isSegmentAvailable.set(false);
-        if (data.getCategoryId()!=null)
-        categoryImg.set(resArray[Integer.parseInt(data.getCategoryId())-1]);
+        if (data.getCategoryId() != null)
+            categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - 1]);
         this.navigator = navigator;
         this.vendorImage = new ObservableField<>(data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
@@ -372,7 +375,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
                     try {
                         shareAction.run();
                     } catch (Exception e) {
-                       // e.printStackTrace();
+                        // e.printStackTrace();
                     }
                 }
 

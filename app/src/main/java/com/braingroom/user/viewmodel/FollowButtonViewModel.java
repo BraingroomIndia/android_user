@@ -51,13 +51,13 @@ public class FollowButtonViewModel extends ViewModel {
 ////                        messageHelper.show("loading");
 //                        break;
                     case STATE_FOLLOW:
-                        messageHelper.show("follow");
+//                        messageHelper.show("follow");
                         changeButtonState(STATE_LOADING);
 //                        TODO remove hardcoded userId
                         apiService.follow(1331 + "").subscribe(new Consumer<FollowResp>() {
                             @Override
                             public void accept(@NonNull FollowResp resp) throws Exception {
-                                if (resp.getData().isEmpty()) {
+                                if (resp.getData().isEmpty() || resp.getData().get(0).getStatus() == 0) {
                                     messageHelper.show(resp.getResMsg());
                                     changeButtonState(STATE_FOLLOW);
                                 } else currentState.set(STATE_FOLLOWED);
@@ -87,7 +87,7 @@ public class FollowButtonViewModel extends ViewModel {
         switch (currentState.get()) {
             case STATE_LOADING:
                 setBackgroundDrawable(R.drawable.solid_blue_rounded_corner_follow);
-                textVal.set("Loading...");
+                textVal.set("...");
                 break;
             case STATE_FOLLOW:
                 setBackgroundDrawable(R.drawable.solid_blue_rounded_corner_follow);

@@ -18,10 +18,7 @@ public class FollowResp extends BaseResp {
 
     @Getter
     public static class Snippet {
-        @SerializedName("following_user_id")
-        public String followingUserId;
-
-        @SerializedName("user_id")
-        public String userId;
+        @SerializedName("status")
+        public int status;
     }
 }
