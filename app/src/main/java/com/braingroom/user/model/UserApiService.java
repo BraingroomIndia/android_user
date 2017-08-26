@@ -393,12 +393,13 @@ public interface UserApiService {
     Observable<FollowResp>follow(@Body FollowReq req);
 
     @POST("getFollowers")
-    Observable<FollowResp>getFollowers(@Body CommonUserIdReq req);
+    Observable<LikedUsersListResp>getFollowers(@Body CommonUserIdReq req);
 
     @POST("getFollowingUsers")
-    Observable<FollowResp>getFollowingUsers(@Body CommonUserIdReq req);
+    Observable<LikedUsersListResp>getFollowingUsers(@Body CommonUserIdReq req);
 
     @POST("getConnectSections")
     Observable<ConnectSectionResp> getConnectSections();
+
 
 }

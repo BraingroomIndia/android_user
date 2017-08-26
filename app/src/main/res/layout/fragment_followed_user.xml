@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,10 +9,9 @@
 
         <variable
             name="vm"
-            type="com.braingroom.user.viewmodel.fragment.PostAcceptViewModel" />
+            type="com.braingroom.user.viewmodel.fragment.FollowedUserViewModel" />
 
     </data>
-
 
     <RelativeLayout
         android:layout_width="match_parent"

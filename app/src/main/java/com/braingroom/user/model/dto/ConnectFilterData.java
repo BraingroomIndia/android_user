@@ -39,6 +39,14 @@ public class ConnectFilterData implements Serializable {
         this.authorId = "";
     }
 
+    public String getInstituteId() {
+        return instituteId;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
     public void setFilterData(ConnectFilterData data) {
         setCategId(data.getCategId());
         setSegId(data.getSegId());

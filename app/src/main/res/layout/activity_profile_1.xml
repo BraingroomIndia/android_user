@@ -13,7 +13,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
 
         <android.support.v4.widget.NestedScrollView
@@ -28,33 +28,56 @@
 
                 <include
                     layout="@layout/content_profile_header"
-                    app:nameIcon="@{vm.nameIcon}"
-                    app:detailIcon1="@{vm.detailIcon1}"
-                    app:detailIcon2="@{vm.detailIcon2}"
-                    app:detailIcon3="@{vm.detailIcon3}"
-                    app:detailIcon4="@{vm.detailIcon4}"
                     app:detail1="@{vm.name.s_1}"
                     app:detail2="@{vm.name.s_1}"
                     app:detail3="@{vm.name.s_1}"
                     app:detail4="@{vm.name.s_1}"
+                    app:detailIcon1="@{vm.detailIcon1}"
+                    app:detailIcon2="@{vm.detailIcon2}"
+                    app:detailIcon3="@{vm.detailIcon3}"
+                    app:detailIcon4="@{vm.detailIcon4}"
                     app:followButtonVm="@{vm.followButtonVm}"
                     app:followerCount="@{vm.followerCount.s_1}"
                     app:followingCount="@{vm.followingCount.s_1}"
                     app:imageUploadVm="@{vm.imageUploadVm}"
                     app:name="@{vm.name.s_1}"
+                    app:nameIcon="@{vm.nameIcon}"
                     app:postCount="@{vm.postCount.s_1}" />
+
+                <android.support.design.widget.BottomNavigationView
+                    android:id="@+id/bottom_navigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@color/bottomNavBackground"
+                    app:elevation="10dp"
+                    app:itemIconTint="@drawable/bottom_nav_selector"
+                    app:itemTextColor="@drawable/bottom_nav_selector" />
 
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/class_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_med"
-                    android:background="@color/white"
-                    bind:items="@{vm.profileDetailsListVms}"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    bind:divider_decoration='@{"line_divider"}'
+                    bind:items="@{vm.feedItems}"
                     bind:layout_vertical="@{true}"
-                    bind:view_provider="@{@layout/item_profile_detail}" />
+                    bind:paginate="@{true}"
+                    bind:view_provider="@{@layout/item_connect_feed}"
+                    bind:viewmodel="@{vm}"
+                    tools:context="com.braingroom.user.view.activity.ProfileDisplayActivity" />
+
             </LinearLayout>
+
+
         </android.support.v4.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/comments_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 </layout>

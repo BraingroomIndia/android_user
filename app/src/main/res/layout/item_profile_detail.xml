@@ -27,6 +27,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:contentDescription="@{vm==null ? title : vm.title}"
             android:padding="5dp"
             android:tint="@color/colorTextGray"
             app:imageResource="@{vm==null ? icon : vm.imageRes}" />

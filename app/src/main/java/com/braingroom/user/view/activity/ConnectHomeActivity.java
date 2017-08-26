@@ -199,8 +199,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         ConnectFilterData connectFilterData = (ConnectFilterData) getIntentSerializable("connectFilterData");
         if (connectFilterData == null) {
             connectFilterData = new ConnectFilterData();
-            connectFilterData.setMajorCateg("learners_forum");
-            connectFilterData.setMinorCateg("tips_tricks");
+            connectFilterData.setMajorCateg(LEARNER_FORUM);
+            connectFilterData.setMinorCateg(TIPS_TRICKS);
         }
         uiHelper = new UiHelper() {
             @Override

@@ -463,6 +463,7 @@
                             android:id="@+id/tab_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:fitsSystemWindows="true"
                             app:tabGravity="fill"
                             app:tabIndicatorColor="@color/colorAccent"
                             app:tabIndicatorHeight="@dimen/elevation_med"
@@ -479,8 +480,7 @@
                             android:id="@+id/pager"
                             class="com.braingroom.user.utils.WrapContentHeightViewPager"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            />
+                            android:layout_height="wrap_content" />
 
                     </android.support.v7.widget.CardView>
 

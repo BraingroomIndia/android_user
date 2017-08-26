@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <data>
 
@@ -28,6 +29,7 @@
             android:gravity="bottom"
             android:maxLines="1"
             android:text="@{count}"
+            tool:text="5"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/_20sdp"
             app:font='@{@string/robotoBold}' />
@@ -39,6 +41,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
+            tool:text="name"
             android:text="@{name}"
             android:textColor="@color/colorTextGray"
             android:textSize="@dimen/text_size_medium"

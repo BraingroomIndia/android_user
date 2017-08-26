@@ -20,13 +20,13 @@ public class LikedUsersListResp extends BaseResp {
     @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
-        @SerializedName("user_id")
+        @SerializedName(value = "user_id",alternate = {"id"})
         private String userId;
 
-        @SerializedName("user_name")
+        @SerializedName(value = "user_name",alternate = {"name"})
         public String userName;
 
-        @SerializedName("user_image")
+        @SerializedName(value = "user_image",alternate = {"photo"})
         public String userImage;
 
     }

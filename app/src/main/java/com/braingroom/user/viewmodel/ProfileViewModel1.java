@@ -4,20 +4,25 @@ import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.dto.ProfileData;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
+import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
+import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.ProfileActivity;
-import com.braingroom.user.view.activity.ProfileDisplayActivity;
+import com.braingroom.user.view.adapters.ViewProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,7 +31,9 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
+import lombok.Getter;
 
 public class ProfileViewModel1 extends ViewModel {
 
@@ -64,14 +71,37 @@ public class ProfileViewModel1 extends ViewModel {
     Observable<ProfileData> getProfileObservable;
     public final PublishSubject<List<IconTextItemViewModel>> profileDetailsListVms = PublishSubject.create();
     public List<IconTextItemViewModel> dataList;
-    public final ProfileDisplayActivity.UiHelper uiHelper;
+    public final ConnectUiHelper uiHelper;
     public final MessageHelper messageHelper;
     private final ObservableBoolean observableBoolean = new ObservableBoolean(false);
 
-    public final int nameIcon,detailIcon1, detailIcon2, detailIcon3, detailIcon4;
+
+    @Getter
+    public ConnectFilterData connectFilterData;
+    public Observable<List<ViewModel>> feedItems;
+    private final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
+    private boolean paginationInProgress = false;
+    private int nextPage = 0;
+    private int currentPage = -1;
+
+    @Getter
+    ViewProvider viewProvider = new ViewProvider() {
+        @Override
+        public int getView(ViewModel vm) {
+            if (vm instanceof ConnectFeedItemViewModel)
+                return R.layout.item_connect_feed;
+            else if (vm instanceof EmptyItemViewModel)
+                return R.layout.item_empty_data;
+            else if (vm instanceof RowShimmerItemViewModel)
+                return R.layout.item_shimmer_row;
+            return 0;
+        }
+    };
+
+    public final int nameIcon, detailIcon1, detailIcon2, detailIcon3, detailIcon4;
 
     public ProfileViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @NonNull final ProfileDisplayActivity.UiHelper uiHelper) {
+            , @NonNull final HelperFactory helperFactory, @NonNull final ConnectUiHelper uiHelper) {
         followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_EDIT);
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
@@ -82,6 +112,13 @@ public class ProfileViewModel1 extends ViewModel {
         this.uiHelper = uiHelper;
         this.messageHelper = messageHelper;
 
+
+        this.connectFilterData = new ConnectFilterData();
+
+// TODO add userId to feed
+        // connectFilterData.setAuthorId(pref.getString(Constants.BG_ID, ""));
+        connectFilterData.setMajorCateg(ConnectHomeActivity.LEARNER_FORUM);
+        connectFilterData.setMinorCateg(ConnectHomeActivity.TIPS_TRICKS);
         nameIcon = R.drawable.ic_account_circle_black_24dp;
         detailIcon1 = R.drawable.ic_email_black_24dp;
         detailIcon2 = R.drawable.ic_domain_black_24dp;
@@ -101,7 +138,12 @@ public class ProfileViewModel1 extends ViewModel {
         GenderTypeApiData.put("Female", TYPE_FEMALE);
         genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null, "");
 
-        getProfileObservable = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<ProfileData>>() {
+        getProfileObservable = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return !apiSuccessful;
+            }
+        }).flatMap(new Function<Integer, Observable<ProfileData>>() {
             @Override
             public Observable<ProfileData> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return apiService.getProfile(pref.getString(Constants.BG_ID, "")).onErrorReturn(new Function<Throwable, ProfileData>() {
@@ -114,6 +156,7 @@ public class ProfileViewModel1 extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
                         if (data.getEmail() == null)
                             return;
+                        apiSuccessful = true;
                         HashMap<String, Integer> selectedGender = new HashMap<>();
                         if (!data.getGender().equals("-1"))
                             selectedGender.put(data.getGender().equals("1") ? "Male" : "Female", Integer.valueOf(data.getGender()));
@@ -161,7 +204,7 @@ public class ProfileViewModel1 extends ViewModel {
                         addProfileData(R.drawable.ic_domain_black_24dp, data.getLocality(), dataList);
                         addProfileData(R.drawable.ic_domain_black_24dp, data.getCategoryName(), dataList);
                         profileDetailsListVms.onNext(dataList);
-                        uiHelper.invalidateMenu();
+                        // uiHelper.invalidateMenu();
                     }
                 }).doOnError(new Consumer<Throwable>() {
                     @Override
@@ -170,7 +213,46 @@ public class ProfileViewModel1 extends ViewModel {
                     }
                 });
             }
-        });/*apiService.getProfile(pref.getString(Constants.BG_ID, "")).doOnNext(new Consumer<ProfileData>() {
+        });
+        feedDataMapFunction = new Function<ConnectFeedResp, List<ViewModel>>() {
+            @Override
+            public List<ViewModel> apply(ConnectFeedResp resp) throws Exception {
+                currentPage = nextPage;
+                nextPage = resp.getNextPage();
+                if (resp.getData().size() == 0 && nextPage < 1) {
+                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
+                } else {
+                    //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
+                    for (final ConnectFeedResp.Snippet elem : resp.getData()) {
+                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
+                    }
+                }
+
+                paginationInProgress = false;
+                return nonReactiveItems;
+            }
+        };
+        feedItems = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return currentPage < nextPage;
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                paginationInProgress = true;
+                return apiService.getConnectFeed(connectFilterData, nextPage)
+                        .map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                            @Override
+                            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                                throwable.printStackTrace();
+                                return nonReactiveItems;
+                            }
+                        }).mergeWith(getLoadingItems());
+            }
+        });
+
+        /*apiService.getProfile(pref.getString(Constants.BG_ID, "")).doOnNext(new Consumer<ProfileData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ProfileData data) throws Exception {
                 HashMap<String, Integer> selectedGender = new HashMap<>();
@@ -337,6 +419,15 @@ public class ProfileViewModel1 extends ViewModel {
 //    }
 
     @Override
+    public void paginate() {
+        if (nextPage > -1 && !paginationInProgress) {
+            nextPage = nextPage + 1;
+            callAgain.set(callAgain.get() + 1);
+
+        }
+    }
+
+    @Override
     public void retry() {
         callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
@@ -369,7 +460,21 @@ public class ProfileViewModel1 extends ViewModel {
 //        editable.set(true);
 //        uiHelper.invalidateMenu();
 //    }
-//
+
+    public void rest() {
+        nonReactiveItems = new ArrayList<>();
+        nextPage = 0;
+        currentPage = -1;
+        paginationInProgress = false;
+        callAgain.set(callAgain.get() + 1);
+    }
+
+    public void setFilterData(ConnectFilterData connectFilterData) {
+        this.connectFilterData = connectFilterData;
+        rest();
+    }
+
+    //
     public static Integer[] stringToIntArray(String[] a) {
         Integer[] b = new Integer[a.length];
         for (int i = 0; i < a.length; i++) {
@@ -382,5 +487,17 @@ public class ProfileViewModel1 extends ViewModel {
     private void addProfileData(int icon, String name, List<IconTextItemViewModel> dataList) {
         if (!"".equals(name))
             dataList.add(new IconTextItemViewModel(icon, name, null));
+    }
+
+    private Observable<List<ViewModel>> getLoadingItems() {
+        int count;
+        if (nonReactiveItems.isEmpty())
+            count = 4;
+        else
+            count = 2;
+        List<ViewModel> result = new ArrayList<>();
+        result.addAll(nonReactiveItems);
+        result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
+        return Observable.just(result);
     }
 }
