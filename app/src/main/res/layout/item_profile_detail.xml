@@ -25,15 +25,15 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:padding="5dp"
             android:tint="@color/colorTextGray"
             app:imageResource="@{vm==null ? icon : vm.imageRes}" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="30dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
