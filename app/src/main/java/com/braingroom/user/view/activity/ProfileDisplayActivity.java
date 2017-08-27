@@ -180,6 +180,9 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openFollower() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance()).addToBackStack(null).commit();
 
     }
 
