@@ -28,6 +28,8 @@
 
                 <include
                     layout="@layout/content_profile_header"
+                    app:clickActionFollower="@{vm.onFollowerClicked}"
+                    app:clickActionFollowing="@{vm.onFollowingClicked}"
                     app:detail1="@{vm.name.s_1}"
                     app:detail2="@{vm.name.s_1}"
                     app:detail3="@{vm.name.s_1}"

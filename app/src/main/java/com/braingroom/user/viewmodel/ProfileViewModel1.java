@@ -75,6 +75,7 @@ public class ProfileViewModel1 extends ViewModel {
     public final MessageHelper messageHelper;
     private final ObservableBoolean observableBoolean = new ObservableBoolean(false);
 
+    public final Action onFollowerClicked, onFollowingClicked;
 
     @Getter
     public ConnectFilterData connectFilterData;
@@ -112,6 +113,19 @@ public class ProfileViewModel1 extends ViewModel {
         this.uiHelper = uiHelper;
         this.messageHelper = messageHelper;
 
+        onFollowerClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.openFollower();
+            }
+        };
+
+        onFollowingClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.openFollowed();
+            }
+        };
 
         this.connectFilterData = new ConnectFilterData();
 

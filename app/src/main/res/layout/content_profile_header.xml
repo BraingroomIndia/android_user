@@ -65,6 +65,14 @@
             name="detail4"
             type="String" />
 
+        <variable
+            name="clickActionFollower"
+            type="io.reactivex.functions.Action" />
+
+        <variable
+            name="clickActionFollowing"
+            type="io.reactivex.functions.Action" />
+
     </data>
 
     <android.support.v7.widget.CardView
@@ -168,6 +176,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            app:clickAction="@{clickActionFollower}"
                             app:count="@{follower_count}"
                             app:name='@{"Followers"}' />
 
@@ -176,6 +185,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            app:clickAction="@{clickActionFollowing}"
                             app:count="@{following_count}"
                             app:name='@{"Following"}' />
                     </LinearLayout>

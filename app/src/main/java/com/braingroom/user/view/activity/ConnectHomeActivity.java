@@ -448,6 +448,22 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         vm.retry();
     }
 
+    @Override
+    public void onUserInteraction() {
+        
+        super.onUserInteraction();
+    }
+
+    @Override
+    public void openFollower() {
+
+    }
+
+    @Override
+    public void openFollowed() {
+
+    }
+
 
     @Override
     public void setSearchQuery(String searchQuery) {

@@ -18,6 +18,8 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.fragment.BaseFragment;
 import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
+import com.braingroom.user.view.fragment.FollowedUserFragment;
+import com.braingroom.user.view.fragment.FollowingUserFragment;
 import com.braingroom.user.view.fragment.LikesFragment;
 import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
@@ -171,11 +173,27 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void retry() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance()).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void openFollower() {
+
+    }
+
+    @Override
+    public void openFollowed() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, FollowedUserFragment.newInstance()).addToBackStack(null).commit();
 
     }
 
     @Override
     public void openFilter() {
+
 
     }
 

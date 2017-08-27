@@ -92,6 +92,16 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     }
 
     @Override
+    public void openFollower() {
+
+    }
+
+    @Override
+    public void openFollowed() {
+
+    }
+
+    @Override
     public void setSearchQuery(String a) {
     }
 

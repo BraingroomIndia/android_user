@@ -13,12 +13,17 @@
             name="name"
             type="String" />
 
+        <variable
+            name="clickAction"
+            type="io.reactivex.functions.Action" />
+
     </data>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:onClick="@{clickAction}"
         android:orientation="horizontal">
 
         <TextView
@@ -29,10 +34,10 @@
             android:gravity="center"
             android:maxLines="1"
             android:text="@{count}"
-            tool:text="5"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/_20sdp"
-            app:font='@{@string/robotoBold}' />
+            app:font='@{@string/robotoBold}'
+            tool:text="5" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,11 +46,11 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
-            tool:text="name"
             android:text="@{name}"
             android:textColor="@color/colorTextGray"
             android:textSize="@dimen/text_size_medium"
-            app:font='@{@string/robotoRegular}' />
+            app:font='@{@string/robotoRegular}'
+            tool:text="name" />
 
     </LinearLayout>
 </layout>

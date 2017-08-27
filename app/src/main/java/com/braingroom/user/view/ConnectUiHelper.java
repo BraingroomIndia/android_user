@@ -3,7 +3,6 @@ package com.braingroom.user.view;
 import android.databinding.ObservableField;
 
 
-
 import java.util.List;
 
 public interface ConnectUiHelper {
@@ -18,7 +17,7 @@ public interface ConnectUiHelper {
     void openAcceptedUsersFragment(String postId);
 
     void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId,
-                       String instituteId,String authorId, List<String> location);
+                       String instituteId, String authorId, List<String> location);
 
     void setSearchQuery(String searchQuery);
 
@@ -26,9 +25,13 @@ public interface ConnectUiHelper {
 
     void popFragment();
 
-    void setCount(int notificationCount,int messageCount);
+    void setCount(int notificationCount, int messageCount);
 
-     void retry();
+    void retry();
 
-     void openFilter();
+    void openFollower();
+
+    void openFollowed();
+
+    void openFilter();
 }
