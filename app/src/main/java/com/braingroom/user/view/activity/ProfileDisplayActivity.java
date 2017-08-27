@@ -52,7 +52,6 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
     ColorStateList greenList, blueList;
     @IdRes
     int selectedBottomNav = R.id.action_tips_tricks;
-    BaseFragment mFragement;
 
     @Override
     protected void onStart() {

@@ -5,13 +5,19 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.dto.ConnectFilterData;
+import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ThirdPartyProfileResp;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
+import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
+import com.braingroom.user.view.adapters.ViewProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +26,10 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
+import lombok.Getter;
 
 public class ThirdPartyViewModel extends ViewModel {
 
@@ -39,9 +48,35 @@ public class ThirdPartyViewModel extends ViewModel {
     public List<IconTextItemViewModel> dataList;
     public final ImageUploadViewModel imageUploadVm;
 
+    public final String userId;
+
+
+    @Getter
+    public ConnectFilterData connectFilterData;
+    public Observable<List<ViewModel>> feedItems;
+    private final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
+    private boolean paginationInProgress = false;
+    private int nextPage = 0;
+    private int currentPage = -1;
+
+    @Getter
+    ViewProvider viewProvider = new ViewProvider() {
+        @Override
+        public int getView(ViewModel vm) {
+            if (vm instanceof ConnectFeedItemViewModel)
+                return R.layout.item_connect_feed;
+            else if (vm instanceof EmptyItemViewModel)
+                return R.layout.item_empty_data;
+            else if (vm instanceof RowShimmerItemViewModel)
+                return R.layout.item_shimmer_row;
+            return 0;
+        }
+    };
+
     public final Action onMessageClicked;
 
-    public ThirdPartyViewModel(@NonNull String userId, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory) {
+    public ThirdPartyViewModel(@NonNull String userId, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory,
+                               @NonNull final ConnectUiHelper uiHelper) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -50,6 +85,14 @@ public class ThirdPartyViewModel extends ViewModel {
         });
         followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_LOADING);
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
+
+        this.userId = userId;
+        //Connect Part
+        connectFilterData = new ConnectFilterData();
+        // TODO add userId to feed
+        // connectFilterData.setAuthorId(pref.getString(Constants.BG_ID, ""));
+        connectFilterData.setMajorCateg(ConnectHomeActivity.LEARNER_FORUM);
+        connectFilterData.setMinorCateg(ConnectHomeActivity.TIPS_TRICKS);
 
         onMessageClicked = new Action() {
             @Override
@@ -98,6 +141,46 @@ public class ThirdPartyViewModel extends ViewModel {
             }
         });
 
+
+        feedDataMapFunction = new Function<ConnectFeedResp, List<ViewModel>>() {
+            @Override
+            public List<ViewModel> apply(ConnectFeedResp resp) throws Exception {
+                currentPage = nextPage;
+                nextPage = resp.getNextPage();
+                if (resp.getData().size() == 0 && nextPage < 1) {
+                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
+                } else {
+                    //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
+                    for (final ConnectFeedResp.Snippet elem : resp.getData()) {
+                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem,uiHelper ,helperFactory, messageHelper, navigator));
+                    }
+                }
+
+                paginationInProgress = false;
+                return nonReactiveItems;
+            }
+        };
+        feedItems = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return currentPage < nextPage;
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                paginationInProgress = true;
+                return apiService.getConnectFeed(connectFilterData, nextPage)
+                        .map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                            @Override
+                            public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                                throwable.printStackTrace();
+                                return nonReactiveItems;
+                            }
+                        }).mergeWith(getLoadingItems());
+            }
+        });
+
+
     }
 
 
@@ -119,10 +202,44 @@ public class ThirdPartyViewModel extends ViewModel {
         connectivityViewmodel.onPause();
     }
 
+    @Override
+    public void paginate() {
+        if (nextPage > -1 && !paginationInProgress) {
+            nextPage = nextPage + 1;
+            callAgain.set(callAgain.get() + 1);
+
+        }
+    }
+
     private void addProfileData(int icon, String name, List<IconTextItemViewModel> dataList) {
         if (!"".equals(name))
             dataList.add(new IconTextItemViewModel(icon, name, null));
     }
 
+
+    public void rest() {
+        nonReactiveItems = new ArrayList<>();
+        nextPage = 0;
+        currentPage = -1;
+        paginationInProgress = false;
+        callAgain.set(callAgain.get() + 1);
+    }
+
+    public void setFilterData(ConnectFilterData connectFilterData) {
+        this.connectFilterData = connectFilterData;
+        rest();
+    }
+
+    private Observable<List<ViewModel>> getLoadingItems() {
+        int count;
+        if (nonReactiveItems.isEmpty())
+            count = 4;
+        else
+            count = 2;
+        List<ViewModel> result = new ArrayList<>();
+        result.addAll(nonReactiveItems);
+        result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
+        return Observable.just(result);
+    }
 
 }
