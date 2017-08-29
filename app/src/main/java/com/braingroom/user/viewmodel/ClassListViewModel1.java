@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -20,16 +21,19 @@ import com.braingroom.user.model.dto.ClassListData;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.dto.ListDialogData1;
+import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.utils.MyConsumer;
+import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
+import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +41,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -86,6 +91,8 @@ public class ClassListViewModel1 extends ViewModel {
     public HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
     public HashMap<String, Integer> classScheduleFilterMap = new HashMap<>();
     public HashMap<String, String> vendorListFilterMap = new HashMap<>();
+    public final SearchSelectListViewModel localityVm;
+    public final Observable<HashMap<String, Pair<String, String>>> localityApiObservable;
     public String keywords = "";
     public String startDate = "";
     public String endDate = "";
@@ -104,6 +111,8 @@ public class ClassListViewModel1 extends ViewModel {
 
     public final Navigator navigator;
 
+    private boolean isLocalitySelected;
+
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @NonNull final FilterData filterData1,
@@ -114,10 +123,13 @@ public class ClassListViewModel1 extends ViewModel {
                                HashMap<String, Integer> communityMap,
                                HashMap<String, Integer> classTypeMap,
                                HashMap<String, Integer> classScheduleMap,
-                               HashMap<String, String> vendorListMap, @Nullable final String origin, final ClassListActivity.UiHelper uiHelper) {
+                               HashMap<String, String> vendorListMap,
+                               @Nullable final String origin,
+                               @NonNull final ClassListActivity.UiHelper uiHelper,
+                               @NonNull final FragmentHelper fragmentHelper) {
 
 
-        this.navigator=navigator;
+        this.navigator = navigator;
         this.origin = origin;
         if (this.origin != null && this.origin.equals(ORIGIN_CATALOG))
             isCatalogue = true;
@@ -158,10 +170,34 @@ public class ClassListViewModel1 extends ViewModel {
             }
         };
 
+        localityApiObservable = apiService.getLocalityList(3659 + "").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+            @Override
+            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
+                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                for (CommonIdResp.Snippet snippet : resp.getData()) {
+                    resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                }
+                return resMap;
+            }
+        });
+
+
         layoutType = new ObservableInt(LAYOUT_TYPE_TILE);
         nonReactiveItems = new ArrayList<>();
 
         filterData = filterData1;
+        localityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_LOCALITY, messageHelper, navigator, "search for locality", false, localityApiObservable, "select a city first", new Consumer<HashMap<String, Pair<String, String>>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+                if (selectedMap.values().iterator().hasNext()) {
+                    String selectedId = "" + selectedMap.values().iterator().next().first;
+                    filterData.setLocationId(selectedId);
+                    isLocalitySelected = true;
+                    reset();
+                }
+            }
+        }, fragmentHelper);
 /*        filterData.setCategoryId(categoryId);
         filterData.setCommunityId(communityId);
         filterData.setSegmentId(segmentId);
@@ -174,6 +210,7 @@ public class ClassListViewModel1 extends ViewModel {
                 retry();
             }
         });
+
 
         this.uiHelper = uiHelper;
         /* if coming from community click
@@ -232,7 +269,7 @@ public class ClassListViewModel1 extends ViewModel {
                         e.printStackTrace();
                     }*/
                 Log.d(TAG, "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
-                if (resp.getClassDataList().size() == 0 && currentPage ==1) {
+                if (resp.getClassDataList().size() == 0 && currentPage == 1) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                 } else {
                     for (final ClassData elem : resp.getClassDataList()) {
@@ -344,7 +381,7 @@ public class ClassListViewModel1 extends ViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
 
-                        if (viewModels.size() > 0 && (viewModels.get(0) instanceof ClassItemViewModel || viewModels.get(0) instanceof EmptyItemViewModel) || nextPage ==-1) {
+                        if (viewModels.size() > 0 && (viewModels.get(0) instanceof ClassItemViewModel || viewModels.get(0) instanceof EmptyItemViewModel) || nextPage == -1) {
                             Iterator<ViewModel> iter = nonReactiveItems.iterator();
                             while (iter.hasNext()) {
                                 if (iter.next() instanceof ShimmerItemViewModel) {
@@ -370,6 +407,18 @@ public class ClassListViewModel1 extends ViewModel {
         });
         classes.subscribe();
 
+        FieldUtils.toObservable(callAgain).debounce(1, TimeUnit.SECONDS).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return !isLocalitySelected;
+            }
+        }).subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                localityVm.onOpenClicked.run();
+//                fragmentHelper.show(SignupActivity.FRAGMENT_TITLE_COUNTRY);
+            }
+        });
 
     }
 

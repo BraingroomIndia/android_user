@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import com.braingroom.user.R;
 import com.braingroom.user.model.response.MessageListResp;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
@@ -25,6 +26,8 @@ public class MessagesViewModel extends ViewModel {
                     @Override
                     public List<ViewModel> apply(MessageListResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
+                        if (resp.getData().isEmpty())
+                            results.add(new EmptyItemViewModel(R.drawable.ic_message_black_48dp, null, "No Message", null));
                         for (final MessageListResp.Snippet elem : resp.getData()) {
                             results.add(new MessagesItemViewModel(navigator, elem.getSenderId(), elem.getSenderName(),
                                     elem.getSenderPic(), elem.getMessage().getMessage(), getHumanDate(elem.getMessage().getModifyDate())));
@@ -40,7 +43,7 @@ public class MessagesViewModel extends ViewModel {
         try {
             long time = Integer.valueOf(timeStamp);
             DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            Date netDate = (new Date(time*1000));
+            Date netDate = (new Date(time * 1000));
             return sdf.format(netDate);
         } catch (Exception ex) {
             return "xx";

@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import com.braingroom.user.R;
 import com.braingroom.user.model.request.ChangeNotificationStatusReq;
 import com.braingroom.user.model.response.MessageListResp;
 import com.braingroom.user.model.response.NotificationListResp;
@@ -25,6 +26,10 @@ public class NotificationViewModel extends ViewModel {
                     @Override
                     public List<ViewModel> apply(NotificationListResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
+                        if (resp.getData().isEmpty()) {
+                            results.add(new EmptyItemViewModel(R.drawable.ic_notifications_none_black_48dp, null, "No Notification", null));
+                            return results;
+                        }
                         for (final NotificationListResp.Snippet elem : resp.getData()) {
                             results.add(new NotificationsItemViewModel(navigator, elem.getNotificationId(), elem.getDescription(), elem.getPostId(),
                                     "", "1".equals(elem.getStatus())));

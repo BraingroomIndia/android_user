@@ -450,7 +450,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     @Override
     public void onUserInteraction() {
-        
+
         super.onUserInteraction();
     }
 

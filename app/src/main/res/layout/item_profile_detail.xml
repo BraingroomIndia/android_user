@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -22,7 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:showIn="@layout/fragment_thirdparty_profile_1">
 
         <ImageView
             android:layout_width="25dp"
@@ -30,6 +32,7 @@
             android:layout_gravity="center_vertical"
             android:contentDescription="@{vm==null ? title : vm.title}"
             android:padding="5dp"
+            tools:src="@drawable/avatar_male"
             android:tint="@color/colorTextGray"
             app:imageResource="@{vm==null ? icon : vm.imageRes}" />
 
@@ -42,6 +45,7 @@
             android:text="@{vm==null ? title : vm.title}"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/text_size_medium"
+            tools:text="Hello learner"
             app:font='@{@string/robotoRegular}' />
 
     </LinearLayout>

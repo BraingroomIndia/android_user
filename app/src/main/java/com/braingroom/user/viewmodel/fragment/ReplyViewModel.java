@@ -54,8 +54,9 @@ public class ReplyViewModel extends ViewModel {
                     return;
                 }
 
-                if (reply.get().length() < 5) {
-                    messageHelper.show("comment must be more than 5 characters");
+                if (reply.get().trim().length() < 1) {
+                    messageHelper.show("Reply can't be empty");
+                    reply.set("");
                     return;
                 }
                 apiService.commentReply(postId, commentId, reply.get()).subscribe(new Consumer<CommentReplyResp>() {

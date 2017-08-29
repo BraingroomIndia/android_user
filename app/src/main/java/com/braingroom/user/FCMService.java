@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,7 +38,7 @@ public class FCMService extends FirebaseMessagingService {
         UserApplication.getInstance().newNotificationBus.onNext(true);
 
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData().get("post_id"));
+            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
 
         if (remoteMessage.getNotification() != null) {
@@ -110,7 +111,6 @@ public class FCMService extends FirebaseMessagingService {
             InputStream input = connection.getInputStream();
             Bitmap bitmap = BitmapFactory.decodeStream(input);
             return bitmap;
-
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -125,8 +125,10 @@ public class FCMService extends FirebaseMessagingService {
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle(builder);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         style.bigText(detailDescription).setBigContentTitle(title);
+
         builder.setContentTitle(title).
-                setSmallIcon(R.mipmap.ic_launcher).
+                setSmallIcon(R.drawable.ic_notifications_white_24dp).
+                setColor(getResources().getColor(R.color.blue)).
                 setContentText(shortDescription).
                 setStyle(style).
                 setAutoCancel(true).
@@ -144,11 +146,13 @@ public class FCMService extends FirebaseMessagingService {
         style.setBigContentTitle(title).setSummaryText(shortDescription).bigPicture(getBitmapfromUrl(imageUrl));
         builder.setContentTitle(title).
                 setContentText(shortDescription).
-                setSmallIcon(R.mipmap.ic_launcher).
+                setColor(getResources().getColor(R.color.transparent)).
+                setSmallIcon(R.drawable.ic_notifications_white_24dp).
                 setStyle(style).
                 setAutoCancel(true).
                 setSound(defaultSoundUri).
                 setContentIntent(pendingIntent);
         return builder;
     }
+
 }

@@ -52,7 +52,6 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
     ColorStateList greenList, blueList;
     @IdRes
     int selectedBottomNav = R.id.action_tips_tricks;
-    BaseFragment mFragement;
 
     @Override
     protected void onStart() {
@@ -173,13 +172,13 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void retry() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance()).addToBackStack(null).commit();
     }
 
     @Override
     public void openFollower() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance(vm.BG_ID)).addToBackStack(null).commit();
 
     }
 
@@ -187,7 +186,7 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
     public void openFollowed() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowedUserFragment.newInstance()).addToBackStack(null).commit();
+        transaction.replace(R.id.comments_container, FollowedUserFragment.newInstance(vm.BG_ID)).addToBackStack(null).commit();
 
     }
 
