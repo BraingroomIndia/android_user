@@ -13,10 +13,22 @@ public class Constants {
     public static final String BG_ID = "BG_ID";
     public static final String FCM_TOKEN = "FCM_TOKEN";
     public static final String NEW_FCM = "new_FCM";
+    public static final String LOCALITY_ID = "localityId";
+    public static final String LOCALITY_NAME = "locality_name";
 
     //Bundle keys
 
-    public static final String USER_ID="userId";
+    public static final String USER_ID = "userId";
+    public static final String classFilterData = "ClassFilterData";
+    public static final String categoryFilterMap = "categoryFilterMap";
+    public static final String segmentsFilterMap = "segmentsFilterMap";
+    public static final String communityFilterMap = "communityFilterMap";
+    public static final String cityFilterMap = "cityFilterMap";
+    public static final String localityFilterMap = "localityFilterMap";
+    public static final String classTypeFilterMap = "classTypeFilterMap";
+    public static final String classScheduleFilterMap = "classScheduleFilterMap";
+    public static final String vendorListFilterMap = "vendorListFilterMap";
+    public static final String origin = "origin";
 
     public static final String FONT_REGULAR = "Roboto-Regular.ttf";
     public static final String FONT_BOLD = "Roboto-Bold.ttf";

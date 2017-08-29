@@ -14,6 +14,7 @@ import com.braingroom.user.R;
 import com.braingroom.user.databinding.ActivityClassList1Binding;
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.utils.CommonUtils;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.SpacingDecoration;
 import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
@@ -169,19 +170,19 @@ public class ClassListActivity extends BaseActivity {
             }
         };
         viewModel = new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(),
-                (FilterData) getIntentSerializable("filterData"),
-                (HashMap<String, Integer>) getIntentSerializable("categoryMap")
-                , (HashMap<String, Integer>) getIntentSerializable("segmentMap")
-                , (HashMap<String, String>) getIntentSerializable("city")
-                , (HashMap<String, String>) getIntentSerializable("locality")
-                , (HashMap<String, Integer>) getIntentSerializable("communityMap")
-                , (HashMap<String, Integer>) getIntentSerializable("classType")
-                , (HashMap<String, Integer>) getIntentSerializable("classSchedule")
-                , (HashMap<String, String>) getIntentSerializable("vendorList"),
+                (FilterData) getIntentSerializable(Constants.classFilterData),
+                (HashMap<String, Integer>) getIntentSerializable(Constants.categoryFilterMap)
+                , (HashMap<String, Integer>) getIntentSerializable(Constants.segmentsFilterMap)
+                , (HashMap<String, String>) getIntentSerializable(Constants.cityFilterMap)
+                , (HashMap<String, String>) getIntentSerializable(Constants.localityFilterMap)
+                , (HashMap<String, Integer>) getIntentSerializable(Constants.communityFilterMap)
+                , (HashMap<String, Integer>) getIntentSerializable(Constants.classTypeFilterMap)
+                , (HashMap<String, Integer>) getIntentSerializable(Constants.classScheduleFilterMap)
+                , (HashMap<String, String>) getIntentSerializable(Constants.vendorListFilterMap),
                 /*getIntentString("categoryId"),
                 getIntentString("searchQuery"), getIntentString("communityId"), getIntentString("segmentId"),
                 getIntentString("catalogId"), getIntentString("giftId"),*/
-                getIntentString("origin"), uiHelper, new FragmentHelper() {
+                getIntentString(Constants.origin), uiHelper, new FragmentHelper() {
             @Override
             public void show(String tag) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

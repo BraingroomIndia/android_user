@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CatalogueGroupResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassListActivity;
 
@@ -41,9 +42,9 @@ public class CatalogueGroupItemViewModel extends ViewModel {
                 Bundle bundleData = new Bundle();
                 FilterData filterData = new FilterData();
                 filterData.setCatalog(data.getId());
-                bundleData.putSerializable("filterData",filterData);
-               // bundleData.putString("catalogId", data.getId());
-                bundleData.putString("origin", ClassListViewModel1.ORIGIN_CATALOG);
+                bundleData.putSerializable(Constants.classFilterData, filterData);
+                // bundleData.putString("catalogId", data.getId());
+                bundleData.putString(Constants.origin, ClassListViewModel1.ORIGIN_CATALOG);
                 navigator.navigateActivity(ClassListActivity.class, bundleData);
             }
         };

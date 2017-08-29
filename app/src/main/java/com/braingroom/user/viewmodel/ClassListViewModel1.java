@@ -1,6 +1,5 @@
 package com.braingroom.user.viewmodel;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -8,11 +7,11 @@ import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.braingroom.user.R;
@@ -23,6 +22,7 @@ import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.utils.MyConsumer;
@@ -34,7 +34,6 @@ import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
 import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
-import com.braingroom.user.viewmodel.fragment.SelectedFilterItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,15 +44,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
-
-import static com.crashlytics.android.answers.Answers.TAG;
 
 public class ClassListViewModel1 extends ViewModel {
 
@@ -104,6 +100,10 @@ public class ClassListViewModel1 extends ViewModel {
     public ObservableBoolean hideSearchBar = new ObservableBoolean(true);
     PublishSubject<DataItemViewModel> segmentSelectorSubject = PublishSubject.create();
 
+    private String localityName = pref.getString(Constants.LOCALITY_NAME, "");
+    private String localityId = pref.getString(Constants.LOCALITY_ID, "");
+
+
     @Getter
     ViewProvider viewProvider;
 
@@ -115,7 +115,8 @@ public class ClassListViewModel1 extends ViewModel {
 
     public final Navigator navigator;
 
-    private boolean isLocalitySelected = true;
+    private boolean isLocalitySelected;
+    private boolean askedForLocality = false;
 
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
@@ -133,19 +134,22 @@ public class ClassListViewModel1 extends ViewModel {
                                @NonNull final FragmentHelper fragmentHelper) {
 
 
+        localityName = pref.getString(Constants.LOCALITY_NAME, "");
+        localityId = pref.getString(Constants.LOCALITY_ID, "");
+        isLocalitySelected = !TextUtils.isEmpty(localityId);
         this.navigator = navigator;
         this.origin = origin;
         if (this.origin != null && this.origin.equals(ORIGIN_CATALOG))
             isCatalogue = true;
-        categoryFilterMap = categoryMap;
+        categoryFilterMap = categoryMap != null ? categoryMap : new HashMap<String, Integer>();
         //searchQuery.set(filterData1.getKeywords());
-        segmentsFilterMap = segmentsMap;
-        cityFilterMap = cityMap;
-        localityFilterMap = localityMap;
-        communityFilterMap = communityMap;
-        classTypeFilterMap = classTypeMap;
-        classScheduleFilterMap = classScheduleMap;
-        vendorListFilterMap = vendorListMap;
+        segmentsFilterMap = segmentsMap != null ? segmentsMap : new HashMap<String, Integer>();
+        cityFilterMap = cityMap != null ? cityMap : new HashMap<String, String>();
+        localityFilterMap = localityMap != null ? localityMap : new HashMap<String, String>();
+        communityFilterMap = communityMap != null ? communityMap : new HashMap<String, Integer>();
+        classTypeFilterMap = classTypeMap != null ? classTypeMap : new HashMap<String, Integer>();
+        classScheduleFilterMap = classScheduleMap != null ? classScheduleMap : new HashMap<String, Integer>();
+        vendorListFilterMap = vendorListMap != null ? vendorListMap : new HashMap<String, String>();
         viewProvider = new ViewProvider() {
             @Override
             public int getView(ViewModel vm) {
@@ -191,11 +195,23 @@ public class ClassListViewModel1 extends ViewModel {
         nonReactiveItems = new ArrayList<>();
 
         filterData = filterData1;
+        if (!ORIGIN_CATALOG.equals(origin) && TextUtils.isEmpty(filterData.getLocationId()) && !TextUtils.isEmpty(localityId)) {
+            filterData.setLocationId(localityId);
+            localityFilterMap = new HashMap<>();
+            localityFilterMap.put(localityName, localityId);
+        }
+
         localityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_LOCALITY, messageHelper, navigator, "search for locality", false, localityApiObservable, "select a city first", new Consumer<HashMap<String, Pair<String, String>>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
+                    String selectedName = "" + selectedMap.keySet().iterator().next();
+                    editor.putString(Constants.LOCALITY_ID, selectedId);
+                    editor.putString(Constants.LOCALITY_NAME, selectedName);
+                    editor.commit();
+                    localityFilterMap = new HashMap<>();
+                    localityFilterMap.put(selectedName, selectedId);
                     filterData.setLocationId(selectedId);
                     isLocalitySelected = true;
                     reset();
@@ -287,6 +303,9 @@ public class ClassListViewModel1 extends ViewModel {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
                                     localityFilterMap = new HashMap<String, String>();
+                                    editor.putString(Constants.LOCALITY_ID, "");
+                                    editor.putString(Constants.LOCALITY_NAME, "");
+                                    editor.commit();
                                     filterData.setLocationId("");
                                     reset();
                                 }
@@ -491,14 +510,15 @@ public class ClassListViewModel1 extends ViewModel {
         });
         classes.subscribe();
 
-        FieldUtils.toObservable(callAgain).debounce(1, TimeUnit.SECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).debounce(5, TimeUnit.SECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return !isLocalitySelected;
+                return !(isLocalitySelected || askedForLocality);
             }
         }).subscribe(new Consumer<Integer>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                askedForLocality = true;
                 localityVm.onOpenClicked.run();
 //                fragmentHelper.show(SignupActivity.FRAGMENT_TITLE_COUNTRY);
             }
@@ -538,16 +558,16 @@ public class ClassListViewModel1 extends ViewModel {
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE_CHOOSE_FILTER) {
             if (data != null) {
-                filterData = (FilterData) data.getSerializableExtra("filterData");
-                this.categoryFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("category");
-                this.segmentsFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("segment");
-                this.cityFilterMap = (HashMap<String, String>) data.getSerializableExtra("city");
-                this.localityFilterMap = (HashMap<String, String>) data.getSerializableExtra("locality");
-                this.communityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("community");
-                this.classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classType");
-                this.classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra("classSchedule");
-                this.vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra("vendorList");
-                this.origin = data.getStringExtra("origin");
+                filterData = (FilterData) data.getSerializableExtra(Constants.classFilterData);
+                this.categoryFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.categoryFilterMap);
+                this.segmentsFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.segmentsFilterMap);
+                this.cityFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.cityFilterMap);
+                this.localityFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.localityFilterMap);
+                this.communityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.communityFilterMap);
+                this.classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.classScheduleFilterMap);
+                this.classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.classScheduleFilterMap);
+                this.vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.vendorListFilterMap);
+                this.origin = data.getStringExtra(Constants.origin);
                 if (origin.equals(ORIGIN_CATALOG))
 
 

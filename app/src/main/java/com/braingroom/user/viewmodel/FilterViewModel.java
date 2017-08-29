@@ -13,6 +13,7 @@ import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -333,20 +334,20 @@ public class FilterViewModel extends ViewModel {
         filterData.setEndDate(endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("category", categoryVm.selectedItemsMap);
-        bundle.putSerializable("segment", segmentsVm.selectedItemsMap);
-        bundle.putSerializable("city", getHashMap(cityVm.selectedDataMap));
-        bundle.putSerializable("locality", getHashMap(localityVm.selectedDataMap));
-        bundle.putSerializable("community", communityVm.selectedItemsMap);
-        bundle.putSerializable("classType", classTypeVm.selectedItemsMap);
-        bundle.putSerializable("classSchedule", classScheduleVm.selectedItemsMap);
-        bundle.putSerializable("vendorList", getHashMap(vendorListVm.selectedDataMap));
-        bundle.putString("origin", origin);
+        bundle.putSerializable(Constants.categoryFilterMap, categoryVm.selectedItemsMap);
+        bundle.putSerializable(Constants.segmentsFilterMap, segmentsVm.selectedItemsMap);
+        bundle.putSerializable(Constants.cityFilterMap, getHashMap(cityVm.selectedDataMap));
+        bundle.putSerializable(Constants.localityFilterMap, getHashMap(localityVm.selectedDataMap));
+        bundle.putSerializable(Constants.communityFilterMap, communityVm.selectedItemsMap);
+        bundle.putSerializable(Constants.classTypeFilterMap, classTypeVm.selectedItemsMap);
+        bundle.putSerializable(Constants.classScheduleFilterMap, classScheduleVm.selectedItemsMap);
+        bundle.putSerializable(Constants.vendorListFilterMap, getHashMap(vendorListVm.selectedDataMap));
+        bundle.putString(Constants.origin, origin);
         /*bundle.putSerializable("keywords", keywords.get());
         bundle.putString("startDate", startDateVm.date.get().equals("YYYY-MM-DD") ? "" : startDateVm.date.get());
         bundle.putString("endDate", endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());*/
         bundle.putBoolean("clearFlag", clearFlag);
-        bundle.putSerializable("filterData", filterData);
+        bundle.putSerializable(Constants.classFilterData, filterData);
         if (origin.equals(ORIGIN_HOME)) {
             navigator.navigateActivity(ClassListActivity.class, bundle);
             navigator.finishActivity();
