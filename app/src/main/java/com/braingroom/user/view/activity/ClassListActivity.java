@@ -3,6 +3,7 @@ package com.braingroom.user.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +14,20 @@ import com.braingroom.user.R;
 import com.braingroom.user.databinding.ActivityClassList1Binding;
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.utils.CommonUtils;
+import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.SpacingDecoration;
 import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
+import com.braingroom.user.view.fragment.SearchSelectListFragment;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.HashMap;
+
+import lombok.Getter;
+
+import static com.braingroom.user.view.activity.FilterActivity.FRAGMENT_TITLE_CITY;
+import static com.braingroom.user.view.activity.FilterActivity.FRAGMENT_TITLE_LOCALITY;
+import static com.braingroom.user.view.activity.FilterActivity.FRAGMENT_TITLE_VENDORLIST;
 
 public class ClassListActivity extends BaseActivity {
 
@@ -26,7 +35,14 @@ public class ClassListActivity extends BaseActivity {
         void changeLayout(int layoutType);
 
         void notifyDataChanged();
+
+        void show(String tag);
+
+        void remove(String tag);
     }
+
+    @Getter
+    private ClassListViewModel1 viewModel;
 
     private RecyclerView mRecyclerView;
     private NonReactiveRecyclerViewAdapter mAdapter;
@@ -140,8 +156,19 @@ public class ClassListActivity extends BaseActivity {
                 if (mAdapter != null)
                     mAdapter.notifyDataSetChanged();
             }
+
+            @Override
+            public void show(String tag) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.fragment_container, SearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
+            }
+
+            @Override
+            public void remove(String tag) {
+                popBackstack(tag);
+            }
         };
-        return new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(),
+        viewModel = new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(),
                 (FilterData) getIntentSerializable("filterData"),
                 (HashMap<String, Integer>) getIntentSerializable("categoryMap")
                 , (HashMap<String, Integer>) getIntentSerializable("segmentMap")
@@ -154,7 +181,19 @@ public class ClassListActivity extends BaseActivity {
                 /*getIntentString("categoryId"),
                 getIntentString("searchQuery"), getIntentString("communityId"), getIntentString("segmentId"),
                 getIntentString("catalogId"), getIntentString("giftId"),*/
-                getIntentString("origin"), uiHelper);
+                getIntentString("origin"), uiHelper, new FragmentHelper() {
+            @Override
+            public void show(String tag) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.fragment_container, SearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
+            }
+
+            @Override
+            public void remove(String tag) {
+                popBackstack(tag);
+            }
+        });
+        return viewModel;
     }
 /*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -174,5 +213,12 @@ public class ClassListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public ViewModel getFragmentViewmodel(String title) {
+        if (FRAGMENT_TITLE_LOCALITY.equals(title))
+            return viewModel.localityVm;
+        return null;
     }
 }

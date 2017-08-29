@@ -1,8 +1,10 @@
 package com.braingroom.user.viewmodel.fragment;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.braingroom.user.model.response.LikedUsersListResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -23,13 +25,15 @@ public class FollowedUserViewModel extends ViewModel {
     public final Action onBackClicked;
     public final Observable<List<ViewModel>> items;
 
-    public FollowedUserViewModel(final ConnectUiHelper uiHelper, @NonNull final Navigator navigator) {
-        items = apiService.getFollowed().map(new Function<LikedUsersListResp, List<ViewModel>>() {
+    public FollowedUserViewModel(final ConnectUiHelper uiHelper, @NonNull final Navigator navigator, String userId) {
+        if (TextUtils.isEmpty(userId))
+            userId = pref.getString(Constants.BG_ID, "");
+        items = apiService.getFollowed(userId).map(new Function<LikedUsersListResp, List<ViewModel>>() {
             @Override
             public List<ViewModel> apply(LikedUsersListResp resp) throws Exception {
                 List<ViewModel> results = new ArrayList<>();
                 for (final LikedUsersListResp.Snippet elem : resp.getData()) {
-                    results.add(new LikedItemViewModel(elem.getUserImage(), elem.getUserName(),elem.getUserId(),navigator  ));
+                    results.add(new LikedItemViewModel(elem.getUserImage(), elem.getUserName(), elem.getUserId(), navigator));
                 }
                 return results;
             }

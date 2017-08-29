@@ -33,6 +33,7 @@ public class ViewModel extends BaseObservable{
     public boolean apiSuccessful = false;
     public ConnectivityViewModel connectivityViewmodel;
 
+    public final String BG_ID;
 
     @Inject
     public DataflowService apiService;
@@ -67,6 +68,7 @@ public class ViewModel extends BaseObservable{
 
     public ViewModel() {
         UserApplication.getInstance().getMAppComponent().inject(this);
+        BG_ID = pref.getString(Constants.BG_ID,"");
         setLoggedIn();
         TAG = this.getClass().getSimpleName();
         if (pref.getBoolean(Constants.NEW_FCM, false)) {
@@ -126,6 +128,10 @@ public class ViewModel extends BaseObservable{
 
     public void onResume() {
     }
+
+    public void onUserInteraction(){
+
+    };
 
     public boolean isValidPhoneNo(CharSequence phoneNo) {
         if (!TextUtils.isEmpty(phoneNo)) {

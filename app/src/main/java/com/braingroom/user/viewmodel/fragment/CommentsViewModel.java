@@ -60,8 +60,9 @@ public class CommentsViewModel extends ViewModel {
                     return;
                 }
 
-                if (comment.get().length() < 1) {
-                    messageHelper.show("comment must be more than 5 characters");
+                if (comment.get().trim().length() < 1) {
+                    messageHelper.show("Comment can't be empty");
+                    comment.set("");
                     return;
                 }
                 apiService.commentReply(postId, "", comment.get()).subscribe(new Consumer<CommentReplyResp>() {

@@ -1056,9 +1056,17 @@ public class DataflowService {
         return api.getFollowers(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<LikedUsersListResp> getFollowers(String userId) {
+        return api.getFollowers(new CommonUserIdReq(new CommonUserIdReq.Snippet(userId))).
+                subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
 
     public Observable<LikedUsersListResp> getFollowed() {
         return api.getFollowingUsers(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).
+                subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<LikedUsersListResp> getFollowed(String userId) {
+        return api.getFollowingUsers(new CommonUserIdReq(new CommonUserIdReq.Snippet(userId))).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 }

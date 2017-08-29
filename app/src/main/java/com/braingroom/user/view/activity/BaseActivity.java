@@ -127,9 +127,13 @@ public abstract class BaseActivity extends MvvmActivity {
     }
 
     public void initNavigationDrawer() {
-    }
+    };
 
-    ;
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        vm.onUserInteraction();
+    }
 
     @Override
     protected void onResume() {
@@ -137,6 +141,7 @@ public abstract class BaseActivity extends MvvmActivity {
         isActive = true;
         vm.onResume();
     }
+
 
     @Override
     protected void onPause() {

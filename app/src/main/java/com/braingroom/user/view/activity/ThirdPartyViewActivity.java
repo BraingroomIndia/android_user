@@ -190,16 +190,13 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void retry() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance()).addToBackStack(null).commit();
     }
 
     @Override
     public void openFollower() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance()).addToBackStack(null).commit();
+        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance(userid)).addToBackStack(null).commit();
 
     }
 
@@ -207,7 +204,7 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
     public void openFollowed() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowedUserFragment.newInstance()).addToBackStack(null).commit();
+        transaction.replace(R.id.comments_container, FollowedUserFragment.newInstance(userid)).addToBackStack(null).commit();
 
     }
 
