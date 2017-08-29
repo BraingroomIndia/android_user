@@ -49,6 +49,8 @@ public class ProfileViewModel1 extends ViewModel {
     public final DataItemViewModel postCount = new DataItemViewModel("...");
     public final DataItemViewModel followerCount = new DataItemViewModel("...");
     public final DataItemViewModel followingCount = new DataItemViewModel("...");
+    public final DataItemViewModel localities = new DataItemViewModel("");
+//    public final DataItemViewModel interest = new DataItemViewModel("");
     public final ListDialogViewModel1 cityVm;
     public final ListDialogViewModel1 localityVm;
     public final ListDialogViewModel1 categoryVm; //Edited By Vikas Godara
@@ -134,7 +136,7 @@ public class ProfileViewModel1 extends ViewModel {
         connectFilterData.setMajorCateg(ConnectHomeActivity.LEARNER_FORUM);
         connectFilterData.setMinorCateg(ConnectHomeActivity.TIPS_TRICKS);
         nameIcon = R.drawable.ic_account_circle_black_24dp;
-        detailIcon1 = R.drawable.ic_email_black_24dp;
+        detailIcon1 = R.drawable.ic_account_circle_black_24dp;
         detailIcon2 = R.drawable.ic_domain_black_24dp;
         detailIcon3 = R.drawable.ic_domain_black_24dp;
         detailIcon4 = R.drawable.ic_domain_black_24dp;
@@ -188,6 +190,7 @@ public class ProfileViewModel1 extends ViewModel {
                         pgPassoutYear.s_1.set(data.getPgInstitutePassingYear());
                         imageUploadVm.remoteAddress.set(data.getProfileImage());
                         genderVm.setSelectedItemsMap(selectedGender);
+                        localities.s_1.set(data.getLocality());
                         if (data.getDob() != null && !data.getDob().equals(""))
                             dobVm.date.set(data.getDob());
                         HashMap<String, Integer> selectedCityMap = new HashMap<>();
@@ -208,6 +211,7 @@ public class ProfileViewModel1 extends ViewModel {
                                 selectedInterestMap.put(categoryName.get(i), categoryId.get(i));
                             categoryVm.setSelectedItemsMap(selectedInterestMap);
                         }
+                        interest.s_1.set(data.getCategoryName());
                         dataList = new ArrayList<>();
                         addProfileData(R.drawable.ic_email_black_24dp, data.getEmail(), dataList);
                         addProfileData(R.drawable.ic_phone_black_24dp, data.getContactNo(), dataList);
