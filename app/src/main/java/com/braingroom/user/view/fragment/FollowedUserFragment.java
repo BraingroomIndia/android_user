@@ -15,9 +15,9 @@ import com.braingroom.user.viewmodel.fragment.FollowedUserViewModel;
 
 public class FollowedUserFragment extends BaseFragment {
 
-    public static FollowedUserFragment newInstance( String userId) {
+    public static FollowedUserFragment newInstance(String userId) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.USER_ID,userId);
+        bundle.putString(Constants.USER_ID, userId);
         FollowedUserFragment fragment = new FollowedUserFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -29,7 +29,8 @@ public class FollowedUserFragment extends BaseFragment {
     @Override
     protected ViewModel createViewModel() {
         String userId = getStringArguments(Constants.USER_ID);
-        return new FollowedUserViewModel(((ConnectUiHelper) activity), activity.getNavigator(),userId);
+        return new FollowedUserViewModel(((ConnectUiHelper) activity), activity.getMessageHelper(), activity.getNavigator()
+                , activity.getHelperFactory(), userId);
     }
 
     @Override

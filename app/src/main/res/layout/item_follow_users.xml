@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.braingroom.user.viewmodel.fragment.LikedItemViewModel" />
+            type="com.braingroom.user.viewmodel.fragment.FollowItemViewModel" />
 
     </data>
 
@@ -21,26 +21,36 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
-            android:onClick="@{vm.showthirdpartyProfile}"
             android:layout_alignParentTop="true"
+            android:onClick="@{vm.showthirdpartyProfile}"
             app:civ_border_color="@color/colorTextGray"
             app:civ_border_width="2dp"
-            app:imageUrl="@{vm.userImage}"
-            app:placeHolder="@{vm.placeHolder}"/>
+            app:imageUrl="@{vm.userImage}" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="@dimen/margin_med"
+            android:layout_toLeftOf="@+id/follow"
             android:layout_toRightOf="@+id/commenter_image"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="@{vm.userName}"
             android:onClick="@{vm.showthirdpartyProfile}"
+            android:text="@{vm.userName}"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/text_size_medium"
             app:font='@{@string/robotoRegular}' />
+
+        <include
+            android:id="@+id/follow"
+            layout="@layout/button_follow"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:vm="@{vm.followButtonVm}" />
+
 
     </RelativeLayout>
 </layout>
