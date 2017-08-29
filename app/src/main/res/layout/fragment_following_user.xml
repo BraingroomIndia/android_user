@@ -25,7 +25,7 @@
             android:clipToPadding="false"
             bind:items="@{vm.items}"
             bind:layout_vertical="@{true}"
-            bind:view_provider="@{@layout/item_liked_users}" />
+            bind:view_provider="@{@layout/item_follow_users}" />
 
     </RelativeLayout>
 </layout>

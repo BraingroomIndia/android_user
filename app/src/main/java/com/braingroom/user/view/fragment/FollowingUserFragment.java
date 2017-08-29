@@ -7,7 +7,6 @@ import com.braingroom.user.R;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.braingroom.user.viewmodel.fragment.FollowedUserViewModel;
 import com.braingroom.user.viewmodel.fragment.FollowingUserViewModel;
 
 /**
@@ -27,7 +26,8 @@ public class FollowingUserFragment extends BaseFragment {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new FollowingUserViewModel(((ConnectUiHelper) activity), activity.getNavigator(),getStringArguments(Constants.USER_ID));
+        return new FollowingUserViewModel(((ConnectUiHelper) activity), activity.getMessageHelper()
+                , activity.getNavigator(), activity.getHelperFactory(), getStringArguments(Constants.USER_ID));
     }
 
     @Override

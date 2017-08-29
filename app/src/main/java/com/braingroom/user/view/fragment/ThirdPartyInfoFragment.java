@@ -6,16 +6,13 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
-import com.braingroom.user.viewmodel.ProfileViewModel1;
 import com.braingroom.user.viewmodel.ThirdPartyViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -63,15 +60,13 @@ public class ThirdPartyInfoFragment extends BaseFragment {
                 ContextCompat.getColor(activity, R.color.bottomNavUnSelected)
         });
         mBottomNav = getView().findViewById(R.id.bottom_navigation);
-        mBottomNav.inflateMenu(R.menu.bottom_nav_connect);
+        mBottomNav.inflateMenu(R.menu.bottom_nav_profile);
         if (TIPS_TRICKS.equals(((ThirdPartyViewModel) vm).getConnectFilterData().getMinorCateg()))
             selectedBottomNav = R.id.action_tips_tricks;
         if (BUY_SELL.equals(((ThirdPartyViewModel) vm).getConnectFilterData().getMinorCateg()))
             selectedBottomNav = R.id.action_buy_sell;
         if (FIND_PARTNERS.equals(((ThirdPartyViewModel) vm).getConnectFilterData().getMinorCateg()))
             selectedBottomNav = R.id.action_find_partners;
-        if (TUTORS_ARTICLE.equals(((ThirdPartyViewModel) vm).getConnectFilterData().getMinorCateg()))
-            selectedBottomNav = R.id.action_tutors_article;
         if (DISCUSS_DECIDE.equals(((ThirdPartyViewModel) vm).getConnectFilterData().getMinorCateg()))
             selectedBottomNav = R.id.action_discuss_n_decide;
         mBottomNav.setSelectedItemId(selectedBottomNav);

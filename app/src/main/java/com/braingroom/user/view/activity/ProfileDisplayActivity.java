@@ -15,16 +15,12 @@ import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
-import com.braingroom.user.view.fragment.BaseFragment;
 import com.braingroom.user.view.fragment.CommentFragment;
-import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.view.fragment.FollowedUserFragment;
 import com.braingroom.user.view.fragment.FollowingUserFragment;
 import com.braingroom.user.view.fragment.LikesFragment;
 import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
-import com.braingroom.user.viewmodel.ConnectHomeViewModel;
-import com.braingroom.user.viewmodel.ProfileViewModel;
 import com.braingroom.user.viewmodel.ProfileViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -73,15 +69,13 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
                 ContextCompat.getColor(this, R.color.bottomNavUnSelected)
         });
         mBottomNav = findViewById(R.id.bottom_navigation);
-        mBottomNav.inflateMenu(R.menu.bottom_nav_connect);
+        mBottomNav.inflateMenu(R.menu.bottom_nav_profile);
         if (TIPS_TRICKS.equals(((ProfileViewModel1) vm).getConnectFilterData().getMinorCateg()))
             selectedBottomNav = R.id.action_tips_tricks;
         if (BUY_SELL.equals(((ProfileViewModel1) vm).getConnectFilterData().getMinorCateg()))
             selectedBottomNav = R.id.action_buy_sell;
         if (FIND_PARTNERS.equals(((ProfileViewModel1) vm).getConnectFilterData().getMinorCateg()))
             selectedBottomNav = R.id.action_find_partners;
-        if (TUTORS_ARTICLE.equals(((ProfileViewModel1) vm).getConnectFilterData().getMinorCateg()))
-            selectedBottomNav = R.id.action_tutors_article;
         if (DISCUSS_DECIDE.equals(((ProfileViewModel1) vm).getConnectFilterData().getMinorCateg()))
             selectedBottomNav = R.id.action_discuss_n_decide;
         mBottomNav.setSelectedItemId(selectedBottomNav);
