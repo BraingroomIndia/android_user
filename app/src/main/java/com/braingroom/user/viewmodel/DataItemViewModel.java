@@ -38,6 +38,13 @@ public class DataItemViewModel extends ViewModel {
         }
     }
 
+    public DataItemViewModel(@NonNull final String s_1, @NonNull final MyConsumer<DataItemViewModel> clickConsumer
+    ) {
+        this.s_1.set(s_1);
+        this.onClicked = clickConsumer;
+
+    }
+
     public DataItemViewModel(@NonNull final String s_1) {
         this.s_1.set(s_1);
         this.onClicked = null;
@@ -47,7 +54,7 @@ public class DataItemViewModel extends ViewModel {
         isSelected.set(!isSelected.get());
     }
 
-    public void setErrorMessage(String message){
+    public void setErrorMessage(String message) {
         errorMessage.set(message);
     }
 

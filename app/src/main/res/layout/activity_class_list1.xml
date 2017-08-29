@@ -10,6 +10,7 @@
 
         <import type="com.braingroom.user.viewmodel.ClassListViewModel1" />
 
+
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.ClassListViewModel1" />
@@ -55,11 +56,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/header_height_large"
                         android:scrollbars="none"
-                        android:visibility="@{vm.segmentsVisibility ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{vm.selectedFilterisEmpty ? View.GONE :View.VISIBLE}"
                         app:layout_scrollFlags="scroll|enterAlways"
-                        bind:items="@{vm.segments}"
+                        bind:items="@{vm.selectedFilter}"
                         bind:layout_vertical="@{false}"
-                        bind:view_provider="@{@layout/item_segments_text}">
+                        bind:view_provider="@{@layout/item_selected_filter}">
 
                     </android.support.v7.widget.RecyclerView>
 
@@ -128,8 +129,8 @@
             <FrameLayout
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
-                android:background="@android:color/transparent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent" />
 
         </FrameLayout>
 

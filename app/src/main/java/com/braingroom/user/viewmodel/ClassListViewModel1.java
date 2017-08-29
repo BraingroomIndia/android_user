@@ -34,6 +34,7 @@ import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
 import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
+import com.braingroom.user.viewmodel.fragment.SelectedFilterItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,13 +66,16 @@ public class ClassListViewModel1 extends ViewModel {
     public static final String ORIGIN_CATALOG = "CATALOG";
     public static final String ORIGIN_GIFT = "GIFT";
 
+
     public final
     @NonNull
     ObservableInt layoutType;
 
     public Observable<List<ViewModel>> classes;
     public final Observable<List<ViewModel>> segments;
+    public final Observable<List<ViewModel>> selectedFilter;
     public final ObservableBoolean segmentsVisibility = new ObservableBoolean(true);
+    public final ObservableBoolean selectedFilterisEmpty = new ObservableBoolean(false);
 
     public final Action onViewChangeClicked, onSortClicked, onFilterClicked;
     public final Function<ClassListData, List<ViewModel>> classDataMapFunction;
@@ -111,13 +115,13 @@ public class ClassListViewModel1 extends ViewModel {
 
     public final Navigator navigator;
 
-    private boolean isLocalitySelected;
+    private boolean isLocalitySelected = true;
 
 
     public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @NonNull final FilterData filterData1,
-                               HashMap<String, Integer> categoryMap,
-                               HashMap<String, Integer> segmentsMap,
+                               final HashMap<String, Integer> categoryMap,
+                               final HashMap<String, Integer> segmentsMap,
                                HashMap<String, String> cityMap,
                                HashMap<String, String> localityMap,
                                HashMap<String, Integer> communityMap,
@@ -253,6 +257,86 @@ public class ClassListViewModel1 extends ViewModel {
                         });
             }
         });
+        selectedFilter = FieldUtils.toObservable(callAgain).
+                flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+                    @Override
+                    public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                        List<ViewModel> selectedItems = new ArrayList<ViewModel>();
+                        if (categoryFilterMap != null && !categoryFilterMap.isEmpty()) {
+                            selectedItems.add(new DataItemViewModel(categoryFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    categoryFilterMap = new HashMap<String, Integer>();
+                                    filterData.setCategoryId("");
+                                    reset();
+                                }
+                            }));
+                        }
+                        if (segmentsFilterMap != null && !segmentsFilterMap.isEmpty()) {
+                            selectedItems.add(new DataItemViewModel(segmentsFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    segmentsFilterMap = new HashMap<String, Integer>();
+                                    filterData.setSegmentId("");
+                                    reset();
+                                }
+                            }));
+                        }
+                        if (localityFilterMap != null && !localityFilterMap.isEmpty()) {
+                            selectedItems.add(new DataItemViewModel(localityFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    localityFilterMap = new HashMap<String, String>();
+                                    filterData.setLocationId("");
+                                    reset();
+                                }
+                            }));
+                        }
+                        if (communityFilterMap != null && !communityFilterMap.isEmpty()) {
+                            selectedItems.add(new DataItemViewModel(communityFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    communityFilterMap = new HashMap<String, Integer>();
+                                    filterData.setCommunityId("");
+                                    reset();
+                                }
+                            }));
+                        }
+                        if (classScheduleFilterMap != null && !classScheduleFilterMap.isEmpty()) {
+                            selectedItems.add(new DataItemViewModel(classScheduleFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    classScheduleFilterMap = new HashMap<String, Integer>();
+                                    filterData.setClassSchedule("");
+                                    reset();
+                                }
+                            }));
+                        }
+                        if (classTypeFilterMap != null && !classTypeFilterMap.isEmpty()) {
+                            selectedItems.add(new DataItemViewModel(classTypeFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    classTypeFilterMap = new HashMap<String, Integer>();
+                                    filterData.setClassType("");
+                                    reset();
+                                }
+                            }));
+                        }
+                        if (vendorListFilterMap != null && !vendorListFilterMap.isEmpty()) {
+                            selectedItems.add(new DataItemViewModel(vendorListFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    vendorListFilterMap = new HashMap<String, String>();
+                                    filterData.setClassProvider("");
+                                    reset();
+                                }
+                            }));
+                        }
+                        if (selectedItems.isEmpty())
+                            selectedFilterisEmpty.set(true);
+                        return Observable.just(selectedItems);
+                    }
+                });
 //
         classDataMapFunction = new Function<ClassListData, List<ViewModel>>() {
             @Override
