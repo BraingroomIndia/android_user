@@ -509,18 +509,23 @@ public class ClassListViewModel1 extends ViewModel {
             }
         });
         classes.subscribe();
+        //messageHelper.showAcceptDismissInfo();
 
-        FieldUtils.toObservable(callAgain).debounce(5, TimeUnit.SECONDS).filter(new Predicate<Integer>() {
+        FieldUtils.toObservable(callAgain).debounce(1, TimeUnit.SECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return !(isLocalitySelected || askedForLocality);
+                return false /*!(isLocalitySelected || askedForLocality)*/;
             }
         }).subscribe(new Consumer<Integer>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 askedForLocality = true;
-                localityVm.onOpenClicked.run();
 //                fragmentHelper.show(SignupActivity.FRAGMENT_TITLE_COUNTRY);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                throwable.printStackTrace();
             }
         });
 

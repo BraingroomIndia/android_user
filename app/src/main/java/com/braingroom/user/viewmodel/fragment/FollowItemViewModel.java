@@ -22,8 +22,8 @@ public class FollowItemViewModel extends ViewModel {
     public final FollowButtonViewModel followButtonVm;
 
     public FollowItemViewModel(String userImage, String userName, final String userId, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory) {
-        followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_FOLLOW);
+            , @NonNull int followStatus) {
+        followButtonVm = new FollowButtonViewModel(userId, messageHelper, navigator, followStatus == 0 ? FollowButtonViewModel.STATE_FOLLOW : FollowButtonViewModel.STATE_FOLLOWED);
         this.userImage = userImage;
         this.userName = userName;
         showthirdpartyProfile = new Action() {

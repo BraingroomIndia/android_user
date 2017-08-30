@@ -29,9 +29,9 @@ public interface ConnectUiHelper {
 
     void retry();
 
-    void openFollower();
+    void openFollowers();
 
-    void openFollowed();
+    void openFollowing();
 
     void openFilter();
 }

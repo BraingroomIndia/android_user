@@ -20,13 +20,13 @@ public class CatalogueHomeActivity extends BaseActivity {
         return R.layout.activity_catalogue_home;
     }
 
-/*    @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         }
         return false;
-    }*/
+    }
 }
 

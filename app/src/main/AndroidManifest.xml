@@ -337,7 +337,7 @@
         <activity android:name=".view.activity.ConnectSectionListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activity.Splash" />
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
         </activity>
 
 

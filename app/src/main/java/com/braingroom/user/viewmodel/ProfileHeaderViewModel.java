@@ -26,9 +26,11 @@ public class ProfileHeaderViewModel extends ViewModel {
         this.profileUrl.set(profileUrl);
 
         if (!isThirdParty) {
-            followButton = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_EDIT);
+//            TODO hardcode user Id
+            followButton = new FollowButtonViewModel(123 + "", messageHelper, navigator, FollowButtonViewModel.STATE_EDIT);
         } else {
-            followButton = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_LOADING);
+            //            TODO hardcode user Id
+            followButton = new FollowButtonViewModel(123 + "", messageHelper, navigator, FollowButtonViewModel.STATE_LOADING);
         }
 
         followersClicked = new Action() {

@@ -19,13 +19,12 @@ import android.view.ViewGroup;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ConnectFilterData;
-import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.fragment.BaseFragment;
 import com.braingroom.user.view.fragment.ClassSimpleListFragment;
 import com.braingroom.user.view.fragment.CommentFragment;
-import com.braingroom.user.view.fragment.FollowedUserFragment;
 import com.braingroom.user.view.fragment.FollowingUserFragment;
+import com.braingroom.user.view.fragment.FollowersUserFragment;
 import com.braingroom.user.view.fragment.LikesFragment;
 import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
@@ -193,18 +192,18 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
     }
 
     @Override
-    public void openFollower() {
+    public void openFollowers() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance(userid)).addToBackStack(null).commit();
+        transaction.replace(R.id.comments_container, FollowersUserFragment.newInstance(userid)).addToBackStack(null).commit();
 
     }
 
     @Override
-    public void openFollowed() {
+    public void openFollowing() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowedUserFragment.newInstance(userid)).addToBackStack(null).commit();
+        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance(userid)).addToBackStack(null).commit();
 
     }
 

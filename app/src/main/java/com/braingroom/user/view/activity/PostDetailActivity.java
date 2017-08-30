@@ -92,12 +92,12 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     }
 
     @Override
-    public void openFollower() {
+    public void openFollowers() {
 
     }
 
     @Override
-    public void openFollowed() {
+    public void openFollowing() {
 
     }
 

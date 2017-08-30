@@ -50,7 +50,7 @@ public class ProfileViewModel1 extends ViewModel {
     public final DataItemViewModel followerCount = new DataItemViewModel("...");
     public final DataItemViewModel followingCount = new DataItemViewModel("...");
     public final DataItemViewModel localities = new DataItemViewModel("");
-//    public final DataItemViewModel interest = new DataItemViewModel("");
+    //    public final DataItemViewModel interest = new DataItemViewModel("");
     public final ListDialogViewModel1 cityVm;
     public final ListDialogViewModel1 localityVm;
     public final ListDialogViewModel1 categoryVm; //Edited By Vikas Godara
@@ -105,7 +105,7 @@ public class ProfileViewModel1 extends ViewModel {
 
     public ProfileViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @NonNull final ConnectUiHelper uiHelper) {
-        followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_EDIT);
+        followButtonVm = new FollowButtonViewModel(BG_ID, messageHelper, navigator, FollowButtonViewModel.STATE_EDIT);
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -118,21 +118,21 @@ public class ProfileViewModel1 extends ViewModel {
         onFollowerClicked = new Action() {
             @Override
             public void run() throws Exception {
-                uiHelper.openFollower();
+                uiHelper.openFollowers();
             }
         };
 
         onFollowingClicked = new Action() {
             @Override
             public void run() throws Exception {
-                uiHelper.openFollowed();
+                uiHelper.openFollowing();
             }
         };
 
         this.connectFilterData = new ConnectFilterData();
 
-// TODO add userId to feed
-        // connectFilterData.setAuthorId(pref.getString(Constants.BG_ID, ""));
+
+        connectFilterData.setAuthorId(BG_ID);
         connectFilterData.setMajorCateg(ConnectHomeActivity.LEARNER_FORUM);
         connectFilterData.setMinorCateg(ConnectHomeActivity.TIPS_TRICKS);
         nameIcon = R.drawable.ic_account_circle_black_24dp;

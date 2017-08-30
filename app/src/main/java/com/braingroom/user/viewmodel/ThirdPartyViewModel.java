@@ -83,14 +83,13 @@ public class ThirdPartyViewModel extends ViewModel {
                 retry();
             }
         });
-        followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator, FollowButtonViewModel.STATE_LOADING);
+        followButtonVm = new FollowButtonViewModel(userId, messageHelper, navigator, FollowButtonViewModel.STATE_LOADING);
         imageUploadVm = new ImageUploadViewModel(messageHelper, navigator, R.drawable.avatar_male, null);
 
         this.userId = userId;
         //Connect Part
         connectFilterData = new ConnectFilterData();
-        // TODO add userId to feed
-        // connectFilterData.setAuthorId(pref.getString(Constants.BG_ID, ""));
+        connectFilterData.setAuthorId(userId);
         connectFilterData.setMajorCateg(ConnectHomeActivity.LEARNER_FORUM);
         connectFilterData.setMinorCateg(ConnectHomeActivity.TIPS_TRICKS);
 
@@ -152,7 +151,7 @@ public class ThirdPartyViewModel extends ViewModel {
                 } else {
                     //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
-                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem,uiHelper ,helperFactory, messageHelper, navigator));
+                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
                     }
                 }
 

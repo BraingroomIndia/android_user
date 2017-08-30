@@ -63,6 +63,7 @@ import com.braingroom.user.model.request.SignUpReq;
 import com.braingroom.user.model.request.SocialLoginReq;
 import com.braingroom.user.model.request.StateReq;
 import com.braingroom.user.model.request.SubmitOTPReq;
+import com.braingroom.user.model.request.ThirdPartyProfileReq;
 import com.braingroom.user.model.request.UserListReq;
 import com.braingroom.user.model.request.WishlistReq;
 import com.braingroom.user.model.response.BaseResp;
@@ -901,7 +902,7 @@ public class DataflowService {
     }
 
     public Observable<ThirdPartyProfileResp> getThirdPartyProfile(String userId) {
-        return api.getThirdPartyProfile(new CommonIdReq(new CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
+        return api.getThirdPartyProfile(new ThirdPartyProfileReq(new ThirdPartyProfileReq.Snippet(pref.getString(Constants.BG_ID, ""), userId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -1056,16 +1057,18 @@ public class DataflowService {
         return api.getFollowers(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
+
     public Observable<LikedUsersListResp> getFollowers(String userId) {
         return api.getFollowers(new CommonUserIdReq(new CommonUserIdReq.Snippet(userId))).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LikedUsersListResp> getFollowed() {
+    public Observable<LikedUsersListResp> getFollowing() {
         return api.getFollowingUsers(new CommonUserIdReq(new CommonUserIdReq.Snippet(pref.getString(Constants.BG_ID, "")))).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<LikedUsersListResp> getFollowed(String userId) {
+
+    public Observable<LikedUsersListResp> getFollowing(String userId) {
         return api.getFollowingUsers(new CommonUserIdReq(new CommonUserIdReq.Snippet(userId))).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
