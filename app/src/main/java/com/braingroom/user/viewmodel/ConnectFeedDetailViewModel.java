@@ -149,7 +149,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                     categoryImg.set(resArray[Integer.parseInt(resp.getData().get(0).getCategoryId()) - 1]);
 
                 vendorImage.set(resp.getData().get(0).getVendorImage());
-                userId = resp.getData().get(0).getPostOwner();
+                userId = resp.getData().get(0).getPostOwnerId();
                 date.set(getHumanDate(resp.getData().get(0).getDate()));
                 segment.set(resp.getData().get(0).getSegName());
                 title.set(resp.getData().get(0).getTitle());
@@ -163,7 +163,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 video.set(getVideoId(resp.getData().get(0).getVideo()));
                 videoThumb.set(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
                 isActivityRequest.set("activity_request".equalsIgnoreCase(resp.getData().get(0).getPostType()));
-                isPostOwner.set((pref.getString(Constants.BG_ID, "").equals(resp.getData().get(0).getPostOwner())));
+                isPostOwner.set((pref.getString(Constants.BG_ID, "").equals(resp.getData().get(0).getPostOwnerId())));
                 liked.set(resp.getData().get(0).getLiked() == 0 ? false : true);
                 reported.set(resp.getData().get(0).getReported() == 0 ? false : true);
                 accepted.set(resp.getData().get(0).getIsAccepted() == 1);

@@ -9,6 +9,7 @@ import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.viewmodel.FollowButtonViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.ArrayList;
@@ -30,13 +31,13 @@ public class FollowingUserViewModel extends ViewModel {
             , @NonNull final HelperFactory helperFactory, String userId) {
         if (TextUtils.isEmpty(userId))
             userId = pref.getString(Constants.BG_ID, "");
-        items = apiService.getFollowers(userId).map(new Function<LikedUsersListResp, List<ViewModel>>() {
+        items = apiService.getFollowing(userId).map(new Function<LikedUsersListResp, List<ViewModel>>() {
             @Override
             public List<ViewModel> apply(LikedUsersListResp resp) throws Exception {
                 List<ViewModel> results = new ArrayList<>();
                 for (final LikedUsersListResp.Snippet elem : resp.getData()) {
                     results.add(new FollowItemViewModel(elem.getUserImage(), elem.getUserName(), elem.getUserId()
-                            , messageHelper, navigator, helperFactory));
+                            , messageHelper, navigator, FollowButtonViewModel.STATE_FOLLOWED));
                 }
                 return results;
             }

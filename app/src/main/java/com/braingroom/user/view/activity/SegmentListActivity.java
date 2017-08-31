@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 import android.view.MenuItem;
 
 import com.braingroom.user.R;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.viewmodel.SegmentListViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
+
 import java.util.HashMap;
 
 /**
@@ -16,7 +18,7 @@ public class SegmentListActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        HashMap<String, Integer> categoryMap = (HashMap<String, Integer>) getIntentSerializable("categoryMap");
+        HashMap<String, Integer> categoryMap = (HashMap<String, Integer>) getIntentSerializable(Constants.categoryFilterMap);
         if (categoryMap == null) {
             categoryMap = new HashMap<>();
             categoryMap.put("Fun & Recreation", 1);

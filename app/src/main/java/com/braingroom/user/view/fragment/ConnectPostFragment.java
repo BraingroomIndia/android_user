@@ -10,12 +10,16 @@ import com.braingroom.user.R;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ConnectPostViewModel;
 
+import lombok.Getter;
+
 
 /**
  * Created by agrahari on 07/04/17.
  */
 
 public class ConnectPostFragment extends BaseFragment {
+    @Getter
+    ConnectPostViewModel viewModel;
 
     private String TAG = getClass().getCanonicalName();
 
@@ -45,12 +49,13 @@ public class ConnectPostFragment extends BaseFragment {
         if (args != null) {
             postType = args.getString(POST_TYPE);
         }
-        return new ConnectPostViewModel(activity.getMessageHelper(), activity.getNavigator(), activity.getHelperFactory(), postType, new UiHelper() {
+        viewModel = new ConnectPostViewModel(activity.getMessageHelper(), activity.getNavigator(), activity.getHelperFactory(), postType, new UiHelper() {
             @Override
             public void next() {
                 getActivity().onBackPressed();
             }
         });
+        return viewModel;
     }
 
     @Override
@@ -64,6 +69,9 @@ public class ConnectPostFragment extends BaseFragment {
         Log.d(TAG, "onActivityResult: " + requestCode);
         vm.handleActivityResult(requestCode, resultCode, data);
     }
+
+
+
 
 //    /**
 //     * TODO: Need to start image chooser activity from fragment instead of activity to receive onActivityResult call

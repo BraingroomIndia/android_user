@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -127,7 +128,9 @@ public abstract class BaseActivity extends MvvmActivity {
     }
 
     public void initNavigationDrawer() {
-    };
+    }
+
+    ;
 
     @Override
     public void onUserInteraction() {
@@ -333,6 +336,30 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
+                public void showAcceptDismissInfo() {
+                    new MaterialDialog.Builder(BaseActivity.this)
+                            .title("Use Google's Location Services?")
+                            .content("Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.")
+                            .positiveText("Agree")
+                            .showListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialog) {
+                                }
+                            })
+                            .cancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                }
+                            })
+                            .dismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                }
+                            })
+                            .show();
+                }
+
+                @Override
                 public void showProgressDialog(@Nullable String title, @NonNull String content) {
                     progressDialog = new MaterialDialog.Builder(BaseActivity.this)
                             .title(title)
@@ -353,15 +380,7 @@ public abstract class BaseActivity extends MvvmActivity {
         return messageHelper;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.home) {
-            this.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
-            this.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         vm.handleActivityResult(requestCode, resultCode, data);

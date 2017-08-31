@@ -80,9 +80,10 @@ public class ConnectPostViewModel extends ViewModel {
     public Navigator navigator;
     public MessageHelper messageHelper;
     private String postType;
-    private Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer, localityConsumer, postConsumer, groupConsumer, categoryConsumer;
+    public Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer, localityConsumer, postConsumer, groupConsumer, categoryConsumer;
 
 
+    HashMap<String, Integer> mSelectedPostType = new HashMap<String, Integer>();
     public final ObservableBoolean videoField = new ObservableBoolean(true);
     public final ObservableBoolean isRecurring = new ObservableBoolean(false);
     public final ObservableBoolean imageField = new ObservableBoolean(true);
@@ -92,7 +93,6 @@ public class ConnectPostViewModel extends ViewModel {
     public final ObservableBoolean groupsField = new ObservableBoolean(true);
     public final ObservableBoolean proposedTimeField = new ObservableBoolean(false);
     public final ObservableBoolean categoryField = new ObservableBoolean(false);
-
 
     public ConnectPostViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory,
                                 final String postType1, final ConnectPostFragment.UiHelper uiHelper) {
@@ -127,19 +127,17 @@ public class ConnectPostViewModel extends ViewModel {
         postTypeLearnerApiData.put("Knowledge nuggets", POST_TYPE_KNOWLEDGE_NUGGETS);
         postTypeLearnerApiData.put("Buy & sell", POST_TYPE_BUY_N_SELL);
         postTypeLearnerApiData.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
+        postTypeLearnerApiData.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
 
         LinkedHashMap<String, Integer> privacyTypeApiData = new LinkedHashMap<>();
         privacyTypeApiData.put("Group", PRIVACY_TYPE_GROUP);
         privacyTypeApiData.put("All", PRIVACY_TYPE_ALL);
 
-        LinkedHashMap<String, Integer> postTypeTutorApiData = new LinkedHashMap<>();
-        postTypeTutorApiData.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
 
         postTypeApiData = postTypeLearnerApiData;
 
-        showAP();
-        HashMap<String, Integer> mSelectedPostType = new HashMap<String, Integer>();
-    /*    if ("action_tips_tricks".equalsIgnoreCase(postType1)) {
+        mSelectedPostType = new HashMap<String, Integer>();
+        if ("action_tips_tricks".equalsIgnoreCase(postType1)) {
             mSelectedPostType.put("Knowledge nuggets", POST_TYPE_KNOWLEDGE_NUGGETS);
             showKNN();
         } else if ("action_buy_sell".equalsIgnoreCase(postType1)) {
@@ -148,8 +146,7 @@ public class ConnectPostViewModel extends ViewModel {
         } else if ("action_find_partners".equalsIgnoreCase(postType1)) {
             mSelectedPostType.put("Find learning partners", POST_TYPE_LEARNING_PARTNERS);
             showAP();
-        } else*/ if ("tutor_talks".equals(postType1)) {
-            postTypeApiData = postTypeTutorApiData;
+        } else if ("action_discuss_n_decide".equalsIgnoreCase(postType1)) {
             mSelectedPostType.put("Discuss and Decide", POST_TYPE_DISCUSS_AND_DECIDE);
             showDND();
         }
@@ -627,7 +624,7 @@ public class ConnectPostViewModel extends ViewModel {
         decideAndDiscussSnippet.setSegmentId(null);
     }
 
-    private void showKNN() {
+    public void showKNN() {
         videoField.set(true);
         postType = "tips_tricks";
         imageField.set(true);
@@ -639,7 +636,7 @@ public class ConnectPostViewModel extends ViewModel {
         categoryField.set(false);
     }
 
-    private void showBNS() {
+    public void showBNS() {
         imageField.set(true);
         postType = "group_post";
         groupsField.set(true);
@@ -650,7 +647,7 @@ public class ConnectPostViewModel extends ViewModel {
         categoryField.set(false);
     }
 
-    private void showAP() {
+    public void showAP() {
         groupsField.set(true);
         postType = "activity_request";
         proposedTimeField.set(true);
@@ -661,7 +658,7 @@ public class ConnectPostViewModel extends ViewModel {
         categoryField.set(false);
     }
 
-    private void showDND() {
+    public void showDND() {
         imageField.set(true);
         postType = "user_post";
         categoryField.set(true);

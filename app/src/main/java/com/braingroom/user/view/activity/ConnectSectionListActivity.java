@@ -25,5 +25,13 @@ public class ConnectSectionListActivity extends BaseActivity {
         return R.layout.activity_connect_section_list;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

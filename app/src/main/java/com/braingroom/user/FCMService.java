@@ -127,8 +127,8 @@ public class FCMService extends FirebaseMessagingService {
         style.bigText(detailDescription).setBigContentTitle(title);
 
         builder.setContentTitle(title).
-                setSmallIcon(R.drawable.ic_notifications_white_24dp).
-                setColor(getResources().getColor(R.color.blue)).
+                setSmallIcon(R.drawable.ic_notifications_64px).
+                setColor(getResources().getColor(R.color.push_notification)).
                 setContentText(shortDescription).
                 setStyle(style).
                 setAutoCancel(true).
@@ -146,8 +146,8 @@ public class FCMService extends FirebaseMessagingService {
         style.setBigContentTitle(title).setSummaryText(shortDescription).bigPicture(getBitmapfromUrl(imageUrl));
         builder.setContentTitle(title).
                 setContentText(shortDescription).
-                setColor(getResources().getColor(R.color.transparent)).
-                setSmallIcon(R.drawable.ic_notifications_white_24dp).
+                setColor(getResources().getColor(R.color.push_notification)).
+                setSmallIcon(R.drawable.ic_notifications_64px).
                 setStyle(style).
                 setAutoCancel(true).
                 setSound(defaultSoundUri).

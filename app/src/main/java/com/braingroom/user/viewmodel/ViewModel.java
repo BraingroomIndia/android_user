@@ -23,7 +23,7 @@ import javax.inject.Named;
 
 import io.reactivex.functions.Consumer;
 
-public class ViewModel extends BaseObservable{
+public class ViewModel extends BaseObservable {
 
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
     public static final int REQ_CODE_CHOOSE_IMAGE = 1;
@@ -68,7 +68,7 @@ public class ViewModel extends BaseObservable{
 
     public ViewModel() {
         UserApplication.getInstance().getMAppComponent().inject(this);
-        BG_ID = pref.getString(Constants.BG_ID,"");
+        BG_ID = pref.getString(Constants.BG_ID, "");
         setLoggedIn();
         TAG = this.getClass().getSimpleName();
         if (pref.getBoolean(Constants.NEW_FCM, false)) {
@@ -129,9 +129,11 @@ public class ViewModel extends BaseObservable{
     public void onResume() {
     }
 
-    public void onUserInteraction(){
+    public void onUserInteraction() {
 
-    };
+    }
+
+    ;
 
     public boolean isValidPhoneNo(CharSequence phoneNo) {
         if (!TextUtils.isEmpty(phoneNo)) {

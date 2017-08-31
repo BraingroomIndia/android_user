@@ -7,34 +7,31 @@ import com.braingroom.user.R;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.braingroom.user.viewmodel.fragment.FollowedUserViewModel;
+import com.braingroom.user.viewmodel.fragment.FollowersUserViewModel;
 
 /**
  * Created by godara on 26/08/17.
  */
 
-public class FollowedUserFragment extends BaseFragment {
-
-    public static FollowedUserFragment newInstance(String userId) {
+public class FollowersUserFragment extends BaseFragment {
+    public static FollowersUserFragment newInstance(String userId) {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.USER_ID, userId);
-        FollowedUserFragment fragment = new FollowedUserFragment();
+        FollowersUserFragment fragment = new FollowersUserFragment();
         fragment.setArguments(bundle);
         return fragment;
-
     }
 
 
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        String userId = getStringArguments(Constants.USER_ID);
-        return new FollowedUserViewModel(((ConnectUiHelper) activity), activity.getMessageHelper(), activity.getNavigator()
-                , activity.getHelperFactory(), userId);
+        return new FollowersUserViewModel(((ConnectUiHelper) activity), activity.getMessageHelper()
+                , activity.getNavigator(), activity.getHelperFactory(), getStringArguments(Constants.USER_ID));
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_followed_user;
+        return R.layout.fragment_following_user;
     }
 }

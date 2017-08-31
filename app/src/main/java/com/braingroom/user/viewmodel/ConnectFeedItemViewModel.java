@@ -111,7 +111,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
             , @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
-        followButtonVm = new FollowButtonViewModel(helperFactory, messageHelper, navigator,
+        followButtonVm = new FollowButtonViewModel(data.getPostOwnerId(), messageHelper, navigator,
                 data.getFollowStatus() == 0 ? FollowButtonViewModel.STATE_FOLLOW : FollowButtonViewModel.STATE_FOLLOWED);
         if (data.getCategoryId() == null && data.getSegId() == null)
             isSegmentAvailable.set(false);
@@ -142,7 +142,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.isVendor.set("vendor_article".equalsIgnoreCase(postType));
         this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
         this.numAccepts = new ObservableInt(data.getNumAccepted());
-        this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwner()));
+        this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwnerId()));
         this.isMediaAvailable = new ObservableBoolean(data.getVideo() != null || !data.getImage().equals(""));
 
 
@@ -154,8 +154,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
                     FilterData filterData = new FilterData();
                     filterData.setCategoryId(data.getCategoryId());
                     filterData.setSegmentId(data.getSegId());
-                    bundle.putSerializable("filterData", filterData);
-                    bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                    bundle.putSerializable(Constants.classFilterData, filterData);
+                    bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
                 /*    try {
                         ZohoSalesIQ.Tracking.setCustomAction("Find relevant classes clicked from connect page categoryId \t" +data.getCategoryId() + "segmentId\t" +data.getSegId() );
                     } catch (PEXException e) {
@@ -189,7 +189,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
                     return;
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString("sender_id", data.getPostOwner());
+                bundle.putString("sender_id", data.getPostOwnerId());
                 bundle.putString("sender_name", data.getVendorName());
              /*   try {
                     ZohoSalesIQ.Tracking.setCustomAction("Message Icon clicked from connect page");
@@ -213,10 +213,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
                 }*/
                 Bundle bundleData = new Bundle();
                 if (data.getPostType().equalsIgnoreCase("vendor_article")) {
-                    bundleData.putString("id", data.getPostOwner());
+                    bundleData.putString("id", data.getPostOwnerId());
                     navigator.navigateActivity(VendorProfileActivity.class, bundleData);
                 } else {
-                    bundleData.putString("userId", data.getPostOwner());
+                    bundleData.putString("userId", data.getPostOwnerId());
                     navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
                 }
 

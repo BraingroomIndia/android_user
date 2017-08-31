@@ -41,7 +41,7 @@ public class FollowButtonViewModel extends ViewModel {
         notifyPropertyChanged(BR.backgroundDrawable);
     }
 
-    public FollowButtonViewModel(final HelperFactory helperFactory, final MessageHelper messageHelper, final Navigator navigator, int state) {
+    public FollowButtonViewModel(@NonNull final String userId, final MessageHelper messageHelper, final Navigator navigator, int state) {
         changeButtonState(state);
         clickAction = new Action() {
             @Override
@@ -54,13 +54,13 @@ public class FollowButtonViewModel extends ViewModel {
 //                        messageHelper.show("follow");
                         changeButtonState(STATE_LOADING);
 //                        TODO remove hardcoded userId
-                        apiService.follow(1331 + "").subscribe(new Consumer<FollowResp>() {
+                        apiService.follow(userId).subscribe(new Consumer<FollowResp>() {
                             @Override
                             public void accept(@NonNull FollowResp resp) throws Exception {
-                                if (resp.getData().isEmpty() || resp.getData().get(0).getStatus() == 0) {
+                                if (resp.getData().isEmpty()) {
                                     messageHelper.show(resp.getResMsg());
                                     changeButtonState(STATE_FOLLOW);
-                                } else currentState.set(STATE_FOLLOWED);
+                                } else changeButtonState(STATE_FOLLOWED);
                             }
                         }, new Consumer<Throwable>() {
                             @Override

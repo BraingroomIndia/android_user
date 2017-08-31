@@ -54,6 +54,7 @@ import com.braingroom.user.model.request.SignUpReq;
 import com.braingroom.user.model.request.SocialLoginReq;
 import com.braingroom.user.model.request.StateReq;
 import com.braingroom.user.model.request.SubmitOTPReq;
+import com.braingroom.user.model.request.ThirdPartyProfileReq;
 import com.braingroom.user.model.request.UserListReq;
 import com.braingroom.user.model.request.VendorReviewReq;
 import com.braingroom.user.model.request.WishlistReq;
@@ -351,7 +352,7 @@ public interface UserApiService {
     Observable<ConnectFeedResp> getFeedsByPostID(@Body ConnectPostByIdReq req);
 
     @POST("viewThirdPartProfile")
-    Observable<ThirdPartyProfileResp> getThirdPartyProfile(@Body CommonIdReq req);
+    Observable<ThirdPartyProfileResp> getThirdPartyProfile(@Body ThirdPartyProfileReq req);
 
     @POST("getConnectGroup")
     Observable<CatalogueGroupResp> getCatalogueGroup();

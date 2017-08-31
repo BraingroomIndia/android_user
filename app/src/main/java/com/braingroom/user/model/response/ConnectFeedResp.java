@@ -73,7 +73,7 @@ public class ConnectFeedResp extends BaseResp {
         private int numAccepted;
 
         @SerializedName("user_id")
-        private String postOwner;
+        private String postOwnerId;
 
         @SerializedName("post_image")
         private String image;

@@ -12,6 +12,7 @@ import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ConnectSectionResp;
 import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.Navigator;
@@ -95,7 +96,7 @@ public class GridViewModel extends ViewModel {
                                         Bundle data = new Bundle();
                                         HashMap<String, Integer> categoryMap = new HashMap<String, Integer>();
                                         categoryMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
-                                        data.putSerializable("categoryMap", categoryMap);
+                                        data.putSerializable(Constants.categoryFilterMap, categoryMap);
                                         navigator.navigateActivity(SegmentListActivity.class, data);
                                     }
                                 }
@@ -134,10 +135,10 @@ public class GridViewModel extends ViewModel {
                                             segmentFilterMap.put(elem.getSegmentName(), Integer.parseInt(elem.getId()));
                                             filterData.setCategoryId(categoryId);
                                             filterData.setSegmentId(elem.getId());
-                                            data.putSerializable("categoryMap", categoryMap);
-                                            data.putSerializable("segmentMap", segmentFilterMap);
-                                            data.putSerializable("filterData", filterData);
-                                            data.putString("origin", FilterViewModel.ORIGIN_HOME);
+                                            data.putSerializable(Constants.categoryFilterMap, categoryMap);
+                                            data.putSerializable(Constants.segmentsFilterMap, segmentFilterMap);
+                                            data.putSerializable(Constants.classFilterData, filterData);
+                                            data.putString(Constants.origin, FilterViewModel.ORIGIN_HOME);
                                             navigator.navigateActivity(ClassListActivity.class, data);
                                         }
 
@@ -181,9 +182,9 @@ public class GridViewModel extends ViewModel {
                                                 HashMap<String, Integer> communityFilterMap = new HashMap<String, Integer>();
                                                 communityFilterMap.put(snippet.getName(), Integer.parseInt(snippet.getId()));
                                                 filterData.setCommunityId(snippet.getId());
-                                                data.putSerializable("community", communityFilterMap);
-                                                data.putSerializable("filterData", filterData);
-                                                data.putString("origin", FilterViewModel.ORIGIN_COMMUNITY);
+                                                data.putSerializable(Constants.communityFilterMap, communityFilterMap);
+                                                data.putSerializable(Constants.classFilterData, filterData);
+                                                data.putString(Constants.origin, FilterViewModel.ORIGIN_COMMUNITY);
                                                 navigator.navigateActivity(ClassListActivity.class, data);
                                             }
                                         }

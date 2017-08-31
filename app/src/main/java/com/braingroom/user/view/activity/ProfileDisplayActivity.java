@@ -16,8 +16,8 @@ import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.fragment.CommentFragment;
-import com.braingroom.user.view.fragment.FollowedUserFragment;
 import com.braingroom.user.view.fragment.FollowingUserFragment;
+import com.braingroom.user.view.fragment.FollowersUserFragment;
 import com.braingroom.user.view.fragment.LikesFragment;
 import com.braingroom.user.view.fragment.PostAcceptFragment;
 import com.braingroom.user.view.fragment.ReplyFragment;
@@ -111,6 +111,8 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openCommentsFragment(String postId) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, CommentFragment.newInstance(postId)).addToBackStack(null).commit();
@@ -118,6 +120,8 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openReplyFragment(String postId, String commentId) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, ReplyFragment.newInstance(postId, commentId)).addToBackStack(null).commit();
@@ -125,6 +129,8 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openLikesFragment(String postId, String commentId, String replyId) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, LikesFragment.newInstance(postId, commentId, replyId)).addToBackStack(null).commit();
@@ -132,6 +138,8 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openAcceptedUsersFragment(String postId) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, PostAcceptFragment.newInstance(postId)).addToBackStack(null).commit();
@@ -169,18 +177,22 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
     }
 
     @Override
-    public void openFollower() {
+    public void openFollowers() {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance(vm.BG_ID)).addToBackStack(null).commit();
+        transaction.replace(R.id.comments_container, FollowersUserFragment.newInstance(vm.BG_ID)).addToBackStack(null).commit();
 
     }
 
     @Override
-    public void openFollowed() {
+    public void openFollowing() {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
-        transaction.replace(R.id.comments_container, FollowedUserFragment.newInstance(vm.BG_ID)).addToBackStack(null).commit();
+        transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance(vm.BG_ID)).addToBackStack(null).commit();
 
     }
 
@@ -224,7 +236,13 @@ public class ProfileDisplayActivity extends BaseActivity implements NavigationVi
         }
     }
 
-//    @Override
+    @Override
+    public void onBackPressed() {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().show();
+        super.onBackPressed();
+    }
+    //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //
 //        MenuInflater inflater = getMenuInflater();
