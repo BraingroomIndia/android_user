@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="collapseAction"
+            type="com.braingroom.user.utils.MyConsumer" />
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.fragment.ClassDetailDemoPostViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableRight="@drawable/ic_keyboard_arrow_left_black_24dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:onClick="@{() -> collapseAction.accept(title)}"
+            android:text="@{title}"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_medium" />
+
+        <include
+            layout="@layout/demo_post_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:vm="@{vm}" />
+
+    </LinearLayout>
+</layout>

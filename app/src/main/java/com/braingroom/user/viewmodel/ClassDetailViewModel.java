@@ -61,7 +61,7 @@ public class ClassDetailViewModel extends ViewModel {
 
     private String defaultLink = "https://www.braingroom.com/Vendor/defult_pic.jpg";
     public final ObservableField<String> imagePath = new ObservableField<>(null);
-    public final ObservableField<String> videoThumb =new ObservableField<>(null);
+    public final ObservableField<String> videoThumb = new ObservableField<>(null);
     public final ObservableField<String> rating = new ObservableField<>("");
     public final ObservableField<String> price = new ObservableField<>(null);
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
@@ -73,7 +73,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
     private final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
-    public final ObservableField<String> aboutAcademy= new ObservableField<>("");
+    public final ObservableField<String> aboutAcademy = new ObservableField<>("");
     public final ObservableField<Spanned> locationConcat = new ObservableField<>();
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
@@ -94,7 +94,7 @@ public class ClassDetailViewModel extends ViewModel {
     private LinkedHashMap<String, Integer> PhoneListApiData = new LinkedHashMap<>();
     private Consumer<HashMap<String, Integer>> callConsumer;
 
-    public boolean isGift =false;
+    public boolean isGift = false;
 
 
     private GoogleMap mGoogleMap;
@@ -106,7 +106,7 @@ public class ClassDetailViewModel extends ViewModel {
     @Setter
     ClassDetailActivity.UiHelper uiHelper;
 
-    public ConnectFilterData connectFilterDataKNN= new ConnectFilterData();
+    public ConnectFilterData connectFilterDataKNN = new ConnectFilterData();
     public ConnectFilterData connectFilterDataBNS = new ConnectFilterData();
     public ConnectFilterData connectFilterDataFP = new ConnectFilterData();
     public ConnectFilterData connectFilterData = new ConnectFilterData();
@@ -114,12 +114,19 @@ public class ClassDetailViewModel extends ViewModel {
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
-            openConnectBnS, openConnectFP,*/ openCateglogLocationList,playAction, onQueryDismiss, onPostDismiss;
+            openConnectBnS, openConnectFP,*/
+            openCateglogLocationList, playAction, onQueryDismiss, onPostDismiss;
 
     public boolean isInWishlist = false;
 
+    public static final String KNK = "Knowledge & Nugget";
+    public static final String BNS = "Buy & Sell";
+    public static final String AP = "Activity partner";
+
+    public final MyConsumer<String> expandAction, collapseAction;
+
     public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin,final String catalogueId) {
+                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -138,7 +145,8 @@ public class ClassDetailViewModel extends ViewModel {
 
         PhoneListApiData.put("044-49507392", 1);
         PhoneListApiData.put("044-65556012", 2);
-        PhoneListApiData.put("044-65556013", 3);;
+        PhoneListApiData.put("044-65556013", 3);
+        ;
         addresses = Observable.just(addressList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
@@ -178,6 +186,18 @@ public class ClassDetailViewModel extends ViewModel {
 
             }
         };*/
+        expandAction = new MyConsumer<String>() {
+            @Override
+            public void accept(String s) {
+                uiHelper.expandDemoClass(s);
+            }
+        };
+        collapseAction = new MyConsumer<String>() {
+            @Override
+            public void accept(String s) {
+                uiHelper.compressDemoClass(s);
+            }
+        };
         openCateglogLocationList = new Action() {
             @Override
             public void run() throws Exception {
@@ -194,7 +214,7 @@ public class ClassDetailViewModel extends ViewModel {
                     Bundle data = new Bundle();
                     data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
                     data.putSerializable("id", classId);
-                    data.putSerializable("origin",ClassListViewModel1.ORIGIN_HOME);
+                    data.putSerializable("origin", ClassListViewModel1.ORIGIN_HOME);
                     messageHelper.showLoginRequireDialog("Please login to post a query", data);
                 }
 
@@ -255,7 +275,7 @@ public class ClassDetailViewModel extends ViewModel {
         };
 
 
-        phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer,"");
+        phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer, "");
         phoneNumber.setPositiveText("Call");
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
@@ -268,8 +288,8 @@ public class ClassDetailViewModel extends ViewModel {
                 // TODO: 16/06/17 place classId
                 int isCatalogue = 0;
                 if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin))
-                    isCatalogue =1;
-                return apiService.getClassDetail(classId,isCatalogue).onErrorReturn(new Function<Throwable, ClassData>() {
+                    isCatalogue = 1;
+                return apiService.getClassDetail(classId, isCatalogue).onErrorReturn(new Function<Throwable, ClassData>() {
                     @Override
                     public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ClassData();
@@ -287,7 +307,7 @@ public class ClassDetailViewModel extends ViewModel {
                         connectFilterDataBNS.setCategId(classData.getCategoryId());
                         //connectFilterDataBNS.setSegId(classData.getSegmentId());
                         connectFilterDataFP.setCategId(classData.getCategoryId());
-                      //  connectFilterDataFP.setSegId(classData.getSegmentId());
+                        //  connectFilterDataFP.setSegId(classData.getSegmentId());
                         mClassData = classData;
                         if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
                             isMapVisible.set(false);
@@ -306,9 +326,9 @@ public class ClassDetailViewModel extends ViewModel {
                         try {
                             description.set(Html.fromHtml(classData.getClassSummary())); //Edited By Vikas Godara
 
-                        }catch (Exception e){
-                            Log.d(TAG, "description:" +e.toString());
-                           // e.printStackTrace();
+                        } catch (Exception e) {
+                            Log.d(TAG, "description:" + e.toString());
+                            // e.printStackTrace();
                         }
 
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
@@ -349,7 +369,7 @@ public class ClassDetailViewModel extends ViewModel {
                                 isYouTube.set(true);
                                 videoId.set(classData.getVideoId().substring(classData.getVideoId().lastIndexOf('/') + 1));
                                 videoThumb.set(videoId.get() == null ? null : "http://img.youtube.com/vi/" + videoId.get() + "/hqdefault.jpg");
-                            } else if (classData.getVideoId()!=null && !classData.getVideoId().equals("")){
+                            } else if (classData.getVideoId() != null && !classData.getVideoId().equals("")) {
                                 isYouTube.set(false);
                                 videoThumb.set("");
                                 videoId.set(classData.getVideoId());
@@ -460,15 +480,15 @@ public class ClassDetailViewModel extends ViewModel {
                     @Override
                     public void run() throws Exception {
                         if (getLoggedIn())
-                        uiHelper.showQuoteForm();
+                            uiHelper.showQuoteForm();
                         else {
                             Bundle data = new Bundle();
                             data.putString("backStackActivity", ClassDetailActivity.class.getSimpleName());
                             data.putSerializable("id", classId);
-                            data.putSerializable("origin",ClassListViewModel1.ORIGIN_CATALOG);
-                            data.putSerializable("catalogueId",catalogueId);
+                            data.putSerializable("origin", ClassListViewModel1.ORIGIN_CATALOG);
+                            data.putSerializable("catalogueId", catalogueId);
                             messageHelper.showLoginRequireDialog("Please login to post a query", data);
-                            navigator.navigateActivityForResult(LoginActivity.class, data,ViewModel.REQ_CODE_LOGIN);
+                            navigator.navigateActivityForResult(LoginActivity.class, data, ViewModel.REQ_CODE_LOGIN);
                         }
 
                     }
@@ -479,8 +499,7 @@ public class ClassDetailViewModel extends ViewModel {
             public void run() throws Exception {
                 if (videoId.get() != null && isYouTube.get()) {
                     navigator.openStandaloneYoutube(videoId.get());
-                }
-                else if (videoId.get()!=null)
+                } else if (videoId.get() != null)
                     navigator.openStandaloneVideo(videoId.get());
             }
         };
@@ -509,18 +528,19 @@ public class ClassDetailViewModel extends ViewModel {
                 markerList.add(markerOption);
                 mGoogleMap.addMarker(markerOption);
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10.0f));
-            }catch (Exception e){
-                Log.d(TAG, "populateMarkers: " +e.toString());}
+            } catch (Exception e) {
+                Log.d(TAG, "populateMarkers: " + e.toString());
+            }
         }
 
-        }
+    }
 
     public void releaseYoutube() {
         if (youTubePlayer != null) {
             try {
                 youTubePlayer.release();
             } catch (Exception e) {
-               // e.printStackTrace();
+                // e.printStackTrace();
             }
         }
     }

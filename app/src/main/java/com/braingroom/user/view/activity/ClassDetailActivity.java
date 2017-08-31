@@ -3,10 +3,13 @@ package com.braingroom.user.view.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.transition.Fade;
+import android.support.transition.Scene;
+import android.support.transition.Transition;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -17,8 +20,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.braingroom.user.R;
+import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
+import com.braingroom.user.databinding.DemoClassExpandedSceneBinding;
 import com.braingroom.user.utils.WrapContentHeightViewPager;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
 import com.braingroom.user.view.fragment.DemoPostFragment;
@@ -26,6 +32,7 @@ import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.braingroom.user.viewmodel.fragment.ClassDetailDemoPostViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -51,6 +58,11 @@ public class ClassDetailActivity extends BaseActivity {
     WrapContentHeightViewPager pager;
     PostPagerAdapter pagerAdapter;
 
+    Scene mColapsedScene;
+    Scene mExpandedScene;
+    RelativeLayout mSceneRoot;
+
+
     public interface UiHelper {
         void initYoutube();
 
@@ -66,16 +78,20 @@ public class ClassDetailActivity extends BaseActivity {
 
         void makeACall(String phoneNumber);
 
+        void expandDemoClass(String v);
+
+        void compressDemoClass(String v);
+
 
     }
-    TabLayout tabLayout;
 
+    TabLayout tabLayout;
 
 
     private class PostPagerAdapter extends FragmentStatePagerAdapter {
         SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
-         PostPagerAdapter(FragmentManager fm) {
+        PostPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -84,16 +100,16 @@ public class ClassDetailActivity extends BaseActivity {
             Fragment fragment;
             switch (position) {
                 case 0:
-                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataKNN);
-                   break;
+                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataKNN);
+                    break;
                 case 1:
-                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataBNS);
+                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataBNS);
                     break;
                 case 2:
-                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataFP);
+                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataFP);
                     break;
                 default:
-                    fragment= null;
+                    fragment = null;
                     break;
             }
             return fragment;
@@ -111,6 +127,7 @@ public class ClassDetailActivity extends BaseActivity {
             if (position == 2) return getString(action_tutors_talk);
             return "NO TAB";
         }
+
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Fragment fragment = (Fragment) super.instantiateItem(container, position);
@@ -144,10 +161,6 @@ public class ClassDetailActivity extends BaseActivity {
         if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin")))
             tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-
-//        shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_container);
-//        shimmerFrameLayout.startShimmerAnimation();
-//        ((ClassDetailViewModel) vm).setUiHelper(uiHelper);
     }
 
 
@@ -173,7 +186,7 @@ public class ClassDetailActivity extends BaseActivity {
 
             @Override
             public void stopShimmer() {
-                if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))){
+                if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))) {
                     pager = (WrapContentHeightViewPager) findViewById(R.id.pager);
                     pagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
                     pager.setAdapter(pagerAdapter);
@@ -212,6 +225,61 @@ public class ClassDetailActivity extends BaseActivity {
                             Log.d("makeACall", "OnError: " + throwable.toString() + "\t" + phoneNumber);
                         }
                     });
+            }
+
+            @Override
+            public void expandDemoClass(String s) {
+                Transition mFadeTransition = new Fade();
+                ClassDetailDemoPostViewModel demoPostVm = null;
+                String title = null;
+                if (((ClassDetailViewModel) vm).KNK.equals(s)) {
+                    mSceneRoot = findViewById(R.id.scene_container1);
+                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataKNN);
+                    title = ((ClassDetailViewModel) vm).KNK;
+                }
+                if (((ClassDetailViewModel) vm).BNS.equals(s)) {
+                    mSceneRoot = findViewById(R.id.scene_container2);
+                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataBNS);
+                    title = ((ClassDetailViewModel) vm).BNS;
+                }
+                if (((ClassDetailViewModel) vm).AP.equals(s)) {
+                    mSceneRoot = findViewById(R.id.scene_container3);
+                    title = ((ClassDetailViewModel) vm).AP;
+                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataFP);
+                }
+                mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_colapsed_scene, ClassDetailActivity.this);
+                mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_expanded_scene, ClassDetailActivity.this);
+                TransitionManager.go(mExpandedScene, mFadeTransition);
+                DemoClassExpandedSceneBinding expBinding = DemoClassExpandedSceneBinding.bind(mSceneRoot.getChildAt(0));
+                expBinding.setTitle(title);
+                expBinding.setCollapseAction(((ClassDetailViewModel) vm).collapseAction);
+                expBinding.setVm(demoPostVm);
+
+            }
+
+            @Override
+            public void compressDemoClass(String s) {
+                Transition mFadeTransition = new Fade();
+                String title = null;
+                if (((ClassDetailViewModel) vm).KNK.equals(s)) {
+                    mSceneRoot = findViewById(R.id.scene_container1);
+                    title = ((ClassDetailViewModel) vm).KNK;
+                }
+                if (((ClassDetailViewModel) vm).BNS.equals(s)) {
+                    mSceneRoot = findViewById(R.id.scene_container2);
+                    title = ((ClassDetailViewModel) vm).BNS;
+                }
+                if (((ClassDetailViewModel) vm).AP.equals(s)) {
+                    mSceneRoot = findViewById(R.id.scene_container3);
+                    title = ((ClassDetailViewModel) vm).AP;
+                }
+                mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_colapsed_scene, ClassDetailActivity.this);
+                mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_expanded_scene, ClassDetailActivity.this);
+                TransitionManager.go(mColapsedScene, mFadeTransition);
+                DemoClassColapsedSceneBinding collapseBinding = DemoClassColapsedSceneBinding.bind(mSceneRoot.getChildAt(0));
+                collapseBinding.setTitle(title);
+                collapseBinding.setExpandAction(((ClassDetailViewModel) vm).expandAction);
+
             }
 
             @Override
@@ -319,5 +387,6 @@ public class ClassDetailActivity extends BaseActivity {
             // due to user scrubbing or call to seekRelativeMillis() or seekToMillis()
         }
     }
+
 
 }
