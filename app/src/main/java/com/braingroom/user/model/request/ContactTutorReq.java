@@ -3,25 +3,26 @@ package com.braingroom.user.model.request;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 /**
- * Created by godara on 30/08/17.
+ * Created by godara on 31/08/17.
  */
-
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class ThirdPartyProfileReq {
+public class ContactTutorReq {
     @SerializedName("braingroom")
     Snippet data;
 
     @AllArgsConstructor(suppressConstructorProperties = true)
     public static class Snippet {
+        @SerializedName("user_id")
+        String userId;
 
-        @SerializedName("following_id")
-        public String followingId;
+        @SerializedName("class_id")
+        String classId;
 
-        @SerializedName("id")
-        public String id;
-
+        @SerializedName("message")
+        String message;
     }
 }
+

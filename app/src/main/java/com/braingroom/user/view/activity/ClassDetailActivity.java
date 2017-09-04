@@ -68,14 +68,14 @@ public class ClassDetailActivity extends BaseActivity {
 
 
     }
-    TabLayout tabLayout;
 
+    TabLayout tabLayout;
 
 
     private class PostPagerAdapter extends FragmentStatePagerAdapter {
         SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
-         PostPagerAdapter(FragmentManager fm) {
+        PostPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -84,16 +84,16 @@ public class ClassDetailActivity extends BaseActivity {
             Fragment fragment;
             switch (position) {
                 case 0:
-                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataKNN);
-                   break;
+                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataKNN);
+                    break;
                 case 1:
-                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataBNS);
+                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataBNS);
                     break;
                 case 2:
-                    fragment= DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataFP);
+                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataFP);
                     break;
                 default:
-                    fragment= null;
+                    fragment = null;
                     break;
             }
             return fragment;
@@ -111,6 +111,7 @@ public class ClassDetailActivity extends BaseActivity {
             if (position == 2) return getString(action_tutors_talk);
             return "NO TAB";
         }
+
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Fragment fragment = (Fragment) super.instantiateItem(container, position);
@@ -154,7 +155,8 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getSupportActionBar().setElevation(0);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setElevation(0);
     }
 
     @NonNull
@@ -173,7 +175,7 @@ public class ClassDetailActivity extends BaseActivity {
 
             @Override
             public void stopShimmer() {
-                if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))){
+                if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))) {
                     pager = (WrapContentHeightViewPager) findViewById(R.id.pager);
                     pagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
                     pager.setAdapter(pagerAdapter);

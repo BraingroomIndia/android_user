@@ -279,25 +279,27 @@ public class ClassListViewModel1 extends ViewModel {
                     public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                         List<ViewModel> selectedItems = new ArrayList<ViewModel>();
                         if (categoryFilterMap != null && !categoryFilterMap.isEmpty()) {
-                            selectedItems.add(new DataItemViewModel(categoryFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
-                                @Override
-                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
-                                    categoryFilterMap = new HashMap<String, Integer>();
-                                    filterData.setCategoryId("");
-                                    reset();
-                                }
-                            }));
+                            if (segmentsFilterMap != null && !segmentsFilterMap.isEmpty()) {
+                                selectedItems.add(new DataItemViewModel(categoryFilterMap.keySet().iterator().next() + " -> " + segmentsFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                    @Override
+                                    public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                        segmentsFilterMap = new HashMap<String, Integer>();
+                                        filterData.setSegmentId("");
+                                        reset();
+                                    }
+                                }));
+                            } else
+
+                                selectedItems.add(new DataItemViewModel(categoryFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                    @Override
+                                    public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                        categoryFilterMap = new HashMap<String, Integer>();
+                                        filterData.setCategoryId("");
+                                        reset();
+                                    }
+                                }));
                         }
-                        if (segmentsFilterMap != null && !segmentsFilterMap.isEmpty()) {
-                            selectedItems.add(new DataItemViewModel(segmentsFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
-                                @Override
-                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
-                                    segmentsFilterMap = new HashMap<String, Integer>();
-                                    filterData.setSegmentId("");
-                                    reset();
-                                }
-                            }));
-                        }
+
                         if (localityFilterMap != null && !localityFilterMap.isEmpty()) {
                             selectedItems.add(new DataItemViewModel(localityFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
                                 @Override
@@ -353,6 +355,7 @@ public class ClassListViewModel1 extends ViewModel {
                         }
                         if (selectedItems.isEmpty())
                             selectedFilterisEmpty.set(true);
+                        else selectedFilterisEmpty.set(false);
                         return Observable.just(selectedItems);
                     }
                 });
@@ -447,17 +450,17 @@ public class ClassListViewModel1 extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle bundle = new Bundle();
-                bundle.putString("origin", origin);
+                bundle.putString(Constants.origin, origin);
                 filterData.setKeywords("");
-                bundle.putSerializable("filterData", filterData);
-                bundle.putSerializable("category", categoryFilterMap);
-                bundle.putSerializable("segment", segmentsFilterMap);
-                bundle.putSerializable("city", cityFilterMap);
-                bundle.putSerializable("locality", localityFilterMap);
-                bundle.putSerializable("community", communityFilterMap);
-                bundle.putSerializable("classType", classTypeFilterMap);
-                bundle.putSerializable("classSchedule", classScheduleFilterMap);
-                bundle.putSerializable("vendorList", vendorListFilterMap);
+                bundle.putSerializable(Constants.classFilterData, filterData);
+                bundle.putSerializable(Constants.categoryFilterMap, categoryFilterMap);
+                bundle.putSerializable(Constants.segmentsFilterMap, segmentsFilterMap);
+                bundle.putSerializable(Constants.cityFilterMap, cityFilterMap);
+                bundle.putSerializable(Constants.localityFilterMap, localityFilterMap);
+                bundle.putSerializable(Constants.communityFilterMap, communityFilterMap);
+                bundle.putSerializable(Constants.classTypeFilterMap, classTypeFilterMap);
+                bundle.putSerializable(Constants.classScheduleFilterMap, classScheduleFilterMap);
+                bundle.putSerializable(Constants.vendorListFilterMap, vendorListFilterMap);
                 /*bundle.putString("keywords", keywords);
                 bundle.putString("startDate", startDate);
                 bundle.putString("endDate", endDate);*/
@@ -569,7 +572,7 @@ public class ClassListViewModel1 extends ViewModel {
                 this.cityFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.cityFilterMap);
                 this.localityFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.localityFilterMap);
                 this.communityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.communityFilterMap);
-                this.classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.classScheduleFilterMap);
+                this.classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.classTypeFilterMap);
                 this.classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.classScheduleFilterMap);
                 this.vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.vendorListFilterMap);
                 this.origin = data.getStringExtra(Constants.origin);

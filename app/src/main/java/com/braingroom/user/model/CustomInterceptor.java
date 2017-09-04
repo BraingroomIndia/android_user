@@ -54,6 +54,7 @@ public class CustomInterceptor implements Interceptor {
             response = chain.proceed(request);
         } catch (IOException e) {
           //  e.printStackTrace();
+
             Log.d(TAG, "intercept: no network " +request.toString());
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;

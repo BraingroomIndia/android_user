@@ -81,6 +81,7 @@ import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ConnectSectionResp;
+import com.braingroom.user.model.response.ContactTutorResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.FirstSocialLoginResp;
 import com.braingroom.user.model.response.FollowResp;
@@ -1070,6 +1071,13 @@ public class DataflowService {
 
     public Observable<LikedUsersListResp> getFollowing(String userId) {
         return api.getFollowingUsers(new CommonUserIdReq(new CommonUserIdReq.Snippet(userId))).
+                subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ContactTutorResp> contactTutor(String classID) {
+        ArrayList<ContactTutorResp.Snippet> snippets = new ArrayList<>();
+        snippets.add(new ContactTutorResp.Snippet("Dummy message", "7014122668"));
+        return Observable.just(new ContactTutorResp(snippets)).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 }

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ExpandableListView;
 
 /**
  * Created by godara on 25/07/17.
@@ -20,14 +21,15 @@ public class WrapContentHeightViewPager extends ViewPager {
         super(context, attrs);
     }
 
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // super has to be called in the beginning so the child views can be
         // initialized.
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if (getChildCount()<=0)
-        return;
+        if (getChildCount() <= 0)
+            return;
 
         // Check if the selected layout_height mode is set to wrap_content
         // (represented by the AT_MOST constraint).

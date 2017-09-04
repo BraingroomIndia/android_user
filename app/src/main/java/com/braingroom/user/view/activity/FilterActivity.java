@@ -37,6 +37,7 @@ public class FilterActivity extends BaseActivity {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(R.id.fragment_container, SearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
             }
+
             @Override
             public void remove(String tag) {
                 popBackstack(tag);

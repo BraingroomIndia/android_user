@@ -26,10 +26,18 @@ public interface MessageHelper {
 
 
     void show(String message);
+
     void showLoginRequireDialog(String message, Bundle data);
+
     void showDismissInfo(@Nullable String title, @NonNull String content);
+
     void showAcceptableInfo(@Nullable String title, @NonNull String content, @NonNull MaterialDialog.SingleButtonCallback positiveCallback);
+
+    void showAcceptableInfo(@Nullable String title, @NonNull String content, String postiveText, @NonNull MaterialDialog.SingleButtonCallback positiveCallback);
+
     void showAcceptDismissInfo(/*@Nullable String title,@NonNull String content,@NonNull String positiveText,@NonNull String negativeText, @NonNull */);
+
     void showProgressDialog(@Nullable String title, @NonNull String content);
+
     void dismissActiveProgress();
 }

@@ -59,6 +59,8 @@ public class ThirdPartyViewModel extends ViewModel {
     private int nextPage = 0;
     private int currentPage = -1;
 
+    public final Action onFollowerClicked, onFollowingClicked;
+
     @Getter
     ViewProvider viewProvider = new ViewProvider() {
         @Override
@@ -179,6 +181,19 @@ public class ThirdPartyViewModel extends ViewModel {
             }
         });
 
+        onFollowerClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.openFollowers();
+            }
+        };
+
+        onFollowingClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.openFollowing();
+            }
+        };
 
     }
 

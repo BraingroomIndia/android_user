@@ -94,7 +94,6 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public Boolean isVendor = false;
 
 
-
     @NonNull
     public ObservableBoolean acceptVisibility;
 
@@ -133,6 +132,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             , final MessageHelper messageHelper, final Navigator navigator) {
         this.navigator = navigator;
 
+        messageHelper.showProgressDialog("", "");
 
         apiService.getFeedsByPostID(postId).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
@@ -140,6 +140,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
                 if (resp.getData().get(0).getCategoryId() == null && resp.getData().get(0).getSegId() == null)
                     isSegmentAvailable.set(false);
+                messageHelper.dismissActiveProgress();
 
 //                ZohoSalesIQ.Tracking.setPageTitle(resp.getData().get(0).getTitle() + " by " + resp.getData().get(0).getVendorName());
                 categoryId = resp.getData().get(0).getCategoryId();
@@ -164,8 +165,8 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 videoThumb.set(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
                 isActivityRequest.set("activity_request".equalsIgnoreCase(resp.getData().get(0).getPostType()));
                 isPostOwner.set((pref.getString(Constants.BG_ID, "").equals(resp.getData().get(0).getPostOwnerId())));
-                liked.set(resp.getData().get(0).getLiked() == 0 ? false : true);
-                reported.set(resp.getData().get(0).getReported() == 0 ? false : true);
+                liked.set(resp.getData().get(0).getLiked() != 0);
+                reported.set(resp.getData().get(0).getReported() != 0);
                 accepted.set(resp.getData().get(0).getIsAccepted() == 1);
                 isMediaAvailable.set((resp.getData().get(0).getVideo() != null || !resp.getData().get(0).getImage().equals("")));
                 shareUrl.set(resp.getData().get(0).getShareUrl());

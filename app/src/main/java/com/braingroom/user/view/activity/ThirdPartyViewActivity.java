@@ -88,7 +88,7 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
     @Override
     protected ViewModel createViewModel() {
         userid = getIntentString("userId");
-        viewModel = new ThirdPartyViewModel(userid, getMessageHelper(), getNavigator(),getHelperFactory(),this);
+        viewModel = new ThirdPartyViewModel(userid, getMessageHelper(), getNavigator(), getHelperFactory(), this);
         return viewModel;
     }
 
@@ -134,6 +134,8 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openCommentsFragment(String postId) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, CommentFragment.newInstance(postId)).addToBackStack(null).commit();
@@ -141,6 +143,8 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openReplyFragment(String postId, String commentId) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, ReplyFragment.newInstance(postId, commentId)).addToBackStack(null).commit();
@@ -148,6 +152,8 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openLikesFragment(String postId, String commentId, String replyId) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, LikesFragment.newInstance(postId, commentId, replyId)).addToBackStack(null).commit();
@@ -155,6 +161,8 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openAcceptedUsersFragment(String postId) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, PostAcceptFragment.newInstance(postId)).addToBackStack(null).commit();
@@ -193,19 +201,23 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
 
     @Override
     public void openFollowers() {
+       /* if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, FollowersUserFragment.newInstance(userid)).addToBackStack(null).commit();
-
+*/
     }
 
     @Override
     public void openFollowing() {
+       /* if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance(userid)).addToBackStack(null).commit();
 
-    }
+*/    }
 
     @Override
     public void openFilter() {

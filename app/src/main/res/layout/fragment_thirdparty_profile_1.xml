@@ -29,6 +29,11 @@
 
             <include
                 layout="@layout/content_profile_header"
+                app:clickActionFollower="@{vm.onFollowerClicked}"
+                app:clickActionFollowing="@{vm.onFollowingClicked}"
+                app:detail1="@{vm.name.s_1}"
+                app:detail2="@{vm.educationInfo1.s_1}"
+                app:detail3="@{vm.interest.s_1}"
                 app:followButtonVm="@{vm.followButtonVm}"
                 app:followerCount="@{vm.followerCount.s_1}"
                 app:followingCount="@{vm.followingCount.s_1}"
@@ -36,6 +41,15 @@
                 app:name="@{vm.name.s_1}"
                 app:postCount="@{vm.postCount.s_1}" />
 
+            <!--    <include
+                    layout="@layout/content_profile_header"
+                    app:followButtonVm="@{vm.followButtonVm}"
+                    app:followerCount="@{vm.followerCount.s_1}"
+                    app:followingCount="@{vm.followingCount.s_1}"
+                    app:imageUploadVm="@{vm.imageUploadVm}"
+                    app:name="@{vm.name.s_1}"
+                    app:postCount="@{vm.postCount.s_1}" />
+    -->
 
             <android.support.design.widget.BottomNavigationView
                 android:id="@+id/bottom_navigation"
@@ -60,7 +74,7 @@
                 bind:paginate="@{true}"
                 bind:view_provider="@{@layout/item_connect_feed}"
                 bind:viewmodel="@{vm}"
-                tools:context="com.braingroom.user.view.activity.ProfileDisplayActivity" />/>
+                tools:context="com.braingroom.user.view.activity.ProfileDisplayActivity" />
 
         </LinearLayout>
     </ScrollView>

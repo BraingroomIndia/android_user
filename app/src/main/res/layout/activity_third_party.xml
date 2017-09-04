@@ -56,6 +56,11 @@
             android:onClick="@{vm.onMessageClicked}"
             android:src="@drawable/ic_menu_message" />
 
+        <FrameLayout
+            android:id="@+id/comments_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>

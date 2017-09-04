@@ -336,11 +336,20 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
+                public void showAcceptableInfo(@Nullable String title, @NonNull String content, String postiveText, @NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
+                    if (title != null) builder.title(title);
+                    builder.content(content);
+                    builder.onPositive(positiveCallback);
+                    builder.positiveText(postiveText).show();
+                }
+
+                @Override
                 public void showAcceptDismissInfo() {
                     new MaterialDialog.Builder(BaseActivity.this)
                             .title("Use Google's Location Services?")
                             .content("Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.")
-                            .positiveText("Agree")
+                            .positiveText("Agree").negativeText("Disagree")
                             .showListener(new DialogInterface.OnShowListener() {
                                 @Override
                                 public void onShow(DialogInterface dialog) {

@@ -98,6 +98,7 @@ public class FilterViewModel extends ViewModel {
         classScheduleMap = classScheduleMap != null ? classScheduleMap : new HashMap<String, Integer>();
         vendorListMap = vendorListMap != null ? vendorListMap : new HashMap<String, String>();
         cityFilterMap = cityFilterMap != null ? cityFilterMap : new HashMap<String, String>();
+        cityFilterMap.put("Chennai,", "3659");
         localityFilterMap = localityFilterMap != null ? localityFilterMap : new HashMap<String, String>();
         this.keywords = new ObservableField<>(filterData != null ? filterData.getKeywords() : "");
         this.navigator = navigator;
@@ -343,16 +344,8 @@ public class FilterViewModel extends ViewModel {
         bundle.putSerializable(Constants.classScheduleFilterMap, classScheduleVm.selectedItemsMap);
         bundle.putSerializable(Constants.vendorListFilterMap, getHashMap(vendorListVm.selectedDataMap));
         bundle.putString(Constants.origin, origin);
-        /*bundle.putSerializable("keywords", keywords.get());
-        bundle.putString("startDate", startDateVm.date.get().equals("YYYY-MM-DD") ? "" : startDateVm.date.get());
-        bundle.putString("endDate", endDateVm.date.get().equals("YYYY-MM-DD") ? "" : endDateVm.date.get());*/
         bundle.putBoolean("clearFlag", clearFlag);
         bundle.putSerializable(Constants.classFilterData, filterData);
-        if (origin.equals(ORIGIN_HOME)) {
-            navigator.navigateActivity(ClassListActivity.class, bundle);
-            navigator.finishActivity();
-            return;
-        }
         resultIntent.putExtras(bundle);
         navigator.finishActivity(resultIntent);
         navigator.finishActivity();
