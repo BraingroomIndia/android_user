@@ -500,6 +500,37 @@
 
                     </android.support.v7.widget.CardView>
 
+                    <RelativeLayout
+                        android:id="@+id/scene_container1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include
+                            layout="@layout/demo_class_colapsed_scene"
+                            app:expandAction="@{vm.expandAction}"
+                            app:title="@{vm.KNK}" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/scene_container2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include
+                            layout="@layout/demo_class_colapsed_scene"
+                            app:expandAction="@{vm.expandAction}"
+                            app:title="@{vm.BNS}" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/scene_container3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include
+                            layout="@layout/demo_class_colapsed_scene"
+                            app:expandAction="@{vm.expandAction}"
+                            app:title="@{vm.AP}" />
+                    </RelativeLayout>
+
                     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/google_maps"
                         android:layout_width="match_parent"

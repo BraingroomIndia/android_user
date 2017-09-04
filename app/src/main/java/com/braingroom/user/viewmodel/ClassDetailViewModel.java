@@ -123,6 +123,12 @@ public class ClassDetailViewModel extends ViewModel {
 
     public boolean isInWishlist = false;
 
+    public static final String KNK = "Knowledge & Nugget";
+    public static final String BNS = "Buy & Sell";
+    public static final String AP = "Activity partner";
+
+    public final MyConsumer<String> expandAction, collapseAction;
+
     public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
                                 @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
@@ -184,6 +190,18 @@ public class ClassDetailViewModel extends ViewModel {
 
             }
         };*/
+        expandAction = new MyConsumer<String>() {
+            @Override
+            public void accept(String s) {
+                uiHelper.expandDemoClass(s);
+            }
+        };
+        collapseAction = new MyConsumer<String>() {
+            @Override
+            public void accept(String s) {
+                uiHelper.compressDemoClass(s);
+            }
+        };
         openCateglogLocationList = new Action() {
             @Override
             public void run() throws Exception {
