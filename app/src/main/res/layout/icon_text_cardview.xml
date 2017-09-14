@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -32,7 +33,8 @@
                 android:layout_height="@dimen/_140sdp"
                 android:contentDescription="@{vm.title}"
                 app:imageUrl="@{vm.image}"
-                app:placeHolder="@{vm.placeHolder}" />
+                app:placeHolder="@{vm.placeHolder}"
+                tools:src="@color/gray"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -45,7 +47,8 @@
                 android:text="@{vm.title}"
                 android:textColor="@color/colorTextDark"
                 android:textSize="@dimen/text_size_medium"
-                app:font='@{@string/robotoRegular}' />
+                app:font='@{@string/robotoRegular}'
+                tools:text="Description"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

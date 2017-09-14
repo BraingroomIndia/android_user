@@ -26,6 +26,9 @@ public class SaveGiftCouponResp extends BaseResp {
         @SerializedName("term_id")
         private String termId;
 
+        @SerializedName("txnid")
+        public String BGtransactionid;
+
         @SerializedName("key")
         private String key;
 

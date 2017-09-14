@@ -89,11 +89,11 @@
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.mobileNumber}"
                     app:editable="@{true}"
-                    app:number="@{true}"
-                    app:hintText='@{"Mobile number"}' />
+                    app:hintText='@{"Mobile number"}'
+                    app:number="@{true}" />
 
                 <include
-                    layout="@layout/item_list_fragment_opener"
+                    layout="@layout/item_list_searchable_fragment_opener"
                     app:editable="@{true}"
                     app:vm="@{vm.ugInstituteVm}" />
 
@@ -119,21 +119,21 @@
                         app:font='@{@string/robotoRegular}' />
 
 
-                 <!--   <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="@dimen/margin_med"
-                        android:background="@drawable/solid_bg_green_rounded_corner"
-                        android:onClick="@{vm.onNextClicked}"
-                        android:paddingBottom="@dimen/padding_small"
-                        android:paddingLeft="@dimen/padding_med"
-                        android:paddingRight="@dimen/padding_med"
-                        android:paddingTop="@dimen/padding_small"
-                        android:text="Next"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_large"
-                        app:font='@{@string/robotoRegular}' />-->
+                    <!--   <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_alignParentRight="true"
+                           android:layout_marginTop="@dimen/margin_med"
+                           android:background="@drawable/solid_bg_green_rounded_corner"
+                           android:onClick="@{vm.onNextClicked}"
+                           android:paddingBottom="@dimen/padding_small"
+                           android:paddingLeft="@dimen/padding_med"
+                           android:paddingRight="@dimen/padding_med"
+                           android:paddingTop="@dimen/padding_small"
+                           android:text="Next"
+                           android:textColor="@color/white"
+                           android:textSize="@dimen/text_size_large"
+                           app:font='@{@string/robotoRegular}' />-->
                 </RelativeLayout>
             </LinearLayout>
 

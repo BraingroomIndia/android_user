@@ -16,7 +16,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v4.widget.NestedScrollView
@@ -26,6 +25,7 @@
             tools:context="com.braingroom.user.view.activity.HomeActivity"
             tools:showIn="@layout/app_bar_home">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -33,14 +33,38 @@
                 android:orientation="vertical"
                 android:paddingTop="@dimen/text_size_small">
 
+
+                <RelativeLayout
+                    android:id="@+id/competition_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_med"
+                    android:background="@color/colorAccent"
+                    android:onClick="@{vm.onRegister}"
+                    android:padding="@dimen/margin_small">
+
+                    <com.hanks.htextview.scale.ScaleTextView
+                        android:id="@+id/textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:onClick="@{vm.onRegister}"
+                        android:padding="@dimen/margin_small"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_large"
+                        tools:text="Hello"
+                        app:font='@{@string/robotoBold}' />
+
+                </RelativeLayout>
+
                 <include
                     layout="@layout/content_typical_grid"
                     app:vm="@{vm.categoryVm}" />
 
-  <!--              <include
+                <include
                     layout="@layout/content_typical_grid"
-                    app:vm="@{vm.gridViewModel}" />-->
-
+                    app:vm="@{vm.gridViewModel}" />
 
 
                 <include

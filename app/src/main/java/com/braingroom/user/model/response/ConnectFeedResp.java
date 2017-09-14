@@ -92,5 +92,14 @@ public class ConnectFeedResp extends BaseResp {
 
         @SerializedName("follow_status")
         private int followStatus;
+
+        public String getVideo() {
+            if (video == null) return null;
+            try {
+                return video.substring(video.lastIndexOf("/") + 1);
+            } catch (IndexOutOfBoundsException iobe) {
+                return null;
+            }
+        }
     }
 }

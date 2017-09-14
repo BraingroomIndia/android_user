@@ -38,6 +38,7 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
     public final Map<String, Pair<String, String>> dataMap = new HashMap<>();
     public final HashMap<String, Pair<String, String>> selectedDataMap = new HashMap<>();
     public static final String FRAGMENT_TITLE_COLLEGE = "College";
+    public static final String FRAGMENT_TITLE_SCHOOL = "Schools";
     public static final String FRAGMENT_TITLE_LEARNER = "Post by";
     public static final String FRAGMENT_TITLE_Vendor = "Posted by";
 
@@ -137,6 +138,8 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
     private Observable<CommonIdResp> requestData(String keyword) {
         if (FRAGMENT_TITLE_COLLEGE.equals(title.get()))
             return apiService.getInstitute(keyword);
+        if (FRAGMENT_TITLE_SCHOOL.equalsIgnoreCase(title.get()))
+            return apiService.getSchools(keyword);
         if (FRAGMENT_TITLE_LEARNER.equals(title.get()))
             return apiService.getLearner(keyword);
         if (FRAGMENT_TITLE_Vendor.equals(title.get()))

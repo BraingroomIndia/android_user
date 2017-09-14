@@ -39,6 +39,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.youtube.player.YouTubePlayer;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -161,35 +162,6 @@ public class ClassDetailViewModel extends ViewModel {
         this.postDescription = new ObservableField<>("");
 
         isGift = ClassListViewModel1.ORIGIN_GIFT.equals(origin);
-       /* openConnectTnT = new Action() {
-            @Override
-            public void run() throws Exception {
-                Bundle data = new Bundle();
-                connectFilterData.setMinorCateg("tips_tricks");
-                data.putString("defMinorCateg", "tips_tricks");
-                navigator.navigateActivity(ConnectHomeActivity.class, data);
-            }
-        };
-        openConnectBnS = new Action() {
-            @Override
-            public void run() throws Exception {
-                Bundle data = new Bundle();
-                connectFilterData.setMinorCateg("group_post");
-                data.putString("defMinorCateg", "group_post");
-                navigator.navigateActivity(ConnectHomeActivity.class, data);
-
-            }
-        };
-        openConnectFP = new Action() {
-            @Override
-            public void run() throws Exception {
-                Bundle data = new Bundle();
-                connectFilterData.setMinorCateg("activity_request");
-                data.putString("defMinorCateg", "activity_request");
-                navigator.navigateActivity(ConnectHomeActivity.class, data);
-
-            }
-        };*/
         expandAction = new MyConsumer<String>() {
             @Override
             public void accept(String s) {
@@ -310,9 +282,10 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 // TODO: 16/06/17 place classId
-                int isCatalogue = 0;
+                final int isCatalogue;
                 if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin))
                     isCatalogue = 1;
+                else isCatalogue = 0;
                 return apiService.getClassDetail(classId, isCatalogue).onErrorReturn(new Function<Throwable, ClassData>() {
                     @Override
                     public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
@@ -326,6 +299,17 @@ public class ClassDetailViewModel extends ViewModel {
 
 //                        ZohoSalesIQ.Tracking.setPageTitle(classData.getClassTopic());
 
+                        //FireBase Tracking
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, classData.getId());
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, classData.getClassTopic());
+                        if (isCatalogue == 0)
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Normal Class");
+                        else
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Catalogue Class");
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+
+                        //FireBase Tracking
                         connectFilterDataKNN.setCategId(classData.getCategoryId());
                         connectFilterDataKNN.setGroupId(classData.getGroupId());
                         connectFilterDataBNS.setCategId(classData.getCategoryId());
@@ -375,7 +359,7 @@ public class ClassDetailViewModel extends ViewModel {
                         if ("fixed".equalsIgnoreCase(classData.getClassTypeData())) {
                             fixedClassDate.set(classData.getSessionTime() + ", " + classData.getSessionDate());
                         }
-                        if (isMapVisible.get())
+                        if (isMapVisible.get() && !isEmpty(classData.getLocation()))
                             for (final ClassLocationData classLocationData : classData.getLocation()) {
                                 locationList.add(classLocationData);
                                 addressList.add(new DataItemViewModel(classLocationData.getLocality(), false, new MyConsumer<DataItemViewModel>() {

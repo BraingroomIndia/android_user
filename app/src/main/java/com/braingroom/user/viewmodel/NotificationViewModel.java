@@ -20,7 +20,7 @@ public class NotificationViewModel extends ViewModel {
     public final Observable<List<ViewModel>> notificationsVm;
 
     public NotificationViewModel(final HelperFactory helperFactory, final MessageHelper messageHelper, final Navigator navigator) {
-
+        messageHelper.showProgressDialog("Wait", "loading");
         notificationsVm = apiService.getNotifications()
                 .map(new Function<NotificationListResp, List<ViewModel>>() {
                     @Override
@@ -36,6 +36,7 @@ public class NotificationViewModel extends ViewModel {
                         }
                         if (resp.getResCode().equals("1"))
                             apiService.changeNotificationStatus("").subscribe();
+                        messageHelper.dismissActiveProgress();
                         return results;
                     }
                 });

@@ -192,7 +192,6 @@ public class LoginViewmodel extends ViewModel {
                     } else if (loginResp.getData().get(0).getIsVerified() == 0) {
                         SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), data.getMobile(), data.getPassword());
                         //login(userName, emailId, profilePic, data.getId(), data.getUuid());
-                        editor.putBoolean(Constants.LOGGED_IN, true);
                         editor.putString(Constants.BG_ID, data.getId());
                         editor.putString(Constants.UUID, data.getUuid());
                         editor.commit();

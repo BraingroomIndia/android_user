@@ -18,6 +18,8 @@ import com.braingroom.user.utils.DaggerAppComponent;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 /*import com.squareup.leakcanary.RefWatcher;*/
 
 import java.util.HashMap;
@@ -54,18 +56,17 @@ public class UserApplication extends Application {
     @Getter
     public TypedArray classPlaceholder;
 
-    public  boolean loggedIn = false;
+    public boolean loggedIn = false;
 
 
     @Getter
     private AppComponent mAppComponent;
     private Map<String, Typeface> fontCache = new HashMap<>();
-   /* private RefWatcher mRefWatcher;
 
-    public static RefWatcher getRefWatcher(Context context) {
-        return getInstance().mRefWatcher;
-    }
-*/
+
+    // Google Analytics
+    private static GoogleAnalytics sAnalytics;
+    private static Tracker sTracker;
 
     @Override
     public void onCreate() {
@@ -73,6 +74,8 @@ public class UserApplication extends Application {
         MultiDex.install(this);
         Fabric.with(this, new Crashlytics());
         Branch.getAutoInstance(this);
+
+        sAnalytics = GoogleAnalytics.getInstance(this);
 //        if (LeakCanary.isInAnalyzerProcess(this)) {
 //            return;
 //        }
@@ -89,9 +92,25 @@ public class UserApplication extends Application {
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this, BASE_URL)).build();
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
         internetStatusBus = PublishSubject.create();
-        newNotificationBus= PublishSubject.create();
+        newNotificationBus = PublishSubject.create();
         otpArrived = PublishSubject.create();
     }
+
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     *
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+        if (sTracker == null) {
+            // sTracker = sAnalytics.newTracker(R.string.global_tracker);
+        }
+
+        return sTracker;
+    }
+
+    //fragment_featured_post
 
     public static UserApplication getInstance() {
         return sInstance;

@@ -98,6 +98,9 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public ObservableBoolean acceptVisibility;
 
     @NonNull
+    public ObservableBoolean loading = new ObservableBoolean(true);
+
+    @NonNull
     public ObservableBoolean accepted = new ObservableBoolean(false);
 
     @NonNull
@@ -132,15 +135,15 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             , final MessageHelper messageHelper, final Navigator navigator) {
         this.navigator = navigator;
 
-        messageHelper.showProgressDialog("", "");
+        messageHelper.showProgressDialog("Wait", "loading");
 
         apiService.getFeedsByPostID(postId).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull final ConnectFeedResp resp) throws Exception {
+                loading.set(false);
 
                 if (resp.getData().get(0).getCategoryId() == null && resp.getData().get(0).getSegId() == null)
                     isSegmentAvailable.set(false);
-                messageHelper.dismissActiveProgress();
 
 //                ZohoSalesIQ.Tracking.setPageTitle(resp.getData().get(0).getTitle() + " by " + resp.getData().get(0).getVendorName());
                 categoryId = resp.getData().get(0).getCategoryId();
@@ -161,7 +164,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 vendorName.set(resp.getData().get(0).getVendorName());
                 isVendor = resp.getData().get(0).getPostType().equalsIgnoreCase("vendor_article");
                 image.set("".equals(resp.getData().get(0).getImage()) ? null : resp.getData().get(0).getImage());
-                video.set(getVideoId(resp.getData().get(0).getVideo()));
+                video.set(resp.getData().get(0).getVideo());
                 videoThumb.set(video.get() == null ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
                 isActivityRequest.set("activity_request".equalsIgnoreCase(resp.getData().get(0).getPostType()));
                 isPostOwner.set((pref.getString(Constants.BG_ID, "").equals(resp.getData().get(0).getPostOwnerId())));
@@ -171,6 +174,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 isMediaAvailable.set((resp.getData().get(0).getVideo() != null || !resp.getData().get(0).getImage().equals("")));
                 shareUrl.set(resp.getData().get(0).getShareUrl());
                 vendorCollege.set(resp.getData().get(0).getInstituteName());
+                messageHelper.dismissActiveProgress();
 
             }
         }, new Consumer<Throwable>() {

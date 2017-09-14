@@ -25,9 +25,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:replace="android:allowBackup">
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -57,7 +57,6 @@
             android:name="io.branch.sdk.BranchKey.test"
             android:value="key_test_pexsI2ytGiNEj794aRPe2mkgFsnwUtCT" />
 
-        <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
         <meta-data
             android:name="io.branch.sdk.TestMode"
             android:value="false" />
@@ -66,7 +65,7 @@
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/experience" />
+            android:resource="@drawable/ic_notifications_64px" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
@@ -134,13 +133,23 @@
         <activity
             android:name=".view.activity.HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar.NoActionBar" />
         <activity
             android:name=".view.activity.SearchActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity android:name=".view.activity.FeaturedPostActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".view.activity.ClassListActivity"
@@ -223,7 +232,7 @@
         </activity>
         <activity
             android:name=".view.activity.ConnectHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar.NoActionBar" />
         <activity
             android:name=".view.activity.SignupActivity"
             android:windowSoftInputMode="stateHidden">
@@ -277,7 +286,7 @@
         <activity android:name=".view.activity.PostDetailActivity" />
         <activity
             android:name=".view.activity.ThirdPartyViewActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".view.activity.CatalogueHomeActivity"
@@ -335,6 +344,11 @@
                 android:value=".view.activity.HomeActivity" />
         </activity>
         <activity android:name=".view.activity.ConnectSectionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.HomeActivity" />
+        </activity>
+        <activity android:name=".view.activity.CatalogueCheckOutActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />

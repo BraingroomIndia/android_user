@@ -14,6 +14,7 @@ import com.braingroom.user.R;
 import com.braingroom.user.model.request.ProfileUpdateReq;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
 import com.braingroom.user.view.fragment.DynamicSearchSelectListFragment;
@@ -21,6 +22,7 @@ import com.braingroom.user.view.fragment.SearchSelectListFragment;
 import com.braingroom.user.view.fragment.SignUpCompetition1Fragment;
 import com.braingroom.user.view.fragment.OTPReqFragment;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 import com.braingroom.user.viewmodel.fragment.SignUpViewModelCompetition;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 /*import com.zoho.livechat.android.MbedableComponent;
@@ -61,7 +63,7 @@ public class SignUpActivityCompetition extends BaseActivity {
         //ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
 
 //        getSupportActionBar().setElevation(0);
-        viewModel = new SignUpViewModelCompetition(getMessageHelper(), getNavigator(), getHelperFactory(), new SignUpActivityCompetition.UiHelper() {
+        viewModel = new SignUpViewModelCompetition(getIntentInt(Constants.competitionStatus), getMessageHelper(), getNavigator(), getHelperFactory(), new SignUpActivityCompetition.UiHelper() {
             @Override
             public void next(SignUpResp.Snippet snippet) {
                 changeToOTPFragment(snippet);
@@ -171,7 +173,9 @@ public class SignUpActivityCompetition extends BaseActivity {
             return viewModel.cityVm;
         if (FRAGMENT_TITLE_LOCALITY.equals(title))
             return viewModel.localityVM;
-        if (FRAGMENT_UG_COLLEGE.equals(title))
+        if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE.equals(title))
+            return viewModel.ugInstituteVm;
+        if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_SCHOOL.equals(title))
             return viewModel.ugInstituteVm;
         return null;
     }

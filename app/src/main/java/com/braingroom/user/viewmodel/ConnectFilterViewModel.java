@@ -247,7 +247,7 @@ public class ConnectFilterViewModel extends ViewModel {
 
         instituteVm = new DynamicSearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, fragmentHelper);
 
-        learnerVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_LEARNER, messageHelper, navigator, "search for institutes... ", false, "", null, fragmentHelper);
+        learnerVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_LEARNER, messageHelper, navigator, "search for user... ", false, "", null, fragmentHelper);
 
         tutorVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_Vendor, messageHelper, navigator, "search for institutes... ", false, "", null, fragmentHelper);
 
@@ -291,7 +291,7 @@ public class ConnectFilterViewModel extends ViewModel {
             tutorVm.onClearClicked.run();
             learnerVm.onClearClicked.run();
         } catch (Exception e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
 
         localityVM.clearSelectedValue();
@@ -357,7 +357,7 @@ public class ConnectFilterViewModel extends ViewModel {
         location.add(stateId);
         location.add(cityId);
         location.add(localityId);
-        this.uiHelper.setFilterData(keyword, categoryId, segmentId, myGroupId, allGroupId,instituteId,authorId ,location );
+        this.uiHelper.setFilterData(keyword, categoryId, segmentId, myGroupId, allGroupId, instituteId, authorId, location);
         uiHelper.popFragment();
     }
 }

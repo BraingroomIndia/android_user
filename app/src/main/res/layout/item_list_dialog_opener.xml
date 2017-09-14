@@ -11,9 +11,11 @@
         <variable
             name="editable"
             type="boolean" />
+
         <variable
             name="isInvisible"
             type="boolean" />
+
         <import type="android.view.View" />
 
 
@@ -24,11 +26,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_line_drawable"
-        android:visibility="@{isInvisible ? View.GONE : View.VISIBLE}"
         android:onClick="@{editable ? vm.onOpenerClick : null}"
         android:paddingBottom="@dimen/padding_large"
         android:paddingLeft="@dimen/padding_large"
-        android:paddingTop="@dimen/margin_small">
+        android:paddingTop="@dimen/margin_small"
+        android:visibility="@{isInvisible ? View.GONE : View.VISIBLE}">
 
         <TextView
             android:id="@+id/title"
@@ -45,10 +47,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_below="@+id/title"
             android:layout_toLeftOf="@+id/arrow"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/title"
             android:ellipsize="end"
-            android:gravity="top"
+            android:gravity="top|start"
             android:lines="1"
             android:text="@{vm.selectedItemsText}"
             android:textColor="@color/colorTextGray"
@@ -61,9 +65,9 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:padding="@dimen/margin_small"
-            android:visibility="@{editable ? View.VISIBLE : View.GONE}"
             android:src="@drawable/ic_chevron_right_black_24dp"
-            android:tint="@color/colorTextGray" />
+            android:tint="@color/colorTextGray"
+            android:visibility="@{editable ? View.VISIBLE : View.GONE}" />
 
     </RelativeLayout>
 </layout>

@@ -21,7 +21,7 @@ public class PayUHashGenReq {
         @SerializedName("key")
         String key;
 
-        @SerializedName("txnid")
+        @SerializedName("razorPayTxnid")
         String txnId;
 
         @SerializedName("amount")

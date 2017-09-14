@@ -79,19 +79,65 @@
             </LinearLayout>
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/class_recyclerview"
+
+        <LinearLayout
+            android:id="@+id/buttonPanel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_4sdp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            bind:divider_decoration='@{"line_divider"}'
-            bind:items="@{vm.feedItems}"
-            bind:layout_vertical="@{true}"
-            bind:paginate="@{true}"
-            bind:view_provider="@{@layout/item_connect_feed}"
-            bind:viewmodel="@{vm}"
-            tools:context="com.braingroom.user.view.activity.ConnectHomeActivity" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_med"
+                    android:layout_weight="1"
+                    android:background="@drawable/solid_bg_green_rounded_corner"
+                    android:gravity="center"
+                    android:onClick="@{vm.onPostOftheDayClicked}"
+                    android:padding="@dimen/padding_small"
+                    android:text="Post of the day"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large"
+                    app:font='@{@string/robotoRegular}' />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_med"
+                    android:layout_weight="1"
+                    android:background="@drawable/solid_bg_green_rounded_corner"
+                    android:gravity="center"
+                    android:onClick="@{vm.onPrimeContentClicked}"
+                    android:padding="@dimen/padding_small"
+                    android:text="Prime Time"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large"
+                    app:font='@{@string/robotoRegular}' />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/class_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4sdp"
+                bind:divider_decoration='@{"line_divider"}'
+                bind:items="@{vm.feedItems}"
+                bind:layout_vertical="@{true}"
+                bind:paginate="@{true}"
+                bind:view_provider="@{@layout/item_connect_feed}"
+                bind:viewmodel="@{vm}"
+                tools:context="com.braingroom.user.view.activity.ConnectHomeActivity"
+                tools:listitem="@layout/item_connect_feed" />
+        </LinearLayout>
 
 
         <!--        <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"

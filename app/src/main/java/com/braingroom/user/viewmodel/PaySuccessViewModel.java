@@ -13,14 +13,15 @@ import io.reactivex.functions.Action;
  */
 
 public class PaySuccessViewModel extends ViewModel {
-    public static String PAYMENT_SUCCESS="True";
-    public static String PAYMENT_FAIL="Fail";
+    public static String PAYMENT_SUCCESS = "True";
+    public static String PAYMENT_FAIL = "Fail";
     public final ObservableField<String> className;
     public final ObservableField<String> name;
     public final ObservableField<String> transactionId;
     public final ObservableField<String> totalAmount;
-    public final Action onDoneClicked,onTryAgainClicked;
-    public PaySuccessViewModel(@NonNull final Navigator navigator, final String name, String transactionId, String className,String totalAmount) {
+    public final Action onDoneClicked, onTryAgainClicked;
+
+    public PaySuccessViewModel(@NonNull final Navigator navigator, final String name, String transactionId, String className, String totalAmount) {
         this.className = new ObservableField<>(className);
         this.name = new ObservableField<>(name);
         this.transactionId = new ObservableField<>(transactionId);
@@ -28,7 +29,7 @@ public class PaySuccessViewModel extends ViewModel {
         onDoneClicked = new Action() {
             @Override
             public void run() throws Exception {
-                navigator.navigateActivity(HomeActivity.class,null);
+                navigator.navigateActivity(HomeActivity.class, null);
                 navigator.finishActivity();
             }
         };

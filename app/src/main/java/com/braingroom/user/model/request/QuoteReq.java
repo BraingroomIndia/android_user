@@ -54,6 +54,12 @@ public class QuoteReq {
         @SerializedName("catalog_id")
         String catalogueId;
 
+        @SerializedName("quote_unit")
+        String quoteUnit;
+
+        @SerializedName("quote_unit_value")
+        String quoteUnitValue;
+
 
     }
 }

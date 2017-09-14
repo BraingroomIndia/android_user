@@ -26,6 +26,7 @@ public class FollowButtonViewModel extends ViewModel {
     public static final int STATE_FOLLOW = 1;
     public static final int STATE_FOLLOWED = 2;
     public static final int STATE_EDIT = 3;
+    public static final int STATE_HIDDEN = 4;
     public final ObservableField<String> textVal = new ObservableField<>();
     private int backgroundDrawable = R.drawable.solid_gray_rounded_corner_chat;
     public final ObservableInt currentState = new ObservableInt();
@@ -46,14 +47,16 @@ public class FollowButtonViewModel extends ViewModel {
         clickAction = new Action() {
             @Override
             public void run() throws Exception {
+                if (!getLoggedIn()) {
+                    messageHelper.showLoginRequireDialog("Only logged in users can like a post", null);
+                    return;
+                }
                 switch (currentState.get()) {
-//                    case STATE_LOADING:
-////                        messageHelper.show("loading");
-//                        break;
+                    case STATE_LOADING:
+                        messageHelper.show("loading");
+                        break;
                     case STATE_FOLLOW:
-//                        messageHelper.show("follow");
                         changeButtonState(STATE_LOADING);
-//                        TODO remove hardcoded userId
                         apiService.follow(userId).subscribe(new Consumer<FollowResp>() {
                             @Override
                             public void accept(@NonNull FollowResp resp) throws Exception {

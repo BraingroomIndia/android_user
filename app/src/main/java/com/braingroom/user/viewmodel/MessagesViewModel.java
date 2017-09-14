@@ -20,6 +20,7 @@ public class MessagesViewModel extends ViewModel {
     public final Observable<List<ViewModel>> messagesVm;
 
     public MessagesViewModel(final HelperFactory helperFactory, final MessageHelper messageHelper, final Navigator navigator) {
+        messageHelper.showProgressDialog("Wait", "loading");
 
         messagesVm = apiService.getMessages()
                 .map(new Function<MessageListResp, List<ViewModel>>() {
@@ -29,9 +30,10 @@ public class MessagesViewModel extends ViewModel {
                         if (resp.getData().isEmpty())
                             results.add(new EmptyItemViewModel(R.drawable.ic_message_black_48dp, null, "No Message", null));
                         for (final MessageListResp.Snippet elem : resp.getData()) {
-                            results.add(new MessagesItemViewModel(navigator, elem.getSenderId(), elem.getSenderName(),
+                            results.add(new MessagesItemViewModel(navigator, elem.getMessage().getMessageType(), elem.getMessage().getQuoteId(), elem.getSenderId(), elem.getSenderName(),
                                     elem.getSenderPic(), elem.getMessage().getMessage(), getHumanDate(elem.getMessage().getModifyDate())));
                         }
+                        messageHelper.dismissActiveProgress();
                         return results;
                     }
                 });

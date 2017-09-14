@@ -60,7 +60,7 @@ public class ClassListActivity extends BaseActivity {
         getSupportActionBar().setElevation(0);
         mRecyclerView = ((ActivityClassList1Binding) binding).classRecyclerview;
         mAdapter = new NonReactiveRecyclerViewAdapter(vm, ((ClassListViewModel1) vm).getViewProvider());
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(false);
         setupRecyclerView(ClassListViewModel1.LAYOUT_TYPE_TILE);
     }
 

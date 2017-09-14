@@ -389,7 +389,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     }*/
 
    /* public void updateFilter() {
-        //pagerAdapter.getFragmentAt(pager.getCurrentItem()).getViewModel().reset(pager.getCurrentItem() == 0 ? learnersFilter : tutorsFilter);
+        //postPagerAdapter.getFragmentAt(postPager.getCurrentItem()).getViewModel().reset(postPager.getCurrentItem() == 0 ? learnersFilter : tutorsFilter);
     }*/
 
 
@@ -499,10 +499,10 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     private String getActivePostType() {
         String postType = "";
 
-//        if (pager == null) return postType;
+//        if (postPager == null) return postType;
 
         int itemId = selectedBottomNav;
-        //  if (pager.getCurrentItem() == 0) itemId = selectedBottomNav;
+        //  if (postPager.getCurrentItem() == 0) itemId = selectedBottomNav;
         if (itemId == R.id.action_tips_tricks)
             postType = "action_tips_tricks";
         if (itemId == R.id.action_buy_sell)
@@ -511,7 +511,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             postType = "action_find_partners";
         if (itemId == R.id.action_discuss_n_decide)
             postType = "action_discuss_n_decide";
-       /* if (itemId == R.id.action_all && pager.getCurrentItem() != 0) {
+       /* if (itemId == R.id.action_all && postPager.getCurrentItem() != 0) {
             postType = "tutor_talks";
         }
         if (itemId == R.id.action_tutors_article) {

@@ -13,6 +13,7 @@ import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.utils.Constants;
 import com.facebook.login.LoginManager;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.functions.Consumer;
+import lombok.Setter;
 
 public class ViewModel extends BaseObservable {
 
@@ -33,7 +35,12 @@ public class ViewModel extends BaseObservable {
     public boolean apiSuccessful = false;
     public ConnectivityViewModel connectivityViewmodel;
 
+    public final String rupeesSymbol ="&#x20b9;";
+
     public final String BG_ID;
+
+    @Setter
+    protected FirebaseAnalytics mFirebaseAnalytics;
 
     @Inject
     public DataflowService apiService;
@@ -148,5 +155,25 @@ public class ViewModel extends BaseObservable {
 
     public boolean getLoggedIn() {
         return pref.getBoolean(Constants.LOGGED_IN, false);
+    }
+
+    public boolean isEmpty(String data) {
+        if (data == null)
+            return true;
+        else if (data.equals(""))
+            return true;
+        else
+            return data.trim().equals("");
+    }
+
+    public boolean isEmpty(List<?> data) {
+        if (data == null)
+            return true;
+        else
+            return data.isEmpty();
+    }
+
+    public boolean isEmpty(Object data) {
+        return data == null;
     }
 }

@@ -40,6 +40,7 @@ public class FilterViewModel extends ViewModel {
 
     public static final String ORIGIN_COMMUNITY = "HOME Community";
     public static final String ORIGIN_CATEGORY = "HOME Category";
+    public static final String ORIGIN_FILTER = "Home Filter";
     public static final String ORIGIN_HOME = "HOME Home";
 
     public static final int CLASS_SCHECULE_FIXED = 2;
@@ -343,10 +344,14 @@ public class FilterViewModel extends ViewModel {
         bundle.putSerializable(Constants.classTypeFilterMap, classTypeVm.selectedItemsMap);
         bundle.putSerializable(Constants.classScheduleFilterMap, classScheduleVm.selectedItemsMap);
         bundle.putSerializable(Constants.vendorListFilterMap, getHashMap(vendorListVm.selectedDataMap));
-        bundle.putString(Constants.origin, origin);
+        if (!ORIGIN_FILTER.equalsIgnoreCase(origin))
+            bundle.putString(Constants.origin, origin);
+        else bundle.putString(Constants.origin, ORIGIN_HOME);
         bundle.putBoolean("clearFlag", clearFlag);
         bundle.putSerializable(Constants.classFilterData, filterData);
         resultIntent.putExtras(bundle);
+        if (ORIGIN_FILTER.equalsIgnoreCase(origin))
+            navigator.navigateActivity(ClassListActivity.class, bundle);
         navigator.finishActivity(resultIntent);
         navigator.finishActivity();
     }

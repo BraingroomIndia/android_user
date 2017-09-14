@@ -398,7 +398,7 @@ public class SignupViewModel extends ViewModel {
         onEditMobile = new Action() {
             @Override
             public void run() throws Exception {
-                uiHelper.editMobileNumber(uuId);
+                UiHelper.editMobileNumber(uuId);
             }
         };*/
 

@@ -154,7 +154,6 @@ public class SignupActivity extends BaseActivity {
             @Override
             public void show(String tag) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
                 transaction.add(R.id.fragment_container, DynamicSearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
 
             }

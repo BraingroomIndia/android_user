@@ -15,7 +15,7 @@ import com.braingroom.user.model.dto.ClassLevelData;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.dto.PayUCheckoutData;
 import com.braingroom.user.model.request.CouponCodeReq;
-import com.braingroom.user.model.request.PayUBookingDetailsReq;
+import com.braingroom.user.model.request.GetBookingDetailsReq;
 import com.braingroom.user.model.request.PromocodeReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.request.SaveGiftCouponReq;
@@ -31,7 +31,6 @@ import com.braingroom.user.view.activity.PaySuccessActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
 
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,14 +41,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
-
-import static com.braingroom.user.FCMInstanceIdService.TAG;
 
 public class CheckoutViewModel extends ViewModel {
     @Override
@@ -145,6 +141,9 @@ public class CheckoutViewModel extends ViewModel {
         public void run() throws Exception {
             if (totalAmount.get() < appliedCouponAmount)
                 appliedCouponAmount = totalAmount.get();
+            if (totalAmount.get() < appliedPromoAmount)
+                appliedPromoAmount = totalAmount.get();
+
             totalAmountAfterPromo.set((int) (totalAmount.get() - appliedPromoAmount - appliedCouponAmount));
         }
     };
@@ -165,9 +164,7 @@ public class CheckoutViewModel extends ViewModel {
         this.messageHelper = messageHelper;
         this.navigator = navigator;
         this.helperFactory = helperFactory;
-
-        if (classData.getClassType().equalsIgnoreCase("Online Classes") || classData.getClassType().equalsIgnoreCase("Webinars"))//Edited by Vikas Godara;
-            isLocation.set(false);
+        isLocation.set(!isEmpty(classData.getLocation()));
         classImage = new ObservableField<>(classData.getImage());
         defaultPrice = new ObservableField<>(classData.getLevelDetails().get(0).getPrice());
         classTopic = new ObservableField<>(classData.getClassTopic());
@@ -429,8 +426,8 @@ public class CheckoutViewModel extends ViewModel {
 
                                 appliedCouponCode.set(couponCode.get());
                                 appliedCouponAmount = resp.getData().get(0).getAmount();
-                                if (appliedCouponAmount>=totalAmount.get())
-                                    appliedCouponAmount=totalAmount.get()-1;
+                                if (appliedCouponAmount > totalAmount.get())
+                                    appliedCouponAmount = totalAmount.get();
                                 applyingCouponCode.set(false);
                                 cartAmount.run();
 //
@@ -503,6 +500,10 @@ public class CheckoutViewModel extends ViewModel {
     }
 
     public void startRazorpayPayment(int amount, String mobile, String email) throws JSONException {
+        if (amount == 0) {
+            handleRazorpaySuccess("");
+            return;
+        }
         JSONObject options = new JSONObject();
         options.put("name", "Gift Coupon");
         options.put("description", "By: Braingroom.com");
@@ -520,33 +521,44 @@ public class CheckoutViewModel extends ViewModel {
 
 
     public void startPayment() throws JSONException {
-        if (totalAmountAfterPromo.get() != 0) {
-            PayUBookingDetailsReq.Snippet snippet = new PayUBookingDetailsReq.Snippet();
-            snippet.setTxnId(UUID.randomUUID().toString());
-            snippet.setAmount("" + totalAmountAfterPromo.get());
-            snippet.setClassId(classData.getId());
-            snippet.setLocalityId(selectedLocalityId);
-            snippet.setIsGuest(isGuest);
-            snippet.setUserId(gUserId);
-            JSONArray levels = new JSONArray();
-            JSONObject levelObj;
-            for (ViewModel nonReactiveItem : nonReactiveItems) {
-                levelObj = new JSONObject();
-                if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
-                    levelObj.put(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get());
-                    levels.put(levelObj);
-                }
-            }
-            snippet.setLevels(levels.toString());
-            messageHelper.showProgressDialog(null, "Initiating Payment...");
-            apiService.getPayUCheckoutData(new PayUBookingDetailsReq(snippet)
-                    , appliedPromoCodeId != null ? appliedPromoCodeId : null
-                    , appliedPromoCodeId != null ? appliedPromoCode.get() : null).subscribe(new Consumer<PayUCheckoutData>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull PayUCheckoutData chekcoutData) throws Exception {
+        boolean classLevelSelected = false;
 
-                    mChekcoutData = chekcoutData;
-                    if (usePayU) {
+        for (ViewModel nonReactiveItem : nonReactiveItems) {
+            if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                classLevelSelected = true;
+                break;
+            }
+        }
+        if (!classLevelSelected) {
+            messageHelper.show("Select class levels");
+            return;
+        }
+        GetBookingDetailsReq.Snippet snippet = new GetBookingDetailsReq.Snippet();
+            /*snippet.setTxnId(UUID.randomUUID().toString());*/
+        snippet.setAmount("" + totalAmountAfterPromo.get());
+        snippet.setClassId(classData.getId());
+        snippet.setLocalityId(selectedLocalityId);
+        snippet.setIsGuest(isGuest);
+        snippet.setUserId(gUserId);
+        JSONArray levels = new JSONArray();
+        JSONObject levelObj;
+        for (ViewModel nonReactiveItem : nonReactiveItems) {
+            levelObj = new JSONObject();
+            if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                levelObj.put(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get());
+                levels.put(levelObj);
+            }
+        }
+        snippet.setLevels(levels.toString());
+        messageHelper.showProgressDialog(null, "Initiating Payment...");
+        apiService.getBookingDetails(new GetBookingDetailsReq(snippet)
+                , appliedPromoCodeId != null ? appliedPromoCodeId : null
+                , appliedPromoCodeId != null ? appliedPromoCode.get() : null).subscribe(new Consumer<PayUCheckoutData>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull PayUCheckoutData chekcoutData) throws Exception {
+
+                mChekcoutData = chekcoutData;
+                if (usePayU) {
                     /*    PayUmoneySdkInitilizer.PaymentParam.Builder builder = new
                                 PayUmoneySdkInitilizer.PaymentParam.Builder()
                                 .setMerchantId("5513008")
@@ -567,39 +579,41 @@ public class CheckoutViewModel extends ViewModel {
                         PayUmoneySdkInitilizer.PaymentParam param = builder.build();
                         param.setMerchantHash(chekcoutData.getPaymentHash());
                         messageHelper.dismissActiveProgress();
-                        uiHelper.startPayUPayment(param);*/
-                    } else {
-                        JSONObject options = new JSONObject();
-                        options.put("name", classData.getClassTopic());
-                        options.put("description", "By: " + classData.getTeacher());
-                        //You can omit the image option to fetch the image from dashboard
-                        options.put("image", "https://www.braingroom.com/homepage/img/logo.jpg");
-                        options.put("currency", "INR");
-                        options.put("amount", "" + Integer.parseInt(chekcoutData.getAmount()) * 100);
-                        JSONObject preFill = new JSONObject();
-                        preFill.put("email", chekcoutData.getEmail());
-                        preFill.put("contact", chekcoutData.getPhone());
-                        options.put("prefill", preFill);
-                        Log.d(TAG, "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
-                                + "\namount\t:\t" + Integer.parseInt(chekcoutData.getAmount()) * 100 + "\nemail\t:\t" + chekcoutData.getEmail()
-                                + "\ncontact\t:\t" + chekcoutData.getPhone());
-                        messageHelper.dismissActiveProgress();
-                        uiHelper.startRazorpayPayment(options);
+                        UiHelper.startPayUPayment(param);*/
+                } else {
+                    if (totalAmountAfterPromo.get() == 0) {
+                        handleRazorpaySuccess("");
+                        return;
                     }
+                    JSONObject options = new JSONObject();
+                    options.put("name", classData.getClassTopic());
+                    options.put("description", "By: " + classData.getTeacher());
+                    //You can omit the image option to fetch the image from dashboard
+                    options.put("image", "https://www.braingroom.com/homepage/img/logo.jpg");
+                    options.put("currency", "INR");
+                    options.put("amount", "" + chekcoutData.getAmount() * 100);
+                    JSONObject preFill = new JSONObject();
+                    preFill.put("email", chekcoutData.getEmail());
+                    preFill.put("contact", chekcoutData.getPhone());
+                    options.put("prefill", preFill);
+                        /*Log.d(TAG, "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
+                                + "\namount\t:\t" + chekcoutData.getAmount() * 100 + "\nemail\t:\t" + chekcoutData.getEmail()
+                                + "\ncontact\t:\t" + chekcoutData.getPhone());*/
+                    messageHelper.dismissActiveProgress();
+                    uiHelper.startRazorpayPayment(options);
+                }
 
-                }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    messageHelper.show(throwable.getMessage());
-                    Log.d("PayUCheckoutData", "accept: " + throwable.getMessage());
-                }
-            });
-        } else {
-            messageHelper.show("select classes first");
-        }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                messageHelper.show(throwable.getMessage());
+                Log.d("PayUCheckoutData", "accept: " + throwable.getMessage());
+            }
+        });
 
     }
+
 
     public String getLevelsTitleText(String levelName) {
         if (sublevelTextMap.get(levelName) == null) {
@@ -634,16 +648,23 @@ public class CheckoutViewModel extends ViewModel {
         String date;
 
         final Bundle bundle = new Bundle();
-        bundle.putString("transactionId", razorpayId);
+
+
         if (isGift.get()) {
+            bundle.putString(Constants.BGTransactionId, couponPayData.getBGtransactionid());
+            bundle.putString(Constants.className, classData.getClassTopic());
+            bundle.putString(Constants.name, couponPayData.getName());
+            bundle.putString(Constants.amount, couponPayData.getPrice() + "");
             messageHelper.showProgressDialog("Processing", "finalizing your purchase");
             RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
+            snippet.setBgTxnid(couponPayData.getBGtransactionid());
+            snippet.setBookingType(Constants.giftClass);
             snippet.setTermId(couponPayData.getTermId());
             snippet.setAmount("" + totalAmountAfterPromo.get());
             snippet.setClassId(classData.getId());
             snippet.setUserId(gUserId);
             snippet.setLocalityId(selectedLocalityId);
-            snippet.setTxnid(razorpayId);
+            snippet.setRazorPayTxnid(razorpayId);
             snippet.setUserEmail(couponPayData.getEmail());
             snippet.setUserMobile(couponPayData.getMobile());
             snippet.setUserEmail(couponPayData.getEmail());
@@ -662,17 +683,62 @@ public class CheckoutViewModel extends ViewModel {
             String temp = gson.toJson(levelsList);
             temp = "{\"tickets\":" + temp + "}";
             snippet.setTickets(temp);
-            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).subscribe(new Consumer<RazorSuccessResp>() {
+            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show(throwable.getMessage());
+                    bundle.putBoolean(Constants.success, false);
+//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+                }
+            }).doOnComplete(new Action() {
+                @Override
+                public void run() throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+                    if (bundle.getBoolean(Constants.success))
+                        navigator.finishActivity();
+                }
+            }).subscribe(new Consumer<RazorSuccessResp>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show(resp.getResMsg());
+                    if (isEmpty(resp)) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else if (isEmpty(resp.getData())) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else if (isEmpty(resp.getData().get(0))) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else
+                        bundle.putBoolean(Constants.success, true);
+
+
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show(throwable.getMessage());
+                    bundle.putBoolean(Constants.success, false);
+//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+
+                }
+            });
+            /*.subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
                     messageHelper.show(resp.getResMsg());
-                    bundle.putString("class_name", resp.getData().get(0).className);
-                    bundle.putString("name", resp.getData().get(0).getUserName());
-                    bundle.putString("totalAmount", resp.getData().get(0).getTotalAmount());
-                    bundle.putString("success", PaySuccessViewModel.PAYMENT_SUCCESS);
+                    if (isEmpty(resp)) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else if (isEmpty(resp.getData())) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else if (isEmpty(resp.getData().get(0))) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else
+                        bundle.putBoolean(Constants.success, true);
                     messageHelper.dismissActiveProgress();
-                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
-                    navigator.finishActivity();
+//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
                 }
             }, new Consumer<Throwable>() {
                 @Override
@@ -680,15 +746,22 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                 }
-            });
+            });*/
         } else {
+
+            bundle.putString(Constants.BGTransactionId, mChekcoutData.getBGtransactionid());
+            bundle.putString(Constants.className, classData.getClassTopic());
+            bundle.putString(Constants.name, mChekcoutData.getFirstname());
+            bundle.putString(Constants.amount, mChekcoutData.getAmount() + "");
             messageHelper.showDismissInfo(null, "Processing your payment...");
             RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
+            snippet.setBookingType(Constants.normalBooking);
+            snippet.setBgTxnid(mChekcoutData.getBGtransactionid());
             snippet.setAmount("" + totalAmountAfterPromo.get());
             snippet.setClassId(classData.getId());
             snippet.setUserId(mChekcoutData.getUdf1());
             snippet.setLocalityId(selectedLocalityId);
-            snippet.setTxnid(razorpayId);
+            snippet.setRazorPayTxnid(razorpayId);
             snippet.setUserEmail(mChekcoutData.getEmail());
             snippet.setUserMobile(mChekcoutData.getPhone());
             snippet.setUserId(mChekcoutData.getUdf1());
@@ -703,32 +776,54 @@ public class CheckoutViewModel extends ViewModel {
                     levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
                 }
             }
+
             String temp = gson.toJson(levelsList);
             temp = "{\"tickets\":" + temp + "}";
             snippet.setTickets(temp);
-            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).subscribe(new Consumer<RazorSuccessResp>() {
+            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).doOnError(new Consumer<Throwable>() {
                 @Override
-                public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
-
-                    messageHelper.show(resp.getResMsg());
-                    bundle.putString("class_name", resp.getData().get(0).className);
-                    bundle.putString("name", resp.getData().get(0).getUserName());
-                    bundle.putString("totalAmount", resp.getData().get(0).getTotalAmount());
-                    bundle.putString("success", PaySuccessViewModel.PAYMENT_SUCCESS);
+                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show(throwable.getMessage());
+                    bundle.putBoolean(Constants.success, false);
+//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+                }
+            }).doOnComplete(new Action() {
+                @Override
+                public void run() throws Exception {
                     messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
+                    if (bundle.getBoolean(Constants.success))
+                        navigator.finishActivity();
+                }
+            }).subscribe(new Consumer<RazorSuccessResp>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show(resp.getResMsg());
+                    if (isEmpty(resp)) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else if (isEmpty(resp.getData())) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else if (isEmpty(resp.getData().get(0))) {
+                        bundle.putBoolean(Constants.success, false);
+                    } else
+                        bundle.putBoolean(Constants.success, true);
+
 
                 }
             }, new Consumer<Throwable>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                     messageHelper.dismissActiveProgress();
-                    bundle.putString("success", PaySuccessViewModel.PAYMENT_FAIL);
-                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
                     messageHelper.show(throwable.getMessage());
+                    bundle.putBoolean(Constants.success, false);
+//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+
                 }
             });
         }
+
     }
 /*
     public PayuHashes generateHashFromSDK(PaymentParams mPaymentParams, String salt) {
@@ -740,7 +835,7 @@ public class CheckoutViewModel extends ViewModel {
         checksum = new PayUChecksum();
         checksum.setAmount(mPaymentParams.getAmount());
         checksum.setKey(mPaymentParams.getKey());
-        checksum.setTxnid(mPaymentParams.getTxnId());
+        checksum.setRazorPayTxnid(mPaymentParams.getTxnId());
         checksum.setEmail(mPaymentParams.getEmail());
         checksum.setSalt(salt);
         checksum.setProductinfo(mPaymentParams.getProductInfo());

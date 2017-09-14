@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.FeaturedPostViewModel" />
+
+    </data>
+
+
+    <RelativeLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f5f5f5"
+        android:fitsSystemWindows="true"
+        tools:context=".view.activity.FeaturedPostActivity">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/post_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_med"
+                    android:text="Post Of The Day"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="30dp"
+                    app:font='@{@string/robotoBoldItalic}' />
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/post_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-5dp"
+                    app:tabBackground="@drawable/tab_selector"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
+
+                <com.braingroom.user.utils.WrapContentHeightViewPager
+                    android:id="@+id/post_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-2dp"
+                    tools:layout="@layout/fragment_featured_post" />
+
+
+                <TextView
+                    android:id="@+id/winner_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_med"
+                    android:text="Weekly Top Perform"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="30dp"
+                    app:font='@{@string/robotoBoldItalic}' />
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/winner_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-5dp"
+                    app:tabBackground="@drawable/tab_selector"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
+
+                <com.braingroom.user.utils.WrapContentHeightViewPager
+                    android:id="@+id/winner_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-2dp"
+                    tools:layout="@layout/fragment_featured_post" />
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <include
+            layout="@layout/content_internet_connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            app:vm="@{vm.connectivityViewmodel}" />
+
+    </RelativeLayout>
+</layout>

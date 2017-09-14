@@ -67,6 +67,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <include
+            android:id="@+id/content_home"
             layout="@layout/content_home"
             app:vm="@{vm}" />
 
@@ -75,6 +76,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
+            android:layout_below="@id/content_home"
+            android:layout_gravity="end|bottom"
+            app:layout_scrollFlags="enterAlways"
             app:vm="@{vm.connectivityViewmodel}" />
 
     </android.support.design.widget.CoordinatorLayout>

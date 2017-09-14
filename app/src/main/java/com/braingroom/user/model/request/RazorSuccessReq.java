@@ -43,7 +43,10 @@ public class RazorSuccessReq {
         public String amount;
 
         @SerializedName("txnid")
-        public String txnid;
+        public String razorPayTxnid;
+
+        @SerializedName("bg_txnid")
+        private String bgTxnid;
 
         @SerializedName("term_id")
         private String termId;
@@ -59,6 +62,9 @@ public class RazorSuccessReq {
 
         @SerializedName("promo_value")
         private String promoAmount;
+
+        @SerializedName("book_type")
+        private int bookingType;
     }
 
     @Data

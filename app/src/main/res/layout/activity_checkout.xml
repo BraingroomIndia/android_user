@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     tools="http://schemas.android.com/tools">
 
     <data>
@@ -87,8 +88,8 @@
 
                 <include
                     layout="@layout/item_list_dialog_opener"
-                    android:visibility="@{vm.isLocation? View.VISIBLE : View.GONE}"
                     app:editable="@{true}"
+                    app:isInvisible="@{!vm.isLocation}"
                     app:vm="@{vm.locationsVm}" />
 
             </android.support.v7.widget.CardView>
@@ -165,7 +166,7 @@
                     android:layout_marginTop="@dimen/padding_small"
                     android:gravity="center"
                     android:onClick="@{vm.onOpenCouponCode}"
-                    android:text='@{vm.appliedCouponCode == null ? "Apply a Coupon Code" : "Coupon Code Discount : " + vm.appliedCouponAmount}'
+                    android:text='@{vm.appliedCouponCode == null ? "Apply a Coupon Code" : "Coupon Code Discount Rs. : " + vm.appliedCouponAmount}'
                     android:textColor="@color/materialBlue"
                     android:textSize="@dimen/text_size_large"
                     android:visibility="@{vm.applyingCouponCode ?  View.GONE: View.VISIBLE}"
@@ -210,7 +211,7 @@
                     android:layout_marginTop="@dimen/padding_small"
                     android:gravity="center"
                     android:onClick="@{vm.onOpenPromoCode}"
-                    android:text='@{vm.appliedPromoCode == null ? "Apply a Promo Code" : "Promo Code Discount : " + vm.appliedPromoAmount}'
+                    android:text='@{vm.appliedPromoCode == null ? "Apply a Promo Code" : "Promo Code Discount Rs. : " + vm.appliedPromoAmount}'
                     android:textColor="@color/materialBlue"
                     android:textSize="@dimen/text_size_large"
                     android:visibility="@{vm.applyingPromoCode ?  View.GONE : View.VISIBLE}"
@@ -257,10 +258,11 @@
                 android:background="@color/materialGreen"
                 android:gravity="center"
                 android:onClick="@{vm.onProceedClicked}"
-                android:text='@{vm.totalAmountAfterPromo==0 ? "Select Items to Proceed" : "Pay Rs."+vm.totalAmountAfterPromo}'
+                android:text='@{vm.totalAmount==0 ? "Select Items to Proceed" : vm.totalAmountAfterPromo==0?"Book for free" : "Pay Rs. " + vm.totalAmountAfterPromo}'
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_large"
-                app:font='@{@string/robotoBold}' />
+                app:font='@{@string/robotoBold}'
+                tools:text='&#x20b9;' />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

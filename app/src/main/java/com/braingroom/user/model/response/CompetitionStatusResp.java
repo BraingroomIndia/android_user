@@ -24,9 +24,9 @@ public class CompetitionStatusResp extends BaseResp {
     @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
         @SerializedName("status")
-        Integer status;
 
-        @SerializedName("banner_url")
-        String backgroundUrl;
+        public Integer status;
+        @SerializedName("display_text")
+        public String displayText[];
     }
 }

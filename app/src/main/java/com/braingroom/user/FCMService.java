@@ -53,6 +53,7 @@ public class FCMService extends FirebaseMessagingService {
 
         Intent intent;
         Bundle data = new Bundle();
+        String notificationType = remoteMessage.getData().get("notify_type");
         String title = remoteMessage.getData().get("title");
         String shortDescription = remoteMessage.getData().get("short_description");
         String detailDescription = remoteMessage.getData().get("detail_description");
@@ -62,6 +63,8 @@ public class FCMService extends FirebaseMessagingService {
         String classId = remoteMessage.getData().get("class_id");
         String messageSenderId = remoteMessage.getData().get("sender_id");
         String messageSenderName = remoteMessage.getData().get("sender_name");
+        String title1 = remoteMessage.getData().get("type");
+        String messageBody = remoteMessage.getData().get("message");
         data.putString("notification_id", notificationId);
         data.putBoolean("pushNotification", true);
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
@@ -90,10 +93,17 @@ public class FCMService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder;
-        if (TextUtils.isEmpty(imageUrl))
+        if ("text".equalsIgnoreCase(notificationType))
             notificationBuilder = createBigTextStyleNotification(title, shortDescription, detailDescription, pendingIntent);
-        else
+        else if ("image".equalsIgnoreCase(notificationType))
             notificationBuilder = createBigPictureStyleNotification(title, imageUrl, shortDescription, pendingIntent);
+        else notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_notifications_64px)
+                    .setContentTitle(title1 == null ? "" : title1)
+                    .setContentText(messageBody)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

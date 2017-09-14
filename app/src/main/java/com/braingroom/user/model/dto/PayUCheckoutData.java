@@ -16,10 +16,10 @@ public class PayUCheckoutData implements Serializable {
     public String key;
 
     @SerializedName("txnid")
-    public String txnId;
+    public String BGtransactionid;
 
     @SerializedName("amount")
-    public String amount;
+    public int amount;
 
     @SerializedName("firstname")
     public String firstname;

@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class PayUBookingDetailsReq {
+public class GetBookingDetailsReq {
 
     @SerializedName("braingroom")
     Snippet data;
@@ -31,7 +31,7 @@ public class PayUBookingDetailsReq {
         String levels;
 
         @SerializedName("txnid")
-        String txnId;
+        String txnId="";
 
         @SerializedName("user_id")
         String userId;

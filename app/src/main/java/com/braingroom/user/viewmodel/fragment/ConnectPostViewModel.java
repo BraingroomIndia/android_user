@@ -468,7 +468,7 @@ public class ConnectPostViewModel extends ViewModel {
 
 //
 //
-                //uiHelper.next();
+                //UiHelper.next();
             }
         };
         changeDateText = new Action() {

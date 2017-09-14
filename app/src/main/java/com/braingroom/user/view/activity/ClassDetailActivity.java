@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.braingroom.user.R;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
@@ -61,7 +63,9 @@ public class ClassDetailActivity extends BaseActivity {
     Scene mColapsedScene;
     Scene mExpandedScene;
     RelativeLayout mSceneRoot;
+    ImageView imageView;
 
+    public String classId;
 
     public interface UiHelper {
         void initYoutube();
@@ -84,8 +88,6 @@ public class ClassDetailActivity extends BaseActivity {
 
 
     }
-
-    TabLayout tabLayout;
 
 
     private class PostPagerAdapter extends FragmentStatePagerAdapter {
@@ -145,6 +147,8 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        vm = (ClassDetailViewModel) vm;
+
         /*try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
         } catch (Exception e){e.printStackTrace();}*/
@@ -158,8 +162,6 @@ public class ClassDetailActivity extends BaseActivity {
                 ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
             }
         });
-        if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin")))
-            tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
     }
 
@@ -175,6 +177,7 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected ViewModel createViewModel() {
         myPlaybackEventListener = new MyPlaybackEventListener();
+        classId = getIntentString("id");
         uiHelper = new UiHelper() {
             @Override
             public void initYoutube() {
@@ -187,19 +190,20 @@ public class ClassDetailActivity extends BaseActivity {
 
             @Override
             public void stopShimmer() {
-                if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))) {
-                    pager = (WrapContentHeightViewPager) findViewById(R.id.pager);
-                    pagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
-                    pager.setAdapter(pagerAdapter);
-                    tabLayout.setupWithViewPager(pager);
-                }
+               /* if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))) {
+                    postPager = (WrapContentHeightViewPager) findViewById(R.id.postPager);
+                    postPagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
+                    postPager.setAdapter(postPagerAdapter);
+                    postTabLayout.setupWithViewPager(postPager);
+                }*/
+                mFirebaseAnalytics.setCurrentScreen(ClassDetailActivity.this, ((ClassDetailViewModel) vm).mClassData.getClassTopic(), null);
 //                shimmerFrameLayout.stopShimmerAnimation();
             }
 
             @Override
             public void showQuoteForm() {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance(getIntentString("catalogueId"), getIntentString("id"))).addToBackStack(null).commit();
+                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance(getIntentString("catalogueId"), classId)).addToBackStack(null).commit();
             }
 
             @Override
@@ -233,21 +237,26 @@ public class ClassDetailActivity extends BaseActivity {
                 Transition mFadeTransition = new Fade();
                 ClassDetailDemoPostViewModel demoPostVm = null;
                 String title = null;
-                if (((ClassDetailViewModel) vm).KNK.equals(s)) {
+
+
+                if (ClassDetailViewModel.KNK.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container1);
                     demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataKNN);
-                    title = ((ClassDetailViewModel) vm).KNK;
+                    title = ClassDetailViewModel.KNK;
                 }
-                if (((ClassDetailViewModel) vm).BNS.equals(s)) {
+                if (ClassDetailViewModel.BNS.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container2);
                     demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataBNS);
-                    title = ((ClassDetailViewModel) vm).BNS;
+                    title = ClassDetailViewModel.BNS;
                 }
-                if (((ClassDetailViewModel) vm).AP.equals(s)) {
+
+                if (ClassDetailViewModel.AP.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container3);
-                    title = ((ClassDetailViewModel) vm).AP;
+                    title = ClassDetailViewModel.AP;
                     demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataFP);
                 }
+               /* imageView = mSceneRoot.findViewById(R.id.action_image);
+                imageView.setImageResource(R.drawable.minus);*/
                 mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_colapsed_scene, ClassDetailActivity.this);
                 mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_expanded_scene, ClassDetailActivity.this);
                 TransitionManager.go(mExpandedScene, mFadeTransition);
@@ -262,18 +271,21 @@ public class ClassDetailActivity extends BaseActivity {
             public void compressDemoClass(String s) {
                 Transition mFadeTransition = new Fade();
                 String title = null;
-                if (((ClassDetailViewModel) vm).KNK.equals(s)) {
+                if (ClassDetailViewModel.KNK.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container1);
-                    title = ((ClassDetailViewModel) vm).KNK;
+                    title = ClassDetailViewModel.KNK;
                 }
-                if (((ClassDetailViewModel) vm).BNS.equals(s)) {
+                if (ClassDetailViewModel.BNS.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container2);
-                    title = ((ClassDetailViewModel) vm).BNS;
+                    title = ClassDetailViewModel.BNS;
                 }
-                if (((ClassDetailViewModel) vm).AP.equals(s)) {
+                if (ClassDetailViewModel.AP.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container3);
-                    title = ((ClassDetailViewModel) vm).AP;
+                    title = ClassDetailViewModel.AP;
                 }
+
+                /*imageView = mSceneRoot.findViewById(R.id.action_image);
+                imageView.setImageResource(R.drawable.plus);*/
                 mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_colapsed_scene, ClassDetailActivity.this);
                 mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_expanded_scene, ClassDetailActivity.this);
                 TransitionManager.go(mColapsedScene, mFadeTransition);
@@ -290,7 +302,7 @@ public class ClassDetailActivity extends BaseActivity {
 
 
         };
-        return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), getIntentString("id"),
+        return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
                 getIntentString("origin"), getIntentString("catalogueId"));
     }
 
@@ -339,10 +351,10 @@ public class ClassDetailActivity extends BaseActivity {
             ((ClassDetailViewModel) vm).share();
             return true;
         }
-/*        if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             onBackPressed();
             return true;
-        }*/
+        }
         return super.onOptionsItemSelected(item);
     }
 

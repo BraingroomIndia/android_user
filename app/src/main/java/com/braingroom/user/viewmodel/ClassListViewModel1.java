@@ -34,6 +34,7 @@ import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
 import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -366,16 +367,41 @@ public class ClassListViewModel1 extends ViewModel {
                 List<ViewModel> results = new ArrayList<>();
                 currentPage = nextPage;
                 nextPage = resp.getNextPage();
-               /* if (nextPage<2)
-//                    ZohoSalesIQ.Tracking.setPageTitle("CategoryId: " +filterData.getCategoryId() +"\tSegmentId: " +filterData.getSegmentId() +"\tCatalogueId: " +filterData.getCatalog() );
-                else
-                    *//*try {
-                        ZohoSalesIQ.Tracking.setCustomAction("Page number" + nextPage);
-                    } catch (PEXException e) {
-                        e.printStackTrace();
-                    }*/
+                Bundle bundle = new Bundle();
+                // FireBase Tracking
+                if (currentPage < 2) {
+                    if (!categoryFilterMap.isEmpty()) {
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Normal ClassList");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, categoryFilterMap.keySet().iterator().next());
+                        if (!classTypeFilterMap.isEmpty()) {
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, classTypeFilterMap.keySet().iterator().next());
+                        }
+                        if (!localityFilterMap.isEmpty()) {
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, localityFilterMap.values().iterator().next() + "");
+                            bundle.putString(FirebaseAnalytics.Param.LOCATION, localityFilterMap.keySet().iterator().next());
+                        }
+                    } else if (!communityFilterMap.isEmpty()) {
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Community ClassList");
+                        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, communityFilterMap.keySet().iterator().next());
+                        if (!classTypeFilterMap.isEmpty()) {
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, classTypeFilterMap.keySet().iterator().next());
+                        }
+                        if (!localityFilterMap.isEmpty()) {
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, localityFilterMap.values().iterator().next() + "");
+                            bundle.putString(FirebaseAnalytics.Param.LOCATION, localityFilterMap.keySet().iterator().next());
+                        }
+
+                    } else if (isCatalogue) {
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Catalogue ClassList");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, filterData.getCatalog());
+                    }
+                    if (!bundle.isEmpty())
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, bundle);
+
+                }
+                // FireBase Tracking
                 Log.d(TAG, "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
-                if (resp.getClassDataList().size() == 0 && currentPage == 1) {
+                if (resp.getClassDataList().size() == 0 && currentPage == 0) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                 } else {
                     for (final ClassData elem : resp.getClassDataList()) {
@@ -727,10 +753,10 @@ public class ClassListViewModel1 extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
                 if (viewModels.size() < 2 && nextPage == 0) {
                     layoutType.set(LAYOUT_TYPE_ROW);
-                    uiHelper.changeLayout(layoutType.get());
+                    UiHelper.changeLayout(layoutType.get());
                 }
                 nonReactiveItems = viewModels;
-                uiHelper.notifyDataChanged();
+                UiHelper.notifyDataChanged();
             }
         }).doOnError(new Consumer<Throwable>() {
             @Override
@@ -772,7 +798,7 @@ public class ClassListViewModel1 extends ViewModel {
                     paginationInProgress = false;
                 }
                 nonReactiveItems.addAll(viewModels);
-                uiHelper.notifyDataChanged();
+                UiHelper.notifyDataChanged();
             }
         }).doOnError(new Consumer<Throwable>() {
             @Override

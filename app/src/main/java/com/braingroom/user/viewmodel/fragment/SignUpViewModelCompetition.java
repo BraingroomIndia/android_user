@@ -5,30 +5,22 @@ import android.support.annotation.NonNull;
 import android.util.Pair;
 import android.util.Patterns;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.SignUpReq;
-import com.braingroom.user.model.request.SubmitOTPReq;
-import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
-import com.braingroom.user.model.response.LoginResp;
 import com.braingroom.user.model.response.SignUpResp;
-import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
 import com.braingroom.user.viewmodel.DataItemViewModel;
 import com.braingroom.user.viewmodel.DatePickerViewModel;
 import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ListDialogViewModel1;
-import com.braingroom.user.viewmodel.OTPReq;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.HashMap;
@@ -68,14 +60,15 @@ public class SignUpViewModelCompetition extends ViewModel {
 
     public final Action onSignupClicked, onBackClicked, onSkipAndSignupClicked;
 
-    public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM, ugInstituteVm;
+    public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM;
+    public final DynamicSearchSelectListViewModel ugInstituteVm;
 
     public Observable<HashMap<String, Pair<String, String>>> countryApiObservable, stateApiObservable, cityApiObservable, localityApiObservable, instituteApiObservable;
 
     private SignUpReq.Snippet signUpSnippet;
 
 
-    public SignUpViewModelCompetition(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignUpActivityCompetition.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
+    public SignUpViewModelCompetition(@NonNull final int competitionStatus ,@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignUpActivityCompetition.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
         this.navigator = navigator;
         this.messageHelper = messageHelper;
         this.uiHelper = uiHelper;
@@ -246,7 +239,7 @@ public class SignUpViewModelCompetition extends ViewModel {
 
             }
         };
-         countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+        countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
@@ -356,7 +349,7 @@ public class SignUpViewModelCompetition extends ViewModel {
         }), new HashMap<String, Integer>(), true, null, "");
 
 
-        instituteApiObservable = apiService.getSchools("").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+        instituteApiObservable = apiService.getInstitute("").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
             @Override
             public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
@@ -367,8 +360,10 @@ public class SignUpViewModelCompetition extends ViewModel {
                 return resMap;
             }
         });
-        ugInstituteVm = new SearchSelectListViewModel(SignUpActivityCompetition.FRAGMENT_UG_COLLEGE, messageHelper, navigator, "search for school", false, instituteApiObservable, "", null, fragmentHelper);
-
+        if (competitionStatus==1)
+        ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_SCHOOL, messageHelper, navigator, "search for school... ", false, "", null, dynamicSearchFragmentHelper);
+        else
+            ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
     }
 
 

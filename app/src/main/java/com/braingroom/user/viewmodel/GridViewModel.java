@@ -17,6 +17,7 @@ import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassListActivity;
+import com.braingroom.user.view.activity.CommunityListActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.SegmentListActivity;
 
@@ -35,6 +36,11 @@ public class GridViewModel extends ViewModel {
     protected final static int COMMUNITY = 2;
     protected final static int SEGMENT = 3;
     protected final static int CONNECT = 4;
+    protected final static int OnlineCommunity = 5;
+
+
+    private String temp1 = "https://www.braingroom.com/img/category_image/201707111154200856274001499774060.jpg";
+    private String temp2 = "https://www.braingroom.com/img/category_image/201707111155160426418001499774116.jpg";
 
 
     public final Observable<List<ViewModel>> gridItems;
@@ -74,6 +80,9 @@ public class GridViewModel extends ViewModel {
             case CONNECT:
                 title.set(connectSection);
                 return getConnectSection().mergeWith(Observable.just(getGridLoadingItems(5)));
+            case OnlineCommunity:
+                title.set("Dummy Title");
+                return getCommunityAndOnlineClass();
             default:
                 return Observable.just(getGridLoadingItems(6));
 
@@ -227,6 +236,31 @@ public class GridViewModel extends ViewModel {
                 return getGridLoadingItems(5);
             }
         });
+    }
+
+    private Observable<List<ViewModel>> getCommunityAndOnlineClass() {
+        ViewModel community, onlineClass;
+        List<ViewModel> list = new ArrayList<ViewModel>();
+        community = new IconTextItemViewModel(temp1, "Community Group", new MyConsumer<IconTextItemViewModel>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
+                navigator.navigateActivity(CommunityListActivity.class, null);
+            }
+        });
+        onlineClass = new IconTextItemViewModel(temp2, "Online Class", new MyConsumer<IconTextItemViewModel>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
+                FilterData filterData = new FilterData();
+                filterData.setClassType(FilterViewModel.CLASS_TYPE_SEMINAR + "");
+                Bundle data = new Bundle();
+                data.putSerializable(Constants.classFilterData, filterData);
+                data.putString(Constants.origin, FilterViewModel.ORIGIN_HOME);
+                navigator.navigateActivity(ClassListActivity.class, data);
+            }
+        });
+        list.add(community);
+        list.add(onlineClass);
+        return Observable.just(list);
     }
 
     private CommunityResp getDefaultResponse() {

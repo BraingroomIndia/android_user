@@ -26,6 +26,7 @@ import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
+import com.braingroom.user.view.activity.ProfileDisplayActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
 
@@ -91,6 +92,9 @@ public class ConnectFeedItemViewModel extends ViewModel {
             likedUsersAction, playAction, detailShowAction, acceptAction, shareAction, showAcceptedUsers, showthirdpartyProfile, onMessageClick, openSegment;
 
     @NonNull
+    public final ObservableBoolean hideMessageIcon;
+
+    @NonNull
     public final Navigator navigator;
 
     public final String postType;
@@ -109,10 +113,11 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     public final FollowButtonViewModel followButtonVm;
 
-    public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
+    public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, boolean hideMessageIcon, boolean hideFollowIcon, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
             , @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
-        followButtonVm = new FollowButtonViewModel(data.getPostOwnerId(), messageHelper, navigator,
-                data.getFollowStatus() == 0 ? FollowButtonViewModel.STATE_FOLLOW : FollowButtonViewModel.STATE_FOLLOWED);
+
+        followButtonVm = new FollowButtonViewModel(data.getPostOwnerId(), messageHelper, navigator
+                , BG_ID.equals(data.getPostOwnerId()) ? FollowButtonViewModel.STATE_HIDDEN : data.getFollowStatus() == 0 ? FollowButtonViewModel.STATE_FOLLOW : FollowButtonViewModel.STATE_FOLLOWED);
         if (data.getCategoryId() == null && data.getSegId() == null)
             isSegmentAvailable.set(false);
         if (data.getCategoryId() != null)
@@ -132,11 +137,11 @@ public class ConnectFeedItemViewModel extends ViewModel {
             this.vendorCollege = new ObservableField<>(data.getInstituteName());
 
         this.image = new ObservableField<>(TextUtils.isEmpty(data.getImage()) ? null : data.getImage());
-        this.video = new ObservableField<>(getVideoId(data.getVideo()));
+        this.video = new ObservableField<>(data.getVideo());
         this.videoThumb = new ObservableField<>(TextUtils.isEmpty(video.get()) ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
-        this.liked = new ObservableBoolean(data.getLiked() == 0 ? false : true);
+        this.liked = new ObservableBoolean(data.getLiked() != 0);
         // Log.d(TAG, "ConnectFeedItemViewModel: \n videoUrl \t " + video.get() + "\n videoThumb \t" + videoThumb.get() + "\n");
-        this.reported = new ObservableBoolean(data.getReported() == 0 ? false : true);
+        this.reported = new ObservableBoolean(data.getReported() != 0);
         this.postType = data.getPostType();
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);
         this.isVendor.set("vendor_article".equalsIgnoreCase(postType));
@@ -144,7 +149,12 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.numAccepts = new ObservableInt(data.getNumAccepted());
         this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwnerId()));
         this.isMediaAvailable = new ObservableBoolean(data.getVideo() != null || !data.getImage().equals(""));
-
+        if (hideFollowIcon)
+            followButtonVm.changeButtonState(FollowButtonViewModel.STATE_HIDDEN);
+        if (hideMessageIcon || isVendor.get() || isPostOwner.get())
+            this.hideMessageIcon = new ObservableBoolean(true);
+        else
+            this.hideMessageIcon = new ObservableBoolean(false);
 
         openSegment = new Action() {
             @Override
@@ -215,10 +225,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
                 if (data.getPostType().equalsIgnoreCase("vendor_article")) {
                     bundleData.putString("id", data.getPostOwnerId());
                     navigator.navigateActivity(VendorProfileActivity.class, bundleData);
-                } else {
+                } else if (!data.getPostOwnerId().equalsIgnoreCase(BG_ID)) {
                     bundleData.putString("userId", data.getPostOwnerId());
                     navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
-                }
+                } else navigator.navigateActivity(ProfileDisplayActivity.class, null);
 
             }
         };

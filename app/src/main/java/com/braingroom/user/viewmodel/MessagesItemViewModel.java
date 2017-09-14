@@ -3,7 +3,10 @@ package com.braingroom.user.viewmodel;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.CatalogueCheckOutActivity;
+import com.braingroom.user.view.activity.CatalogueHomeActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 
 import java.text.DateFormat;
@@ -17,7 +20,7 @@ public class MessagesItemViewModel extends ViewModel {
     public final Action onClicked;
     public final String senderImage, senderName, message, sentDate;
 
-    public MessagesItemViewModel(@NonNull final Navigator navigator, @NonNull final String senderId,
+    public MessagesItemViewModel(@NonNull final Navigator navigator, @NonNull final int messageType, @NonNull final String quoteId, @NonNull final String senderId,
                                  @NonNull final String senderName, @NonNull final String senderImage,
                                  @NonNull String message, @NonNull String sentDate) {
 
@@ -29,11 +32,15 @@ public class MessagesItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                // TODO: 23/05/17 change to senderId
-                data.putString("sender_id", senderId);//senderId);
-                data.putString("sender_name", senderName);//senderId);
-                data.putString("sender_image", senderImage);//senderId);
-                navigator.navigateActivity(MessagesThreadActivity.class, data);
+                if (messageType == 1) {
+                    data.putString(Constants.quoteId, quoteId);
+                    navigator.navigateActivity(CatalogueCheckOutActivity.class, data);
+                } else {
+                    data.putString("sender_id", senderId);//senderId);
+                    data.putString("sender_name", senderName);//senderId);
+                    data.putString("sender_image", senderImage);//senderId);
+                    navigator.navigateActivity(MessagesThreadActivity.class, data);
+                }
             }
         };
 

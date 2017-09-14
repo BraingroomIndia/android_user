@@ -16,9 +16,18 @@ public class Constants {
     public static final String LOCALITY_ID = "localityId";
     public static final String LOCALITY_NAME = "locality_name";
 
+
+
+    //booking Types
+    public static final int normalBooking =1;
+    public static final int giftClass =2;
+    public static final int giftCoupon =3;
+    public static final int catalogBooking =4;
+
     //Bundle keys
 
     public static final String USER_ID = "userId";
+
     public static final String classFilterData = "ClassFilterData";
     public static final String categoryFilterMap = "categoryFilterMap";
     public static final String segmentsFilterMap = "segmentsFilterMap";
@@ -29,6 +38,17 @@ public class Constants {
     public static final String classScheduleFilterMap = "classScheduleFilterMap";
     public static final String vendorListFilterMap = "vendorListFilterMap";
     public static final String origin = "origin";
+
+    public static final String competitionStatus = "CompetitionStatus";
+
+
+    public static final String quoteId = "quoteId";
+    public static final String success = "success";
+    public static final String name = "name";
+    public static final String BGTransactionId = "BGtransactionId";
+    public static final String className = "class_name";
+    public static final String amount = "amount";
+
 
     public static final String FONT_REGULAR = "Roboto-Regular.ttf";
     public static final String FONT_BOLD = "Roboto-Bold.ttf";

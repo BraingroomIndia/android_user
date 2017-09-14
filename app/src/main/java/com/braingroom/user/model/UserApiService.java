@@ -1,107 +1,9 @@
 package com.braingroom.user.model;
 
 
-import com.braingroom.user.model.request.ArticleAndVideosPostReq;
-import com.braingroom.user.model.request.BuyAndSellPostReq;
-import com.braingroom.user.model.request.ChangeNotificationStatusReq;
-import com.braingroom.user.model.request.ChangePasswordReq;
-import com.braingroom.user.model.request.ChatMessageReq;
-import com.braingroom.user.model.request.CityReq;
-import com.braingroom.user.model.request.ClassDetailReq;
-import com.braingroom.user.model.request.CommentReplyReq;
-import com.braingroom.user.model.request.CommentViewReply;
-import com.braingroom.user.model.request.CommentViewReplyReq;
-import com.braingroom.user.model.request.CommonIdReq;
-import com.braingroom.user.model.request.CommonUserIdReq;
-import com.braingroom.user.model.request.CommonUuidReq;
-import com.braingroom.user.model.request.ConnectDataReq;
-import com.braingroom.user.model.request.ConnectFeedReq;
-import com.braingroom.user.model.request.ConnectPostByIdReq;
-import com.braingroom.user.model.request.ContactAdmin;
-import com.braingroom.user.model.request.CouponCodeReq;
-import com.braingroom.user.model.request.DecideAndDiscussPostReq;
-import com.braingroom.user.model.request.ExploreReq;
-import com.braingroom.user.model.request.FirstSocialLoginReq;
-import com.braingroom.user.model.request.FollowReq;
-import com.braingroom.user.model.request.GeneralFilterReq;
-import com.braingroom.user.model.request.GiftCouponReq;
-import com.braingroom.user.model.request.GuestUserReq;
-import com.braingroom.user.model.request.InstituteReq;
-import com.braingroom.user.model.request.KnowledgeNuggetsPostReq;
-import com.braingroom.user.model.request.LearningPartnerPostReq;
-import com.braingroom.user.model.request.LikeReq;
-import com.braingroom.user.model.request.LocalityReq;
-import com.braingroom.user.model.request.LoginReq;
-import com.braingroom.user.model.request.LogoutReq;
-import com.braingroom.user.model.request.MarkerDataReq;
-import com.braingroom.user.model.request.MessageListReq;
-import com.braingroom.user.model.request.MessageReplyReq;
-import com.braingroom.user.model.request.PayUBookingDetailsReq;
-import com.braingroom.user.model.request.PayUHashGenReq;
-import com.braingroom.user.model.request.PostRelatedReq;
-import com.braingroom.user.model.request.ProfileUpdateReq;
-import com.braingroom.user.model.request.PromocodeReq;
-import com.braingroom.user.model.request.QuoteReq;
-import com.braingroom.user.model.request.RazorBuySuccessReq;
-import com.braingroom.user.model.request.RazorSuccessReq;
-import com.braingroom.user.model.request.ReferralCodeReq;
-import com.braingroom.user.model.request.RegisterUserDeviceReq;
-import com.braingroom.user.model.request.ReportReq;
-import com.braingroom.user.model.request.SaveGiftCouponReq;
-import com.braingroom.user.model.request.SearchReq;
-import com.braingroom.user.model.request.SegmentReq;
-import com.braingroom.user.model.request.SignUpReq;
-import com.braingroom.user.model.request.SocialLoginReq;
-import com.braingroom.user.model.request.StateReq;
-import com.braingroom.user.model.request.SubmitOTPReq;
-import com.braingroom.user.model.request.ThirdPartyProfileReq;
-import com.braingroom.user.model.request.UserListReq;
-import com.braingroom.user.model.request.VendorReviewReq;
-import com.braingroom.user.model.request.WishlistReq;
-import com.braingroom.user.model.response.BaseResp;
-import com.braingroom.user.model.response.BookingHistoryResp;
-import com.braingroom.user.model.response.CatalogueGroupResp;
-import com.braingroom.user.model.response.CategoryResp;
-import com.braingroom.user.model.response.ChangePasswordResp;
-import com.braingroom.user.model.response.ChatListResp;
-import com.braingroom.user.model.response.ClassListResp;
-import com.braingroom.user.model.response.CommentListResp;
-import com.braingroom.user.model.response.CommentReplyResp;
-import com.braingroom.user.model.response.CommonIdResp;
-import com.braingroom.user.model.response.CommunityResp;
-import com.braingroom.user.model.response.CompetitionStatusResp;
-import com.braingroom.user.model.response.ConnectFeedResp;
-import com.braingroom.user.model.response.ConnectSectionResp;
-import com.braingroom.user.model.response.ExploreResp;
-import com.braingroom.user.model.response.FirstSocialLoginResp;
-import com.braingroom.user.model.response.FollowResp;
-import com.braingroom.user.model.response.GiftcardResp;
-import com.braingroom.user.model.response.GroupResp;
-import com.braingroom.user.model.response.GuestUserResp;
-import com.braingroom.user.model.response.LikeResp;
-import com.braingroom.user.model.response.LikedUsersListResp;
-import com.braingroom.user.model.response.LoginResp;
-import com.braingroom.user.model.response.MarkerDataResp;
-import com.braingroom.user.model.response.MessageListResp;
-import com.braingroom.user.model.response.NotificationCountResp;
-import com.braingroom.user.model.response.NotificationListResp;
-import com.braingroom.user.model.response.PayUBookingDetailsResp;
-import com.braingroom.user.model.response.PayUHashResp;
-import com.braingroom.user.model.response.ProfileResp;
-import com.braingroom.user.model.response.PromocodeResp;
-import com.braingroom.user.model.response.RazorSuccessResp;
-import com.braingroom.user.model.response.ReferralCodeResp;
-import com.braingroom.user.model.response.ReportResp;
-import com.braingroom.user.model.response.SaveGiftCouponResp;
-import com.braingroom.user.model.response.SegmentResp;
-import com.braingroom.user.model.response.SignUpResp;
-import com.braingroom.user.model.response.ThirdPartyProfileResp;
-import com.braingroom.user.model.response.UploadPostApiResp;
-import com.braingroom.user.model.response.UploadResp;
-import com.braingroom.user.model.response.VendorProfileResp;
-import com.braingroom.user.model.response.VendorReviewResp;
-import com.braingroom.user.model.response.WishlistResp;
-import com.braingroom.user.viewmodel.OTPReq;
+import com.braingroom.user.model.request.*;
+import com.braingroom.user.model.response.*;
+
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -115,46 +17,6 @@ import retrofit2.http.Url;
 
 public interface UserApiService {
 
-
-    @POST("registerUserDevice")
-    Observable <BaseResp> registerUserDevice(@Body RegisterUserDeviceReq req);
-
-
-    @POST("login")
-    Observable<LoginResp> login(@Body LoginReq req);
-
-    @POST("socialLogin")
-    Observable<LoginResp> socialLogin(@Body SocialLoginReq req);
-
-    @POST("forgotPassword")
-    Observable<LoginResp> forgotPassword(@Body LoginReq req);
-
-    @POST("changePassword")
-    Observable<ChangePasswordResp> changePassword(@Body ChangePasswordReq req);
-
-    @POST("BuyerRegistration")
-    Observable<SignUpResp> BuyerRegistration(@Body SignUpReq req);
-
-    @POST("checkReferal")
-    Observable<ReferralCodeResp> checkReferal(@Body ReferralCodeReq req);
-
-    @POST("logout")
-    Observable<BaseResp> logout(@Body LogoutReq req);
-
-    @POST("getCommunity")
-    Observable<CommunityResp> getCommunity();
-
-    @POST("getCategory")
-    Observable<CategoryResp> getCategories();
-
-    @POST("viewFeaturedClass")
-    Observable<ClassListResp> getFeaturedClass();
-
-    @POST("viewTrendingClass")
-    Observable<ClassListResp> getTrendingClass();
-
-    @POST("getCity")
-    Observable<CommonIdResp> getCityList(@Body CityReq req);
 
     @POST("getCatalogueCities")
     Observable<CommonIdResp> getCatalogueCities();
@@ -227,7 +89,7 @@ public interface UserApiService {
     Observable<PayUHashResp> generatePayUHash(@Body PayUHashGenReq req);
 
     @POST("getBookNowPageDetails")
-    Observable<PayUBookingDetailsResp> getBookingDetails(@Body PayUBookingDetailsReq req);
+    Observable<PayUBookingDetailsResp> getBookingDetails(@Body GetBookingDetailsReq req);
 
     @POST("saveMandatoryData")
     Observable<FirstSocialLoginResp> firstSocialLogin(@Body FirstSocialLoginReq req);
@@ -388,21 +250,65 @@ public interface UserApiService {
 
 
     @POST("verifyOTP")
-    Observable<BaseResp>submitOTP(@Body SubmitOTPReq req);
+    Observable<BaseResp> submitOTP(@Body SubmitOTPReq req);
 
     @POST("followUser")
-    Observable<FollowResp>follow(@Body FollowReq req);
+    Observable<FollowResp> follow(@Body FollowReq req);
 
     @POST("getFollowers")
-    Observable<LikedUsersListResp>getFollowers(@Body CommonUserIdReq req);
+    Observable<LikedUsersListResp> getFollowers(@Body CommonUserIdReq req);
 
     @POST("getFollowingUsers")
-    Observable<LikedUsersListResp>getFollowingUsers(@Body CommonUserIdReq req);
+    Observable<LikedUsersListResp> getFollowingUsers(@Body CommonUserIdReq req);
 
     @POST("getConnectSections")
     Observable<ConnectSectionResp> getConnectSections();
 
+    @POST("getQuoteDetails")
+    Observable<QuoteDetailsResp> getQuoteDetails(@Body QuoteDetailsReq req);
 
+
+    @POST("registerUserDevice")
+    Observable<BaseResp> registerUserDevice(@Body RegisterUserDeviceReq req);
+
+    @POST("login")
+    Observable<LoginResp> login(@Body LoginReq req);
+
+    @POST("socialLogin")
+    Observable<LoginResp> socialLogin(@Body SocialLoginReq req);
+
+    @POST("forgotPassword")
+    Observable<LoginResp> forgotPassword(@Body LoginReq req);
+
+    @POST("changePassword")
+    Observable<ChangePasswordResp> changePassword(@Body ChangePasswordReq req);
+
+    @POST("BuyerRegistration")
+    Observable<SignUpResp> BuyerRegistration(@Body SignUpReq req);
+
+    @POST("checkReferal")
+    Observable<ReferralCodeResp> checkReferal(@Body ReferralCodeReq req);
+
+    @POST("logout")
+    Observable<BaseResp> logout(@Body LogoutReq req);
+
+    @POST("getCommunity")
+    Observable<CommunityResp> getCommunity();
+
+    @POST("getCategory")
+    Observable<CategoryResp> getCategories();
+
+    @POST("viewFeaturedClass")
+    Observable<ClassListResp> getFeaturedClass();
+
+    @POST("viewTrendingClass")
+    Observable<ClassListResp> getTrendingClass();
+
+    @POST("getCity")
+    Observable<CommonIdResp> getCityList(@Body CityReq req);
+
+    @POST("contactTutor")
+    Observable<ContactTutorResp> contactTutor(@Body ContactTutorReq req);
 
 
 }

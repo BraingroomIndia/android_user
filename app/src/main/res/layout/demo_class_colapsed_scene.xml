@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -14,21 +15,34 @@
 
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:drawableRight="@drawable/ic_arrow_back"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"
+            android:drawableRight="@drawable/ic_keyboard_arrow_down_black_24dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:onClick="@{() -> expandAction.accept(title)}"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingRight="@dimen/margin_med"
+            android:paddingTop="@dimen/margin_small"
             android:text="@{title}"
-            android:textColor="@color/colorTextDark"
-            android:textSize="@dimen/text_size_medium" />
+            android:textColor="@color/materialBlue"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="Test Text" />
 
-    </LinearLayout>
+        <!--<ImageView
+            android:id="@+id/action_image"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/plus" />-->
+    </RelativeLayout>
 </layout>

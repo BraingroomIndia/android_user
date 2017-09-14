@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.FollowButtonViewModel" />
@@ -13,7 +15,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:visibility="@{vm.currentState==4? View.GONE : View.VISIBLE}">
 
         <TextView
             android:layout_width="match_parent"

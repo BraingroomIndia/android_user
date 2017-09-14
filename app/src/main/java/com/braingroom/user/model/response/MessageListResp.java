@@ -21,19 +21,19 @@ public class MessageListResp extends BaseResp {
     public static class Snippet {
 
         @SerializedName("sender_id")
-        public String senderId;
+        private String senderId;
 
         @SerializedName("username")
-        public String senderName;
+        private String senderName;
 
         @SerializedName("reciever_id")
-        public String recieverId;
+        private String recieverId;
 
         @SerializedName("sender_pic")
-        public String senderPic;
+        private String senderPic;
 
         @SerializedName("Message")
-        public Message message;
+        private Message message;
 
     }
 
@@ -48,7 +48,7 @@ public class MessageListResp extends BaseResp {
         public String quoteId;
 
         @SerializedName("message_type")
-        public String messageType;
+        public int messageType;
 
         @SerializedName("message")
         public String message;

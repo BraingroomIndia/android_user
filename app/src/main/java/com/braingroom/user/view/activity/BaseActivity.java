@@ -46,6 +46,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 
@@ -98,10 +99,19 @@ public abstract class BaseActivity extends MvvmActivity {
 
     public final String TAG = this.getClass().getSimpleName();
 
+    protected FirebaseAnalytics mFirebaseAnalytics;
+
+    interface fireBaseLogging {
+
+    }
+
+    ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
        /* try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
         } catch (Exception e){e.printStackTrace();}*/
@@ -116,15 +126,11 @@ public abstract class BaseActivity extends MvvmActivity {
         WindowManager w = getWindowManager();
         if (pushNotification && !TextUtils.isEmpty(notificationId))
             vm.apiService.changeNotificationStatus(notificationId).subscribe();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            w.getDefaultDisplay().getSize(size);
-            screenDims.width = size.x;
-            screenDims.height = size.y;
-        } else {
-            Display d = w.getDefaultDisplay();
-            screenDims.width = d.getWidth();
-            screenDims.height = d.getHeight();
-        }
+        w.getDefaultDisplay().getSize(size);
+        screenDims.width = size.x;
+        screenDims.height = size.y;
+
+        vm.setMFirebaseAnalytics(mFirebaseAnalytics);
     }
 
     public void initNavigationDrawer() {

@@ -23,7 +23,7 @@ public class RazorBuySuccessReq {
         @SerializedName("amount")
         private String amount;
 
-        @SerializedName("txnid")
+        @SerializedName("razorPayTxnid")
         private String txnid;
 
         @SerializedName("user_id")

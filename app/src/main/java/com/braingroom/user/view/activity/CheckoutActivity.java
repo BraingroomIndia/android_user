@@ -74,10 +74,10 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 //                startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
 //            }
 
-           /* Removed payumoney
-           @Override
-            public void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param) {
-           *//*    try {
+            /* Removed payumoney
+            @Override
+             public void startPayUPayment(PayUmoneySdkInitilizer.PaymentParam param) {
+            *//*    try {
                     ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
                 } catch (Exception e){e.printStackTrace();}*//*
                 PayUmoneySdkInitilizer.startPaymentActivityForResult(CheckoutActivity.this, param);
@@ -94,7 +94,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
                     co.open(activity, options);
                 } catch (Exception e) {
                     getMessageHelper().show("Error in payment: " + e.getMessage());
-                   // e.printStackTrace();
+                    // e.printStackTrace();
                 }
 
             }
@@ -118,7 +118,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
 /*        try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
         } catch (Exception e){e.printStackTrace();}*/

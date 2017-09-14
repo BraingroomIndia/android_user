@@ -158,7 +158,7 @@ public class BookingHistoryResp {
         @SerializedName("created")
 
         public String created;
-        @SerializedName("txnid")
+        @SerializedName("razorPayTxnid")
 
         public String txnid;
         @SerializedName("amount")

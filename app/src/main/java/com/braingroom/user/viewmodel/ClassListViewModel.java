@@ -112,7 +112,7 @@ public class ClassListViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull List<String> selectedIds) throws Exception {
                 if (!selectedIds.get(0).equalsIgnoreCase("-1")) {
 //                    filterData.setSortData(selectedIds.get(0));
-//                    uiHelper.refreshSortedList(Observable.just(getDefaultClasses()).mergeWith(apiService.generalFilter(filterData.getFilterReq()))
+//                    UiHelper.refreshSortedList(Observable.just(getDefaultClasses()).mergeWith(apiService.generalFilter(filterData.getFilterReq()))
 //                            .map(classMapFunction),tileView.get());
                 }
             }
@@ -160,7 +160,7 @@ public class ClassListViewModel extends ViewModel {
             if (data != null && data.getSerializableExtra("filter") != null) {
 //                FilterData filterData = (FilterData) data.getSerializableExtra("filter");
 //                filterData.setFilterData(filterData);
-//                uiHelper.refreshSortedList(Observable.just(getDefaultClasses()).mergeWith(apiService.generalFilter(filterData.getFilterReq()))
+//                UiHelper.refreshSortedList(Observable.just(getDefaultClasses()).mergeWith(apiService.generalFilter(filterData.getFilterReq()))
 //                        .map(classMapFunction),tileView.get());
             }
 

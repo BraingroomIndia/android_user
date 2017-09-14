@@ -24,7 +24,7 @@ public class RazorSuccessResp extends BaseResp {
     @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
 
-        @SerializedName("txnid")
+        @SerializedName("razorPayTxnid")
         public String txnid;
 
         @SerializedName("booking_id")

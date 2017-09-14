@@ -40,6 +40,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="@dimen/margin_small">
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="70dp">
@@ -151,16 +152,15 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/margin_med"
-                                    android:visibility="@{vm.isSegmentAvailable ? View.VISIBLE : View.GONE}"
                                     android:onClick="@{vm.openSegment}"
                                     android:tint="@color/colorTextGray"
+                                    android:visibility="@{vm.isSegmentAvailable ? View.VISIBLE : View.GONE}"
                                     app:placeHolder="@{vm.categoryImg}" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/margin_med"
-                                    android:visibility="@{vm.isSegmentAvailable ? View.VISIBLE : View.GONE}"
                                     android:ellipsize="end"
                                     android:gravity="center_vertical"
                                     android:lines="1"
@@ -168,6 +168,7 @@
                                     android:text="@{vm.segment}"
                                     android:textColor="@color/colorTextGray"
                                     android:textSize="@dimen/text_size_medium"
+                                    android:visibility="@{vm.isSegmentAvailable ? View.VISIBLE : View.GONE}"
                                     app:font='@{@string/robotoRegular}' />
 
 
@@ -176,104 +177,104 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
                                 android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
                                 android:layout_alignParentTop="true"
-                                android:paddingLeft="@dimen/_5sdp"
-                                android:paddingRight="@dimen/_5sdp"
-                                android:paddingBottom="@dimen/_5sdp"
                                 android:layout_margin="@dimen/margin_med"
                                 android:onClick="@{(v) -> vm.showMenuPopup(v)}"
+                                android:paddingBottom="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_5sdp"
+                                android:paddingRight="@dimen/_5sdp"
                                 android:src="@drawable/ic_more_vert_black_24dp"
                                 android:tint="@color/colorTextGray" />
                         </RelativeLayout>
 
-                       <!-- <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="70dp">
+                        <!-- <RelativeLayout
+                             android:layout_width="match_parent"
+                             android:layout_height="70dp">
 
-                            <ImageView
-                                android:id="@+id/vendorProfile"
-                                android:layout_width="70dp"
-                                android:layout_height="70dp"
-                                android:layout_alignParentLeft="true"
-                                android:layout_marginRight="@dimen/margin_small"
-                                android:scaleType="centerCrop"
-                                app:imageUrl="@{vm.vendorImage}"
-                                android:onClick="@{vm.showthirdpartyProfile}"/>
+                             <ImageView
+                                 android:id="@+id/vendorProfile"
+                                 android:layout_width="70dp"
+                                 android:layout_height="70dp"
+                                 android:layout_alignParentLeft="true"
+                                 android:layout_marginRight="@dimen/margin_small"
+                                 android:scaleType="centerCrop"
+                                 app:imageUrl="@{vm.vendorImage}"
+                                 android:onClick="@{vm.showthirdpartyProfile}"/>
 
-                            <TextView
-                                android:id="@+id/feed_title"
-                                android:layout_width="match_parent"
-                                android:layout_height="25dp"
-                                android:layout_alignParentTop="true"
-                                android:layout_toRightOf="@+id/vendorProfile"
-                                android:ellipsize="end"
-                                android:gravity="center_vertical"
-                                android:lines="1"
-                                android:text="@{vm.vendorName}"
-                                android:textColor="@color/colorTextDark"
-                                android:textSize="@dimen/text_size_medium"
-                                app:font='@{@string/robotoBold}'
-                                android:onClick="@{vm.showthirdpartyProfile}"/>
+                             <TextView
+                                 android:id="@+id/feed_title"
+                                 android:layout_width="match_parent"
+                                 android:layout_height="25dp"
+                                 android:layout_alignParentTop="true"
+                                 android:layout_toRightOf="@+id/vendorProfile"
+                                 android:ellipsize="end"
+                                 android:gravity="center_vertical"
+                                 android:lines="1"
+                                 android:text="@{vm.vendorName}"
+                                 android:textColor="@color/colorTextDark"
+                                 android:textSize="@dimen/text_size_medium"
+                                 app:font='@{@string/robotoBold}'
+                                 android:onClick="@{vm.showthirdpartyProfile}"/>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="25dp"
-                                android:layout_alignParentBottom="true"
-                                android:layout_below="@+id/feed_title"
-                                android:layout_toRightOf="@+id/vendorProfile"
-                                android:orientation="horizontal">
+                             <LinearLayout
+                                 android:layout_width="match_parent"
+                                 android:layout_height="25dp"
+                                 android:layout_alignParentBottom="true"
+                                 android:layout_below="@+id/feed_title"
+                                 android:layout_toRightOf="@+id/vendorProfile"
+                                 android:orientation="horizontal">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:ellipsize="end"
-                                    android:gravity="center_vertical"
-                                    android:lines="1"
-                                    android:text="@{vm.date}"
-                                    android:textColor="@color/colorTextGray"
-                                    android:textSize="@dimen/text_size_medium"
-                                    app:font='@{@string/robotoRegular}' />
+                                 <TextView
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="match_parent"
+                                     android:ellipsize="end"
+                                     android:gravity="center_vertical"
+                                     android:lines="1"
+                                     android:text="@{vm.date}"
+                                     android:textColor="@color/colorTextGray"
+                                     android:textSize="@dimen/text_size_medium"
+                                     app:font='@{@string/robotoRegular}' />
 
-                                <ImageView
-                                    android:layout_width="5dp"
-                                    android:layout_height="5dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_margin="@dimen/margin_med"
-                                    android:src="@drawable/solid_circle_gray" />
+                                 <ImageView
+                                     android:layout_width="5dp"
+                                     android:layout_height="5dp"
+                                     android:layout_gravity="center_vertical"
+                                     android:layout_margin="@dimen/margin_med"
+                                     android:src="@drawable/solid_circle_gray" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:ellipsize="end"
-                                    android:gravity="center_vertical"
-                                    android:lines="1"
-                                    android:text="@{vm.segment}"
-                                    android:textColor="@color/colorTextGray"
-                                    android:textSize="@dimen/text_size_medium"
-                                    app:font='@{@string/robotoRegular}' />
+                                 <TextView
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="match_parent"
+                                     android:ellipsize="end"
+                                     android:gravity="center_vertical"
+                                     android:lines="1"
+                                     android:text="@{vm.segment}"
+                                     android:textColor="@color/colorTextGray"
+                                     android:textSize="@dimen/text_size_medium"
+                                     app:font='@{@string/robotoRegular}' />
 
-                                <ImageView
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/margin_small"
-                                    android:src="@drawable/ic_call_made_black_24dp"
-                                    android:tint="@color/colorTextGray" />
+                                 <ImageView
+                                     android:layout_width="15dp"
+                                     android:layout_height="15dp"
+                                     android:layout_gravity="center_vertical"
+                                     android:layout_marginLeft="@dimen/margin_small"
+                                     android:src="@drawable/ic_call_made_black_24dp"
+                                     android:tint="@color/colorTextGray" />
 
-                            </LinearLayout>
+                             </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:layout_margin="@dimen/margin_med"
-                                android:onClick="@{(v) -> vm.showMenuPopup(v)}"
-                                android:src="@drawable/vert_more_dots"
-                                android:tint="@color/colorTextGray" />
-                        </RelativeLayout>-->
+                             <ImageView
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 android:layout_alignParentRight="true"
+                                 android:layout_alignParentTop="true"
+                                 android:layout_margin="@dimen/margin_med"
+                                 android:onClick="@{(v) -> vm.showMenuPopup(v)}"
+                                 android:src="@drawable/vert_more_dots"
+                                 android:tint="@color/colorTextGray" />
+                         </RelativeLayout>-->
 
 
                         <RelativeLayout
@@ -454,6 +455,7 @@
                                 android:gravity="center"
                                 android:onClick="@{vm.commentAction}"
                                 android:orientation="horizontal">
+
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
@@ -461,6 +463,7 @@
                                     android:layout_marginTop="3dp"
                                     android:src="@drawable/ic_chat_black_24dp"
                                     android:tint="@color/fbLikeDark" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
@@ -556,6 +559,14 @@
 
             </LinearLayout>
         </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{vm.loading}" />
 
         <FrameLayout
             android:id="@+id/comments_container"

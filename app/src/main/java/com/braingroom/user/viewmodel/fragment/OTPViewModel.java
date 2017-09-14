@@ -14,7 +14,7 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.fragment.OTPReqFragment;
-import com.braingroom.user.viewmodel.OTPReq;
+import com.braingroom.user.model.request.OTPReq;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import io.reactivex.disposables.Disposable;
@@ -99,7 +99,7 @@ public class OTPViewModel extends ViewModel {
                                             }
                                         });
                             else {
-                                editor.putBoolean(Constants.LOGGED_IN, true);
+                                editor.putBoolean(Constants.LOGGED_IN, true).commit();
                                 navigator.finishActivity(new Intent());
                             }
                         else {

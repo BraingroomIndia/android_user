@@ -18,6 +18,7 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
+import com.braingroom.user.view.activity.FeaturedPostActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
 
@@ -58,7 +59,7 @@ public class ConnectHomeViewModel extends ViewModel {
 
     //    public final Observable<List<ViewModel>> feedItems;
 //    public final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
-    public final Action onSearchClicked, onFilterClicked, onPostClicked;
+    public final Action onSearchClicked, onFilterClicked, onPostClicked, onPostOftheDayClicked, onPrimeContentClicked;
 
     public final ConnectUiHelper uiHelper;
 //    public final ConnectFilterData filterData;
@@ -116,7 +117,7 @@ public class ConnectHomeViewModel extends ViewModel {
                 } else {
                     //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
-                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
+                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem, false, false, uiHelper, helperFactory, messageHelper, navigator));
                     }
                 }
 
@@ -153,7 +154,7 @@ public class ConnectHomeViewModel extends ViewModel {
 //                    results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
 //                } else {
 //                    for (final ConnectFeedResp.Snippet elem : resp.getData()) {
-//                        results.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
+//                        results.add(new ConnectFeedItemViewModel(elem, UiHelper, helperFactory, messageHelper, navigator));
 //                    }
 //                }
 //                return results;
@@ -213,10 +214,11 @@ public class ConnectHomeViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull String searchQuery) throws Exception {
                 lastSearchQuery = searchQuery;
-                connectFilterData.setSearchQuery(searchQuery);
-                setFilterData(connectFilterData);
+                filterData.setSearchQuery(searchQuery);
+                setFilterData(filterData);
             }
         });
+
 
         onSearchClicked = new Action() {
             @Override
@@ -240,6 +242,18 @@ public class ConnectHomeViewModel extends ViewModel {
                     return;
                 }
                 uiHelper.openConnectPost();
+            }
+        };
+        onPostOftheDayClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                navigator.navigateActivity(FeaturedPostActivity.class, null);
+            }
+        };
+        onPrimeContentClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+
             }
         };
 

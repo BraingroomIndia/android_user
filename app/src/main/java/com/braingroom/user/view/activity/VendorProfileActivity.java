@@ -25,11 +25,11 @@ public class VendorProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setElevation(0);
 
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-//        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
-//        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+//        TabLayout postTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+//        postTabLayout.addTab(postTabLayout.newTab().setText("Tab 1"));
+//        postTabLayout.addTab(postTabLayout.newTab().setText("Tab 2"));
+//        postTabLayout.addTab(postTabLayout.newTab().setText("Tab 3"));
+//        postTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         ((ActivityVendorProfileBinding) binding).pager.setAdapter(new VendorPagerAdapter(getSupportFragmentManager()));
         ((ActivityVendorProfileBinding) binding).tabLayout.setupWithViewPager(((ActivityVendorProfileBinding) binding).pager);

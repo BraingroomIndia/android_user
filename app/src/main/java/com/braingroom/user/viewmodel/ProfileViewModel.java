@@ -170,7 +170,7 @@ public class ProfileViewModel extends ViewModel {
                         selectedInterestMap.put(categoryName.get(i), categoryId.get(i));
                     categoryVm.setSelectedItemsMap(selectedInterestMap);
                 }
-                uiHelper.invalidateMenu();
+                UiHelper.invalidateMenu();
             }
         }).doOnError(new Consumer<Throwable>() {
             @Override

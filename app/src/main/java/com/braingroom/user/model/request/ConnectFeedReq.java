@@ -63,6 +63,9 @@ public class ConnectFeedReq {
         @SerializedName("search_query")
         public String searchQuery;
 
+        @SerializedName("best_posts")
+        private String featuredPost;
+
         public String getUserId() {
             return userId;
         }

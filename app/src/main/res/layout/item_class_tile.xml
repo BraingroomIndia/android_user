@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -19,8 +20,8 @@
         android:onClick="@{vm.onClicked}">
 
         <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="275dp"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -31,7 +32,9 @@
                 android:layout_weight="6"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{vm.classData.image}"
-                app:placeHolder="@{vm.placeHolder}" />
+                app:placeHolder="@{vm.placeHolder}"
+                tools:src="@drawable/empty_board"
+                tools:scaleType="fitCenter"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,7 +54,8 @@
                     android:text="@{vm.classData.classTopic}"
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
-                    app:font='@{@string/robotoRegular}' />
+                    app:font='@{@string/robotoRegular}'
+                    tools:text="Class Topic"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -62,7 +66,8 @@
                     android:text="@{vm.classData.teacher}"
                     android:textColor="@color/colorTextGray"
                     android:textSize="@dimen/text_size_small"
-                    app:font='@{@string/robotoRegular}' />
+                    app:font='@{@string/robotoRegular}'
+                    tools:text="Teacher name"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -77,7 +82,8 @@
                         android:gravity="center_vertical"
                         android:text='@{vm.classData.price == null || "".equals(vm.classData.price) ? "N/A" : "Rs "+vm.classData.price}'
                         android:textColor="@color/materialGreen"
-                        app:font='@{@string/robotoRegular}' />
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="Class Price"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -87,7 +93,8 @@
                         android:gravity="center_vertical"
                         android:text="@{vm.classData.classTypeData}"
                         android:textColor="@color/materialBlue"
-                        app:font='@{@string/robotoRegular}' />
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="Class Type"/>
 
                 </LinearLayout>
 
@@ -104,7 +111,8 @@
                         android:text='@{vm.classData.noOfSession + " Sessions, "+ vm.classData.classDuration}'
                         android:textColor="@color/colorTextDark"
                         android:textSize="@dimen/text_size_small"
-                        app:font='@{@string/robotoRegular}' />
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="5 Sessions 20 hours "/>
 
                 </LinearLayout>
 

@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.MessageHelper;
@@ -30,7 +31,6 @@ import io.reactivex.functions.Predicate;
 
 public class CommunityListViewModel extends ViewModel {
 
-    public final int defaultCount = 9;
     public final Observable<List<ViewModel>> gridItems;
     public final ObservableField<String> title = new ObservableField<>("Discover the joy of learning in groups");
     List<ViewModel> results;
@@ -73,9 +73,9 @@ public class CommunityListViewModel extends ViewModel {
                                                         HashMap<String, Integer> communityFilterMap = new HashMap<String, Integer>();
                                                         communityFilterMap.put(snippet.getName(), Integer.parseInt(snippet.getId()));
                                                         filterData.setCommunityId(snippet.getId());
-                                                        data.putSerializable("community", communityFilterMap);
-                                                        data.putSerializable("filterData", filterData);
-                                                        data.putString("origin", FilterViewModel.ORIGIN_COMMUNITY);
+                                                        data.putSerializable(Constants.communityFilterMap, communityFilterMap);
+                                                        data.putSerializable(Constants.classFilterData, filterData);
+                                                        data.putString(Constants.origin, FilterViewModel.ORIGIN_COMMUNITY);
                                                         navigator.navigateActivity(ClassListActivity.class, data);
                                                     }
                                                 }
@@ -96,7 +96,7 @@ public class CommunityListViewModel extends ViewModel {
     }
 
     private CommunityResp getDefaultResponse() {
-        return new CommunityResp(Collections.nCopies(defaultCount, new CommunityResp.Snippet("-1", "", null)));
+        return new CommunityResp(Collections.nCopies(12, new CommunityResp.Snippet("-1", "", null)));
     }
 
     @Override

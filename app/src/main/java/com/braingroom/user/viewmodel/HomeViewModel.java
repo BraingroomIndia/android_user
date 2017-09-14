@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CategoryResp;
+import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.NotificationCountResp;
 import com.braingroom.user.utils.Constants;
@@ -57,15 +59,15 @@ import io.reactivex.functions.Predicate;
 public class HomeViewModel extends ViewModel {
 
 
-    public final Action onSearchClicked, onExploreClicked, onRegister, onFilterClicked;
+    public final Action onSearchClicked, onExploreClicked, onFilterClicked;
+    public final ObservableField<Action> onRegister;
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final GridViewModel categoryVm;
-    public final IconTextItemViewModel community;
-    public final IconTextItemViewModel onlineClass;
-    // public final GridViewModel gridViewModel;
-    public final ShowcaseClassListViewModel featuredVm, trendingVm, indigenousVm;
+    public final GridViewModel gridViewModel;
+    public final ShowcaseClassListViewModel /*featuredVm,*/ trendingVm /*,indigenousVm*/;
+
 
     private List<ClassLocationData> locationList = new ArrayList<>();
     private List<MarkerOptions> markerList = new ArrayList<>();
@@ -74,8 +76,6 @@ public class HomeViewModel extends ViewModel {
 
     private Disposable notificationDisposable;
 
-    private String temp1 = "https://www.braingroom.com/img/category_image/201707111154200856274001499774060.jpg";
-    private String temp2 = "https://www.braingroom.com/img/category_image/201707111155160426418001499774116.jpg";
 
     public ObservableBoolean loggedIn;
 
@@ -83,7 +83,13 @@ public class HomeViewModel extends ViewModel {
     private Map<String, Integer> pinColorMap = new HashMap<>();
     private DialogHelper dialogHelper;
     Navigator navigator;
+
+
     public Observable observable;
+    public boolean showCompetitionLink = true;
+    public String[] competitionText = {"", ""};
+    private Disposable timerDisposable;
+    private final HomeActivity.UiHelper uiHelper;
 
 /*
     private final int[] resArray = new int[]{R.drawable.main_category_1,
@@ -97,10 +103,11 @@ public class HomeViewModel extends ViewModel {
     public HomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
                          @NonNull final DialogHelper dialogHelper, @NonNull final HomeActivity.UiHelper uiHelper) {
         this.loggedIn = new ObservableBoolean(getLoggedIn());
+        this.uiHelper = uiHelper;
 
-        this.featuredVm = new ShowcaseClassListViewModel("Fast Tracked - Education & Skill Development", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
+//        this.featuredVm = new ShowcaseClassListViewModel("Fast Tracked - Education & Skill Development", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
         this.trendingVm = new ShowcaseClassListViewModel("People's Choice - Hobbies & Sports", messageHelper, navigator, apiService.getTrendingClass(), ClassDetailActivity.class);
-        this.indigenousVm = new ShowcaseClassListViewModel("Featured - Classes & Activities", messageHelper, navigator, apiService.getIndigeneousClass(), ClassDetailActivity.class);
+//        this.indigenousVm = new ShowcaseClassListViewModel("Featured - Classes & Activities", messageHelper, navigator, apiService.getIndigeneousClass(), ClassDetailActivity.class);
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         this.userEmail.set(pref.getString(Constants.EMAIL, null));
@@ -114,6 +121,13 @@ public class HomeViewModel extends ViewModel {
         });
         this.dialogHelper = dialogHelper;
         this.navigator = navigator;
+        Action temp = new Action() {
+            @Override
+            public void run() throws Exception {
+                messageHelper.show("Cliked");
+            }
+        };
+        onRegister = new ObservableField<>(temp);
 
         observable = Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread());
 
@@ -125,32 +139,12 @@ public class HomeViewModel extends ViewModel {
         pinColorMap.put("#50bef7", R.drawable.pin_new_6);
         pinColorMap.put("My Location", R.drawable.pin_0);
 
-        onRegister = new Action() {
-            @Override
-            public void run() throws Exception {
-                navigator.navigateActivity(SignUpActivityCompetition.class, null);
-            }
-        };
-        community = new IconTextItemViewModel(temp1, "Community Group", new MyConsumer<IconTextItemViewModel>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
-                navigator.navigateActivity(CommunityListActivity.class, null);
-            }
-        });
-        onlineClass = new IconTextItemViewModel(temp2, "Online Class", new MyConsumer<IconTextItemViewModel>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
-                FilterData filterData = new FilterData();
-                filterData.setClassType(FilterViewModel.CLASS_TYPE_SEMINAR + "");
-                Bundle data = new Bundle();
-                data.putSerializable("filterData", filterData);
-                data.putString("origin", FilterViewModel.ORIGIN_HOME);
-                navigator.navigateActivity(ClassListActivity.class, data);
-            }
-        });
+
+        this.gridViewModel = new GridViewModel(navigator, GridViewModel.OnlineCommunity, null);
 
 
         this.categoryVm = new GridViewModel(navigator, GridViewModel.CATEGORY, null);
+
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws
@@ -175,6 +169,24 @@ public class HomeViewModel extends ViewModel {
             }
         });
 
+        FieldUtils.toObservable(callAgain).subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                apiService.getCompetitionStatus().subscribe(new Consumer<CompetitionStatusResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull CompetitionStatusResp resp) throws Exception {
+                        if (resp.getData() == null) {
+                            showCompetitionLink = false;
+                        } else if (resp.getData().isEmpty()) {
+                            showCompetitionLink = false;
+                        } else {
+                            showCompetitionLink = resp.getData().get(0).displayText.length > 1;
+                            competitionText = resp.getData().get(0).displayText;
+                        }
+                    }
+                });
+            }
+        });
 
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
@@ -229,18 +241,18 @@ public class HomeViewModel extends ViewModel {
                     public void run() throws Exception {
                         HashMap<String, Integer> filterMap = new HashMap<>();
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("category", filterMap);
-                        bundle.putSerializable("segment", filterMap);
-                        bundle.putSerializable("city", filterMap);
-                        bundle.putSerializable("locality", filterMap);
-                        bundle.putSerializable("community", filterMap);
-                        bundle.putSerializable("classType", filterMap);
-                        bundle.putSerializable("classSchedule", filterMap);
-                        bundle.putSerializable("vendorList", filterMap);
+                        bundle.putSerializable(Constants.categoryFilterMap, filterMap);
+                        bundle.putSerializable(Constants.segmentsFilterMap, filterMap);
+                        bundle.putSerializable(Constants.cityFilterMap, filterMap);
+                        bundle.putSerializable(Constants.localityFilterMap, filterMap);
+                        bundle.putSerializable(Constants.communityFilterMap, filterMap);
+                        bundle.putSerializable(Constants.classTypeFilterMap, filterMap);
+                        bundle.putSerializable(Constants.classScheduleFilterMap, filterMap);
+                        bundle.putSerializable(Constants.vendorListFilterMap, filterMap);
                         bundle.putString("keywords", "");
                         bundle.putString("startDate", "");
                         bundle.putString("endDate", "");
-                        bundle.putString("origin", FilterViewModel.ORIGIN_HOME);
+                        bundle.putString(Constants.origin, FilterViewModel.ORIGIN_FILTER);
                         navigator.navigateActivity(FilterActivity.class, bundle);
                     }
                 }
@@ -332,10 +344,11 @@ public class HomeViewModel extends ViewModel {
     public void retry() {
         callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
-        featuredVm.retry();
+      /*  featuredVm.retry();*/
         trendingVm.retry();
-        indigenousVm.retry();
+      /*  indigenousVm.retry();*/
         categoryVm.retry();
+        gridViewModel.retry();
     }
 
     private void notificationResume() {
@@ -367,6 +380,38 @@ public class HomeViewModel extends ViewModel {
         userEmail.set(pref.getString(Constants.EMAIL, null));
         loggedIn.set(getLoggedIn());
         connectivityViewmodel.onResume();
+        apiService.getCompetitionStatus().subscribe(new Consumer<CompetitionStatusResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull CompetitionStatusResp resp) throws Exception {
+                if (resp.getData() == null) {
+                    showCompetitionLink = false;
+                } else if (resp.getData().isEmpty()) {
+                    showCompetitionLink = false;
+                } else {
+                    showCompetitionLink = resp.getData().get(0).displayText.length > 1;
+                    competitionText = resp.getData().get(0).displayText;
+                    final Bundle data = new Bundle();
+                    data.putInt(Constants.competitionStatus, resp.getData().get(0).getStatus());
+                    Action temp = new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            navigator.navigateActivity(SignUpActivityCompetition.class, data);
+                        }
+                    };
+                    onRegister.set(temp);
+
+                }
+                if (!getLoggedIn() && showCompetitionLink) {
+                    timerDisposable = observable.subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Long aLong) throws Exception {
+                            uiHelper.animate((int) (aLong % competitionText.length));
+                        }
+                    });
+                } else uiHelper.animate(-1);
+            }
+        });
+
     }
 
 
@@ -374,6 +419,6 @@ public class HomeViewModel extends ViewModel {
     public void onPause() {
         super.onPause();
         connectivityViewmodel.onPause();
-        safelyDispose(notificationDisposable);
+        safelyDispose(notificationDisposable, timerDisposable);
     }
 }

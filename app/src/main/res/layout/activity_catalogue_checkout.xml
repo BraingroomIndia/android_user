@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.braingroom.user.R" />
+
+        <import type="android.view.View" />
+
+        <import type="android.text.TextUtils" />
+
+
+        <variable
+            name="vm"
+            type="com.braingroom.user.viewmodel.CatalogueCheckOutViewModel" />
+    </data>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardElevation="@dimen/dimen_zero">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:contentDescription="@{vm.className}"
+                        android:scaleType="centerCrop"
+                        app:imageUrl="@{vm.classImage}"
+                        app:placeHolder="@{R.drawable.video_generic_thumb}"
+                        tools:src="@drawable/video_generic_thumb" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_med"
+                        android:layout_marginStart="@dimen/margin_med"
+                        android:gravity="center_vertical"
+                        android:lines="2"
+                        android:padding="@dimen/margin_small"
+                        android:text="@{vm.className}"
+                        android:textColor="@color/colorTextDark"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="Class Name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginLeft="@dimen/margin_med"
+                        android:layout_marginStart="@dimen/margin_med"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/margin_small"
+                        android:text='@{"Class Type: " +vm.classType}'
+                        android:textColor="@color/colorTextGray"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="Class Type: Classes" />
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:cardCornerRadius="@dimen/margin_small"
+                card_view:cardElevation="@dimen/dimen_zero">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:orientation="vertical"
+                        android:padding="@dimen/margin_med">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/margin_small"
+                            android:text="Booked By"
+                            android:textColor="@color/colorTextDark"
+                            android:textSize="@dimen/text_size_large"
+                            app:font='@{@string/robotoRegular}'
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/margin_small"
+                            android:text="@{vm.organizationName}"
+                            android:textColor="@color/colorTextGray"
+                            android:textSize="@dimen/text_size_large"
+                            app:font='@{@string/robotoRegular}'
+                            tools:text="Organization Name" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:orientation="vertical"
+                        android:padding="@dimen/margin_med"
+                        android:visibility="@{vm.location == null ? View.GONE : View.VISIBLE}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/margin_small"
+                            android:text="Location"
+                            android:textColor="@color/colorTextDark"
+                            android:textSize="@dimen/text_size_large"
+                            app:font='@{@string/robotoRegular}'
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/margin_small"
+                            android:text="@{vm.location}"
+                            android:textColor="@color/colorTextGray"
+                            android:textSize="@dimen/text_size_large"
+                            app:font='@{@string/robotoRegular}'
+                            tools:text="Location Name" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:visibility="@{vm.classDate ==null ? View.GONE : View.VISIBLE}"
+                app:cardCornerRadius="@dimen/margin_small"
+                card_view:cardElevation="@dimen/dimen_zero">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_med">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/margin_small"
+                        android:text="Date"
+                        android:textColor="@color/colorTextDark"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}'
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/margin_small"
+                        android:text='@{vm.classDate}'
+                        android:textColor="@color/colorTextGray"
+                        android:textSize="@dimen/text_size_medium"
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="27-08-17" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_med"
+                app:cardCornerRadius="@dimen/margin_med"
+                card_view:cardElevation="@dimen/dimen_zero">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_small">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bottom_line_drawable"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="3"
+                            android:gravity="center_vertical"
+                            android:text="Choose Payment Type"
+                            android:textSize="@dimen/text_size_large"
+                            app:font='@{@string/robotoBold}'
+                            tools:ignore="HardcodedText" />
+
+                        <!-- <TextView
+                             android:layout_width="0dp"
+                             android:layout_height="50dp"
+                             android:layout_weight="1"
+                             android:gravity="center_vertical"
+                             android:text="Pricing Info"
+                             android:textColor="@color/materialBlue"
+                             android:textSize="@dimen/text_size_medium"
+                             app:font='@{@string/robotoBold}'
+                             tools:ignore="HardcodedText" />-->
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin_med"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{vm.payTotalPrice}"
+                            android:onClick="@{vm.onPaymentOptionClicked}"
+                            android:text="@{vm.totalPriceMessage}"
+                            tools:checked="true"
+                            tools:text="Pay for total " />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_large"
+                            android:checked="@={!vm.payTotalPrice}"
+                            android:onClick="@{vm.onPaymentOptionClicked}"
+                            android:text="@{vm.unitPriceMessage}"
+                            android:visibility="@{vm.hideUnitPrice ? View.GONE : View.VISIBLE}"
+                            tools:checked="false"
+                            tools:text="Pay for one Unit" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_small"
+                        android:background="@drawable/top_line_drawable"
+                        android:gravity="end"
+                        android:padding="@dimen/padding_small"
+                        android:text='@{"Total amount : Rs." +vm.amountTobePayed}'
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="Total amount : Rs. 500" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_9sdp"
+                    android:layout_marginTop="@dimen/_9sdp"
+                    app:cardCornerRadius="@dimen/margin_large"
+                    card_view:cardElevation="@dimen/margin_small">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/materialGreen"
+                        android:gravity="center"
+                        android:onClick="@{vm.onPaymentClicked}"
+                        android:padding="@dimen/_10sdp"
+                        android:text='@{"Pay Rs. " + vm.amountTobePayed}'
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoBold}'
+                        tools:text="Pay Rs.  500 " />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

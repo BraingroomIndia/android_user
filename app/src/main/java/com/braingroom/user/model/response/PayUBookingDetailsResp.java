@@ -28,7 +28,7 @@ public class PayUBookingDetailsResp extends BaseResp {
         public String txnid;
 
         @SerializedName("amount")
-        public String amount;
+        public int amount;
 
         @SerializedName("firstname")
         public String firstname;

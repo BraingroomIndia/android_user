@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CategoryResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -73,8 +74,8 @@ public class SearchViewModel extends ViewModel {
                 Bundle data = new Bundle();
                 FilterData filterData = new FilterData();
                 filterData.setKeywords(searchQuery.get());
-                data.putSerializable("filterData",filterData);
-                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                data.putSerializable(Constants.classFilterData, filterData);
+                data.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }
         };

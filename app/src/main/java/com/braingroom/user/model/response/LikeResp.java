@@ -22,10 +22,13 @@ public class LikeResp extends BaseResp {
     public static class Snippet {
         @SerializedName("post_id")
         String postId;
+
         @SerializedName("comment_id")
         String commentId;
+
         @SerializedName("reply_id")
         String replyId;
+
         @SerializedName("liked")
         int liked;
     }

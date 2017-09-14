@@ -22,6 +22,11 @@ public class ConnectFilterData implements Serializable {
     public String searchQuery;
     public String instituteId;
     public String authorId;
+    private boolean featuredPost;
+
+    public void setFeaturedPost(boolean featuredPost) {
+        this.featuredPost = featuredPost;
+    }
 
     public ConnectFilterData() {
         this.categId = "";
@@ -37,6 +42,8 @@ public class ConnectFilterData implements Serializable {
         this.searchQuery = "";
         this.instituteId = "";
         this.authorId = "";
+
+        this.featuredPost = false;
     }
 
     public String getInstituteId() {
@@ -77,6 +84,7 @@ public class ConnectFilterData implements Serializable {
         snippet.setSearchQuery(searchQuery);
         snippet.setInstituteId(instituteId);
         snippet.setAuthorId(authorId);
+        snippet.setFeaturedPost(this.featuredPost ? "1" : "0");
         return new ConnectFeedReq(snippet);
     }
 

@@ -222,7 +222,7 @@ public class ProfileViewModel1 extends ViewModel {
                         addProfileData(R.drawable.ic_domain_black_24dp, data.getLocality(), dataList);
                         addProfileData(R.drawable.ic_domain_black_24dp, data.getCategoryName(), dataList);
                         profileDetailsListVms.onNext(dataList);
-                        // uiHelper.invalidateMenu();
+                        // UiHelper.invalidateMenu();
                     }
                 }).doOnError(new Consumer<Throwable>() {
                     @Override
@@ -242,7 +242,7 @@ public class ProfileViewModel1 extends ViewModel {
                 } else {
                     //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
-                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
+                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem,true,true, uiHelper, helperFactory, messageHelper, navigator));
                     }
                 }
 
@@ -306,7 +306,7 @@ public class ProfileViewModel1 extends ViewModel {
                         selectedInterestMap.put(categoryName.get(i), categoryId.get(i));
                     categoryVm.setSelectedItemsMap(selectedInterestMap);
                 }
-                uiHelper.invalidateMenu();
+                UiHelper.invalidateMenu();
             }
         }).doOnError(new Consumer<Throwable>() {
             @Override
@@ -476,7 +476,7 @@ public class ProfileViewModel1 extends ViewModel {
 //
 //    public void edit() {
 //        editable.set(true);
-//        uiHelper.invalidateMenu();
+//        UiHelper.invalidateMenu();
 //    }
 
     public void rest() {

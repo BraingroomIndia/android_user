@@ -77,8 +77,9 @@ public class ThirdPartyViewModel extends ViewModel {
 
     public final Action onMessageClicked;
 
-    public ThirdPartyViewModel(@NonNull String userId, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory,
+    public ThirdPartyViewModel(@NonNull final String userId, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory,
                                @NonNull final ConnectUiHelper uiHelper) {
+        messageHelper.showProgressDialog("Wait", "loading");
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -103,11 +104,12 @@ public class ThirdPartyViewModel extends ViewModel {
                     data.putString("backStackActivity", ThirdPartyViewActivity.class.getSimpleName());
                     data.putString("thirdPartyUserId", pref.getString(Constants.BG_ID, ""));
                     messageHelper.showLoginRequireDialog("Only logged in users can send a message", data);
+                    return;
                 }
 
                 String userName = name.s_1.get();
                 Bundle bundle = new Bundle();
-                bundle.putString("sender_id", pref.getString(Constants.BG_ID, ""));
+                bundle.putString("sender_id", userId);
                 bundle.putString("sender_name", userName);
                 navigator.navigateActivity(MessagesThreadActivity.class, bundle);
 
@@ -133,6 +135,7 @@ public class ThirdPartyViewModel extends ViewModel {
                 addProfileData(R.drawable.ic_school_black_24dp, data.getEduInfo2(), dataList);
                 addProfileData(R.drawable.ic_domain_black_24dp, data.getInterest(), dataList);
                 profileDetailsListVms.onNext(dataList);
+                messageHelper.dismissActiveProgress();
 
             }
         }, new Consumer<Throwable>() {
@@ -153,7 +156,7 @@ public class ThirdPartyViewModel extends ViewModel {
                 } else {
                     //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
-                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem, uiHelper, helperFactory, messageHelper, navigator));
+                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem,true,true, uiHelper, helperFactory, messageHelper, navigator));
                     }
                 }
 

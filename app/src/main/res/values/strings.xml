@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Braingroom</string>
 
+
     <string name="screen_profile">My Profile</string>
     <string name="facebook_app_id">1544024608972199</string>
     <string name="screen_explore">Explore</string>
@@ -18,15 +19,31 @@
     <string name="action_settings">Settings</string>
     <string name="action_share">Share</string>
 
-    <string name="robotoRegular">Roboto-Regular.ttf</string>
-    <string name="robotoBold">Roboto-Bold.ttf</string>
+
+    <!--Fonts-->
+    <string name="robotoBlack" translatable="false">Roboto-Black.ttf</string>
+    <string name="robotoBlackItalic" translatable="false">Roboto-BlackItalic.ttf</string>
+    <string name="robotoBold" translatable="false">Roboto-Bold.ttf</string>
+    <string name="robotoBoldItalic" translatable="false">Roboto-BoldItalic.ttf</string>
+    <string name="robotoItalic" translatable="false">Roboto-Italic.ttf</string>
+    <string name="robotoLight" translatable="false">Roboto-Light.ttf</string>
+    <string name="robotoLightItalic" translatable="false">Roboto-LightItalic.ttf</string>
+    <string name="robotoMedium" translatable="false">Roboto-Medium.ttf</string>
+    <string name="robotoMediumItalic" translatable="false">Roboto-MediumItalic.ttf</string>
+    <string name="robotoRegular" translatable="false">Roboto-Regular.ttf</string>
+    <string name="robotoThin" translatable="false">Roboto-Thin.ttf</string>
+    <string name="robotoThinItalic" translatable="false">Roboto-ThinItalic.ttf</string>
+
+    <!--Fonts-->
 
     <string name="searchHint">Search for Classes, Activities and More</string>
     <string name="searchBlogHint">Search in blog posts</string>
     <string name="searchHintSmall">Search for Classes</string>
 
     <string name="sign_up"><u>New User?Signup</u>.</string>
-    <string name="google_maps_key">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
+    <string name="google_maps_key" translatable="false">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
+    <string name="ga_trackingId" translatable="false">${YOUR_TRACKING_ID}</string>
+
 
     <string name="action_edit">Edit</string>
     <string name="action_done">Done</string>

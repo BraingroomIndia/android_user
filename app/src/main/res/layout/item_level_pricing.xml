@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.LevelPricingItemViewModel" />
@@ -60,10 +62,11 @@
                     android:ellipsize="end"
                     android:gravity="top"
                     android:lines="1"
-                    android:paddingLeft="@dimen/padding_small"
                     android:onClick="@{vm.sublevelClicked}"
+                    android:paddingLeft="@dimen/padding_small"
                     android:text="details"
                     android:textColor="@color/materialBlue"
+                    android:visibility="@{vm.sublevelClicked==null ? View.GONE: View.VISIBLE}"
                     app:font='@{@string/robotoRegular}' />
 
             </LinearLayout>

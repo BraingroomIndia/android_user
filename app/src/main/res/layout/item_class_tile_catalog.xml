@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -30,7 +31,9 @@
                 android:layout_weight="6"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{vm.classData.image}"
-                app:placeHolder="@{vm.placeHolder}" />
+                app:placeHolder="@{vm.placeHolder}"
+                tools:src="@drawable/empty_board"
+                tools:scaleType="fitCenter"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -50,7 +53,8 @@
                     android:text="@{vm.classData.classTopic}"
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
-                    app:font='@{@string/robotoRegular}' />
+                    app:font='@{@string/robotoRegular}'
+                    tools:text="Class topic"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -60,7 +64,8 @@
                     android:text='@{vm.classData.noOfSession + " Sessions, "+ vm.classData.classDuration}'
                     android:textColor="@color/colorTextGray"
                     android:textSize="@dimen/text_size_medium"
-                    app:font='@{@string/robotoRegular}' />
+                    app:font='@{@string/robotoRegular}'
+                    tools:text="10 Sessions, 25 hours "/>
 
 
             </LinearLayout>

@@ -3,6 +3,7 @@ package com.braingroom.user.viewmodel;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.braingroom.user.view.MessageHelper;
 
@@ -63,13 +64,16 @@ public class LevelPricingItemViewModel extends ViewModel {
         this.priceList = priceList;
         this.dataChangeAction = dataChangeAction;
         countVm = new CountModifierItemViewModel(0, countConsumer);
-        sublevelClicked = new Action() {
-            @Override
-            public void run() throws Exception {
-                messageHelper.showDismissInfo(null, sublevelDesc);
+        if (TextUtils.isEmpty(sublevelDesc))
+            sublevelClicked = null;
+        else
+            sublevelClicked = new Action() {
+                @Override
+                public void run() throws Exception {
+                    messageHelper.showDismissInfo(null, sublevelDesc);
 
-            }
-        };
+                }
+            };
 
     }
 
