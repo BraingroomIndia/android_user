@@ -22,7 +22,7 @@ public class ConnectDataReq {
         String group;
     }
 
-    public static ConnectDataReq getGroupRequest(){
+    public static ConnectDataReq getGroupRequest() {
         return new ConnectDataReq(new Snippet("all_group"));
     }
 }

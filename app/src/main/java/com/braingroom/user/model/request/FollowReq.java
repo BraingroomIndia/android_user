@@ -14,7 +14,7 @@ public class FollowReq {
     public Snippet data;
 
     @AllArgsConstructor(suppressConstructorProperties = true)
-    public static class Snippet{
+    public static class Snippet {
         @SerializedName("following_user_id")
         public String followingUserId;
 

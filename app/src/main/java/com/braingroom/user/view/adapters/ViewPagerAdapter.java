@@ -89,7 +89,7 @@ public class ViewPagerAdapter extends PagerAdapter implements Connectable {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return ((ViewDataBinding)object).getRoot() == view;
+        return ((ViewDataBinding) object).getRoot() == view;
     }
 
     @Override

@@ -55,7 +55,7 @@ public class LocationFilterViewModel extends CustomDialogViewModel {
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
             }
-        }), selectedCountries, false, countryConsumer,"");
+        }), selectedCountries, false, countryConsumer, "");
 
         stateConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
@@ -67,8 +67,8 @@ public class LocationFilterViewModel extends CustomDialogViewModel {
             }
         };
 
-        stateVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "State", messageHelper, getStateApiObservable("-1"), selectedStates, false, stateConsumer,"select a country first");
-        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), selectedCity, false, null,"select a state first");
+        stateVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "State", messageHelper, getStateApiObservable("-1"), selectedStates, false, stateConsumer, "select a country first");
+        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), selectedCity, false, null, "select a state first");
 
 
         onResetClicked = new Action() {

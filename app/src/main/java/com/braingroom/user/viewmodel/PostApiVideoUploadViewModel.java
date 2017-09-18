@@ -20,7 +20,7 @@ public class PostApiVideoUploadViewModel extends ViewModel {
 
     public final ObservableInt placeHolder = new ObservableInt();
     public final ObservableField<String> remoteAddress = new ObservableField<>("");
-    public final ObservableField<String> thumbUrl =new ObservableField<>(null);
+    public final ObservableField<String> thumbUrl = new ObservableField<>(null);
     public final Action onUploadClicked;
     MessageHelper messageHelper;
     private String TAG = getClass().getCanonicalName();
@@ -53,7 +53,7 @@ public class PostApiVideoUploadViewModel extends ViewModel {
                 .subscribe(new Consumer<UploadPostApiResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {
-                        if (resp.getData()!=null && !resp.getData().isEmpty()) {
+                        if (resp.getData() != null && !resp.getData().isEmpty()) {
                             messageHelper.show("video upload success");
                             remoteAddress.set(resp.getData().get(0).getUrl());
                             thumbUrl.set(resp.getData().get(0).getThumb());

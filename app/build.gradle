@@ -115,7 +115,7 @@ dependencies {
     }
 
     //Dimension
-    compile 'com.intuit.sdp:sdp-android:1.0.4'
+//    compile 'com.intuit.sdp:sdp-android:1.0.4'
     //Dimension
     compile 'com.hanks:htextview-scale:0.1.1'
 //    compile 'at.blogc:expandabletextview:1.0.3'

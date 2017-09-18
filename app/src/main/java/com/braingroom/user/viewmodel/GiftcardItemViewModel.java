@@ -33,12 +33,12 @@ public class GiftcardItemViewModel extends ViewModel {
             public void run() throws Exception {
                 Bundle bundle = new Bundle();
                 if (GiftCouponViewModel.GCTYPE_NGO.equals(giftcardType)) {
-                    bundle.putString("giftcardId",data.getId());
+                    bundle.putString("giftcardId", data.getId());
                     navigator.navigateActivity(NgoFormActivity.class, bundle);
                 } else {
                     FilterData filterData = new FilterData();
                     filterData.setGiftId(cardId.get());
-                    bundle.putSerializable("filterData",filterData);
+                    bundle.putSerializable("filterData", filterData);
                    /* data.putString("giftId", cardId.get());//senderId);*/
                     bundle.putString("origin", ClassListViewModel1.ORIGIN_GIFT);
                     navigator.navigateActivity(ClassListActivity.class, bundle);

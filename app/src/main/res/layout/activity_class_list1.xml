@@ -77,7 +77,8 @@
                         android:gravity="center"
                         android:onClick="@{vm.onViewChangeClicked}"
                         android:padding="@dimen/padding_small"
-                        android:src="@{ vm.layoutType == ClassListViewModel1.LAYOUT_TYPE_TILE ?  @drawable/ic_format_list_bulleted_black_24dp : @drawable/ic_border_all_black_24dp }" />
+                        android:src="@{ vm.layoutType == ClassListViewModel1.LAYOUT_TYPE_TILE ?  @drawable/ic_format_list_bulleted_black_24dp : @drawable/ic_border_all_black_24dp }"
+                        tools:src="@drawable/ic_format_list_bulleted_black_24dp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -117,14 +118,14 @@
                 android:id="@+id/class_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/margin_small_neg"
-                android:layout_marginLeft="@dimen/margin_small_neg"
-                android:layout_marginRight="@dimen/margin_small_neg"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_small"
                 app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                app:spanCount="1"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:spanCount="2"
                 tools:context="com.braingroom.user.view.activity.ClassListActivity"
-                tools:listitem="@layout/item_class_row_listing" />
+                tools:listitem="@layout/item_class_tile_listing" />
 
         </android.support.design.widget.CoordinatorLayout>
 

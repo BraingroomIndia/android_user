@@ -34,7 +34,7 @@ public class CustomInterceptor implements Interceptor {
 
     Gson gson;
 
-   // InternetConnection internetConnection = new InternetConnection(UserApplication.getInstance());
+    // InternetConnection internetConnection = new InternetConnection(UserApplication.getInstance());
 
     @Inject
     public CustomInterceptor(Gson gson) {
@@ -53,9 +53,9 @@ public class CustomInterceptor implements Interceptor {
         try {
             response = chain.proceed(request);
         } catch (IOException e) {
-          //  e.printStackTrace();
+            //  e.printStackTrace();
 
-            Log.d(TAG, "intercept: no network " +request.toString());
+            Log.d(TAG, "intercept: no network " + request.toString());
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;
         }

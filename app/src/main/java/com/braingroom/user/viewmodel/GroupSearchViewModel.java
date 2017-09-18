@@ -50,7 +50,7 @@ public class GroupSearchViewModel extends ViewModel {
                         List<ViewModel> results = new ArrayList<>();
                         if (s.length() > 0) {
                             for (ViewModel viewModel : groupsData) {
-                                if(((HorizontalIconTextItemViewModel)viewModel).title.contains(s)){
+                                if (((HorizontalIconTextItemViewModel) viewModel).title.contains(s)) {
                                     results.add(viewModel);
                                 }
                             }

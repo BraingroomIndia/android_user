@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -34,6 +35,8 @@
             android:text="@{vm.textVal}"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_small"
-            app:font='@{@string/robotoRegular}' />
+            app:font='@{@string/robotoRegular}'
+            tools:background="@drawable/solid_blue_rounded_corner_follow"
+            tools:text="Follow"/>
     </RelativeLayout>
 </layout>

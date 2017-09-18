@@ -13,6 +13,8 @@ import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.utils.Constants;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 
@@ -35,7 +37,10 @@ public class ViewModel extends BaseObservable {
     public boolean apiSuccessful = false;
     public ConnectivityViewModel connectivityViewmodel;
 
-    public final String rupeesSymbol ="&#x20b9;";
+    @Setter
+    protected Tracker mTracker;
+
+    public final String rupeesSymbol = "&#x20b9;";
 
     public final String BG_ID;
 
@@ -171,6 +176,12 @@ public class ViewModel extends BaseObservable {
             return true;
         else
             return data.isEmpty();
+    }
+
+    public void setScreenName(String screenName) {
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
     }
 
     public boolean isEmpty(Object data) {

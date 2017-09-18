@@ -27,7 +27,7 @@ public class LikesViewModel extends ViewModel {
                     public List<ViewModel> apply(LikedUsersListResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         for (final LikedUsersListResp.Snippet elem : resp.getData()) {
-                            results.add(new LikedItemViewModel(elem.getUserImage(), elem.getUserName(),elem.getUserId(),navigator));
+                            results.add(new LikedItemViewModel(elem.getUserImage(), elem.getUserName(), elem.getUserId(), navigator));
                         }
                         return results;
                     }

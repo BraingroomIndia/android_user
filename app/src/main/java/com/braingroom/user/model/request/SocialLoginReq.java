@@ -30,7 +30,7 @@ public class SocialLoginReq {
         String lastName = "";
 
         @SerializedName("email")
-        String email ="";
+        String email = "";
 
         @SerializedName("social_network_id")
         String socialId = "";

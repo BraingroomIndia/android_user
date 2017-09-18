@@ -23,9 +23,12 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
+import com.braingroom.user.UserApplication;
 import com.braingroom.user.utils.BindingUtils;
 import com.braingroom.user.view.adapters.ViewModelBinder;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 
@@ -40,16 +43,30 @@ public abstract class MvvmActivity extends AppCompatActivity {
     public ViewDataBinding binding;
     protected ViewModel vm;
     protected Bundle extras;
+    protected Tracker mTracker;
+    protected FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTracker = UserApplication.getInstance().getDefaultTracker();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         if (getIntent().getExtras() != null)
             extras = getIntent().getExtras().getBundle("classData");
         binding = DataBindingUtil.setContentView(this, getLayoutId());
         vm = createViewModel();
+        vm.setMFirebaseAnalytics(mFirebaseAnalytics);
+        vm.setMTracker(mTracker);
         getDefaultBinder().bind(binding, vm);
     }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -57,6 +74,11 @@ public abstract class MvvmActivity extends AppCompatActivity {
         binding.executePendingBindings();
         super.onDestroy();
     }
+
+    @NonNull
+    protected FirebaseAnalytics getFirebaseAnalytics() {return mFirebaseAnalytics;}
+    @NonNull
+    protected Tracker getGoogleTracker() {return mTracker;}
 
     @NonNull
     protected ViewModelBinder getDefaultBinder() {

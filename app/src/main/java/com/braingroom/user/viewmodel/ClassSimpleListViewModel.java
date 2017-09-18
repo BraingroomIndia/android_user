@@ -27,7 +27,7 @@ public class ClassSimpleListViewModel extends ViewModel {
 
     private boolean paginationInProgress = false;
     private int nextPage = 1;
-    private int currentPage=0;
+    private int currentPage = 0;
     private boolean nextPageAvailable = true;
     private final String listType;
     private final String userId;
@@ -36,7 +36,7 @@ public class ClassSimpleListViewModel extends ViewModel {
     public Observable<List<ViewModel>> result;
     private List<ViewModel> classes;
 
-    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1,  String id) {
+    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1, String id) {
         this.listType = listType1;
         classes = new ArrayList<>();
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
@@ -44,13 +44,13 @@ public class ClassSimpleListViewModel extends ViewModel {
             public void run() throws Exception {
                 retry();
                 connectivityViewmodel.isConnected.set(true);
-                Log.d(TAG, "run: "+callAgain.get());
+                Log.d(TAG, "run: " + callAgain.get());
             }
         });
-        if (id!=null)
+        if (id != null)
             this.userId = id;
         else
-            this.userId =pref.getString(Constants.BG_ID,"");
+            this.userId = pref.getString(Constants.BG_ID, "");
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -61,17 +61,17 @@ public class ClassSimpleListViewModel extends ViewModel {
         result = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return currentPage<nextPage;
+                return currentPage < nextPage;
             }
         }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
-                Log.d(TAG, "apply: " +callAgain.get());
+                Log.d(TAG, "apply: " + callAgain.get());
                 if ("wishlist".equalsIgnoreCase(listType))
                     apiObservable = apiService.getWishList(nextPage);
                 else if ("bookinghistory".equalsIgnoreCase(listType))
-                    apiObservable = apiService.getBookingHistory(userId,nextPage);
+                    apiObservable = apiService.getBookingHistory(userId, nextPage);
 
                 return apiObservable
                         .map(new Function<List<ClassData>, List<ViewModel>>() {
@@ -79,7 +79,7 @@ public class ClassSimpleListViewModel extends ViewModel {
                             public List<ViewModel> apply(List<ClassData> resp) throws Exception {
                                 List<ViewModel> results = new ArrayList<>();
                                 if (resp.size() == 0)
-                                    nextPageAvailable =false;
+                                    nextPageAvailable = false;
                                 if (resp.size() == 0 && classes.size() == 0) {
                                     classes.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                                 }
@@ -119,8 +119,8 @@ public class ClassSimpleListViewModel extends ViewModel {
     @Override
     public void paginate() {
         if (nextPageAvailable && !paginationInProgress) {
-            nextPage=nextPage+1;
-            callAgain.set(callAgain.get()+1);
+            nextPage = nextPage + 1;
+            callAgain.set(callAgain.get() + 1);
 
         }
     }
@@ -143,9 +143,10 @@ public class ClassSimpleListViewModel extends ViewModel {
         super.onPause();
         connectivityViewmodel.onPause();
     }
+
     @Override
-    public void retry(){
-        callAgain.set(callAgain.get()+1);
+    public void retry() {
+        callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
     }
 

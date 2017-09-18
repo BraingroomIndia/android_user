@@ -86,7 +86,7 @@ public class CouponFormActivity extends BaseActivity implements PaymentResultLis
                     co.open(activity, options);
                 } catch (Exception e) {
                     getMessageHelper().show("Error in payment: " + e.getMessage());
-                   // e.printStackTrace();
+                    // e.printStackTrace();
                 }
 
             }
@@ -161,7 +161,7 @@ public class CouponFormActivity extends BaseActivity implements PaymentResultLis
             try {
                 viewmodel.addNewFormData(0, getIntentInt("giftType"), getIntentInt("giftBy"));
             } catch (Exception e) {
-               // e.printStackTrace();
+                // e.printStackTrace();
             }
             return true;
         }
@@ -169,7 +169,7 @@ public class CouponFormActivity extends BaseActivity implements PaymentResultLis
             try {
                 viewmodel.submitClicked.run();
             } catch (Exception e) {
-               // e.printStackTrace();
+                // e.printStackTrace();
             }
             return true;
         }

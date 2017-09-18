@@ -26,7 +26,7 @@ public class FilterData implements Serializable {
     String sortOrder = "";
     String catalog = "";
     String giftId = "";
-    String sortOrderCat ="";
+    String sortOrderCat = "";
 
     public void setFilterData(FilterData data) {
         setKeywords(data.getKeywords());
@@ -51,7 +51,7 @@ public class FilterData implements Serializable {
     }
 
     public GeneralFilterReq getFilterReq() {
-        return new GeneralFilterReq(new GeneralFilterReq.Snippet("", keywords, startDate, endDate, categoryId, segmentId, classType, communityId, classSchedule, classProvider, locationId, sortOrder, sortOrderCat, catalog,giftId));
+        return new GeneralFilterReq(new GeneralFilterReq.Snippet("", keywords, startDate, endDate, categoryId, segmentId, classType, communityId, classSchedule, classProvider, locationId, sortOrder, sortOrderCat, catalog, giftId));
     }
 
 
@@ -151,7 +151,9 @@ public class FilterData implements Serializable {
 
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
-    }    public void setSortOrderCat(String sortOrder) {
+    }
+
+    public void setSortOrderCat(String sortOrder) {
         this.sortOrderCat = sortOrder;
     }
 

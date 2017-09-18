@@ -242,7 +242,7 @@ public class ProfileViewModel1 extends ViewModel {
                 } else {
                     //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
-                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem,true,true, uiHelper, helperFactory, messageHelper, navigator));
+                        nonReactiveItems.add(new ConnectFeedItemViewModel(elem, true, true, uiHelper, helperFactory, messageHelper, navigator));
                     }
                 }
 

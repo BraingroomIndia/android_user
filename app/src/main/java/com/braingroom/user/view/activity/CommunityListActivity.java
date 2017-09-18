@@ -14,7 +14,7 @@ public class CommunityListActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new CommunityListViewModel(getMessageHelper(),getNavigator());
+        return new CommunityListViewModel(getMessageHelper(), getNavigator());
     }
 
     @Override

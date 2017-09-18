@@ -29,6 +29,8 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.PaySuccessActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
+import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 import org.json.JSONArray;
@@ -148,8 +150,11 @@ public class CheckoutViewModel extends ViewModel {
         }
     };
 
-    public CheckoutViewModel(@NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper,
+    public CheckoutViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper,
                              @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final boolean isGift) {
+        this.mFirebaseAnalytics = mFirebaseAnalytics;
+        this.mTracker = mTracker;
+        setScreenName(classData.getClassTopic());
         totalAmount = new ObservableInt(0);
         totalAmountAfterPromo = new ObservableInt(0);
         couponCode = new ObservableField<>();

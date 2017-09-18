@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by agrahari on 26/03/17.
  */
 
-public class ClassLocationData implements Serializable{
+public class ClassLocationData implements Serializable {
 
     @SerializedName("locality_id")
     private String localityId;
@@ -33,7 +33,6 @@ public class ClassLocationData implements Serializable{
 
     @SerializedName("color_code")
     private String colorCode;
-
 
 
     public String getLocalityId() {

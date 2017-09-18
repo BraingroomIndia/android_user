@@ -82,10 +82,10 @@
                     app:editable="@{true}"
                     app:vm="@{vm.interestAreaVm}" />
 
-<!--                <include
-                    layout="@layout/item_list_dialog_opener"
-                    app:editable="@{true}"
-                    app:vm="@{vm.communityClassVm}" />-->
+                <!--                <include
+                                    layout="@layout/item_list_dialog_opener"
+                                    app:editable="@{true}"
+                                    app:vm="@{vm.communityClassVm}" />-->
 
 
                 <include
@@ -107,8 +107,6 @@
                     layout="@layout/item_list_fragment_opener"
                     app:editable="@{true}"
                     app:vm="@{vm.localityVM}" />
-
-
 
 
             </LinearLayout>

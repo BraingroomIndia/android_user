@@ -31,7 +31,7 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new ConnectFeedDetailViewModel(getIntentString("postId"), this, getHelperFactory(), getMessageHelper(), getNavigator());
+        return new ConnectFeedDetailViewModel(getFirebaseAnalytics(), getGoogleTracker(), getIntentString("postId"), this, getHelperFactory(), getMessageHelper(), getNavigator());
 
     }
 

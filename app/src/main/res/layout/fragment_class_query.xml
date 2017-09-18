@@ -77,7 +77,6 @@
                     android:text="@={vm.postDescription}" />
 
 
-
                 <TextView
                     android:layout_below="@id/query"
                     android:layout_width="wrap_content"
@@ -95,6 +94,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_large"
                     app:font='@{@string/robotoRegular}' />
+
                 <TextView
                     android:layout_below="@id/query"
                     android:layout_width="wrap_content"

@@ -41,6 +41,7 @@ import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
@@ -99,7 +100,6 @@ public abstract class BaseActivity extends MvvmActivity {
 
     public final String TAG = this.getClass().getSimpleName();
 
-    protected FirebaseAnalytics mFirebaseAnalytics;
 
     interface fireBaseLogging {
 
@@ -111,7 +111,7 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
        /* try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
         } catch (Exception e){e.printStackTrace();}*/
@@ -129,14 +129,13 @@ public abstract class BaseActivity extends MvvmActivity {
         w.getDefaultDisplay().getSize(size);
         screenDims.width = size.x;
         screenDims.height = size.y;
-
-        vm.setMFirebaseAnalytics(mFirebaseAnalytics);
     }
 
     public void initNavigationDrawer() {
     }
 
     ;
+
 
     @Override
     public void onUserInteraction() {
@@ -328,6 +327,15 @@ public abstract class BaseActivity extends MvvmActivity {
                     if (title != null) builder.title(title);
                     builder.content(content);
                     builder.positiveText("Dismiss").show();
+                }
+
+                @Override
+                public void showDismissInfo(@Nullable String title, @NonNull String buttonText, @NonNull String content) {
+                    dismissActiveProgress();
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
+                    if (title != null) builder.title(title);
+                    builder.content(content);
+                    builder.positiveText(buttonText).show();
                 }
 
                 @Override

@@ -13,19 +13,20 @@ import com.braingroom.user.viewmodel.fragment.ClassDetailDemoPostViewModel;
  */
 
 public class DemoPostFragment extends BaseFragment {
-    public static DemoPostFragment newInstance(ConnectFilterData filterData){
-        Bundle bundle =new Bundle();
-        bundle.putSerializable("connectFilterData",filterData);
+    public static DemoPostFragment newInstance(ConnectFilterData filterData) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("connectFilterData", filterData);
         DemoPostFragment fragment = new DemoPostFragment();
         fragment.setArguments(bundle);
         return fragment;
 
     }
+
     @NonNull
     @Override
     protected ViewModel createViewModel() {
         ConnectFilterData connectFilterData = (ConnectFilterData) getSerializableArguments("connectFilterData");
-        return new ClassDetailDemoPostViewModel(activity.getNavigator(),connectFilterData);
+        return new ClassDetailDemoPostViewModel(activity.getNavigator(), connectFilterData);
     }
 
     @Override

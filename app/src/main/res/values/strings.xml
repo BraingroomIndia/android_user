@@ -42,7 +42,7 @@
 
     <string name="sign_up"><u>New User?Signup</u>.</string>
     <string name="google_maps_key" translatable="false">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
-    <string name="ga_trackingId" translatable="false">${YOUR_TRACKING_ID}</string>
+    <string name="ga_trackingId" translatable="false">UA-106408998-1</string>
 
 
     <string name="action_edit">Edit</string>

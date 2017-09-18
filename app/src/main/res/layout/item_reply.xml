@@ -23,7 +23,7 @@
             app:civ_border_color="@color/colorTextGray"
             app:civ_border_width="2dp"
             app:imageUrl="@{vm.userImage}"
-            android:onClick="@{vm.showthirdpartyProfile}"/>
+            android:onClick="@{vm.showthirdpartyProfile}" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,22 +72,22 @@
                     app:font='@{@string/robotoRegular}' />
 
                 <!--<ImageView-->
-                    <!--android:layout_width="5dp"-->
-                    <!--android:layout_height="5dp"-->
-                    <!--android:layout_gravity="center_vertical"-->
-                    <!--android:layout_margin="@dimen/margin_med"-->
-                    <!--android:src="@drawable/solid_circle_gray" />-->
+                <!--android:layout_width="5dp"-->
+                <!--android:layout_height="5dp"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_margin="@dimen/margin_med"-->
+                <!--android:src="@drawable/solid_circle_gray" />-->
 
                 <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:ellipsize="end"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:maxLines="1"-->
-                    <!--android:text='@{vm.liked ? "Liked" : "Like"}'-->
-                    <!--android:textColor="@color/materialBlueGray"-->
-                    <!--android:textSize="@dimen/text_size_medium"-->
-                    <!--app:font='@{@string/robotoRegular}' />-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:ellipsize="end"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:maxLines="1"-->
+                <!--android:text='@{vm.liked ? "Liked" : "Like"}'-->
+                <!--android:textColor="@color/materialBlueGray"-->
+                <!--android:textSize="@dimen/text_size_medium"-->
+                <!--app:font='@{@string/robotoRegular}' />-->
             </LinearLayout>
 
         </LinearLayout>

@@ -50,6 +50,8 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 /*        try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
         } catch (Exception e){e.printStackTrace();}*/
+
+
         getSupportActionBar().setElevation(0);
         mRecyclerView = ((ActivityCheckoutBinding) binding).pricingRecyclerview;
         mAdapter = new NonReactiveRecyclerViewAdapter(vm, ((CheckoutViewModel) vm).getViewProvider());
@@ -99,7 +101,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
             }
         };
-        return new CheckoutViewModel(getHelperFactory(), getMessageHelper(), getNavigator(),
+        return new CheckoutViewModel(getFirebaseAnalytics(),getGoogleTracker(),getHelperFactory(), getMessageHelper(), getNavigator(),
                 uiHelper, (ClassData) getIntentSerializable("classData"), "gift".equals(getIntentString("checkoutType")));
     }
 

@@ -56,7 +56,7 @@ public class GeneralFilterReq {
         String sort = "";
 
         @SerializedName("sort_by_latest")
-        String sortCat="";
+        String sortCat = "";
 
         @SerializedName("catlog")
         String catalog = "";

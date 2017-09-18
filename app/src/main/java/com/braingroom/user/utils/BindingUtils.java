@@ -132,7 +132,7 @@ public class BindingUtils {
                 if (vm instanceof EmptyItemViewModel)
                     return R.layout.item_empty_data;
                 if (vm instanceof IconTextShimmerItemViewModel)
-                    return  R.layout.icon_text_shimmer;
+                    return R.layout.icon_text_shimmer;
                 return layoutId;
             }
         };
@@ -198,7 +198,7 @@ public class BindingUtils {
     @BindingAdapter(value = {"layout_grid_vertical", "span_count", "divider_decoration", "space_length"}, requireAll = false)
     public static void bindGridLayoutManager(@NonNull RecyclerView recyclerView, boolean vertical, int spanCount, String decorationType, float spaceLength) {
         int orientation = vertical ? RecyclerView.VERTICAL : RecyclerView.HORIZONTAL;
-        if (spanCount == 0) spanCount = 3;
+        if (spanCount == 0) spanCount = 1;
         GridLayoutManager gm = new GridLayoutManager(recyclerView.getContext(), spanCount, orientation, false);
         gm.setAutoMeasureEnabled(true);
         if (DIVIDER_TYPE_LINE.equalsIgnoreCase(decorationType)) {

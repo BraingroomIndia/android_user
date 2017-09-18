@@ -13,13 +13,13 @@ import lombok.Setter;
  * Created by godara on 11/05/17.
  */
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class SignUpReq extends BaseResp{
+public class SignUpReq extends BaseResp {
     @SerializedName("braingroom")
     Snippet data;
 
     @Data
     @Setter
-    public static class Snippet implements Serializable{
+    public static class Snippet implements Serializable {
 
         @SerializedName("name")
         public String name;

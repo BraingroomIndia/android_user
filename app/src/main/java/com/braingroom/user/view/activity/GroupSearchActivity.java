@@ -11,7 +11,7 @@ public class GroupSearchActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new GroupSearchViewModel(getMessageHelper(),getNavigator());
+        return new GroupSearchViewModel(getMessageHelper(), getNavigator());
     }
 
     @Override

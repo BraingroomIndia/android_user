@@ -42,8 +42,8 @@ public class VendorClassViewModel extends ViewModel {
         })*/.filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                if (nextPage==1)
-                    paginationInProgress=true;
+                if (nextPage == 1)
+                    paginationInProgress = true;
                 return currentPage < nextPage;
             }
         }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
@@ -54,7 +54,7 @@ public class VendorClassViewModel extends ViewModel {
                     public List<ViewModel> apply(List<ClassData> resp) throws Exception {
                         currentPage = nextPage;
                         if (resp.size() == 0)
-                            nextPage = - 1;
+                            nextPage = -1;
                         for (final ClassData elem : resp) {
                             classes.add(new ClassItemViewModel(elem, new Action() {
                                 @Override
@@ -68,7 +68,7 @@ public class VendorClassViewModel extends ViewModel {
                                 }
                             }));
                         }
-                        paginationInProgress=false;
+                        paginationInProgress = false;
                         return classes;
                     }
                 }).mergeWith(getLoadingItems(3));
@@ -87,7 +87,7 @@ public class VendorClassViewModel extends ViewModel {
     public void paginate() {
         if (!paginationInProgress) {
             nextPage = nextPage + 1;
-            paginationInProgress=true;
+            paginationInProgress = true;
             callAgain.set(callAgain.get() + 1);
         }
     }

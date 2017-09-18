@@ -3,6 +3,7 @@ package com.braingroom.user.utils;
 /**
  * Created by agrahari on 26/04/17.
  */
+
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.annotation.IntDef;

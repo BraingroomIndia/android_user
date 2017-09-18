@@ -32,7 +32,7 @@
                 app:imageUrl="@{vm.classData.image}"
                 app:placeHolder="@{vm.placeHolder}"
                 tools:src="@drawable/empty_board"
-                tools:scaleType="fitCenter"/>
+                tools:scaleType="fitCenter" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
                     app:font='@{@string/robotoRegular}'
-                    tools:text="Class topic"/>
+                    tools:text="Class topic" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                         android:textColor="@color/colorTextGray"
                         android:textSize="@dimen/text_size_medium"
                         app:font='@{@string/robotoRegular}'
-                        tools:text="10 Sessions, 25 hours "/>
+                        tools:text="10 Sessions, 25 hours " />
 
                 </LinearLayout>
 

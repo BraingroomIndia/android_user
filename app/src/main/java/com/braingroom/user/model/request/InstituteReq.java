@@ -16,7 +16,7 @@ public class InstituteReq {
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
-    public static class Snippet{
+    public static class Snippet {
         @SerializedName("search_key")
         public String searchKey;
 

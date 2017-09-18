@@ -13,8 +13,8 @@ import io.reactivex.functions.Action;
 
 public class ReplyItemViewModel extends ViewModel {
 
-    public final Action onLikeClicked, onReplyClicked,showthirdpartyProfile;
-    public final String userImage, userName, reply, replyDate,userId;
+    public final Action onLikeClicked, onReplyClicked, showthirdpartyProfile;
+    public final String userImage, userName, reply, replyDate, userId;
 //    public final ObservableInt numLikes = new ObservableInt();
 //    public final ObservableBoolean liked = new ObservableBoolean();
 

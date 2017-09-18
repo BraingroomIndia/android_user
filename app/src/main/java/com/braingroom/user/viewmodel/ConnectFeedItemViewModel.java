@@ -104,6 +104,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
 
     public ObservableInt categoryImg = new ObservableInt();
 
+    public final String smallDate;
+
     public final int[] resArray = new int[]{R.drawable.main_category_1,
             R.drawable.main_category_5, //Edited By Vikas Godara
             R.drawable.main_category_3,
@@ -122,6 +124,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
             isSegmentAvailable.set(false);
         if (data.getCategoryId() != null)
             categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - 1]);
+        smallDate = getHumanDateSmall(data.getDate());
         this.navigator = navigator;
         this.vendorImage = new ObservableField<>(data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
@@ -148,7 +151,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
         this.numAccepts = new ObservableInt(data.getNumAccepted());
         this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwnerId()));
-        this.isMediaAvailable = new ObservableBoolean(data.getVideo() != null || !data.getImage().equals(""));
+        this.isMediaAvailable = new ObservableBoolean(isEmpty(data.getVideo()) || isEmpty(data.getImage()));
         if (hideFollowIcon)
             followButtonVm.changeButtonState(FollowButtonViewModel.STATE_HIDDEN);
         if (hideMessageIcon || isVendor.get() || isPostOwner.get())
@@ -237,7 +240,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         showAcceptedUsers = new Action() {
             @Override
             public void run() throws Exception {
-                if (isPostOwner.get()) {
+                if (isPostOwner.get() && numAccepts.get() > 0) {
                     uiHelper.openAcceptedUsersFragment(data.getId());
                 }
             }
@@ -285,7 +288,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
         likedUsersAction = new Action() {
             @Override
             public void run() throws Exception {
-                uiHelper.openLikesFragment(data.getId(), null, null);
+                if (numLikes.get() > 0)
+                    uiHelper.openLikesFragment(data.getId(), null, null);
             }
         };
         playAction = new Action() {
@@ -414,6 +418,19 @@ public class ConnectFeedItemViewModel extends ViewModel {
         long time = Long.valueOf(timeStamp) * 1000;
         try {
             java.text.DateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy");
+            Date netDate = (new Date(time));
+            return sdf.format(netDate);
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    private String getHumanDateSmall(String timeStamp) {
+        if (timeStamp == null)
+            return "";
+        long time = Long.valueOf(timeStamp) * 1000;
+        try {
+            java.text.DateFormat sdf = new SimpleDateFormat("EEEE");
             Date netDate = (new Date(time));
             return sdf.format(netDate);
         } catch (Exception ex) {

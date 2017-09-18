@@ -26,6 +26,8 @@ import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
+import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -128,22 +130,42 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
     public final ObservableField<String> shareUrl = new ObservableField<>("");
 
+    public ObservableField<FollowButtonViewModel> followButtonVm;
+
     @NonNull
     String postId;
 
-    public ConnectFeedDetailViewModel(final String postId, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
+    public ConnectFeedDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, final String postId, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
+
+        this.mFirebaseAnalytics = mFirebaseAnalytics;
+        this.mTracker = mTracker;
+
         this.navigator = navigator;
 
         messageHelper.showProgressDialog("Wait", "loading");
+        followButtonVm = new ObservableField<>();
 
         apiService.getFeedsByPostID(postId).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull final ConnectFeedResp resp) throws Exception {
+                if (isEmpty(resp))
+                    navigator.finishActivity();
+                else if (isEmpty(resp.getData()))
+                    navigator.finishActivity();
+                else if (isEmpty(resp.getData().get(0)))
+                    navigator.finishActivity();
                 loading.set(false);
 
+
+                setScreenName(resp.getData().get(0).getTitle());
                 if (resp.getData().get(0).getCategoryId() == null && resp.getData().get(0).getSegId() == null)
                     isSegmentAvailable.set(false);
+
+                ConnectFeedResp.Snippet data = resp.getData().get(0);
+                followButtonVm.set(new FollowButtonViewModel(data.getPostOwnerId(), messageHelper, navigator
+                        , BG_ID.equals(data.getPostOwnerId()) ? FollowButtonViewModel.STATE_HIDDEN : data.getFollowStatus() == 0 ? FollowButtonViewModel.STATE_FOLLOW : FollowButtonViewModel.STATE_FOLLOWED));
+
 
 //                ZohoSalesIQ.Tracking.setPageTitle(resp.getData().get(0).getTitle() + " by " + resp.getData().get(0).getVendorName());
                 categoryId = resp.getData().get(0).getCategoryId();
@@ -180,6 +202,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                navigator.finishActivity();
 
             }
         });

@@ -6,7 +6,7 @@ import com.braingroom.user.model.response.BaseResp;
  * Created by agrahari on 21/03/17.
  */
 
-public class NetworkErrorHandler <T extends BaseResp> {
+public class NetworkErrorHandler<T extends BaseResp> {
 
 //    public Observable<T> emmitOnError(Observable<T> source){
 //        return source.onErrorReturn(new Function<Throwable, T>() {

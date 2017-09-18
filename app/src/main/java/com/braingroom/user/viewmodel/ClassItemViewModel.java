@@ -23,7 +23,7 @@ public class ClassItemViewModel extends ViewModel {
         this.classData = classData;
         this.onClicked = clickAction;
         if ("fixed".equalsIgnoreCase(classData.getClassTypeData())) {
-            fixedClassDate .set(classData.getSessionTime() + ", " + classData.getSessionDate());
+            fixedClassDate.set(classData.getSessionTime() + ", " + classData.getSessionDate());
         }
 
     }

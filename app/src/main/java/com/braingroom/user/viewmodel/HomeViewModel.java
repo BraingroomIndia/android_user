@@ -31,6 +31,7 @@ import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.activity.SegmentListActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -100,8 +102,11 @@ public class HomeViewModel extends ViewModel {
             R.drawable.main_category_6};
 */
 
-    public HomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
+    public HomeViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
                          @NonNull final DialogHelper dialogHelper, @NonNull final HomeActivity.UiHelper uiHelper) {
+
+        this.mFirebaseAnalytics = mFirebaseAnalytics;
+        this.mTracker = mTracker;
         this.loggedIn = new ObservableBoolean(getLoggedIn());
         this.uiHelper = uiHelper;
 

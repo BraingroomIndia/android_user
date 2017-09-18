@@ -19,7 +19,7 @@ public class SignUpCompetition2Fragment extends BaseFragment {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return ((SignUpActivityCompetition)activity).getViewModel();
+        return ((SignUpActivityCompetition) activity).getViewModel();
     }
 
     @Override

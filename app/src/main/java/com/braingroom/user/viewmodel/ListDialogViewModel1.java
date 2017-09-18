@@ -51,7 +51,7 @@ public class ListDialogViewModel1 extends ViewModel {
         this.dialogHelper = dialogHelper;
         this.resultConsumer = resultConsumer;
         this.isMultiSelect = isMultiSelect;
-        this.dependencyMessage=dependencyMessage;
+        this.dependencyMessage = dependencyMessage;
         setSourceObservable(sourceObservable);
         onOpenerClick = new Action() {
             @Override
@@ -102,7 +102,7 @@ public class ListDialogViewModel1 extends ViewModel {
     }
 
     public void show() {
-        if (source==null){
+        if (source == null) {
             messageHelper.show(dependencyMessage);
         }
         messageHelper.showProgressDialog(null, "Loading...");
@@ -150,7 +150,7 @@ public class ListDialogViewModel1 extends ViewModel {
             if (resultConsumer != null)
                 resultConsumer.accept(selectedItemsMap);
         } catch (Exception e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
 
     }

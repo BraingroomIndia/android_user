@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="com.braingroom.user.R" />
 
         <import type="android.view.View" />
@@ -65,31 +66,50 @@
                     app:editable="@{true}"
                     app:vm="@{vm.postTypeVm}" />
 
-                <include
-                    layout="@layout/item_list_dialog_opener"
-                    android:visibility="@{vm.groupsField ? View.VISIBLE : View.GONE}"
-                    app:editable="@{true}"
-                    app:vm="@{vm.groupVm}" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.groupsField ? View.VISIBLE : View.GONE}">
 
+                    <include
+                        layout="@layout/item_list_dialog_opener"
+                        app:editable="@{true}"
+                        app:vm="@{vm.groupVm}" />
+                </FrameLayout>
 
-                <include
-                    layout="@layout/item_list_dialog_opener"
-                    android:visibility="@{vm.activityField ? View.VISIBLE : View.GONE}"
-                    app:editable="@{true}"
-                    app:vm="@{vm.activityVm}" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.activityField ? View.VISIBLE : View.GONE}">
 
-                <include
-                    layout="@layout/item_list_dialog_opener"
-                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}"
-                    app:editable="@{true}"
-                    app:vm="@{vm.categoryVm}" />
+                    <include
+                        layout="@layout/item_list_dialog_opener"
+                        app:editable="@{true}"
+                        app:vm="@{vm.activityVm}" />
+                </FrameLayout>
 
-                <include
-                    layout="@layout/item_list_dialog_opener"
-                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}"
-                    app:editable="@{true}"
-                    app:vm="@{vm.segmentsVm}" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}">
 
+                    <include
+                        layout="@layout/item_list_dialog_opener"
+                        app:editable="@{true}"
+                        app:vm="@{vm.categoryVm}" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}">
+
+                    <include
+                        layout="@layout/item_list_dialog_opener"
+                        app:editable="@{true}"
+                        app:vm="@{vm.segmentsVm}" />
+                </FrameLayout>
 
                 <include
                     layout="@layout/floating_label_edit_text"

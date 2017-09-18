@@ -71,8 +71,6 @@ public class ConnectPostFragment extends BaseFragment {
     }
 
 
-
-
 //    /**
 //     * TODO: Need to start image chooser activity from fragment instead of activity to receive onActivityResult call
 //     * XXX: This block is written to bypass Navigator inside fragment

@@ -55,9 +55,9 @@ public class VendorProfileViewModel extends ViewModel {
         }).subscribe(new Consumer<VendorProfileData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull VendorProfileData data) throws Exception {
-               if (data==null)
-                   return;
-                callAgain=null;
+                if (data == null)
+                    return;
+                callAgain = null;
                 image.s_1.set(null);
                 name.s_1.set(data.getName());
                 locality.s_1.set(data.getLocality());
@@ -91,9 +91,10 @@ public class VendorProfileViewModel extends ViewModel {
         super.onPause();
         connectivityViewmodel.onPause();
     }
+
     @Override
-    public void retry(){
-        callAgain.set(callAgain.get()+1);
+    public void retry() {
+        callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
     }
 }

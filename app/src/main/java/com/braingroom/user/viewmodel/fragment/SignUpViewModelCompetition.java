@@ -68,7 +68,7 @@ public class SignUpViewModelCompetition extends ViewModel {
     private SignUpReq.Snippet signUpSnippet;
 
 
-    public SignUpViewModelCompetition(@NonNull final int competitionStatus ,@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignUpActivityCompetition.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
+    public SignUpViewModelCompetition(@NonNull final int competitionStatus, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignUpActivityCompetition.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper) {
         this.navigator = navigator;
         this.messageHelper = messageHelper;
         this.uiHelper = uiHelper;
@@ -360,8 +360,8 @@ public class SignUpViewModelCompetition extends ViewModel {
                 return resMap;
             }
         });
-        if (competitionStatus==1)
-        ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_SCHOOL, messageHelper, navigator, "search for school... ", false, "", null, dynamicSearchFragmentHelper);
+        if (competitionStatus == 1)
+            ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_SCHOOL, messageHelper, navigator, "search for school... ", false, "", null, dynamicSearchFragmentHelper);
         else
             ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
     }

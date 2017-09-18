@@ -17,7 +17,7 @@ public class ConnectSectionListActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new ConnectSectionListViewModel(getNavigator());
+        return new ConnectSectionListViewModel(getFirebaseAnalytics(),getGoogleTracker(),getNavigator());
     }
 
     @Override

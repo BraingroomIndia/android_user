@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class ListDialogData {
 
-    private Integer [] selectedItems;
-    private Map<String,String> items;
+    private Integer[] selectedItems;
+    private Map<String, String> items;
 
-    public ListDialogData(Integer[] selectedItems, Map<String,String> items) {
+    public ListDialogData(Integer[] selectedItems, Map<String, String> items) {
         this.selectedItems = selectedItems;
         this.items = items;
     }

@@ -95,7 +95,7 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-       vm.setLoggedIn();
+        vm.setLoggedIn();
         vm.onResume();
         super.onActivityResult(requestCode, resultCode, data);
     }

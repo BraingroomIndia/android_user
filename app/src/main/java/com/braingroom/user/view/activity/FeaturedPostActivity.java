@@ -6,25 +6,33 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.braingroom.user.R;
 import com.braingroom.user.utils.WrapContentHeightViewPager;
+import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.fragment.BaseFragment;
+import com.braingroom.user.view.fragment.CommentFragment;
 import com.braingroom.user.view.fragment.FeaturedPostFragment;
+import com.braingroom.user.view.fragment.LikesFragment;
+import com.braingroom.user.view.fragment.ReplyFragment;
 import com.braingroom.user.view.fragment.WinnerFragment;
+import com.braingroom.user.viewmodel.ConnectFeedItemViewModel;
 import com.braingroom.user.viewmodel.FeaturedPostViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.FeaturedPostItemViewModel;
 import com.braingroom.user.viewmodel.fragment.WinnersViewModel;
 
+import java.util.List;
+
 /**
  * Created by godara on 13/09/17.
  */
 
-public class FeaturedPostActivity extends BaseActivity {
+public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelper {
 
 
     FeaturedPostViewModel viewModel;
@@ -32,11 +40,13 @@ public class FeaturedPostActivity extends BaseActivity {
     WrapContentHeightViewPager postPager;
     PagerAdapter postPagerAdapter;
     TabLayout postTabLayout;
+    TextView postDate;
     private boolean setPostPagerAdapter = false;
     WrapContentHeightViewPager winnerPager;
     PagerAdapter winnerPagerAdapter;
     TabLayout winnerTabLayout;
     private boolean setWinnerPagerAdapter = false;
+
 
     public interface UiHelper {
         void setPostPagerAdapter();
@@ -49,6 +59,7 @@ public class FeaturedPostActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         if (getSupportActionBar() != null)
             getSupportActionBar().hide();
+        postDate = findViewById(R.id.post_date);
         postTabLayout = findViewById(R.id.post_tab_layout);
         postPager = findViewById(R.id.post_pager);
         winnerTabLayout = findViewById(R.id.winner_tab_layout);
@@ -57,6 +68,24 @@ public class FeaturedPostActivity extends BaseActivity {
             postPagerAdapter = new PagerAdapter(getSupportFragmentManager(), FeaturedPostFragment.class);
             postPager.setAdapter(postPagerAdapter);
             postTabLayout.setupWithViewPager(postPager, true);
+            postTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    int position = tab.getPosition();
+                    postDate.setText(getFeaturePostItemViewModel(position).smallDate);
+
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
         }
         winnerTabLayout = findViewById(R.id.winner_tab_layout);
         winnerPager = findViewById(R.id.winner_pager);
@@ -71,13 +100,31 @@ public class FeaturedPostActivity extends BaseActivity {
     @Override
     protected ViewModel createViewModel() {
 
-        viewModel = new FeaturedPostViewModel(getNavigator(), new UiHelper() {
+        viewModel = new FeaturedPostViewModel(getNavigator(), getHelperFactory(), getMessageHelper(), new UiHelper() {
             @Override
             public void setPostPagerAdapter() {
                 if (postTabLayout != null && postPager != null) {
                     postPagerAdapter = new PagerAdapter(getSupportFragmentManager(), FeaturedPostFragment.class);
                     postPager.setAdapter(postPagerAdapter);
                     postTabLayout.setupWithViewPager(postPager, true);
+                    postTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                        @Override
+                        public void onTabSelected(TabLayout.Tab tab) {
+                            int position = tab.getPosition();
+                            postDate.setText(getFeaturePostItemViewModel(position).smallDate);
+
+                        }
+
+                        @Override
+                        public void onTabUnselected(TabLayout.Tab tab) {
+
+                        }
+
+                        @Override
+                        public void onTabReselected(TabLayout.Tab tab) {
+
+                        }
+                    });
                 } else setPostPagerAdapter = true;
             }
 
@@ -89,12 +136,12 @@ public class FeaturedPostActivity extends BaseActivity {
                     winnerTabLayout.setupWithViewPager(winnerPager, true);
                 } else setWinnerPagerAdapter = true;
             }
-        });
+        }, this);
         return viewModel;
     }
 
-    public FeaturedPostItemViewModel getFeaturePostItemViewModel(int i) {
-        return viewModel.featuredPostItemViewModelList.get(i);
+    public ConnectFeedItemViewModel getFeaturePostItemViewModel(int i) {
+        return viewModel.connectFeedItemViewModelList.get(i);
     }
 
     public WinnersViewModel getWinnersViewModel(int i) {
@@ -130,7 +177,7 @@ public class FeaturedPostActivity extends BaseActivity {
         @Override
         public int getCount() {
             if (fragment == FeaturedPostFragment.class)
-                return viewModel.featuredPostItemViewModelList.size();
+                return viewModel.connectFeedItemViewModelList.size();
             else
                 return viewModel.winnersViewModelList.size();
         }
@@ -147,5 +194,81 @@ public class FeaturedPostActivity extends BaseActivity {
             registeredFragments.remove(position);
             super.destroyItem(container, position, object);
         }
+
     }
+
+
+    //Connect ui Helper
+    @Override
+    public void openCommentsFragment(String postId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, CommentFragment.newInstance(postId)).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void openReplyFragment(String postId, String commentId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, ReplyFragment.newInstance(postId, commentId)).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void openLikesFragment(String postId, String commentId, String replyId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
+        transaction.replace(R.id.comments_container, LikesFragment.newInstance(postId, commentId, replyId)).addToBackStack(null).commit();
+
+    }
+
+    @Override
+    public void openAcceptedUsersFragment(String postId) {
+
+    }
+
+    @Override
+    public void setFilterData(String keyword, String categoryId, String segmentId, String myGroupId, String allGroupId, String instituteId, String authorId, List<String> location) {
+
+    }
+
+    @Override
+    public void setSearchQuery(String searchQuery) {
+
+    }
+
+    @Override
+    public void openConnectPost() {
+
+    }
+
+    @Override
+    public void popFragment() {
+        popBackstack();
+    }
+
+    @Override
+    public void setCount(int notificationCount, int messageCount) {
+
+    }
+
+    @Override
+    public void retry() {
+
+    }
+
+    @Override
+    public void openFollowers() {
+
+    }
+
+    @Override
+    public void openFilter() {
+
+    }
+
+    @Override
+    public void openFollowing() {
+
+    }
+    //Connect Ui helper
 }

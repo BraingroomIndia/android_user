@@ -169,7 +169,7 @@ public class ClassListActivity extends BaseActivity {
                 popBackstack(tag);
             }
         };
-        viewModel = new ClassListViewModel1(getMessageHelper(), getNavigator(), getHelperFactory(),
+        viewModel = new ClassListViewModel1(getFirebaseAnalytics(),getGoogleTracker(),getMessageHelper(), getNavigator(), getHelperFactory(),
                 (FilterData) getIntentSerializable(Constants.classFilterData),
                 (HashMap<String, Integer>) getIntentSerializable(Constants.categoryFilterMap)
                 , (HashMap<String, Integer>) getIntentSerializable(Constants.segmentsFilterMap)

@@ -23,7 +23,7 @@ public class Signup1Fragment extends BaseFragment {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return ((SignupActivity)activity).getViewModel();
+        return ((SignupActivity) activity).getViewModel();
     }
 
     @Override

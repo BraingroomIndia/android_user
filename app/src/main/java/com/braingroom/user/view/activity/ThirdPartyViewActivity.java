@@ -217,7 +217,8 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
         transaction.setCustomAnimations(R.anim.bottom_in, R.anim.top_out);
         transaction.replace(R.id.comments_container, FollowingUserFragment.newInstance(userid)).addToBackStack(null).commit();
 
-*/    }
+*/
+    }
 
     @Override
     public void openFilter() {

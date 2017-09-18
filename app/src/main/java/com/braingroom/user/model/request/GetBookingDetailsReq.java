@@ -31,7 +31,7 @@ public class GetBookingDetailsReq {
         String levels;
 
         @SerializedName("txnid")
-        String txnId="";
+        String txnId = "";
 
         @SerializedName("user_id")
         String userId;

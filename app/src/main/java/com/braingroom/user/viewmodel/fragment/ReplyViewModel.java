@@ -32,12 +32,12 @@ public class ReplyViewModel extends ViewModel {
 
     public ReplyViewModel(final String postId, final String commentId, final HelperFactory helperFactory, final MessageHelper messageHelper, final Navigator navigator, final ConnectUiHelper uiHelper, final CommentFragment.UiHelper fragmentUiHelper) {
 
-        repliesVmObservable=apiService.getReplies(commentId).map(new Function<CommentViewReply, List<ViewModel>>() {
+        repliesVmObservable = apiService.getReplies(commentId).map(new Function<CommentViewReply, List<ViewModel>>() {
             @Override
             public List<ViewModel> apply(@NonNull CommentViewReply resp) throws Exception {
                 List<ViewModel> results = new ArrayList<>();
-                for (CommentViewReply.Snippet elem:resp.getData())
-                    results.add(new ReplyItemViewModel(postId,commentId,elem,navigator,uiHelper));
+                for (CommentViewReply.Snippet elem : resp.getData())
+                    results.add(new ReplyItemViewModel(postId, commentId, elem, navigator, uiHelper));
                 return results;
             }
         });
@@ -48,9 +48,9 @@ public class ReplyViewModel extends ViewModel {
             public void run() throws Exception {
                 if (!getLoggedIn()) {
 
-                    Bundle data =new Bundle();
+                    Bundle data = new Bundle();
                     data.putString("backStackActivity", ConnectHomeActivity.class.getSimpleName());
-                    messageHelper.showLoginRequireDialog("Please login before reply",data);
+                    messageHelper.showLoginRequireDialog("Please login before reply", data);
                     return;
                 }
 
@@ -89,8 +89,8 @@ public class ReplyViewModel extends ViewModel {
         };
 
 
-
     }
+
     public void initSubscription() {
         repliesVmObservable.subscribe(new Consumer<List<ViewModel>>() {
             @Override

@@ -67,7 +67,7 @@ public class ExploreActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new ExploreViewModel(getMessageHelper(), getNavigator(),getHelperFactory().createDialogHelper());
+        return new ExploreViewModel(getMessageHelper(), getNavigator(), getHelperFactory().createDialogHelper());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ExploreActivity extends BaseActivity {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                ((ExploreViewModel) vm).setNewAddress(place.getLatLng(),place.getName().toString());
+                ((ExploreViewModel) vm).setNewAddress(place.getLatLng(), place.getName().toString());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 // TODO: Handle the error.

@@ -15,6 +15,7 @@ public class ClassQueryFragment extends BaseFragment {
     public static ClassQueryFragment newInstance() {
         return new ClassQueryFragment();
     }
+
     @NonNull
     @Override
     protected ViewModel createViewModel() {

@@ -55,22 +55,21 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
     public final Action openConnect;
 
 
-
     public ClassDetailDemoPostViewModel(final Navigator navigator, final ConnectFilterData filterData) {
         openConnect = new Action() {
             @Override
             public void run() throws Exception {
                 Bundle data = new Bundle();
-                data.putSerializable("connectFilterData",filterData);
+                data.putSerializable("connectFilterData", filterData);
                 navigator.navigateActivity(ConnectHomeActivity.class, data);
 
             }
         };
 
-        apiService.getConnectFeed(filterData,0).subscribe(new Consumer<ConnectFeedResp>() {
+        apiService.getConnectFeed(filterData, 0).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ConnectFeedResp resp) throws Exception {
-                if (!resp.getData().isEmpty()){
+                if (!resp.getData().isEmpty()) {
                     ConnectFeedResp.Snippet data = resp.getData().get(0);
                     data.setVideo(getVideoId(data.getVideo()));
                     vendorImage.set(data.getVendorImage());
@@ -81,9 +80,8 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
                     description.set(data.getDescription());
                     numLikes.set(data.getNumLikes());
                     numComments.set(data.getNumComments());
-                    numAccepts.set(data.getNumAccepted()+"");
+                    numAccepts.set(data.getNumAccepted() + "");
                     videoThumb.set(!TextUtils.isEmpty(data.getImage()) ? data.getImage() : TextUtils.isEmpty(data.getVideo()) ? null : "http://img.youtube.com/vi/" + data.getVideo() + "/hqdefault.jpg");
-
 
 
                 }

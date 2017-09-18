@@ -18,10 +18,10 @@ import io.reactivex.subjects.PublishSubject;
 
 public class GroupDataViewModel extends CustomDialogViewModel {
 
-    public List<ViewModel> titleItems ;
+    public List<ViewModel> titleItems;
     public List<ViewModel> subtitleItems;
 
-    public Map<String,List<ViewModel>> dataMap = new HashMap<>();
+    public Map<String, List<ViewModel>> dataMap = new HashMap<>();
 
     PublishSubject<DataItemViewModel> titleSelectorSubject = PublishSubject.create();
     PublishSubject<IconTextItemViewModel> subtitleSelectorSubject = PublishSubject.create();
@@ -31,19 +31,19 @@ public class GroupDataViewModel extends CustomDialogViewModel {
 //    Map<Integer,List<IconTextItemViewModel>>
 
     public GroupDataViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
-          apiService.getCategoryTree().subscribe(new Consumer<CategoryTreeResp>() {
-              @Override
-              public void accept(@io.reactivex.annotations.NonNull CategoryTreeResp categoryTreeResp) throws Exception {
-                  for (CategoryTreeResp.Snippet snippet : categoryTreeResp.getData()) {
+        apiService.getCategoryTree().subscribe(new Consumer<CategoryTreeResp>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull CategoryTreeResp categoryTreeResp) throws Exception {
+                for (CategoryTreeResp.Snippet snippet : categoryTreeResp.getData()) {
 //                      dataMap.put(snippet.getCategory())
-                  }
-              }
-          }, new Consumer<Throwable>() {
-              @Override
-              public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
 
-              }
-          });
+            }
+        });
 //        titleItems = getDefaultTitleVm().mergeWith(getTitleApiObservable()).publish();
 //        initSubtitleObservable();
 //        fetchAllItems();

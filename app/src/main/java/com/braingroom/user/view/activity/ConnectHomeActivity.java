@@ -209,7 +209,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
 
         };
-        return new ConnectHomeViewModel(connectFilterData, getMessageHelper(), getNavigator(), getHelperFactory(), this);
+        return new ConnectHomeViewModel(getFirebaseAnalytics(),getGoogleTracker(),connectFilterData, getMessageHelper(), getNavigator(), getHelperFactory(), this);
     }
 
     @Override

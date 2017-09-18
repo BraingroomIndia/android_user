@@ -59,11 +59,11 @@ public class ChangePasswordViewModel extends ViewModel {
         snippet.setUuid(pref.getString(Constants.UUID, ""));
         snippet.setNewPassword(newPassword.get());
         Observable<ChangePasswordResp> respObservable = apiService.changePassword(snippet);
-                respObservable.subscribe(new Consumer<ChangePasswordResp>() {
+        respObservable.subscribe(new Consumer<ChangePasswordResp>() {
 
             @Override
             public void accept(@io.reactivex.annotations.NonNull ChangePasswordResp changePasswordResp) throws Exception {
-                if (changePasswordResp.getData()!=null) {
+                if (changePasswordResp.getData() != null) {
                     oldPassword.set("");
                     newPassword.set("");
                     confirmPassword.set("");

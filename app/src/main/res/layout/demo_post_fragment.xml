@@ -170,25 +170,25 @@
             app:font='@{@string/robotoRegular}' />
 
 
- <!--       <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="@dimen/margin_small"
-            android:background="@drawable/bottom_line_drawable"
-            android:paddingBottom="@dimen/margin_small">
+        <!--       <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="30dp"
+                   android:layout_margin="@dimen/margin_small"
+                   android:background="@drawable/bottom_line_drawable"
+                   android:paddingBottom="@dimen/margin_small">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:orientation="horizontal">
-
-
-            </LinearLayout>
+                   <LinearLayout
+                       android:layout_width="wrap_content"
+                       android:layout_height="match_parent"
+                       android:layout_alignParentRight="true"
+                       android:layout_alignParentEnd="true"
+                       android:orientation="horizontal">
 
 
-        </RelativeLayout>-->
+                   </LinearLayout>
+
+
+               </RelativeLayout>-->
 
     </LinearLayout>
 </layout>

@@ -112,6 +112,14 @@ public class ConnectPostViewModel extends ViewModel {
         imageUploadVm = new PostApiImageUploadViewModel(messageHelper, navigator, R.drawable.image_placeholder, null);
         videoUploadVm = new PostApiVideoUploadViewModel(messageHelper, navigator, R.drawable.video_placeholder, null);
 
+        if (postType1.equalsIgnoreCase("action_tips_tricks"))
+            showKNN();
+        if (postType1.equalsIgnoreCase("action_buy_sell"))
+            showBNS();
+        if (postType1.equalsIgnoreCase("action_find_partners"))
+            showAP();
+        if (postType1.equalsIgnoreCase("action_discuss_n_decide"))
+            showDND();
 
         //request
         buyAndSellSnippet = new BuyAndSellPostReq.Snippet();

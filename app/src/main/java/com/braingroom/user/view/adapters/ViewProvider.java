@@ -7,5 +7,6 @@ import com.braingroom.user.viewmodel.ViewModel;
 
 
 public interface ViewProvider {
-    @LayoutRes int getView(ViewModel vm);
+    @LayoutRes
+    int getView(ViewModel vm);
 }

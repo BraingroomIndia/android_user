@@ -77,13 +77,13 @@ public class ProfileUpdateReq {
         public String description = "";
 
         @SerializedName("gender")
-        public String gender="";
+        public String gender = "";
 
         @SerializedName("dob")
         public String dob = "";
 
         @SerializedName("profile_image")
-        public String profileImage="";
+        public String profileImage = "";
 
         @SerializedName("primary_verification_media1")
         public String primaryVerificationMedia1 = "";

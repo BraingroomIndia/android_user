@@ -43,7 +43,7 @@
             app:layoutManager="android.support.v7.widget.GridLayoutManager"
             app:spanCount="2"
             bind:view_provider="@{@layout/icon_text_cardview}"
-            tools:listitem="@layout/icon_text_cardview"/>
+            tools:listitem="@layout/icon_text_cardview" />
 
     </LinearLayout>
 

@@ -11,7 +11,7 @@ public class SearchActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new SearchViewModel(getMessageHelper(),getNavigator());
+        return new SearchViewModel(getMessageHelper(), getNavigator());
     }
 
     @Override

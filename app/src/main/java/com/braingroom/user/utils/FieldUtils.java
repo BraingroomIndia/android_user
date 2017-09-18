@@ -23,7 +23,7 @@ public class FieldUtils {
                     @Override
                     public void onPropertyChanged(android.databinding.Observable observable, int i) {
                         e.onNext(field.get());
-                        Log.d("onPropertyChanged", "cancel: " +field.toString());
+                        Log.d("onPropertyChanged", "cancel: " + field.toString());
                     }
                 };
                 field.addOnPropertyChangedCallback(callback);
@@ -31,7 +31,7 @@ public class FieldUtils {
                     @Override
                     public void cancel() throws Exception {
                         field.removeOnPropertyChangedCallback(callback);
-                        Log.d("removeOnProperty", "cancel: " +field.toString());
+                        Log.d("removeOnProperty", "cancel: " + field.toString());
                     }
                 });
             }
@@ -40,6 +40,7 @@ public class FieldUtils {
 
     /**
      * A convenient wrapper for {@code ReadOnlyField#create(Observable)}
+     *
      * @return DataBinding field created from the specified Observable
      */
     @NonNull

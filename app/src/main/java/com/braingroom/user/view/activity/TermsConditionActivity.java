@@ -10,7 +10,7 @@ import com.braingroom.user.R;
 
 public class TermsConditionActivity extends AppCompatActivity {
     TextView textView;
-    String termsCondition="<div style=\"padding:20px;\"><h2 class=\"main\">Description of Service</h2>\n" +
+    String termsCondition = "<div style=\"padding:20px;\"><h2 class=\"main\">Description of Service</h2>\n" +
             "        <h4 class=\"text-primary\">Class Type (Fixed/Flexible) and Booking related:</h4>\n" +
             "\t\t\n" +
             "       \t<li>Listing classes in braingroom.com is free. Anyone can browse, choose, book and pay for classes through braingroom.com</li>\n" +
@@ -153,7 +153,7 @@ public class TermsConditionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Spanned spanned = Html.fromHtml(termsCondition);
         setContentView(R.layout.activity_terms_condtion);
-        textView= (TextView) findViewById(R.id.terms);
+        textView = (TextView) findViewById(R.id.terms);
         textView.setText(spanned);
     }
 }

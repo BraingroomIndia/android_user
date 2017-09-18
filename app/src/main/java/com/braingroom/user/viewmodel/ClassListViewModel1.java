@@ -34,6 +34,7 @@ import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
 import com.braingroom.user.viewmodel.fragment.SearchSelectListViewModel;
+import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
@@ -120,7 +121,7 @@ public class ClassListViewModel1 extends ViewModel {
     private boolean askedForLocality = false;
 
 
-    public ClassListViewModel1(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
+    public ClassListViewModel1(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @NonNull final FilterData filterData1,
                                final HashMap<String, Integer> categoryMap,
                                final HashMap<String, Integer> segmentsMap,
@@ -135,6 +136,8 @@ public class ClassListViewModel1 extends ViewModel {
                                @NonNull final FragmentHelper fragmentHelper) {
 
 
+        this.mFirebaseAnalytics = mFirebaseAnalytics;
+        this.mTracker = mTracker;
         localityName = pref.getString(Constants.LOCALITY_NAME, "");
         localityId = pref.getString(Constants.LOCALITY_ID, "");
         isLocalitySelected = !TextUtils.isEmpty(localityId);
@@ -369,34 +372,53 @@ public class ClassListViewModel1 extends ViewModel {
                 nextPage = resp.getNextPage();
                 Bundle bundle = new Bundle();
                 // FireBase Tracking
-                if (currentPage < 2) {
+                String screenName = "";
+                if (currentPage < 2 && !isCatalogue) {
+
+
                     if (!categoryFilterMap.isEmpty()) {
+                        String temp = categoryFilterMap.keySet().iterator().next();
+                        screenName = screenName + temp;
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Normal ClassList");
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, categoryFilterMap.keySet().iterator().next());
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, temp);
                         if (!classTypeFilterMap.isEmpty()) {
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, classTypeFilterMap.keySet().iterator().next());
+                            temp = classTypeFilterMap.keySet().iterator().next();
+                            screenName = screenName + temp;
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, temp);
                         }
                         if (!localityFilterMap.isEmpty()) {
+                            temp = localityFilterMap.keySet().iterator().next();
+                            screenName = screenName + temp;
                             bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, localityFilterMap.values().iterator().next() + "");
-                            bundle.putString(FirebaseAnalytics.Param.LOCATION, localityFilterMap.keySet().iterator().next());
+                            bundle.putString(FirebaseAnalytics.Param.LOCATION, temp);
                         }
                     } else if (!communityFilterMap.isEmpty()) {
+                        String temp = "Community ClassList" + communityFilterMap.keySet().iterator().next();
+                        screenName = screenName + temp;
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Community ClassList");
-                        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, communityFilterMap.keySet().iterator().next());
+                        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, temp);
                         if (!classTypeFilterMap.isEmpty()) {
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, classTypeFilterMap.keySet().iterator().next());
+                            temp = classTypeFilterMap.keySet().iterator().next();
+                            screenName = screenName + temp;
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, temp);
                         }
                         if (!localityFilterMap.isEmpty()) {
+                            temp = localityFilterMap.keySet().iterator().next();
+                            screenName = screenName + temp;
                             bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, localityFilterMap.values().iterator().next() + "");
-                            bundle.putString(FirebaseAnalytics.Param.LOCATION, localityFilterMap.keySet().iterator().next());
+                            bundle.putString(FirebaseAnalytics.Param.LOCATION, temp);
                         }
 
-                    } else if (isCatalogue) {
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Catalogue ClassList");
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, filterData.getCatalog());
+                    } else if (isCatalogue && currentPage < 2) {
+                        String temp = "Catalogue Listing";
+                        screenName = screenName + temp + filterData.getCatalog();
+
                     }
                     if (!bundle.isEmpty())
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, bundle);
+                    if (!isEmpty(screenName)) {
+                        setScreenName(screenName);
+                    }
 
                 }
                 // FireBase Tracking
@@ -540,10 +562,10 @@ public class ClassListViewModel1 extends ViewModel {
         classes.subscribe();
         //messageHelper.showAcceptDismissInfo();
 
-        FieldUtils.toObservable(callAgain).debounce(1, TimeUnit.SECONDS).filter(new Predicate<Integer>() {
+     /*   FieldUtils.toObservable(callAgain).debounce(1, TimeUnit.SECONDS).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return false /*!(isLocalitySelected || askedForLocality)*/;
+                return false *//*!(isLocalitySelected || askedForLocality)*//*;
             }
         }).subscribe(new Consumer<Integer>() {
             @Override
@@ -557,7 +579,7 @@ public class ClassListViewModel1 extends ViewModel {
                 throwable.printStackTrace();
             }
         });
-
+*/
     }
 
 

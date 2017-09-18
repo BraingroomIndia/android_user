@@ -18,13 +18,14 @@ public class QuoteFormFragment extends BaseFragment {
 
     public static String catalogueId;
     public static String classId;
-    public static QuoteFormFragment newInstance(String catId,String classid) {
-        catalogueId=catId;
+
+    public static QuoteFormFragment newInstance(String catId, String classid) {
+        catalogueId = catId;
         classId = classid;
         return new QuoteFormFragment();
     }
 
-    public interface UiHelper{
+    public interface UiHelper {
         void popFragment();
     }
 
@@ -40,13 +41,13 @@ public class QuoteFormFragment extends BaseFragment {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new QuoteFormViewModel(activity.getMessageHelper() ,new UiHelper(){
+        return new QuoteFormViewModel(activity.getMessageHelper(), new UiHelper() {
             @Override
-            public void popFragment(){
+            public void popFragment() {
                 getActivity().onBackPressed();
 
             }
-        },activity.getHelperFactory(),catalogueId,classId);
+        }, activity.getHelperFactory(), catalogueId, classId);
     }
 
     @Override

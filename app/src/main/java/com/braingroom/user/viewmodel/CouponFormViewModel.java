@@ -119,7 +119,7 @@ public class CouponFormViewModel extends ViewModel {
                 try {
                     removeNewFormData(vm);
                 } catch (Exception e) {
-                   // e.printStackTrace();
+                    // e.printStackTrace();
                 }
             }
         }, formDataList.size()));

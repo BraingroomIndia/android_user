@@ -34,6 +34,7 @@ import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -130,8 +131,11 @@ public class ClassDetailViewModel extends ViewModel {
 
     public final MyConsumer<String> expandAction, collapseAction;
 
-    public ClassDetailViewModel(@NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
+    public ClassDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
                                 @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId) {
+
+        this.mFirebaseAnalytics = mFirebaseAnalytics;
+        this.mTracker = mTracker;
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -371,6 +375,7 @@ public class ClassDetailViewModel extends ViewModel {
                             }
                         addresses.connect();
 
+
                         if (classData.getVideoId() != null && !classData.getVideoId().equalsIgnoreCase(defaultLink)) {//Edited By Vikas Godara
 
                             if (classData.getVideoId().contains("www.youtube.com/embed")) {
@@ -390,6 +395,7 @@ public class ClassDetailViewModel extends ViewModel {
                             if (mGoogleMap != null && markerList.size() == 0)
                                 populateMarkers(locationList);
                         uiHelper.invalidateMenu();
+                        setScreenName(classData.getClassTopic());
                         return Observable.empty();
 
                     }

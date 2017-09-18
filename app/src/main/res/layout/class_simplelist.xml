@@ -19,25 +19,26 @@
         android:layout_height="match_parent">
 
 
-    <RelativeLayout
+        <RelativeLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/class_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            bind:divider_decoration='@{"line_divider"}'
-            bind:items="@{vm.result}"
-            bind:layout_vertical="@{true}"
-            bind:paginate="@{true}"
-            bind:view_provider="@{@layout/item_class_row_listing}"
-            bind:viewmodel="@{vm}"
-            tools:context="com.braingroom.user.view.activity.ClassSimpleListActivity" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/class_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                bind:divider_decoration='@{"line_divider"}'
+                bind:items="@{vm.result}"
+                bind:layout_vertical="@{true}"
+                bind:paginate="@{true}"
+                bind:view_provider="@{@layout/item_class_row_listing}"
+                bind:viewmodel="@{vm}"
+                tools:context="com.braingroom.user.view.activity.ClassSimpleListActivity" />
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+
         <include
             layout="@layout/content_internet_connectivity"
             android:layout_width="match_parent"

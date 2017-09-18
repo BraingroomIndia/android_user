@@ -17,9 +17,12 @@ import android.util.Log;
 
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.HomeActivity;
+import com.braingroom.user.view.activity.MessageActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
+import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -31,9 +34,16 @@ import java.util.Date;
 public class FCMService extends FirebaseMessagingService {
 
     public static final String TAG = "FCMService";
+    protected Tracker mTracker;
+    protected FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        if (mTracker == null)
+            mTracker = UserApplication.getInstance().getDefaultTracker();
+        if (mFirebaseAnalytics == null)
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         UserApplication.getInstance().newNotificationBus.onNext(true);
 
@@ -80,7 +90,10 @@ public class FCMService extends FirebaseMessagingService {
             data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
 
         } else if (messageSenderId != null) {
-            intent = new Intent(this, MessagesThreadActivity.class);
+            if ("0".equalsIgnoreCase(messageSenderId))
+                intent = new Intent(this, MessageActivity.class);
+            else
+                intent = new Intent(this, MessagesThreadActivity.class);
             data.putString("sender_id", messageSenderId);
             data.putString("sender_name", messageSenderName);
         } else {

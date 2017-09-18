@@ -59,7 +59,7 @@ public class ClassSimpleListActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new ClassSimpleListViewModel(getMessageHelper(), getNavigator(), getIntentString("listType"),null);
+        return new ClassSimpleListViewModel(getMessageHelper(), getNavigator(), getIntentString("listType"), null);
     }
 
     @Override

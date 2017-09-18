@@ -31,6 +31,8 @@ public interface MessageHelper {
 
     void showDismissInfo(@Nullable String title, @NonNull String content);
 
+    void showDismissInfo(@Nullable String title,@NonNull String buttonText , @NonNull String content);
+
     void showAcceptableInfo(@Nullable String title, @NonNull String content, @NonNull MaterialDialog.SingleButtonCallback positiveCallback);
 
     void showAcceptableInfo(@Nullable String title, @NonNull String content, String postiveText, @NonNull MaterialDialog.SingleButtonCallback positiveCallback);

@@ -46,7 +46,7 @@ public class HelperFactory {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 DatePicker datePicker = (DatePicker) dialog.getCustomView().findViewById(R.id.datePicker);
-                                int month= datePicker.getMonth()+1;
+                                int month = datePicker.getMonth() + 1;
                                 ((DatePickerViewModel) viewModel).date.set(datePicker.getYear() + "-" + month + "-" + datePicker.getDayOfMonth());
                                 ((DatePickerViewModel) viewModel).handleOkClick();
                             }
@@ -82,7 +82,7 @@ public class HelperFactory {
 
 
             @Override
-            public void showSingleSelectList(String title, List<String> items, final Integer[] selectedItems,String positiveText) {
+            public void showSingleSelectList(String title, List<String> items, final Integer[] selectedItems, String positiveText) {
                 new MaterialDialog.Builder(activity)
                         .title(title)
                         .items(items)

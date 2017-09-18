@@ -11,6 +11,7 @@ import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.NotificationCountResp;
+import com.braingroom.user.model.response.PrimeMessageResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
@@ -21,6 +22,8 @@ import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.FeaturedPostActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
+import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,6 +65,8 @@ public class ConnectHomeViewModel extends ViewModel {
     public final Action onSearchClicked, onFilterClicked, onPostClicked, onPostOftheDayClicked, onPrimeContentClicked;
 
     public final ConnectUiHelper uiHelper;
+
+    private String primeTimeMessage;
 //    public final ConnectFilterData filterData;
 
     @Getter
@@ -78,9 +83,10 @@ public class ConnectHomeViewModel extends ViewModel {
         }
     };
 
-    public ConnectHomeViewModel(@NonNull final ConnectFilterData connectFilterData,
+    public ConnectHomeViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final ConnectFilterData connectFilterData,
                                 @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
                                 @NonNull final HelperFactory helperFactory, @NonNull final ConnectUiHelper uiHelper) {
+        this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.filterData = connectFilterData;
         this.loggedIn = new ObservableBoolean(getLoggedIn());
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
@@ -112,6 +118,8 @@ public class ConnectHomeViewModel extends ViewModel {
             public List<ViewModel> apply(ConnectFeedResp resp) throws Exception {
                 currentPage = nextPage;
                 nextPage = resp.getNextPage();
+                if (currentPage < 1)
+                    setScreenName("Connect Home Page " + filterData.getMinorCateg());
                 if (resp.getData().size() == 0 && nextPage < 1) {
                     nonReactiveItems.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
                 } else {
@@ -170,6 +178,12 @@ public class ConnectHomeViewModel extends ViewModel {
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
             public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                apiService.getPrimeTimeMessage().subscribe(new Consumer<PrimeMessageResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull PrimeMessageResp resp) throws Exception {
+                        primeTimeMessage = resp.getData().get(0).getValue();
+                    }
+                });
                 return apiService.getUnreadMessageCount();
             }
         }).subscribe(new Consumer<NotificationCountResp>() {
@@ -253,6 +267,18 @@ public class ConnectHomeViewModel extends ViewModel {
         onPrimeContentClicked = new Action() {
             @Override
             public void run() throws Exception {
+                if (isEmpty(primeTimeMessage)) {
+                    messageHelper.showProgressDialog("Wait", "loading");
+                    apiService.getPrimeTimeMessage().subscribe(new Consumer<PrimeMessageResp>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull PrimeMessageResp resp) throws Exception {
+                            primeTimeMessage = resp.getData().get(0).getValue();
+                            messageHelper.showDismissInfo("Prime Time", "Close", primeTimeMessage);
+                        }
+                    });
+                } else
+                    messageHelper.showDismissInfo("Prime Time", "Close", primeTimeMessage);
+
 
             }
         };
@@ -294,7 +320,6 @@ public class ConnectHomeViewModel extends ViewModel {
     @Override
     public void paginate() {
         if (nextPage > -1 && !paginationInProgress) {
-            nextPage = nextPage + 1;
             callAgain.set(callAgain.get() + 1);
 
         }

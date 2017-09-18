@@ -34,7 +34,7 @@ public class ShowcaseGiftcardListViewModel extends ViewModel {
                     public List<ViewModel> apply(List<GiftcardResp.DataSnippet> resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         for (final GiftcardResp.DataSnippet elem : resp) {
-                            results.add(new GiftcardItemViewModel(navigator,elem,giftcardType));
+                            results.add(new GiftcardItemViewModel(navigator, elem, giftcardType));
                         }
                         return results;
                     }

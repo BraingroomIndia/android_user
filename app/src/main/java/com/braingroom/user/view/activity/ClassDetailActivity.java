@@ -302,7 +302,7 @@ public class ClassDetailActivity extends BaseActivity {
 
 
         };
-        return new ClassDetailViewModel(getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
+        return new ClassDetailViewModel(getFirebaseAnalytics(),getGoogleTracker(),getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
                 getIntentString("origin"), getIntentString("catalogueId"));
     }
 

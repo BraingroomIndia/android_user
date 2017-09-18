@@ -17,12 +17,11 @@ public class Constants {
     public static final String LOCALITY_NAME = "locality_name";
 
 
-
     //booking Types
-    public static final int normalBooking =1;
-    public static final int giftClass =2;
-    public static final int giftCoupon =3;
-    public static final int catalogBooking =4;
+    public static final int normalBooking = 1;
+    public static final int giftClass = 2;
+    public static final int giftCoupon = 3;
+    public static final int catalogBooking = 4;
 
     //Bundle keys
 

@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import com.braingroom.user.model.response.CatalogueGroupResp;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,8 +20,10 @@ public class CatalogueHomeViewModel extends ViewModel {
 
     public final Observable<List<ViewModel>> feedItems;
 
-    public CatalogueHomeViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
+    public CatalogueHomeViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator) {
 
+        this.mFirebaseAnalytics = mFirebaseAnalytics;
+        this.mTracker = mTracker;
         feedItems = getLoadingItems(2).mergeWith(apiService.getCatalogueGroups().map(new Function<CatalogueGroupResp, List<ViewModel>>() {
             @Override
             public List<ViewModel> apply(CatalogueGroupResp resp) throws Exception {

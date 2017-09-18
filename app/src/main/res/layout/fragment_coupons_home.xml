@@ -52,11 +52,11 @@
                 android:checked="@{vm.giftByCorporate}"
                 android:text="Corporate" />
 
-<!--            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{vm.giftByNgo}"
-                android:text="NGO" />-->
+            <!--            <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{vm.giftByNgo}"
+                            android:text="NGO" />-->
 
         </RadioGroup>
 

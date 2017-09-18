@@ -12,7 +12,7 @@ public class CatalogueHomeActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new CatalogueHomeViewModel(getMessageHelper(), getNavigator());
+        return new CatalogueHomeViewModel(getFirebaseAnalytics(),getGoogleTracker(),getMessageHelper(), getNavigator());
     }
 
     @Override

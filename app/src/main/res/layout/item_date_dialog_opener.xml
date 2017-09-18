@@ -7,11 +7,13 @@
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.DatePickerViewModel" />
+
         <variable
             name="editable"
             type="boolean" />
 
     </data>
+
     <RelativeLayout
         android:id="@+id/input_layout_date_picker"
         android:layout_width="150dp"

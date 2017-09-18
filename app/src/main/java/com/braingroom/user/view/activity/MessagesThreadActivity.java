@@ -37,7 +37,7 @@ public class MessagesThreadActivity extends BaseActivity {
         return new MessagesThreadViewModel(senserId, getMessageHelper(), getNavigator(), new UiHelper() {
             @Override
             public void scrollToEnd() {
-                recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount()-1 );
+                recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
             }
 
             @Override

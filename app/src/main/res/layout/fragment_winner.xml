@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_18sdp"
-            android:layout_marginTop="@dimen/_18sdp"
             app:cardCornerRadius="@dimen/_6sdp"
             app:cardElevation="@dimen/_4sdp">
 

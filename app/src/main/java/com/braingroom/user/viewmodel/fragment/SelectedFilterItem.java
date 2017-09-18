@@ -1,12 +1,10 @@
 package com.braingroom.user.viewmodel.fragment;
 
 
-
 import android.databinding.ObservableField;
 
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.viewmodel.ViewModel;
-
 
 
 /**
@@ -18,7 +16,7 @@ public class SelectedFilterItem extends ViewModel {
     public final String selectedItemId;
     public final MyConsumer<SelectedFilterItem> onRemoveClicked;
 
-    public SelectedFilterItem(String selectedItemname , String selectedItemId,
+    public SelectedFilterItem(String selectedItemname, String selectedItemId,
                               MyConsumer<SelectedFilterItem> onRemoveClicked) {
         this.selectedItemname.set(selectedItemname);
         this.selectedItemId = selectedItemId;

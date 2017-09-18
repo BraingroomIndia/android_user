@@ -132,6 +132,7 @@ public class FileUtils {
 
         return extension;
     }
+
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.

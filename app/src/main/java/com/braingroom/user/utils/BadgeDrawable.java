@@ -87,10 +87,10 @@ public class BadgeDrawable extends Drawable {
     Sets the count (i.e notifications) to display.
      */
     public void setCount(int count) {
-        mCount = count+"";
+        mCount = count + "";
 
         // Only draw a badge if there are notifications.
-        mWillDraw = count!=0;
+        mWillDraw = count != 0;
         invalidateSelf();
     }
 

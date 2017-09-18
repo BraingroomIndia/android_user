@@ -30,7 +30,6 @@ public class ClassLevelData implements Serializable {
     private List<ClassGroupData> groups;
 
 
-
     public String getLevelId() {
         return levelId;
     }

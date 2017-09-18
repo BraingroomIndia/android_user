@@ -40,6 +40,17 @@
                     android:textSize="30dp"
                     app:font='@{@string/robotoBoldItalic}' />
 
+                <TextView
+                    android:id="@+id/post_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_med"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="14dp"
+                    app:font='@{@string/robotoBoldItalic}'
+                    tools:text="14 Sept" />
+
                 <android.support.design.widget.TabLayout
                     android:id="@+id/post_tab_layout"
                     android:layout_width="match_parent"
@@ -53,7 +64,7 @@
                     android:id="@+id/post_pager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-2dp"
+                    android:layout_marginTop="@dimen/margin_small_neg"
                     tools:layout="@layout/fragment_featured_post" />
 
 
@@ -63,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="@dimen/margin_med"
-                    android:text="Weekly Top Perform"
+                    android:text="Weekly Top Performer"
                     android:textColor="@color/colorTextDark"
                     android:textSize="30dp"
                     app:font='@{@string/robotoBoldItalic}' />
@@ -86,6 +97,13 @@
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/comments_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
 
         <include
             layout="@layout/content_internet_connectivity"

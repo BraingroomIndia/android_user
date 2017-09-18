@@ -14,7 +14,7 @@ public class ChangePasswordActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new ChangePasswordViewModel(getMessageHelper(),getNavigator());
+        return new ChangePasswordViewModel(getMessageHelper(), getNavigator());
     }
 
     @Override

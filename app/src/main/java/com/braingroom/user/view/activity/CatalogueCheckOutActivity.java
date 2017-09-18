@@ -31,7 +31,7 @@ public class CatalogueCheckOutActivity extends BaseActivity implements PaymentRe
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new CatalogueCheckOutViewModel(getNavigator(), getMessageHelper(), new UiHelper() {
+        return new CatalogueCheckOutViewModel(getFirebaseAnalytics(),getGoogleTracker(),getNavigator(), getMessageHelper(), new UiHelper() {
             @Override
             public void startRazorpayPayment(JSONObject options) {
                 final Activity activity = CatalogueCheckOutActivity.this;

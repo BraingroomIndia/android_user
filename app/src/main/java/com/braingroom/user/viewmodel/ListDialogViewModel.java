@@ -32,7 +32,7 @@ public class ListDialogViewModel extends DialogViewModel {
     Consumer<List<String>> resultConsumer;
     private String positiveText;
 
-    public ListDialogViewModel(@NonNull final DialogHelper dialogHelper, final String title, @NonNull final MessageHelper messageHelper, Observable<ListDialogData> sourceObservable, final boolean isMultiSelect,@Nullable Consumer<List<String>> resultConsumer) {
+    public ListDialogViewModel(@NonNull final DialogHelper dialogHelper, final String title, @NonNull final MessageHelper messageHelper, Observable<ListDialogData> sourceObservable, final boolean isMultiSelect, @Nullable Consumer<List<String>> resultConsumer) {
         super(dialogHelper, title);
         this.messageHelper = messageHelper;
         selectedItemsText.set("select filter values");
@@ -53,7 +53,7 @@ public class ListDialogViewModel extends DialogViewModel {
                 if (isMultiSelect)
                     dialogHelper.showMultiselectList(title, listItems, selectedIndexes.toArray(new Integer[0]));
                 else
-                    dialogHelper.showSingleSelectList(title, listItems, selectedIndexes.toArray(new Integer[0]),positiveText!=null?positiveText:"Done");
+                    dialogHelper.showSingleSelectList(title, listItems, selectedIndexes.toArray(new Integer[0]), positiveText != null ? positiveText : "Done");
             }
         }).doOnError(new Consumer<Throwable>() {
             @Override
@@ -87,7 +87,7 @@ public class ListDialogViewModel extends DialogViewModel {
             if (resultConsumer != null)
                 resultConsumer.accept(getSelectedIds());
         } catch (Exception e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
 //        setSelectedItemsText();
     }

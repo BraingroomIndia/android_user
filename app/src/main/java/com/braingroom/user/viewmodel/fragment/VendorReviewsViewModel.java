@@ -41,9 +41,10 @@ public class VendorReviewsViewModel extends ViewModel {
             }
         });
     }
+
     @Override
-    public void retry(){
-        callAgain.set(callAgain.get()+1);
+    public void retry() {
+        callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
     }
 

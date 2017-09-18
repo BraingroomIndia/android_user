@@ -14,7 +14,7 @@ import com.braingroom.user.viewmodel.fragment.LikesViewModel;
 
 public class LikesFragment extends BaseFragment {
 
-    public static LikesFragment newInstance(String postId,String commentId,String replyId) {
+    public static LikesFragment newInstance(String postId, String commentId, String replyId) {
         Bundle bundle = new Bundle();
         bundle.putString("postId", postId);
         bundle.putString("commentId", commentId);
@@ -31,7 +31,7 @@ public class LikesFragment extends BaseFragment {
         String postId = getStringArguments("postId");
         String commentId = getStringArguments("commentId");
         String replyId = getStringArguments("replyId");
-        return new LikesViewModel(postId,commentId,replyId, ((ConnectUiHelper) activity),activity.getNavigator());
+        return new LikesViewModel(postId, commentId, replyId, ((ConnectUiHelper) activity), activity.getNavigator());
     }
 
     @Override

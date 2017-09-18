@@ -1010,4 +1010,8 @@ public class DataflowService {
         snippetList.add(snippet);
         return Observable.just(new WinnerResp(snippetList)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<PrimeMessageResp> getPrimeTimeMessage() {
+        return api.getPrimeMessage().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
 }

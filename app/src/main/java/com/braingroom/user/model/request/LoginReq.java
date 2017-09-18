@@ -19,13 +19,13 @@ public class LoginReq {
     @Data
     public static class Snippet {
         String email;
-        String password="";
+        String password = "";
         @SerializedName("social_network_id")
         String socialId = "";
-        String latitude="";
-        String longitude="";
+        String latitude = "";
+        String longitude = "";
         @SerializedName("reg_id")
-        String regId="";
+        String regId = "";
     }
 
 }

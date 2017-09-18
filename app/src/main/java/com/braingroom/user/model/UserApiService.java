@@ -310,5 +310,8 @@ public interface UserApiService {
     @POST("contactTutor")
     Observable<ContactTutorResp> contactTutor(@Body ContactTutorReq req);
 
+    @POST("getPrimeMessage")
+    Observable<PrimeMessageResp> getPrimeMessage();
+
 
 }

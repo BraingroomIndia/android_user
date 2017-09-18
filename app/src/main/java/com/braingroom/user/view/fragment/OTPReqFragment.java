@@ -24,7 +24,7 @@ public class OTPReqFragment extends BaseFragment {
     static SignUpResp.Snippet data;
 
     public static OTPReqFragment newInstance(SignUpResp.Snippet snippet) {
-        data=snippet;
+        data = snippet;
         return new OTPReqFragment();
     }
 
@@ -59,7 +59,7 @@ public class OTPReqFragment extends BaseFragment {
                                     vm.apiService.updateProfile(new ProfileUpdateReq(snippet)).subscribe(new Consumer<CommonIdResp>() {
                                         @Override
                                         public void accept(@io.reactivex.annotations.NonNull CommonIdResp commonIdResp) throws Exception {
-                                          activity.getMessageHelper().dismissActiveProgress();
+                                            activity.getMessageHelper().dismissActiveProgress();
                                             try {
                                                 ((OTPViewModel) vm).requestOTP(mobile);
                                             } catch (Exception e) {

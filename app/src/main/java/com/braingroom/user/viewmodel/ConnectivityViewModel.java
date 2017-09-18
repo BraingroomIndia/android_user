@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
+
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -25,19 +26,19 @@ public class ConnectivityViewModel extends ViewModel {
     @Override
     public void onResume() {
         internetDisposable = UserApplication.getInstance().getInternetStatusBus().subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean isConnectedToInternet) {
-                        if (!isConnectedToInternet) {
-                            try {
-                               isConnected.set(false);
-                            } catch (Exception e) {
-                                //e.printStackTrace();
-                            }
-                        }
-
-                        Log.d("Connectivity", "accept: " + isConnectedToInternet);
+            @Override
+            public void accept(Boolean isConnectedToInternet) {
+                if (!isConnectedToInternet) {
+                    try {
+                        isConnected.set(false);
+                    } catch (Exception e) {
+                        //e.printStackTrace();
                     }
-                });
+                }
+
+                Log.d("Connectivity", "accept: " + isConnectedToInternet);
+            }
+        });
     }
 
     @Override

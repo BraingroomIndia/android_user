@@ -19,6 +19,8 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CatalogueCheckOutActivity;
 import com.braingroom.user.view.activity.PaySuccessActivity;
+import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,8 +69,10 @@ public class CatalogueCheckOutViewModel extends ViewModel {
     private final CatalogueCheckOutActivity.UiHelper uiHelper;
 
 
-    public CatalogueCheckOutViewModel(@NonNull final Navigator navigator, @NonNull final MessageHelper messageHelper, @NonNull final CatalogueCheckOutActivity.UiHelper uiHelper, @NonNull String quoteId) {
+    public CatalogueCheckOutViewModel(@NonNull FirebaseAnalytics mFirebaseAnalytics, @NonNull Tracker mTracker, @NonNull final Navigator navigator, @NonNull final MessageHelper messageHelper, @NonNull final CatalogueCheckOutActivity.UiHelper uiHelper, @NonNull String quoteId) {
         messageHelper.showProgressDialog("Wait", "loading");
+        this.mFirebaseAnalytics = mFirebaseAnalytics;
+        this.mTracker = mTracker;
         this.navigator = navigator;
         this.messageHelper = messageHelper;
         this.uiHelper = uiHelper;

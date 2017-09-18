@@ -20,7 +20,7 @@ public class Question implements Parent<String> {
     private String text;
     private List<String> mAnswers = new ArrayList<>();
 
-    public Question(String name,String answer) {
+    public Question(String name, String answer) {
         this.text = name;
         mAnswers.add(answer);
     }

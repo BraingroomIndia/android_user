@@ -18,7 +18,7 @@ import io.reactivex.functions.Action;
 
 public class CommentsItemViewModel extends ViewModel {
 
-    public final Action onReplyClicked,showthirdpartyProfile;
+    public final Action onReplyClicked, showthirdpartyProfile;
     public final String commenterImage, commenterName, comment, commentDate;
     private String commenterId;
     public final int numReplies;
@@ -55,7 +55,7 @@ public class CommentsItemViewModel extends ViewModel {
         onReplyClicked = new Action() {
             @Override
             public void run() throws Exception {
-                uiHelper.openReplyFragment(postId,item.getId());
+                uiHelper.openReplyFragment(postId, item.getId());
             }
         };
         showthirdpartyProfile = new Action() {
@@ -63,8 +63,8 @@ public class CommentsItemViewModel extends ViewModel {
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
 
-                    bundleData.putString("userId",commenterId);
-                    navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+                bundleData.putString("userId", commenterId);
+                navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
 
             }
         };
@@ -75,7 +75,7 @@ public class CommentsItemViewModel extends ViewModel {
 
         try {
             DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            Date netDate = (new Date(timeStamp*1000));
+            Date netDate = (new Date(timeStamp * 1000));
             return sdf.format(netDate);
         } catch (Exception ex) {
             return "xx";

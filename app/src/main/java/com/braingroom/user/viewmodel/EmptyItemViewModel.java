@@ -16,7 +16,7 @@ public class EmptyItemViewModel extends ViewModel {
     @NonNull
     public final int placeHolder;
 
-    public EmptyItemViewModel(@NonNull final int placeHolder, final String icon, @NonNull final String title,  final Action clickAction) {
+    public EmptyItemViewModel(@NonNull final int placeHolder, final String icon, @NonNull final String title, final Action clickAction) {
         this.image = icon;
         this.title = title;
         this.placeHolder = placeHolder;

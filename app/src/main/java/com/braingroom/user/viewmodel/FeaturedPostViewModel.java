@@ -4,6 +4,9 @@ import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.WinnerResp;
 import com.braingroom.user.utils.FieldUtils;
+import com.braingroom.user.utils.HelperFactory;
+import com.braingroom.user.view.ConnectUiHelper;
+import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.FeaturedPostActivity;
 import com.braingroom.user.viewmodel.fragment.FeaturedPostItemViewModel;
@@ -28,11 +31,13 @@ public class FeaturedPostViewModel extends ViewModel {
 
     private boolean apiSuccessful1;
 
-    public List<FeaturedPostItemViewModel> featuredPostItemViewModelList = new ArrayList<>();
+    public List<ConnectFeedItemViewModel> connectFeedItemViewModelList = new ArrayList<>();
 
     public List<WinnersViewModel> winnersViewModelList = new ArrayList<>();
 
-    public FeaturedPostViewModel(final @NonNull Navigator navigator, final FeaturedPostActivity.UiHelper uiHelper) {
+    public FeaturedPostViewModel(final @NonNull Navigator navigator, @NonNull final HelperFactory helperFactory,
+                                 @NonNull final MessageHelper messageHelper, final FeaturedPostActivity.UiHelper uiHelper,
+                                 final ConnectUiHelper connectUiHelper) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -62,9 +67,9 @@ public class FeaturedPostViewModel extends ViewModel {
                     @Override
                     public void accept(@NonNull ConnectFeedResp resp) throws Exception {
                         apiSuccessful = true;
-                        featuredPostItemViewModelList = new ArrayList<>();
+                        connectFeedItemViewModelList = new ArrayList<>();
                         for (ConnectFeedResp.Snippet snippet : resp.getData()) {
-                            featuredPostItemViewModelList.add(new FeaturedPostItemViewModel(snippet, navigator));
+                            connectFeedItemViewModelList.add(new ConnectFeedItemViewModel(snippet, false, false, connectUiHelper, helperFactory, messageHelper, navigator));
                         }
                         uiHelper.setPostPagerAdapter();
 

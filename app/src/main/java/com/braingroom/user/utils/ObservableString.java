@@ -15,7 +15,8 @@ public class ObservableString extends BaseObservable {
         this.value = value;
     }
 
-    public ObservableString() { }
+    public ObservableString() {
+    }
 
     public String get() {
         return value != null ? value : "";

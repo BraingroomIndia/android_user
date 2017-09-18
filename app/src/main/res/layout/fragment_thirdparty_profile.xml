@@ -6,6 +6,7 @@
     <data>
 
         <import type="android.view.View" />
+
         <import type="com.braingroom.user.R" />
 
         <variable
@@ -48,7 +49,7 @@
             <include
                 layout="@layout/floating_label_edit_text"
                 app:data="@{vm.educationInfo1}"
-                app:hintText='@{"Education Info 1"}'/>
+                app:hintText='@{"Education Info 1"}' />
 
             <include
                 layout="@layout/floating_label_edit_text"

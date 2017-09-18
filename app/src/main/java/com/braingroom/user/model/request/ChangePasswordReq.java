@@ -14,9 +14,10 @@ public class ChangePasswordReq {
 
     @SerializedName("braingroom")
     public Snippet data;
+
     @Data
     @Setter
-    public static   class Snippet {
+    public static class Snippet {
 
         @SerializedName("uuid")
         public String uuid;

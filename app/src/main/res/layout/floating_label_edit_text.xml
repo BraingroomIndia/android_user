@@ -5,8 +5,10 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="android.text.InputType"/>
-        <import type = "android.text.Html" />
+
+        <import type="android.text.InputType" />
+
+        <import type="android.text.Html" />
 
         <variable
             name="data"
@@ -23,9 +25,10 @@
         <variable
             name="password"
             type="boolean" />
+
         <variable
             name="number"
-            type="boolean"/>
+            type="boolean" />
 
     </data>
 

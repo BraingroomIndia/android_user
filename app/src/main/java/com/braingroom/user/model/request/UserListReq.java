@@ -16,7 +16,7 @@ public class UserListReq {
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
-    public static class Snippet{
+    public static class Snippet {
 
         @SerializedName("search_user")
         public String searchUser;

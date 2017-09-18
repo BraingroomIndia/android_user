@@ -23,7 +23,7 @@ public class SegmentListActivity extends BaseActivity {
             categoryMap = new HashMap<>();
             categoryMap.put("Fun & Recreation", 1);
         }
-        return new SegmentListViewModel(getNavigator(), categoryMap);//new GridViewModel(getMessageHelper(),getNavigator(),ClassListActivity.class);
+        return new SegmentListViewModel(getFirebaseAnalytics(),getGoogleTracker(),getNavigator(), categoryMap);//new GridViewModel(getMessageHelper(),getNavigator(),ClassListActivity.class);
     }
 
 /*    @Override

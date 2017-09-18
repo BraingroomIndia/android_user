@@ -19,7 +19,7 @@ public class PostAcceptViewModel extends ViewModel {
     public final Action onBackClicked;
     public final Observable<List<ViewModel>> items;
 
-    public PostAcceptViewModel(String postId , final ConnectUiHelper uiHelper, @NonNull final Navigator navigator) {
+    public PostAcceptViewModel(String postId, final ConnectUiHelper uiHelper, @NonNull final Navigator navigator) {
 
         items = apiService.getAcceptedUsers(postId)
                 .map(new Function<LikedUsersListResp, List<ViewModel>>() {
@@ -27,7 +27,7 @@ public class PostAcceptViewModel extends ViewModel {
                     public List<ViewModel> apply(LikedUsersListResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         for (final LikedUsersListResp.Snippet elem : resp.getData()) {
-                            results.add(new LikedItemViewModel(elem.getUserImage(), elem.getUserName(),elem.getUserId(),navigator  ));
+                            results.add(new LikedItemViewModel(elem.getUserImage(), elem.getUserName(), elem.getUserId(), navigator));
                         }
                         return results;
                     }

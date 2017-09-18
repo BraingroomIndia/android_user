@@ -24,7 +24,7 @@ public class NonReactiveRecyclerViewAdapter extends RecyclerView.Adapter<NonReac
 
     ViewProvider viewProvider;
 
-    public NonReactiveRecyclerViewAdapter(ViewModel viewModel,ViewProvider viewProvider) {
+    public NonReactiveRecyclerViewAdapter(ViewModel viewModel, ViewProvider viewProvider) {
         this.binder = BindingUtils.getDefaultBinder();
         this.viewModel = viewModel;
         this.viewProvider = viewProvider;
