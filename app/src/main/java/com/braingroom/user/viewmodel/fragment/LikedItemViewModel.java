@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ProfileDisplayActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -25,8 +26,12 @@ public class LikedItemViewModel extends ViewModel {
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
 
-                bundleData.putString("userId", userId);
-                navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+                if (!userId.equalsIgnoreCase(BG_ID)) {
+                    bundleData.putString("userId", userId);
+                    navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+                } else {
+                    navigator.navigateActivity(ProfileDisplayActivity.class, null);
+                }
 
             }
         };

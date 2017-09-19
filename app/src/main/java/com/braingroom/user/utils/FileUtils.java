@@ -12,17 +12,21 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
+import com.braingroom.user.UserApplication;
+
 import java.io.File;
 
 /**
  * Created by Promolta-H on 02-02-2017.
  */
 public class FileUtils {
+
+
     @SuppressLint("NewApi")
-    public static String getPath(final Context context, final Uri uri) {
+    public static String getPath(final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
+        final Context context = UserApplication.getInstance();
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
@@ -115,9 +119,9 @@ public class FileUtils {
     }
 
 
-    public static String getMimeType(Context context, Uri uri) {
+    public static String getMimeType(Uri uri) {
         String extension;
-
+        final Context context = UserApplication.getInstance();
         //Check uri format to avoid null
         if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
             //If scheme is a content
@@ -156,4 +160,5 @@ public class FileUtils {
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
+
 }

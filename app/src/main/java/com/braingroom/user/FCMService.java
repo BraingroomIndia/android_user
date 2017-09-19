@@ -21,6 +21,7 @@ import com.braingroom.user.view.activity.MessageActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -78,6 +79,14 @@ public class FCMService extends FirebaseMessagingService {
         data.putString("notification_id", notificationId);
         data.putBoolean("pushNotification", true);
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+        if (mTracker != null) {
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Notification Received")
+                    .setAction(notificationId)
+                    .setLabel(shortDescription)
+                    .setNonInteraction(false)
+                    .build());
+        }
 
 
         if (postId != null) {

@@ -93,6 +93,9 @@ public class ConnectFeedResp extends BaseResp {
         @SerializedName("follow_status")
         private int followStatus;
 
+        @SerializedName("weekly_post")
+        private int weeklyPost;
+
         public String getVideo() {
             if (video == null) return null;
             try {

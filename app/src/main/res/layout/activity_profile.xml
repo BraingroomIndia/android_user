@@ -78,10 +78,9 @@
                                 app:editable="@{vm.editable}" />-->
 
                 <include
-                    layout="@layout/floating_label_edit_text"
-                    app:data="@{vm.ugInstitution}"
+                    layout="@layout/item_list_searchable_fragment_opener"
                     app:editable="@{vm.editable}"
-                    app:hintText='@{"UG Institution"}' />
+                    app:vm="@{vm.ugInstituteVm}" />
 
                 <include
                     layout="@layout/floating_label_edit_text"

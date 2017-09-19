@@ -61,7 +61,7 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                     return;
                 }
 
-                apiService.firstSocialLogin(userId, emailId, mobileVm.s_1.get(), referralVm.s_1.get() != null ? referralVm.s_1.get() : referralCode).
+                apiService.firstSocialLogin(userId, emailId, mobileVm.s_1.get() != null ? mobileVm.s_1.get() : "", referralVm.s_1.get() != null ? referralVm.s_1.get() : referralCode).
                         subscribe(new Consumer<FirstSocialLoginResp>() {
                             @Override
                             public void accept(@io.reactivex.annotations.NonNull FirstSocialLoginResp resp) throws Exception {

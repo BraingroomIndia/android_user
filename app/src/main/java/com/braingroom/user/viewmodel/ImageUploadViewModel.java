@@ -45,8 +45,14 @@ public class ImageUploadViewModel extends ViewModel {
         if ((requestCode == REQ_CODE_CHOOSE_IMAGE)
                 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri fileUri = data.getData();
+            String filePath = FileUtils.getPath(fileUri);
+            String fileType = FileUtils.getMimeType(fileUri);
+            if (filePath == null || fileType == null) {
+                messageHelper.showDismissInfo("", "Unable to upload");
+                return;
+            }
             messageHelper.show("uploading...");
-            apiService.uploadImage(FileUtils.getPath(UserApplication.getInstance(), fileUri), UserApplication.getInstance().getContentResolver().getType(fileUri))
+            apiService.uploadImage(filePath, fileType)
                     .subscribe(new Consumer<UploadResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull UploadResp resp) throws Exception {

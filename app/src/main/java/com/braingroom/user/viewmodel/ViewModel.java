@@ -184,6 +184,17 @@ public class ViewModel extends BaseObservable {
 
     }
 
+    public void setCustomEvent(String category, String actionId, String label, boolean interaction) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(actionId)
+                .setLabel(label)
+                .setNonInteraction(!interaction)
+                .build());
+    }
+
+    ;
+
     public boolean isEmpty(Object data) {
         return data == null;
     }

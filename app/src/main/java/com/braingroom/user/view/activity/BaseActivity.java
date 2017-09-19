@@ -124,8 +124,11 @@ public abstract class BaseActivity extends MvvmActivity {
         screenDims = new ScreenDims();
         Point size = new Point();
         WindowManager w = getWindowManager();
-        if (pushNotification && !TextUtils.isEmpty(notificationId))
-            vm.apiService.changeNotificationStatus(notificationId).subscribe();
+        if (pushNotification && !vm.isEmpty(notificationId)) {
+            if (vm.getLoggedIn())
+                vm.apiService.changeNotificationStatus(notificationId).subscribe();
+            vm.setCustomEvent("Notification Opened", notificationId, "", true);
+        }
         w.getDefaultDisplay().getSize(size);
         screenDims.width = size.x;
         screenDims.height = size.y;

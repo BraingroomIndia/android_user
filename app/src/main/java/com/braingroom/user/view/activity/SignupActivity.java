@@ -209,8 +209,8 @@ public class SignupActivity extends BaseActivity {
             return viewModel.localityVM;
         if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE.equals(title))
             return viewModel.ugInstituteVm;
-        if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE.equals(title))
-            return viewModel.pgInstituteVm;
+//        if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE.equals(title))
+//            return viewModel.pgInstituteVm;
         return null;
     }
 

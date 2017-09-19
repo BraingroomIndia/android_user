@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.braingroom.user.R;
@@ -84,7 +85,6 @@ public class Splash extends AppCompatActivity {
             public void run() {
 
                 splashScreen.setVisibility(View.VISIBLE);
-
             }
         }, SPLASH_DISPLAY_LENGTH);
         FirebaseMessaging.getInstance().subscribeToTopic("all");

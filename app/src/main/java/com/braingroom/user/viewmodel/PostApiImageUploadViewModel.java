@@ -1,10 +1,12 @@
 package com.braingroom.user.viewmodel;
 
+import android.content.ContentResolver;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.UploadPostApiResp;
@@ -40,8 +42,8 @@ public class PostApiImageUploadViewModel extends ViewModel {
 
     public void imageUpload(Uri fileUri, String postType) {
         messageHelper.showProgressDialog("Upload", "Please wait while we upload the file to server");
-        String filePath = FileUtils.getPath(UserApplication.getInstance(), fileUri);
-        String fileType = UserApplication.getInstance().getContentResolver().getType(fileUri);
+        String filePath = FileUtils.getPath(fileUri);
+        String fileType = FileUtils.getMimeType(fileUri);
         if (filePath == null || fileType == null) {
             messageHelper.show("Sorry we are unable to upload the file");
             Log.d(TAG, "\nimageUpload: File Path" + filePath + "\nFile type" + fileType);
@@ -75,6 +77,20 @@ public class PostApiImageUploadViewModel extends ViewModel {
                 });
 
 
+    }
+
+    private String getMimeType(Uri uri) {
+        String mimeType = null;
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            ContentResolver cr = UserApplication.getInstance().getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase());
+        }
+        return mimeType;
     }
 
 }

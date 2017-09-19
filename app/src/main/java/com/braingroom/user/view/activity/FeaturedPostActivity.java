@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -37,16 +38,18 @@ public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelpe
 
     FeaturedPostViewModel viewModel;
 
-    WrapContentHeightViewPager postPager;
+
+    ViewPager postPager;
     PagerAdapter postPagerAdapter;
     TabLayout postTabLayout;
     TextView postDate;
+    TextView headingText;
     private boolean setPostPagerAdapter = false;
-    WrapContentHeightViewPager winnerPager;
+    /*WrapContentHeightViewPager winnerPager;
     PagerAdapter winnerPagerAdapter;
     TabLayout winnerTabLayout;
     private boolean setWinnerPagerAdapter = false;
-
+*/
 
     public interface UiHelper {
         void setPostPagerAdapter();
@@ -59,20 +62,29 @@ public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelpe
         super.onCreate(savedInstanceState);
         if (getSupportActionBar() != null)
             getSupportActionBar().hide();
+        headingText = findViewById(R.id.post_heading);
         postDate = findViewById(R.id.post_date);
         postTabLayout = findViewById(R.id.post_tab_layout);
         postPager = findViewById(R.id.post_pager);
-        winnerTabLayout = findViewById(R.id.winner_tab_layout);
-        winnerPager = findViewById(R.id.winner_pager);
+       /* winnerTabLayout = findViewById(R.id.winner_tab_layout);
+        winnerPager = findViewById(R.id.winner_pager);*/
         if (setPostPagerAdapter) {
             postPagerAdapter = new PagerAdapter(getSupportFragmentManager(), FeaturedPostFragment.class);
             postPager.setAdapter(postPagerAdapter);
             postTabLayout.setupWithViewPager(postPager, true);
+            if (getFeaturePostItemViewModel(0).weeklyPost == 1)
+                headingText.setText("Post of the week");
+            else headingText.setText("Post of the day");
+
+            postDate.setText(getFeaturePostItemViewModel(0).smallDate);
             postTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     int position = tab.getPosition();
                     postDate.setText(getFeaturePostItemViewModel(position).smallDate);
+                    if (getFeaturePostItemViewModel(0).weeklyPost == 1)
+                        headingText.setText("Post of the week");
+                    else headingText.setText("Post of the day");
 
                 }
 
@@ -87,13 +99,13 @@ public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelpe
                 }
             });
         }
-        winnerTabLayout = findViewById(R.id.winner_tab_layout);
+       /* winnerTabLayout = findViewById(R.id.winner_tab_layout);
         winnerPager = findViewById(R.id.winner_pager);
         if (setWinnerPagerAdapter) {
             winnerPagerAdapter = new PagerAdapter(getSupportFragmentManager(), WinnerFragment.class);
             winnerPager.setAdapter(winnerPagerAdapter);
             winnerTabLayout.setupWithViewPager(winnerPager, true);
-        }
+        }*/
     }
 
     @NonNull
@@ -107,11 +119,19 @@ public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelpe
                     postPagerAdapter = new PagerAdapter(getSupportFragmentManager(), FeaturedPostFragment.class);
                     postPager.setAdapter(postPagerAdapter);
                     postTabLayout.setupWithViewPager(postPager, true);
+                    postDate.setText(getFeaturePostItemViewModel(0).smallDate);
+                    if (getFeaturePostItemViewModel(0).weeklyPost == 1)
+                        headingText.setText("Post of the week");
+                    else headingText.setText("Post of the day");
                     postTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                         @Override
                         public void onTabSelected(TabLayout.Tab tab) {
                             int position = tab.getPosition();
                             postDate.setText(getFeaturePostItemViewModel(position).smallDate);
+                            if (getFeaturePostItemViewModel(0).weeklyPost == 1)
+                                headingText.setText("Post of the week");
+                            else headingText.setText("Post of the day");
+
 
                         }
 
@@ -130,11 +150,11 @@ public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelpe
 
             @Override
             public void setWinnerPagerAdapter() {
-                if (winnerTabLayout != null && winnerPager != null) {
+                /*if (winnerTabLayout != null && winnerPager != null) {
                     winnerPagerAdapter = new PagerAdapter(getSupportFragmentManager(), WinnerFragment.class);
                     winnerPager.setAdapter(winnerPagerAdapter);
                     winnerTabLayout.setupWithViewPager(winnerPager, true);
-                } else setWinnerPagerAdapter = true;
+                } else setWinnerPagerAdapter = true;*/
             }
         }, this);
         return viewModel;

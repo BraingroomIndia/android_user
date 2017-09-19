@@ -48,7 +48,7 @@ public class FollowButtonViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (!getLoggedIn()) {
-                    messageHelper.showLoginRequireDialog("Only logged in users can like a post", null);
+                    messageHelper.showLoginRequireDialog("Only logged in users can follow", null);
                     return;
                 }
                 switch (currentState.get()) {

@@ -13,9 +13,11 @@ import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
+import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ProfileActivity;
+import com.braingroom.user.viewmodel.fragment.DynamicSearchSelectListViewModel;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,6 +58,8 @@ public class ProfileViewModel extends ViewModel {
     public Consumer<HashMap<String, Integer>> cityConsumer;
     public Consumer<HashMap<String, Integer>> categoryConsumer; //Edited By Vikas Goodara
 
+    public final DynamicSearchSelectListViewModel ugInstituteVm;
+
     Observable<ProfileData> getProfileObservable;
 
     public final ProfileActivity.UiHelper uiHelper;
@@ -63,7 +67,7 @@ public class ProfileViewModel extends ViewModel {
     private final ObservableBoolean observableBoolean = new ObservableBoolean(false);
 
     public ProfileViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @NonNull final ProfileActivity.UiHelper uiHelper) {
+            , @NonNull final HelperFactory helperFactory, @NonNull final ProfileActivity.UiHelper uiHelper,@NonNull FragmentHelper dynamicSearchFragmentHelper) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -78,7 +82,7 @@ public class ProfileViewModel extends ViewModel {
         GenderTypeApiData.put("Male", TYPE_MALE);
         GenderTypeApiData.put("Female", TYPE_FEMALE);
         genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null, "");
-
+        ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
         getProfileObservable = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<ProfileData>>() {
             @Override
             public Observable<ProfileData> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {

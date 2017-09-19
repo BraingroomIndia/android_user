@@ -42,11 +42,10 @@ public class PostApiVideoUploadViewModel extends ViewModel {
 
     public void uploadVideo(Uri fileUri, String postType) {
         messageHelper.showProgressDialog("Upload", "Please wait while we upload the file to server");
-        String filePath = FileUtils.getPath(UserApplication.getInstance(), fileUri);
-        String fileType = UserApplication.getInstance().getContentResolver().getType(fileUri);
+        String filePath = FileUtils.getPath(fileUri);
+        String fileType = FileUtils.getMimeType(fileUri);
         if (filePath == null || fileType == null) {
-            messageHelper.show("Sorry we are unable to upload the file");
-            Log.d(TAG, "\nvideoUpload: File Path" + filePath + "\nFile type" + fileType);
+            messageHelper.showDismissInfo("", "Sorry we are unable to upload the file");
             return;
         }
         apiService.uploadPostApiVideo(filePath, fileType, postType)
@@ -57,8 +56,6 @@ public class PostApiVideoUploadViewModel extends ViewModel {
                             messageHelper.show("video upload success");
                             remoteAddress.set(resp.getData().get(0).getUrl());
                             thumbUrl.set(resp.getData().get(0).getThumb());
-                            Log.d(TAG, "VideoPath: " + resp.getData().get(0).getUrl());
-                            Log.d(TAG, "VideoThumbPath: " + resp.getData().get(0).getThumb());
                         } else {
                             messageHelper.show("video upload FAIlURE");
                         }
@@ -75,6 +72,8 @@ public class PostApiVideoUploadViewModel extends ViewModel {
                 });
 
     }
+
+
 }
 
 

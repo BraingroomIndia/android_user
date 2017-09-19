@@ -181,7 +181,8 @@ public class ConnectHomeViewModel extends ViewModel {
                 apiService.getPrimeTimeMessage().subscribe(new Consumer<PrimeMessageResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull PrimeMessageResp resp) throws Exception {
-                        primeTimeMessage = resp.getData().get(0).getValue();
+                        if (!isEmpty(resp) && !isEmpty(resp.getData()) && !isEmpty(resp.getData().get(0)))
+                            primeTimeMessage = resp.getData().get(0).getValue();
                     }
                 });
                 return apiService.getUnreadMessageCount();
@@ -272,7 +273,8 @@ public class ConnectHomeViewModel extends ViewModel {
                     apiService.getPrimeTimeMessage().subscribe(new Consumer<PrimeMessageResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull PrimeMessageResp resp) throws Exception {
-                            primeTimeMessage = resp.getData().get(0).getValue();
+                            if (!isEmpty(resp) && !isEmpty(resp.getData()) && !isEmpty(resp.getData().get(0)))
+                                primeTimeMessage = resp.getData().get(0).getValue();
                             messageHelper.showDismissInfo("Prime Time", "Close", primeTimeMessage);
                         }
                     });

@@ -105,6 +105,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
     public ObservableInt categoryImg = new ObservableInt();
 
     public final String smallDate;
+    public final int weeklyPost;
 
     public final int[] resArray = new int[]{R.drawable.main_category_1,
             R.drawable.main_category_5, //Edited By Vikas Godara
@@ -124,6 +125,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
             isSegmentAvailable.set(false);
         if (data.getCategoryId() != null)
             categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - 1]);
+        weeklyPost = data.getWeeklyPost();
         smallDate = getHumanDateSmall(data.getDate());
         this.navigator = navigator;
         this.vendorImage = new ObservableField<>(data.getVendorImage());
@@ -151,7 +153,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.accepted = new ObservableBoolean(data.getIsAccepted() == 1);
         this.numAccepts = new ObservableInt(data.getNumAccepted());
         this.isPostOwner = new ObservableBoolean(pref.getString(Constants.BG_ID, "").equals(data.getPostOwnerId()));
-        this.isMediaAvailable = new ObservableBoolean(isEmpty(data.getVideo()) || isEmpty(data.getImage()));
+        this.isMediaAvailable = new ObservableBoolean(!isEmpty(data.getVideo()) || !isEmpty(data.getImage()));
         if (hideFollowIcon)
             followButtonVm.changeButtonState(FollowButtonViewModel.STATE_HIDDEN);
         if (hideMessageIcon || isVendor.get() || isPostOwner.get())
