@@ -9,6 +9,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -301,6 +302,9 @@ public interface UserApiService {
     @POST("viewFeaturedClass")
     Observable<ClassListResp> getFeaturedClass();
 
+    @POST("viewRecommendedClass")
+    Observable<ClassListResp> getRecommendedClass();
+
     @POST("viewTrendingClass")
     Observable<ClassListResp> getTrendingClass();
 
@@ -312,6 +316,9 @@ public interface UserApiService {
 
     @POST("getPrimeMessage")
     Observable<PrimeMessageResp> getPrimeMessage();
+
+    @GET("getWeeklyPerformers")
+    Observable<WinnerResp> getWeeklyPerformers();
 
 
 }

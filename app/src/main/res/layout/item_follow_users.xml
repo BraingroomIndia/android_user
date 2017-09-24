@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -21,18 +22,23 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:onClick="@{vm.showthirdpartyProfile}"
             app:civ_border_color="@color/colorTextGray"
             app:civ_border_width="2dp"
-            app:imageUrl="@{vm.userImage}" />
+            app:imageUrl="@{vm.userImage}"
+            tools:src="@drawable/avatar_male"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="@dimen/margin_med"
+            android:layout_marginStart="@dimen/margin_med"
+            android:layout_toEndOf="@+id/commenter_image"
             android:layout_toLeftOf="@+id/follow"
             android:layout_toRightOf="@+id/commenter_image"
+            android:layout_toStartOf="@+id/follow"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
@@ -40,13 +46,15 @@
             android:text="@{vm.userName}"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/text_size_medium"
-            app:font='@{@string/robotoRegular}' />
+            app:font='@{@string/robotoRegular}'
+            tools:text="Name"/>
 
         <include
             android:id="@+id/follow"
             layout="@layout/button_follow"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             app:vm="@{vm.followButtonVm}" />

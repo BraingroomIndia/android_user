@@ -56,12 +56,19 @@ public class IconTextItemViewModel extends ViewModel {
         }
     }
 
-    public IconTextItemViewModel(@NonNull final int iconRes, @NonNull final String title
+    public IconTextItemViewModel(final int iconRes, @NonNull final String title
             , @NonNull final MyConsumer<IconTextItemViewModel> clickAction) {
         this.imageRes = iconRes;
         this.title = title;
-        this.image = null;
+        this.image = "";
         this.onClicked = clickAction;
+    }
+
+    public IconTextItemViewModel(final int iconRes, @NonNull final String title) {
+        this.imageRes = iconRes;
+        this.title = title;
+        this.image = "";
+        this.onClicked = null;
     }
 
     @Nullable

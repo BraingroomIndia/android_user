@@ -79,122 +79,152 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_4sdp"
         android:layout_marginBottom="@dimen/_6sdp"
+        app:cardElevation="@dimen/_4sdp"
         tools:showIn="@layout/fragment_thirdparty_profile_1">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:background="@color/white"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:imageUrl="@{imageUploadVm.remoteAddress}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeHolder="@{imageUploadVm.placeHolder}"
+                bind:layout_editor_absoluteX="0dp"
+                tools:src="@drawable/avatar_male" />
+
+
+            <include
+                android:id="@+id/item_profile_detail_1"
+                layout="@layout/item_profile_detail"
+                android:layout_width="304dp"
+                android:layout_height="0dp"
+                app:icon="@{detailIcon1}"
+                app:layout_constraintStart_toEndOf="@id/profile_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:title="@{detail1}"
+                bind:layout_editor_absoluteX="80dp" />
+
+            <include
+                android:id="@+id/item_profile_detail_2"
+                layout="@layout/item_profile_detail"
+                android:layout_width="304dp"
+                android:layout_height="0dp"
+                app:icon="@{detailIcon2}"
+                app:layout_constraintStart_toStartOf="@id/item_profile_detail_1"
+                app:layout_constraintTop_toBottomOf="@+id/item_profile_detail_1"
+                app:title="@{detail2}"
+                bind:layout_editor_absoluteX="80dp" />
+
+            <include
+                android:id="@+id/item_profile_detail_3"
+                layout="@layout/item_profile_detail"
+                android:layout_width="304dp"
+                android:layout_height="0dp"
+                app:icon="@{detailIcon3}"
+                app:layout_constraintStart_toStartOf="@id/item_profile_detail_2"
+                app:layout_constraintTop_toBottomOf="@+id/item_profile_detail_2"
+                app:title="@{detail3}"
+                bind:layout_editor_absoluteX="80dp" />
+
+            <include
+                android:id="@+id/item_profile_detail_4"
+                layout="@layout/item_profile_detail"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:icon="@{detailIcon4}"
+                app:layout_constraintStart_toStartOf="@id/item_profile_detail_3"
+                app:layout_constraintTop_toBottomOf="@+id/item_profile_detail_3"
+                app:title="@{detail4}"
+                bind:layout_editor_absoluteX="80dp" />
+
+            <include
+                android:id="@+id/button_follow"
+                layout="@layout/button_follow"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_image"
+                app:vm="@{followButtonVm}"
+                bind:layout_editor_absoluteX="0dp"
+                tools:layout="@layout/button_follow" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_med"
+                android:layout_marginStart="@dimen/margin_med"
                 android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/button_follow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_follow">
 
-                <LinearLayout
+                <include
+                    layout="@layout/item_profile_count_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/margin_small"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    app:count="@{post_count}"
+                    app:name='@{"Posts"}'
+                    tools:layout="@layout/item_profile_count_detail" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        app:imageUrl="@{imageUploadVm.remoteAddress}"
-                        app:placeHolder="@{imageUploadVm.placeHolder}" />
-
-                    <include
-                        layout="@layout/button_follow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        app:vm="@{followButtonVm}" />
-                </LinearLayout>
-
-
-                <LinearLayout
+                <include
+                    layout="@layout/item_profile_count_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_weight="3"
-                    android:orientation="vertical">
+                    android:layout_weight="1.3"
+                    app:clickAction="@{clickActionFollower}"
+                    app:count="@{follower_count}"
+                    app:name='@{"Followers"}'
+                    tools:layout="@layout/item_profile_count_detail" />
 
-                    <include
-                        layout="@layout/item_profile_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        app:icon="@{detailIcon1}"
-                        app:title="@{detail1}" />
-
-                    <include
-                        layout="@layout/item_profile_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        app:icon="@{detailIcon2}"
-                        app:title="@{detail2}" />
-
-                    <include
-                        layout="@layout/item_profile_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        app:icon="@{detailIcon3}"
-                        app:title="@{detail3}" />
-
-                    <include
-                        layout="@layout/item_profile_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        app:icon="@{detailIcon4}"
-                        app:title="@{detail4}" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1.5"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal">
-
-                        <include
-                            layout="@layout/item_profile_count_detail"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            app:count="@{post_count}"
-                            app:name='@{"Posts"}' />
-
-                        <include
-                            layout="@layout/item_profile_count_detail"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            app:clickAction="@{clickActionFollower}"
-                            app:count="@{follower_count}"
-                            app:name='@{"Followers"}' />
-
-                        <include
-                            layout="@layout/item_profile_count_detail"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            app:clickAction="@{clickActionFollowing}"
-                            app:count="@{following_count}"
-                            app:name='@{"Following"}' />
-                    </LinearLayout>
-                </LinearLayout>
+                <include
+                    layout="@layout/item_profile_count_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.3"
+                    app:clickAction="@{clickActionFollowing}"
+                    app:count="@{following_count}"
+                    app:name='@{"Following"}'
+                    tools:layout="@layout/item_profile_count_detail" />
             </LinearLayout>
+            <!--<include
+                layout="@layout/item_profile_count_detail"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:clickAction="@{clickActionFollower}"
+                app:count="@{follower_count}"
+                app:name='@{"Followers"}'
+                bind:layout_conversion_absoluteX="165dp"
+                bind:layout_conversion_absoluteY="106dp"
+                bind:layout_conversion_absoluteWidth="77dp"
+                bind:layout_conversion_absoluteHeight="38dp"
+                bind:layout_editor_absoluteY="93dp"
+                bind:layout_editor_absoluteX="165dp" />-->
 
-
-        </LinearLayout>
+            <!--<include
+                layout="@layout/item_profile_count_detail"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:clickAction="@{clickActionFollowing}"
+                app:count="@{following_count}"
+                app:name='@{"Following"}'
+                bind:layout_conversion_absoluteX="242dp"
+                bind:layout_conversion_absoluteY="106dp"
+                bind:layout_conversion_absoluteWidth="77dp"
+                bind:layout_conversion_absoluteHeight="38dp"
+                bind:layout_editor_absoluteY="107dp"
+                bind:layout_editor_absoluteX="242dp" />-->
+        </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </layout>

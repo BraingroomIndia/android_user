@@ -58,7 +58,7 @@ public class ProfileViewModel extends ViewModel {
     public Consumer<HashMap<String, Integer>> cityConsumer;
     public Consumer<HashMap<String, Integer>> categoryConsumer; //Edited By Vikas Goodara
 
-    public final DynamicSearchSelectListViewModel ugInstituteVm;
+//    public final DynamicSearchSelectListViewModel ugInstituteVm;
 
     Observable<ProfileData> getProfileObservable;
 
@@ -67,7 +67,7 @@ public class ProfileViewModel extends ViewModel {
     private final ObservableBoolean observableBoolean = new ObservableBoolean(false);
 
     public ProfileViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
-            , @NonNull final HelperFactory helperFactory, @NonNull final ProfileActivity.UiHelper uiHelper,@NonNull FragmentHelper dynamicSearchFragmentHelper) {
+            , @NonNull final HelperFactory helperFactory, @NonNull final ProfileActivity.UiHelper uiHelper) {
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -82,7 +82,7 @@ public class ProfileViewModel extends ViewModel {
         GenderTypeApiData.put("Male", TYPE_MALE);
         GenderTypeApiData.put("Female", TYPE_FEMALE);
         genderVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Choose gender", messageHelper, Observable.just(new ListDialogData1(GenderTypeApiData)), new HashMap<String, Integer>(), false, null, "");
-        ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
+//        ugInstituteVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE, messageHelper, navigator, "search for institutes... ", false, "", null, dynamicSearchFragmentHelper);
         getProfileObservable = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<ProfileData>>() {
             @Override
             public Observable<ProfileData> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -103,11 +103,12 @@ public class ProfileViewModel extends ViewModel {
                         email.s_1.set(data.getEmail());
                         contact.s_1.set(data.getContactNo());
                         dobVm.date.set(data.getDob());
-                        ugInstitution.s_1.set(data.getUgInstituteName());
+                        if (!isEmpty(data.getUgInstituteName()))
+                            ugInstitution.s_1.set(data.getUgInstituteName());
                         pgInstitution.s_1.set(data.getPgInstituteName());
                         ugPassoutYear.s_1.set(data.getUgInstitutePassingYear());
                         pgPassoutYear.s_1.set(data.getPgInstitutePassingYear());
-                        imageUploadVm.remoteAddress.set(data.getProfileImage());
+                        imageUploadVm.setRemoteAddress(data.getProfileImage());
                         genderVm.setSelectedItemsMap(selectedGender);
                         if (data.getDob() != null && !data.getDob().equals(""))
                             dobVm.date.set(data.getDob());
@@ -280,7 +281,7 @@ public class ProfileViewModel extends ViewModel {
         snippet.setCityId(cityVm.getSelectedItemsId().size() > 0 ? cityVm.getSelectedItemsId().get(0) : "");
         snippet.setLocalityId(localityVm.getSelectedItemsId().size() > 0 ? localityVm.getSelectedItemsId().get(0) : "");
         snippet.setCategoryId(categoryVm.getSelectedItemsId().size() > 0 ? categoryVm.getSelectedItemsId().get(0) : "");
-        snippet.setInstitutionName("");
+        snippet.setInstitutionName(ugInstitution.s_1.get());
         snippet.setUgInstitutePassingYear(ugPassoutYear.s_1.get());
         snippet.setPgInstituteName(pgInstitution.s_1.get());
         snippet.setDob(dobVm.date.get());

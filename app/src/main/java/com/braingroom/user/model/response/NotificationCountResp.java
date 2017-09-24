@@ -4,12 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
  * Created by godara on 22/06/17.
  */
 @Getter
+@AllArgsConstructor(suppressConstructorProperties = true)
 public class NotificationCountResp extends BaseResp {
 
     @SerializedName("braingroom")

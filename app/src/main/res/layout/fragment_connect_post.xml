@@ -69,6 +69,18 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}">
+
+                    <include
+                        layout="@layout/item_list_dialog_opener"
+                        app:editable="@{true}"
+                        app:vm="@{vm.categoryVm}" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:visibility="@{vm.groupsField ? View.VISIBLE : View.GONE}">
 
                     <include
@@ -88,22 +100,11 @@
                         app:vm="@{vm.activityVm}" />
                 </FrameLayout>
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}">
-
-                    <include
-                        layout="@layout/item_list_dialog_opener"
-                        app:editable="@{true}"
-                        app:vm="@{vm.categoryVm}" />
-
-                </FrameLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="@{vm.categoryField ? View.VISIBLE : View.GONE}">
+                    android:visibility="@{vm.groupsField ? View.GONE : View.VISIBLE}">
 
                     <include
                         layout="@layout/item_list_dialog_opener"

@@ -44,18 +44,6 @@ public class ProfileActivity extends BaseActivity {
             public void invalidateMenu() {
                 invalidateOptionsMenu();
             }
-        }, new FragmentHelper() {
-            @Override
-            public void show(String tag) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment_container, DynamicSearchSelectListFragment.newInstance(tag)).addToBackStack(tag).commit();
-
-            }
-
-            @Override
-            public void remove(String tag) {
-                popBackstack(tag);
-            }
         });
     }
 
@@ -73,15 +61,6 @@ public class ProfileActivity extends BaseActivity {
         return true;
     }
 
-    @Override
-    public ViewModel getFragmentViewmodel(String title) {
-
-        if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE.equals(title))
-            return viewModel.ugInstituteVm;
-//        if (DynamicSearchSelectListViewModel.FRAGMENT_TITLE_COLLEGE.equals(title))
-//            return viewModel.pgInstituteVm;
-        return null;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

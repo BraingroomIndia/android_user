@@ -1,5 +1,8 @@
 package com.braingroom.user.model.response;
 
+import android.text.Html;
+import android.text.Spanned;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -35,9 +38,18 @@ public class WinnerResp extends BaseResp {
         private String userCollege;
 
         @SerializedName("prize_rank")
-        private Integer prizeRank;
+        private String prizeRank;
 
         @SerializedName("prize_text")
         private String prizeText;
+
+        public Spanned getPrizeRank(){
+            return Html.fromHtml(prizeRank);
+        }
+
     }
+
+
+
+
 }

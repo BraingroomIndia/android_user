@@ -1,3 +1,4 @@
+/*
 package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableBoolean;
@@ -74,3 +75,4 @@ public class GroupSearchViewModel extends ViewModel {
         };
     }
 }
+*/

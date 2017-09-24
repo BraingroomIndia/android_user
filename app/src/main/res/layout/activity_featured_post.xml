@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.FeaturedPostViewModel" />
@@ -22,8 +24,8 @@
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_16sdp">
+            android:layout_height="wrap_content">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,49 +55,48 @@
                 <android.support.design.widget.TabLayout
                     android:id="@+id/post_tab_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="-10dp"
+                    android:layout_height="10dp"
                     app:tabBackground="@drawable/tab_selector"
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp" />
 
-                <android.support.v4.view.ViewPager
+                <com.braingroom.user.utils.WrapContentHeightViewPager
                     android:id="@+id/post_pager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:listitems="@layout/fragment_featured_post" />
 
-                <!--
-                                <TextView
-                                    android:id="@+id/winner_heading"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_16sdp"
-                                    android:gravity="center"
-                                    android:text="Weekly Top Performer"
-                                    android:textColor="@color/colorTextDark"
-                                    android:textSize="30dp"
-                                    android:visibility="gone"
-                                    app:font='@{@string/robotoBoldItalic}' />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_med"
+                    android:orientation="vertical"
+                    android:visibility="@{vm.hideWinnerFragment ? View.GONE : View.VISIBLE}">
 
-                                <android.support.design.widget.TabLayout
-                                    android:id="@+id/winner_tab_layout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="-5dp"
-                                    android:visibility="gone"
-                                    app:tabBackground="@drawable/tab_selector"
-                                    app:tabGravity="center"
-                                    app:tabIndicatorHeight="0dp" />
+                    <TextView
+                        android:id="@+id/winner_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Weekly top performers"
+                        android:textColor="@color/colorTextDark"
+                        android:textSize="30dp"
+                        app:font='@{@string/robotoBoldItalic}' />
 
-                                <com.braingroom.user.utils.WrapContentHeightViewPager
-                                    android:id="@+id/winner_pager"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="-2dp"
-                                    android:visibility="gone"
-                                    tools:layout="@layout/fragment_featured_post" />-->
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/winner_tab_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        app:tabBackground="@drawable/tab_selector"
+                        app:tabGravity="center"
+                        app:tabIndicatorHeight="0dp" />
 
+                    <com.braingroom.user.utils.WrapContentHeightViewPager
+                        android:id="@+id/winner_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:layout="@layout/fragment_featured_post" />
+                </LinearLayout>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

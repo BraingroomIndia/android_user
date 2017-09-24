@@ -6,8 +6,10 @@ import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.UploadResp;
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.FileUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -16,6 +18,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 import static android.app.Activity.RESULT_OK;
+import static com.braingroom.user.utils.Constants.defaultProfilePic;
 
 public class ImageUploadViewModel extends ViewModel {
 
@@ -24,11 +27,29 @@ public class ImageUploadViewModel extends ViewModel {
     public final ObservableField<String> remoteAddress = new ObservableField<>("");
     public final Action onUploadClicked;
     MessageHelper messageHelper;
+    public final int[] profilePicResArray = new int[]{
+            R.drawable.man, //Edited By Vikas Godara
+            R.drawable.man_1,
+            R.drawable.man_2,
+            R.drawable.man_3, //Edited By Vikas Godara
+            R.drawable.man_4,
+            R.drawable.man_5,
+            R.drawable.woman,
+            R.drawable.woman_1,
+            R.drawable.woman_2,
+            R.drawable.woman_3,
+            R.drawable.woman_4,
+            R.drawable.woman_5,
+
+    };
 
     public ImageUploadViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, int placeholder, String remoteAddress) {
         this.messageHelper = messageHelper;
-        this.placeHolder.set(placeholder);
-        this.remoteAddress.set(remoteAddress);
+        if (placeholder == R.drawable.avatar_male)
+            this.placeHolder.set(profilePicResArray[CommonUtils.randInt(0, profilePicResArray.length)]);
+        else
+            this.placeHolder.set(placeholder);
+        this.remoteAddress.set(!defaultProfilePic.equalsIgnoreCase(remoteAddress) ? remoteAddress : "");
 
         onUploadClicked = new Action() {
             @Override
@@ -37,6 +58,10 @@ public class ImageUploadViewModel extends ViewModel {
             }
         };
 
+    }
+
+    public void setRemoteAddress(String remoteAddress) {
+        this.remoteAddress.set(!defaultProfilePic.equalsIgnoreCase(remoteAddress) ? remoteAddress : "");
     }
 
 

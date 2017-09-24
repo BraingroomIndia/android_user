@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/indicator"
         android:layout_centerHorizontal="true"
+        android:baselineAligned="false"
         android:gravity="center"
 
         android:orientation="horizontal">

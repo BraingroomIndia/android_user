@@ -12,7 +12,7 @@ import lombok.Getter;
 /**
  * Created by godara on 15/09/17.
  */
-
+@AllArgsConstructor(suppressConstructorProperties = true)
 public class PrimeMessageResp extends BaseResp {
 
 

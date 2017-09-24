@@ -61,6 +61,8 @@ public class CheckoutViewModel extends ViewModel {
     public final ObservableInt totalAmount;
     public final ObservableInt totalAmountAfterPromo;
 
+    public final ObservableBoolean showBookOption = new ObservableBoolean(false);
+
     public final Action onProceedClicked, onOpenPromoCode, onApplyPromoCode, onOpenCouponCode, onApplyCouponCode, onShowPriceDetailsClicked;
 
     public final ObservableField<String> couponCode;
@@ -130,11 +132,16 @@ public class CheckoutViewModel extends ViewModel {
                 appliedPromoAmount = 0;
 
             }
+            showBookOption.set(false);
+
             for (ViewModel nonReactiveItem : nonReactiveItems) {
                 totalPrice = totalPrice + ((LevelPricingItemViewModel) nonReactiveItem).totalPrice.get();
+                if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0)
+                    showBookOption.set(true);
             }
             totalAmount.set(totalPrice);
             totalAmountAfterPromo.set(totalPrice);
+
 
         }
     };

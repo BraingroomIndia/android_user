@@ -64,6 +64,7 @@ public class QuoteFormViewModel extends ViewModel {
 
         durationVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Duration Type", messageHelper,
                 Observable.just(new ListDialogData1(durationTypeMap)), new HashMap<String, Integer>(), false, null, "");
+        durationVm.selectedItemsText.set("Day/Month");
         dateVm = new DatePickerViewModel(helperFactory.createDialogHelper(), "Date", "choose");
         onSubmit = new Action() {
             @Override

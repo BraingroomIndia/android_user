@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.braingroom.user.model.request.CommentViewReply;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.ProfileDisplayActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -45,8 +46,12 @@ public class ReplyItemViewModel extends ViewModel {
             public void run() throws Exception {
                 Bundle bundleData = new Bundle();
 
-                bundleData.putString("userId", userId);
-                navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+                if (!BG_ID.equalsIgnoreCase(userId)) {
+                    bundleData.putString("userId", userId);
+                    navigator.navigateActivity(ThirdPartyViewActivity.class, bundleData);
+                } else {
+                    navigator.navigateActivity(ProfileDisplayActivity.class, null);
+                }
 
             }
         };

@@ -103,6 +103,9 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public ObservableBoolean loading = new ObservableBoolean(true);
 
     @NonNull
+    public ObservableBoolean noPostBackground = new ObservableBoolean(false);
+
+    @NonNull
     public ObservableBoolean accepted = new ObservableBoolean(false);
 
     @NonNull
@@ -149,13 +152,19 @@ public class ConnectFeedDetailViewModel extends ViewModel {
         apiService.getFeedsByPostID(postId).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull final ConnectFeedResp resp) throws Exception {
-                if (isEmpty(resp))
-                    navigator.finishActivity();
-                else if (isEmpty(resp.getData()))
-                    navigator.finishActivity();
-                else if (isEmpty(resp.getData().get(0)))
-                    navigator.finishActivity();
                 loading.set(false);
+                messageHelper.dismissActiveProgress();
+                if (isEmpty(resp)) {
+                    noPostBackground.set(true);
+                    return;
+                } else if (isEmpty(resp.getData())) {
+                    noPostBackground.set(true);
+                    return;
+                } else if (isEmpty(resp.getData().get(0))) {
+
+                    noPostBackground.set(true);
+                    return;
+                }
 
 
                 setScreenName(resp.getData().get(0).getTitle());
@@ -196,7 +205,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 isMediaAvailable.set((resp.getData().get(0).getVideo() != null || !resp.getData().get(0).getImage().equals("")));
                 shareUrl.set(resp.getData().get(0).getShareUrl());
                 vendorCollege.set(resp.getData().get(0).getInstituteName());
-                messageHelper.dismissActiveProgress();
+
 
             }
         }, new Consumer<Throwable>() {
@@ -215,15 +224,11 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                     FilterData filterData = new FilterData();
                     filterData.setCategoryId(categoryId);
                     filterData.setSegmentId(segmentId);
-                    bundle.putSerializable("filterData", filterData);
-                    bundle.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-               /*     try {
-                        ZohoSalesIQ.Tracking.setCustomAction("Find relevant classes clicked from post detail page categoryId \t" +categoryId + "segmentId\t" +segmentId );
-                    } catch (PEXException e) {
-                        e.printStackTrace();
-                    }*/
+                    bundle.putSerializable(Constants.classFilterData, filterData);
+                    bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
                     navigator.navigateActivity(ClassListActivity.class, bundle);
                     return;
+
                 }
                 return;
             }

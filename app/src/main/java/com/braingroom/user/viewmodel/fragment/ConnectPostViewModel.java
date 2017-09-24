@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Pair;
 
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
@@ -81,7 +82,7 @@ public class ConnectPostViewModel extends ViewModel {
     public MessageHelper messageHelper;
     private String postType;
     public Consumer<HashMap<String, Integer>> countryConsumer, stateConsumer, cityConsumer, localityConsumer, postConsumer, groupConsumer, categoryConsumer;
-
+    public Observable<ListDialogData1> allGroupsApiObservable;
 
     HashMap<String, Integer> mSelectedPostType = new HashMap<String, Integer>();
     public final ObservableBoolean videoField = new ObservableBoolean(true);
@@ -278,6 +279,18 @@ public class ConnectPostViewModel extends ViewModel {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = android.text.TextUtils.join(",", new ArrayList(selectedMap.values()));
                     setCategory(selectedId);
+                    allGroupsApiObservable = apiService.getGroups(selectedId).map(new Function<GroupResp, ListDialogData1>() {
+                        @Override
+                        public ListDialogData1 apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
+                            LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
+                            for (GroupResp.Snippet snippet : resp.getData()) {
+                                itemMap.put(snippet.getName(), Integer.parseInt(snippet.getId()));
+                            }
+                            // TODO: 05/04/17 use rx zip to get if category already selected like in profile
+                            return new ListDialogData1(itemMap);
+                        }
+                    });
+                    groupVm.setSourceObservable(allGroupsApiObservable);
                     segmentsVm.reInit(getSegmentsApiObservable(selectedId));
                 }
             }
@@ -292,7 +305,7 @@ public class ConnectPostViewModel extends ViewModel {
                 , new HashMap<String, Integer>(), false, null, "select a group first");
 
 
-        groupVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Groups", messageHelper, apiService.getGroups().map(new Function<GroupResp, ListDialogData1>() {
+        groupVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Groups", messageHelper, apiService.getGroups("1").map(new Function<GroupResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
@@ -641,7 +654,7 @@ public class ConnectPostViewModel extends ViewModel {
         dateField.set(false);
         proposedTimeField.set(false);
         activityField.set(false);
-        categoryField.set(false);
+        categoryField.set(true);
     }
 
     public void showBNS() {
@@ -652,7 +665,7 @@ public class ConnectPostViewModel extends ViewModel {
         classField.set(false);
         proposedTimeField.set(false);
         activityField.set(false);
-        categoryField.set(false);
+        categoryField.set(true);
     }
 
     public void showAP() {
@@ -663,7 +676,7 @@ public class ConnectPostViewModel extends ViewModel {
         imageField.set(false);
         videoField.set(false);
         classField.set(false);
-        categoryField.set(false);
+        categoryField.set(true);
     }
 
     public void showDND() {

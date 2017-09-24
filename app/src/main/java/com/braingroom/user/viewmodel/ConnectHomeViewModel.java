@@ -120,8 +120,8 @@ public class ConnectHomeViewModel extends ViewModel {
                 nextPage = resp.getNextPage();
                 if (currentPage < 1)
                     setScreenName("Connect Home Page " + filterData.getMinorCateg());
-                if (resp.getData().size() == 0 && nextPage < 1) {
-                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
+                if (resp.getData().size() == 0 && currentPage < 1) {
+                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No Post Available", null));
                 } else {
                     //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
@@ -147,9 +147,9 @@ public class ConnectHomeViewModel extends ViewModel {
                             @Override
                             public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                                 throwable.printStackTrace();
-                                return nonReactiveItems;
+                                return getLoadingItems();
                             }
-                        }).mergeWith(getLoadingItems());
+                        }).mergeWith(Observable.just(getLoadingItems()));
             }
         });
         //New Changes
@@ -190,7 +190,7 @@ public class ConnectHomeViewModel extends ViewModel {
         }).subscribe(new Consumer<NotificationCountResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
-                if (resp != null && resp.getData() != null) {
+                if (resp != null && resp.getData() != null && !resp.getData().isEmpty()) {
                     messageCount = resp.getData().get(0).getCount();
                     uiHelper.setCount(notificationCount, messageCount);
 
@@ -211,7 +211,7 @@ public class ConnectHomeViewModel extends ViewModel {
         }).subscribe(new Consumer<NotificationCountResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws Exception {
-                if (resp != null && resp.getData() != null) {
+                if (resp != null && resp.getData() != null && !resp.getData().isEmpty()) {
                     notificationCount = resp.getData().get(0).getCount();
                     uiHelper.setCount(notificationCount, messageCount);
 
@@ -288,7 +288,7 @@ public class ConnectHomeViewModel extends ViewModel {
 
     }
 
-    private Observable<List<ViewModel>> getLoadingItems() {
+    private List<ViewModel> getLoadingItems() {
         int count;
         if (nonReactiveItems.isEmpty())
             count = 4;
@@ -297,7 +297,7 @@ public class ConnectHomeViewModel extends ViewModel {
         List<ViewModel> result = new ArrayList<>();
         result.addAll(nonReactiveItems);
         result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
-        return Observable.just(result);
+        return (result);
     }
 
     @Override

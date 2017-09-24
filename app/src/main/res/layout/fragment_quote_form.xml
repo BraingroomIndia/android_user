@@ -56,7 +56,7 @@
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.unitValue}"
                     app:editable="@{true}"
-                    app:hintText='@{"Enter Day/Month" + vm.mandatory }' />
+                    app:hintText='@{"Enter no. Day/Month" + vm.mandatory }' />
 
                 <include
                     layout="@layout/floating_label_edit_text"
@@ -74,13 +74,13 @@
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.classNeedDetail}"
                     app:editable="@{true}"
-                    app:hintText='@{"Explain catalogue class need"}' />
+                    app:hintText='@{"Catalogue class need(Optional) "}' />
 
                 <include
                     layout="@layout/floating_label_edit_text"
                     app:data="@{vm.description}"
                     app:editable="@{true}"
-                    app:hintText='@{"Description"}' />
+                    app:hintText='@{"Special request (Optional)"}' />
 
                 <include
                     layout="@layout/item_list_dialog_opener"

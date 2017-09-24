@@ -46,8 +46,7 @@
                         android:contentDescription="@{vm.className}"
                         android:scaleType="centerCrop"
                         app:imageUrl="@{vm.classImage}"
-                        app:placeHolder="@{R.drawable.video_generic_thumb}"
-                        tools:src="@drawable/video_generic_thumb" />
+                        app:placeHolder="@{R.drawable.video_placeholder}" />
 
                     <TextView
                         android:layout_width="match_parent"

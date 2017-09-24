@@ -1,6 +1,7 @@
 package com.braingroom.user;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.multidex.MultiDex;
@@ -17,6 +18,8 @@ import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 /*import com.squareup.leakcanary.RefWatcher;*/
 
 import java.util.HashMap;
@@ -54,12 +57,17 @@ public class UserApplication extends Application {
     public TypedArray classPlaceholder;
 
     public boolean loggedIn = false;
-
+//
 
     @Getter
     private AppComponent mAppComponent;
     private Map<String, Typeface> fontCache = new HashMap<>();
 
+    private RefWatcher mRefWatcher;
+
+    public static RefWatcher getRefWatcher(Context context) {
+        return getInstance().mRefWatcher;
+    }
 
     // Google Analytics
     private static GoogleAnalytics sAnalytics;
@@ -73,13 +81,12 @@ public class UserApplication extends Application {
         Branch.getAutoInstance(this);
 
         sAnalytics = GoogleAnalytics.getInstance(this);
-//        if (LeakCanary.isInAnalyzerProcess(this)) {
-//            return;
-//        }
-//        mRefWatcher = LeakCanary.install(this);
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        Stetho.initializeWithDefaults(this);
+      /*  if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        mRefWatcher = LeakCanary.install(this);*/
+        // FacebookSdk.sdkInitialize(getApplicationContext());
+        // Stetho.initializeWithDefaults(this);
 //        if (BuildConfig.DEBUG) {
 //            Timber.plant(new Timber.DebugTree());
 //        } else {

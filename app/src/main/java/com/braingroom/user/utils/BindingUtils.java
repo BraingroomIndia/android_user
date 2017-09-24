@@ -3,6 +3,8 @@ package com.braingroom.user.utils;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.BindingConversion;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -45,6 +47,7 @@ import com.braingroom.user.viewmodel.TileShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,12 +221,10 @@ public class BindingUtils {
     public static void setImageUrl(ImageView imageView, String url, int placeHolder, int errorUrl, int scaleWidth, int scaleHeight) {
         Log.d(TAG, "setImageUrl: " + url);
 
-        if (TextUtils.isEmpty(url) && placeHolder == 0) return;
+        Log.d(TAG, "setImageUrl: " + url);
+        if ("".equals(url)) url = null;
         Picasso picasso = Picasso.with(imageView.getContext());
-        picasso.setLoggingEnabled(false);
         RequestCreator requestCreator;
-        if (TextUtils.isEmpty(url))
-            url = null;
         requestCreator = picasso.load(url);
         if (placeHolder != 0) {
             requestCreator = requestCreator.placeholder(placeHolder);
@@ -235,7 +236,6 @@ public class BindingUtils {
         if (scaleHeight == 0) scaleHeight = 250;
         requestCreator.centerCrop()
                 .fit().into(imageView);
-
     }
 
 

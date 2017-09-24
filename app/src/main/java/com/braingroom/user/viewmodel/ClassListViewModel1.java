@@ -284,9 +284,10 @@ public class ClassListViewModel1 extends ViewModel {
                         List<ViewModel> selectedItems = new ArrayList<ViewModel>();
                         if (categoryFilterMap != null && !categoryFilterMap.isEmpty()) {
                             if (segmentsFilterMap != null && !segmentsFilterMap.isEmpty()) {
-                                selectedItems.add(new DataItemViewModel(categoryFilterMap.keySet().iterator().next() + " -> " + segmentsFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                selectedItems.add(new IconTextItemViewModel(0, categoryFilterMap.keySet().iterator().next()));
+                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, segmentsFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                     @Override
-                                    public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                         segmentsFilterMap = new HashMap<String, Integer>();
                                         filterData.setSegmentId("");
                                         reset();
@@ -294,9 +295,9 @@ public class ClassListViewModel1 extends ViewModel {
                                 }));
                             } else
 
-                                selectedItems.add(new DataItemViewModel(categoryFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, categoryFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                     @Override
-                                    public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                    public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                         categoryFilterMap = new HashMap<String, Integer>();
                                         filterData.setCategoryId("");
                                         reset();
@@ -304,10 +305,11 @@ public class ClassListViewModel1 extends ViewModel {
                                 }));
                         }
 
+
                         if (localityFilterMap != null && !localityFilterMap.isEmpty()) {
-                            selectedItems.add(new DataItemViewModel(localityFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, localityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
-                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     localityFilterMap = new HashMap<String, String>();
                                     editor.putString(Constants.LOCALITY_ID, "");
                                     editor.putString(Constants.LOCALITY_NAME, "");
@@ -318,9 +320,9 @@ public class ClassListViewModel1 extends ViewModel {
                             }));
                         }
                         if (communityFilterMap != null && !communityFilterMap.isEmpty()) {
-                            selectedItems.add(new DataItemViewModel(communityFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, communityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
-                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     communityFilterMap = new HashMap<String, Integer>();
                                     filterData.setCommunityId("");
                                     reset();
@@ -328,9 +330,9 @@ public class ClassListViewModel1 extends ViewModel {
                             }));
                         }
                         if (classScheduleFilterMap != null && !classScheduleFilterMap.isEmpty()) {
-                            selectedItems.add(new DataItemViewModel(classScheduleFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, classScheduleFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
-                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     classScheduleFilterMap = new HashMap<String, Integer>();
                                     filterData.setClassSchedule("");
                                     reset();
@@ -338,9 +340,9 @@ public class ClassListViewModel1 extends ViewModel {
                             }));
                         }
                         if (classTypeFilterMap != null && !classTypeFilterMap.isEmpty()) {
-                            selectedItems.add(new DataItemViewModel(classTypeFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, classTypeFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
-                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     classTypeFilterMap = new HashMap<String, Integer>();
                                     filterData.setClassType("");
                                     reset();
@@ -348,9 +350,9 @@ public class ClassListViewModel1 extends ViewModel {
                             }));
                         }
                         if (vendorListFilterMap != null && !vendorListFilterMap.isEmpty()) {
-                            selectedItems.add(new DataItemViewModel(vendorListFilterMap.keySet().iterator().next(), new MyConsumer<DataItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, vendorListFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
-                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
+                                public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     vendorListFilterMap = new HashMap<String, String>();
                                     filterData.setClassProvider("");
                                     reset();
@@ -542,7 +544,7 @@ public class ClassListViewModel1 extends ViewModel {
                                     iter.remove();
                                 }
                             }
-                            if (viewModels.size() < 2) {
+                            if (viewModels.size() < 2 && currentPage < 1) {
                                 layoutType.set(LAYOUT_TYPE_ROW);
                                 uiHelper.changeLayout(layoutType.get());
                             }

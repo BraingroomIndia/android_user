@@ -4,8 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.transition.Fade;
 import android.support.transition.Scene;
 import android.support.transition.Transition;
@@ -14,14 +14,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Layout;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
@@ -39,7 +43,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
@@ -57,13 +60,14 @@ public class ClassDetailActivity extends BaseActivity {
     SupportMapFragment mapFragment;
     RxPermissions rxPermissions;
 
-    WrapContentHeightViewPager pager;
-    PostPagerAdapter pagerAdapter;
-
+//    WrapContentHeightViewPager pager;
+ /*   PostPagerAdapter pagerAdapter;
+*/
     Scene mColapsedScene;
     Scene mExpandedScene;
     RelativeLayout mSceneRoot;
     ImageView imageView;
+    TextView catalogLocationList;
 
     public String classId;
 
@@ -86,11 +90,13 @@ public class ClassDetailActivity extends BaseActivity {
 
         void compressDemoClass(String v);
 
+        boolean isViewEllipsized();
+
 
     }
 
 
-    private class PostPagerAdapter extends FragmentStatePagerAdapter {
+   /* private class PostPagerAdapter extends FragmentStatePagerAdapter {
         SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
         PostPagerAdapter(FragmentManager fm) {
@@ -142,26 +148,33 @@ public class ClassDetailActivity extends BaseActivity {
             registeredFragments.remove(position);
             super.destroyItem(container, position, object);
         }
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        vm = (ClassDetailViewModel) vm;
+        catalogLocationList = findViewById(R.id.catalog_location_list);
+        if (catalogLocationList != null)
+            catalogLocationList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    Layout l = catalogLocationList.getLayout();
+                    if (l != null && vm != null) {
+                        ((ClassDetailViewModel) vm).hideViewMore.set((l.getEllipsisCount(3) > 0));
+                    }
+                }
+            });
 
-        /*try {
-            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
-        } catch (Exception e){e.printStackTrace();}*/
-//        ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
         rxPermissions = new RxPermissions(this);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
-            }
-        });
+        if (mapFragment != null)
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
+                }
+            });
 
     }
 
@@ -190,12 +203,6 @@ public class ClassDetailActivity extends BaseActivity {
 
             @Override
             public void stopShimmer() {
-               /* if (!ClassListViewModel1.ORIGIN_CATALOG.equals(getIntentString("origin"))) {
-                    postPager = (WrapContentHeightViewPager) findViewById(R.id.postPager);
-                    postPagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
-                    postPager.setAdapter(postPagerAdapter);
-                    postTabLayout.setupWithViewPager(postPager);
-                }*/
                 mFirebaseAnalytics.setCurrentScreen(ClassDetailActivity.this, ((ClassDetailViewModel) vm).mClassData.getClassTopic(), null);
 //                shimmerFrameLayout.stopShimmerAnimation();
             }
@@ -255,8 +262,6 @@ public class ClassDetailActivity extends BaseActivity {
                     title = ClassDetailViewModel.AP;
                     demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataFP);
                 }
-               /* imageView = mSceneRoot.findViewById(R.id.action_image);
-                imageView.setImageResource(R.drawable.minus);*/
                 mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_colapsed_scene, ClassDetailActivity.this);
                 mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_expanded_scene, ClassDetailActivity.this);
                 TransitionManager.go(mExpandedScene, mFadeTransition);
@@ -284,8 +289,6 @@ public class ClassDetailActivity extends BaseActivity {
                     title = ClassDetailViewModel.AP;
                 }
 
-                /*imageView = mSceneRoot.findViewById(R.id.action_image);
-                imageView.setImageResource(R.drawable.plus);*/
                 mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_colapsed_scene, ClassDetailActivity.this);
                 mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_expanded_scene, ClassDetailActivity.this);
                 TransitionManager.go(mColapsedScene, mFadeTransition);
@@ -296,13 +299,20 @@ public class ClassDetailActivity extends BaseActivity {
             }
 
             @Override
+            public boolean isViewEllipsized() {
+
+                return ClassDetailActivity.this.isViewEllipsized(catalogLocationList);
+            }
+
+
+            @Override
             public void next() {
                 onBackPressed();
             }
 
 
         };
-        return new ClassDetailViewModel(getFirebaseAnalytics(),getGoogleTracker(),getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
+        return new ClassDetailViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
                 getIntentString("origin"), getIntentString("catalogueId"));
     }
 
@@ -312,6 +322,7 @@ public class ClassDetailActivity extends BaseActivity {
             return R.layout.activity_class_detail_catalog;
         return R.layout.activity_class_detail;
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -360,8 +371,11 @@ public class ClassDetailActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
         ((ClassDetailViewModel) vm).releaseYoutube();
+        ((ClassDetailViewModel) vm).releaseGoogleMap();
+
     }
 
     @Override
@@ -399,6 +413,11 @@ public class ClassDetailActivity extends BaseActivity {
             // Called when a jump in playback position occurs, either
             // due to user scrubbing or call to seekRelativeMillis() or seekToMillis()
         }
+    }
+
+    public boolean isViewEllipsized(TextView view) {
+
+        return view != null && view.getLayout() != null && (view.getLayout().getEllipsisCount(3) > 0);
     }
 
 

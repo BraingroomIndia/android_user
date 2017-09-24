@@ -30,11 +30,15 @@ public class ThirdPartyProfileResp extends BaseResp {
         @SerializedName("interest")
         String interest;
 
+        @SerializedName("profile_image")
+        String  profileImage;
+
         @SerializedName("follower_cnt")
         long follower_count;
 
         @SerializedName("following_cnt")
         long following_count;
+
 
         @SerializedName("post_cnt")
         long post_count;

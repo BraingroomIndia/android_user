@@ -3,7 +3,6 @@
 
 
     <string name="screen_profile">My Profile</string>
-    <string name="facebook_app_id">1544024608972199</string>
     <string name="screen_explore">Explore</string>
     <string name="screen_filter">Filter Options</string>
     <string name="screen_vendor_profile">Vendor Profile</string>
@@ -34,16 +33,19 @@
     <string name="sign_up"><u>New User?Signup</u>.</string>
     <string name="google_maps_key" translatable="false">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
 
+    <string name="facebook_app_id" translatable="false">174195469818514</string>
+    <string name="fb_login_protocol_scheme">fb174195469818514</string>
+
 
     <string name="action_done">Done</string>
     <string name="action_discard">Discard</string>
 
-    <string name="action_tips_tricks">Knowledge &amp; Nugget</string>
+    <string name="action_tips_tricks">Knowledge Nugget</string>
     <string name="action_learners_forum">Buy &amp; Sell</string>
     <string name="action_tutors_talk">Activity Partners</string>
 
-    <string name="action_discuss_n_decide">Discuss &amp; Decide</string>
-    <string name="action_tutors_article">Tutors Article</string>
+    <string name="action_discuss_n_decide">Discussion Forum</string>
+    <string name="action_tutors_article">Articles &amp; Videos</string>
 
     <string name="action_message">Message</string>
     <string name="action_notification">Notification</string>
@@ -76,7 +78,7 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="a10">Select \'Promote your Class\' and choose your required days to promote your classes. Payments for home page &amp; category page featured listings will be different and will change from time to time based on demand. Vendors should check the details thoroughly before booking.</string>
     <string name="a11">BrainGroom Catalogue is the B2B feature which helps Schools, Colleges, Corporate, Clubs, Residential Communities and Parties to organize an event (workshops/classes/activities) at their location within few clicks. To list your class/workshop/activity, click on \'Add to Catalogue\' in your Dashboard and select the respective class/activity/workshop to be added. After Admin verification, it will get posted in the Catalogue list.</string>
     <string name="a12">For mobile application users, a push notification will be sent if there is any booking. Web users will get a notification in their respective BrainGroom dashboard for booking details.</string>
-    <string name="booking_related_help">For any booking related help contact us</string>
+    <string name="booking_related_help">Contact Customer Care</string>
 
     <string name="action_connect">Connect</string>
 

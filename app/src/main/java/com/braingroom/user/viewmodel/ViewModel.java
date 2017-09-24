@@ -42,7 +42,7 @@ public class ViewModel extends BaseObservable {
 
     public final String rupeesSymbol = "&#x20b9;";
 
-    public final String BG_ID;
+    public String BG_ID;
 
     @Setter
     protected FirebaseAnalytics mFirebaseAnalytics;
@@ -82,6 +82,7 @@ public class ViewModel extends BaseObservable {
         UserApplication.getInstance().getMAppComponent().inject(this);
         BG_ID = pref.getString(Constants.BG_ID, "");
         setLoggedIn();
+
         TAG = this.getClass().getSimpleName();
         if (pref.getBoolean(Constants.NEW_FCM, false)) {
             apiService.registerUserDevice().subscribe(new Consumer<BaseResp>() {
@@ -129,6 +130,7 @@ public class ViewModel extends BaseObservable {
 
 
     public void handleActivityResult(final int requestCode, int resultCode, Intent data) {
+        BG_ID = pref.getString(Constants.BG_ID, "");
     }
 
     public void retry() {

@@ -1,5 +1,9 @@
 package com.braingroom.user.viewmodel;
 
+import android.databinding.ObservableBoolean;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.WinnerResp;
@@ -9,12 +13,12 @@ import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.FeaturedPostActivity;
-import com.braingroom.user.viewmodel.fragment.FeaturedPostItemViewModel;
 import com.braingroom.user.viewmodel.fragment.WinnersViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -34,6 +38,8 @@ public class FeaturedPostViewModel extends ViewModel {
     public List<ConnectFeedItemViewModel> connectFeedItemViewModelList = new ArrayList<>();
 
     public List<WinnersViewModel> winnersViewModelList = new ArrayList<>();
+
+    public ObservableBoolean hideWinnerFragment = new ObservableBoolean(false);
 
     public FeaturedPostViewModel(final @NonNull Navigator navigator, @NonNull final HelperFactory helperFactory,
                                  @NonNull final MessageHelper messageHelper, final FeaturedPostActivity.UiHelper uiHelper,
@@ -68,10 +74,18 @@ public class FeaturedPostViewModel extends ViewModel {
                     public void accept(@NonNull ConnectFeedResp resp) throws Exception {
                         apiSuccessful = true;
                         connectFeedItemViewModelList = new ArrayList<>();
-                        for (ConnectFeedResp.Snippet snippet : resp.getData()) {
-                            connectFeedItemViewModelList.add(new ConnectFeedItemViewModel(snippet, false, false, connectUiHelper, helperFactory, messageHelper, navigator));
-                        }
-                        uiHelper.setPostPagerAdapter();
+                        if (!isEmpty(resp) && !isEmpty(resp.getData())) {
+                            for (ConnectFeedResp.Snippet snippet : resp.getData()) {
+                                connectFeedItemViewModelList.add(new ConnectFeedItemViewModel(snippet, false, false, connectUiHelper, helperFactory, messageHelper, navigator));
+                            }
+                            uiHelper.setPostPagerAdapter();
+                        } else
+                            messageHelper.showAcceptableInfo("", "No post of the day available visit later ", new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@android.support.annotation.NonNull MaterialDialog materialDialog, @android.support.annotation.NonNull DialogAction dialogAction) {
+                                    navigator.finishActivity();
+                                }
+                            });
 
                     }
                 }, new Consumer<Throwable>() {
@@ -95,7 +109,7 @@ public class FeaturedPostViewModel extends ViewModel {
                 filterData.setMajorCateg(LEARNER_FORUM);
                 filterData.setMinorCateg(TIPS_TRICKS);
                 filterData.setFeaturedPost(true);
-                apiService.getWeaklyWinners().doOnError(new Consumer<Throwable>() {
+                apiService.getWeeklyWinners().doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         navigator.finishActivity();
@@ -105,16 +119,26 @@ public class FeaturedPostViewModel extends ViewModel {
                     public void accept(@NonNull WinnerResp resp) throws Exception {
                         apiSuccessful1 = true;
                         winnersViewModelList = new ArrayList<>();
+
                         for (WinnerResp.Snippet snippet : resp.getData()) {
                             winnersViewModelList.add(new WinnersViewModel(snippet, navigator));
                         }
-                        uiHelper.setWinnerPagerAdapter();
+                        if (isEmpty(resp.getData())) {
+                            hideWinnerFragment.set(true);
+
+                        } else uiHelper.setWinnerPagerAdapter();
 
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-                        navigator.finishActivity();
+                        messageHelper.showAcceptableInfo("Error", "Something went wrong ", new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@android.support.annotation.NonNull MaterialDialog materialDialog, @android.support.annotation.NonNull DialogAction dialogAction) {
+                                navigator.finishActivity();
+                            }
+                        });
+
                     }
                 });
             }

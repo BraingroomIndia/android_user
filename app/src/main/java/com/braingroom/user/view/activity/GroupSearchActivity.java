@@ -1,3 +1,4 @@
+/*
 package com.braingroom.user.view.activity;
 
 import android.support.annotation.NonNull;
@@ -19,3 +20,4 @@ public class GroupSearchActivity extends BaseActivity {
         return R.layout.activity_group_search;
     }
 }
+*/

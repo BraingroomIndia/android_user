@@ -17,7 +17,7 @@
     </data>
 
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -25,7 +25,6 @@
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
             android:visibility="@{vm.isShimmerOn ? View.GONE : View.VISIBLE}"
             tools:context="com.braingroom.user.view.activity.ClassDetailActivity">
 
@@ -52,7 +51,7 @@
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             app:imageUrl="@{vm.videoThumb ?? vm.imagePath}"
-                            app:placeHolder="@{R.drawable.video_generic_thumb}" />
+                            app:placeHolder="@{R.drawable.video_placeholder}" />
 
                         <ImageView
                             android:layout_width="50dp"
@@ -95,7 +94,7 @@
                         android:onClick="@{vm.onBookClicked}"
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
-                        android:text="BOOK NOW"
+                        android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "BOOK FREE" : "BOOK NOW"}'
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
                         android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
@@ -108,6 +107,7 @@
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:context="com.braingroom.user.view.activity.ClassDetailActivity">
 
@@ -351,8 +351,10 @@
                                 android:layout_height="wrap_content"
                                 android:nestedScrollingEnabled="false"
                                 android:paddingBottom="@dimen/margin_med"
+                                android:paddingEnd="@dimen/margin_med"
                                 android:paddingLeft="@dimen/margin_large"
                                 android:paddingRight="@dimen/margin_med"
+                                android:paddingStart="@dimen/margin_large"
                                 android:paddingTop="@dimen/margin_med"
                                 bind:items="@{vm.addresses}"
                                 bind:layout_vertical="@{true}"
@@ -379,6 +381,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@drawable/bottom_line_drawable"
                             android:orientation="vertical">
 
 
@@ -388,6 +391,7 @@
                                 android:background="@drawable/bottom_line_drawable"
                                 android:gravity="center_vertical"
                                 android:paddingLeft="@dimen/margin_large"
+                                android:paddingRight="@dimen/margin_large"
                                 android:text="Contact Us "
                                 android:textColor="@color/colorTextDark"
                                 android:textSize="@dimen/text_size_medium"
@@ -399,22 +403,25 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/margin_large"
                                 android:layout_marginTop="@dimen/margin_large"
-                                android:background="@drawable/bottom_line_drawable"
+
                                 android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
+                                    android:layout_margin="@dimen/margin_small"
                                     android:layout_weight="1"
                                     android:background="@color/white"
-                                    android:drawableLeft="@drawable/ic_call_black_24dp"
+                                    android:drawableLeft="@drawable/ic_customer_care"
                                     android:drawablePadding="@dimen/margin_large"
-                                    android:drawableStart="@drawable/ic_call_black_24dp"
+                                    android:drawableStart="@drawable/ic_customer_care"
                                     android:gravity="center_vertical"
                                     android:onClick="@{vm.phoneNumber.onOpenerClick}"
                                     android:paddingBottom="@dimen/margin_small"
+                                    android:paddingEnd="@dimen/margin_med"
                                     android:paddingLeft="@dimen/margin_large"
                                     android:paddingRight="@dimen/margin_med"
+                                    android:paddingStart="@dimen/margin_large"
                                     android:paddingTop="@dimen/margin_small"
                                     android:text="@string/booking_related_help"
                                     android:textColor="@color/materialBlue"
@@ -423,16 +430,19 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
+                                    android:layout_margin="@dimen/margin_small"
                                     android:layout_weight="1"
                                     android:background="@color/white"
-                                    android:drawableLeft="@drawable/ic_call_black_24dp"
+                                    android:drawableLeft="@drawable/ic_telephone_call_24dp"
                                     android:drawablePadding="@dimen/margin_large"
-                                    android:drawableStart="@drawable/ic_call_black_24dp"
+                                    android:drawableStart="@drawable/ic_telephone_call_24dp"
                                     android:gravity="center_vertical"
                                     android:onClick="@{vm.callTutor}"
                                     android:paddingBottom="@dimen/margin_small"
+                                    android:paddingEnd="@dimen/margin_med"
                                     android:paddingLeft="@dimen/margin_large"
                                     android:paddingRight="@dimen/margin_med"
+                                    android:paddingStart="@dimen/margin_large"
                                     android:paddingTop="@dimen/margin_small"
                                     android:text="Contact Tutor"
                                     android:textColor="@color/materialBlue"
@@ -441,17 +451,20 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
+                                    android:layout_margin="@dimen/margin_small"
                                     android:layout_marginTop="@dimen/margin_med"
                                     android:layout_weight="1"
                                     android:background="@color/white"
-                                    android:drawableLeft="@drawable/ic_teacher_black_24dp"
+                                    android:drawableLeft="@drawable/ic_professor_24dp"
                                     android:drawablePadding="@dimen/margin_large"
-                                    android:drawableStart="@drawable/ic_teacher_black_24dp"
+                                    android:drawableStart="@drawable/ic_professor_24dp"
                                     android:gravity="center_vertical"
                                     android:onClick="@{vm.onGetTutor}"
                                     android:paddingBottom="@dimen/margin_small"
+                                    android:paddingEnd="@dimen/margin_med"
                                     android:paddingLeft="@dimen/margin_large"
                                     android:paddingRight="@dimen/margin_med"
+                                    android:paddingStart="@dimen/margin_large"
                                     android:paddingTop="@dimen/margin_small"
                                     android:text="Get your Private tutor for this class"
                                     android:textColor="@color/materialBlue"
@@ -461,17 +474,20 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
+                                    android:layout_margin="@dimen/margin_small"
                                     android:layout_marginTop="@dimen/margin_med"
                                     android:layout_weight="1"
                                     android:background="@color/white"
-                                    android:drawableLeft="@drawable/ic_mode_edit_black_24dp"
+                                    android:drawableLeft="@drawable/ic_letter"
                                     android:drawablePadding="@dimen/margin_large"
-                                    android:drawableStart="@drawable/ic_mode_edit_black_24dp"
+                                    android:drawableStart="@drawable/ic_letter"
                                     android:gravity="center_vertical"
                                     android:onClick="@{vm.onQueryClicked}"
                                     android:paddingBottom="@dimen/margin_small"
+                                    android:paddingEnd="@dimen/margin_med"
                                     android:paddingLeft="@dimen/margin_large"
                                     android:paddingRight="@dimen/margin_med"
+                                    android:paddingStart="@dimen/margin_large"
                                     android:paddingTop="@dimen/margin_small"
                                     android:text="Post a query about this class"
                                     android:textColor="@color/materialBlue"
@@ -508,6 +524,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_large"
                             android:orientation="vertical">
 
                             <TextView
@@ -516,7 +533,7 @@
                                 android:background="@drawable/bottom_line_drawable"
                                 android:gravity="center_vertical"
                                 android:paddingLeft="@dimen/margin_large"
-                                android:text="Contact Us "
+                                android:text="Social Learning "
                                 android:textColor="@color/colorTextDark"
                                 android:textSize="@dimen/text_size_medium"
                                 app:font='@{@string/robotoBold}' />
@@ -725,7 +742,6 @@
 
         </android.support.design.widget.CoordinatorLayout>
 
-
         <!--<include-->
         <!--android:id="@+id/shimmer_container"-->
         <!--layout="@layout/class_detail_shimmer"-->
@@ -738,18 +754,17 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center"
             android:visibility="@{vm.isShimmerOn}" />
 
         <include
             layout="@layout/content_internet_connectivity"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             app:vm="@{vm.connectivityViewmodel}" />
 
 
-    </RelativeLayout>
+    </FrameLayout>
 </layout>
 

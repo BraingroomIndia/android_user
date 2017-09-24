@@ -27,7 +27,8 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
+                android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 app:imageUrl="@{vm.classData.image}"
                 app:placeHolder="@{vm.placeHolder}"
@@ -61,7 +62,7 @@
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="@{vm.classData.teacher}"
+                    android:text="@{vm.classData.classProvider}"
                     android:textColor="@color/colorTextGray"
                     android:textSize="@dimen/text_size_small"
                     app:font='@{@string/robotoRegular}'
@@ -116,7 +117,7 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
-                        android:text='@{vm.classData.price == null || "".equals(vm.classData.price) ? "N/A" : "Rs "+vm.classData.price}'
+                        android:text='@{vm.classData.price == null || "".equals(vm.classData.price) || "0".equals(vm.classData.price)  ? "Book Free" : "Rs "+vm.classData.price}'
                         android:textColor="@color/materialGreen"
                         app:font='@{@string/robotoRegular}'
                         tools:text="Rs 500" />

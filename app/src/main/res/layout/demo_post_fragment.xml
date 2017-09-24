@@ -15,180 +15,270 @@
 
     </data>
 
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="@{vm.openConnect}"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_small">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="wrap_content"
+            android:onClick="@{vm.openConnect}"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_small"
+            android:visibility="@{vm.showLoadingItem || vm.showNoPost ? View.GONE : View.VISIBLE }">
 
-            <ImageView
-                android:id="@+id/vendorProfile"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="@dimen/margin_small"
-                android:scaleType="centerCrop"
-                app:imageUrl="@{vm.vendorImage}" />
-
-            <TextView
-                android:id="@+id/feed_title"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/vendorProfile"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:lines="1"
-                android:text="@{vm.vendorName}"
-                android:textColor="@color/colorTextDark"
-                android:textSize="@dimen/text_size_medium"
-                app:font='@{@string/robotoBold}' />
-
-
-            <LinearLayout
-                android:id="@+id/institute"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/feed_title"
-                android:layout_toRightOf="@id/vendorProfile">
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_below="@id/feed_title"
-                    android:layout_toRightOf="@id/vendorProfile"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="@{vm.vendorCollege}"
-                    android:textColor="@color/colorTextDark"
-                    android:textSize="@dimen/text_size_medium"
-                    android:visibility="@{vm.vendorCollege!=null? View.VISIBLE : View.GONE}"
-                    app:font='@{@string/robotoRegular}' />
-
-                <TextView
-
-                    android:id="@+id/second_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_below="@id/feed_title"
-                    android:layout_toRightOf="@id/vendorProfile"
-                    android:text="@{vm.date}"
-                    android:textColor="@color/colorTextGray"
-                    android:textSize="@dimen/text_size_medium"
-                    android:visibility="@{vm.vendorCollege!=null? View.GONE : View.VISIBLE}"
-                    app:font='@{@string/robotoRegular}' />
-            </LinearLayout>
-
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_alignParentBottom="false"
-                android:layout_below="@+id/institute"
-                android:layout_toRightOf="@+id/vendorProfile"
-                android:orientation="horizontal">
+                android:layout_height="70dp">
+
+                <ImageView
+                    android:id="@+id/vendorProfile"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="@dimen/margin_small"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{vm.vendorImage}" />
 
                 <TextView
+                    android:id="@+id/feed_title"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/vendorProfile"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:text="@{vm.date}"
-                    android:textColor="@color/colorTextGray"
+                    android:text="@{vm.vendorName}"
+                    android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/text_size_medium"
-                    android:visibility="@{vm.vendorCollege!=null? View.VISIBLE : View.GONE}"
-                    app:font='@{@string/robotoRegular}' />
+                    app:font='@{@string/robotoBold}' />
 
-                <!--            <ImageView
-                                 android:layout_width="5dp"
-                                 android:layout_height="5dp"
-                                 android:layout_gravity="center_vertical"
-                                 android:layout_margin="@dimen/margin_med"
-                                 android:src="@drawable/solid_circle_gray" />
-                -->
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/institute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/feed_title"
+                    android:layout_toRightOf="@id/vendorProfile">
 
-        </RelativeLayout>
+                    <TextView
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:ellipsize="end"
-            android:maxLines="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/feed_title"
+                        android:layout_toRightOf="@id/vendorProfile"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@{vm.vendorCollege}"
+                        android:textColor="@color/colorTextDark"
+                        android:textSize="@dimen/text_size_medium"
+                        android:visibility="@{vm.vendorCollege!=null? View.VISIBLE : View.GONE}"
+                        app:font='@{@string/robotoRegular}' />
 
-            android:paddingBottom="@dimen/padding_small"
-            android:text="@{vm.title}"
-            android:textColor="@color/colorTextDark"
-            android:textSize="@dimen/text_size_medium"
-            app:font='@{@string/robotoRegular}' />
+                    <TextView
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:paddingBottom="@dimen/padding_small"
-            android:text="@{CommonUtils.fromHtml(vm.description)}"
-            android:textColor="@color/colorTextGray"
-            android:textSize="@dimen/text_size_medium"
-            app:font='@{@string/robotoRegular}' />
+                        android:id="@+id/second_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/feed_title"
+                        android:layout_toRightOf="@id/vendorProfile"
+                        android:text="@{vm.date}"
+                        android:textColor="@color/colorTextGray"
+                        android:textSize="@dimen/text_size_medium"
+                        android:visibility="@{vm.vendorCollege!=null? View.GONE : View.VISIBLE}"
+                        app:font='@{@string/robotoRegular}' />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_below="@+id/institute"
+                    android:layout_toRightOf="@+id/vendorProfile"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:text="@{vm.date}"
+                        android:textColor="@color/colorTextGray"
+                        android:textSize="@dimen/text_size_medium"
+                        android:visibility="@{vm.vendorCollege!=null? View.VISIBLE : View.GONE}"
+                        app:font='@{@string/robotoRegular}' />
+
+                    <!--            <ImageView
+                                     android:layout_width="5dp"
+                                     android:layout_height="5dp"
+                                     android:layout_gravity="center_vertical"
+                                     android:layout_margin="@dimen/margin_med"
+                                     android:src="@drawable/solid_circle_gray" />
+                    -->
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:ellipsize="end"
+                android:maxLines="1"
+
+                android:paddingBottom="@dimen/padding_small"
+                android:text="@{vm.title}"
+                android:textColor="@color/colorTextDark"
+                android:textSize="@dimen/text_size_medium"
+                app:font='@{@string/robotoRegular}' />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:paddingBottom="@dimen/padding_small"
+                android:text="@{CommonUtils.fromHtml(vm.description)}"
+                android:textColor="@color/colorTextGray"
+                android:textSize="@dimen/text_size_medium"
+                app:font='@{@string/robotoRegular}' />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{vm.videoThumb !=null ? View.VISIBLE :View.GONE}">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{vm.videoThumb }" />
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="4"
+                android:paddingLeft="@dimen/margin_large"
+                android:paddingRight="@dimen/margin_large"
+                android:text="view more posts"
+                android:textColor="@color/materialBlue"
+                android:textSize="@dimen/text_size_medium"
+                app:font='@{@string/robotoRegular}' />
+
+
+            <!--       <RelativeLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="30dp"
+                       android:layout_margin="@dimen/margin_small"
+                       android:background="@drawable/bottom_line_drawable"
+                       android:paddingBottom="@dimen/margin_small">
+
+                       <LinearLayout
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_alignParentRight="true"
+                           android:layout_alignParentEnd="true"
+                           android:orientation="horizontal">
+
+
+                       </LinearLayout>
+
+
+                   </RelativeLayout>-->
+
+        </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{vm.videoThumb !=null ? View.VISIBLE :View.GONE}">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_small"
+            android:visibility="@{vm.showNoPost ? View.VISIBLE : View.GONE}">
 
             <ImageView
+                android:id="@+id/icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/empty_board"/>
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:scaleType="centerCrop"
-                app:imageUrl="@{vm.videoThumb }" />
-
-
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/icon"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:lines="1"
+                android:text="No Post Available"
+                android:textColor="@color/colorTextGray"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoRegular}' />
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:layout_gravity="end"
-            android:paddingLeft="@dimen/margin_large"
-            android:paddingRight="@dimen/margin_large"
-            android:text="view more posts"
-            android:textColor="@color/materialBlue"
-            android:textSize="@dimen/text_size_medium"
-            app:font='@{@string/robotoRegular}' />
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:padding="@dimen/margin_small"
+            android:visibility="@{vm.showLoadingItem ? View.VISIBLE : View.GONE}">
 
+            <!--<com.facebook.shimmer.ShimmerFrameLayout-->
+            <!--android:id="@+id/shimmer_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
-        <!--       <RelativeLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="30dp"
-                   android:layout_margin="@dimen/margin_small"
-                   android:background="@drawable/bottom_line_drawable"
-                   android:paddingBottom="@dimen/margin_small">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_small">
 
-                   <LinearLayout
-                       android:layout_width="wrap_content"
-                       android:layout_height="match_parent"
-                       android:layout_alignParentRight="true"
-                       android:layout_alignParentEnd="true"
-                       android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/solid_shimmer_light_rounded_corner"
+                    android:paddingLeft="@dimen/margin_small" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_small">
 
-                   </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginBottom="@dimen/margin_med"
+                        android:layout_marginRight="75dp"
+                        android:background="@drawable/solid_shimmer_rounded_corner" />
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="50dp"
+                        android:background="@drawable/solid_shimmer_rounded_corner" />
 
-               </RelativeLayout>-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginBottom="@dimen/margin_med"
+                        android:layout_marginTop="@dimen/margin_med"
+                        android:background="@drawable/solid_shimmer_rounded_corner" />
 
-    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <!--</com.facebook.shimmer.ShimmerFrameLayout>-->
+        </android.support.v7.widget.CardView>
+    </FrameLayout>
 </layout>

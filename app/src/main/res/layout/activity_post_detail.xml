@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools">
+    xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.PostDetailActivity">
 
     <data>
 
@@ -25,8 +27,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="@{vm.noPostBackground ? View.GONE : View.VISIBLE}">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -73,9 +76,9 @@
 
 
                             <ImageView
+                                android:id="@+id/message"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
-                                android:id="@+id/message"
                                 android:layout_alignTop="@+id/feed_title"
                                 android:layout_marginLeft="@dimen/margin_small"
                                 android:layout_toRightOf="@+id/feed_title"
@@ -93,8 +96,6 @@
                                 android:layout_marginLeft="@dimen/margin_small"
                                 android:layout_toRightOf="@+id/message"
                                 app:vm="@{vm.followButtonVm}" />
-
-
 
 
                             <LinearLayout
@@ -572,6 +573,35 @@
 
             </LinearLayout>
         </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_small"
+            android:visibility="@{vm.noPostBackground ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/margin_small"
+                android:src="@drawable/ic_no_post_64dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/icon"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:lines="1"
+                android:text="Post is not available"
+                android:textColor="@color/colorTextGray"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoRegular}' />
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/loading"

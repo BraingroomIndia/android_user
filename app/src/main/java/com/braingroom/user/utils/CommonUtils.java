@@ -5,6 +5,8 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
 
+import java.util.Random;
+
 /**
  * Created by agrahari on 10/04/17.
  */
@@ -42,4 +44,14 @@ public class CommonUtils {
     }
 
 
+    public static int randInt(int min, int max) {
+
+        // Usually this can be a field rather than a method variable
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+
+        return rand.nextInt((max - min)) + min;
+    }
 }

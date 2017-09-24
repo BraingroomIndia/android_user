@@ -188,7 +188,7 @@ public class ProfileViewModel1 extends ViewModel {
                         pgInstitution.s_1.set(data.getPgInstituteName());
                         ugPassoutYear.s_1.set(data.getUgInstitutePassingYear());
                         pgPassoutYear.s_1.set(data.getPgInstitutePassingYear());
-                        imageUploadVm.remoteAddress.set(data.getProfileImage());
+                        imageUploadVm.setRemoteAddress(data.getProfileImage());
                         genderVm.setSelectedItemsMap(selectedGender);
                         localities.s_1.set(data.getLocality());
                         if (data.getDob() != null && !data.getDob().equals(""))
@@ -237,8 +237,8 @@ public class ProfileViewModel1 extends ViewModel {
             public List<ViewModel> apply(ConnectFeedResp resp) throws Exception {
                 currentPage = nextPage;
                 nextPage = resp.getNextPage();
-                if (resp.getData().size() == 0 && nextPage < 1) {
-                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
+                if (resp.getData().size() == 0 && currentPage < 1) {
+                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No Post Available", null));
                 } else {
                     //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {

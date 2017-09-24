@@ -39,8 +39,8 @@ public class GridViewModel extends ViewModel {
     protected final static int OnlineCommunity = 5;
 
 
-    private String temp1 = "https://www.braingroom.com/img/category_image/201707111154200856274001499774060.jpg";
-    private String temp2 = "https://www.braingroom.com/img/category_image/201707111155160426418001499774116.jpg";
+    private String temp1 = "https://www.braingroom.com/img/community.jpg";
+    private String temp2 = "https://www.braingroom.com/img/online_classes.jpg";
 
 
     public final Observable<List<ViewModel>> gridItems;
@@ -81,7 +81,7 @@ public class GridViewModel extends ViewModel {
                 title.set(connectSection);
                 return getConnectSection().mergeWith(Observable.just(getGridLoadingItems(5)));
             case OnlineCommunity:
-                title.set("Dummy Title");
+                title.set("Group classes and Online classes");
                 return getCommunityAndOnlineClass();
             default:
                 return Observable.just(getGridLoadingItems(6));
@@ -241,13 +241,13 @@ public class GridViewModel extends ViewModel {
     private Observable<List<ViewModel>> getCommunityAndOnlineClass() {
         ViewModel community, onlineClass;
         List<ViewModel> list = new ArrayList<ViewModel>();
-        community = new IconTextItemViewModel(temp1, "Community Group", new MyConsumer<IconTextItemViewModel>() {
+        community = new IconTextItemViewModel(temp1, "Group Classes", new MyConsumer<IconTextItemViewModel>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                 navigator.navigateActivity(CommunityListActivity.class, null);
             }
         });
-        onlineClass = new IconTextItemViewModel(temp2, "Online Class", new MyConsumer<IconTextItemViewModel>() {
+        onlineClass = new IconTextItemViewModel(temp2, "Online Classes", new MyConsumer<IconTextItemViewModel>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                 FilterData filterData = new FilterData();

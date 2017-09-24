@@ -45,7 +45,7 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
             mobileVm.s_1.set(null);
 
         if (!TextUtils.isEmpty(emailId))
-            emailVm.s_1.set("");
+            emailVm.s_1.set(null);
 
         onContinue = new Action() {
             @Override

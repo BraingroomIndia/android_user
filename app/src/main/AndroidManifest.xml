@@ -32,12 +32,12 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
-        <!--        <meta-data
-                    android:name="com.razorpay.ApiKey"
-                    android:value="rzp_live_SN4tYAqDnzHHem" />-->
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_OqXUgMZBz4WkBL" />
+            android:value="rzp_live_SN4tYAqDnzHHem" />
+        <!-- <meta-data
+             android:name="com.razorpay.ApiKey"
+             android:value="rzp_test_OqXUgMZBz4WkBL" />-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -354,6 +354,30 @@
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
         </activity>
 
+        <!--Facebook Login-->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
+        <!--Facebook Login-->
+
 
         <!-- Branch install referrer tracking -->
         <!-- io.branch.referral.InstallListener -->
@@ -385,9 +409,34 @@
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false" />
+        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
+     dispatching on non-Google Play devices -->
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
+             installation campaign reporting -->
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
 
         <!--   <activity android:name=".view.activity.ChatActivity"></activity>-->
     </application>
+
 
 </manifest>

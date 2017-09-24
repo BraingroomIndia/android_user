@@ -127,6 +127,7 @@ public class ThirdPartyViewModel extends ViewModel {
                 postCount.s_1.set("" + data.getPost_count());
                 followerCount.s_1.set("" + data.getFollower_count());
                 followingCount.s_1.set("" + data.getFollowing_count());
+                imageUploadVm.setRemoteAddress(data.getProfileImage());
                 if (data.getFollowStatus() == 0)
                     followButtonVm.changeButtonState(FollowButtonViewModel.STATE_FOLLOW);
                 else followButtonVm.changeButtonState(FollowButtonViewModel.STATE_FOLLOWED);
@@ -151,8 +152,8 @@ public class ThirdPartyViewModel extends ViewModel {
             public List<ViewModel> apply(ConnectFeedResp resp) throws Exception {
                 currentPage = nextPage;
                 nextPage = resp.getNextPage();
-                if (resp.getData().size() == 0 && nextPage < 1) {
-                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No Post Available", null));
+                if (resp.getData().size() == 0 && currentPage < 1) {
+                    nonReactiveItems.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No Post Available", null));
                 } else {
                     //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {

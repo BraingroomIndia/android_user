@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel.fragment;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,13 +10,19 @@ import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
+import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Created by godara on 24/07/17.
@@ -51,6 +58,9 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
 
     @NonNull
     public final ObservableField<String> videoThumb = new ObservableField<>("");
+    @NonNull
+    public final ObservableBoolean showLoadingItem, showNoPost;
+
 
     public final Action openConnect;
 
@@ -65,10 +75,18 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
 
             }
         };
+        showLoadingItem = new ObservableBoolean(true);
+        showNoPost = new ObservableBoolean(false);
 
-        apiService.getConnectFeed(filterData, 0).subscribe(new Consumer<ConnectFeedResp>() {
+        apiService.getConnectFeed(filterData, 0).onErrorReturn(new Function<Throwable, ConnectFeedResp>() {
+            @Override
+            public ConnectFeedResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                return new ConnectFeedResp(0, new ArrayList<ConnectFeedResp.Snippet>());
+            }
+        }).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ConnectFeedResp resp) throws Exception {
+                showLoadingItem.set(false);
                 if (!resp.getData().isEmpty()) {
                     ConnectFeedResp.Snippet data = resp.getData().get(0);
                     data.setVideo(getVideoId(data.getVideo()));
@@ -84,9 +102,21 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
                     videoThumb.set(!TextUtils.isEmpty(data.getImage()) ? data.getImage() : TextUtils.isEmpty(data.getVideo()) ? null : "http://img.youtube.com/vi/" + data.getVideo() + "/hqdefault.jpg");
 
 
-                }
+                } else showNoPost.set(true);
             }
         });
+    }
+
+    private Observable<List<ViewModel>> getLoadingItems() {
+        int count;
+        if (nonReactiveItems.isEmpty())
+            count = 4;
+        else
+            count = 2;
+        List<ViewModel> result = new ArrayList<>();
+        result.addAll(nonReactiveItems);
+        result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
+        return Observable.just(result);
     }
 
     private String getHumanDate(String timeStamp) {

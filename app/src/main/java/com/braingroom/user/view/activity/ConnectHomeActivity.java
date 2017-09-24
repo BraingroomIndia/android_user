@@ -209,7 +209,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
 
         };
-        return new ConnectHomeViewModel(getFirebaseAnalytics(),getGoogleTracker(),connectFilterData, getMessageHelper(), getNavigator(), getHelperFactory(), this);
+        return new ConnectHomeViewModel(getFirebaseAnalytics(), getGoogleTracker(), connectFilterData, getMessageHelper(), getNavigator(), getHelperFactory(), this);
     }
 
     @Override
@@ -319,6 +319,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             getNavigator().navigateActivity(SignupActivity.class, null);
             finish();
         }
+        if (id == R.id.nav_change_pass)
+            getNavigator().navigateActivity(ChangePasswordActivity.class, null);
         if (id == R.id.nav_faq)
             //Edited By Vikas Godara
             getNavigator().navigateActivity(FAQActivity.class, null);
@@ -580,7 +582,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
         if (FRAGMENT_TITLE_ALL_GROUPS.equals(title))
             return connectFilterViewModel.allGroups;
         if (FRAGMENT_TITLE_MY_GROUPS.equals(title))
-            return connectFilterViewModel.myGroups;
+          /*  return connectFilterViewModel.myGroups;*/
+            return null;
         if (FRAGMENT_TITLE_CATEGORY.equals(title))
             return connectFilterViewModel.categoryVm;
         if (FRAGMENT_TITLE_SEGMENT.equals(title))

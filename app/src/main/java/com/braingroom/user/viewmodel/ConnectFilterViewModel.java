@@ -31,7 +31,8 @@ public class ConnectFilterViewModel extends ViewModel {
 
 
     public final ObservableField<String> keywords = new ObservableField<>("");
-    public final SearchSelectListViewModel categoryVm, segmentsVm, myGroups, allGroups, countryVm, stateVm, cityVm, localityVM;
+    public final SearchSelectListViewModel categoryVm, segmentsVm, /*myGroups,*/
+            allGroups, countryVm, stateVm, cityVm, localityVM;
     public final DynamicSearchSelectListViewModel instituteVm, learnerVm, tutorVm;
     public final Action onBackClicked, onResetClicked, onApplyClicked;
     public Navigator navigator;
@@ -56,6 +57,19 @@ public class ConnectFilterViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
+
+                    allGroupsApiObservable = apiService.getGroups(selectedId).map(new Function<GroupResp, HashMap<String, Pair<String, String>>>() {
+                        @Override
+                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
+                            if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
+                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            for (GroupResp.Snippet snippet : resp.getData()) {
+                                resMap.put(snippet.getName(), new Pair<String, String>(snippet.getId(), snippet.getImage()));
+                            }
+                            return resMap;
+                        }
+                    });
+                    allGroups.changeDataSource(allGroupsApiObservable);
                     segmentsApiObservable = apiService.getSegments(selectedId).map(new Function<SegmentResp, HashMap<String, Pair<String, String>>>() {
                         @Override
                         public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull SegmentResp resp) throws Exception {
@@ -90,7 +104,7 @@ public class ConnectFilterViewModel extends ViewModel {
 
         segmentsVm = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_SEGMENT, messageHelper, navigator, "search for segments", false, segmentsApiObservable, "select a category first", null, fragmentHelper);
 
-        myGroupsApiObservable = apiService.getGroups().map(new Function<GroupResp, HashMap<String, Pair<String, String>>>() {
+      /*  myGroupsApiObservable = apiService.getGroups().map(new Function<GroupResp, HashMap<String, Pair<String, String>>>() {
             @Override
             public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
@@ -112,27 +126,16 @@ public class ConnectFilterViewModel extends ViewModel {
         };
 
         myGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_MY_GROUPS, messageHelper, navigator, "search for your groups", false, myGroupsApiObservable, "", myGroupsConsumer, fragmentHelper);
+*/
 
-        allGroupsApiObservable = apiService.getGroups().map(new Function<GroupResp, HashMap<String, Pair<String, String>>>() {
-            @Override
-            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
-                if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
-                for (GroupResp.Snippet snippet : resp.getData()) {
-                    resMap.put(snippet.getName(), new Pair<String, String>(snippet.getId(), snippet.getImage()));
-                }
-                return resMap;
-            }
-        });
-
-        allGroupsConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+       /* allGroupsConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     myGroups.clearSelectedValue();
                 }
             }
-        };
+        };*/
         countryApiObservable = apiService.getCountry().map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
             @Override
             public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
@@ -252,7 +255,7 @@ public class ConnectFilterViewModel extends ViewModel {
         tutorVm = new DynamicSearchSelectListViewModel(DynamicSearchSelectListViewModel.FRAGMENT_TITLE_Vendor, messageHelper, navigator, "search for institutes... ", false, "", null, fragmentHelper);
 
 
-        allGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_ALL_GROUPS, messageHelper, navigator, "search for groups", false, allGroupsApiObservable, "", allGroupsConsumer, fragmentHelper);
+        allGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_ALL_GROUPS, messageHelper, navigator, "search for groups", false, allGroupsApiObservable, "select a category first", allGroupsConsumer, fragmentHelper);
 
         onBackClicked = new Action() {
             @Override
@@ -281,7 +284,7 @@ public class ConnectFilterViewModel extends ViewModel {
         categoryVm.clearSelectedValue();
         segmentsVm.changeDataSource(null);
         segmentsVm.clearSelectedValue();
-        myGroups.clearSelectedValue();
+       /* myGroups.clearSelectedValue();*/
         allGroups.clearSelectedValue();
         countryVm.clearSelectedValue();
         stateVm.clearSelectedValue();
@@ -317,8 +320,8 @@ public class ConnectFilterViewModel extends ViewModel {
             segmentId = segmentsVm.selectedDataMap.values().iterator().next().first;
 
         String myGroupId = "";
-        if (!myGroups.selectedDataMap.isEmpty())
-            myGroupId = myGroups.selectedDataMap.values().iterator().next().first;
+       /* if (!myGroups.selectedDataMap.isEmpty())
+            myGroupId = myGroups.selectedDataMap.values().iterator().next().first;*/
 
         String allGroupId = "";
         if (!allGroups.selectedDataMap.isEmpty())

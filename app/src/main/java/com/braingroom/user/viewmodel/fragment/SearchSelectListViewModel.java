@@ -149,6 +149,7 @@ public class SearchSelectListViewModel extends ViewModel {
 
     public void changeDataSource(final Observable<HashMap<String, Pair<String, String>>> dataSource) {
         this.apiObservable = dataSource;
+        selectedDataMap.clear();
     }
 
     /*populates dataMap*/

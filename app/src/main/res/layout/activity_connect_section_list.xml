@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,41 +13,31 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_20sdp"
-                android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
 
-                <include
-                    layout="@layout/content_typical_grid"
-                    app:vm="@{vm.gridViewModel}" />
+        <include
+            layout="@layout/content_typical_grid"
+            app:vm="@{vm.gridViewModel}" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:onClick="@{vm.hideThisPage}"
-                    android:text="Don't show this page again"
-                    android:textColor="@color/blue"
-                    app:font='@{@string/robotoRegular}' />
-            </LinearLayout>
-        </ScrollView>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:gravity="center"
+            android:onClick="@{vm.hideThisPage}"
+            android:text="Don't show this page again"
+            android:textColor="@color/blue"
+            app:font='@{@string/robotoRegular}' />
 
         <include
             layout="@layout/content_internet_connectivity"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            app:vm="@{vm.connectivityViewmodel}" />
+            app:vm="@{vm.connectivityViewmodel}"
+            tools:visibility="gone" />
 
     </FrameLayout>
 

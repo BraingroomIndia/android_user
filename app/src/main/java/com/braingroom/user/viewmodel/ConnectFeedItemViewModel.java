@@ -17,6 +17,7 @@ import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.LikeResp;
 import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
@@ -37,13 +38,19 @@ import java.util.Date;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
+import static com.braingroom.user.utils.Constants.defaultProfilePic;
+
 
 public class ConnectFeedItemViewModel extends ViewModel {
 
     public static final String TAG = ConnectHomeActivity.class.getSimpleName();
 
+
     @NonNull
     public final ObservableField<String> vendorImage;
+
+    @NonNull
+    public final int profilePicPlaceHolder;
 
     @NonNull
     public final ObservableField<String> vendorName;
@@ -114,6 +121,22 @@ public class ConnectFeedItemViewModel extends ViewModel {
             R.drawable.main_category_2, //Edited By Vikas Godara
             R.drawable.main_category_6};
 
+    public final int[] profilePicResArray = new int[]{
+            R.drawable.man, //Edited By Vikas Godara
+            R.drawable.man_1,
+            R.drawable.man_2,
+            R.drawable.man_3, //Edited By Vikas Godara
+            R.drawable.man_4,
+            R.drawable.man_5,
+            R.drawable.woman,
+            R.drawable.woman_1,
+            R.drawable.woman_2,
+            R.drawable.woman_3,
+            R.drawable.woman_4,
+            R.drawable.woman_5,
+
+    };
+
     public final FollowButtonViewModel followButtonVm;
 
     public ConnectFeedItemViewModel(@NonNull final ConnectFeedResp.Snippet data, boolean hideMessageIcon, boolean hideFollowIcon, @NonNull final ConnectUiHelper uiHelper, @NonNull final HelperFactory helperFactory
@@ -126,9 +149,10 @@ public class ConnectFeedItemViewModel extends ViewModel {
         if (data.getCategoryId() != null)
             categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - 1]);
         weeklyPost = data.getWeeklyPost();
+        profilePicPlaceHolder = profilePicResArray[CommonUtils.randInt(0, profilePicResArray.length)];
         smallDate = getHumanDateSmall(data.getDate());
         this.navigator = navigator;
-        this.vendorImage = new ObservableField<>(data.getVendorImage());
+        this.vendorImage = new ObservableField<>(defaultProfilePic.equalsIgnoreCase(data.getImage()) ? "" : data.getImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
         this.segment = new ObservableField<>(data.getSegName());
         this.title = new ObservableField<>(data.getTitle());

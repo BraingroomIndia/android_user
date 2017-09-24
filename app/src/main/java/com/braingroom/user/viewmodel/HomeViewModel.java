@@ -6,30 +6,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.LinearLayout;
 
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ClassLocationData;
-import com.braingroom.user.model.dto.FilterData;
-import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.NotificationCountResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
-import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassDetailActivity;
-import com.braingroom.user.view.activity.ClassListActivity;
-import com.braingroom.user.view.activity.CommunityListActivity;
 import com.braingroom.user.view.activity.ExploreActivity;
 import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
-import com.braingroom.user.view.activity.SegmentListActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -49,7 +42,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -68,7 +60,7 @@ public class HomeViewModel extends ViewModel {
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
     public final GridViewModel categoryVm;
     public final GridViewModel gridViewModel;
-    public final ShowcaseClassListViewModel /*featuredVm,*/ trendingVm /*,indigenousVm*/;
+    public final ShowcaseClassListViewModel featuredVm, recommendedVm  /*,indigenousVm*/;
 
 
     private List<ClassLocationData> locationList = new ArrayList<>();
@@ -111,7 +103,8 @@ public class HomeViewModel extends ViewModel {
         this.uiHelper = uiHelper;
 
 //        this.featuredVm = new ShowcaseClassListViewModel("Fast Tracked - Education & Skill Development", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
-        this.trendingVm = new ShowcaseClassListViewModel("People's Choice - Hobbies & Sports", messageHelper, navigator, apiService.getTrendingClass(), ClassDetailActivity.class);
+        this.recommendedVm = new ShowcaseClassListViewModel("Recommended - Classes & Activities", messageHelper, navigator, apiService.getRecommendedClass(), ClassDetailActivity.class);
+        this.featuredVm = new ShowcaseClassListViewModel("Free - Classes & Activities", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
 //        this.indigenousVm = new ShowcaseClassListViewModel("Featured - Classes & Activities", messageHelper, navigator, apiService.getIndigeneousClass(), ClassDetailActivity.class);
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
@@ -166,7 +159,7 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws
                     Exception {
-                if (resp != null && resp.getData() != null) {
+                if (resp != null && resp.getData() != null && !resp.getData().isEmpty()) {
                     messageCount = resp.getData().get(0).getCount();
                     uiHelper.setCount();
 
@@ -180,7 +173,8 @@ public class HomeViewModel extends ViewModel {
                 apiService.getCompetitionStatus().subscribe(new Consumer<CompetitionStatusResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull CompetitionStatusResp resp) throws Exception {
-                        if (resp.getData() == null) {
+
+                        if (resp != null && resp.getData() == null && !resp.getData().isEmpty()) {
                             showCompetitionLink = false;
                         } else if (resp.getData().isEmpty()) {
                             showCompetitionLink = false;
@@ -209,7 +203,7 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws
                     Exception {
-                if (resp != null && resp.getData() != null) {
+                if (resp != null && resp.getData() != null && !resp.getData().isEmpty()) {
                     notificationCount = resp.getData().get(0).getCount();
                     uiHelper.setCount();
                 }
@@ -274,15 +268,17 @@ public class HomeViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull ExploreResp resp) throws Exception {
                 ClassLocationData cld;
                 locationList.clear();
-                for (final ExploreResp.Snippet snippet : resp.getData()) {
-                    cld = new ClassLocationData();
-                    cld.setLatitude(snippet.getLatitude());
-                    cld.setLongitude(snippet.getLongitude());
-                    cld.setClassId(snippet.getClassId());
-                    cld.setClassTopic(snippet.getClassTopic());
-                    cld.setColorCode(snippet.getColorCode());
-                    locationList.add(cld);
-                }
+
+                if (!isEmpty(resp.getData()))
+                    for (final ExploreResp.Snippet snippet : resp.getData()) {
+                        cld = new ClassLocationData();
+                        cld.setLatitude(snippet.getLatitude());
+                        cld.setLongitude(snippet.getLongitude());
+                        cld.setClassId(snippet.getClassId());
+                        cld.setClassTopic(snippet.getClassTopic());
+                        cld.setColorCode(snippet.getColorCode());
+                        locationList.add(cld);
+                    }
                 if (mGoogleMap != null && markerList.size() == 0)
                     populateMarkers(locationList);
             }
@@ -350,7 +346,7 @@ public class HomeViewModel extends ViewModel {
         callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
       /*  featuredVm.retry();*/
-        trendingVm.retry();
+        recommendedVm.retry();
       /*  indigenousVm.retry();*/
         categoryVm.retry();
         gridViewModel.retry();

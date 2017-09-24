@@ -32,10 +32,10 @@ import io.reactivex.functions.Function;
 
 public class FilterViewModel extends ViewModel {
 
-    public static final int CLASS_TYPE_CLASSES = 4;
+    public static final int CLASS_TYPE_WORKSHOP = 1;
     public static final int CLASS_TYPE_SEMINAR = 2;
     public static final int CLASS_TYPE_WEBINAR = 3;
-    public static final int CLASS_TYPE_WORKSHOP = 1;
+    public static final int CLASS_TYPE_CLASSES = 4;
     public static final int CLASS_TYPE_ACTIVITY = 5;
 
     public static final String ORIGIN_COMMUNITY = "HOME Community";

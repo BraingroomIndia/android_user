@@ -258,7 +258,7 @@
                 android:background="@color/materialGreen"
                 android:gravity="center"
                 android:onClick="@{vm.onProceedClicked}"
-                android:text='@{vm.totalAmount==0 ? "Select Items to Proceed" : vm.totalAmountAfterPromo==0?"Book for free" : "Pay Rs. " + vm.totalAmountAfterPromo}'
+                android:text='@{vm.showBookOption? (vm.totalAmountAfterPromo==0?"Book for free" : "Pay Rs. " + vm.totalAmountAfterPromo ):"Select Items to Proceed" }'
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_large"
                 app:font='@{@string/robotoBold}'

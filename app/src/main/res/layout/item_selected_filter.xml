@@ -5,9 +5,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
-            type="com.braingroom.user.viewmodel.DataItemViewModel" />
+            type="com.braingroom.user.viewmodel.IconTextItemViewModel" />
 
     </data>
 
@@ -16,19 +18,19 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         app:cardCornerRadius="@dimen/_4sdp"
-        app:cardElevation="@dimen/_5sdp">
+        app:cardElevation="@dimen/_4sdp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_small"
             android:orientation="horizontal"
+            android:padding="@dimen/margin_small"
             tools:ignore="UseCompoundDrawables">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{vm.s_1}"
+                android:text="@{vm.title}"
                 android:textColor="@color/black"
                 app:font='@{@string/robotoRegular}'
                 tools:text="Selected Item Name" />
@@ -36,11 +38,13 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/margin_small_neg"
-                android:layout_gravity="center"
-                android:contentDescription="@{vm.s_1}"
+                android:gravity="center"
                 android:onClick="@{() -> vm.onClicked.accept(vm)}"
-                android:src="@drawable/ic_close_black_36dp" />
+                android:paddingLeft="3dp"
+                android:paddingStart="3dp"
+                android:visibility="@{vm.imageRes==0 ? View.GONE : View.VISIBLE}"
+                app:placeHolder="@{vm.imageRes}"
+                tools:src="@drawable/ic_close_black_16dp"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

@@ -69,7 +69,10 @@
 
                 <include
                     layout="@layout/content_showcase_list_1"
-                    app:vm="@{vm.trendingVm}" />
+                    app:vm="@{vm.recommendedVm}" />
+                <include
+                    layout="@layout/content_showcase_list_1"
+                    app:vm="@{vm.featuredVm}" />
 
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"

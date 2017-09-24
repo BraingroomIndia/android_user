@@ -21,6 +21,7 @@ import com.braingroom.user.view.activity.MessageActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.PostDetailActivity;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -79,14 +80,13 @@ public class FCMService extends FirebaseMessagingService {
         data.putString("notification_id", notificationId);
         data.putBoolean("pushNotification", true);
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
-        if (mTracker != null) {
-            mTracker.send(new HitBuilders.EventBuilder()
-                    .setCategory("Notification Received")
-                    .setAction(notificationId)
-                    .setLabel(shortDescription)
-                    .setNonInteraction(false)
-                    .build());
-        }
+
+        SendEventGoogleAnalytics(this, "Notification Received", notificationId, shortDescription);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, notificationId);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, shortDescription);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Notification Received");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
 
         if (postId != null) {
@@ -121,6 +121,7 @@ public class FCMService extends FirebaseMessagingService {
             notificationBuilder = createBigPictureStyleNotification(title, imageUrl, shortDescription, pendingIntent);
         else notificationBuilder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_notifications_64px)
+                    .setLargeIcon(getBitmapFromResource(R.mipmap.ic_launcher))
                     .setContentTitle(title1 == null ? "" : title1)
                     .setContentText(messageBody)
                     .setAutoCancel(true)
@@ -151,6 +152,11 @@ public class FCMService extends FirebaseMessagingService {
         }
     }
 
+    public Bitmap getBitmapFromResource(int id) {
+        return BitmapFactory.decodeResource(getResources(), id);
+    }
+
+
     private NotificationCompat.Builder createBigTextStyleNotification(String title, String shortDescription, String detailDescription, PendingIntent pendingIntent) {
         NotificationCompat.Builder builder;
         builder = new NotificationCompat.Builder(this);
@@ -160,6 +166,7 @@ public class FCMService extends FirebaseMessagingService {
 
         builder.setContentTitle(title).
                 setSmallIcon(R.drawable.ic_notifications_64px).
+                setLargeIcon(getBitmapFromResource(R.mipmap.ic_launcher)).
                 setColor(getResources().getColor(R.color.push_notification)).
                 setContentText(shortDescription).
                 setStyle(style).
@@ -180,6 +187,7 @@ public class FCMService extends FirebaseMessagingService {
                 setContentText(shortDescription).
                 setColor(getResources().getColor(R.color.push_notification)).
                 setSmallIcon(R.drawable.ic_notifications_64px).
+                setLargeIcon(getBitmapFromResource(R.mipmap.ic_launcher)).
                 setStyle(style).
                 setAutoCancel(true).
                 setSound(defaultSoundUri).
@@ -187,4 +195,28 @@ public class FCMService extends FirebaseMessagingService {
         return builder;
     }
 
+    public void init(Context ctx) {
+        try {
+
+            if (mTracker == null && ctx != null) {
+                mTracker = GoogleAnalytics.getInstance(ctx).newTracker(R.xml.global_tracker);
+            }
+        } catch (Exception e) {
+            Log.d("Notification", "init, e=" + e);
+        }
+
+
+    }
+
+    public void SendEventGoogleAnalytics(Context iCtx, String iCategoryId, String iActionId, String iLabelId) {
+        init(iCtx);
+
+        // Build and send an Event.
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(iCategoryId)
+                .setAction(iActionId)
+                .setLabel(iLabelId)
+                .build());
+
+    }
 }

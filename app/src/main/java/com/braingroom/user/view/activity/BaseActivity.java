@@ -2,7 +2,6 @@ package com.braingroom.user.view.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
@@ -20,12 +18,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
-import android.view.KeyEvent;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -35,19 +29,18 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
-import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 
@@ -57,9 +50,6 @@ import javax.inject.Named;
 import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
-
-
-import java.util.List;
 
 
 public abstract class BaseActivity extends MvvmActivity {
@@ -117,17 +107,17 @@ public abstract class BaseActivity extends MvvmActivity {
         } catch (Exception e){e.printStackTrace();}*/
 
         FirebaseApp.initializeApp(this);
-        pushNotification = getIntentBoolean("splash");
+        pushNotification = getIntentBoolean("pushNotification");
         String notificationId = getIntentString("notification_id");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         UserApplication.getInstance().getMAppComponent().inject(this);
         screenDims = new ScreenDims();
         Point size = new Point();
         WindowManager w = getWindowManager();
-        if (pushNotification && !vm.isEmpty(notificationId)) {
-            if (vm.getLoggedIn())
+        if (pushNotification) {
+            if (vm.getLoggedIn() && !vm.isEmpty(notificationId))
                 vm.apiService.changeNotificationStatus(notificationId).subscribe();
-            vm.setCustomEvent("Notification Opened", notificationId, "", true);
+            SendEventGoogleAnalytics(this, "Notification opened", notificationId, "pushNotification", true);
         }
         w.getDefaultDisplay().getSize(size);
         screenDims.width = size.x;
@@ -460,5 +450,30 @@ public abstract class BaseActivity extends MvvmActivity {
         return new ViewModel();
     }
 
+    public void init(Context ctx) {
+        try {
+
+            if (mTracker == null && ctx != null) {
+                mTracker = GoogleAnalytics.getInstance(ctx).newTracker(R.xml.global_tracker);
+            }
+        } catch (Exception e) {
+            Log.d("Notification", "init, e=" + e);
+        }
+
+
+    }
+
+    public void SendEventGoogleAnalytics(Context context, String categoryId, String actionId, String labelId, boolean interaction) {
+        init(context);
+
+        // Build and send an Event.
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(categoryId)
+                .setAction(actionId)
+                .setNonInteraction(!interaction)
+                .setLabel(labelId)
+                .build());
+
+    }
 
 }

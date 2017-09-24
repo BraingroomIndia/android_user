@@ -143,7 +143,12 @@ public class DataflowService {
         LogoutReq.Snippet snippet = new LogoutReq.Snippet();
         snippet.setUserId(pref.getString(Constants.BG_ID, ""));
         snippet.setDeviceId(pref.getString(Constants.FCM_TOKEN, ""));
-        return api.logout(new LogoutReq(snippet)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        return api.logout(new LogoutReq(snippet)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, BaseResp>() {
+            @Override
+            public BaseResp apply(@NonNull Throwable throwable) throws Exception {
+                return new BaseResp();
+            }
+        });
     }
 
     public Observable<CommunityResp> getCommunity() {
@@ -156,8 +161,8 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<GroupResp> getGroups() {
-        return api.getGroups(ConnectDataReq.getGroupRequest()).subscribeOn(Schedulers.io())
+    public Observable<GroupResp> getGroups( String categoryId ) {
+        return api.getGroups(new ConnectDataReq( new ConnectDataReq.Snippet(categoryId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -430,6 +435,25 @@ public class DataflowService {
                     }
                 });
     }
+    public Observable<List<ClassData>> getRecommendedClass() {
+        return api.getRecommendedClass().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
+                    @Override
+                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
+                        List<ClassData> dataList = new ArrayList<>();
+                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
+                            try {
+                                dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                            } catch (Exception e) {
+                                //  e.printStackTrace();
+                                Log.d(TAG, "apply: " + e.toString());
+                            }
+
+                        }
+                        return dataList;
+                    }
+                });
+    }
 
     public Observable<List<ClassData>> getTrendingClass() {
         return api.getTrendingClass().subscribeOn(Schedulers.io())
@@ -461,7 +485,12 @@ public class DataflowService {
     public Observable<ExploreResp> getExploreDashboard(String latitude, String longitude) {
 
         return api.getExploreDashboard(new ExploreReq(new ExploreReq.Snippet(null, null, null, latitude, longitude))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, ExploreResp>() {
+                    @Override
+                    public ExploreResp apply(@NonNull Throwable throwable) throws Exception {
+                        return new ExploreResp(new ArrayList<ExploreResp.Snippet>());
+                    }
+                });
 
     }
 
@@ -595,7 +624,12 @@ public class DataflowService {
 
     public Observable<CompetitionStatusResp> getCompetitionStatus() {
         return api.getCompetitionStatus().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, CompetitionStatusResp>() {
+                    @Override
+                    public CompetitionStatusResp apply(@NonNull Throwable throwable) throws Exception {
+                        return new CompetitionStatusResp(new ArrayList<CompetitionStatusResp.Snippet>());
+                    }
+                });
     }
 
     public Observable<LikeResp> like(String postId) {
@@ -791,7 +825,7 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, NotificationCountResp>() {
                     @Override
                     public NotificationCountResp apply(@NonNull Throwable throwable) throws Exception {
-                        return new NotificationCountResp();
+                        return new NotificationCountResp(new ArrayList<NotificationCountResp.Snippet>());
                     }
                 });
     }
@@ -806,7 +840,7 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, NotificationCountResp>() {
                     @Override
                     public NotificationCountResp apply(@NonNull Throwable throwable) throws Exception {
-                        return new NotificationCountResp();
+                        return new NotificationCountResp(new ArrayList<NotificationCountResp.Snippet>());
                     }
                 });
     }
@@ -998,9 +1032,9 @@ public class DataflowService {
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<WinnerResp> getWeaklyWinners() {
-        List<WinnerResp.Snippet> snippetList = new ArrayList<>();
-        WinnerResp.Snippet snippet = new WinnerResp.Snippet("123", "Dummy Name", "https://dev.braingroom.com/img/default_profile.png", "Dummy College", 0, "Dummy winner");
+    public Observable<WinnerResp> getWeeklyWinners() {
+      /*  List<WinnerResp.Snippet> snippetList = new ArrayList<>();
+        WinnerResp.Snippet snippet = new WinnerResp.Snippet("123", "Dummy Name", "https://dev.braingroom.com/img/default_profile.png", "Dummy College", "3<sup>rd</sup>", "Dummy winner");
         snippetList.add(snippet);
         snippetList.add(snippet);
         snippetList.add(snippet);
@@ -1008,10 +1042,21 @@ public class DataflowService {
         snippetList.add(snippet);
         snippetList.add(snippet);
         snippetList.add(snippet);
-        return Observable.just(new WinnerResp(snippetList)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        return Observable.just(new WinnerResp(snippetList))*/
+        return api.getWeeklyPerformers().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, WinnerResp>() {
+            @Override
+            public WinnerResp apply(@NonNull Throwable throwable) throws Exception {
+                return new WinnerResp(new ArrayList<WinnerResp.Snippet>());
+            }
+        });
     }
 
     public Observable<PrimeMessageResp> getPrimeTimeMessage() {
-        return api.getPrimeMessage().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        return api.getPrimeMessage().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, PrimeMessageResp>() {
+            @Override
+            public PrimeMessageResp apply(@NonNull Throwable throwable) throws Exception {
+                return new PrimeMessageResp(new ArrayList<PrimeMessageResp.Snippet>());
+            }
+        });
     }
 }

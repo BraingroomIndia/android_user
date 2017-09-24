@@ -1,59 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="vm"
-            type="com.braingroom.user.viewmodel.GroupSearchViewModel" />
-    </data>
-
-    <RelativeLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"/>
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/search_header"
+    <!--
+
+        <data>
+
+            <variable
+                name="vm"
+                type="com.braingroom.user.viewmodel.GroupSearchViewModel" />
+        </data>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-            <RelativeLayout
+            <android.support.v7.widget.CardView
+                android:id="@+id/search_header"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?attr/actionBarSize">
 
-                <ImageView
-                    android:id="@+id/back_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:onClick="@{vm.onBackClicked}"
-                    android:padding="@dimen/margin_small"
-                    android:src="@drawable/ic_arrow_back" />
-
-                <EditText
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/padding_large"
-                    android:layout_toRightOf="@+id/back_arrow"
-                    android:background="@android:color/transparent"
-                    android:hint="@string/searchHintSmall"
-                    app:font='@{@string/robotoRegular}'
-                    android:text="@={vm.searchQuery}" />
+                    android:layout_height="match_parent">
 
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
+                    <ImageView
+                        android:id="@+id/back_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:onClick="@{vm.onBackClicked}"
+                        android:padding="@dimen/margin_small"
+                        android:src="@drawable/ic_arrow_back" />
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/search_header"
-            android:background="@color/white"
-            bind:items="@{vm.results}"
-            bind:layout_vertical="@{true}"
-            bind:view_provider="@{@layout/item_search_dropdown}" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/padding_large"
+                        android:layout_toRightOf="@+id/back_arrow"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/searchHintSmall"
+                        app:font='@{@string/robotoRegular}'
+                        android:text="@={vm.searchQuery}" />
 
-    </RelativeLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/search_header"
+                android:background="@color/white"
+                bind:items="@{vm.results}"
+                bind:layout_vertical="@{true}"
+                bind:view_provider="@{@layout/item_search_dropdown}" />
+
+        </RelativeLayout>
+    -->
 
 </layout>

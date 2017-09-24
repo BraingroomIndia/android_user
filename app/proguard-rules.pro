@@ -68,6 +68,7 @@
 ################timber
 -dontwarn org.jetbrains.annotations.**
 
+-dontwarn io.branch.**
 
 ############# razorpay-android-sample-app
 -keepclassmembers class * {@android.webkit.JavascriptInterface <methods>;}
@@ -88,6 +89,7 @@
 -dontwarn com.crashlytics.android.answers.shim.**
 
 -keep class com.google.firebase.**{*;}
+
 
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;

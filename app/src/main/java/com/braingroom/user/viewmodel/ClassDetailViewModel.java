@@ -112,6 +112,8 @@ public class ClassDetailViewModel extends ViewModel {
     @Setter
     ClassDetailActivity.UiHelper uiHelper;
 
+    public ObservableBoolean hideViewMore = new ObservableBoolean(false);
+
     public ConnectFilterData connectFilterDataKNN = new ConnectFilterData();
     public ConnectFilterData connectFilterDataBNS = new ConnectFilterData();
     public ConnectFilterData connectFilterDataFP = new ConnectFilterData();
@@ -239,21 +241,23 @@ public class ClassDetailViewModel extends ViewModel {
         callTutor = new Action() {
             @Override
             public void run() throws Exception {
-                apiService.contactTutor(classId).subscribe(new Consumer<ContactTutorResp>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull final ContactTutorResp resp) throws Exception {
-                        if (resp.getData().isEmpty())
-                            messageHelper.showDismissInfo("", resp.getResMsg());
-                        else {
-                            messageHelper.showAcceptableInfo("Offer", resp.getData().get(0).getDisplayText(), "Call Tutor", new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                    uiHelper.makeACall(resp.getData().get(0).getMobileNumber());
-                                }
-                            });
+                if (getLoggedIn())
+                    apiService.contactTutor(classId).subscribe(new Consumer<ContactTutorResp>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull final ContactTutorResp resp) throws Exception {
+                            if (resp.getData().isEmpty())
+                                messageHelper.showDismissInfo("", resp.getResMsg());
+                            else {
+                                messageHelper.showAcceptableInfo("Offer", resp.getData().get(0).getDisplayText(), "Call Tutor", new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                                        uiHelper.makeACall(resp.getData().get(0).getMobileNumber());
+                                    }
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+                else messageHelper.showLoginRequireDialog("Only logged user can call tutor", null);
             }
         };
 
@@ -389,6 +393,7 @@ public class ClassDetailViewModel extends ViewModel {
                             }
                         }
                         uiHelper.stopShimmer();
+                        hideViewMore.set(uiHelper.isViewEllipsized());
                         isShimmerOn.set(false);
                         apiSuccessful = true;
                         if (isMapVisible.get())
@@ -423,9 +428,7 @@ public class ClassDetailViewModel extends ViewModel {
                     public void run() throws Exception {
                         messageHelper.show("coming soon.");
                     }
-                }
-
-        ;
+                };
         onVendorProfileClicked = new
 
                 Action() {
@@ -556,6 +559,15 @@ public class ClassDetailViewModel extends ViewModel {
                 // e.printStackTrace();
             }
         }
+    }
+
+    public void releaseGoogleMap() {
+        if (mGoogleMap != null)
+            try {
+                mGoogleMap.clear();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     public void addToWishlist() {

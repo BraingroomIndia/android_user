@@ -37,4 +37,5 @@
             android:textSize="@dimen/text_size_large"
             app:font='@{@string/robotoRegular}' />
     </RelativeLayout>
+
 </layout>

@@ -1,6 +1,5 @@
 package com.braingroom.user.viewmodel;
 
-import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
@@ -10,7 +9,6 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.LoginActivity;
-import com.braingroom.user.view.activity.SignupActivity;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
@@ -62,8 +60,8 @@ public class ChangePasswordViewModel extends ViewModel {
         respObservable.subscribe(new Consumer<ChangePasswordResp>() {
 
             @Override
-            public void accept(@io.reactivex.annotations.NonNull ChangePasswordResp changePasswordResp) throws Exception {
-                if (changePasswordResp.getData() != null) {
+            public void accept(@io.reactivex.annotations.NonNull ChangePasswordResp resp) throws Exception {
+                if (resp != null && !isEmpty(resp.getData())) {
                     oldPassword.set("");
                     newPassword.set("");
                     confirmPassword.set("");
