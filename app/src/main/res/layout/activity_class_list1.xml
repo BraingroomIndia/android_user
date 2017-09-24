@@ -57,14 +57,17 @@
                             android:background="@drawable/solid_white_rounded_corner"
                             android:drawableLeft="@drawable/search_new"
                             android:drawableStart="@drawable/search_new"
+                            android:ellipsize="end"
                             android:focusableInTouchMode="true"
+                            android:hint="@string/searchHint"
                             android:imeOptions="actionSearch"
                             android:inputType="text"
-                            android:hint="@string/searchHint"
-                            android:textColorHint="@color/gray"
+                            android:maxLines="1"
                             android:padding="@dimen/margin_small"
                             android:text="@={vm.searchQuery}"
                             android:textColor="@color/black"
+                            android:textColorHint="@color/gray"
+                            android:textSize="@dimen/text_size_medium"
                             android:visibility="@{vm.hideSearchBar ? View.GONE :View.VISIBLE}" />
 
 
@@ -104,36 +107,86 @@
                         android:src="@{ vm.layoutType == ClassListViewModel1.LAYOUT_TYPE_TILE ?  @drawable/ic_format_list_bulleted_black_24dp : @drawable/ic_border_all_black_24dp }"
                         tools:src="@drawable/ic_format_list_bulleted_black_24dp" />
 
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginRight="1dp"
+                        android:layout_marginLeft="@dimen/_1sdp"
+                        android:layout_marginStart="@dimen/_1sdp"
                         android:layout_weight="1"
                         android:background="@color/white"
-                        android:drawableLeft="@drawable/ic_import_export_black_24dp"
-                        android:drawablePadding="@dimen/padding_medium"
-                        android:gravity="center"
-                        android:onClick="@{vm.onSortClicked}"
-                        android:padding="@dimen/padding_small"
-                        android:text="Sort By"
-                        android:textColor="@color/colorTextDark"
-                        app:font='@{@string/robotoRegular}' />
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
 
-                    <TextView
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:gravity="center"
+                            android:onClick="@{vm.onSortClicked}"
+                            android:padding="@dimen/padding_small"
+                            android:text="Sort By"
+                            android:textColor="@color/colorTextDark"
+                            app:font='@{@string/robotoRegular}' />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_toLeftOf="@id/textView"
+                            android:src="@drawable/ic_import_export_black_24dp" />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/_1sdp"
+                        android:layout_marginStart="@dimen/_1sdp"
                         android:layout_weight="1"
                         android:background="@color/white"
-                        android:drawableLeft="@drawable/ic_filter_list_black_24dp"
-                        android:drawablePadding="@dimen/padding_medium"
-                        android:gravity="center"
+                        android:gravity="center_horizontal"
                         android:onClick="@{vm.onFilterClicked}"
-                        android:padding="@dimen/padding_small"
-                        android:text="Filter"
-                        android:textColor="@color/colorTextDark"
-                        app:font='@{@string/robotoRegular}' />
+                        android:orientation="horizontal">
 
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:gravity="center"
+                            android:padding="@dimen/padding_small"
+                            android:text="Filter"
+                            android:textColor="@color/colorTextDark"
+                            app:font='@{@string/robotoRegular}' />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_toLeftOf="@id/textView1"
+                            android:src="@drawable/ic_filter_list_black_24dp" />
+
+                    </RelativeLayout>
+
+                    <!-- <TextView
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_weight="1"
+                         android:background="@color/white"
+                         android:drawableLeft="@drawable/ic_filter_list_black_24dp"
+                         android:drawablePadding="@dimen/padding_medium"
+                         android:gravity="center"
+                         android:onClick="@{vm.onFilterClicked}"
+                         android:padding="@dimen/padding_small"
+                         android:text="Filter"
+                         android:textColor="@color/colorTextDark"
+                         app:font='@{@string/robotoRegular}' />
+ -->
                 </LinearLayout>
 
             </android.support.design.widget.AppBarLayout>
@@ -142,10 +195,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/class_recyclerview"
                 android:layout_width="match_parent"
+                android:padding="2dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:layout_marginLeft="@dimen/margin_small"
-                android:layout_marginRight="@dimen/margin_small"
                 app:layoutManager="android.support.v7.widget.GridLayoutManager"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:spanCount="2"

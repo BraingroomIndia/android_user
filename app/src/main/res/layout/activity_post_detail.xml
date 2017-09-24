@@ -55,6 +55,7 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
                                 android:layout_marginRight="@dimen/_5sdp"
+                                app:placeHolder="@{vm.profilePicPlaceHolder}"
                                 android:onClick="@{vm.showthirdpartyProfile}"
                                 android:scaleType="centerCrop"
                                 app:imageUrl="@{vm.vendorImage}" />

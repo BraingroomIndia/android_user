@@ -152,7 +152,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         profilePicPlaceHolder = profilePicResArray[CommonUtils.randInt(0, profilePicResArray.length)];
         smallDate = getHumanDateSmall(data.getDate());
         this.navigator = navigator;
-        this.vendorImage = new ObservableField<>(defaultProfilePic.equalsIgnoreCase(data.getImage()) ? "" : data.getImage());
+        this.vendorImage = new ObservableField<>(defaultProfilePic.equalsIgnoreCase(data.getVendorImage()) ? "" : data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
         this.segment = new ObservableField<>(data.getSegName());
         this.title = new ObservableField<>(data.getTitle());

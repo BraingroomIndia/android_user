@@ -285,7 +285,7 @@ public class ClassListViewModel1 extends ViewModel {
                         if (categoryFilterMap != null && !categoryFilterMap.isEmpty()) {
                             if (segmentsFilterMap != null && !segmentsFilterMap.isEmpty()) {
                                 selectedItems.add(new IconTextItemViewModel(0, categoryFilterMap.keySet().iterator().next()));
-                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, segmentsFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, segmentsFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                     @Override
                                     public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                         segmentsFilterMap = new HashMap<String, Integer>();
@@ -295,7 +295,7 @@ public class ClassListViewModel1 extends ViewModel {
                                 }));
                             } else
 
-                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, categoryFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, categoryFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                     @Override
                                     public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                         categoryFilterMap = new HashMap<String, Integer>();
@@ -307,7 +307,7 @@ public class ClassListViewModel1 extends ViewModel {
 
 
                         if (localityFilterMap != null && !localityFilterMap.isEmpty()) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, localityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, localityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     localityFilterMap = new HashMap<String, String>();
@@ -320,7 +320,7 @@ public class ClassListViewModel1 extends ViewModel {
                             }));
                         }
                         if (communityFilterMap != null && !communityFilterMap.isEmpty()) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, communityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, communityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     communityFilterMap = new HashMap<String, Integer>();
@@ -330,7 +330,7 @@ public class ClassListViewModel1 extends ViewModel {
                             }));
                         }
                         if (classScheduleFilterMap != null && !classScheduleFilterMap.isEmpty()) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, classScheduleFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, classScheduleFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     classScheduleFilterMap = new HashMap<String, Integer>();
@@ -340,7 +340,7 @@ public class ClassListViewModel1 extends ViewModel {
                             }));
                         }
                         if (classTypeFilterMap != null && !classTypeFilterMap.isEmpty()) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, classTypeFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, classTypeFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     classTypeFilterMap = new HashMap<String, Integer>();
@@ -350,7 +350,7 @@ public class ClassListViewModel1 extends ViewModel {
                             }));
                         }
                         if (vendorListFilterMap != null && !vendorListFilterMap.isEmpty()) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_black_16dp, vendorListFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, vendorListFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
                                     vendorListFilterMap = new HashMap<String, String>();

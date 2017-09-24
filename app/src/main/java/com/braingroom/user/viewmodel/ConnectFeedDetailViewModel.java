@@ -16,6 +16,7 @@ import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.LikeResp;
 import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.ConnectUiHelper;
@@ -35,6 +36,8 @@ import java.util.Date;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
+import static com.braingroom.user.utils.Constants.defaultProfilePic;
+
 public class ConnectFeedDetailViewModel extends ViewModel {
 
     @NonNull
@@ -48,6 +51,9 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
     @NonNull
     public String userId;
+
+    @NonNull
+    public final int profilePicPlaceHolder;
 
     @NonNull
     public final ObservableField<String> date = new ObservableField<>();
@@ -138,12 +144,30 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     @NonNull
     String postId;
 
+
+    public final int[] profilePicResArray = new int[]{
+            R.drawable.man, //Edited By Vikas Godara
+            R.drawable.man_1,
+            R.drawable.man_2,
+            R.drawable.man_3, //Edited By Vikas Godara
+            R.drawable.man_4,
+            R.drawable.man_5,
+            R.drawable.woman,
+            R.drawable.woman_1,
+            R.drawable.woman_2,
+            R.drawable.woman_3,
+            R.drawable.woman_4,
+            R.drawable.woman_5,
+
+    };
+
     public ConnectFeedDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, final String postId, final ConnectUiHelper uiHelper, final HelperFactory helperFactory
             , final MessageHelper messageHelper, final Navigator navigator) {
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
 
+        profilePicPlaceHolder = profilePicResArray[CommonUtils.randInt(0, profilePicResArray.length)];
         this.navigator = navigator;
 
         messageHelper.showProgressDialog("Wait", "loading");
@@ -183,7 +207,8 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 if (resp.getData().get(0).getCategoryId() != null)
                     categoryImg.set(resArray[Integer.parseInt(resp.getData().get(0).getCategoryId()) - 1]);
 
-                vendorImage.set(resp.getData().get(0).getVendorImage());
+                vendorImage.set(defaultProfilePic.equalsIgnoreCase(data.getVendorImage()) ? "" : data.getVendorImage());
+
                 userId = resp.getData().get(0).getPostOwnerId();
                 date.set(getHumanDate(resp.getData().get(0).getDate()));
                 segment.set(resp.getData().get(0).getSegName());

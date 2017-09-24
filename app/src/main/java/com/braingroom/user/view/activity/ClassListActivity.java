@@ -51,8 +51,8 @@ public class ClassListActivity extends BaseActivity {
     private GridLayoutManager gridLayoutManager;
 
     private RecyclerView.OnScrollListener onScrollListener;
-    SpacingDecoration linearDecor = new SpacingDecoration((int) CommonUtils.convertDpToPixel(10), 1);
-    SpacingDecoration gridDecor = new SpacingDecoration((int) CommonUtils.convertDpToPixel(10), 2);
+    SpacingDecoration linearDecor = new SpacingDecoration((int) CommonUtils.convertDpToPixel(5), 1);
+    SpacingDecoration gridDecor = new SpacingDecoration((int) CommonUtils.convertDpToPixel(2), 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +169,7 @@ public class ClassListActivity extends BaseActivity {
                 popBackstack(tag);
             }
         };
-        viewModel = new ClassListViewModel1(getFirebaseAnalytics(),getGoogleTracker(),getMessageHelper(), getNavigator(), getHelperFactory(),
+        viewModel = new ClassListViewModel1(getFirebaseAnalytics(), getGoogleTracker(), getMessageHelper(), getNavigator(), getHelperFactory(),
                 (FilterData) getIntentSerializable(Constants.classFilterData),
                 (HashMap<String, Integer>) getIntentSerializable(Constants.categoryFilterMap)
                 , (HashMap<String, Integer>) getIntentSerializable(Constants.segmentsFilterMap)
