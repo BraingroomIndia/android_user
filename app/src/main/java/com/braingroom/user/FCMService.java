@@ -15,7 +15,10 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.braingroom.user.model.dto.FilterData;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.activity.ClassDetailActivity;
+import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.MessageActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
@@ -75,6 +78,8 @@ public class FCMService extends FirebaseMessagingService {
         String classId = remoteMessage.getData().get("class_id");
         String messageSenderId = remoteMessage.getData().get("sender_id");
         String messageSenderName = remoteMessage.getData().get("sender_name");
+        String categoryId = remoteMessage.getData().get("category_id");
+        String segmentId = remoteMessage.getData().get("segment_id");
         String title1 = remoteMessage.getData().get("type");
         String messageBody = remoteMessage.getData().get("message");
         data.putString("notification_id", notificationId);
@@ -88,7 +93,7 @@ public class FCMService extends FirebaseMessagingService {
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Notification Received");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-
+        FilterData classFilterData = new FilterData();
         if (postId != null) {
             intent = new Intent(this, PostDetailActivity.class);
             data.putString("postId", postId);
@@ -105,6 +110,13 @@ public class FCMService extends FirebaseMessagingService {
                 intent = new Intent(this, MessagesThreadActivity.class);
             data.putString("sender_id", messageSenderId);
             data.putString("sender_name", messageSenderName);
+        } else if (categoryId != null) {
+            intent = new Intent(this, ClassListActivity.class);
+            classFilterData.setCategoryId(categoryId);
+            if (segmentId != null)
+                classFilterData.setSegmentId(segmentId);
+            data.putSerializable(Constants.classFilterData, classFilterData);
+
         } else {
             intent = new Intent(this, HomeActivity.class);
         }

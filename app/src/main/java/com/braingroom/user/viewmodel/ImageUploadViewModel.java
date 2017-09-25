@@ -64,6 +64,17 @@ public class ImageUploadViewModel extends ViewModel {
         this.remoteAddress.set(!defaultProfilePic.equalsIgnoreCase(remoteAddress) ? remoteAddress : "");
     }
 
+    public ImageUploadViewModel(int placeholder, String remoteAddress) {
+        if (placeholder == R.drawable.avatar_male)
+            this.placeHolder.set(profilePicResArray[CommonUtils.randInt(0, profilePicResArray.length)]);
+        else
+            this.placeHolder.set(placeholder);
+        this.remoteAddress.set(!defaultProfilePic.equalsIgnoreCase(remoteAddress) ? remoteAddress : "");
+
+        onUploadClicked = null;
+
+    }
+
 
     @Override
     public void handleActivityResult(final int requestCode, int resultCode, Intent data) {

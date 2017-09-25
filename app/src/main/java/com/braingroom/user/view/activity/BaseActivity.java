@@ -10,6 +10,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -87,6 +88,7 @@ public abstract class BaseActivity extends MvvmActivity {
     public Toolbar toolbar;
     public NavigationView navigationView;
     Boolean pushNotification;
+    protected boolean doubleBackToExitPressedOnce;
 
     public final String TAG = this.getClass().getSimpleName();
 
@@ -409,6 +411,25 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     public void onBackPressed() {
 
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 5000);
+
+        if (isTaskRoot()) {
+            if (HomeActivity.class.getSimpleName().equals(this.getClass().getSimpleName()) && !doubleBackToExitPressedOnce) {
+                doubleBackToExitPressedOnce = true;
+                getMessageHelper().show("Press back again to exit");
+                return;
+            } else if (doubleBackToExitPressedOnce && HomeActivity.class.getSimpleName().equals(this.getClass().getSimpleName()))
+                super.onBackPressed();
+            else getNavigator().navigateActivity(HomeActivity.class, null);
+        }
+
         int count = getSupportFragmentManager().getBackStackEntryCount();
         /*try {
 
@@ -428,8 +449,10 @@ public abstract class BaseActivity extends MvvmActivity {
         } else {
             getSupportFragmentManager().popBackStack();
         }
+        doubleBackToExitPressedOnce = true;
 
     }
+
 
     public void popBackstack() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
@@ -443,6 +466,7 @@ public abstract class BaseActivity extends MvvmActivity {
         if (count > 0) {
             getSupportFragmentManager().popBackStack(title, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
+
     }
 
 
@@ -450,18 +474,6 @@ public abstract class BaseActivity extends MvvmActivity {
         return new ViewModel();
     }
 
-    public void init(Context ctx) {
-        try {
-
-            if (mTracker == null && ctx != null) {
-                mTracker = GoogleAnalytics.getInstance(ctx).newTracker(R.xml.global_tracker);
-            }
-        } catch (Exception e) {
-            Log.d("Notification", "init, e=" + e);
-        }
-
-
-    }
 
     public void SendEventGoogleAnalytics(Context context, String categoryId, String actionId, String labelId, boolean interaction) {
         init(context);

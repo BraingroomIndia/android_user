@@ -64,7 +64,7 @@ public class GridViewModel extends ViewModel {
     private Observable<List<ViewModel>> getGridItems(@NonNull HashMap<String, Integer> categoryMap) {
         final String categoryTitle = "Learn new skills or pick up a new hobby";
         final String segmentTitle = "Segments";
-        final String connectSection = "Connect Section";
+        final String connectSection = "Connect Sections";
         switch (type) {
             case CATEGORY:
                 title.set(categoryTitle);

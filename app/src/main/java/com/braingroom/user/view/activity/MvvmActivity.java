@@ -16,17 +16,21 @@
 
 package com.braingroom.user.view.activity;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.utils.BindingUtils;
 import com.braingroom.user.view.adapters.ViewModelBinder;
 import com.braingroom.user.viewmodel.ViewModel;
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -49,7 +53,7 @@ public abstract class MvvmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = UserApplication.getInstance().getDefaultTracker();
+        init(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         if (getIntent().getExtras() != null)
             extras = getIntent().getExtras().getBundle("classData");
@@ -76,9 +80,14 @@ public abstract class MvvmActivity extends AppCompatActivity {
     }
 
     @NonNull
-    protected FirebaseAnalytics getFirebaseAnalytics() {return mFirebaseAnalytics;}
+    protected FirebaseAnalytics getFirebaseAnalytics() {
+        return mFirebaseAnalytics;
+    }
+
     @NonNull
-    protected Tracker getGoogleTracker() {return mTracker;}
+    protected Tracker getGoogleTracker() {
+        return mTracker;
+    }
 
     @NonNull
     protected ViewModelBinder getDefaultBinder() {
@@ -112,6 +121,19 @@ public abstract class MvvmActivity extends AppCompatActivity {
         if (extras != null) {
             return extras.getSerializable(key);
         } else return null;
+
+    }
+
+    protected void init(Context ctx) {
+        try {
+
+            if (mTracker == null && ctx != null) {
+                mTracker = GoogleAnalytics.getInstance(ctx).newTracker(R.xml.global_tracker);
+            }
+        } catch (Exception e) {
+            Log.d("Notification", "init, e=" + e);
+        }
+
 
     }
 

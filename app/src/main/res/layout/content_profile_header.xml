@@ -80,21 +80,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_6sdp"
-        app:cardElevation="@dimen/_4sdp"
+        app:cardElevation="@dimen/_1sdp"
         tools:showIn="@layout/fragment_thirdparty_profile_1">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:background="@color/white"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding_small">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
                 app:imageUrl="@{imageUploadVm.remoteAddress}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -147,27 +150,27 @@
                 app:title="@{detail4}"
                 bind:layout_editor_absoluteX="80dp" />
 
-            <include
-                android:id="@+id/button_follow"
-                layout="@layout/button_follow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_image"
-                app:vm="@{followButtonVm}"
-                bind:layout_editor_absoluteX="0dp"
-                tools:layout="@layout/button_follow" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_med"
-                android:layout_marginStart="@dimen/margin_med"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_small"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@+id/button_follow"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/button_follow">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_image">
+
+                <include
+                    android:id="@+id/button_follow"
+                    layout="@layout/button_follow"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:vm="@{followButtonVm}"
+                    tools:layout="@layout/button_follow" />
 
                 <include
                     layout="@layout/item_profile_count_detail"

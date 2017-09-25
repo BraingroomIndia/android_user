@@ -18,14 +18,15 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/commenter_image"
-            android:onClick="@{vm.showthirdpartyProfile}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:onClick="@{vm.showthirdpartyProfile}"
             app:civ_border_color="@color/colorTextGray"
             app:civ_border_width="2dp"
-            app:imageUrl="@{vm.commenterImage}" />
+            app:imageUrl="@{vm.imageUploadViewModel.remoteAddress}"
+            app:placeHolder="@{vm.imageUploadViewModel.placeHolder}" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,8 +42,8 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="@{vm.commenterName}"
                 android:onClick="@{vm.showthirdpartyProfile}"
+                android:text="@{vm.commenterName}"
                 android:textColor="@color/colorTextDark"
                 android:textSize="@dimen/text_size_medium"
                 app:font='@{@string/robotoBold}' />
@@ -137,7 +138,8 @@
                     android:layout_gravity="center_vertical"
                     app:civ_border_color="@color/colorTextGray"
                     app:civ_border_width="2dp"
-                    app:imageUrl="@{vm.firstReplyImage}" />
+                    app:imageUrl="@{vm.replyImageUploadViewModel.remoteAddress}"
+                    app:placeHolder="@{vm.replyImageUploadViewModel.placeHolder}" />
 
                 <TextView
                     android:layout_width="wrap_content"

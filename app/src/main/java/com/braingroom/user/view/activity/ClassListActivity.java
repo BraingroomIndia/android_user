@@ -17,6 +17,7 @@ import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.SpacingDecoration;
+import com.braingroom.user.view.GridSpacingItemDecoration;
 import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
 import com.braingroom.user.view.fragment.SearchSelectListFragment;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
@@ -26,9 +27,7 @@ import java.util.HashMap;
 
 import lombok.Getter;
 
-import static com.braingroom.user.view.activity.FilterActivity.FRAGMENT_TITLE_CITY;
 import static com.braingroom.user.view.activity.FilterActivity.FRAGMENT_TITLE_LOCALITY;
-import static com.braingroom.user.view.activity.FilterActivity.FRAGMENT_TITLE_VENDORLIST;
 
 public class ClassListActivity extends BaseActivity {
 
@@ -52,7 +51,7 @@ public class ClassListActivity extends BaseActivity {
 
     private RecyclerView.OnScrollListener onScrollListener;
     SpacingDecoration linearDecor = new SpacingDecoration((int) CommonUtils.convertDpToPixel(5), 1);
-    SpacingDecoration gridDecor = new SpacingDecoration((int) CommonUtils.convertDpToPixel(2), 1);
+    GridSpacingItemDecoration gridDecor = new GridSpacingItemDecoration(2, (int) CommonUtils.convertDpToPixel(5), true, 0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +72,7 @@ public class ClassListActivity extends BaseActivity {
             mRecyclerView.setLayoutManager(linearLayoutManager);
             mRecyclerView.addItemDecoration(linearDecor);
             mRecyclerView.setAdapter(mAdapter);
+            mAdapter.setLayoutManager(linearLayoutManager);
             onScrollListener = new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -100,6 +100,7 @@ public class ClassListActivity extends BaseActivity {
             mRecyclerView.setLayoutManager(gridLayoutManager);
             mRecyclerView.addItemDecoration(gridDecor);
             mRecyclerView.setAdapter(mAdapter);
+            mAdapter.setLayoutManager(gridLayoutManager);
             onScrollListener = new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

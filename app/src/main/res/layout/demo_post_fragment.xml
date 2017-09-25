@@ -18,14 +18,20 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/margin_small"
+        android:paddingEnd="@dimen/margin_med"
+        android:paddingLeft="@dimen/margin_large"
+        android:paddingRight="@dimen/margin_med"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_small">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{vm.openConnect}"
             android:orientation="vertical"
-            android:padding="@dimen/margin_small"
+
             android:visibility="@{vm.showLoadingItem || vm.showNoPost ? View.GONE : View.VISIBLE }">
 
             <RelativeLayout
@@ -39,7 +45,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginRight="@dimen/margin_small"
                     android:scaleType="centerCrop"
-                    app:imageUrl="@{vm.vendorImage}" />
+                    app:imageUrl="@{vm.vendorImage}"
+                    app:placeHolder="@{vm.profilePicPlaceHolder}" />
 
                 <TextView
                     android:id="@+id/feed_title"
@@ -211,7 +218,7 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
                 android:padding="@dimen/margin_small"
-                android:src="@drawable/empty_board"/>
+                android:src="@drawable/ic_no_post_64dp" />
 
             <TextView
                 android:layout_width="match_parent"

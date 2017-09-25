@@ -5,12 +5,17 @@ package com.braingroom.user.view.adapters;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.braingroom.user.utils.BindingUtils;
 import com.braingroom.user.viewmodel.ViewModel;
+
+import lombok.Setter;
 
 
 public class NonReactiveRecyclerViewAdapter extends RecyclerView.Adapter<NonReactiveRecyclerViewAdapter.DataBindingViewHolder> {
@@ -23,6 +28,9 @@ public class NonReactiveRecyclerViewAdapter extends RecyclerView.Adapter<NonReac
     ViewModel viewModel;
 
     ViewProvider viewProvider;
+
+    @Setter
+    private RecyclerView.LayoutManager layoutManager;
 
     public NonReactiveRecyclerViewAdapter(ViewModel viewModel, ViewProvider viewProvider) {
         this.binder = BindingUtils.getDefaultBinder();
@@ -44,6 +52,16 @@ public class NonReactiveRecyclerViewAdapter extends RecyclerView.Adapter<NonReac
 
     @Override
     public void onBindViewHolder(DataBindingViewHolder holder, int position) {
+
+     /*   if (layoutManager != null && layoutManager instanceof GridLayoutManager) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            if (position % 2 == 0)
+                params.gravity = Gravity.END;
+            else
+                params.gravity = Gravity.START;
+            holder.itemView.setLayoutParams(params);
+        }*/
+        holder.getItemViewType();
         binder.bind(holder.viewBinding, viewModel.nonReactiveItems.get(position));
         holder.viewBinding.executePendingBindings();
 //        if (viewModel.nonReactiveItems.get(position) instanceof ShimmerItemViewModel)

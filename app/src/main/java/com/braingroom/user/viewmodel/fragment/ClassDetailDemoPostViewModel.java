@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.response.ConnectFeedResp;
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
@@ -24,11 +26,16 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
+import static com.braingroom.user.utils.Constants.defaultProfilePic;
+
 /**
  * Created by godara on 24/07/17.
  */
 
 public class ClassDetailDemoPostViewModel extends ViewModel {
+
+    @NonNull
+    public final int profilePicPlaceHolder;
     @NonNull
     public final ObservableField<String> vendorImage = new ObservableField<>("");
 
@@ -64,6 +71,21 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
 
     public final Action openConnect;
 
+    public final int[] profilePicResArray = new int[]{
+            R.drawable.man,
+            R.drawable.man_1,
+            R.drawable.man_2,
+            R.drawable.man_3,
+            R.drawable.man_4,
+            R.drawable.man_5,
+            R.drawable.woman,
+            R.drawable.woman_1,
+            R.drawable.woman_2,
+            R.drawable.woman_3,
+            R.drawable.woman_4,
+            R.drawable.woman_5,
+
+    };
 
     public ClassDetailDemoPostViewModel(final Navigator navigator, final ConnectFilterData filterData) {
         openConnect = new Action() {
@@ -75,6 +97,7 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
 
             }
         };
+        profilePicPlaceHolder = profilePicResArray[CommonUtils.randInt(0, profilePicResArray.length)];
         showLoadingItem = new ObservableBoolean(true);
         showNoPost = new ObservableBoolean(false);
 
@@ -90,7 +113,7 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
                 if (!resp.getData().isEmpty()) {
                     ConnectFeedResp.Snippet data = resp.getData().get(0);
                     data.setVideo(getVideoId(data.getVideo()));
-                    vendorImage.set(data.getVendorImage());
+                    vendorImage.set(defaultProfilePic.equalsIgnoreCase(data.getVendorImage()) ? "" : data.getVendorImage());
                     vendorName.set(data.getVendorName());
                     title.set(data.getTitle());
                     vendorCollege.set(data.getInstituteName());

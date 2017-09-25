@@ -20,10 +20,11 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:onClick="@{vm.showthirdpartyProfile}"
             app:civ_border_color="@color/colorTextGray"
             app:civ_border_width="2dp"
-            app:imageUrl="@{vm.userImage}"
-            android:onClick="@{vm.showthirdpartyProfile}" />
+            app:imageUrl="@{vm.imageUploadViewModel.remoteAddress}"
+            app:placeHolder="@{vm.imageUploadViewModel.placeHolder}" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,8 +40,8 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="@{vm.userName}"
                 android:onClick="@{vm.showthirdpartyProfile}"
+                android:text="@{vm.userName}"
                 android:textColor="@color/colorTextDark"
                 android:textSize="@dimen/text_size_medium"
                 app:font='@{@string/robotoBold}' />

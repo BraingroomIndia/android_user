@@ -118,6 +118,7 @@ public class ClassDetailViewModel extends ViewModel {
     public ConnectFilterData connectFilterDataBNS = new ConnectFilterData();
     public ConnectFilterData connectFilterDataFP = new ConnectFilterData();
     public ConnectFilterData connectFilterData = new ConnectFilterData();
+    public final ImageUploadViewModel imageUploadViewModel;
 
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
@@ -146,6 +147,7 @@ public class ClassDetailViewModel extends ViewModel {
             }
         });
 
+        imageUploadViewModel = new ImageUploadViewModel(R.drawable.avatar_male, "");
         connectFilterData.setMajorCateg("learners_forum");
         connectFilterDataKNN.setMajorCateg("learners_forum");
         connectFilterDataBNS.setMajorCateg("learners_forum");
@@ -337,6 +339,7 @@ public class ClassDetailViewModel extends ViewModel {
                                 price.set(classData.getLevelDetails().get(0).getGroups().get(1).getPrice());
                         else
                             price.set(classData.getLevelDetails().get(0).getGroups().get(0).getPrice());
+                        imageUploadViewModel.setRemoteAddress(classData.getTeacherPic());
                         teacherPic.set(classData.getTeacherPic());
                         teacherName.set(classData.getClassProvider());
                         try {

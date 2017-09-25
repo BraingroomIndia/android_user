@@ -3,11 +3,13 @@ package com.braingroom.user.viewmodel.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.braingroom.user.R;
 import com.braingroom.user.model.response.CommentListResp;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
+import com.braingroom.user.viewmodel.ImageUploadViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.text.DateFormat;
@@ -22,6 +24,8 @@ public class CommentsItemViewModel extends ViewModel {
     public final String commenterImage, commenterName, comment, commentDate;
     private String commenterId;
     public final int numReplies;
+    public final ImageUploadViewModel imageUploadViewModel;
+    public final ImageUploadViewModel replyImageUploadViewModel;
     //    public final ObservableInt numLikes = new ObservableInt();
 //    public final ObservableBoolean liked = new ObservableBoolean();
     public final String firstReplyImage, firstReplyName, firstReply;
@@ -29,6 +33,7 @@ public class CommentsItemViewModel extends ViewModel {
     public CommentsItemViewModel(@NonNull final String postId, @NonNull final CommentListResp.Snippet item, @NonNull final Navigator navigator, final ConnectUiHelper uiHelper) {
 
         commenterImage = item.getUserImage();
+        imageUploadViewModel = new ImageUploadViewModel(R.drawable.avatar_male, commenterImage);
         commenterName = item.getUserName();
         comment = item.getComment();
         commenterId = item.getUserId();
@@ -40,11 +45,13 @@ public class CommentsItemViewModel extends ViewModel {
             firstReplyImage = item.getReplies().get(0).getUserImage();
             firstReplyName = item.getReplies().get(0).getUserName();
             firstReply = item.getReplies().get(0).getReply();
+            replyImageUploadViewModel = new ImageUploadViewModel(R.drawable.avatar_male, firstReplyImage);
 
         } else {
             firstReplyImage = null;
             firstReplyName = null;
             firstReply = null;
+            replyImageUploadViewModel = new ImageUploadViewModel(R.drawable.avatar_male, "");
         }
 //        onLikeClicked = new Action() {
 //            @Override

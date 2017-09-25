@@ -47,7 +47,7 @@ public class WrapContentHeightViewPager extends ViewPager {
         if (wrapHeight) {
 
             // Keep the current measured width.
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.UNSPECIFIED);
 
         }
 
