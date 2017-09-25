@@ -47,6 +47,10 @@
                     app:detail1="@{vm.name.s_1}"
                     app:detail2="@{vm.educationInfo1.s_1}"
                     app:detail3="@{vm.interest.s_1}"
+                    app:detailIcon1="@{vm.detailIcon1}"
+                    app:detailIcon2="@{vm.detailIcon2}"
+                    app:detailIcon3="@{vm.detailIcon3}"
+                    app:detailIcon4="@{vm.detailIcon4}"
                     app:followButtonVm="@{vm.followButtonVm}"
                     app:followerCount="@{vm.followerCount.s_1}"
                     app:followingCount="@{vm.followingCount.s_1}"
@@ -54,6 +58,7 @@
                     app:layout_collapseMode="parallax"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed"
                     app:name="@{vm.name.s_1}"
+                    app:nameIcon="@{vm.nameIcon}"
                     app:postCount="@{vm.postCount.s_1}" />
             </android.support.design.widget.CollapsingToolbarLayout>
 

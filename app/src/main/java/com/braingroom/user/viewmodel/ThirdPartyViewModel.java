@@ -50,6 +50,7 @@ public class ThirdPartyViewModel extends ViewModel {
 
     public final String userId;
 
+    public final int nameIcon, detailIcon1, detailIcon2, detailIcon3, detailIcon4;
 
     @Getter
     public ConnectFilterData connectFilterData;
@@ -75,10 +76,16 @@ public class ThirdPartyViewModel extends ViewModel {
         }
     };
 
+
     public final Action onMessageClicked;
 
     public ThirdPartyViewModel(@NonNull final String userId, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull final HelperFactory helperFactory,
                                @NonNull final ConnectUiHelper uiHelper) {
+        nameIcon = R.drawable.ic_account_circle_black_24dp;
+        detailIcon1 = R.drawable.ic_account_circle_black_24dp;
+        detailIcon2 = R.drawable.ic_domain_black_24dp;
+        detailIcon3 = R.drawable.ic_domain_black_24dp;
+        detailIcon4 = R.drawable.ic_domain_black_24dp;
         messageHelper.showProgressDialog("Wait", "loading");
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
