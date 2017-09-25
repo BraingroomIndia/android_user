@@ -27,13 +27,13 @@
             android:background="@{vm.backgroundDrawable}"
             android:ellipsize="end"
             android:gravity="center"
-            android:minWidth="56dp"
+            android:minWidth="53dp"
             android:lines="1"
             android:onClick="@{vm.clickAction}"
             android:padding="@dimen/margin_small"
             android:text="@{vm.textVal}"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_medium"
+            android:textSize="14dp"
             app:font='@{@string/robotoRegular}'
             tools:background="@drawable/solid_blue_rounded_corner_follow"
             tools:text="Follow" />

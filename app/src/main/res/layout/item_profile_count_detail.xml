@@ -35,7 +35,7 @@
             android:maxLines="1"
             android:text="@{count}"
             android:textColor="@color/colorTextDark"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/text_size_large"
             app:font='@{@string/robotoBold}'
             tool:text="5" />
 
