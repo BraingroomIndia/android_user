@@ -3,7 +3,7 @@ package com.braingroom.user.utils;
 
 public class Constants {
 
-    public static final String defaultProfilePic = "https://dev.braingroom.com/img/default_profile.png";
+    public static final String defaultProfilePic = "https://www.braingroom.com/img/default_profile.png";
 
     public static final String LOGGED_IN = "looged_in";
     public static final String UUID = "UUID";
@@ -28,6 +28,8 @@ public class Constants {
     //Bundle keys
 
     public static final String USER_ID = "userId";
+
+    public static final String connectFilterData="connectFilterData";
 
     public static final String classFilterData = "ClassFilterData";
     public static final String categoryFilterMap = "categoryFilterMap";

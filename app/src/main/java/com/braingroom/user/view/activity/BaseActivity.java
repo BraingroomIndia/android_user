@@ -28,14 +28,12 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.viewmodel.ViewModel;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -195,7 +193,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
                 @Override
                 public void openStandaloneYoutube(String videoId) {
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(BaseActivity.this, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId, 100, true, true);
+                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(BaseActivity.this, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId, 100, true, false);
                     startActivity(intent);
                 }
 

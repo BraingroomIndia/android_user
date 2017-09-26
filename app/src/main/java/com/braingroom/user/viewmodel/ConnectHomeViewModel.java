@@ -44,6 +44,7 @@ public class ConnectHomeViewModel extends ViewModel {
     //    public GroupDataViewModel groupVm;
     public GroupDataViewModel catSegVm;
 
+    public final ImageUploadViewModel imageUploadViewModel;
     public final ObservableField<String> profileImage = new ObservableField();
     public final ObservableField<String> userName = new ObservableField("Hello Learner!");
     public final ObservableField<String> userEmail = new ObservableField("Sign In.");
@@ -59,6 +60,7 @@ public class ConnectHomeViewModel extends ViewModel {
     private boolean paginationInProgress = false;
     private int nextPage = 0;
     private int currentPage = -1;
+
 
     //    public final Observable<List<ViewModel>> feedItems;
 //    public final Function<ConnectFeedResp, List<ViewModel>> feedDataMapFunction;
@@ -86,6 +88,7 @@ public class ConnectHomeViewModel extends ViewModel {
     public ConnectHomeViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final ConnectFilterData connectFilterData,
                                 @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
                                 @NonNull final HelperFactory helperFactory, @NonNull final ConnectUiHelper uiHelper) {
+        imageUploadViewModel = new ImageUploadViewModel(R.drawable.avatar_male, pref.getString(Constants.PROFILE_PIC, ""));
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.filterData = connectFilterData;
         this.loggedIn = new ObservableBoolean(getLoggedIn());
@@ -305,6 +308,7 @@ public class ConnectHomeViewModel extends ViewModel {
         super.onResume();
         loggedIn.set(getLoggedIn());
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
+        imageUploadViewModel.setRemoteAddress(pref.getString(Constants.PROFILE_PIC, ""));
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         this.userEmail.set(pref.getString(Constants.EMAIL, null));
         notificationResume();

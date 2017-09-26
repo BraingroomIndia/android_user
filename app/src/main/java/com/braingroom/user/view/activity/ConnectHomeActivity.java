@@ -28,6 +28,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.utils.BadgeDrawable;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.BaseFragment;
@@ -196,7 +197,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        ConnectFilterData connectFilterData = (ConnectFilterData) getIntentSerializable("connectFilterData");
+        ConnectFilterData connectFilterData = (ConnectFilterData) getIntentSerializable(Constants.connectFilterData);
         if (connectFilterData == null) {
             connectFilterData = new ConnectFilterData();
             connectFilterData.setMajorCateg(LEARNER_FORUM);

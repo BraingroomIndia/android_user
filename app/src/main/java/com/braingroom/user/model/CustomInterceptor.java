@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
@@ -52,9 +55,17 @@ public class CustomInterceptor implements Interceptor {
         Response response;
         try {
             response = chain.proceed(request);
-        } catch (IOException e) {
+        } catch (ConnectException e) {
             //  e.printStackTrace();
 
+            Log.d(TAG, "intercept: no network " + request.toString());
+            UserApplication.getInstance().getInternetStatusBus().onNext(false);
+            throw e;
+        } catch (SocketTimeoutException e) {
+            Log.d(TAG, "intercept: no network " + request.toString());
+            UserApplication.getInstance().getInternetStatusBus().onNext(false);
+            throw e;
+        } catch (UnknownHostException e) {
             Log.d(TAG, "intercept: no network " + request.toString());
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;

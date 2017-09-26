@@ -225,8 +225,10 @@ public class ClassDetailViewModel extends ViewModel {
                         onPostDismiss.run();
                         messageHelper.show(baseResp.getResMsg());
                         Bundle data = new Bundle();
-                        data.putString("defMajorCateg", "tutors_talk");
-                        data.putString("defMinorCateg", "user_post");
+                        ConnectFilterData  connectFilterData = new ConnectFilterData();
+                        connectFilterData.setMajorCateg(ConnectHomeActivity.TUTORS_ARTICLE);
+                        connectFilterData.setMinorCateg(ConnectHomeActivity.DISCUSS_DECIDE);
+                        data.putSerializable(Constants.connectFilterData,connectFilterData);
                         navigator.navigateActivity(ConnectHomeActivity.class, data);
 
                     }
@@ -259,7 +261,8 @@ public class ClassDetailViewModel extends ViewModel {
                             }
                         }
                     });
-                else messageHelper.showLoginRequireDialog("Only logged user can call tutor", null);
+                else
+                    messageHelper.showLoginRequireDialog("Only logged in user can call tutor", null);
             }
         };
 
@@ -291,7 +294,6 @@ public class ClassDetailViewModel extends ViewModel {
         }).flatMap(new Function<Integer, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                // TODO: 16/06/17 place classId
                 final int isCatalogue;
                 if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin))
                     isCatalogue = 1;

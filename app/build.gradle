@@ -20,8 +20,8 @@ android {
         applicationId "com.braingroom.user"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 4
-        versionName "1.0.0.2"
+        versionCode 5
+        versionName "1.0.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 

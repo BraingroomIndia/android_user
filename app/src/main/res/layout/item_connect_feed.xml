@@ -231,6 +231,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
+                    android:onClick="@{vm.videoThumb==null ? vm.detailShowAction : null}"
                     android:scaleType="centerCrop"
                     app:imageUrl="@{vm.image ?? vm.videoThumb }" />
 

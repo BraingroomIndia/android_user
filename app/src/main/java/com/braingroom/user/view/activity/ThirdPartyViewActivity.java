@@ -249,7 +249,7 @@ public class ThirdPartyViewActivity extends BaseActivity implements NavigationVi
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) return "General Info";
-            if (position == 1) return "Classes";
+            if (position == 1) return "Booking History";
             return "NO TAB";
         }
 

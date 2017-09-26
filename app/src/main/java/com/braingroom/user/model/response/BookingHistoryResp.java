@@ -50,55 +50,54 @@ public class BookingHistoryResp {
     public static class ClassDetail {
 
         @SerializedName("id")
-
         public String id;
+
         @SerializedName("class_provided_by")
-
         public String teacher;
+
         @SerializedName("category")
-
         public String category;
+
         @SerializedName("segment")
-
         public String segment;
+
         @SerializedName("class_type_data")
-
         public String classTypeData;
+
         @SerializedName("class_type")
-
         public String classType;
+
         @SerializedName("no_of_seats")
-
         public String noOfSeats;
+
         @SerializedName("no_of_session")
-
         public String noOfSession;
+
         @SerializedName("class_date")
-
         public String classDate;
+
         @SerializedName("class_start_time")
-
         public String classStartTime;
+
         @SerializedName("class_duration")
-
         public String classDuration;
+
         @SerializedName("class_topic")
-
         public String classTopic;
+
         @SerializedName("class_summary")
-
         public String classSummary;
+
         @SerializedName("class_ratting")
-
         public Integer classRatting;
-        @SerializedName("photo")
 
+        @SerializedName("pic_name")
         public String photo;
+
         @SerializedName("VendorClasseLevelDetail")
-
         public List<ClassLevel> classLevels;
-        @SerializedName("VendorClasseLocationDetail")
 
+        @SerializedName("VendorClasseLocationDetail")
         public List<Location> location;
 
 
@@ -107,19 +106,18 @@ public class BookingHistoryResp {
         public class ClassLevel {
 
             @SerializedName("level_id")
-
             public String levelId;
+
             @SerializedName("level_name")
-
             public String levelName;
+
             @SerializedName("price")
-
             public String price;
+
             @SerializedName("Description")
-
             public String description;
-            @SerializedName("expert_level_id")
 
+            @SerializedName("expert_level_id")
             public String expertLevelId;
 
         }
@@ -153,16 +151,15 @@ public class BookingHistoryResp {
     static class PayuTransaction {
 
         @SerializedName("id")
-
         public String id;
+
         @SerializedName("created")
-
         public String created;
+
         @SerializedName("razorPayTxnid")
-
         public String txnid;
-        @SerializedName("amount")
 
+        @SerializedName("amount")
         public String amount;
         @SerializedName("status")
 

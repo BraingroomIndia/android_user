@@ -62,6 +62,8 @@ public class HomeViewModel extends ViewModel {
     public final GridViewModel gridViewModel;
     public final ShowcaseClassListViewModel featuredVm, recommendedVm  /*,indigenousVm*/;
 
+    public final ImageUploadViewModel imageUploadViewModel;
+
 
     private List<ClassLocationData> locationList = new ArrayList<>();
     private List<MarkerOptions> markerList = new ArrayList<>();
@@ -102,6 +104,7 @@ public class HomeViewModel extends ViewModel {
         this.loggedIn = new ObservableBoolean(getLoggedIn());
         this.uiHelper = uiHelper;
 
+        imageUploadViewModel = new ImageUploadViewModel(R.drawable.avatar_male, pref.getString(Constants.PROFILE_PIC, ""));
 //        this.featuredVm = new ShowcaseClassListViewModel("Fast Tracked - Education & Skill Development", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
         this.recommendedVm = new ShowcaseClassListViewModel("Recommended - Classes & Activities", messageHelper, navigator, apiService.getRecommendedClass(), ClassDetailActivity.class);
         this.featuredVm = new ShowcaseClassListViewModel("Free - Classes & Activities", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
@@ -377,6 +380,7 @@ public class HomeViewModel extends ViewModel {
         super.onResume();
         notificationResume();
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
+        imageUploadViewModel.setRemoteAddress(pref.getString(Constants.PROFILE_PIC, ""));
         userName.set(pref.getString(Constants.NAME, "Hello Learner!"));
         userEmail.set(pref.getString(Constants.EMAIL, null));
         loggedIn.set(getLoggedIn());

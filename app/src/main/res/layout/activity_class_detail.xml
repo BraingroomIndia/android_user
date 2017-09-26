@@ -94,7 +94,7 @@
                         android:onClick="@{vm.onBookClicked}"
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
-                        android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "BOOK FREE" : "BOOK NOW"}'
+                        android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "BOOK NOW"}'
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
                         android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"

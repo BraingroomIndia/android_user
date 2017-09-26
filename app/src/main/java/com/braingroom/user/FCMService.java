@@ -115,6 +115,7 @@ public class FCMService extends FirebaseMessagingService {
             classFilterData.setCategoryId(categoryId);
             if (segmentId != null)
                 classFilterData.setSegmentId(segmentId);
+            data.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
             data.putSerializable(Constants.classFilterData, classFilterData);
 
         } else {
