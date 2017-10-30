@@ -55,13 +55,12 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
                 apiService.addGuestUser(nameVm.s_1.get(), emailVm.s_1.get(), mobileVm.s_1.get()).subscribe(new Consumer<GuestUserResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull GuestUserResp guestUserResp) throws Exception {
-                        if ("1".equals(guestUserResp.getResCode())) {
-                            dismissDialog();
+                        dismissDialog();
+                        if (!isEmpty(guestUserResp.getData())) {
                             uiHelper.onGuestLoginSuccess(guestUserResp.getData().get(0).getUserId());
 
                         } else {
-                            dismissDialog();
-                            messageHelper.show(guestUserResp.getResMsg());
+                            messageHelper.showDismissInfo("Error", guestUserResp.getResMsg());
                         }
                     }
                 });

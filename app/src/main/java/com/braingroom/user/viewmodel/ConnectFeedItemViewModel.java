@@ -34,6 +34,8 @@ import com.braingroom.user.view.activity.VendorProfileActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -443,7 +445,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
             return "";
         long time = Long.valueOf(timeStamp) * 1000;
         try {
-            java.text.DateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy");
+            java.text.DateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault());
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
             Date netDate = (new Date(time));
             return sdf.format(netDate);
         } catch (Exception ex) {
@@ -456,7 +459,8 @@ public class ConnectFeedItemViewModel extends ViewModel {
             return "";
         long time = Long.valueOf(timeStamp) * 1000;
         try {
-            java.text.DateFormat sdf = new SimpleDateFormat("EEEE");
+            java.text.DateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
             Date netDate = (new Date(time));
             return sdf.format(netDate);
         } catch (Exception ex) {

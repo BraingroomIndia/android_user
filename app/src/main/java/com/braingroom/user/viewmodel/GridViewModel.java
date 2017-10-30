@@ -31,6 +31,8 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
+import static com.braingroom.user.viewmodel.FilterViewModel.CLASS_TYPE_SEMINAR;
+
 public class GridViewModel extends ViewModel {
     protected final static int CATEGORY = 1;
     protected final static int COMMUNITY = 2;
@@ -251,9 +253,12 @@ public class GridViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                 FilterData filterData = new FilterData();
-                filterData.setClassType(FilterViewModel.CLASS_TYPE_SEMINAR + "");
+                filterData.setClassType(CLASS_TYPE_SEMINAR + "");
+                HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
+                classTypeFilterMap.put("Online Classes", CLASS_TYPE_SEMINAR);
                 Bundle data = new Bundle();
                 data.putSerializable(Constants.classFilterData, filterData);
+                data.putSerializable(Constants.classTypeFilterMap, classTypeFilterMap);
                 data.putString(Constants.origin, FilterViewModel.ORIGIN_HOME);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }

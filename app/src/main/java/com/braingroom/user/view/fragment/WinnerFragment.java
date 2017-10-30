@@ -2,6 +2,7 @@ package com.braingroom.user.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.activity.FeaturedPostActivity;
@@ -21,7 +22,7 @@ public class WinnerFragment extends BaseFragment {
         return mFragment;
     }
 
-    @NonNull
+    @Nullable
     @Override
     protected ViewModel createViewModel() {
         Bundle args = getArguments();

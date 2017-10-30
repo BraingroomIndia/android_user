@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
 import com.braingroom.user.databinding.DemoClassExpandedSceneBinding;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.WrapContentHeightViewPager;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
 import com.braingroom.user.view.fragment.DemoPostFragment;
@@ -60,7 +61,7 @@ public class ClassDetailActivity extends BaseActivity {
     SupportMapFragment mapFragment;
     RxPermissions rxPermissions;
 
-//    WrapContentHeightViewPager pager;
+    //    WrapContentHeightViewPager pager;
  /*   PostPagerAdapter pagerAdapter;
 */
     Scene mColapsedScene;
@@ -160,7 +161,11 @@ public class ClassDetailActivity extends BaseActivity {
                 public void onGlobalLayout() {
                     Layout l = catalogLocationList.getLayout();
                     if (l != null && vm != null) {
-                        ((ClassDetailViewModel) vm).hideViewMore.set((l.getEllipsisCount(3) > 0));
+                        try {
+                            ((ClassDetailViewModel) vm).hideViewMore.set((l.getEllipsisCount(3) > 0));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
@@ -313,7 +318,7 @@ public class ClassDetailActivity extends BaseActivity {
 
         };
         return new ClassDetailViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
-                getIntentString("origin"), getIntentString("catalogueId"));
+                getIntentString("origin"), getIntentString("catalogueId"),getIntentString(Constants.promoCode));
     }
 
     @Override
@@ -374,7 +379,6 @@ public class ClassDetailActivity extends BaseActivity {
 
         super.onDestroy();
         ((ClassDetailViewModel) vm).releaseYoutube();
-        ((ClassDetailViewModel) vm).releaseGoogleMap();
 
     }
 

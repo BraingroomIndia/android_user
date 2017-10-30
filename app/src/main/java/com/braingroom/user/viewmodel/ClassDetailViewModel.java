@@ -21,6 +21,7 @@ import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.ContactTutorResp;
+import com.braingroom.user.model.response.PromoInfo;
 import com.braingroom.user.model.response.WishlistResp;
 import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
@@ -135,7 +136,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final MyConsumer<String> expandAction, collapseAction;
 
     public ClassDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId) {
+                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo) {
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
@@ -146,6 +147,14 @@ public class ClassDetailViewModel extends ViewModel {
                 Log.d(TAG, "run: " + callAgain.get());
             }
         });
+        if (!isEmpty(promo))
+            apiService.getPromoInfo(promo).subscribe(new Consumer<PromoInfo>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull PromoInfo resp) throws Exception {
+                    if (!isEmpty(resp) && !isEmpty(resp.data) && !isEmpty(resp.data.content))
+                        messageHelper.showDismissInfo(resp.data.title, CommonUtils.fromHtml(resp.data.content));
+                }
+            });
 
         imageUploadViewModel = new ImageUploadViewModel(R.drawable.avatar_male, "");
         connectFilterData.setMajorCateg("learners_forum");
@@ -225,10 +234,10 @@ public class ClassDetailViewModel extends ViewModel {
                         onPostDismiss.run();
                         messageHelper.show(baseResp.getResMsg());
                         Bundle data = new Bundle();
-                        ConnectFilterData  connectFilterData = new ConnectFilterData();
+                        ConnectFilterData connectFilterData = new ConnectFilterData();
                         connectFilterData.setMajorCateg(ConnectHomeActivity.TUTORS_ARTICLE);
                         connectFilterData.setMinorCateg(ConnectHomeActivity.DISCUSS_DECIDE);
-                        data.putSerializable(Constants.connectFilterData,connectFilterData);
+                        data.putSerializable(Constants.connectFilterData, connectFilterData);
                         navigator.navigateActivity(ConnectHomeActivity.class, data);
 
                     }
@@ -420,6 +429,7 @@ public class ClassDetailViewModel extends ViewModel {
                     Bundle data = new Bundle();
                     data.putSerializable("classData", mClassData);
                     data.putSerializable("checkoutType", "class");
+                    data.putString(Constants.promoCode, promo);
                     navigator.navigateActivity(CheckoutActivity.class, data);
                 }
             }

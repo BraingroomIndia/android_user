@@ -161,8 +161,8 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<GroupResp> getGroups( String categoryId ) {
-        return api.getGroups(new ConnectDataReq( new ConnectDataReq.Snippet(categoryId))).subscribeOn(Schedulers.io())
+    public Observable<GroupResp> getGroups(String categoryId) {
+        return api.getGroups(new ConnectDataReq(new ConnectDataReq.Snippet(categoryId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -223,9 +223,9 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<PromocodeResp> applyPromoCode(PromocodeReq.Snippet snippet) {
+    public Observable<PromocodeResp> applyPromoCode(PromoCodeReq.Snippet snippet) {
 
-        return api.applyPromoCode(new PromocodeReq((snippet))).subscribeOn(Schedulers.io())
+        return api.applyPromoCode(new PromoCodeReq((snippet))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -435,6 +435,7 @@ public class DataflowService {
                     }
                 });
     }
+
     public Observable<List<ClassData>> getRecommendedClass() {
         return api.getRecommendedClass().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
@@ -547,8 +548,8 @@ public class DataflowService {
                         snippet.setUdf3(resp.getData().get(0).getUdf3());
                         snippet.setUdf4(resp.getData().get(0).getUdf4());
 
-                        PayUHashGenReq req = new PayUHashGenReq(snippet);
-                        return api.generatePayUHash(req).map(new Function<PayUHashResp, PayUCheckoutData>() {
+                        PayUHashGenReq braingroom = new PayUHashGenReq(snippet);
+                        return api.generatePayUHash(braingroom).map(new Function<PayUHashResp, PayUCheckoutData>() {
                             @Override
                             public PayUCheckoutData apply(@NonNull PayUHashResp payUHashResp) throws Exception {
                                 PayUCheckoutData payUdata = gson.fromJson(gson.toJson(snippet), PayUCheckoutData.class);
@@ -1056,6 +1057,45 @@ public class DataflowService {
             @Override
             public PrimeMessageResp apply(@NonNull Throwable throwable) throws Exception {
                 return new PrimeMessageResp(new ArrayList<PrimeMessageResp.Snippet>());
+            }
+        });
+    }
+
+    public Observable<Boolean> forceUpdate() {
+        return api.getLearnerAppMinVersion().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, CommonIdResp>() {
+            @Override
+            public CommonIdResp apply(@NonNull Throwable throwable) throws Exception {
+                return new CommonIdResp(new ArrayList<CommonIdResp.Snippet>());
+            }
+        }).map(new Function<CommonIdResp, Boolean>() {
+
+            @Override
+            public Boolean apply(@NonNull CommonIdResp resp) throws Exception {
+                if (resp == null)
+                    return false;
+                else if (resp.getData() == null)
+                    return false;
+                else if (resp.getData().isEmpty())
+                    return false;
+                else if (resp.getData().get(0) == null)
+                    return false;
+                else if (resp.getData().get(0).getTextValue() == null)
+                    return false;
+                try {
+                    return Float.parseFloat(resp.getData().get(0).getTextValue()) > UserApplication.versionCode;
+                } catch (Exception e) {
+                    return false;
+                }
+
+            }
+        });
+    }
+
+    public Observable<PromoInfo> getPromoInfo(String promoCode) {
+        return api.getPromoInfo(new PromoCodeReq(new PromoCodeReq.Snippet(promoCode))).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, PromoInfo>() {
+            @Override
+            public PromoInfo apply(@NonNull Throwable throwable) throws Exception {
+                return new PromoInfo();
             }
         });
     }

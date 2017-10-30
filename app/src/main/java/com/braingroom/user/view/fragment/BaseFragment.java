@@ -25,9 +25,9 @@ import java.io.Serializable;
 import dagger.internal.Preconditions;
 import lombok.Getter;
 
-/**
+/*
  * Created by agrahari on 07/04/17.
- */
+*/
 
 public abstract class BaseFragment extends Fragment {
 
@@ -49,6 +49,8 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
         vm = createViewModel();
+        if (vm == null)
+            activity.popBackstack();
         getDefaultBinder().bind(binding, vm);
         return binding.getRoot();
     }
@@ -87,7 +89,7 @@ public abstract class BaseFragment extends Fragment {
         super.onPause();
     }
 
-    @NonNull
+    @Nullable
     protected abstract ViewModel createViewModel();
 
     @LayoutRes

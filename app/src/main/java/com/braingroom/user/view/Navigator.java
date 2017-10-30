@@ -7,12 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
 import android.view.View;
 
+import com.braingroom.user.view.activity.MvvmActivity;
+
 public interface Navigator {
 
 
     void navigateActivity(Class<?> destination, @Nullable Bundle bundle);
 
-    void navigateActivityForResult(Class<?> destination, @Nullable Bundle bundle, int reqCode);
+    void navigateActivityForResult(Class<? extends MvvmActivity> destination, @Nullable Bundle bundle, int reqCode);
 
     void navigateActivity(Intent intent);
 
@@ -33,4 +35,6 @@ public interface Navigator {
     void hideKeyBoard(View view);
 
     void showMenuPopup(@MenuRes int layout, View v, PopupMenu.OnMenuItemClickListener clickListner);
+
+    void forceUpdate();
 }

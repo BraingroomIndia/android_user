@@ -6,6 +6,7 @@
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="26"
+        tools:ignore="GradleOverrides"
         tools:overrideLibrary="com.facebook.shimmer" />
 
     <meta-data
@@ -32,12 +33,12 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
-    <!--    <meta-data
+        <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_live_SN4tYAqDnzHHem" />-->
-         <meta-data
+            android:value="rzp_live_SN4tYAqDnzHHem" />
+        <!-- <meta-data
              android:name="com.razorpay.ApiKey"
-             android:value="rzp_test_OqXUgMZBz4WkBL" />
+             android:value="rzp_test_OqXUgMZBz4WkBL" />-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -48,15 +49,13 @@
             android:name="android.support.VERSION"
             android:value="26.0.1" />
 
-
         <!-- Branch init -->
         <meta-data
             android:name="io.branch.sdk.BranchKey"
-            android:value="key_live_hpBAJ2zvLlPqp388kOv49pieszozQrrF" />
+            android:value="@string/branch_live_key" />
         <meta-data
             android:name="io.branch.sdk.BranchKey.test"
-            android:value="key_test_pexsI2ytGiNEj794aRPe2mkgFsnwUtCT" />
-
+            android:value="@string/branch_test_key" />
         <meta-data
             android:name="io.branch.sdk.TestMode"
             android:value="false" />
@@ -83,8 +82,10 @@
 
         <activity
             android:name=".view.activity.Splash"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -105,20 +106,10 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- note that the leading "/" is required for pathPrefix -->
-                <!-- Accepts URIs that begin with "example://gizmos” -->
-                <!--                <data
-                                    android:host="www.braingroom.com"
-                                    android:scheme="https" />-->
+
                 <data
-                    android:host="www.braingroom.com"
-                    android:scheme="http" />
-                <data
-                    android:host="ht5w.test-app.link"
+                    android:host="https://ht5w.app.link"
                     android:scheme="https" />
-                <data
-                    android:host="app"
-                    android:scheme="braingroom" />
             </intent-filter>
         </activity>
         <activity
@@ -145,11 +136,13 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
-            <!-- <intent-filter>
+            <!--
+             <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
 
                  <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>-->
+             </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".view.activity.ClassListActivity"
@@ -325,7 +318,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.GiftcardCouponActivity" />
         </activity>
-
         <activity
             android:name=".view.activity.CompetitionWebPage"
             android:windowSoftInputMode="stateHidden">
@@ -354,7 +346,7 @@
                 android:value="com.braingroom.user.view.activity.HomeActivity" />
         </activity>
 
-        <!--Facebook Login-->
+        <!-- Facebook Login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -375,8 +367,20 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.QRCodeReaderActivity" />
+        <!-- <activity android:name=".view.activity.ChatActivity"></activity> -->
+        <activity
+            android:name=".view.activity.FullscreenImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_image"
+            android:parentActivityName=".view.activity.PostDetailActivity"
+            android:theme="@style/FullscreenTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.braingroom.user.view.activity.PostDetailActivity" />
+        </activity>
 
-        <!--Facebook Login-->
+        <!-- Facebook Login -->
 
 
         <!-- Branch install referrer tracking -->
@@ -397,20 +401,8 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
-            </intent-filter>
-        </receiver>
 
-        <service
-            android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false" />
-        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
-     dispatching on non-Google Play devices -->
+        <!--Google analytics -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
@@ -427,15 +419,13 @@
              installation campaign reporting -->
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
-            android:exported="true">
+            android:exported="true"
+            android:permission="">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
-
-
-        <!--   <activity android:name=".view.activity.ChatActivity"></activity>-->
     </application>
 
 

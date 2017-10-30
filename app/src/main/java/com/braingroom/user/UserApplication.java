@@ -2,8 +2,10 @@ package com.braingroom.user;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.widget.TextView;
 
@@ -26,18 +28,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.branch.referral.Branch;
+import io.branch.referral.BranchApp;
 import io.fabric.sdk.android.Fabric;
 import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
 import timber.log.Timber;
 
 
-public class UserApplication extends Application {
+public class UserApplication extends BranchApp {
 
 
     private static final String TAG = UserApplication.class.getSimpleName();
 
-    public static String BASE_URL = "https://dev.braingroom.com/apis/";
+    public static String BASE_URL = "https://www.braingroom.com/apis/";
     //Edited By Vikas Godara
     public static String DEV_BASE_URL = "https://dev.braingroom.com/apis/";
     //Edited By Vikas Godara
@@ -57,6 +60,8 @@ public class UserApplication extends Application {
     public TypedArray classPlaceholder;
 
     public boolean loggedIn = false;
+
+    public static int versionCode = 10;
 //
 
     @Getter
@@ -77,16 +82,22 @@ public class UserApplication extends Application {
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
-        Fabric.with(this, new Crashlytics());
+        if (!BuildConfig.DEBUG)
+            Fabric.with(this, new Crashlytics());
         Branch.getAutoInstance(this);
 
+        try {
+            versionCode = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         sAnalytics = GoogleAnalytics.getInstance(this);
       /*  if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
         mRefWatcher = LeakCanary.install(this);*/
-         FacebookSdk.sdkInitialize(getApplicationContext());
-         Stetho.initializeWithDefaults(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        Stetho.initializeWithDefaults(this);
 //        if (BuildConfig.DEBUG) {
 //            Timber.plant(new Timber.DebugTree());
 //        } else {

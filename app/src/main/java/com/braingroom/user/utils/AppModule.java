@@ -129,8 +129,7 @@ public class AppModule {
             picasso.setIndicatorsEnabled(true);
             return picasso;
         } else {
-            Picasso picasso = Picasso.with(application);
-            return picasso;
+            return Picasso.with(application);
         }
     }
 

@@ -29,7 +29,7 @@ public class Constants {
 
     public static final String USER_ID = "userId";
 
-    public static final String connectFilterData="connectFilterData";
+    public static final String connectFilterData = "connectFilterData";
 
     public static final String classFilterData = "ClassFilterData";
     public static final String categoryFilterMap = "categoryFilterMap";
@@ -41,6 +41,7 @@ public class Constants {
     public static final String classScheduleFilterMap = "classScheduleFilterMap";
     public static final String vendorListFilterMap = "vendorListFilterMap";
     public static final String origin = "origin";
+    public static final String promoCode = "promoCode";
 
     public static final String competitionStatus = "CompetitionStatus";
 

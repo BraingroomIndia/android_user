@@ -16,12 +16,14 @@ import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.dto.PayUCheckoutData;
 import com.braingroom.user.model.request.CouponCodeReq;
 import com.braingroom.user.model.request.GetBookingDetailsReq;
-import com.braingroom.user.model.request.PromocodeReq;
+import com.braingroom.user.model.request.PromoCodeReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.request.SaveGiftCouponReq;
+import com.braingroom.user.model.response.PromoInfo;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.SaveGiftCouponResp;
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
@@ -96,11 +98,12 @@ public class CheckoutViewModel extends ViewModel {
     MessageHelper messageHelper;
     Navigator navigator;
     HelperFactory helperFactory;
+    final String promo;
 
 
     //private PayUChecksum checksum;
 
-    final Map<String, Integer> sublevelTextMap = new HashMap<>();
+    private final Map<String, Integer> sublevelTextMap = new HashMap<>();
 
     public SaveGiftCouponResp.Snippet couponPayData;
 
@@ -122,12 +125,10 @@ public class CheckoutViewModel extends ViewModel {
         @Override
         public void run() throws Exception {
             int totalPrice = 0;
-            if (!TextUtils.isEmpty(couponCode.get()) || !TextUtils.isEmpty(promoCode.get())) {
+            if (appliedCouponAmount > 0 || appliedPromoAmount > 0) {
                 messageHelper.showDismissInfo("Warning", "Your discount has been reset");
                 appliedCouponCode.set(null);
                 appliedPromoCode.set(null);
-                couponCode.set(null);
-                promoCode.set(null);
                 appliedCouponAmount = 0;
                 appliedPromoAmount = 0;
 
@@ -145,7 +146,7 @@ public class CheckoutViewModel extends ViewModel {
 
         }
     };
-    Action cartAmount = new Action() {
+    private Action cartAmount = new Action() {
         @Override
         public void run() throws Exception {
             if (totalAmount.get() < appliedCouponAmount)
@@ -158,7 +159,7 @@ public class CheckoutViewModel extends ViewModel {
     };
 
     public CheckoutViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper,
-                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final boolean isGift) {
+                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final boolean isGift, final String promo) {
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
         setScreenName(classData.getClassTopic());
@@ -166,12 +167,12 @@ public class CheckoutViewModel extends ViewModel {
         totalAmountAfterPromo = new ObservableInt(0);
         couponCode = new ObservableField<>();
         appliedCouponCode = new ObservableField<>(null);
-        promoCode = new ObservableField<>();
+        this.promoCode = new ObservableField<>();
         appliedPromoCode = new ObservableField<>(null);
         this.uiHelper = uiHelper;
         this.classData = classData;
         gUserId = pref.getString(Constants.BG_ID, "");
-
+        this.promo = promo;
 //        ZohoSalesIQ.Tracking.setPageTitle("Booking Page " +classData.getClassTopic());
         this.messageHelper = messageHelper;
         this.navigator = navigator;
@@ -288,7 +289,7 @@ public class CheckoutViewModel extends ViewModel {
                 couponCode.set(null);
                 appliedCouponCode.set(null);
                 appliedCouponAmount = 0;
-                if (!getLoggedIn() && isGuest == 0) {
+               /* if (!getLoggedIn() && isGuest == 0) {
                     helperFactory.createDialogHelper()
                             .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
                                 @Override
@@ -309,19 +310,27 @@ public class CheckoutViewModel extends ViewModel {
                                 }
                             }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
 
-                } else {
-                    promoCode.set("");
-                    appliedPromoCode.set(null);
-                    appliedPromoAmount = 0;
-                    couponCode.set(null);
-                    appliedCouponCode.set(null);
-                    appliedCouponAmount = 0;
-                    cartAmount.run();
-                }
+                } else {*/
+                promoCode.set("");
+                appliedPromoCode.set(null);
+                appliedPromoAmount = 0;
+                couponCode.set(null);
+                appliedCouponCode.set(null);
+                appliedCouponAmount = 0;
+                cartAmount.run();
+//                }
 
 
             }
         };
+        if (promo != null)
+            try {
+                onOpenPromoCode.run();
+                promoCode.set(promo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         onOpenCouponCode = new Action() {
             @Override
             public void run() throws Exception {
@@ -366,6 +375,7 @@ public class CheckoutViewModel extends ViewModel {
             }
         };
 
+
         onShowPriceDetailsClicked = new Action() {
             @Override
             public void run() throws Exception {
@@ -376,14 +386,39 @@ public class CheckoutViewModel extends ViewModel {
         onApplyPromoCode = new Action() {
             @Override
             public void run() throws Exception {
-                if (promoCode != null && promoCode.get().length() > 3) {
-                    PromocodeReq.Snippet snippet = new PromocodeReq.Snippet();
+                if (!getLoggedIn() && isGuest == 0) {
+                    helperFactory.createDialogHelper()
+                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
+                                @Override
+                                public void onGuestLoginSuccess(String id) {
+
+                                    gUserId = id;
+                                    isGuest = 1;
+
+                                    try {
+                                        cartAmount.run();
+                                    } catch (Exception e) {
+                                    }
+                                }
+
+                                @Override
+                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
+
+                                }
+                            }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
+
+                } else if (promoCode != null && promoCode.get().length() > 3) {
+                    PromoCodeReq.Snippet snippet = new PromoCodeReq.Snippet();
                     List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
                     snippet.setClassId(classData.getId());
                     for (ViewModel nonReactiveItem : nonReactiveItems) {
                         if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
                             levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
                         }
+                    }
+                    if (levelsList.isEmpty()) {
+                        messageHelper.showDismissInfo("Error", "Please select level.");
+                        return;
                     }
                     snippet.setTotalTicket("{\"tickets\":" + gson.toJson(levelsList) + "}");
                     snippet.setCode(promoCode.get());
@@ -409,7 +444,7 @@ public class CheckoutViewModel extends ViewModel {
                             Log.d("Checkout ", "accept: ");
                         }
                     });
-                } else {
+                } else if (getLoggedIn() && isGuest == 1) {
                     messageHelper.show("code length should be more than 3");
                 }
             }
@@ -444,7 +479,7 @@ public class CheckoutViewModel extends ViewModel {
                                 cartAmount.run();
 //
                             } else {
-                                messageHelper.show(resp.getResMsg());
+                                messageHelper.showDismissInfo("Error", resp.getResMsg());
                             }
                         }
                     }, new Consumer<Throwable>() {
@@ -542,7 +577,7 @@ public class CheckoutViewModel extends ViewModel {
             }
         }
         if (!classLevelSelected) {
-            messageHelper.show("Select class levels");
+            messageHelper.showDismissInfo("Error", "Select class levels");
             return;
         }
         GetBookingDetailsReq.Snippet snippet = new GetBookingDetailsReq.Snippet();
@@ -599,7 +634,7 @@ public class CheckoutViewModel extends ViewModel {
                     }
                     JSONObject options = new JSONObject();
                     options.put("name", classData.getClassTopic());
-                    options.put("description", "By: " + classData.getTeacher());
+                    options.put("description", "By: " + classData.getClassProvider());
                     //You can omit the image option to fetch the image from dashboard
                     options.put("image", "https://www.braingroom.com/homepage/img/logo.jpg");
                     options.put("currency", "INR");
@@ -765,7 +800,7 @@ public class CheckoutViewModel extends ViewModel {
             bundle.putString(Constants.className, classData.getClassTopic());
             bundle.putString(Constants.name, mChekcoutData.getFirstname());
             bundle.putString(Constants.amount, mChekcoutData.getAmount() + "");
-            messageHelper.showDismissInfo(null, "Processing your payment...");
+            messageHelper.showProgressDialog("Wait", "Processing your payment...");
             RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
             snippet.setBookingType(Constants.normalBooking);
             snippet.setBgTxnid(mChekcoutData.getBGtransactionid());

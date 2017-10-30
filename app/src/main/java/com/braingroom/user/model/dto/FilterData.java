@@ -1,6 +1,7 @@
 package com.braingroom.user.model.dto;
 
 import com.braingroom.user.model.request.GeneralFilterReq;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -12,20 +13,34 @@ import lombok.Getter;
 @Getter
 public class FilterData implements Serializable {
 
+    @SerializedName("search_key")
     String keywords = "";
+    @SerializedName("start_date")
     String startDate = "";
+    @SerializedName("end_date")
     String endDate = "";
+    @SerializedName("search_cat_id")
     String categoryId = "";
+    @SerializedName("search_seg_id")
     String segmentId = "";
+    @SerializedName("class_type")
     String classType = "";
+    @SerializedName("community_id")
     String communityId = "";
+    @SerializedName("class_schedule")
     String classSchedule = "";
+    @SerializedName("class_provider")
     String classProvider = "";
+    @SerializedName("location_id")
     String locationId = "";
     String city = "";
+    @SerializedName("price_sort_status")
     String sortOrder = "";
+    @SerializedName("catlog")
     String catalog = "";
+    @SerializedName("gift_id")
     String giftId = "";
+    @SerializedName("sort_by_latest")
     String sortOrderCat = "";
 
     public void setFilterData(FilterData data) {

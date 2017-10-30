@@ -1,6 +1,7 @@
 package com.braingroom.user.model.dto;
 
 import com.braingroom.user.model.request.ConnectFeedReq;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -9,19 +10,33 @@ import java.io.Serializable;
  */
 public class ConnectFilterData implements Serializable {
 
+    @SerializedName("categ_id")
     public String categId;
+    @SerializedName("seg_id")
     public String segId;
+    @SerializedName("group_id")
     public String groupId;
+    @SerializedName("is_my_group")
     public int isMyGroup;
+    @SerializedName("major_categ")
     public String majorCateg;
+    @SerializedName("minor_categ")
     public String minorCateg;
+    @SerializedName("country_id")
     public String countryId;
+    @SerializedName("state_id")
     public String stateId;
+    @SerializedName("city_id")
     public String cityId;
+    @SerializedName("locality_id")
     public String localityId;
+    @SerializedName("search_query")
     public String searchQuery;
+    @SerializedName("institute_id")
     public String instituteId;
+    @SerializedName("author_id")
     public String authorId;
+    @SerializedName("best_posts")
     private boolean featuredPost;
 
     public void setFeaturedPost(boolean featuredPost) {
@@ -98,6 +113,8 @@ public class ConnectFilterData implements Serializable {
         }
 
     }
+
+
 
     public void setInstituteId(String instituteId) {
         this.instituteId = instituteId;

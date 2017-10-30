@@ -15,13 +15,13 @@ repositories {
 }
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.braingroom.user"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 5
-        versionName "1.0.0.3"
+        versionCode 6
+        versionName "1.0.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -45,21 +45,17 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        
+
 
     }
     dataBinding {
         enabled = true
     }
 
-    dexOptions {
-        incremental true
-    }
-
-   /* compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }*/
+    /* compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_8
+         targetCompatibility JavaVersion.VERSION_1_8
+     }*/
 
 }
 
@@ -77,14 +73,41 @@ dependencies {
     }
 
     //FaceBook Login
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    
 
     //
+    compile 'com.android.support:cardview-v7:26.0.1'
+    compile 'com.android.support:recyclerview-v7:26.0.1'
+    compile('com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+    
+
+    
+    compile('com.patloew.rxlocation:rxlocation:1.0.3') {
+        exclude group: 'com.google.gms', module: 'play-services-location'
+    }
+
+    //Dimension
+//    compile 'com.intuit.sdp:sdp-android:1.0.4'
+    //Dimension
+    //    compile 'at.blogc:expandabletextview:1.0.3'
+    compile('io.branch.sdk.android:library:2.12.1') {
+        transitive = true;
+        exclude module: 'answers-shim'
+    }
+    //memory
+    //memory
+    
+
+compile 'com.facebook.android:facebook-android-sdk:4.17.0'
     compile 'com.google.android.gms:play-services-auth:11.0.4'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.google.android.gms:play-services-places:11.0.4'
     compile 'com.google.android.gms:play-services-location:11.0.4'
     compile 'com.google.android.gms:play-services-analytics:11.0.4'
+    compile 'com.google.android.gms:play-services-vision:11.0.4'
+    compile 'info.androidhive:barcode-reader:1.1.3'
     compile 'com.google.firebase:firebase-core:11.0.4'
     compile 'com.google.firebase:firebase-auth:11.0.4'
     compile 'com.google.firebase:firebase-messaging:11.0.4'
@@ -93,16 +116,11 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.0.1'
     compile 'com.android.support:appcompat-v7:26.0.1'
     compile 'com.android.support:design:26.0.1'
-    compile 'com.android.support:cardview-v7:26.0.1'
-    compile 'com.android.support:recyclerview-v7:26.0.1'
     compile 'com.android.support:support-v4:26.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:multidex:1.0.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
-    compile('com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1') {
-        exclude group: 'com.android.support', module: 'support-v4'
-    }
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.google.dagger:dagger:2.11'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -113,43 +131,23 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'io.reactivex.rxjava2:rxjava:2.0.7'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.facebook.android:facebook-android-sdk:4.15.0'
-
-
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.jakewharton:butterknife:8.8.0'
     compile 'com.facebook.stetho:stetho:1.5.0'
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
-    compile('com.patloew.rxlocation:rxlocation:1.0.3') {
-        exclude group: 'com.google.gms', module: 'play-services-location'
-    }
-
-    //Dimension
-//    compile 'com.intuit.sdp:sdp-android:1.0.4'
-    //Dimension
     compile 'com.hanks:htextview-scale:0.1.1'
-//    compile 'at.blogc:expandabletextview:1.0.3'
     compile 'com.ms-square:expandableTextView:0.1.4'
-    compile('io.branch.sdk.android:library:2.12.1') {
-        transitive = true;
-        exclude module: 'answers-shim'
-    }
     compile 'com.razorpay:checkout:1.4.0'
+    compile 'me.relex:circleindicator:1.2.2@aar'
     testCompile 'junit:junit:4.12'
-    //memory
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    //memory
     annotationProcessor 'com.squareup:javapoet:1.9.0'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
     annotationProcessor 'org.projectlombok:lombok:1.12.6'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     provided 'org.projectlombok:lombok:1.12.6'
-    compile 'me.relex:circleindicator:1.2.2@aar'
-
-
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->

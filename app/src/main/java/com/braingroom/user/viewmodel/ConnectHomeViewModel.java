@@ -358,6 +358,8 @@ public class ConnectHomeViewModel extends ViewModel {
     }
 
     public void setFilterData(ConnectFilterData connectFilterData) {
+        if (filterData.hashCode() == connectFilterData.hashCode())
+            return;
         this.filterData = connectFilterData;
         rest();
     }

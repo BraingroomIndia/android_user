@@ -230,7 +230,6 @@ public class ThirdPartyViewModel extends ViewModel {
     @Override
     public void paginate() {
         if (nextPage > -1 && !paginationInProgress) {
-            nextPage = nextPage + 1;
             callAgain.set(callAgain.get() + 1);
 
         }

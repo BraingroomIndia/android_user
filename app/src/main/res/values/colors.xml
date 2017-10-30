@@ -39,5 +39,7 @@
     <color name="bottomNavSelectedGreen">#64ffda</color>
     <color name="badgeColor">#ef5350</color>
 
+    <color name="black_overlay">#66000000</color>
+
 
 </resources>

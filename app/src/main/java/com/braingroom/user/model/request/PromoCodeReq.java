@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
-public class PromocodeReq {
+public class PromoCodeReq {
 
     @SerializedName("braingroom")
     Snippet data;
@@ -34,5 +34,15 @@ public class PromocodeReq {
 
         @SerializedName("total_amount")
         String totalAmount;
+
+        public Snippet(String code) {
+            this.code = code;
+        }
+
+        public Snippet() {
+
+        }
     }
+
+
 }

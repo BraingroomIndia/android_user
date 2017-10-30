@@ -4,14 +4,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.view.Navigator;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -27,13 +32,17 @@ import javax.inject.Named;
 import io.reactivex.functions.Consumer;
 import lombok.Setter;
 
+import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
+
 public class ViewModel extends BaseObservable {
 
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0;
     public static final int REQ_CODE_CHOOSE_IMAGE = 1;
     public static final int REQ_CODE_CHOOSE_FILTER = 2;
     public static final int REQ_CODE_CHOOSE_VIDEO = 3;
+
     public static final int REQ_CODE_LOGIN = 4;
+    public static final int REQ_CODE_PLAY_VIDEO = 5;
     public boolean apiSuccessful = false;
     public ConnectivityViewModel connectivityViewmodel;
 
@@ -43,6 +52,8 @@ public class ViewModel extends BaseObservable {
     public final String rupeesSymbol = "&#x20b9;";
 
     public String BG_ID;
+
+    public static boolean versionChecked = false;
 
     @Setter
     protected FirebaseAnalytics mFirebaseAnalytics;
@@ -58,13 +69,13 @@ public class ViewModel extends BaseObservable {
 
     @Inject
     @Named("defaultPref")
-
     public SharedPreferences pref;
 
     @Inject
     @Named("defaultPrefEditor")
     protected
     SharedPreferences.Editor editor;
+
 
     //public final ObservableBoolean loggedInNonStatic = new ObservableBoolean(false);
 
@@ -84,16 +95,7 @@ public class ViewModel extends BaseObservable {
         setLoggedIn();
 
         TAG = this.getClass().getSimpleName();
-        if (pref.getBoolean(Constants.NEW_FCM, false)) {
-            apiService.registerUserDevice().subscribe(new Consumer<BaseResp>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                    if (resp.getResCode() != null)
-                        editor.putBoolean(Constants.NEW_FCM, false).commit();
 
-                }
-            });
-        }
     }
 
     public void logOut() {
@@ -199,5 +201,8 @@ public class ViewModel extends BaseObservable {
 
     public boolean isEmpty(Object data) {
         return data == null;
+    }
+
+    public void openPlayStore() {
     }
 }

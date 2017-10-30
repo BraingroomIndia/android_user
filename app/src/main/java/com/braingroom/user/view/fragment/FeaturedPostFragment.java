@@ -1,15 +1,14 @@
 package com.braingroom.user.view.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-
+import android.support.annotation.Nullable;
 import com.braingroom.user.R;
 import com.braingroom.user.view.activity.FeaturedPostActivity;
 import com.braingroom.user.viewmodel.ViewModel;
 
-/**
- * Created by godara on 13/09/17.
- */
+/*
+* Created by godara on 13/09/17.
+*/
 
 public class FeaturedPostFragment extends BaseFragment {
 
@@ -21,7 +20,7 @@ public class FeaturedPostFragment extends BaseFragment {
         return mFragment;
     }
 
-    @NonNull
+    @Nullable
     @Override
     protected ViewModel createViewModel() {
         Bundle args = getArguments();

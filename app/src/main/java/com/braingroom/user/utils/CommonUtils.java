@@ -1,9 +1,17 @@
 package com.braingroom.user.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
+import com.braingroom.user.R;
+import com.braingroom.user.UserApplication;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders.EventBuilder;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.Random;
 
@@ -54,4 +62,40 @@ public class CommonUtils {
 
         return rand.nextInt((max - min)) + min;
     }
+
+    public static void sendCustomEvent(String category, String action, String label) {
+        category = category == null ? "" : category;
+        action = action == null ? "" : action;
+        label = label == null ? "" : label;
+        UserApplication.getInstance().getDefaultTracker().send(new EventBuilder()
+                .setCategory(category)
+                .setAction(action).setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(UserApplication.getInstance()).dispatchLocalHits();
+    }
+
+    public static void sendCustomEvent(Context context, String category, String action, String label) {
+        category = category == null ? "category" : category;
+        action = action == null ? "action" : action;
+        label = label == null ? "label" : label;
+        Tracker mTracker = init(context);
+        if (mTracker != null) {
+            mTracker.send(new EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .setLabel(label)
+                    .build());
+            GoogleAnalytics.getInstance(context).dispatchLocalHits();
+        }
+
+    }
+
+    public static Tracker init(Context ctx) {
+        try {
+            return GoogleAnalytics.getInstance(ctx).newTracker(R.xml.global_tracker);
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
 }

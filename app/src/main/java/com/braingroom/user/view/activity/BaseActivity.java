@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
@@ -28,7 +29,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.braingroom.user.UserApplication;
+import com.braingroom.user.model.response.BaseResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -49,6 +53,8 @@ import javax.inject.Named;
 import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
+
+import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
 
 public abstract class BaseActivity extends MvvmActivity {
@@ -88,6 +94,7 @@ public abstract class BaseActivity extends MvvmActivity {
     Boolean pushNotification;
     protected boolean doubleBackToExitPressedOnce;
 
+
     public final String TAG = this.getClass().getSimpleName();
 
 
@@ -102,26 +109,32 @@ public abstract class BaseActivity extends MvvmActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       /* try {
-            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
-        } catch (Exception e){e.printStackTrace();}*/
 
         FirebaseApp.initializeApp(this);
         pushNotification = getIntentBoolean("pushNotification");
         String notificationId = getIntentString("notification_id");
+        if (pushNotification)
+            sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", pref.getString(Constants.NAME, ""));
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         UserApplication.getInstance().getMAppComponent().inject(this);
         screenDims = new ScreenDims();
         Point size = new Point();
         WindowManager w = getWindowManager();
-        if (pushNotification) {
-            if (vm.getLoggedIn() && !vm.isEmpty(notificationId))
-                vm.apiService.changeNotificationStatus(notificationId).subscribe();
-            SendEventGoogleAnalytics(this, "Notification opened", notificationId, "pushNotification", true);
-        }
         w.getDefaultDisplay().getSize(size);
         screenDims.width = size.x;
         screenDims.height = size.y;
+        getNavigator().forceUpdate();
+        if (pref.getBoolean(Constants.NEW_FCM, false)) {
+            vm.apiService.registerUserDevice().subscribe(new Consumer<BaseResp>() {
+                @Override
+                public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
+                    if (resp.getResCode() != null)
+                        editor.putBoolean(Constants.NEW_FCM, false).commit();
+                    sendCustomEvent(BaseActivity.this, "New token sent:", "", "");
+
+                }
+            });
+        }
     }
 
     public void initNavigationDrawer() {
@@ -169,7 +182,7 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
-                public void navigateActivityForResult(Class<?> destination, @Nullable Bundle bundle, int reqCode) {
+                public void navigateActivityForResult(Class<? extends MvvmActivity> destination, @Nullable Bundle bundle, int reqCode) {
                     Intent intent = new Intent(BaseActivity.this, destination);
                     intent.putExtra("classData", bundle);
                     startActivityForResult(intent, reqCode);
@@ -193,8 +206,8 @@ public abstract class BaseActivity extends MvvmActivity {
 
                 @Override
                 public void openStandaloneYoutube(String videoId) {
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(BaseActivity.this, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId, 100, true, false);
-                    startActivity(intent);
+                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(BaseActivity.this, "AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", videoId, 100, true, true);
+                    startActivityForResult(intent, ViewModel.REQ_CODE_PLAY_VIDEO);
                 }
 
                 @Override
@@ -212,6 +225,42 @@ public abstract class BaseActivity extends MvvmActivity {
                     inflater.inflate(layout, popup.getMenu());
                     popup.setOnMenuItemClickListener(clickListner);
                     popup.show();
+                }
+
+                @Override
+                public void forceUpdate() {
+                    if (ViewModel.versionChecked)
+                        return;
+                    final MaterialDialog.SingleButtonCallback singleButtonCallback = new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            final String appPackageName = UserApplication.getInstance().getPackageName(); // getPackageName() from Context or Activity object
+                            try {
+                                navigateActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                            } catch (android.content.ActivityNotFoundException anfe) {
+                                navigateActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                            }
+                        }
+                    };
+                    vm.apiService.forceUpdate().subscribe(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
+                            if (aBoolean != null && aBoolean) {
+                                MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
+                                builder.title("Update").
+                                        content("Please Update the app").
+                                        theme(Theme.LIGHT).
+                                        positiveText("Update").autoDismiss(false).cancelable(false).
+                                        onNegative(singleButtonCallback).
+                                        onNeutral(singleButtonCallback).
+                                        onPositive(singleButtonCallback);
+                                builder.show();
+
+                            } else ViewModel.versionChecked = true;
+                        }
+                    });
+
+
                 }
 
 
@@ -323,6 +372,15 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
+                public void showDismissInfo(@Nullable String title, @NonNull Spanned content) {
+                    dismissActiveProgress();
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
+                    if (title != null) builder.title(title);
+                    builder.content(content);
+                    builder.positiveText("Dismiss").show();
+                }
+
+                @Override
                 public void showDismissInfo(@Nullable String title, @NonNull String buttonText, @NonNull String content) {
                     dismissActiveProgress();
                     MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
@@ -380,7 +438,7 @@ public abstract class BaseActivity extends MvvmActivity {
                     progressDialog = new MaterialDialog.Builder(BaseActivity.this)
                             .title(title)
                             .content(content)
-                            .progress(true, 0)
+                            .progress(true, 0).cancelable(false)
 //                .canceledOnTouchOutside(false)
                             .show();
 

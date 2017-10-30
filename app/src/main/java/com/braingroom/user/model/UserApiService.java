@@ -81,7 +81,7 @@ public interface UserApiService {
     Observable<ExploreResp> exploreFilter(@Body ExploreReq exploreReq);
 
     @POST("verifyPromoCode")
-    Observable<PromocodeResp> applyPromoCode(@Body PromocodeReq req);
+    Observable<PromocodeResp> applyPromoCode(@Body PromoCodeReq req);
 
     @POST("applyCoupon")
     Observable<PromocodeResp> applyCouponCode(@Body CouponCodeReq req);
@@ -319,6 +319,13 @@ public interface UserApiService {
 
     @GET("getWeeklyPerformers")
     Observable<WinnerResp> getWeeklyPerformers();
+
+    @POST("getLearnerAppMinVersion")
+    Observable<CommonIdResp>getLearnerAppMinVersion();
+
+    @POST("getPromoPopup")
+    Observable<PromoInfo>getPromoInfo(@Body PromoCodeReq req);
+
 
 
 }

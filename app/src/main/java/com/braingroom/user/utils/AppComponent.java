@@ -2,6 +2,7 @@ package com.braingroom.user.utils;
 
 import com.braingroom.user.FCMInstanceIdService;
 import com.braingroom.user.view.activity.BaseActivity;
+import com.braingroom.user.view.activity.QRCodeReaderActivity;
 import com.braingroom.user.view.activity.Splash;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -20,5 +21,7 @@ public interface AppComponent {
     void inject(BaseActivity baseActivity);
 
     void inject(Splash splash);
+
+    void inject(QRCodeReaderActivity activity);
 
 }

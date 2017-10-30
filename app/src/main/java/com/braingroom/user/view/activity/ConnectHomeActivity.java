@@ -609,8 +609,8 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
     @Override
     protected void onResume() {
         super.onResume();
-        int id = mBottomNav.getSelectedItemId();
-        updateBottomNavigation(id);
+     /*   int id = mBottomNav.getSelectedItemId();
+        updateBottomNavigation(id);*/
         // navigationView.getMenu().clear();
     }
 
@@ -636,8 +636,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             connectFilterData.setMinorCateg(TIPS_TRICKS);
             if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
                 ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-        }
-        if (itemId == R.id.action_buy_sell) {
+        } else if (itemId == R.id.action_buy_sell) {
             selectedBottomNav = R.id.action_buy_sell;
             connectFilterViewModel.isLearnerForum.set(true);
             ConnectFilterData connectFilterData = new ConnectFilterData();
@@ -645,8 +644,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             connectFilterData.setMinorCateg(BUY_SELL);
             if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
                 ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-        }
-        if (itemId == R.id.action_find_partners) {
+        } else if (itemId == R.id.action_find_partners) {
             selectedBottomNav = R.id.action_find_partners;
             connectFilterViewModel.isLearnerForum.set(true);
             ConnectFilterData connectFilterData = new ConnectFilterData();
@@ -654,9 +652,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             connectFilterData.setMinorCateg(FIND_PARTNERS);
             if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
                 ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-        }
-
-        if (itemId == R.id.action_discuss_n_decide) {
+        } else if (itemId == R.id.action_discuss_n_decide) {
             selectedBottomNav = R.id.action_discuss_n_decide;
             connectFilterViewModel.isLearnerForum.set(false);
             ConnectFilterData connectFilterData = new ConnectFilterData();
@@ -664,8 +660,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             connectFilterData.setMinorCateg(DISCUSS_DECIDE);
             if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
                 ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
-        }
-        if (itemId == R.id.action_tutors_article) {
+        } else if (itemId == R.id.action_tutors_article) {
             fab.setVisibility(View.INVISIBLE);
             connectFilterViewModel.isLearnerForum.set(false);
             ConnectFilterData connectFilterData = new ConnectFilterData();

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.ActivityCheckoutBinding;
 import com.braingroom.user.model.dto.ClassData;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
 import com.braingroom.user.viewmodel.CheckoutViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -45,14 +46,11 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
         super.onCreate(savedInstanceState);
-/*        try {
-            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
-        } catch (Exception e){e.printStackTrace();}*/
 
 
-        getSupportActionBar().setElevation(0);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setElevation(0);
         mRecyclerView = ((ActivityCheckoutBinding) binding).pricingRecyclerview;
         mAdapter = new NonReactiveRecyclerViewAdapter(vm, ((CheckoutViewModel) vm).getViewProvider());
         linearLayoutManager = new LinearLayoutManager(this);
@@ -87,22 +85,19 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 */
             @Override
             public void startRazorpayPayment(JSONObject options) {
-            /*    try {
-                    ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
-                } catch (Exception e){e.printStackTrace();}*/
+
                 final Activity activity = CheckoutActivity.this;
                 final Checkout co = new Checkout();
                 try {
                     co.open(activity, options);
                 } catch (Exception e) {
                     getMessageHelper().show("Error in payment: " + e.getMessage());
-                    // e.printStackTrace();
                 }
 
             }
         };
-        return new CheckoutViewModel(getFirebaseAnalytics(),getGoogleTracker(),getHelperFactory(), getMessageHelper(), getNavigator(),
-                uiHelper, (ClassData) getIntentSerializable("classData"), "gift".equals(getIntentString("checkoutType")));
+        return new CheckoutViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), getMessageHelper(), getNavigator(),
+                uiHelper, (ClassData) getIntentSerializable("classData"), "gift".equals(getIntentString("checkoutType")), getIntentString(Constants.promoCode));
     }
 
     @Override
@@ -121,9 +116,6 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-/*        try {
-            ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
-        } catch (Exception e){e.printStackTrace();}*/
 
 //removed payumoney
     /*    if (requestCode ==

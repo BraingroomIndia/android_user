@@ -129,12 +129,11 @@ public class ClassListViewModel1 extends ViewModel {
                                HashMap<String, String> localityMap,
                                HashMap<String, Integer> communityMap,
                                HashMap<String, Integer> classTypeMap,
-                               HashMap<String, Integer> classScheduleMap,
+                               final HashMap<String, Integer> classScheduleMap,
                                HashMap<String, String> vendorListMap,
                                @Nullable final String origin,
                                @NonNull final ClassListActivity.UiHelper uiHelper,
                                @NonNull final FragmentHelper fragmentHelper) {
-
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
@@ -282,8 +281,8 @@ public class ClassListViewModel1 extends ViewModel {
                     @Override
                     public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                         List<ViewModel> selectedItems = new ArrayList<ViewModel>();
-                        if (categoryFilterMap != null && !categoryFilterMap.isEmpty()) {
-                            if (segmentsFilterMap != null && !segmentsFilterMap.isEmpty()) {
+                        if (!isEmpty(categoryFilterMap)) {
+                            if (!isEmpty(segmentsFilterMap)) {
                                 selectedItems.add(new IconTextItemViewModel(0, categoryFilterMap.keySet().iterator().next()));
                                 selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, segmentsFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                     @Override
@@ -306,7 +305,7 @@ public class ClassListViewModel1 extends ViewModel {
                         }
 
 
-                        if (localityFilterMap != null && !localityFilterMap.isEmpty()) {
+                        if (!isEmpty(localityFilterMap)) {
                             selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, localityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
@@ -319,7 +318,7 @@ public class ClassListViewModel1 extends ViewModel {
                                 }
                             }));
                         }
-                        if (communityFilterMap != null && !communityFilterMap.isEmpty()) {
+                        if (!isEmpty(communityFilterMap)) {
                             selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, communityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
@@ -329,7 +328,7 @@ public class ClassListViewModel1 extends ViewModel {
                                 }
                             }));
                         }
-                        if (classScheduleFilterMap != null && !classScheduleFilterMap.isEmpty()) {
+                        if (!isEmpty(classScheduleFilterMap)) {
                             selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, classScheduleFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
@@ -339,7 +338,7 @@ public class ClassListViewModel1 extends ViewModel {
                                 }
                             }));
                         }
-                        if (classTypeFilterMap != null && !classTypeFilterMap.isEmpty()) {
+                        if (!isEmpty(classTypeFilterMap)) {
                             selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, classTypeFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
@@ -349,7 +348,7 @@ public class ClassListViewModel1 extends ViewModel {
                                 }
                             }));
                         }
-                        if (vendorListFilterMap != null && !vendorListFilterMap.isEmpty()) {
+                        if (!isEmpty(vendorListFilterMap)) {
                             selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, vendorListFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
@@ -753,6 +752,16 @@ public class ClassListViewModel1 extends ViewModel {
         connectivityViewmodel.onPause();
     }
 
+
+    private boolean isEmpty(HashMap<String, ?> hashMap) {
+        if (hashMap == null)
+            return true;
+        if (hashMap.isEmpty())
+            return true;
+        if (TextUtils.isEmpty(hashMap.keySet().iterator().next()))
+            return true;
+        else return false;
+    }
 
 }
 

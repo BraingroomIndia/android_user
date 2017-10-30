@@ -157,7 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_med"
-                android:visibility="@{vm.isGift ?  View.GONE : View.VISIBLE}"
+                android:visibility="@{vm.isGift || vm.promoCode!=null ?  View.GONE : View.VISIBLE}"
                 card_view:cardElevation="@dimen/dimen_zero">
 
                 <TextView
@@ -258,7 +258,7 @@
                 android:background="@color/materialGreen"
                 android:gravity="center"
                 android:onClick="@{vm.onProceedClicked}"
-                android:text='@{vm.showBookOption? (vm.totalAmountAfterPromo==0?"Book for free" : "Pay Rs. " + vm.totalAmountAfterPromo ):"Select Items to Proceed" }'
+                android:text='@{vm.showBookOption? (vm.totalAmountAfterPromo==0?"Book for free" : "Pay only Rs. " + vm.totalAmountAfterPromo ):"Select Items to Proceed" }'
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_large"
                 app:font='@{@string/robotoBold}'

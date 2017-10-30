@@ -19,6 +19,7 @@ package com.braingroom.user.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Spanned;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -30,6 +31,7 @@ public interface MessageHelper {
     void showLoginRequireDialog(String message, Bundle data);
 
     void showDismissInfo(@Nullable String title, @NonNull String content);
+    void showDismissInfo(@Nullable String title, @NonNull Spanned content);
 
     void showDismissInfo(@Nullable String title,@NonNull String buttonText , @NonNull String content);
 

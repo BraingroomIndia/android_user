@@ -2,6 +2,7 @@ package com.braingroom.user.view.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -71,19 +72,16 @@ public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelpe
             postPagerAdapter = new PagerAdapter(getSupportFragmentManager(), FeaturedPostFragment.class);
             postPager.setAdapter(postPagerAdapter);
             postTabLayout.setupWithViewPager(postPager, true);
-            if (getFeaturePostItemViewModel(0).weeklyPost == 1)
-                headingText.setText("Post of the week");
-            else headingText.setText("Post of the day");
-
-            postDate.setText(getFeaturePostItemViewModel(0).smallDate);
+            headingText.setText("Post of the day");
+            if (getFeaturePostItemViewModel(0) != null)
+                postDate.setText(getFeaturePostItemViewModel(0).smallDate);
             postTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     int position = tab.getPosition();
-                    postDate.setText(getFeaturePostItemViewModel(position).smallDate);
-                    if (getFeaturePostItemViewModel(0).weeklyPost == 1)
-                        headingText.setText("Post of the week");
-                    else headingText.setText("Post of the day");
+                    if (getFeaturePostItemViewModel(position) != null)
+                        postDate.setText(getFeaturePostItemViewModel(position).smallDate);
+                    headingText.setText("Post of the day");
 
                 }
 
@@ -118,14 +116,14 @@ public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelpe
                     postPagerAdapter = new PagerAdapter(getSupportFragmentManager(), FeaturedPostFragment.class);
                     postPager.setAdapter(postPagerAdapter);
                     postTabLayout.setupWithViewPager(postPager, true);
-                    postDate.setText(getFeaturePostItemViewModel(0).smallDate);
+                    if (getFeaturePostItemViewModel(0) != null)
+                        postDate.setText(getFeaturePostItemViewModel(0).smallDate);
                     postTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                         @Override
                         public void onTabSelected(TabLayout.Tab tab) {
                             int position = tab.getPosition();
-                            postDate.setText(getFeaturePostItemViewModel(position).smallDate);
-
-
+                            if (getFeaturePostItemViewModel(position) != null)
+                                postDate.setText(getFeaturePostItemViewModel(position).smallDate);
                         }
 
                         @Override
@@ -153,12 +151,26 @@ public class FeaturedPostActivity extends BaseActivity implements ConnectUiHelpe
         return viewModel;
     }
 
+    @Nullable
     public ConnectFeedItemViewModel getFeaturePostItemViewModel(int i) {
-        return viewModel.connectFeedItemViewModelList.get(i);
+        try {
+            return viewModel.connectFeedItemViewModelList.get(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
+    @Nullable
     public WinnersViewModel getWinnersViewModel(int i) {
-        return viewModel.winnersViewModelList.get(i);
+        try {
+            return viewModel.winnersViewModelList.get(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override

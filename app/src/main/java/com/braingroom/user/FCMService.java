@@ -36,6 +36,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
 
+import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
+
 public class FCMService extends FirebaseMessagingService {
 
     public static final String TAG = "FCMService";
@@ -86,7 +88,7 @@ public class FCMService extends FirebaseMessagingService {
         data.putBoolean("pushNotification", true);
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 
-        SendEventGoogleAnalytics(this, "Notification Received", notificationId, shortDescription);
+        sendCustomEvent(this, "Notification Received", notificationId, shortDescription);
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, notificationId);
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, shortDescription);
@@ -149,19 +151,22 @@ public class FCMService extends FirebaseMessagingService {
 
 
     public Bitmap getBitmapfromUrl(String imageUrl) {
+
+        HttpURLConnection connection = null;
         try {
+
             URL url = new URL(imageUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(input);
-            return bitmap;
+            return BitmapFactory.decodeStream(input);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
-
+        } finally {
+            if (connection != null)
+                connection.disconnect();
         }
     }
 
@@ -221,15 +226,4 @@ public class FCMService extends FirebaseMessagingService {
 
     }
 
-    public void SendEventGoogleAnalytics(Context iCtx, String iCategoryId, String iActionId, String iLabelId) {
-        init(iCtx);
-
-        // Build and send an Event.
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory(iCategoryId)
-                .setAction(iActionId)
-                .setLabel(iLabelId)
-                .build());
-
-    }
 }

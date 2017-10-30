@@ -1,14 +1,22 @@
 package com.braingroom.user.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.icu.text.TimeZoneFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.ActionBarOverlayLayout;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.FilterData;
@@ -19,11 +27,13 @@ import com.braingroom.user.model.response.ReportResp;
 import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
+import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.ConnectUiHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
+import com.braingroom.user.view.activity.FullscreenImageActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
 import com.braingroom.user.view.activity.ThirdPartyViewActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
@@ -32,11 +42,14 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 import static com.braingroom.user.utils.Constants.defaultProfilePic;
+import static com.braingroom.user.view.activity.LoginActivity.TAG;
 
 public class ConnectFeedDetailViewModel extends ViewModel {
 
@@ -124,6 +137,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
     public final Action likeAction, commentAction, reportAction, likedUsersAction, playAction, acceptAction, shareAction,
             showAcceptedUsers, showthirdpartyProfile, onMessageClick, openSegment;
 
+    public final MyConsumer imageClick;
     public ObservableBoolean isActivityRequest = new ObservableBoolean(false);
 
     private String categoryId, segmentId;
@@ -172,6 +186,21 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 
         messageHelper.showProgressDialog("Wait", "loading");
         followButtonVm = new ObservableField<>();
+        imageClick = new MyConsumer<ImageView>() {
+            Bundle data = new Bundle();
+
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull ImageView view) {
+                if (videoThumb.get() == null) {
+                    data.putString("imageUrl", image.get());
+                    navigator.navigateActivity(FullscreenImageActivity.class, data);
+                }else if (videoThumb.get().isEmpty()){
+                    data.putString("imageUrl", image.get());
+                    navigator.navigateActivity(FullscreenImageActivity.class, data);
+                }
+
+            }
+        };
 
         apiService.getFeedsByPostID(postId).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
@@ -478,7 +507,8 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             return "";
         long time = Long.valueOf(timeStamp) * 1000;
         try {
-            java.text.DateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy");
+            java.text.DateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault());
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
             Date netDate = (new Date(time));
             return sdf.format(netDate);
         } catch (Exception ex) {

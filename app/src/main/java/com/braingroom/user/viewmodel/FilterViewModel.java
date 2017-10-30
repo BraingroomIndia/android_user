@@ -42,6 +42,7 @@ public class FilterViewModel extends ViewModel {
     public static final String ORIGIN_CATEGORY = "HOME Category";
     public static final String ORIGIN_FILTER = "Home Filter";
     public static final String ORIGIN_HOME = "HOME Home";
+    public static final String ORIGIN_CATALOG = "CATALOG";
 
     public static final int CLASS_SCHECULE_FIXED = 2;
     public static final int CLASS_SCHECULE_FLEXIBLE = 1;

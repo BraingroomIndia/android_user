@@ -10,6 +10,8 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
+
 /**
  * Created by Promolta-H on 05-02-2017.
  */
@@ -31,6 +33,7 @@ public class FCMInstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
+        sendCustomEvent(this, "Refreshed token:", refreshedToken, "");
         editor.putBoolean(Constants.NEW_FCM, true);
         editor.putString(Constants.FCM_TOKEN, refreshedToken).commit();
     }
