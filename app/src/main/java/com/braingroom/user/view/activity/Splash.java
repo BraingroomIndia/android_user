@@ -172,7 +172,6 @@ public class Splash extends AppCompatActivity {
                             if (referringParams.containsKey("referral")) {
                                 referralCode = referringParams.get("referral");
                                 bundleSend.putString("referralCode", referralCode);
-                                isClicked = true;
                                 if (!TextUtils.isEmpty(referralCode))
                                     navigateActivity(HomeActivity.class, bundleSend);
                             } else if (referringParams.containsKey("qrcode")) {
@@ -353,7 +352,7 @@ public class Splash extends AppCompatActivity {
                     ClassDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassDetail.class);
                     bundle.putString("id", data.reqData.getId());
                     bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
-                    bundle.putString(Constants.promoCode,data.reqData.getPromoCode());
+                    bundle.putString(Constants.promoCode, data.reqData.getPromoCode());
                     navigateActivity(ClassDetailActivity.class, bundle);
                 } else if (json.contains("post_detail")) {
                     PostDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), PostDetail.class);
@@ -384,8 +383,7 @@ public class Splash extends AppCompatActivity {
     }
 
 
-
-    public void forceUpdate(){
+    public void forceUpdate() {
         apiService.forceUpdate().subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(@NonNull Boolean aBoolean) throws Exception {
@@ -401,6 +399,7 @@ public class Splash extends AppCompatActivity {
         });
 
     }
+
     public void showAcceptableInfo(@NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(Splash.this);
         builder.title("Update").
@@ -412,6 +411,7 @@ public class Splash extends AppCompatActivity {
                 onPositive(positiveCallback);
         builder.show();
     }
+
     public void openPlayStore() {
         isClicked = true;
         final String appPackageName = UserApplication.getInstance().getPackageName(); // getPackageName() from Context or Activity object

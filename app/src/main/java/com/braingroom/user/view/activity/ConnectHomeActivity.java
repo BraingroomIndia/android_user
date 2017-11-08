@@ -629,14 +629,17 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
 
     private void updateBottomNavigation(int itemId) {
         if (itemId == R.id.action_tips_tricks) {
+            fab.setVisibility(View.VISIBLE);
             ConnectFilterData connectFilterData = new ConnectFilterData();
             selectedBottomNav = R.id.action_tips_tricks;
             connectFilterViewModel.isLearnerForum.set(true);
+
             connectFilterData.setMajorCateg(LEARNER_FORUM);
             connectFilterData.setMinorCateg(TIPS_TRICKS);
             if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
                 ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
         } else if (itemId == R.id.action_buy_sell) {
+            fab.setVisibility(View.VISIBLE);
             selectedBottomNav = R.id.action_buy_sell;
             connectFilterViewModel.isLearnerForum.set(true);
             ConnectFilterData connectFilterData = new ConnectFilterData();
@@ -645,6 +648,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
                 ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
         } else if (itemId == R.id.action_find_partners) {
+            fab.setVisibility(View.VISIBLE);
             selectedBottomNav = R.id.action_find_partners;
             connectFilterViewModel.isLearnerForum.set(true);
             ConnectFilterData connectFilterData = new ConnectFilterData();
@@ -653,6 +657,7 @@ public class ConnectHomeActivity extends BaseActivity implements NavigationView.
             if (!connectFilterData.isEqual(((ConnectHomeViewModel) vm).getFilterData()))
                 ((ConnectHomeViewModel) vm).setFilterData(connectFilterData);
         } else if (itemId == R.id.action_discuss_n_decide) {
+            fab.setVisibility(View.VISIBLE);
             selectedBottomNav = R.id.action_discuss_n_decide;
             connectFilterViewModel.isLearnerForum.set(false);
             ConnectFilterData connectFilterData = new ConnectFilterData();

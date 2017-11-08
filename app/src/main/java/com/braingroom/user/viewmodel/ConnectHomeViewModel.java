@@ -27,7 +27,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -231,9 +230,9 @@ public class ConnectHomeViewModel extends ViewModel {
         }).subscribe(new Consumer<String>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull String searchQuery) throws Exception {
-                lastSearchQuery = searchQuery;
-                filterData.setSearchQuery(searchQuery);
-                setFilterData(filterData);
+                lastSearchQuery = searchQuery.trim();
+                filterData.setSearchQuery(searchQuery.trim());
+                rest();
             }
         });
 

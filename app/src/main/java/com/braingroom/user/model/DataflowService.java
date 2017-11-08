@@ -858,56 +858,11 @@ public class DataflowService {
 
     public Observable<MessageListResp> getMessages() {
 
-//        List<MessageListResp.Snippet> dataList = new ArrayList<>();
-//        MessageListResp.Snippet snippet = new MessageListResp.Snippet();
-//        snippet.setSenderId("0");
-//        snippet.setRecieverId("1");
-//        MessageListResp.Message message = new MessageListResp.Message();
-//        message.setAddDate("12 sept");
-//        message.setMessage("test message himanshu test message test test himanshu test message");
-//        message.setId("1");
-//        message.setModifyDate("12 sept");
-//        snippet.setMessage(message);
-//        snippet.setSenderName("Himanshu Agrahari");
-//        snippet.setSenderPic("https://www.braingroom.com/img/Buyer/profile/201705100651530709511001494399113.jpg");
-//        dataList.addAll(Collections.nCopies(20, snippet));
-//
-//        MessageListResp resp = new MessageListResp(dataList);
-//        return Observable.just(resp);
         return api.getMessages(new MessageListReq(new MessageListReq.Snippet(pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<ChatListResp> getChatMessages(String senderId) {
-
-//        List<ChatListResp.Snippet> dataList = new ArrayList<>();
-//        ChatListResp.Snippet chat1 = new ChatListResp.Snippet();
-//        chat1.setText("From sender msg 1");
-//        chat1.setUserId("0");
-//        chat1.setTime("1495524123");
-//
-//        ChatListResp.Snippet chat2 = new ChatListResp.Snippet();
-//        chat2.setText("From sender msg 2");
-//        chat2.setUserId("0");
-//        chat2.setTime("1495524123");
-//
-//        ChatListResp.Snippet chat3 = new ChatListResp.Snippet();
-//        chat3.setText("From sender msg 3");
-//        chat3.setUserId("0");
-//        chat3.setTime("1495524123");
-//
-//        ChatListResp.Snippet chat4 = new ChatListResp.Snippet();
-//        chat4.setText("From me msg 1");
-//        chat4.setUserId("1");
-//        chat4.setTime("1495524123");
-//
-//        dataList.add(chat1);
-//        dataList.add(chat2);
-//        dataList.add(chat3);
-//        dataList.add(chat4);
-//
-//        ChatListResp resp = new ChatListResp(dataList);
-//        return Observable.just(resp);
         return api.getChatMessages(new ChatMessageReq(new ChatMessageReq.Snippet(senderId, pref.getString(Constants.BG_ID, "")))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -1034,16 +989,6 @@ public class DataflowService {
     }
 
     public Observable<WinnerResp> getWeeklyWinners() {
-      /*  List<WinnerResp.Snippet> snippetList = new ArrayList<>();
-        WinnerResp.Snippet snippet = new WinnerResp.Snippet("123", "Dummy Name", "https://dev.braingroom.com/img/default_profile.png", "Dummy College", "3<sup>rd</sup>", "Dummy winner");
-        snippetList.add(snippet);
-        snippetList.add(snippet);
-        snippetList.add(snippet);
-        snippetList.add(snippet);
-        snippetList.add(snippet);
-        snippetList.add(snippet);
-        snippetList.add(snippet);
-        return Observable.just(new WinnerResp(snippetList))*/
         return api.getWeeklyPerformers().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, WinnerResp>() {
             @Override
             public WinnerResp apply(@NonNull Throwable throwable) throws Exception {
@@ -1099,4 +1044,5 @@ public class DataflowService {
             }
         });
     }
+
 }

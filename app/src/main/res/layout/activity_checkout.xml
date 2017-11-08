@@ -157,7 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_med"
-                android:visibility="@{vm.isGift || vm.promoCode!=null ?  View.GONE : View.VISIBLE}"
+                android:visibility="@{vm.isGift ?  View.GONE : View.VISIBLE}"
                 card_view:cardElevation="@dimen/dimen_zero">
 
                 <TextView
@@ -230,6 +230,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="7.5"
+                        android:inputType="textCapCharacters"
                         android:text="@={vm.promoCode}"
                         android:textSize="@dimen/_10sdp" />
 

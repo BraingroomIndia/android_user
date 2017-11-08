@@ -60,8 +60,10 @@
                     android:drawableStart="@drawable/search_new"
                     android:gravity="center_vertical"
                     android:hint="@string/searchBlogHint"
+                    android:imeOptions="actionDone"
                     android:padding="@dimen/margin_small"
                     android:text="@={vm.searchQuery}"
+                    android:inputType="text"
                     android:textColor="@color/colorTextGray"
                     android:textColorHint="@color/colorTextGray"
                     app:font='@{@string/robotoRegular}' />
@@ -83,9 +85,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_small"
                 android:background="@color/white"
                 android:orientation="horizontal"
+                android:padding="@dimen/padding_small"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 

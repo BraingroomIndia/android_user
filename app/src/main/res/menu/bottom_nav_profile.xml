@@ -5,13 +5,13 @@
     <item
         android:id="@+id/action_tips_tricks"
         android:enabled="true"
-        android:icon="@drawable/tips_tricks"
+        android:icon="@drawable/ic_action_tips_tricks"
         android:title="@string/action_tips_tricks"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_discuss_n_decide"
         android:enabled="true"
-        android:icon="@drawable/ic_record_voice_over_white_24dp"
+        android:icon="@drawable/ic_action_discuss_n_decide"
         android:title="@string/action_discuss_n_decide" />
     <item
         android:id="@+id/action_find_partners"
@@ -21,7 +21,7 @@
     <item
         android:id="@+id/action_buy_sell"
         android:enabled="true"
-        android:icon="@drawable/ic_people_white_24dp"
+        android:icon="@drawable/ic_action_buy_sell"
         android:title="@string/action_learners_forum"
         app:showAsAction="ifRoom" />
 

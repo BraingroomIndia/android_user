@@ -38,8 +38,7 @@ public class BindingAdapters {
 
     @BindingAdapter("android:visibility")
     public static void bindVisibility(@NonNull View view, @Nullable Boolean visible) {
-        int visibility = (visible != null && visible) ? View.VISIBLE : View.GONE;
-        view.setVisibility(visibility);
+        view.setVisibility((visible != null && visible) ? View.VISIBLE : View.GONE);
     }
 
 
@@ -90,7 +89,7 @@ public class BindingAdapters {
 
 
     @BindingAdapter(value = {"android:onClick", "fullScreen"}, requireAll = true)
-    public static void toggleHideyBar(ImageView view,final Action listener, boolean fullScreen) {
+    public static void toggleHideyBar(ImageView view, final Action listener, boolean fullScreen) {
 
         // BEGIN_INCLUDE (get_current_ui_flags)
         // The UI options currently enabled are represented by a bitfield.
