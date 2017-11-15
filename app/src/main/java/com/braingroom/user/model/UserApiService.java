@@ -321,11 +321,13 @@ public interface UserApiService {
     Observable<WinnerResp> getWeeklyPerformers();
 
     @POST("getLearnerAppMinVersion")
-    Observable<CommonIdResp>getLearnerAppMinVersion();
+    Observable<CommonIdResp> getLearnerAppMinVersion();
 
     @POST("getPromoPopup")
-    Observable<PromoInfo>getPromoInfo(@Body PromoCodeReq req);
+    Observable<PromoInfo> getPromoInfo(@Body PromoCodeReq req);
 
+    @GET("getGeoDetail")
+    Observable<CommonIdResp> getGeoDetail();
 
 
 }

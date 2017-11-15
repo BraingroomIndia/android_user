@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
@@ -14,8 +15,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -41,7 +40,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,10 +67,6 @@ public class Splash extends AppCompatActivity {
     Bundle bundleReceived = new Bundle();
     Bundle bundleSend = new Bundle();
     String referralCode = "";
-    String postId;
-    String classId;
-    String messageSenderId;
-    String messageSenderName;
     private ViewPager mPager;
     private static int currentPage = 0;
     private static final Integer[] XMEN = {R.drawable.find_background, R.drawable.connect_background, R.drawable.catalouge_background};
@@ -96,13 +90,35 @@ public class Splash extends AppCompatActivity {
     public Toast toast;
     MaterialDialog progressDialog;
     RxPermissions rxPermissions;
+    boolean firstRun = true;
+    Branch branch;
+
+    String lastUri = "";
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+
+        UserApplication.getInstance().getMAppComponent().inject(this);
+        apiService.checkGeoDetail();
+        bundleSend.putBoolean("splash", true);
+        bundleReceived = getIntent().getExtras();
+        if (bundleReceived != null) {
+            String ActivityName = bundleReceived.getString(Constants.ACTIVITY_NAME);
+            if (PostDetail.class.getSimpleName().equals(ActivityName))
+                navigateActivity(PostDetail.class, bundleReceived);
+            else if (ClassDetailActivity.class.getSimpleName().equals(ActivityName))
+                navigateActivity(ClassDetailActivity.class, bundleReceived);
+            else if (MessageActivity.class.getSimpleName().equals(ActivityName))
+                navigateActivity(MessageActivity.class, bundleReceived);
+            else if (MessagesThreadActivity.class.getSimpleName().equals(ActivityName))
+                navigateActivity(MessagesThreadActivity.class, bundleReceived);
+            else if (ClassListActivity.class.getSimpleName().equals(ActivityName))
+                navigateActivity(ClassListActivity.class, bundleReceived);
+        }
         isBackground = false;
         rxPermissions = new RxPermissions(Splash.this);
-        UserApplication.getInstance().getMAppComponent().inject(this);
+
         apiService.forceUpdate().subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(@NonNull Boolean aBoolean) throws Exception {
@@ -117,6 +133,7 @@ public class Splash extends AppCompatActivity {
             }
         });
 
+
         setContentView(R.layout.activity_splash);
         init();
         final ConstraintLayout splashScreen = (ConstraintLayout) findViewById(R.id.splash);
@@ -130,60 +147,9 @@ public class Splash extends AppCompatActivity {
         }, SPLASH_DISPLAY_LENGTH);
         FirebaseMessaging.getInstance().subscribeToTopic("all");
 //        ZohoSalesIQ.init(getApplication(), "vbaQbJT6pgp%2F3Bcyb2J5%2FIhGMQOrLMwCtSBDWvN719iFMGR6B8HQyg%2BYib4OymZbE8IA0L0udBo%3D", "689wH7lT2QpWpcVrcMcCOyr5GFEXO50qvrL9kW6ZUoJBV99ST2d97x9bQ72vOdCZvEyaq1slqV%2BhFd9wYVqD4%2FOv9G5EQVmggE5fHIGwHTu%2BOv301MhrYfOQ0d2CzZkt0qlz0ytPLErfXRYn5bu%2FGGbVJmRXRnWU");
-        bundleSend.putBoolean("splash", true);
-        bundleReceived = getIntent().getExtras();
-        if (bundleReceived != null) {
 
-            postId = bundleReceived.getString("post_id");
-            classId = bundleReceived.getString("class_id");
-            messageSenderId = bundleReceived.getString("sender_id");
-            messageSenderName = bundleReceived.getString("sender_name");
-        }
-        if (postId != null) {
-            bundleSend.putString("postId", postId);
-            navigateActivity(PostDetailActivity.class, bundleSend);
 
-        } else if (classId != null) {
-            bundleSend.putString("id", classId);
-            bundleSend.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-            navigateActivity(ClassDetailActivity.class, bundleSend);
-
-        } else if (messageSenderId != null) {
-            bundleSend.putString("sender_id", messageSenderId);
-            bundleSend.putString("sender_name", messageSenderName);
-            navigateActivity(MessagesThreadActivity.class, bundleSend);
-        }
-
-        Branch branch = Branch.getInstance();
-        try {
-            if (branch != null)
-                branch.initSession(new Branch.BranchUniversalReferralInitListener() {
-                    @Override
-                    public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
-                        //If not Launched by clicking Branch link
-                        if (branchUniversalObject == null) {
-                            return;
-                        }
-                /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
-                 * Launch Monster viewer activity if a link clicked without $android_deeplink_path
-                 */
-                        else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
-                            HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
-                            if (referringParams.containsKey("referral")) {
-                                referralCode = referringParams.get("referral");
-                                bundleSend.putString("referralCode", referralCode);
-                                if (!TextUtils.isEmpty(referralCode))
-                                    navigateActivity(HomeActivity.class, bundleSend);
-                            } else if (referringParams.containsKey("qrcode")) {
-                                qrCodeData(referringParams.get("qrcode"));
-                            }
-                        }
-                    }
-                }, this.getIntent().getData(), this);
-        } catch (Exception e) {
-            //e.printStackTrace();
-            Log.d(TAG, "onCreate: " + e.toString());
-        }
+        branch = Branch.getInstance();
     }
         /*try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,false);
@@ -244,7 +210,36 @@ public class Splash extends AppCompatActivity {
         super.onResume();
         isBackground = false;
         isClicked = false;
+//       JSONObject jsonObject;
+        if (branch != null) {
+            branchData();
+        }
+            /* jsonObject = branch.getFirstReferringParamsSync();
+            if (jsonObject.has("referral")) {
+                try {
+                    referralCode = jsonObject.getString("referral");
+                    pref.edit().putString(Constants.referralCode, referralCode).apply();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (!TextUtils.isEmpty(referralCode))
+                    bundleSend.putString(Constants.referralCode, referralCode);
+                navigateActivity(HomeActivity.class, bundleSend);
+            } else if (jsonObject.has("qrcode"))
+                try {
+                    jsonObject = new JSONObject(jsonObject.getString("qrcode"));
+                    qrCodeData(jsonObject.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+        }*/
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firstRun = false;
     }
 
     public void goHome(View view) {
@@ -263,13 +258,34 @@ public class Splash extends AppCompatActivity {
     }
 
     public void openQrCode(final View view) {
-
         rxPermissions.request(Manifest.permission.CAMERA).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(@NonNull Boolean aBoolean) throws Exception {
-                if (aBoolean != null && aBoolean)
+                if (aBoolean != null && aBoolean) {
+                    isBackground = false;
                     navigateActivity(QRCodeReaderActivity.class, bundleSend);
-                else openQrCode(view);
+                } else askAgain(view);
+            }
+        });
+
+
+    }
+
+    public void askAgain(final View view) {
+        rxPermissions.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(@NonNull Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    rxPermissions.request(Manifest.permission.CAMERA).subscribe(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(@NonNull Boolean aBoolean) throws Exception {
+                            if (aBoolean != null && aBoolean) {
+                                isBackground = false;
+                                navigateActivity(QRCodeReaderActivity.class, bundleSend);
+                            } else openQrCode(view);
+                        }
+                    });
+                } else openPermissionSettings();
             }
         });
 
@@ -496,7 +512,7 @@ public class Splash extends AppCompatActivity {
                 @Override
                 public void showProgressDialog(@Nullable String title, @NonNull String content) {
                     progressDialog = new MaterialDialog.Builder(Splash.this)
-                            .title(title)
+                            .title(title != null ? title : "")
                             .content(content)
                             .progress(true, 0)
 //                .canceledOnTouchOutside(false)
@@ -515,6 +531,55 @@ public class Splash extends AppCompatActivity {
     }
 
 
+    private void branchData() {
+        try {
+            if (branch != null)
+                branch.initSession(new Branch.BranchUniversalReferralInitListener() {
+                    @Override
+                    public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
+                        //If not Launched by clicking Branch link
+                        if (branchUniversalObject == null) {
+                            return;
+
+                        } else if (linkProperties != null) {
+                            if (lastUri.equals(linkProperties.getAlias()))
+                                return;
+                            else lastUri = linkProperties.getAlias();
+                        }
+
+                /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
+                 * Launch Monster viewer activity if a link clicked without $android_deeplink_path
+                 */
+                        else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
+                            lastUri = branchUniversalObject.getCanonicalIdentifier();
+                            HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
+                            if (referringParams.containsKey("referral")) {
+                                referralCode = referringParams.get("referral");
+                                bundleSend.putString("referralCode", referralCode);
+                                if (!TextUtils.isEmpty(referralCode)) {
+                                    pref.edit().putString(Constants.referralCode, referralCode).apply();
+                                    navigateActivity(HomeActivity.class, bundleSend);
+                                }
+
+                            } else if (referringParams.containsKey("qrcode")) {
+                                qrCodeData(referringParams.get("qrcode"));
+                            }
+                        }
+                    }
+                }, this.getIntent().getData(), this);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            Log.d(TAG, "onCreate: " + e.toString());
+        }
+    }
+
+    public void openPermissionSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:" + this.getPackageName()));
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(intent);
+    }
 }
 
 

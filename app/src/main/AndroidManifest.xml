@@ -58,7 +58,7 @@
             android:value="@string/branch_test_key" />
         <meta-data
             android:name="io.branch.sdk.TestMode"
-            android:value="false" />
+            android:value="true" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

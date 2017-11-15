@@ -30,15 +30,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/text_size_small">
+                android:orientation="vertical">
 
 
                 <RelativeLayout
                     android:id="@+id/competition_banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_med"
                     android:background="@color/colorAccent"
                     android:onClick="@{vm.onRegister}"
                     android:padding="@dimen/margin_small">
@@ -53,8 +51,8 @@
                         android:padding="@dimen/margin_small"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
-                        tools:text="Hello"
-                        app:font='@{@string/robotoBold}' />
+                        app:font='@{@string/robotoBold}'
+                        tools:text="Hello" />
 
                 </RelativeLayout>
 
@@ -70,6 +68,7 @@
                 <include
                     layout="@layout/content_showcase_list_1"
                     app:vm="@{vm.recommendedVm}" />
+
                 <include
                     layout="@layout/content_showcase_list_1"
                     app:vm="@{vm.featuredVm}" />

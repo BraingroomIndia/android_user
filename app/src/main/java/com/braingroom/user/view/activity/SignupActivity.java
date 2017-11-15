@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.SmsReceiver;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.fragment.ConnectPostFragment;
@@ -113,7 +114,7 @@ public class SignupActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        referralCode = getIntentString("referralCode");
+
         return new SignupViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new UiHelper() {
 
             @Override

@@ -67,13 +67,7 @@ public abstract class BaseActivity extends MvvmActivity {
     MaterialDialog datePickerDialog;
     public boolean isActive;
 
-    @Inject
-    @Named("defaultPref")
-    public SharedPreferences pref;
 
-    @Inject
-    @Named("defaultPrefEditor")
-    SharedPreferences.Editor editor;
 
 
     @Data
@@ -108,15 +102,13 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         FirebaseApp.initializeApp(this);
         pushNotification = getIntentBoolean("pushNotification");
         String notificationId = getIntentString("notification_id");
         if (pushNotification)
-            sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", pref.getString(Constants.NAME, ""));
+            sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        UserApplication.getInstance().getMAppComponent().inject(this);
+
         screenDims = new ScreenDims();
         Point size = new Point();
         WindowManager w = getWindowManager();
@@ -128,13 +120,16 @@ public abstract class BaseActivity extends MvvmActivity {
             vm.apiService.registerUserDevice().subscribe(new Consumer<BaseResp>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                    if (resp.getResCode() != null)
+                    if (resp.getResCode() != null) {
                         editor.putBoolean(Constants.NEW_FCM, false).commit();
-                    sendCustomEvent(BaseActivity.this, "New token sent:", "", "");
+                        sendCustomEvent(BaseActivity.this, "New token sent:", "", "");
+                    }
 
                 }
             });
         }
+
+
     }
 
     public void initNavigationDrawer() {
@@ -483,7 +478,10 @@ public abstract class BaseActivity extends MvvmActivity {
                 return;
             } else if (doubleBackToExitPressedOnce && HomeActivity.class.getSimpleName().equals(this.getClass().getSimpleName()))
                 super.onBackPressed();
-            else getNavigator().navigateActivity(HomeActivity.class, null);
+            else {
+                getNavigator().navigateActivity(Splash.class, null);
+                finish();
+            }
         }
 
         int count = getSupportFragmentManager().getBackStackEntryCount();

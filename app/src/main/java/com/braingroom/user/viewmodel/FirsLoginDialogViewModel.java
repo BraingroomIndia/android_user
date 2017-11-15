@@ -38,13 +38,13 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
         this.userId = loginResp.getData().get(0).getId();
         this.emailId = loginResp.getData().get(0).getEmailId();
 
-        if (loginResp.getData().get(0).getReferralCode().equals("1") || !TextUtils.isEmpty(referralCode))
+        if (loginResp.getData().get(0).getReferralCode().equals("1") || !isEmpty(referralCode))
             referralVm.s_1.set(null);
 
-        if (loginResp.getData().get(0).getMobile() != null && !loginResp.getData().get(0).getMobile().equals(""))
+        if (isEmpty(loginResp.getData().get(0).getMobile()))
             mobileVm.s_1.set(null);
 
-        if (!TextUtils.isEmpty(emailId))
+        if (isEmpty(emailId))
             emailVm.s_1.set(null);
 
         onContinue = new Action() {
@@ -61,7 +61,7 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                     return;
                 }
 
-                apiService.firstSocialLogin(userId, emailId, mobileVm.s_1.get() != null ? mobileVm.s_1.get() : "", referralVm.s_1.get() != null ? referralVm.s_1.get() : referralCode).
+                apiService.firstSocialLogin(userId, emailId, mobileVm.s_1.get() != null ? mobileVm.s_1.get() : loginResp.getData().get(0).getMobile(), referralVm.s_1.get() != null ? referralVm.s_1.get() : referralCode).
                         subscribe(new Consumer<FirstSocialLoginResp>() {
                             @Override
                             public void accept(@io.reactivex.annotations.NonNull FirstSocialLoginResp resp) throws Exception {
@@ -70,6 +70,7 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                                     messageHelper.show(resp.getResMsg());
                                     dismissDialog();
                                 } else {
+                                    pref.edit().putString(Constants.referralCode, "").apply();
                                     LoginResp.Snippet data = loginResp.getData().get(0);
                                     if (mobileVm.s_1.get() != null) {
                                         SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), mobileVm.s_1.get(), data.getPassword());

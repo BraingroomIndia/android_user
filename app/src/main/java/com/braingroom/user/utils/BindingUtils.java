@@ -1,13 +1,9 @@
 package com.braingroom.user.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.BindingConversion;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,7 +21,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -35,7 +30,7 @@ import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.databinding.NavHeaderConnectBinding;
 import com.braingroom.user.databinding.NavHeaderHomeBinding;
-import com.braingroom.user.view.SpacingDecoration;
+import com.braingroom.user.view.adapters.SpacingDecoration;
 import com.braingroom.user.view.adapters.Connectable;
 import com.braingroom.user.view.adapters.RecyclerViewAdapter;
 import com.braingroom.user.view.adapters.ViewModelBinder;
@@ -50,7 +45,6 @@ import com.braingroom.user.viewmodel.TileShimmerItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;

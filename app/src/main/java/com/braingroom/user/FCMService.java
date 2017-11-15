@@ -10,22 +10,19 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
 import android.util.Log;
 
+import com.braingroom.user.model.QRCode.PostDetail;
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
-import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.MessageActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
-import com.braingroom.user.view.activity.PostDetailActivity;
+import com.braingroom.user.view.activity.Splash;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -54,15 +51,6 @@ public class FCMService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         UserApplication.getInstance().newNotificationBus.onNext(true);
 
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-        }
-
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            Log.d(TAG, "Message Notification Title: " + remoteMessage.getNotification().getTitle());
-
-        }
         sendNotification(remoteMessage);
     }
 
@@ -85,7 +73,7 @@ public class FCMService extends FirebaseMessagingService {
         String title1 = remoteMessage.getData().get("type");
         String messageBody = remoteMessage.getData().get("message");
         data.putString("notification_id", notificationId);
-        data.putBoolean("pushNotification", true);
+        data.putBoolean(Constants.pushNotification, true);
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 
         sendCustomEvent(this, "Notification Received", notificationId, shortDescription);
@@ -97,23 +85,29 @@ public class FCMService extends FirebaseMessagingService {
 
         FilterData classFilterData = new FilterData();
         if (postId != null) {
-            intent = new Intent(this, PostDetailActivity.class);
+            intent = new Intent(this, Splash.class);
             data.putString("postId", postId);
+            data.putString(Constants.ACTIVITY_NAME, PostDetail.class.getSimpleName());
 
         } else if (classId != null) {
-            intent = new Intent(this, ClassDetailActivity.class);
+            intent = new Intent(this, Splash.class);
+            data.putString(Constants.ACTIVITY_NAME, ClassDetailActivity.class.getSimpleName());
             data.putString("id", classId);
             data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
 
         } else if (messageSenderId != null) {
-            if ("0".equalsIgnoreCase(messageSenderId))
-                intent = new Intent(this, MessageActivity.class);
-            else
+            if ("0".equalsIgnoreCase(messageSenderId)) {
+                intent = new Intent(this, Splash.class);
+                data.putString(Constants.ACTIVITY_NAME, MessageActivity.class.getSimpleName());
+            } else {
                 intent = new Intent(this, MessagesThreadActivity.class);
+                data.putString(Constants.ACTIVITY_NAME, MessagesThreadActivity.class.getSimpleName());
+            }
             data.putString("sender_id", messageSenderId);
             data.putString("sender_name", messageSenderName);
         } else if (categoryId != null) {
-            intent = new Intent(this, ClassListActivity.class);
+            intent = new Intent(this, Splash.class);
+            data.putString(Constants.ACTIVITY_NAME, ClassListActivity.class.getSimpleName());
             classFilterData.setCategoryId(categoryId);
             if (segmentId != null)
                 classFilterData.setSegmentId(segmentId);
@@ -121,7 +115,7 @@ public class FCMService extends FirebaseMessagingService {
             data.putSerializable(Constants.classFilterData, classFilterData);
 
         } else {
-            intent = new Intent(this, HomeActivity.class);
+            intent = new Intent(this, Splash.class);
         }
         intent.putExtra("classData", data);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

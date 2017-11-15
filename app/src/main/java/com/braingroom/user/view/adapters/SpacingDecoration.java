@@ -1,4 +1,4 @@
-package com.braingroom.user.view;
+package com.braingroom.user.view.adapters;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

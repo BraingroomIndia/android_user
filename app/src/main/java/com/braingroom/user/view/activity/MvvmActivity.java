@@ -17,6 +17,7 @@
 package com.braingroom.user.view.activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -36,6 +37,9 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import dagger.internal.Preconditions;
 
 
@@ -50,9 +54,18 @@ public abstract class MvvmActivity extends AppCompatActivity {
     protected Tracker mTracker;
     protected FirebaseAnalytics mFirebaseAnalytics;
 
+    @Inject
+    @Named("defaultPref")
+    public SharedPreferences pref;
+
+    @Inject
+    @Named("defaultPrefEditor")
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserApplication.getInstance().getMAppComponent().inject(this);
         init(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         if (getIntent().getExtras() != null)
@@ -62,6 +75,7 @@ public abstract class MvvmActivity extends AppCompatActivity {
         vm.setMFirebaseAnalytics(mFirebaseAnalytics);
         vm.setMTracker(mTracker);
         getDefaultBinder().bind(binding, vm);
+        vm.apiService.checkGeoDetail();
     }
 
 

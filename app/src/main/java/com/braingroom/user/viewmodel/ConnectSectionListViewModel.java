@@ -12,9 +12,7 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.Navigator;
-import com.braingroom.user.view.activity.ClassListActivity;
-import com.braingroom.user.view.activity.ConnectHomeActivity;
-import com.braingroom.user.view.activity.SegmentListActivity;
+
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 

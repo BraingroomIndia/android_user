@@ -180,7 +180,6 @@ public class LoginViewmodel extends ViewModel {
 
 
                 if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
-                    editor.commit();
                     LoginResp.Snippet data = loginResp.getData().get(0);
                     if (TextUtils.isEmpty(loginResp.getData().get(0).getMobile()) || TextUtils.isEmpty(loginResp.getData().get(0).getEmailId())) {
                         //login(userName, emailId, profilePic, data.getId(), data.getUuid());

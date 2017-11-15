@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.utils.Constants;
 import com.google.gson.Gson;
 
 import java.io.EOFException;
@@ -37,6 +38,8 @@ public class CustomInterceptor implements Interceptor {
 
     Gson gson;
 
+    int versionCode = UserApplication.versionCode;
+
     // InternetConnection internetConnection = new InternetConnection(UserApplication.getInstance());
 
     @Inject
@@ -50,7 +53,8 @@ public class CustomInterceptor implements Interceptor {
         Request original = chain.request();
         Request.Builder requestBuilder = original.newBuilder()
                 .addHeader("X-App-Type", "BGUSR01")
-                .addHeader("X-App-Version", "1.2");
+                .addHeader("X-App-Version", versionCode + "")
+                .addHeader("X-App-Geo", Constants.GEO_TAG);
         Request request = requestBuilder.build();
         Response response;
         try {

@@ -12,6 +12,7 @@ import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.FragmentHelper;
 import com.braingroom.user.view.MessageHelper;
@@ -143,6 +144,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                             signUpResp.getData().get(0).setPassword(password.s_1.get());
                             signUpResp.getData().get(0).setLoginType("direct");
                             uiHelper.next(signUpResp.getData().get(0));
+                            editor.putString(Constants.referralCode,"").apply();
 
                         } else {
                             messageHelper.show(signUpResp.getResMsg());
@@ -224,6 +226,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
                         if (signUpResp.getData().size() > 0) {
+                            editor.putString(Constants.referralCode,"").apply();
                             signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
                             signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
                             signUpResp.getData().get(0).setPassword(password.s_1.get());

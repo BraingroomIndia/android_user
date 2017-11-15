@@ -215,7 +215,7 @@ public class LoginActivity extends BaseActivity implements
 
     public void showMandatoryEmailPopup(LoginResp loginResp) {
         FirsLoginDialogViewModel firsLoginDialogViewModel =
-                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), referralCode);
+                new FirsLoginDialogViewModel(loginResp, getMessageHelper(), getNavigator(), pref.getString(Constants.referralCode, ""));
         firsLoginDialogViewModel.setUiHandler(uiHandler);
         getHelperFactory().createDialogHelper().showCustomView(R.layout.content_first_social_login, firsLoginDialogViewModel
                 , false);

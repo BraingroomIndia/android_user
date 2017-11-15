@@ -9,7 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -49,6 +51,17 @@ public class BindingAdapters {
     public static void bindRecyclerViewAdapter(RecyclerView recyclerView, io.reactivex.Observable<List<ViewModel>> items, ViewProvider viewProvider) {
         RecyclerView.Adapter previousAdapter = recyclerView.getAdapter();
         BindingUtils.bindAdapterWithDefaultBinder(recyclerView, items, viewProvider);
+
+        // Previous adapter should get deallocated
+//        if (previousAdapter != null)
+//            UserApplication.getRefWatcher(recyclerView.getContext()).watch(previousAdapter);
+    }
+
+    @BindingAdapter({"items", "view_provider", "layout"})
+    public static void bindRecyclerViewAdapter(RecyclerView recyclerView, io.reactivex.Observable<List<ViewModel>> items, ViewProvider viewProvider, StaggeredGridLayoutManager gridLayoutManager) {
+        RecyclerView.Adapter previousAdapter = recyclerView.getAdapter();
+        BindingUtils.bindAdapterWithDefaultBinder(recyclerView, items, viewProvider);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         // Previous adapter should get deallocated
 //        if (previousAdapter != null)

@@ -42,6 +42,7 @@ public class Constants {
     public static final String vendorListFilterMap = "vendorListFilterMap";
     public static final String origin = "origin";
     public static final String promoCode = "promoCode";
+    public static final String referralCode = "referralCode";
 
     public static final String competitionStatus = "CompetitionStatus";
 
@@ -56,4 +57,9 @@ public class Constants {
 
     public static final String FONT_REGULAR = "Roboto-Regular.ttf";
     public static final String FONT_BOLD = "Roboto-Bold.ttf";
+    public static String GEO_TAG = "";
+
+    public static final String ACTIVITY_NAME = "ACTIVITY_NAME";
+    public static final String pushNotification = "pushNotification";
+
 }

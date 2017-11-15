@@ -54,6 +54,11 @@ public class LoginResp extends BaseResp {
         private String emailId;
 
         private String password;
+
+        public String getMobile() {
+            return mobile == null ? "" : mobile;
+        }
     }
+
 
 }

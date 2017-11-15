@@ -101,11 +101,13 @@ public class ViewModel extends BaseObservable {
     public void logOut() {
 
         String fcmToken = pref.getString(Constants.FCM_TOKEN, "");
+        String referralCode = pref.getString(Constants.referralCode, "");
         Log.d("Firebase", "fcm Token: " + fcmToken);
         apiService.logout().subscribe();
         editor.clear();
         editor.putString(Constants.FCM_TOKEN, fcmToken);
-        editor.commit();
+        editor.putString(Constants.referralCode, referralCode);
+        editor.apply();
         LoginManager.getInstance().logOut();
 
 
@@ -152,10 +154,7 @@ public class ViewModel extends BaseObservable {
     ;
 
     public boolean isValidPhoneNo(CharSequence phoneNo) {
-        if (!TextUtils.isEmpty(phoneNo)) {
-            return android.util.Patterns.PHONE.matcher(phoneNo).matches();
-        }
-        return false;
+        return !TextUtils.isEmpty(phoneNo) && android.util.Patterns.PHONE.matcher(phoneNo).matches();
     }
 
     public void setLoggedIn() {

@@ -92,7 +92,7 @@ public class SignupViewModel extends ViewModel {
     private SignUpReq.Snippet signUpSnippet;
 
 
-    public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper, final String referralCode) {
+    public SignupViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, final SignupActivity.UiHelper uiHelper, FragmentHelper fragmentHelper, FragmentHelper dynamicSearchFragmentHelper, String referralCode) {
         this.navigator = navigator;
         this.messageHelper = messageHelper;
         this.uiHelper = uiHelper;
@@ -109,7 +109,9 @@ public class SignupViewModel extends ViewModel {
         signUpSnippet.setLongitude("");
         signUpSnippet.setProfileImage("");
         OTP = new ObservableField<>("");
-        if (referralCode != null) {
+        if (isEmpty(referralCode))
+            referralCode = pref.getString(Constants.referralCode, "");
+        if (!isEmpty(referralCode)) {
             referralCodeVm.s_1.set(null);
             referralFieldVisible.set(false);
             signUpSnippet.setReferalCode(referralCode);
@@ -190,6 +192,7 @@ public class SignupViewModel extends ViewModel {
 
                         if (signUpResp.getData().size() > 0) {
                             messageHelper.dismissActiveProgress();
+                            editor.putString(Constants.referralCode, "").commit();
                             signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
                             signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
                             signUpResp.getData().get(0).setPassword(password.s_1.get());
@@ -272,6 +275,7 @@ public class SignupViewModel extends ViewModel {
 
                         if (signUpResp.getData().size() > 0) {
                             messageHelper.dismissActiveProgress();
+                            editor.putString(Constants.referralCode, "").commit();
                             signUpResp.getData().get(0).setEmailId(emailId.s_1.get());
                             signUpResp.getData().get(0).setMobileNumber(mobileNumber.s_1.get());
                             signUpResp.getData().get(0).setPassword(password.s_1.get());
