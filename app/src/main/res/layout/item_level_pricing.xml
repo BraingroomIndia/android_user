@@ -80,7 +80,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:lines="1"
-            android:text='@{vm.totalPrice > 0 ? "Rs. " + vm.totalPrice : "" }'
+            android:text='@{vm.totalPrice > 0 ? "" + vm.totalPrice : "" }'
             android:textColor="@color/colorPrimary"
             app:font='@{@string/robotoRegular}' />
 

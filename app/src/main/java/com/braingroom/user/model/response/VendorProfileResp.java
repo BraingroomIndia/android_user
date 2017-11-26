@@ -161,6 +161,12 @@ public class VendorProfileResp extends BaseResp {
             @SerializedName("price")
             public String price;
 
+            @SerializedName("price_symbol")
+            private String priceSymbol;
+
+            @SerializedName("price_code")
+            private String priceCode;
+
             @SerializedName("location")
             public String location;
 

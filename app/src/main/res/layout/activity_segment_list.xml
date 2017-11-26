@@ -16,7 +16,7 @@
         android:background="@color/white">
 
         <include
-            layout="@layout/content_typical_grid"
+            layout="@layout/content_typical_grid_1"
             app:vm="@{vm.gridViewModel}" />
 
         <include

@@ -104,9 +104,13 @@ public class ViewModel extends BaseObservable {
         String referralCode = pref.getString(Constants.referralCode, "");
         Log.d("Firebase", "fcm Token: " + fcmToken);
         apiService.logout().subscribe();
-        editor.clear();
-        editor.putString(Constants.FCM_TOKEN, fcmToken);
-        editor.putString(Constants.referralCode, referralCode);
+        editor.putString(Constants.BG_ID, "");
+        editor.putBoolean(Constants.LOGGED_IN, false);
+        editor.putString(Constants.EMAIL, "");
+        editor.putString(Constants.NAME, "");
+        editor.putString(Constants.UUID, "");
+        editor.putString(Constants.PROFILE_PIC, "");
+        editor.commit();
         editor.apply();
         LoginManager.getInstance().logOut();
 
@@ -151,10 +155,10 @@ public class ViewModel extends BaseObservable {
 
     }
 
-    ;
 
-    public boolean isValidPhoneNo(CharSequence phoneNo) {
-        return !TextUtils.isEmpty(phoneNo) && android.util.Patterns.PHONE.matcher(phoneNo).matches();
+
+    boolean isValidPhoneNo(CharSequence phoneNo) {
+        return !isEmpty(phoneNo) && android.util.Patterns.PHONE.matcher(phoneNo).matches();
     }
 
     public void setLoggedIn() {
@@ -166,22 +170,14 @@ public class ViewModel extends BaseObservable {
     }
 
     public boolean isEmpty(String data) {
-        if (data == null)
-            return true;
-        else if (data.equals(""))
-            return true;
-        else
-            return data.trim().equals("");
+        return data == null || data.equals("") || data.trim().equals("");
     }
 
     public boolean isEmpty(List<?> data) {
-        if (data == null)
-            return true;
-        else
-            return data.isEmpty();
+        return data == null || data.isEmpty();
     }
 
-    public void setScreenName(String screenName) {
+    void setScreenName(String screenName) {
         mTracker.setScreenName(screenName);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
@@ -196,12 +192,8 @@ public class ViewModel extends BaseObservable {
                 .build());
     }
 
-    ;
-
     public boolean isEmpty(Object data) {
         return data == null;
     }
 
-    public void openPlayStore() {
-    }
 }

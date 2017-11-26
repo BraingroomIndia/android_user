@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -81,6 +82,8 @@ public class CheckoutViewModel extends ViewModel {
     public final CheckoutActivity.UiHelper uiHelper;
     public final ObservableBoolean isLocation = new ObservableBoolean(true);
     public final ObservableBoolean isGift = new ObservableBoolean(false);
+
+    public final ObservableField<Spanned> priceSymbol = new ObservableField<>();
 
     public final List<String> pricingTableList = new ArrayList<>();
 
@@ -162,6 +165,7 @@ public class CheckoutViewModel extends ViewModel {
                              @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final boolean isGift, final String promo) {
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
+        priceSymbol.set(classData.getPriceSymbol());
         setScreenName(classData.getClassTopic());
         totalAmount = new ObservableInt(0);
         totalAmountAfterPromo = new ObservableInt(0);

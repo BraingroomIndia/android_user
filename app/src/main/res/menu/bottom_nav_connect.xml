@@ -7,30 +7,35 @@
         android:enabled="true"
         android:icon="@drawable/ic_action_tips_tricks"
         android:title="@string/action_tips_tricks"
+        app:autoSizeTextType="uniform"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_discuss_n_decide"
         android:enabled="true"
         android:icon="@drawable/ic_action_discuss_n_decide"
-        android:title="@string/action_discuss_n_decide" />
+        android:title="@string/action_discuss_n_decide"
+        app:autoSizeTextType="uniform" />
 
     <item
         android:id="@+id/action_tutors_article"
         android:enabled="true"
         android:icon="@drawable/ic_action_articles_white_24dp"
         android:title="@string/action_tutors_article"
+        app:autoSizeTextType="uniform"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_find_partners"
         android:enabled="true"
         android:icon="@drawable/ic_action_find_partners"
-        android:title="@string/action_tutors_talk" />
+        android:title="@string/action_tutors_talk"
+        app:autoSizeTextType="uniform" />
     <item
         android:id="@+id/action_buy_sell"
         android:enabled="true"
         android:icon="@drawable/ic_action_buy_sell"
         android:title="@string/action_learners_forum"
+        app:autoSizeTextType="uniform"
         app:showAsAction="ifRoom" />
 
 

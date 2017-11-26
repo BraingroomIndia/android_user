@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.braingroom.user.BR;
+import com.braingroom.user.view.adapters.CustomGridLayoutManger;
 import com.braingroom.user.view.adapters.ViewModelBinder;
 import com.braingroom.user.view.adapters.ViewProvider;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -58,7 +59,7 @@ public class BindingAdapters {
     }
 
     @BindingAdapter({"items", "view_provider", "layout"})
-    public static void bindRecyclerViewAdapter(RecyclerView recyclerView, io.reactivex.Observable<List<ViewModel>> items, ViewProvider viewProvider, StaggeredGridLayoutManager gridLayoutManager) {
+    public static void bindRecyclerViewAdapter(final RecyclerView recyclerView, io.reactivex.Observable<List<ViewModel>> items, ViewProvider viewProvider, CustomGridLayoutManger gridLayoutManager) {
         RecyclerView.Adapter previousAdapter = recyclerView.getAdapter();
         BindingUtils.bindAdapterWithDefaultBinder(recyclerView, items, viewProvider);
         recyclerView.setLayoutManager(gridLayoutManager);

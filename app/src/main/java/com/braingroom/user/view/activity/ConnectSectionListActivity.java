@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import com.braingroom.user.R;
 
+import com.braingroom.user.view.adapters.CustomGridLayoutManger;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ConnectSectionListViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -18,7 +19,7 @@ public class ConnectSectionListActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        return new ConnectSectionListViewModel(getFirebaseAnalytics(),getGoogleTracker(),getNavigator());
+        return new ConnectSectionListViewModel(getFirebaseAnalytics(), getGoogleTracker(), getNavigator(), new CustomGridLayoutManger(this, 5));
     }
 
     @Override

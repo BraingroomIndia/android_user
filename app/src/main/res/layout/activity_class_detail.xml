@@ -80,6 +80,7 @@
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
                         android:text="GIFT THIS CLASS"
+                        app:autoSizeTextType="uniform"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
                         app:font='@{@string/robotoBold}' />
@@ -91,6 +92,7 @@
                         android:layout_weight="1"
                         android:background="@color/materialOrange"
                         android:gravity="center"
+                        app:autoSizeTextType="uniform"
                         android:onClick="@{vm.onBookClicked}"
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
@@ -185,7 +187,7 @@
                                     android:paddingBottom="@dimen/padding_small"
                                     android:paddingRight="@dimen/padding_small"
                                     android:paddingTop="@dimen/padding_small"
-                                    android:text='@{"Rs. "+vm.price}'
+                                    android:text='@{vm.price}'
                                     android:textColor="@color/materialBlue"
                                     android:textSize="@dimen/text_size_large"
                                     app:font='@{@string/robotoBold}'

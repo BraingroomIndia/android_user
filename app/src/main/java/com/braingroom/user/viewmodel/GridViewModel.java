@@ -20,6 +20,7 @@ import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.CommunityListActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.SegmentListActivity;
+import com.braingroom.user.view.adapters.CustomGridLayoutManger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +51,7 @@ public class GridViewModel extends ViewModel {
     public final HashMap<String, Integer> categoryMap;
     public final Navigator navigator;
     public final int type;
+    public final CustomGridLayoutManger layout;
 
     public GridViewModel(@NonNull Navigator navigator, int type, @Nullable final HashMap<String, Integer> categoryMap1) {
         this.navigator = navigator;
@@ -61,6 +63,20 @@ public class GridViewModel extends ViewModel {
                 return getGridItems(categoryMap);
             }
         });
+        layout = null;
+    }
+
+    public GridViewModel(@NonNull Navigator navigator, int type, @Nullable final HashMap<String, Integer> categoryMap1, CustomGridLayoutManger layout) {
+        this.navigator = navigator;
+        this.type = type;
+        this.categoryMap = categoryMap1 != null ? categoryMap1 : new HashMap<String, Integer>();
+        gridItems = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return getGridItems(categoryMap);
+            }
+        });
+        this.layout = layout;
     }
 
     private Observable<List<ViewModel>> getGridItems(@NonNull HashMap<String, Integer> categoryMap) {
@@ -135,6 +151,8 @@ public class GridViewModel extends ViewModel {
                 for (final SegmentResp.Snippet elem : resp.getData()) {
                     if (!elem.getId().equals("-1")) {
                         apiSuccessful = true;
+                        if (layout != null)
+                            layout.setTotalCount(resp.getData().size());
                         results.add(new IconTextItemViewModel(elem.getSegmentImage(), elem.getSegmentName(),
                                 new MyConsumer<IconTextItemViewModel>() {
                                     @Override

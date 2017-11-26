@@ -1,7 +1,9 @@
 package com.braingroom.user.utils;
 
+import android.support.v7.app.AppCompatActivity;
+
 import com.braingroom.user.FCMInstanceIdService;
-import com.braingroom.user.view.activity.BaseActivity;
+import com.braingroom.user.view.activity.Index;
 import com.braingroom.user.view.activity.MvvmActivity;
 import com.braingroom.user.view.activity.QRCodeReaderActivity;
 import com.braingroom.user.view.activity.Splash;
@@ -21,7 +23,9 @@ public interface AppComponent {
 
     void inject(MvvmActivity baseActivity);
 
-    void inject(Splash splash);
+    void inject(Splash activity);
+
+    void inject(Index activity);
 
     void inject(QRCodeReaderActivity activity);
 

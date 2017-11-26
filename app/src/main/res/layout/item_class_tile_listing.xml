@@ -117,7 +117,7 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
-                        android:text='@{vm.classData.price == null || "".equals(vm.classData.price) || "0".equals(vm.classData.price)  ? "Free Booking" : "Rs "+vm.classData.price}'
+                        android:text='@{vm.classData.price == null || "".equals(vm.classData.price) || "0".equals(vm.classData.price)  ? "Free Booking" : vm.classData.priceSymbol +vm.classData.price}'
                         android:textColor="@color/materialGreen"
                         app:font='@{@string/robotoRegular}'
                         tools:text="Rs 500" />

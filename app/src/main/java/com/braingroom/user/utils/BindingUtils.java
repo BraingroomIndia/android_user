@@ -66,7 +66,9 @@ public class BindingUtils {
 
     @Nullable
     public static ViewModelBinder getDefaultBinder() {
-        return defaultBinder;
+        if (defaultBinder != null)
+            return defaultBinder;
+        else return BindingAdapters.defaultBinder;
     }
 
     public static void setDefaultBinder(@NonNull ViewModelBinder viewModelBinder) {

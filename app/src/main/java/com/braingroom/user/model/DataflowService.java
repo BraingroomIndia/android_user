@@ -322,6 +322,8 @@ public class DataflowService {
                             classData.setId(classDetail.getId());
                             classData.setClassTypeData(classDetail.getClassTypeData());
                             classData.setTeacher(classDetail.getTeacher());
+                            classData.setPriceSymbol(classDetail.getPriceSymbol());
+                            classData.setPriceCode(classDetail.getPriceCode());
                             //Edited by Vikas Godara
                             dataList.add(classData);
                             i++;
@@ -334,6 +336,9 @@ public class DataflowService {
 
     public Observable<VendorProfileData> getVendorProfile(String vendorId) {
 
+        FilterData filterData = new FilterData();
+        filterData.setClassProvider(vendorId);
+
         return api.getVendorProfile("", new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorProfileData>() {
                     @Override
@@ -345,7 +350,24 @@ public class DataflowService {
 
     public Observable<List<ClassData>> getVendorClassList(Integer pageIndex, String vendorId) {
 
-        return api.getVendorProfile(pageIndex > 1 ? pageIndex + "" : "",
+
+        FilterData filterData = new FilterData();
+        filterData.setClassProvider(vendorId);
+
+        return api.generalFilter(pageIndex > 0 ? pageIndex + "" : "", filterData.getFilterReq()).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
+                    @Override
+                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
+                        List<ClassData> dataList = new ArrayList<>(0);
+
+                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
+                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
+                        }
+                        return dataList;
+                    }
+                });
+
+        /*return api.getVendorProfile(pageIndex > 1 ? pageIndex + "" : "",
                 new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, List<ClassData>>() {
                     @Override
@@ -363,6 +385,7 @@ public class DataflowService {
                                 classData.setPrice(classDetail.price);
                                 classData.setNoOfSession(classDetail.noOfSession);
                                 classData.setClassDuration(classDetail.classDuration);
+                                classData.setC
 
 
                                 if (classDetail.classTimingId.equals("1"))
@@ -377,7 +400,7 @@ public class DataflowService {
                             }
                         return dataList;
                     }
-                });
+                });*/
     }
 
     public Observable<List<ClassData>> getBookingHistory(String userId, Integer pageIndex) {
@@ -405,6 +428,8 @@ public class DataflowService {
                                 classData.setId(classDetail.getId());
                                 classData.setClassTypeData(classDetail.getClassTypeData());
                                 classData.setTeacher(classDetail.getTeacher());
+                                classData.setPriceSymbol(classDetail.getPriceSymbol());
+                                classData.setPriceCode(classDetail.getPriceCode());
                                 //Edited by Vikas Godara
                                 dataList.add(classData);
                             }
@@ -913,6 +938,8 @@ public class DataflowService {
                         return new NotificationCountResp(new ArrayList<NotificationCountResp.Snippet>());
                     }
                 });
+
+
     }
 
     public Observable<ConnectFeedResp> getFeedsByPostID(String postId) {
@@ -1142,7 +1169,7 @@ public class DataflowService {
     }
 
     public Observable<String> getGeoDetail() {
-        return api.getGeoDetail().map(new Function<CommonIdResp, String>() {
+        return Observable.just(""); /*api.getGeoDetail().map(new Function<CommonIdResp, String>() {
             @Override
             public String apply(@NonNull CommonIdResp resp) throws Exception {
                 if (resp == null)
@@ -1155,7 +1182,7 @@ public class DataflowService {
                     return "";
                 if (resp.getData().get(0).getTextValue() == null)
                     return "";
-                else return resp.getData().get(0).getTextValue();
+                else return "SG|01|Singapore|37541";
             }
         }).onErrorReturn(new Function<Throwable, String>() {
             @Override
@@ -1164,15 +1191,15 @@ public class DataflowService {
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
-
+*/
     }
 
-    public void checkGeoDetail(){
+    public void checkGeoDetail() {
         if (TextUtils.isEmpty(Constants.GEO_TAG))
             getGeoDetail().subscribe(new Consumer<String>() {
                 @Override
                 public void accept(@NonNull String s) throws Exception {
-                    Constants.GEO_TAG=s;
+                    Constants.GEO_TAG = s;
                 }
             });
     }

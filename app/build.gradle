@@ -14,13 +14,13 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.0"
     defaultConfig {
         applicationId "com.braingroom.user"
         minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 7
+        targetSdkVersion 27
+        versionCode 8
         versionName "1.0.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -148,6 +148,13 @@ compile 'com.facebook.android:facebook-android-sdk:4.17.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     provided 'org.projectlombok:lombok:1.12.6'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    //Dependency For Citrus Plug & Play SDK
+    compile('com.citruspay.sdk:plug-n-play-sdk:2.0.1') {
+        transitive = true;
+        exclude module: 'payment-sdk'
+    }
+    //Dependency For Citrus Core SDK
+    compile 'com.citruspay.sdk:payment-sdk:4.1.6'
 }
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->

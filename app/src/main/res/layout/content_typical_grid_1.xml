@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_med"
         android:orientation="vertical"
         android:paddingBottom="@dimen/padding_large">
@@ -37,12 +37,13 @@
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:nestedScrollingEnabled="false"
             android:padding="@dimen/padding_small"
             app:layoutManager="android.support.v7.widget.GridLayoutManager"
             app:spanCount="2"
             bind:items="@{vm.gridItems}"
+            bind:layout="@{vm.layout}"
             bind:view_provider="@{@layout/icon_text_cardview}"
             tools:listitem="@layout/icon_text_cardview"
             tools:padding="@dimen/padding_small" />

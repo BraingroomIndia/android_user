@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -18,20 +19,24 @@ import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
+import com.braingroom.user.view.activity.PostDetailActivity;
+import com.braingroom.user.view.activity.Splash;
 import com.braingroom.user.view.activity.MessageActivity;
 import com.braingroom.user.view.activity.MessagesThreadActivity;
-import com.braingroom.user.view.activity.Splash;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.Random;
 
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
@@ -40,6 +45,7 @@ public class FCMService extends FirebaseMessagingService {
     public static final String TAG = "FCMService";
     protected Tracker mTracker;
     protected FirebaseAnalytics mFirebaseAnalytics;
+    protected Random random = new Random();
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -50,84 +56,55 @@ public class FCMService extends FirebaseMessagingService {
 
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         UserApplication.getInstance().newNotificationBus.onNext(true);
+        Log.d(TAG, "onMessageReceived: " + remoteMessage.toString());
+
+        if (remoteMessage.getData() != null)
+            Log.d(TAG, "Payload:" + remoteMessage.getData());
 
         sendNotification(remoteMessage);
+
     }
 
     private void sendNotification(RemoteMessage remoteMessage) {
 
+        Gson objGson = new GsonBuilder().setPrettyPrinting().create();
         Intent intent;
         Bundle data = new Bundle();
         String notificationType = remoteMessage.getData().get("notify_type");
-        String title = remoteMessage.getData().get("title");
-        String shortDescription = remoteMessage.getData().get("short_description");
-        String detailDescription = remoteMessage.getData().get("detail_description");
-        String imageUrl = remoteMessage.getData().get("image");
         String notificationId = remoteMessage.getData().get("notification_id");
-        String postId = remoteMessage.getData().get("post_id");
-        String classId = remoteMessage.getData().get("class_id");
-        String messageSenderId = remoteMessage.getData().get("sender_id");
-        String messageSenderName = remoteMessage.getData().get("sender_name");
-        String categoryId = remoteMessage.getData().get("category_id");
-        String segmentId = remoteMessage.getData().get("segment_id");
-        String title1 = remoteMessage.getData().get("type");
-        String messageBody = remoteMessage.getData().get("message");
-        data.putString("notification_id", notificationId);
-        data.putBoolean(Constants.pushNotification, true);
-        int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
-
-        sendCustomEvent(this, "Notification Received", notificationId, shortDescription);
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, notificationId);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, shortDescription);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Notification Received");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-        FilterData classFilterData = new FilterData();
-        if (postId != null) {
-            intent = new Intent(this, Splash.class);
-            data.putString("postId", postId);
-            data.putString(Constants.ACTIVITY_NAME, PostDetail.class.getSimpleName());
-
-        } else if (classId != null) {
-            intent = new Intent(this, Splash.class);
-            data.putString(Constants.ACTIVITY_NAME, ClassDetailActivity.class.getSimpleName());
-            data.putString("id", classId);
-            data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-
-        } else if (messageSenderId != null) {
-            if ("0".equalsIgnoreCase(messageSenderId)) {
-                intent = new Intent(this, Splash.class);
-                data.putString(Constants.ACTIVITY_NAME, MessageActivity.class.getSimpleName());
-            } else {
-                intent = new Intent(this, MessagesThreadActivity.class);
-                data.putString(Constants.ACTIVITY_NAME, MessagesThreadActivity.class.getSimpleName());
-            }
-            data.putString("sender_id", messageSenderId);
-            data.putString("sender_name", messageSenderName);
-        } else if (categoryId != null) {
-            intent = new Intent(this, Splash.class);
-            data.putString(Constants.ACTIVITY_NAME, ClassListActivity.class.getSimpleName());
-            classFilterData.setCategoryId(categoryId);
-            if (segmentId != null)
-                classFilterData.setSegmentId(segmentId);
-            data.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
-            data.putSerializable(Constants.classFilterData, classFilterData);
-
-        } else {
-            intent = new Intent(this, Splash.class);
+        String title = null;
+        String title1 = null;
+        String messageBody = null;
+        String shortDescription = null;
+        String detailDescription = null;
+        String imageUrl = null;
+        if (notificationType == null) {
+            title1 = remoteMessage.getData().get("type");
+            messageBody = remoteMessage.getData().get("message");
+        } else if (notificationType.equalsIgnoreCase("text")) {
+            title = remoteMessage.getData().get("title");
+            shortDescription = remoteMessage.getData().get("short_description");
+            detailDescription = remoteMessage.getData().get("detail_description");
+        } else if (notificationType.equalsIgnoreCase("image")) {
+            title = remoteMessage.getData().get("title");
+            shortDescription = remoteMessage.getData().get("short_description");
+            imageUrl = remoteMessage.getData().get("image");
         }
-        intent.putExtra("classData", data);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        String mapToJson = objGson.toJson(remoteMessage.getData());
+        data.putBoolean(Constants.pushNotification, true);
+        data.putString(Constants.pushNotification, mapToJson);
+        int number = (random).nextInt(Integer.MAX_VALUE);
+        Log.d(TAG, "sendNotification: " + number);
+        intent = new Intent(this, Splash.class);
+        intent.putExtra(Constants.pushNotification, data);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
-
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder;
         if ("text".equalsIgnoreCase(notificationType))
             notificationBuilder = createBigTextStyleNotification(title, shortDescription, detailDescription, pendingIntent);
         else if ("image".equalsIgnoreCase(notificationType))
-            notificationBuilder = createBigPictureStyleNotification(title, imageUrl, shortDescription, pendingIntent);
+            notificationBuilder = createBigPictureStyleNotification(title, getBitmapfromUrl(imageUrl), shortDescription, pendingIntent);
         else notificationBuilder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_notifications_64px)
                     .setLargeIcon(getBitmapFromResource(R.mipmap.ic_launcher))
@@ -136,11 +113,12 @@ public class FCMService extends FirebaseMessagingService {
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent);
-
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(m /* ID of notification */, notificationBuilder.build());
+        if (notificationManager != null)
+            notificationManager.notify(number /* ID of notification */, notificationBuilder.build());
+        sendCustomEvent(this, "Notification Received", notificationId, shortDescription);
     }
 
 
@@ -185,16 +163,25 @@ public class FCMService extends FirebaseMessagingService {
                 setAutoCancel(true).
                 setSound(defaultSoundUri).
                 setContentIntent(pendingIntent);
-        ;
+
         return builder;
     }
 
-    private NotificationCompat.Builder createBigPictureStyleNotification(String title, String imageUrl, String shortDescription, PendingIntent pendingIntent) {
+    private NotificationCompat.Builder createBigPictureStyleNotification(String title, Bitmap image, String shortDescription, PendingIntent pendingIntent) {
         NotificationCompat.Builder builder;
         builder = new NotificationCompat.Builder(this);
         NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle(builder);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        style.setBigContentTitle(title).setSummaryText(shortDescription).bigPicture(getBitmapfromUrl(imageUrl));
+        if (image == null)
+            return new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_notifications_64px)
+                    .setLargeIcon(getBitmapFromResource(R.mipmap.ic_launcher))
+                    .setContentTitle(title == null ? "" : title)
+                    .setContentText(shortDescription)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
+        style.setBigContentTitle(title).setSummaryText(shortDescription).bigPicture(image);
         builder.setContentTitle(title).
                 setContentText(shortDescription).
                 setColor(getResources().getColor(R.color.push_notification)).
@@ -207,17 +194,5 @@ public class FCMService extends FirebaseMessagingService {
         return builder;
     }
 
-    public void init(Context ctx) {
-        try {
-
-            if (mTracker == null && ctx != null) {
-                mTracker = GoogleAnalytics.getInstance(ctx).newTracker(R.xml.global_tracker);
-            }
-        } catch (Exception e) {
-            Log.d("Notification", "init, e=" + e);
-        }
-
-
-    }
 
 }

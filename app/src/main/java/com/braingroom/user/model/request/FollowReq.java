@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 
-/**
+/*
  * Created by godara on 23/08/17.
- */
+*/
 @AllArgsConstructor(suppressConstructorProperties = true)
 public class FollowReq {
 

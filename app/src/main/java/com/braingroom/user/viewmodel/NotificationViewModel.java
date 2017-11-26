@@ -28,6 +28,7 @@ public class NotificationViewModel extends ViewModel {
                         List<ViewModel> results = new ArrayList<>();
                         if (resp.getData().isEmpty()) {
                             results.add(new EmptyItemViewModel(R.drawable.ic_notifications_none_black_48dp, null, "No Notification", null));
+                            messageHelper.dismissActiveProgress();
                             return results;
                         }
                         for (final NotificationListResp.Snippet elem : resp.getData()) {

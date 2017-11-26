@@ -1,17 +1,12 @@
 package com.braingroom.user.viewmodel;
 
-import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ClassLocationData;
@@ -29,7 +24,6 @@ import com.braingroom.user.view.activity.FilterActivity;
 import com.braingroom.user.view.activity.HomeActivity;
 import com.braingroom.user.view.activity.SearchActivity;
 import com.braingroom.user.view.activity.SignUpActivityCompetition;
-import com.braingroom.user.view.activity.Splash;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

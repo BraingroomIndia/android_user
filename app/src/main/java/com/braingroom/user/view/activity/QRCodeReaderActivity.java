@@ -16,6 +16,7 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.braingroom.user.BuildConfig;
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
@@ -82,6 +83,8 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     @Inject
     public DataflowService apiService;
 
+    public final String baseUrl = BuildConfig.DEBUG ? getString(R.string.branch_test_base_url) : getString(R.string.branch_live_key);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,13 +114,13 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
         Log.e(TAG, "onScanned: " + barcode.displayValue);
         barcodeReader.playBeep();
         Bundle bundle = new Bundle();
-        if (barCodeUrl != null && barCodeUrl.contains("https://ht5w.app.link/"))
+        if (barCodeUrl != null && barCodeUrl.contains(baseUrl))
             return;
         if (barcode.displayValue == null) {
             return;
         }
 
-        if (barcode.displayValue.contains("https://ht5w.app.link/")) {
+        if (barcode.displayValue.contains(baseUrl)) {
             barCodeUrl = barcode.displayValue;
             qrCodeData(getBranchUrlData(barCodeUrl));
         }
@@ -229,7 +232,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     public String getBranchUrlData(String url) {
         if (TextUtils.isEmpty(url))
             return null;
-        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + getString(R.string.branch_live_key));
+        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
         try {
             jsonObject = new JSONObject(jsonObject.getString("data"));
             jsonObject = new JSONObject(jsonObject.getString("qrcode"));

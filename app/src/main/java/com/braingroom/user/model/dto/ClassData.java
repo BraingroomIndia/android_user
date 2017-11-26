@@ -1,5 +1,8 @@
 package com.braingroom.user.model.dto;
 
+import android.text.Spanned;
+
+import com.braingroom.user.utils.CommonUtils;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -8,7 +11,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
+/*
  * Created by agrahari on 26/03/17.
  */
 @Getter
@@ -127,6 +130,12 @@ public class ClassData implements Serializable {
 
     @SerializedName("locality")
     private String locality;
+
+    @SerializedName("price_symbol")
+    private String priceSymbol;
+
+    @SerializedName("price_code")
+    private String priceCode;
 
     @SerializedName("vendorClasseLevelDetail")
     private List<ClassLevelData> levelDetails;
@@ -428,5 +437,13 @@ public class ClassData implements Serializable {
 
     public void setCatalogLocations(List<String> catalogLocations) {
         this.catalogLocations = catalogLocations;
+    }
+
+    public Spanned getPriceSymbol() {
+        return CommonUtils.fromHtml(priceSymbol + "");
+    }
+
+    public String getPriceSymbolNonSpanned() {
+        return priceSymbol;
     }
 }

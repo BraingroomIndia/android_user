@@ -69,7 +69,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> imagePath = new ObservableField<>(null);
     public final ObservableField<String> videoThumb = new ObservableField<>(null);
     public final ObservableField<String> rating = new ObservableField<>("");
-    public final ObservableField<String> price = new ObservableField<>(null);
+    public final ObservableField<Spanned> price = new ObservableField<>(null);
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
     public final ObservableField<String> teacherName = new ObservableField<>(null);
     public final ObservableField<Spanned> description = new ObservableField<>(null); //Edited By Vikas Godara
@@ -345,11 +345,11 @@ public class ClassDetailViewModel extends ViewModel {
                         rating.set("" + classData.getRating());
                         if (classData.getIsCoupleClass() != 1)
                             if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON))
-                                price.set(classData.getLevelDetails().get(0).getPrice());
+                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+ classData.getLevelDetails().get(0).getPrice()));
                             else
-                                price.set(classData.getLevelDetails().get(0).getGroups().get(1).getPrice());
+                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
                         else
-                            price.set(classData.getLevelDetails().get(0).getGroups().get(0).getPrice());
+                            price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+ classData.getLevelDetails().get(0).getGroups().get(0).getPrice()));
                         imageUploadViewModel.setRemoteAddress(classData.getTeacherPic());
                         teacherPic.set(classData.getTeacherPic());
                         teacherName.set(classData.getClassProvider());

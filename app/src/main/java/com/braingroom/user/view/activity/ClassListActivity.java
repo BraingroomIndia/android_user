@@ -49,14 +49,14 @@ public class ClassListActivity extends BaseActivity {
     private LinearLayoutManager linearLayoutManager;
     private GridLayoutManager gridLayoutManager;
 
-    private RecyclerView.OnScrollListener onScrollListener;
     SpacingDecoration linearDecor = new SpacingDecoration((int) CommonUtils.convertDpToPixel(5), 1);
     GridSpacingItemDecoration gridDecor = new GridSpacingItemDecoration(2, (int) CommonUtils.convertDpToPixel(5), true, 0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setElevation(0);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setElevation(0);
         mRecyclerView = ((ActivityClassList1Binding) binding).classRecyclerview;
         mAdapter = new NonReactiveRecyclerViewAdapter(vm, ((ClassListViewModel1) vm).getViewProvider());
         mRecyclerView.setHasFixedSize(false);
@@ -67,6 +67,7 @@ public class ClassListActivity extends BaseActivity {
         mRecyclerView.removeItemDecoration(linearDecor);
         mRecyclerView.removeItemDecoration(gridDecor);
 
+        RecyclerView.OnScrollListener onScrollListener;
         if (layoutType == ClassListViewModel1.LAYOUT_TYPE_ROW) {
             linearLayoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(linearLayoutManager);

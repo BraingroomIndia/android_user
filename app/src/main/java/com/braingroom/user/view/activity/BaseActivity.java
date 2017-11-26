@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.net.Uri;
@@ -47,9 +46,6 @@ import com.google.firebase.FirebaseApp;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
@@ -66,8 +62,6 @@ public abstract class BaseActivity extends MvvmActivity {
     MaterialDialog progressDialog;
     MaterialDialog datePickerDialog;
     public boolean isActive;
-
-
 
 
     @Data
@@ -103,7 +97,7 @@ public abstract class BaseActivity extends MvvmActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
-        pushNotification = getIntentBoolean("pushNotification");
+        pushNotification = getIntentBoolean(Constants.pushNotification);
         String notificationId = getIntentString("notification_id");
         if (pushNotification)
             sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
@@ -133,15 +127,6 @@ public abstract class BaseActivity extends MvvmActivity {
     }
 
     public void initNavigationDrawer() {
-    }
-
-    ;
-
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-        vm.onUserInteraction();
     }
 
     @Override
@@ -462,40 +447,21 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     public void onBackPressed() {
 
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 5000);
-
+        getMessageHelper().dismissActiveProgress();
         if (isTaskRoot()) {
-            if (HomeActivity.class.getSimpleName().equals(this.getClass().getSimpleName()) && !doubleBackToExitPressedOnce) {
+           /* if (HomeActivity.class.getSimpleName().equals(this.getClass().getSimpleName()) && !doubleBackToExitPressedOnce) {
                 doubleBackToExitPressedOnce = true;
                 getMessageHelper().show("Press back again to exit");
                 return;
             } else if (doubleBackToExitPressedOnce && HomeActivity.class.getSimpleName().equals(this.getClass().getSimpleName()))
                 super.onBackPressed();
-            else {
-                getNavigator().navigateActivity(Splash.class, null);
-                finish();
-            }
+            else {*/
+            getNavigator().navigateActivity(Index.class, null);
+            finish();
+//        }
         }
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
-        /*try {
-
-            if (pushNotification && !this.getClass().getSimpleName().equals(Splash.class.getSimpleName())) {
-                getNavigator().navigateActivity(Splash.class, null);
-                finish();
-                return;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }*/
 
         if (count == 0) {
             super.onBackPressed();
@@ -503,7 +469,6 @@ public abstract class BaseActivity extends MvvmActivity {
         } else {
             getSupportFragmentManager().popBackStack();
         }
-        doubleBackToExitPressedOnce = true;
 
     }
 

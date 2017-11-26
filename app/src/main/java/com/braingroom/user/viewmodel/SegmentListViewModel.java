@@ -11,6 +11,7 @@ import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ClassListActivity;
 import com.braingroom.user.view.activity.SegmentListActivity;
+import com.braingroom.user.view.adapters.CustomGridLayoutManger;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -34,12 +35,12 @@ public class SegmentListViewModel extends ViewModel {
     public final GridViewModel gridViewModel;
 
 
-    public SegmentListViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final Navigator navigator, @NonNull final HashMap<String, Integer> categoryMap) {
+    public SegmentListViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final Navigator navigator, @NonNull final HashMap<String, Integer> categoryMap, CustomGridLayoutManger layout) {
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
         if (!categoryMap.isEmpty())
             setScreenName(categoryMap.keySet().iterator().next());
-        gridViewModel = new GridViewModel(navigator, GridViewModel.SEGMENT, categoryMap);
+        gridViewModel = new GridViewModel(navigator, GridViewModel.SEGMENT, categoryMap,layout);
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {

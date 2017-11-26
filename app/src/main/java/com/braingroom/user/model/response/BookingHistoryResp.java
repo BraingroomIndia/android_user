@@ -66,6 +66,11 @@ public class BookingHistoryResp {
 
         @SerializedName("class_type")
         public String classType;
+        @SerializedName("price_symbol")
+        private String priceSymbol;
+
+        @SerializedName("price_code")
+        private String priceCode;
 
         @SerializedName("no_of_seats")
         public String noOfSeats;

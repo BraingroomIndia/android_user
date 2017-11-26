@@ -7,6 +7,7 @@
         android:enabled="true"
         android:icon="@drawable/ic_action_tips_tricks"
         android:title="@string/action_tips_tricks"
+        app:autoSizeTextType="uniform"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_discuss_n_decide"
@@ -16,6 +17,7 @@
     <item
         android:id="@+id/action_find_partners"
         android:enabled="true"
+        app:autoSizeTextType="uniform"
         android:icon="@drawable/ic_action_find_partners"
         android:title="@string/action_tutors_talk" />
     <item
@@ -23,6 +25,7 @@
         android:enabled="true"
         android:icon="@drawable/ic_action_buy_sell"
         android:title="@string/action_learners_forum"
+        app:autoSizeTextType="uniform"
         app:showAsAction="ifRoom" />
 
 

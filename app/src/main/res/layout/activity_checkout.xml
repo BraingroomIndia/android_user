@@ -147,7 +147,7 @@
                         android:background="@drawable/top_line_drawable"
                         android:gravity="right"
                         android:padding="@dimen/padding_small"
-                        android:text='@{"Total amount : Rs. " + vm.totalAmount}'
+                        android:text='@{"Total amount : " +vm.priceSymbol + vm.totalAmount}'
                         android:textSize="@dimen/text_size_large"
                         app:font='@{@string/robotoRegular}' />
                 </LinearLayout>
@@ -259,7 +259,7 @@
                 android:background="@color/materialGreen"
                 android:gravity="center"
                 android:onClick="@{vm.onProceedClicked}"
-                android:text='@{vm.showBookOption? (vm.totalAmountAfterPromo==0?"Book for free" : "Pay only Rs. " + vm.totalAmountAfterPromo ):"Select Items to Proceed" }'
+                android:text='@{vm.showBookOption? (vm.totalAmountAfterPromo==0?"Book for free" : "Pay only " +vm.priceSymbol + vm.totalAmountAfterPromo ):"Select Items to Proceed" }'
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_large"
                 app:font='@{@string/robotoBold}'

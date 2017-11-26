@@ -5,6 +5,7 @@ import android.view.MenuItem;
 
 import com.braingroom.user.R;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.view.adapters.CustomGridLayoutManger;
 import com.braingroom.user.viewmodel.SegmentListViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
@@ -23,7 +24,7 @@ public class SegmentListActivity extends BaseActivity {
             categoryMap = new HashMap<>();
             categoryMap.put("Fun & Recreation", 1);
         }
-        return new SegmentListViewModel(getFirebaseAnalytics(),getGoogleTracker(),getNavigator(), categoryMap);//new GridViewModel(getMessageHelper(),getNavigator(),ClassListActivity.class);
+        return new SegmentListViewModel(getFirebaseAnalytics(),getGoogleTracker(),getNavigator(), categoryMap, new CustomGridLayoutManger(this,9));//new GridViewModel(getMessageHelper(),getNavigator(),ClassListActivity.class);
     }
 
 /*    @Override

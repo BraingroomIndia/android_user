@@ -150,6 +150,11 @@ public class ClassListResp extends BaseResp {
 
         @SerializedName("localities")
         private List<String> catalogLocations;
+        @SerializedName("price_symbol")
+        private String priceSymbol;
+
+        @SerializedName("price_code")
+        private String priceCode;
 
 
     }

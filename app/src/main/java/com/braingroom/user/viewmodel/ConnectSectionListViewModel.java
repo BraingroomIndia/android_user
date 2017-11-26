@@ -13,6 +13,7 @@ import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
 import com.braingroom.user.view.Navigator;
 
+import com.braingroom.user.view.adapters.CustomGridLayoutManger;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -37,11 +38,11 @@ public class ConnectSectionListViewModel extends ViewModel {
     public final GridViewModel gridViewModel;
     public final Action hideThisPage;
 
-    public ConnectSectionListViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final Navigator navigator) {
+    public ConnectSectionListViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final Navigator navigator, CustomGridLayoutManger layout) {
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
         this.navigator = navigator;
-        gridViewModel = new GridViewModel(navigator, GridViewModel.CONNECT, null);
+        gridViewModel = new GridViewModel(navigator, GridViewModel.CONNECT, null, layout);
 
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override

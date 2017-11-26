@@ -48,11 +48,11 @@ public class ProfileUpdateReq {
         @SerializedName("community_id")
         public String communityId = "";
 
-        @SerializedName("institution_name")
+        @SerializedName("institute_name1")
         public String institutionName = "";
 
-        @SerializedName("institute_name1")
-        String ugInstituteName;
+        @SerializedName("institution_name")
+        String ugInstituteName="";
 
         @SerializedName("institute_poy1")
         String ugInstitutePassingYear;

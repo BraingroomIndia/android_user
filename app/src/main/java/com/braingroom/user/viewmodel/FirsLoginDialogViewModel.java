@@ -41,10 +41,10 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
         if (loginResp.getData().get(0).getReferralCode().equals("1") || !isEmpty(referralCode))
             referralVm.s_1.set(null);
 
-        if (isEmpty(loginResp.getData().get(0).getMobile()))
+        if (!isEmpty(loginResp.getData().get(0).getMobile()))
             mobileVm.s_1.set(null);
 
-        if (isEmpty(emailId))
+        if (!isEmpty(emailId))
             emailVm.s_1.set(null);
 
         onContinue = new Action() {
@@ -56,7 +56,7 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                         messageHelper.show("Enter a vaild email Id");
                     }
                 }
-                if (TextUtils.isEmpty(loginResp.getData().get(0).getMobile()) && !isValidPhoneNo(mobileVm.s_1.get())) {
+                if (isEmpty(loginResp.getData().get(0).getMobile()) && !isValidPhoneNo(mobileVm.s_1.get())) {
                     messageHelper.show("Enter a valid mobile number");
                     return;
                 }

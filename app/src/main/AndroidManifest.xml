@@ -29,7 +29,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup,android:theme">
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
@@ -81,12 +82,12 @@
         </service>
 
         <activity
-            android:name=".view.activity.Splash"
+            android:name=".view.activity.Index"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
 
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -100,7 +101,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
 
-            <!-- AppLink config -->
+            &lt;!&ndash; AppLink config &ndash;&gt;
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -110,7 +111,7 @@
                 <data
                     android:host="https://ht5w.app.link"
                     android:scheme="https" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".view.activity.LoginActivity"
@@ -378,6 +379,38 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.PostDetailActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.Splash"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <data android:scheme="branchsters" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
+            <!-- AppLink config -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="https://ht5w.app.link"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
 
         <!-- Facebook Login -->
