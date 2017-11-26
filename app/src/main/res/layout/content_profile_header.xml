@@ -19,15 +19,15 @@
             type="String" />
 
         <variable
-            name="post_count"
+            name="postCount"
             type="String" />
 
         <variable
-            name="following_count"
+            name="followingCount"
             type="String" />
 
         <variable
-            name="follower_count"
+            name="followerCount"
             type="String" />
 
         <variable
@@ -192,7 +192,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:count="@{post_count}"
+                    app:count="@{postCount}"
                     app:name='@{"Posts"}'
                     tools:layout="@layout/item_profile_count_detail" />
 
@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.3"
                     app:clickAction="@{clickActionFollower}"
-                    app:count="@{follower_count}"
+                    app:count="@{followerCount}"
                     app:name='@{"Followers"}'
                     tools:layout="@layout/item_profile_count_detail" />
 
@@ -212,7 +212,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.3"
                     app:clickAction="@{clickActionFollowing}"
-                    app:count="@{following_count}"
+                    app:count="@{followingCount}"
                     app:name='@{"Following"}'
                     tools:layout="@layout/item_profile_count_detail" />
             </LinearLayout>

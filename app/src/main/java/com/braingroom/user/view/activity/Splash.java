@@ -75,6 +75,7 @@ public class Splash extends AppCompatActivity {
         branchData();
     }
 
+
     public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
         try {
             Log.d(this.getClass().getSimpleName(), "FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));

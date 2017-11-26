@@ -80,9 +80,9 @@
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
                         android:text="GIFT THIS CLASS"
-                        app:autoSizeTextType="uniform"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
+                        app:autoSizeTextType="uniform"
                         app:font='@{@string/robotoBold}' />
 
                     <TextView
@@ -92,7 +92,6 @@
                         android:layout_weight="1"
                         android:background="@color/materialOrange"
                         android:gravity="center"
-                        app:autoSizeTextType="uniform"
                         android:onClick="@{vm.onBookClicked}"
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
@@ -100,6 +99,7 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large"
                         android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
+                        app:autoSizeTextType="uniform"
                         app:font='@{@string/robotoBold}' />
 
                 </LinearLayout>
@@ -553,9 +553,10 @@
                                 layout="@layout/demo_class_colapsed_scene"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:expandAction="@{vm.expandAction}"
+
                                 app:title="@{vm.KNK}" />
                             <!--</RelativeLayout>-->
+                            <!--    app:expandAction="@{vm.expandAction}"-->
                             <!--  <RelativeLayout
                                   android:id="@+id/scene_container2"
                                   android:layout_width="match_parent"
@@ -566,8 +567,8 @@
                                 layout="@layout/demo_class_colapsed_scene"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:expandAction="@{vm.expandAction}"
                                 app:title="@{vm.BNS}" />
+                            <!--app:expandAction="@{vm.expandAction}"-->
                             <!-- </RelativeLayout>-->
                             <!-- <RelativeLayout
                                  android:id="@+id/scene_container3"
@@ -579,9 +580,10 @@
                                 layout="@layout/demo_class_colapsed_scene"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:expandAction="@{vm.expandAction}"
+
                                 app:title="@{vm.AP}" />
                             <!--  </RelativeLayout>-->
+                            <!--app:expandAction="@{vm.expandAction}"-->
 
                         </LinearLayout>
                         <!-- <view

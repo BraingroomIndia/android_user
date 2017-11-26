@@ -92,6 +92,7 @@ public class Index extends AppCompatActivity {
     boolean firstRun = true;
 
 
+
     @Override
     public void onCreate(Bundle icicle) {
         UserApplication.getInstance().getMAppComponent().inject(this);

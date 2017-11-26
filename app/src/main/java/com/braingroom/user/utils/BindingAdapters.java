@@ -25,6 +25,7 @@ import com.braingroom.user.viewmodel.ViewModel;
 import java.util.List;
 
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 import static com.braingroom.user.view.activity.LoginActivity.TAG;
 
@@ -102,7 +103,7 @@ public class BindingAdapters {
     }
 
 
-    @BindingAdapter(value = {"android:onClick", "fullScreen"}, requireAll = true)
+    /*@BindingAdapter(value = {"android:onClick", "fullScreen"}, requireAll = true)
     public static void toggleHideyBar(ImageView view, final Action listener, boolean fullScreen) {
 
         // BEGIN_INCLUDE (get_current_ui_flags)
@@ -147,18 +148,22 @@ public class BindingAdapters {
         //END_INCLUDE (set_ui_flags)
     }
 
-
-//    @BindingConversion
-//    public static View.OnClickListener toOnClickListener(final Consumer listener) {
-//        if (listener != null) {
-//            return new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    listener.call();
-//                }
-//            };
-//        } else {
-//            return null;
-//        }
-//    }
+*/
+    @BindingConversion
+    public static View.OnClickListener toOnClickListener(final MyConsumer listener) {
+        if (listener != null) {
+            return new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        listener.accept(view);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+        } else {
+            return null;
+        }
+    }
 }

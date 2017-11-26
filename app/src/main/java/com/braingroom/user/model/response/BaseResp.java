@@ -24,5 +24,6 @@ public class BaseResp {
     public String getResCode() {
         return resCode;
     }
+
 }
  

@@ -55,6 +55,7 @@ public class DataflowService {
 
     }
 
+
     public Observable<BaseResp> registerUserDevice() {
 
         return api.registerUserDevice(new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""))))
