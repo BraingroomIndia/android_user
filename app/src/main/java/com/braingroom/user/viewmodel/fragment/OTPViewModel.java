@@ -75,7 +75,7 @@ public class OTPViewModel extends ViewModel {
                 apiService.submitOTP(new SubmitOTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                        if (true) //TODO start otp verification
+                        if (resp != null && resp.getResCode() != null&&resp.getResCode().equals("1"))
                             if (data.getLoginType().equals("direct"))
                                 apiService.login(emailId, password, pref.getString(Constants.FCM_TOKEN, ""))
                                         .subscribe(new Consumer<LoginResp>() {

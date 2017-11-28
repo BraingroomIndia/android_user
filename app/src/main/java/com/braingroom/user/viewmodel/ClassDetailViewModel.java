@@ -28,6 +28,7 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.utils.MyConsumer;
+import com.braingroom.user.utils.MyConsumerString;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CheckoutActivity;
@@ -133,7 +134,7 @@ public class ClassDetailViewModel extends ViewModel {
     public static final String BNS = "Buy & Sell";
     public static final String AP = "Activity partner";
 
-    public final MyConsumer<String> expandAction, collapseAction;
+    public final MyConsumerString expandAction, collapseAction;
 
     public ClassDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
                                 @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo) {
@@ -179,13 +180,13 @@ public class ClassDetailViewModel extends ViewModel {
         this.postDescription = new ObservableField<>("");
 
         isGift = ClassListViewModel1.ORIGIN_GIFT.equals(origin);
-        expandAction = new MyConsumer<String>() {
+        expandAction = new MyConsumerString() {
             @Override
             public void accept(String s) {
                 uiHelper.expandDemoClass(s);
             }
         };
-        collapseAction = new MyConsumer<String>() {
+        collapseAction = new MyConsumerString() {
             @Override
             public void accept(String s) {
                 uiHelper.compressDemoClass(s);
@@ -345,11 +346,11 @@ public class ClassDetailViewModel extends ViewModel {
                         rating.set("" + classData.getRating());
                         if (classData.getIsCoupleClass() != 1)
                             if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON))
-                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+ classData.getLevelDetails().get(0).getPrice()));
+                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getPrice()));
                             else
-                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
+                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
                         else
-                            price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+ classData.getLevelDetails().get(0).getGroups().get(0).getPrice()));
+                            price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(0).getPrice()));
                         imageUploadViewModel.setRemoteAddress(classData.getTeacherPic());
                         teacherPic.set(classData.getTeacherPic());
                         teacherName.set(classData.getClassProvider());

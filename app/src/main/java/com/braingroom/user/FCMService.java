@@ -97,6 +97,7 @@ public class FCMService extends FirebaseMessagingService {
         Log.d(TAG, "sendNotification: " + number);
         intent = new Intent(this, Splash.class);
         intent.putExtra(Constants.pushNotification, data);
+        intent.setAction(number+"");
         final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

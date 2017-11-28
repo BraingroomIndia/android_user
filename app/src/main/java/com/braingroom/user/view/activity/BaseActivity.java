@@ -427,7 +427,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
                 @Override
                 public void dismissActiveProgress() {
-                    if (progressDialog != null && progressDialog.isShowing())
+                    if (progressDialog != null )
                         progressDialog.dismiss();
                 }
             };

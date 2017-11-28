@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity implements
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        getMessageHelper().showProgressDialog("Logging in", "Sit back while we connect you...");
+
                         AccessToken accessToken = loginResult.getAccessToken();
                         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                             @Override
@@ -250,6 +250,7 @@ public class LoginActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int responseCode,
                                     Intent data) {
         super.onActivityResult(requestCode, responseCode, data);
+        getMessageHelper().dismissActiveProgress();
 
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);

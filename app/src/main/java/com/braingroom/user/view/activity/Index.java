@@ -92,7 +92,6 @@ public class Index extends AppCompatActivity {
     boolean firstRun = true;
 
 
-
     @Override
     public void onCreate(Bundle icicle) {
         UserApplication.getInstance().getMAppComponent().inject(this);
@@ -203,7 +202,7 @@ public class Index extends AppCompatActivity {
             public void accept(@NonNull Boolean aBoolean) throws Exception {
                 if (aBoolean != null && aBoolean) {
                     isBackground = false;
-                    navigateActivity(QRCodeReaderActivity.class, bundleSend);
+                    navigateActivity(QRCodeReaderActivity.class, null);
                 } else askAgain(view);
             }
         });
@@ -221,7 +220,7 @@ public class Index extends AppCompatActivity {
                         public void accept(@NonNull Boolean aBoolean) throws Exception {
                             if (aBoolean != null && aBoolean) {
                                 isBackground = false;
-                                navigateActivity(QRCodeReaderActivity.class, bundleSend);
+                                navigateActivity(QRCodeReaderActivity.class, null);
                             } else openQrCode(view);
                         }
                     });

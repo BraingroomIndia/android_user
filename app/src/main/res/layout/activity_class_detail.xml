@@ -553,10 +553,10 @@
                                 layout="@layout/demo_class_colapsed_scene"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-
+                                app:expandAction="@{vm.expandAction}"
                                 app:title="@{vm.KNK}" />
                             <!--</RelativeLayout>-->
-                            <!--    app:expandAction="@{vm.expandAction}"-->
+                            <!--  app:expandAction="@{vm.expandAction}" -->
                             <!--  <RelativeLayout
                                   android:id="@+id/scene_container2"
                                   android:layout_width="match_parent"
@@ -567,6 +567,7 @@
                                 layout="@layout/demo_class_colapsed_scene"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                app:expandAction="@{vm.expandAction}"
                                 app:title="@{vm.BNS}" />
                             <!--app:expandAction="@{vm.expandAction}"-->
                             <!-- </RelativeLayout>-->
@@ -580,7 +581,7 @@
                                 layout="@layout/demo_class_colapsed_scene"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-
+                                app:expandAction="@{vm.expandAction}"
                                 app:title="@{vm.AP}" />
                             <!--  </RelativeLayout>-->
                             <!--app:expandAction="@{vm.expandAction}"-->

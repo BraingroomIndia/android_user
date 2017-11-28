@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import org.json.JSONObject;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import lombok.Setter;
@@ -101,53 +102,64 @@ public class LoginViewmodel extends ViewModel {
 
     public void emailLogin() {
         Observable<LoginResp> myObserb = apiService.login(email.get(), password.get(), pref.getString(Constants.FCM_TOKEN, ""));
-        myObserb.subscribe(new Consumer<LoginResp>() {
+        myObserb.doOnSubscribe(new Consumer<Disposable>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
-                if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
-                    loginResp.getData().get(0).setEmailId(email.get());
-                    loginResp.getData().get(0).setPassword(password.get());
-                    LoginResp.Snippet data = loginResp.getData().get(0);
-                    messageHelper.dismissActiveProgress();
-                    if ("".equals(loginResp.getData().get(0).getMobile()) || loginResp.getData().get(0).getReferralCode() == null) {
-                        uiHandler.showEmailDialog(loginResp);
-                        return;
-                    } else if (loginResp.getData().get(0).getIsVerified() == 0) {
+            public void accept(Disposable disposable) throws Exception {
+                messageHelper.showProgressDialog("Logging in", "Sit back while we connect you...");
+            }
+        }).doOnComplete(new Action() {
+            @Override
+            public void run() throws Exception {
+                messageHelper.dismissActiveProgress();
+            }
+        }).
+                subscribe(new Consumer<LoginResp>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
+                        if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
+                            loginResp.getData().get(0).setEmailId(email.get());
+                            loginResp.getData().get(0).setPassword(password.get());
+                            LoginResp.Snippet data = loginResp.getData().get(0);
+                            messageHelper.dismissActiveProgress();
+                            if ("".equals(loginResp.getData().get(0).getMobile()) || loginResp.getData().get(0).getReferralCode() == null) {
+                                uiHandler.showEmailDialog(loginResp);
+                                return;
+                            } else if (loginResp.getData().get(0).getIsVerified() == 0) {
 
-                        SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), data.getMobile(), data.getPassword());
-                        uiHandler.changeToOTPFragment(snippet);
-                        return;
-                    } else {
-                        //login(data.getName(), data.getEmailId(), data.getProfilePic(), data.getId(), data.getUuid());
-                        editor.putBoolean(Constants.LOGGED_IN, true);
-                        editor.putString(Constants.NAME, data.getName());
-                        editor.putString(Constants.EMAIL, data.getEmailId());
-                        editor.putString(Constants.PROFILE_PIC, data.getProfilePic());
-                        editor.putString(Constants.BG_ID, data.getId());
-                        editor.putString(Constants.UUID, data.getUuid());
-                        editor.commit();
-                        navigator.finishActivity(new Intent());
-                        return;
+                                SignUpResp.Snippet snippet = new SignUpResp.Snippet(data.getUuid(), data.getId(), data.getLoginType(), data.getEmailId(), data.getMobile(), data.getPassword());
+                                uiHandler.changeToOTPFragment(snippet);
+                                return;
+                            } else {
+                                //login(data.getName(), data.getEmailId(), data.getProfilePic(), data.getId(), data.getUuid());
+                                editor.putBoolean(Constants.LOGGED_IN, true);
+                                editor.putString(Constants.NAME, data.getName());
+                                editor.putString(Constants.EMAIL, data.getEmailId());
+                                editor.putString(Constants.PROFILE_PIC, data.getProfilePic());
+                                editor.putString(Constants.BG_ID, data.getId());
+                                editor.putString(Constants.UUID, data.getUuid());
+                                editor.commit();
+                                navigator.finishActivity(new Intent());
+                                return;
+                            }
+
+                        } else
+
+                        {
+                            logOut();
+                            messageHelper.show(loginResp.getResMsg());
+                            return;
+
+                        }
                     }
-
-                } else
+                }, new Consumer<Throwable>()
 
                 {
-                    logOut();
-                    messageHelper.show(loginResp.getResMsg());
-                    return;
-
-                }
-            }
-        }, new Consumer<Throwable>()
-
-        {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-                messageHelper.show("some error occurred");
-            }
-        });
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                        messageHelper.show("some error occurred");
+                    }
+                });
     }
 
     public void socialLogin(final String type) {

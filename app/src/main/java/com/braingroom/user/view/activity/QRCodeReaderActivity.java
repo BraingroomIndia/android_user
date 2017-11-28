@@ -83,14 +83,14 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     @Inject
     public DataflowService apiService;
 
-    public final String baseUrl = BuildConfig.DEBUG ? getString(R.string.branch_test_base_url) : getString(R.string.branch_live_key);
+    public String baseUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UserApplication.getInstance().getMAppComponent().inject(this);
         setContentView(R.layout.activity_qrcode_reader);
-
+        baseUrl = BuildConfig.DEBUG ? getString(R.string.branch_test_base_url) : getString(R.string.branch_live_key);
         // getting barcode instance
         barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_fragment);
 

@@ -10,7 +10,7 @@
 
         <variable
             name="collapseAction"
-            type="com.braingroom.user.utils.MyConsumer" />
+            type="com.braingroom.user.utils.MyConsumerString" />
 
         <variable
             name="vm"
