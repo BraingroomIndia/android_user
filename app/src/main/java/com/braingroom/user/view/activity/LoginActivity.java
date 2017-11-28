@@ -250,7 +250,7 @@ public class LoginActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int responseCode,
                                     Intent data) {
         super.onActivityResult(requestCode, responseCode, data);
-        getMessageHelper().dismissActiveProgress();
+
 
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -290,6 +290,7 @@ public class LoginActivity extends BaseActivity implements
         super.onBackPressed();
         ((LoginViewmodel) vm).isOTP.set(false);
         vm.logOut();
+        getMessageHelper().dismissActiveProgress();
     }
 }
 

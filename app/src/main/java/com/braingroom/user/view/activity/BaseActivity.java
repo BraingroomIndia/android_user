@@ -320,10 +320,10 @@ public abstract class BaseActivity extends MvvmActivity {
             messageHelper = new MessageHelper() {
                 @Override
                 public void show(String message) {
+                    dismissActiveProgress();
                     if (toast != null) {
                         toast.cancel();
                     }
-                    dismissActiveProgress();
                     toast = Toast.makeText(BaseActivity.this, message, Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -382,6 +382,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
                 @Override
                 public void showAcceptableInfo(@Nullable String title, @NonNull String content, String postiveText, @NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
+                    dismissActiveProgress();
                     MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
                     if (title != null) builder.title(title);
                     builder.content(content);
@@ -415,6 +416,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
                 @Override
                 public void showProgressDialog(@Nullable String title, @NonNull String content) {
+                    dismissActiveProgress();
                     progressDialog = new MaterialDialog.Builder(BaseActivity.this)
                             .title(title)
                             .content(content)
@@ -427,7 +429,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
                 @Override
                 public void dismissActiveProgress() {
-                    if (progressDialog != null )
+                    if (progressDialog != null)
                         progressDialog.dismiss();
                 }
             };

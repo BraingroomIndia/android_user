@@ -13,16 +13,14 @@
             type="com.braingroom.user.viewmodel.LoginViewmodel" />
     </data>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@color/colorBackgroundGray"
             android:orientation="vertical"
             android:paddingBottom="20dp"
@@ -163,17 +161,17 @@
             </RelativeLayout>
 
 
-
         </LinearLayout>
-            <FrameLayout
-                android:id="@+id/fragment_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:clickable="true"
-                android:visibility="@{vm.isOTP ? View.VISIBLE: View.GONE}" />
 
-        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:clickable="true"
+            android:visibility="@{vm.isOTP ? View.VISIBLE: View.GONE}" />
 
-    </ScrollView>
+    </RelativeLayout>
+
+
 </layout>

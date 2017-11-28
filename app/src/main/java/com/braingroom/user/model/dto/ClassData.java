@@ -132,7 +132,7 @@ public class ClassData implements Serializable {
     private String locality;
 
     @SerializedName("price_symbol")
-    private String priceSymbol;
+    private String priceSymbol = "&#8377;";
 
     @SerializedName("price_code")
     private String priceCode;
@@ -440,10 +440,10 @@ public class ClassData implements Serializable {
     }
 
     public Spanned getPriceSymbol() {
-        return CommonUtils.fromHtml(priceSymbol + "");
+        return CommonUtils.fromHtml("&#8377;");
     }
 
     public String getPriceSymbolNonSpanned() {
-        return priceSymbol;
+        return "&#8377;";
     }
 }
