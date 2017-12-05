@@ -71,7 +71,7 @@ public class SignupViewModel extends ViewModel {
     public final Navigator navigator;
     public final MessageHelper messageHelper;
     public final SignupActivity.UiHelper uiHelper;
-    public Consumer<HashMap<String, Pair<String, String>>> countryConsumer, stateConsumer, cityConsumer;
+    public Consumer<HashMap<String, Pair<Integer, String>>> countryConsumer, stateConsumer, cityConsumer;
 
     public final ListDialogViewModel1 genderVm, communityClassVm;
     public final DatePickerViewModel dobVm;
@@ -87,7 +87,7 @@ public class SignupViewModel extends ViewModel {
 
     public final SearchSelectListViewModel countryVm, stateVm, cityVm, localityVM;
     public final DynamicSearchSelectListViewModel ugInstituteVm, pgInstituteVm;
-    public Observable<HashMap<String, Pair<String, String>>> countryApiObservable, stateApiObservable, cityApiObservable, localityApiObservable, instituteApiObservable;
+    public Observable<HashMap<String, Pair<Integer, String>>> countryApiObservable, stateApiObservable, cityApiObservable, localityApiObservable, instituteApiObservable;
 
     private SignUpReq.Snippet signUpSnippet;
 
@@ -265,7 +265,7 @@ public class SignupViewModel extends ViewModel {
                     signUpSnippet.setReferalCode(referralCodeVm.s_1.get());
                 signUpSnippet.setCategoryId(android.text.TextUtils.join(",", interestAreaVm.getSelectedItemsId()));
                 if (!ugInstituteVm.selectedDataMap.isEmpty() && isValidYear(passoutYear.s_1.get())) {
-                    signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first);
+                    signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first + "");
                     signUpSnippet.setInstitutePoy1(passoutYear.s_1.get());
                 }
                 messageHelper.showProgressDialog("Signup in", "Sit back while we set up your profile...");
@@ -345,80 +345,26 @@ public class SignupViewModel extends ViewModel {
                     signUpSnippet.setReferalCode(referralCodeVm.s_1.get());
                 signUpSnippet.setCategoryId(android.text.TextUtils.join(",", interestAreaVm.getSelectedItemsId()));
                 if (!ugInstituteVm.selectedDataMap.isEmpty() && isValidYear(passoutYear.s_1.get())) {
-                    signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first);
+                    signUpSnippet.setInstituteName1(ugInstituteVm.selectedDataMap.values().iterator().next().first + "");
                     signUpSnippet.setInstitutePoy1(passoutYear.s_1.get());
                 }
                 uiHelper.secondFragment();
 
             }
         };
-/*
-        submitOTP = new Action() {
+
+        countryConsumer = new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void run() throws Exception {
-                if (OTP.get().equals("")) {
-                    messageHelper.show("Please enter OTP");
-                    return;
-                }
-                SubmitOTPReq.Snippet snippet = new SubmitOTPReq.Snippet();
-                snippet.setUserId(userId);
-                snippet.setOTP(OTP.get());
-                apiService.submitOTP(new SubmitOTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                        if (resp.getResCode().equals("1"))
-                            apiService.login(emailId.s_1.get(), password.s_1.get(), pref.getString(Constants.FCM_TOKEN, ""))
-                                    .subscribe(new Consumer<LoginResp>() {
-                                        @Override
-                                        public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
-                                            if (loginResp.getResCode().equals("1") && loginResp.getData().size() > 0) {
-                                                editor.putBoolean(Constants.LOGGED_IN, true);
-                                                editor.putString(Constants.UUID, loginResp.getData().get(0).getUuid());
-                                                editor.putString(Constants.BG_ID, loginResp.getData().get(0).getId());
-                                                editor.commit();
-                                                navigator.navigateActivity(HomeActivity.class, null);
-                                            }
-
-                                        }
-                                    });
-                        else messageHelper.show(resp.getResMsg());
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        Log.d(TAG, "submit OTP: " + throwable.toString());
-
-                    }
-                });
-            }
-        };*/
-/*        onResendOTP = new Action() {
-            @Override
-            public void run() throws Exception {
-                requestOTP();
-            }
-        };
-        onEditMobile = new Action() {
-            @Override
-            public void run() throws Exception {
-                UiHelper.editMobileNumber(uuId);
-            }
-        };*/
-
-
-        countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    stateApiObservable = apiService.getState(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+                    stateApiObservable = apiService.getState(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
-                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                        public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                             for (CommonIdResp.Snippet snippet : resp.getData()) {
-                                resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                                resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                             }
                             return resMap;
                         }
@@ -432,13 +378,13 @@ public class SignupViewModel extends ViewModel {
                 }
             }
         };
-        countryApiObservable = apiService.getCountry().map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+        countryApiObservable = apiService.getCountry().map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+            public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                 for (CommonIdResp.Snippet snippet : resp.getData()) {
-                    resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                    resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                 }
                 return resMap;
             }
@@ -446,18 +392,18 @@ public class SignupViewModel extends ViewModel {
         countryVm = new SearchSelectListViewModel(SignupActivity.FRAGMENT_TITLE_COUNTRY, messageHelper, navigator, "search for country", false, countryApiObservable, "", countryConsumer, fragmentHelper);
 
 
-        stateConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+        stateConsumer = new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    cityApiObservable = apiService.getCityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+                    cityApiObservable = apiService.getCityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
-                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                        public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                             for (CommonIdResp.Snippet snippet : resp.getData()) {
-                                resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                                resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                             }
                             return resMap;
                         }
@@ -472,18 +418,18 @@ public class SignupViewModel extends ViewModel {
 
         stateVm = new SearchSelectListViewModel(SignupActivity.FRAGMENT_TITLE_STATE, messageHelper, navigator, "search for state", false, stateApiObservable, "select a country first", stateConsumer, fragmentHelper);
 
-        cityConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+        cityConsumer = new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    localityApiObservable = apiService.getLocalityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+                    localityApiObservable = apiService.getLocalityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
-                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                        public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                             for (CommonIdResp.Snippet snippet : resp.getData()) {
-                                resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                                resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                             }
                             return resMap;
                         }
@@ -506,7 +452,7 @@ public class SignupViewModel extends ViewModel {
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CategoryResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
                 for (CategoryResp.Snippet snippet : resp.getData()) {
-                    itemMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
+                    itemMap.put(snippet.getCategoryName(), snippet.getId());
                 }
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
@@ -514,13 +460,13 @@ public class SignupViewModel extends ViewModel {
         }), new HashMap<String, Integer>(), true, null, "");
 
 
-        instituteApiObservable = apiService.getInstitute("").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+        instituteApiObservable = apiService.getInstitute("").map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+            public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                 for (CommonIdResp.Snippet snippet : resp.getData()) {
-                    resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                    resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                 }
                 return resMap;
             }
@@ -547,40 +493,5 @@ public class SignupViewModel extends ViewModel {
 
     }
 
-
-
-/*    private void safelyDispose(Disposable... disposables) {
-        for (Disposable subscription : disposables) {
-            if (subscription != null && !subscription.isDisposed()) {
-                subscription.dispose();
-            }
-        }
-    }
-
-
-    @Override
-    public void onResume() {
-        otpDisposable = UserApplication.getInstance().getOtpArrived().subscribe(new Consumer<String>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull String otp) throws Exception {
-                Log.d("Otp received in signup", "accept: " + otp);
-                if (!otp.equals("")) {
-                    try {
-                        OTP.set(otp);
-                        if (!OTP.get().equals("")) {
-                            submitOTP.run();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onPause() {
-        safelyDispose(otpDisposable);
-    }*/
 
 }

@@ -30,11 +30,10 @@ public class SearchResultItemViewModel extends ViewModel {
                 FilterData filterData = new FilterData();
                 HashMap<String, Integer> categoryFilterMap = new HashMap<>();
                 categoryFilterMap.put(item.category, Integer.parseInt(item.categoryId));
-                filterData.setCategoryId(item.categoryId);
+                filterData.setCategoryFilterMap(categoryFilterMap);
                 filterData.setKeywords(item.query);
                 data.putSerializable(Constants.classFilterData, filterData);
                 data.putString(Constants.origin, FilterViewModel.ORIGIN_CATEGORY);
-                data.putSerializable(Constants.categoryFilterMap, categoryFilterMap);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }
         };

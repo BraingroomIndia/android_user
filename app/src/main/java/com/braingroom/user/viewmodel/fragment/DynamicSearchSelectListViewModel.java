@@ -35,8 +35,8 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
     public final ObservableField<String> searchQuery = new ObservableField<>("");
     public final ObservableField<String> searchHint = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
-    public final Map<String, Pair<String, String>> dataMap = new HashMap<>();
-    public final HashMap<String, Pair<String, String>> selectedDataMap = new HashMap<>();
+    public final Map<String, Pair<Integer, String>> dataMap = new HashMap<>();
+    public final HashMap<String, Pair<Integer, String>> selectedDataMap = new HashMap<>();
     public static final String FRAGMENT_TITLE_COLLEGE = "College";
     public static final String FRAGMENT_TITLE_SCHOOL = "Schools";
     public static final String FRAGMENT_TITLE_LEARNER = "Post by";
@@ -48,7 +48,7 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
 //    Observable<HashMap<String, Pair<String, String>>> apiObservable;
 
     public DynamicSearchSelectListViewModel(final String title, final MessageHelper messageHelper, final Navigator navigator, String searchHint
-            , final boolean isMultipleSelect, final String dependencySelectMessage, final Consumer<HashMap<String, Pair<String, String>>> saveConsumer, final FragmentHelper fragmentHelper) {
+            , final boolean isMultipleSelect, final String dependencySelectMessage, final Consumer<HashMap<String, Pair<Integer, String>>> saveConsumer, final FragmentHelper fragmentHelper) {
         this.searchHint.set(searchHint);
         this.title.set(title);
 //        this.apiObservable = apiObservableArg;
@@ -66,9 +66,9 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
                         return requestData(keyword).map(new Function<CommonIdResp, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(@NonNull CommonIdResp resp) throws Exception {
-                                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                                HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                                 for (CommonIdResp.Snippet snippet : resp.getData()) {
-                                    resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                                    resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                                 }
                                 dataMap.clear();
                                 dataMap.putAll(resMap);
@@ -147,10 +147,10 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
         return null;
     }
 
-    public void setSelectedValues(HashMap<String, String> selectedValues) {
+    public void setSelectedValues(HashMap<String, Integer> selectedValues) {
         for (String key : selectedValues.keySet()) {
             selectedDataMap.clear();
-            selectedDataMap.put(key, new Pair<String, String>(selectedValues.get(key), null));
+            selectedDataMap.put(key, new Pair<Integer, String>(selectedValues.get(key), null));
             searchQuery.set("");
             selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keySet()));
         }

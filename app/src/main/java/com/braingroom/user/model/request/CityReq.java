@@ -16,9 +16,21 @@ public class CityReq {
     Snippet data;
 
     @Data
-    @AllArgsConstructor(suppressConstructorProperties = true)
+
     public static class Snippet {
         @SerializedName("state_id")
         String id;
+        @SerializedName("only_major_cities")
+        String majorCity;
+
+        public Snippet(String id) {
+            this.id = id;
+            majorCity = null;
+        }
+
+        public Snippet(boolean majorCity) {
+            this.id = null;
+            this.majorCity = majorCity ? "1" : null;
+        }
     }
 }

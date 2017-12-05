@@ -1,5 +1,7 @@
 package com.braingroom.user.model.response;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -22,9 +24,13 @@ public class CommonIdResp extends BaseResp {
     public static class Snippet {
 
         @SerializedName("id")
-        String id;
+        Integer id;
 
-        @SerializedName(value = "name", alternate = {"college_name", "activity_name", "school_name", "ngo_name", "segment_name", "city_name", "first_name","version","geo"})
+        @SerializedName(value = "name", alternate = {"college_name", "activity_name", "school_name", "ngo_name", "segment_name", "city_name", "first_name", "version", "geo"})
         String textValue;
+
+        public Integer getId() {
+            return id;
+        }
     }
 }

@@ -5,13 +5,11 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="26"
-        tools:ignore="GradleOverrides"
         tools:overrideLibrary="com.facebook.shimmer" />
 
     <meta-data
         android:name="android.support.VERSION"
-        android:value="26.0.1" />
+        android:value="27.0.1" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -34,12 +32,12 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
-         <meta-data
-             android:name="com.razorpay.ApiKey"
-             android:value="rzp_live_SN4tYAqDnzHHem" />
-     <!--   <meta-data
+        <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_OqXUgMZBz4WkBL" />-->
+            android:value="rzp_live_SN4tYAqDnzHHem" />
+        <!--   <meta-data
+               android:name="com.razorpay.ApiKey"
+               android:value="rzp_test_OqXUgMZBz4WkBL" />-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -115,8 +113,6 @@
         <activity
             android:name=".view.activity.LoginActivity"
             android:label="@string/app_name">
-
-            <!-- android:theme="@style/AppTheme.NoActionBar"> -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.braingroom.user.view.activity.HomeActivity" />

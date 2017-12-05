@@ -173,18 +173,7 @@ public class ClassListActivity extends BaseActivity {
         };
         viewModel = new ClassListViewModel1(getFirebaseAnalytics(), getGoogleTracker(), getMessageHelper(), getNavigator(), getHelperFactory(),
                 (FilterData) getIntentSerializable(Constants.classFilterData),
-                (HashMap<String, Integer>) getIntentSerializable(Constants.categoryFilterMap)
-                , (HashMap<String, Integer>) getIntentSerializable(Constants.segmentsFilterMap)
-                , (HashMap<String, String>) getIntentSerializable(Constants.cityFilterMap)
-                , (HashMap<String, String>) getIntentSerializable(Constants.localityFilterMap)
-                , (HashMap<String, Integer>) getIntentSerializable(Constants.communityFilterMap)
-                , (HashMap<String, Integer>) getIntentSerializable(Constants.classTypeFilterMap)
-                , (HashMap<String, Integer>) getIntentSerializable(Constants.classScheduleFilterMap)
-                , (HashMap<String, String>) getIntentSerializable(Constants.vendorListFilterMap),
-                /*getIntentString("categoryId"),
-                getIntentString("searchQuery"), getIntentString("communityId"), getIntentString("segmentId"),
-                getIntentString("catalogId"), getIntentString("giftId"),*/
-                getIntentString(Constants.origin), uiHelper, new FragmentHelper() {
+                getIntentString(Constants.origin), getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive), uiHelper, new FragmentHelper() {
             @Override
             public void show(String tag) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

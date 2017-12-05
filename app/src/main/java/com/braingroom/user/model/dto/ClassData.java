@@ -1,6 +1,7 @@
 package com.braingroom.user.model.dto;
 
 import android.text.Spanned;
+import android.text.TextUtils;
 
 import com.braingroom.user.utils.CommonUtils;
 import com.google.gson.annotations.SerializedName;
@@ -440,10 +441,10 @@ public class ClassData implements Serializable {
     }
 
     public Spanned getPriceSymbol() {
-        return CommonUtils.fromHtml("&#8377;");
+        return CommonUtils.fromHtml(getPriceSymbolNonSpanned());
     }
 
     public String getPriceSymbolNonSpanned() {
-        return "&#8377;";
+        return TextUtils.isEmpty(priceSymbol) ? "&#8377;" : priceSymbol;
     }
 }

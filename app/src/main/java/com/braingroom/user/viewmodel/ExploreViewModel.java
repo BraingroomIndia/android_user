@@ -90,7 +90,7 @@ public class ExploreViewModel extends ViewModel {
                             results.add(new DataItemViewModel(elem.getCategoryName(), false, new MyConsumer<DataItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
-                                    categoryId = elem.getId();
+                                    categoryId = elem.getId()+"";
 //                                    zoom = 11.0f;
                                     refreshMapPinsToNewLocation(null);
                                     categorySelectorSubject.onNext(viewModel);

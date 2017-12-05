@@ -72,8 +72,7 @@ public class CommunityListViewModel extends ViewModel {
                                                         FilterData filterData = new FilterData();
                                                         HashMap<String, Integer> communityFilterMap = new HashMap<String, Integer>();
                                                         communityFilterMap.put(snippet.getName(), Integer.parseInt(snippet.getId()));
-                                                        filterData.setCommunityId(snippet.getId());
-                                                        data.putSerializable(Constants.communityFilterMap, communityFilterMap);
+                                                        filterData.setCommunityFilterMap(communityFilterMap);
                                                         data.putSerializable(Constants.classFilterData, filterData);
                                                         data.putString(Constants.origin, FilterViewModel.ORIGIN_COMMUNITY);
                                                         navigator.navigateActivity(ClassListActivity.class, data);

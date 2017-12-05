@@ -36,10 +36,10 @@ public class ConnectFilterViewModel extends ViewModel {
     public final DynamicSearchSelectListViewModel instituteVm, learnerVm, tutorVm;
     public final Action onBackClicked, onResetClicked, onApplyClicked;
     public Navigator navigator;
-    public Consumer<HashMap<String, Pair<String, String>>> categoryConsumer, countryConsumer, stateConsumer, cityConsumer;
-    public Consumer<HashMap<String, Pair<String, String>>> myGroupsConsumer, allGroupsConsumer;
+    public Consumer<HashMap<String, Pair<Integer, String>>> categoryConsumer, countryConsumer, stateConsumer, cityConsumer;
+    public Consumer<HashMap<String, Pair<Integer, String>>> myGroupsConsumer, allGroupsConsumer;
     private boolean clearFlag = false;
-    public Observable<HashMap<String, Pair<String, String>>> segmentsApiObservable, categoryApiObservable, myGroupsApiObservable,
+    public Observable<HashMap<String, Pair<Integer, String>>> segmentsApiObservable, categoryApiObservable, myGroupsApiObservable,
             allGroupsApiObservable, countryApiObservable, stateApiObservable, cityApiObservable, localityApiObservable;
     ConnectUiHelper uiHelper;
     FragmentHelper fragmentHelper;
@@ -52,29 +52,29 @@ public class ConnectFilterViewModel extends ViewModel {
         this.uiHelper = uiHelper;
         this.fragmentHelper = fragmentHelper;
 
-        categoryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+        categoryConsumer = new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
 
-                    allGroupsApiObservable = apiService.getGroups(selectedId).map(new Function<GroupResp, HashMap<String, Pair<String, String>>>() {
+                    allGroupsApiObservable = apiService.getGroups(selectedId).map(new Function<GroupResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
-                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
+                        public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                             for (GroupResp.Snippet snippet : resp.getData()) {
-                                resMap.put(snippet.getName(), new Pair<String, String>(snippet.getId(), snippet.getImage()));
+                                resMap.put(snippet.getName(), new Pair<Integer, String>(snippet.getId(), snippet.getImage()));
                             }
                             return resMap;
                         }
                     });
                     allGroups.changeDataSource(allGroupsApiObservable);
-                    segmentsApiObservable = apiService.getSegments(selectedId).map(new Function<SegmentResp, HashMap<String, Pair<String, String>>>() {
+                    segmentsApiObservable = apiService.getSegments(selectedId).map(new Function<SegmentResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
-                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull SegmentResp resp) throws Exception {
+                        public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull SegmentResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                             for (SegmentResp.Snippet snippet : resp.getData()) {
                                 resMap.put(snippet.getSegmentName(), new Pair<>(snippet.getId(), snippet.getSegmentImage()));
                             }
@@ -88,11 +88,11 @@ public class ConnectFilterViewModel extends ViewModel {
             }
         };
 
-        categoryApiObservable = apiService.getCategory().map(new Function<CategoryResp, HashMap<String, Pair<String, String>>>() {
+        categoryApiObservable = apiService.getCategory().map(new Function<CategoryResp, HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CategoryResp resp) throws Exception {
+            public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CategoryResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                 for (CategoryResp.Snippet snippet : resp.getData()) {
                     resMap.put(snippet.getCategoryName(), new Pair<>(snippet.getId(), snippet.getCategoryImage()));
                 }
@@ -104,62 +104,30 @@ public class ConnectFilterViewModel extends ViewModel {
 
         segmentsVm = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_SEGMENT, messageHelper, navigator, "search for segments", false, segmentsApiObservable, "select a category first", null, fragmentHelper);
 
-      /*  myGroupsApiObservable = apiService.getGroups().map(new Function<GroupResp, HashMap<String, Pair<String, String>>>() {
+        countryApiObservable = apiService.getCountry().map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
+            public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
-                for (GroupResp.Snippet snippet : resp.getData()) {
-                    resMap.put(snippet.getName(), new Pair<>(snippet.getId(), snippet.getImage()));
-                }
-                return resMap;
-            }
-        });
-
-        myGroupsConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
-                if (selectedMap.values().iterator().hasNext()) {
-                    allGroups.clearSelectedValue();
-                }
-            }
-        };
-
-        myGroups = new SearchSelectListViewModel(ConnectHomeActivity.FRAGMENT_TITLE_MY_GROUPS, messageHelper, navigator, "search for your groups", false, myGroupsApiObservable, "", myGroupsConsumer, fragmentHelper);
-*/
-
-       /* allGroupsConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
-                if (selectedMap.values().iterator().hasNext()) {
-                    myGroups.clearSelectedValue();
-                }
-            }
-        };*/
-        countryApiObservable = apiService.getCountry().map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
-            @Override
-            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
-                if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                 for (CommonIdResp.Snippet snippet : resp.getData()) {
-                    resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                    resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                 }
                 return resMap;
             }
         });
 
-        countryConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+        countryConsumer = new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    stateApiObservable = apiService.getState(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+                    stateApiObservable = apiService.getState(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
-                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                        public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                             for (CommonIdResp.Snippet snippet : resp.getData()) {
-                                resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                                resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                             }
                             return resMap;
                         }
@@ -167,8 +135,6 @@ public class ConnectFilterViewModel extends ViewModel {
                     stateVm.clearSelectedValue();
                     cityVm.clearSelectedValue();
                     localityVM.clearSelectedValue();
-                    //TODO
-                    //signUpSnippet.setCountry(selectedId);
                     stateVm.changeDataSource(stateApiObservable);
                     cityVm.changeDataSource(null);
                 } else {
@@ -181,18 +147,18 @@ public class ConnectFilterViewModel extends ViewModel {
             }
         };
 
-        stateConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+        stateConsumer = new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    cityApiObservable = apiService.getCityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+                    cityApiObservable = apiService.getCityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
-                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                        public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                             for (CommonIdResp.Snippet snippet : resp.getData()) {
-                                resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                                resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                             }
                             return resMap;
                         }
@@ -212,18 +178,18 @@ public class ConnectFilterViewModel extends ViewModel {
         };
 
 
-        cityConsumer = new Consumer<HashMap<String, Pair<String, String>>>() {
+        cityConsumer = new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    localityApiObservable = apiService.getLocalityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+                    localityApiObservable = apiService.getLocalityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
-                        public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+                        public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                            HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                            HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                             for (CommonIdResp.Snippet snippet : resp.getData()) {
-                                resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                                resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                             }
                             return resMap;
                         }
@@ -313,11 +279,11 @@ public class ConnectFilterViewModel extends ViewModel {
         String keyword = keywords.get();
         String categoryId = "";
         if (!categoryVm.selectedDataMap.isEmpty())
-            categoryId = categoryVm.selectedDataMap.values().iterator().next().first;
+            categoryId = categoryVm.selectedDataMap.values().iterator().next().first + "";
 
         String segmentId = "";
         if (!segmentsVm.selectedDataMap.isEmpty())
-            segmentId = segmentsVm.selectedDataMap.values().iterator().next().first;
+            segmentId = segmentsVm.selectedDataMap.values().iterator().next().first + "";
 
         String myGroupId = "";
        /* if (!myGroups.selectedDataMap.isEmpty())
@@ -325,17 +291,17 @@ public class ConnectFilterViewModel extends ViewModel {
 
         String allGroupId = "";
         if (!allGroups.selectedDataMap.isEmpty())
-            allGroupId = allGroups.selectedDataMap.values().iterator().next().first;
+            allGroupId = allGroups.selectedDataMap.values().iterator().next().first + "";
 
         String authorId = "";
         if (!learnerVm.selectedDataMap.isEmpty())
-            authorId = learnerVm.selectedDataMap.values().iterator().next().first;
+            authorId = learnerVm.selectedDataMap.values().iterator().next().first + "";
         if (!tutorVm.selectedDataMap.isEmpty())
-            authorId = tutorVm.selectedDataMap.values().iterator().next().first;
+            authorId = tutorVm.selectedDataMap.values().iterator().next().first + "";
 
         String instituteId = "";
         if (!instituteVm.selectedDataMap.isEmpty())
-            instituteId = instituteVm.selectedDataMap.values().iterator().next().first;
+            instituteId = instituteVm.selectedDataMap.values().iterator().next().first + "";
 
         String countryId = "";
 
@@ -345,13 +311,13 @@ public class ConnectFilterViewModel extends ViewModel {
 
         String localityId = "";
         if (!countryVm.selectedDataMap.isEmpty()) {
-            countryId = countryVm.selectedDataMap.values().iterator().next().first;
+            countryId = countryVm.selectedDataMap.values().iterator().next().first + "";
             if (!stateVm.selectedDataMap.isEmpty()) {
-                stateId = stateVm.selectedDataMap.values().iterator().next().first;
+                stateId = stateVm.selectedDataMap.values().iterator().next().first + "";
                 if (!cityVm.selectedDataMap.isEmpty()) {
-                    cityId = cityVm.selectedDataMap.values().iterator().next().first;
+                    cityId = cityVm.selectedDataMap.values().iterator().next().first + "";
                     if (!localityVM.selectedDataMap.isEmpty())
-                        localityId = localityVM.selectedDataMap.values().iterator().next().first;
+                        localityId = localityVM.selectedDataMap.values().iterator().next().first + "";
                 }
             }
         }

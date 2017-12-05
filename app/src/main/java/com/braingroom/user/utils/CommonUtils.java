@@ -6,6 +6,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
@@ -13,6 +14,9 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders.EventBuilder;
 import com.google.android.gms.analytics.Tracker;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -95,6 +99,17 @@ public class CommonUtils {
         } catch (Exception e) {
         }
         return null;
+    }
+
+    public static HashMap<String, Integer> getSelectedDataMap(HashMap<String, Pair<Integer, String>> selectedDataMap) {
+        HashMap<String, Integer> selectedData = new HashMap<>();
+        Iterator it;
+        if (selectedDataMap != null) {
+            for (Map.Entry<String, Pair<Integer, String>> data : selectedDataMap.entrySet()) {
+                selectedData.put(data.getKey(), data.getValue().first);
+            }
+        }
+        return selectedData;
     }
 
 }

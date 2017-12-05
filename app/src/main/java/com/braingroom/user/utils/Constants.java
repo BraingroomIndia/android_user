@@ -24,6 +24,10 @@ public class Constants {
     public static final int giftClass = 2;
     public static final int giftCoupon = 3;
     public static final int catalogBooking = 4;
+    public static final int paymentOnline = 1;
+    public static final int paymentOffline = 2;
+
+
 
     //Bundle keys
 
@@ -43,8 +47,10 @@ public class Constants {
     public static final String origin = "origin";
     public static final String promoCode = "promoCode";
     public static final String referralCode = "referralCode";
-
+    public static final String discountFactor = "discountFactor";
+    public static final String paymentMode = "paymentMode";
     public static final String competitionStatus = "CompetitionStatus";
+    public static final String isIncentive="isIncentive";
 
 
     public static final String quoteId = "quoteId";

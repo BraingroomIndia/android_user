@@ -10,9 +10,11 @@ public class DatePickerViewModel extends DialogViewModel {
     public final ObservableField<String> date;
     public DialogHelper dialogHelper;
 
-    public DatePickerViewModel(@NonNull DialogHelper dialogHelper, String title, String defaultDate) {
+    public DatePickerViewModel(@NonNull DialogHelper dialogHelper, String title, @NonNull String defaultDate) {
         super(dialogHelper, title);
-        date = new ObservableField(defaultDate);
+        if (!isEmpty(defaultDate))
+            date = new ObservableField<>(defaultDate);
+        else date = new ObservableField<>("YYYY-MM-DD");
         this.dialogHelper = dialogHelper;
     }
 

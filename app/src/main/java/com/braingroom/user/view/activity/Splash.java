@@ -35,10 +35,14 @@ import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
+import static android.text.TextUtils.isEmpty;
 import static com.braingroom.user.FCMInstanceIdService.TAG;
 
 /*
@@ -139,61 +143,97 @@ public class Splash extends AppCompatActivity {
 
     }
 
+    private void navigateToIndex() {
+        navigateActivity(Index.class, null);
+    }
 
     private void qrCodeData(final String json) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                final Bundle bundle = new Bundle();
-                if (json == null) {
-                    return;
-                }
-                if (json.contains("class_listing")) {
-                    ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
-                    FilterData filterData = gson.fromJson(gson.toJson(data.reqData), FilterData.class);
-                    bundle.putSerializable(Constants.classFilterData, filterData);
-                    if (filterData.getCatalog() != null && !filterData.getCatalog().isEmpty())
-                        bundle.putString(Constants.origin, FilterViewModel.ORIGIN_CATALOG);
-                    else bundle.putString(Constants.origin, FilterViewModel.ORIGIN_HOME);
-                    navigateActivity(ClassListActivity.class, bundle);
-                } else if (json.contains("connect_listing")) {
-                    ConnectListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ConnectListing.class);
-                    ConnectFilterData connectFilterData = gson.fromJson(gson.toJson(data.reqData), ConnectFilterData.class);
-                    bundle.putSerializable(Constants.connectFilterData, connectFilterData);
-                    navigateActivity(ConnectHomeActivity.class, bundle);
-                } else if (json.contains("class_detail")) {
-                    ClassDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassDetail.class);
-                    bundle.putString("id", data.reqData.getId());
-                    bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
-                    bundle.putString(Constants.promoCode, data.reqData.getPromoCode());
-                    navigateActivity(ClassDetailActivity.class, bundle);
-                } else if (json.contains("post_detail")) {
-                    PostDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), PostDetail.class);
-                    bundle.putString("postId", data.reqData.getPostId());
-                    navigateActivity(PostDetailActivity.class, bundle);
-                } else if (json.contains("class_booking")) {
-                    final ClassBooking data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassBooking.class);
-                    apiService.getClassDetail(data.reqData.id, 0).onErrorReturn(new Function<Throwable, ClassData>() {
-                        @Override
-                        public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                            return new ClassData();
-                        }
-                    }).subscribe(new Consumer<ClassData>() {
-                        @Override
-                        public void accept(@NonNull ClassData classData) throws Exception {
-                            if (classData != null) {
-                                bundle.putSerializable("classData", classData);
-                                bundle.putSerializable("checkoutType", "class");
-                                bundle.putString(Constants.promoCode, data.reqData.promoCode);
-                                navigateActivity(CheckoutActivity.class, bundle);
-                            }
-                        }
-                    });
-                }
 
+        final Bundle bundle = new Bundle();
+        if (json == null) {
+            return;
+        }
+        if (json.contains("class_listing")) {
+            final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
+            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
+                @Override
+                public void accept(FilterData filterData) throws Exception {
+                    bundle.putSerializable(Constants.classFilterData, filterData);
+                    bundle.putString(Constants.promoCode, data.promoCode);
+                    bundle.putSerializable(Constants.origin, FilterViewModel.ORIGIN_HOME);
+                    bundle.putString(Constants.isIncentive, data.isIncentive);
+                    navigateActivity(ClassListActivity.class, bundle);
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    navigateToIndex();
+                    throwable.printStackTrace();
+                }
+            });
+
+        } else if (json.contains("connect_listing")) {
+            try {
+                ConnectListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ConnectListing.class);
+                ConnectFilterData connectFilterData = gson.fromJson(gson.toJson(data.reqData), ConnectFilterData.class);
+                bundle.putSerializable(Constants.connectFilterData, connectFilterData);
+                navigateActivity(ConnectHomeActivity.class, bundle);
+            } catch (Exception e) {
+                navigateToIndex();
+                e.printStackTrace();
             }
-        });
+
+        } else if (json.contains("class_detail")) {
+
+            try {
+                ClassDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassDetail.class);
+                bundle.putString("id", data.reqData.getId());
+                bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
+                bundle.putString(Constants.promoCode, data.reqData.getPromoCode());
+                navigateActivity(ClassDetailActivity.class, bundle);
+            } catch (Exception e) {
+                e.printStackTrace();
+                navigateToIndex();
+            }
+        } else if (json.contains("post_detail")) {
+
+            try {
+                PostDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), PostDetail.class);
+                bundle.putString("postId", data.reqData.getPostId());
+                navigateActivity(PostDetailActivity.class, bundle);
+            } catch (Exception e) {
+                e.printStackTrace();
+                navigateToIndex();
+            }
+        } else if (json.contains("class_booking")) {
+            final ClassBooking data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassBooking.class);
+            apiService.getClassDetail(data.reqData.id, 0).onErrorReturn(new Function<Throwable, ClassData>() {
+                @Override
+                public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                    return new ClassData();
+                }
+            }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<ClassData>() {
+                @Override
+                public void accept(@NonNull ClassData classData) throws Exception {
+                    if (classData != null) {
+                        bundle.putSerializable("classData", classData);
+                        bundle.putSerializable("checkoutType", "class");
+                        bundle.putString(Constants.promoCode, data.reqData.promoCode);
+                        navigateActivity(CheckoutActivity.class, bundle);
+                    }
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    throwable.printStackTrace();
+                    navigateToIndex();
+                }
+            });
+        }
+        else navigateToIndex();
+
     }
+
 
     private void branchData() {
         try {
@@ -213,7 +253,7 @@ public class Splash extends AppCompatActivity {
                                 String referralCode = referringParams.get("referral");
                                 Bundle bundle = new Bundle();
                                 bundle.putString("referralCode", referralCode);
-                                if (!TextUtils.isEmpty(referralCode)) {
+                                if (!isEmpty(referralCode)) {
                                     editor.putString(Constants.referralCode, referralCode).apply();
                                     // Splash>-HomePage->Login
                                     navigateActivity(HomeActivity.class, bundle);
@@ -231,6 +271,7 @@ public class Splash extends AppCompatActivity {
                 }, this.getIntent().getData(), this);
         } catch (Exception e) {
             Log.d(TAG, "Branch error: " + e.getLocalizedMessage());
+            navigateToIndex();
             e.printStackTrace();
 
         }

@@ -339,6 +339,16 @@ public class Index extends AppCompatActivity {
                 }
 
                 @Override
+                public void showAcceptableInfo(@Nullable String title, @android.support.annotation.NonNull Spanned content, @android.support.annotation.NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
+                    dismissActiveProgress();
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(Index.this);
+                    if (title != null) builder.title(title);
+                    builder.content(content);
+                    builder.onPositive(positiveCallback);
+                    builder.positiveText("OK").show();
+                }
+
+                @Override
                 public void showAcceptableInfo(@Nullable String title, @NonNull String content, String postiveText, @NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
                     MaterialDialog.Builder builder = new MaterialDialog.Builder(Index.this);
                     if (title != null) builder.title(title);

@@ -48,7 +48,7 @@ public class CouponFormDataViewModel extends ViewModel {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
                 itemMap.put("General", -1);
                 for (CategoryResp.Snippet snippet : resp.getData()) {
-                    itemMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
+                    itemMap.put(snippet.getCategoryName(), snippet.getId());
                 }
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);

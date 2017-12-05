@@ -193,8 +193,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
                 if (!data.getCategoryId().equals("-1")) {
                     Bundle bundle = new Bundle();
                     FilterData filterData = new FilterData();
-                    filterData.setCategoryId(data.getCategoryId());
-                    filterData.setSegmentId(data.getSegId());
+                    filterData.setSegmentId(data.getSegName(), Integer.parseInt(data.getSegId()));
                     bundle.putSerializable(Constants.classFilterData, filterData);
                     bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
                 /*    try {

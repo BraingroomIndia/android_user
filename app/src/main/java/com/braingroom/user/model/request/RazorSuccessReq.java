@@ -65,6 +65,19 @@ public class RazorSuccessReq {
 
         @SerializedName("book_type")
         private int bookingType;
+
+        @SerializedName("is_insentive")
+        private String isIncentive;
+
+        @SerializedName("cod_amount")
+        private String codAmount;
+
+        @SerializedName("payment_mode")
+        private int paymentMode;
+
+
+        @SerializedName("price_code")
+        private String priceCode;
     }
 
     @Data

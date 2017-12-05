@@ -1,6 +1,7 @@
 package com.braingroom.user.model;
 
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -34,6 +35,11 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static android.content.ContentValues.TAG;
+import static com.braingroom.user.model.DataflowService.FilterType.Category;
+import static com.braingroom.user.model.DataflowService.FilterType.City;
+import static com.braingroom.user.model.DataflowService.FilterType.Community;
+import static com.braingroom.user.model.DataflowService.FilterType.Locality;
+import static com.braingroom.user.model.DataflowService.FilterType.Segment;
 
 public class DataflowService {
 
@@ -53,6 +59,22 @@ public class DataflowService {
     @Inject
     public DataflowService() {
 
+    }
+
+    public static enum FilterType {
+        Category, Segment, City, Locality, Community, ClassType, ClassSchedule, VendorList
+    }
+
+    public class NameIdPair {
+        FilterType type;
+        String name;
+        Integer id;
+
+        public NameIdPair(FilterType type, String name, Integer id) {
+            this.name = name;
+            this.type = type;
+            this.id = id;
+        }
     }
 
 
@@ -206,6 +228,12 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<CommonIdResp> getCityList() {
+
+        return api.getCityList(new CityReq(new CityReq.Snippet(true))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<CommonIdResp> getCatalogueCities() {
 
         return api.getCatalogueCities().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -218,7 +246,6 @@ public class DataflowService {
     }
 
     public Observable<CommonIdResp> getLocalityList(String cityId) {
-
         return api.getLocalities(new LocalityReq(new LocalityReq.Snippet(cityId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -231,7 +258,6 @@ public class DataflowService {
 
 
     public Observable<ProfileData> getProfile(String userId) {
-
         return api.getProfile(new CommonIdReq(new CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ProfileResp, ProfileData>() {
                     @Override
@@ -337,8 +363,6 @@ public class DataflowService {
 
     public Observable<VendorProfileData> getVendorProfile(String vendorId) {
 
-        FilterData filterData = new FilterData();
-        filterData.setClassProvider(vendorId);
 
         return api.getVendorProfile("", new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, VendorProfileData>() {
@@ -349,11 +373,11 @@ public class DataflowService {
                 });
     }
 
-    public Observable<List<ClassData>> getVendorClassList(Integer pageIndex, String vendorId) {
+    public Observable<List<ClassData>> getVendorClassList(Integer pageIndex, Integer vendorId) {
 
 
         FilterData filterData = new FilterData();
-        filterData.setClassProvider(vendorId);
+        filterData.setVendorId("xyz", vendorId);
 
         return api.generalFilter(pageIndex > 0 ? pageIndex + "" : "", filterData.getFilterReq()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
@@ -726,12 +750,12 @@ public class DataflowService {
                              public Observable<CategoryTreeResp> apply(@NonNull CategoryResp resp) throws Exception {
                                  List<Observable<SegmentResp>> segmentObservableList = new ArrayList<>();
                                  for (CategoryResp.Snippet category : resp.getData()) {
-                                     segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet(category.getId()))));
+                                     segmentObservableList.add(api.getSegments(new SegmentReq(new SegmentReq.Snippet(category.getId() + ""))));
                                  }
 
                                  final Map<String, CategoryResp.Snippet> categoryMap = new HashMap<>();
                                  for (CategoryResp.Snippet snippet : resp.getData()) {
-                                     categoryMap.put(snippet.getId(), snippet);
+                                     categoryMap.put(snippet.getId() + "", snippet);
                                  }
 
                                  return Observable.zip(segmentObservableList, new Function<Object[], CategoryTreeResp>() {
@@ -771,6 +795,182 @@ public class DataflowService {
                     snippets.addAll(segment.getData());
                 }
                 return new SegmentResp("1", snippets);
+            }
+        });
+
+    }
+
+
+    private Observable<NameIdPair> getCategoryName(final Integer id) {
+        return getCategory().map(new Function<CategoryResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(CategoryResp categoryResp) throws Exception {
+                for (CategoryResp.Snippet snippet : categoryResp.getData())
+                    if (snippet.getId().equals(id))
+                        return new NameIdPair(Category, snippet.getCategoryName(), snippet.getId());
+
+                return new NameIdPair(Category, null, null);
+            }
+        });
+    }
+
+
+    private Observable<NameIdPair> getSegmentName(Integer categoryId, final Integer segmentId) {
+
+        return getSegments(categoryId + "").map(new Function<SegmentResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(SegmentResp segmentResp) throws Exception {
+                for (SegmentResp.Snippet snippet : segmentResp.getData())
+                    if (snippet.getId().equals(segmentId))
+                        return new NameIdPair(Segment, snippet.getSegmentName(), snippet.getId());
+                return new NameIdPair(Segment, null, null);
+            }
+        });
+
+    }
+
+    private Observable<NameIdPair> getCityName(final Integer cityId) {
+        return getCityList().map(new Function<CommonIdResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(CommonIdResp commonIdResp) throws Exception {
+                for (CommonIdResp.Snippet snippet : commonIdResp.getData())
+                    if (snippet.getId().equals(cityId))
+                        return new NameIdPair(City, snippet.getTextValue(), snippet.getId());
+                return new NameIdPair(City, null, null);
+            }
+        });
+    }
+
+    private Observable<NameIdPair> getLocalityName(Integer cityId, final Integer localityId) {
+        return getLocalityList(cityId + "").map(new Function<CommonIdResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(CommonIdResp commonIdResp) throws Exception {
+                for (CommonIdResp.Snippet snippet : commonIdResp.getData())
+                    if (snippet.getId().equals(localityId))
+                        return new NameIdPair(Locality, snippet.getTextValue(), snippet.getId());
+                return new NameIdPair(Locality, null, null);
+            }
+        });
+    }
+
+    private Observable<NameIdPair> getCommunityName(final Integer id) {
+        return getCommunity().map(new Function<CommunityResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(CommunityResp communityResp) throws Exception {
+                for (CommunityResp.Snippet snippet : communityResp.getData())
+                    if ((Integer.parseInt(snippet.getId())) == id)
+                        return new NameIdPair(Community, snippet.getName(), Integer.parseInt(snippet.getId()));
+                return new NameIdPair(Community, null, null);
+            }
+        });
+    }
+
+    private Observable<NameIdPair> getClassType(final Integer id) {
+        return Observable.just(id).map(new Function<Integer, NameIdPair>() {
+            @Override
+            public NameIdPair apply(Integer integer) throws Exception {
+                for (com.braingroom.user.utils.ClassType classType : com.braingroom.user.utils.ClassType.values())
+                    if (classType.id == integer)
+                        return new NameIdPair(FilterType.ClassType, classType.name, classType.id);
+                return new NameIdPair(FilterType.ClassType, null, null);
+
+            }
+        });
+    }
+
+    private Observable<NameIdPair> getClassSchedule(final Integer id) {
+        return Observable.just(id).map(new Function<Integer, NameIdPair>() {
+            @Override
+            public NameIdPair apply(Integer integer) throws Exception {
+                for (com.braingroom.user.utils.ClassSchedule classSchedule : com.braingroom.user.utils.ClassSchedule.values())
+                    if (classSchedule.id == integer)
+                        return new NameIdPair(FilterType.ClassSchedule, classSchedule.name, classSchedule.id);
+                return new NameIdPair(FilterType.ClassType, null, null);
+
+            }
+        });
+    }
+
+    private Observable<NameIdPair> getVendorName(final Integer id) {
+        return getVendors().map(new Function<CommonIdResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(CommonIdResp commonIdResp) throws Exception {
+                for (CommonIdResp.Snippet snippet : commonIdResp.getData())
+                    if (snippet.getId().equals(id))
+                        return new NameIdPair(FilterType.VendorList, snippet.getTextValue(), snippet.getId());
+                return new NameIdPair(FilterType.VendorList, null, null);
+            }
+        });
+    }
+
+    public Observable<FilterData> getFilterData(final GeneralFilterReq.Snippet data) {
+
+        final FilterData filterData = new FilterData();
+        filterData.setStartDate(data.getStartDate());
+        filterData.setEndDate(data.getEndDate());
+        filterData.setKeywords(data.getKeywords());
+        List<Observable<NameIdPair>> filterReqName = new ArrayList<>();
+//        1
+        if (isDigitsOnly(data.getCategoryId())) {
+            filterReqName.add(getCategoryName(Integer.parseInt(data.getCategoryId())));
+//        2
+            if (isDigitsOnly(data.getSegmentId()))
+                filterReqName.add(getSegmentName(Integer.parseInt(data.getCategoryId()), Integer.parseInt(data.getSegmentId())));
+        }
+//        3 city
+        if (isDigitsOnly(data.getCityId())) {
+            filterReqName.add(getCityName(Integer.parseInt(data.getCityId())));
+//        4 locality
+            if (isDigitsOnly(data.getLocalityId()))
+                filterReqName.add(getLocalityName(Integer.parseInt(data.getCityId()), Integer.parseInt(data.getLocalityId())));
+        }
+//        5 community
+        if (isDigitsOnly(data.getCommunityId()))
+            filterReqName.add(getCommunityName(Integer.parseInt(data.getCommunityId())));
+//        6 class Type
+        if (isDigitsOnly(data.getClassType()))
+            filterReqName.add(getClassType(Integer.parseInt(data.getClassType())));
+//        7  class schedule
+        if (isDigitsOnly(data.getClassSchedule()))
+            filterReqName.add(getClassSchedule(Integer.parseInt(data.getClassSchedule())));
+//        8  vendor
+        if (isDigitsOnly(data.getClassProvider()))
+            filterReqName.add(getVendorName(Integer.parseInt(data.getClassProvider())));
+        return Observable.zip(filterReqName, new Function<Object[], FilterData>() {
+            @Override
+            public FilterData apply(Object[] objects) throws Exception {
+
+                for (Object nameIdPair : objects)
+                    if (nameIdPair instanceof NameIdPair) {
+                        NameIdPair object = (NameIdPair) nameIdPair;
+                        switch (object.type) {
+                            case Category:
+                                filterData.setCategoryId(object.name, object.id);
+                                break;
+                            case Segment:
+                                filterData.setSegmentId(object.name, object.id);
+                                break;
+                            case City:
+                                filterData.setCityId(object.name, object.id);
+                                break;
+                            case Locality:
+                                filterData.setLocalityId(object.name, object.id);
+                                break;
+                            case Community:
+                                filterData.setCommunityId(object.name, object.id);
+                                break;
+                            case ClassType:
+                                filterData.setClassTypeId(object.name, object.id);
+                                break;
+                            case ClassSchedule:
+                                filterData.setClassScheduleId(object.name, object.id);
+                                break;
+                            case VendorList:
+                                filterData.setVendorId(object.name, object.id);
+                                break;
+                        }
+                    }
+                return filterData;
             }
         });
 
@@ -1169,21 +1369,11 @@ public class DataflowService {
         });
     }
 
-    public Observable<String> getGeoDetail() {
-        return Observable.just(""); /*api.getGeoDetail().map(new Function<CommonIdResp, String>() {
+    private Observable<String> getGeoDetail() {
+        return api.getGeoDetail().map(new Function<CommonIdResp, String>() {
             @Override
             public String apply(@NonNull CommonIdResp resp) throws Exception {
-                if (resp == null)
-                    return "";
-                if (resp.getData() == null)
-                    return "";
-                if (resp.getData().isEmpty())
-                    return "";
-                if (resp.getData().get(0) == null)
-                    return "";
-                if (resp.getData().get(0).getTextValue() == null)
-                    return "";
-                else return "SG|01|Singapore|37541";
+                return resp == null || resp.getData() == null || resp.getData().isEmpty() || resp.getData().get(0) == null || resp.getData().get(0).getTextValue() == null ? "" : resp.getData().get(0).getTextValue();
             }
         }).onErrorReturn(new Function<Throwable, String>() {
             @Override
@@ -1192,7 +1382,7 @@ public class DataflowService {
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
-*/
+
     }
 
     public void checkGeoDetail() {
@@ -1205,5 +1395,15 @@ public class DataflowService {
             });
     }
 
+    private boolean isDigitsOnly(String text) {
+        return !isEmpty(text) && text.matches("[0-9]+");
+    }
 
+    public boolean isEmpty(@Nullable String text) {
+        return text == null || TextUtils.isEmpty(text.trim());
+    }
+
+    public Observable<CODOfferDetailResp> getCODOfferDetail(PromoCodeReq.Snippet snippet) {
+        return api.getCODOfferDetail(new PromoCodeReq(snippet)).onErrorReturnItem(new CODOfferDetailResp()).subscribeOn(Schedulers.io());
+    }
 }

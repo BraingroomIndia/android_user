@@ -62,15 +62,15 @@ public class CustomInterceptor implements Interceptor {
         } catch (ConnectException e) {
             //  e.printStackTrace();
 
-            Log.d(TAG, "intercept: no network " + request.toString());
+            Log.d(TAG, "intercept: no network " + e.getLocalizedMessage());
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;
         } catch (SocketTimeoutException e) {
-            Log.d(TAG, "intercept: no network " + request.toString());
+            Log.d(TAG, "intercept: no network " + e.getLocalizedMessage());
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;
         } catch (UnknownHostException e) {
-            Log.d(TAG, "intercept: no network " + request.toString());
+            Log.d(TAG, "intercept: no network " + e.getLocalizedMessage());
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;
         }

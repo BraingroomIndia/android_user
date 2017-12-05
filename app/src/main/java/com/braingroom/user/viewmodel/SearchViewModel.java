@@ -36,7 +36,7 @@ public class SearchViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull CategoryResp categoryResp) throws Exception {
                 for (CategoryResp.Snippet snippet : categoryResp.getData()) {
-                    mainCategories.put(snippet.getCategoryName(), snippet.getId());
+                    mainCategories.put(snippet.getCategoryName(), snippet.getId()+"");
                 }
                 editable.set(true);
             }

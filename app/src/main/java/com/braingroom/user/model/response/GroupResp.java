@@ -1,5 +1,7 @@
 package com.braingroom.user.model.response;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -21,10 +23,14 @@ public class GroupResp extends BaseResp {
     @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
         @SerializedName("segment_id")
-        String id;
+        Integer id;
         @SerializedName("group_name")
         String name;
         @SerializedName("group_image")
         String image;
+
+        public Integer getId() {
+            return id;
+        }
     }
 }

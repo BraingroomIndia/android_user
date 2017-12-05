@@ -19,7 +19,9 @@ import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
+import com.braingroom.user.model.request.PromoCodeReq;
 import com.braingroom.user.model.response.BaseResp;
+import com.braingroom.user.model.response.CODOfferDetailResp;
 import com.braingroom.user.model.response.ContactTutorResp;
 import com.braingroom.user.model.response.PromoInfo;
 import com.braingroom.user.model.response.WishlistResp;
@@ -34,7 +36,6 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
-import com.braingroom.user.view.activity.LoginActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -51,11 +52,13 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observables.ConnectableObservable;
+import io.reactivex.schedulers.Schedulers;
 import lombok.Setter;
 
 
@@ -124,7 +127,7 @@ public class ClassDetailViewModel extends ViewModel {
 
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
-            onGiftClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
+            onPayTutorClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
             openConnectBnS, openConnectFP,*/
             openCateglogLocationList, playAction, onQueryDismiss, onPostDismiss;
 
@@ -137,7 +140,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final MyConsumerString expandAction, collapseAction;
 
     public ClassDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo) {
+                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo, final String isIncentive) {
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
@@ -430,6 +433,7 @@ public class ClassDetailViewModel extends ViewModel {
                     Bundle data = new Bundle();
                     data.putSerializable("classData", mClassData);
                     data.putSerializable("checkoutType", "class");
+                    data.putString(Constants.isIncentive, isIncentive);
                     data.putString(Constants.promoCode, promo);
                     navigator.navigateActivity(CheckoutActivity.class, data);
                 }
@@ -458,14 +462,36 @@ public class ClassDetailViewModel extends ViewModel {
 
         ;
         //Edited by Vikas Godara
-        onGiftClicked = new Action() {
+        onPayTutorClicked = new Action() {
             @Override
             public void run() throws Exception {
+
                 if (mClassData != null) {
-                    Bundle data = new Bundle();
+                    final Bundle data = new Bundle();
                     data.putSerializable("classData", mClassData);
-                    data.putSerializable("checkoutType", "gift");
-                    navigator.navigateActivity(CheckoutActivity.class, data);
+                    data.putString(Constants.isIncentive, isIncentive);
+                    data.putInt(Constants.paymentMode, Constants.paymentOffline);
+                    apiService.getCODOfferDetail(new PromoCodeReq.Snippet(mClassData.getId(), promo)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
+                            subscribe(new Consumer<CODOfferDetailResp>() {
+                                @Override
+                                public void accept(CODOfferDetailResp resp) throws Exception {
+                                    if (resp != null && resp.getData() != null && resp.getData().get(0) != null) {
+                                        final CODOfferDetailResp.Snippet snippet = resp.getData().get(0);
+                                        messageHelper.showAcceptableInfo(snippet.title, CommonUtils.fromHtml(snippet.getMessage()), new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                data.putFloat(Constants.discountFactor, snippet.getDiscountFactor());
+                                                navigator.navigateActivity(CheckoutActivity.class, data);
+                                            }
+                                        });
+                                    } else {
+                                        data.putFloat(Constants.discountFactor, 1);
+                                        navigator.navigateActivity(CheckoutActivity.class, data);
+                                    }
+
+                                }
+                            });
+
                 }
             }
         };

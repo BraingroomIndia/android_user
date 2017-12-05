@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
+/*
  * Created by himan on 1/25/2017.
  */
 @Data
@@ -36,6 +36,11 @@ public class PromoCodeReq {
         String totalAmount;
 
         public Snippet(String code) {
+            this.code = code;
+        }
+
+        public Snippet(String classId, String code) {
+            this.classId = classId;
             this.code = code;
         }
 

@@ -194,7 +194,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 if (videoThumb.get() == null) {
                     data.putString("imageUrl", image.get());
                     navigator.navigateActivity(FullscreenImageActivity.class, data);
-                }else if (videoThumb.get().isEmpty()){
+                } else if (videoThumb.get().isEmpty()) {
                     data.putString("imageUrl", image.get());
                     navigator.navigateActivity(FullscreenImageActivity.class, data);
                 }
@@ -232,6 +232,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
 //                ZohoSalesIQ.Tracking.setPageTitle(resp.getData().get(0).getTitle() + " by " + resp.getData().get(0).getVendorName());
                 categoryId = resp.getData().get(0).getCategoryId();
                 segmentId = resp.getData().get(0).getSegId();
+
 
                 if (resp.getData().get(0).getCategoryId() != null)
                     categoryImg.set(resArray[Integer.parseInt(resp.getData().get(0).getCategoryId()) - 1]);
@@ -276,8 +277,8 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                 if (categoryId != null) {
                     Bundle bundle = new Bundle();
                     FilterData filterData = new FilterData();
-                    filterData.setCategoryId(categoryId);
-                    filterData.setSegmentId(segmentId);
+                    filterData.setCategoryId(segment.get(), Integer.parseInt(categoryId));
+                    filterData.setSegmentId("xyz", Integer.parseInt(segmentId)); //TODO change category name
                     bundle.putSerializable(Constants.classFilterData, filterData);
                     bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
                     navigator.navigateActivity(ClassListActivity.class, bundle);

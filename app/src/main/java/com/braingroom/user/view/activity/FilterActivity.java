@@ -31,6 +31,7 @@ public class FilterActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
+
         viewModel = new FilterViewModel(getMessageHelper(), getNavigator(), getHelperFactory(), new FragmentHelper() {
             @Override
             public void show(String tag) {
@@ -42,17 +43,11 @@ public class FilterActivity extends BaseActivity {
             public void remove(String tag) {
                 popBackstack(tag);
             }
-        }, (FilterData) getIntentSerializable(Constants.classFilterData), (HashMap<String, Integer>) getIntentSerializable(Constants.categoryFilterMap)
-                , (HashMap<String, Integer>) getIntentSerializable(Constants.segmentsFilterMap)
-                , (HashMap<String, String>) getIntentSerializable(Constants.cityFilterMap)
-                , (HashMap<String, String>) getIntentSerializable(Constants.localityFilterMap)
-                , (HashMap<String, Integer>) getIntentSerializable(Constants.communityFilterMap)
-                , (HashMap<String, Integer>) getIntentSerializable(Constants.classTypeFilterMap)
-                , (HashMap<String, Integer>) getIntentSerializable(Constants.classScheduleFilterMap)
-                , (HashMap<String, String>) getIntentSerializable(Constants.vendorListFilterMap)
+        }, (FilterData) getIntentSerializable(Constants.classFilterData) == null ? new FilterData() : (FilterData) getIntentSerializable(Constants.classFilterData)
                 , /*getIntentString("keywords")
                 , getIntentString("startDate")
-                , getIntentString("endDate"),*/getIntentString(Constants.origin));
+                , getIntentString("endDate"),*/
+                getIntentString(Constants.origin));
         return viewModel;
     }
 

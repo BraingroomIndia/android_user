@@ -39,7 +39,7 @@ public class OTPReqFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (data == null)
             activity.popBackstack();
         return super.onCreateView(inflater, container, savedInstanceState);

@@ -74,14 +74,15 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:autoSizeMaxTextSize="@dimen/text_size_large"
                         android:background="#FF29540B"
                         android:gravity="center"
-                        android:onClick="@{vm.onGiftClicked}"
+                        android:onClick="@{vm.onPayTutorClicked}"
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
-                        android:text="GIFT THIS CLASS"
+                        android:text="Pay To Tutor"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_large"
+                        android:visibility="@{vm.isMapVisible?View.VISIBLE:View.GONE}"
                         app:autoSizeTextType="uniform"
                         app:font='@{@string/robotoBold}' />
 
@@ -90,17 +91,18 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/_1sdp"
                         android:layout_weight="1"
+                        android:autoSizeMaxTextSize="@dimen/text_size_large"
                         android:background="@color/materialOrange"
                         android:gravity="center"
                         android:onClick="@{vm.onBookClicked}"
                         android:paddingLeft="@dimen/margin_small"
                         android:paddingRight="@dimen/margin_small"
-                        android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "BOOK NOW"}'
+                        android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'
                         android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_large"
                         android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
                         app:autoSizeTextType="uniform"
-                        app:font='@{@string/robotoBold}' />
+                        app:font='@{@string/robotoBold}'
+                        tools:text="Book Now" />
 
                 </LinearLayout>
 
@@ -541,13 +543,6 @@
                                 app:font='@{@string/robotoBold}' />
 
 
-                            <!--
-
-                                                    <RelativeLayout
-                                                        android:id="@+id/scene_container1"
-                                                        android:layout_width="match_parent"
-                                                        android:layout_height="wrap_content">-->
-
                             <include
                                 android:id="@+id/scene_container1"
                                 layout="@layout/demo_class_colapsed_scene"
@@ -555,13 +550,7 @@
                                 android:layout_height="wrap_content"
                                 app:expandAction="@{vm.expandAction}"
                                 app:title="@{vm.KNK}" />
-                            <!--</RelativeLayout>-->
-                            <!--  app:expandAction="@{vm.expandAction}" -->
-                            <!--  <RelativeLayout
-                                  android:id="@+id/scene_container2"
-                                  android:layout_width="match_parent"
-                                  android:layout_height="wrap_content">
-      -->
+
                             <include
                                 android:id="@+id/scene_container2"
                                 layout="@layout/demo_class_colapsed_scene"
@@ -569,12 +558,6 @@
                                 android:layout_height="wrap_content"
                                 app:expandAction="@{vm.expandAction}"
                                 app:title="@{vm.BNS}" />
-                            <!--app:expandAction="@{vm.expandAction}"-->
-                            <!-- </RelativeLayout>-->
-                            <!-- <RelativeLayout
-                                 android:id="@+id/scene_container3"
-                                 android:layout_width="match_parent"
-                                 android:layout_height="wrap_content">-->
 
                             <include
                                 android:id="@+id/scene_container3"
@@ -583,49 +566,12 @@
                                 android:layout_height="wrap_content"
                                 app:expandAction="@{vm.expandAction}"
                                 app:title="@{vm.AP}" />
-                            <!--  </RelativeLayout>-->
-                            <!--app:expandAction="@{vm.expandAction}"-->
+
 
                         </LinearLayout>
-                        <!-- <view
-                             android:id="@+id/pager"
-                             class="com.braingroom.user.utils.WrapContentHeightViewPager"
-                             android:layout_width="match_parent"
-                             android:layout_height="wrap_content" />-->
 
 
                     </android.support.v7.widget.CardView>
-
-                    <!--  <RelativeLayout
-                          android:id="@+id/scene_container1"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content">
-
-                          <include
-                              layout="@layout/demo_class_colapsed_scene"
-                              app:expandAction="@{vm.expandAction}"
-                              app:title="@{vm.KNK}" />
-                      </RelativeLayout>
-                      <RelativeLayout
-                          android:id="@+id/scene_container2"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content">
-
-                          <include
-                              layout="@layout/demo_class_colapsed_scene"
-                              app:expandAction="@{vm.expandAction}"
-                              app:title="@{vm.BNS}" />
-                      </RelativeLayout>
-                      <RelativeLayout
-                          android:id="@+id/scene_container3"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content">
-
-                          <include
-                              layout="@layout/demo_class_colapsed_scene"
-                              app:expandAction="@{vm.expandAction}"
-                              app:title="@{vm.AP}" />
-                      </RelativeLayout>-->
 
                     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/google_maps"
@@ -664,81 +610,6 @@
                         </LinearLayout>
 
                     </android.support.v7.widget.CardView>
-                    <!--        <android.support.v4.view.ViewPager
-                                android:layout_gravity="bottom"
-                                android:id="@+id/pager"
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />-->
-                    <!--Edited By Vikas Godara-->
-                    <!--    <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/search_height"
-                                android:layout_gravity="top"
-                                android:background="@color/colorTextGray"
-                                android:orientation="horizontal">
-
-
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:background="@color/white"
-                                    android:ellipsize="end"
-                                    android:gravity="center"
-                                    android:onClick="@{vm.openConnectTnT}"
-                                    android:paddingLeft="@dimen/margin_small"
-                                    android:paddingRight="@dimen/margin_small"
-                                    android:text="@string/action_tips_tricks"
-                                    android:textColor="@color/materialGreen"
-                                    app:font='@{@string/robotoBold}' />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginLeft="0.5dp"
-                                    android:layout_weight="1"
-                                    android:background="@color/white"
-                                    android:gravity="center"
-                                    android:onClick="@{vm.openConnectBnS}"
-                                    android:paddingLeft="@dimen/margin_small"
-                                    android:paddingRight="@dimen/margin_small"
-                                    android:text="@string/action_learners_forum"
-                                    android:textColor="@color/materialGreen"
-                                    app:font='@{@string/robotoBold}' />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginLeft="0.5dp"
-                                    android:layout_weight="1"
-                                    android:background="@color/white"
-                                    android:gravity="center"
-                                    android:onClick="@{vm.openConnectFP}"
-                                    android:paddingLeft="@dimen/margin_small"
-                                    android:paddingRight="@dimen/margin_small"
-                                    android:text="@string/action_tutors_talk"
-                                    android:textColor="@color/materialGreen"
-                                    app:font='@{@string/robotoBold}' />
-
-                            </LinearLayout>
-
-
-                        </android.support.v7.widget.CardView>
-                        <include
-                            layout="@layout/demo_post_fragment"
-                            android:layout_width="match_parent"
-                            android:layout_gravity="bottom"
-                            android:layout_height="wrap_content"
-                            app:vm="@{vm.postVm}"/>-->
-
-                    <!--Edited By Vikas Godara-->
                 </LinearLayout>
 
 
@@ -747,12 +618,6 @@
 
         </android.support.design.widget.CoordinatorLayout>
 
-        <!--<include-->
-        <!--android:id="@+id/shimmer_container"-->
-        <!--layout="@layout/class_detail_shimmer"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:visible="@{vm.isShimmerOn}" />-->
 
         <ProgressBar
             android:id="@+id/loading"

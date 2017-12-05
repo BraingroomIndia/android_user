@@ -56,9 +56,11 @@ import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -232,7 +234,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     public String getBranchUrlData(String url) {
         if (TextUtils.isEmpty(url))
             return null;
-        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
+        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG  ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
         try {
             jsonObject = new JSONObject(jsonObject.getString("data"));
             jsonObject = new JSONObject(jsonObject.getString("qrcode"));
@@ -282,54 +284,21 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
                 if (json.contains("class_listing")) {
 
-                    ClassListing data = gson.fromJson(json, ClassListing.class);
-                    FilterData filterData = gson.fromJson(gson.toJson(data.reqData), FilterData.class);
-                    bundle.putSerializable(Constants.classFilterData, filterData);
-
-                    if (filterData.getCatalog() != null && !filterData.getCatalog().isEmpty())
-                        bundle.putString(Constants.origin, FilterViewModel.ORIGIN_CATALOG);
-                    else
-                        bundle.putString(Constants.origin, FilterViewModel.ORIGIN_HOME);
-                    try {
-                        HashMap<String, Integer> categoryFilterMap = new HashMap<>();
-                        HashMap<String, Integer> segmentsFilterMap = new HashMap<>();
-                        HashMap<String, String> cityFilterMap = new HashMap<>();
-                        HashMap<String, String> localityFilterMap = new HashMap<>();
-                        HashMap<String, Integer> communityFilterMap = new HashMap<>();
-                        HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
-                        HashMap<String, Integer> classScheduleFilterMap = new HashMap<>();
-                        HashMap<String, String> vendorListFilterMap = new HashMap<>();
-
-                        if (!isEmpty(filterData.getCategoryId()))
-                            categoryFilterMap.put("", Integer.valueOf(filterData.getCategoryId()));
-                        if (!isEmpty(filterData.getSegmentId()))
-                            segmentsFilterMap.put("", Integer.valueOf(filterData.getSegmentId()));
-                        if (!isEmpty(filterData.getCommunityId()))
-                            communityFilterMap.put("", Integer.valueOf(filterData.getCommunityId()));
-                        if (!isEmpty(filterData.getClassType()))
-                            classTypeFilterMap.put("", Integer.valueOf(filterData.getClassType()));
-                        if (!isEmpty(filterData.getClassSchedule()))
-                            classScheduleFilterMap.put("", Integer.valueOf(filterData.getClassSchedule()));
-                        if (!isEmpty(filterData.getClassProvider()))
-                            vendorListFilterMap.put("", filterData.getClassProvider());
-                        if (!isEmpty(filterData.getCity()))
-                            cityFilterMap.put("", filterData.getCity());
-                        if (!isEmpty(filterData.getCity()))
-                            localityFilterMap.put("", filterData.getLocationId());
-                        bundle.putSerializable(Constants.classFilterData, filterData);
-                        bundle.putSerializable(Constants.categoryFilterMap, categoryFilterMap);
-                        bundle.putSerializable(Constants.segmentsFilterMap, segmentsFilterMap);
-                        bundle.putSerializable(Constants.cityFilterMap, cityFilterMap);
-                        bundle.putSerializable(Constants.localityFilterMap, localityFilterMap);
-                        bundle.putSerializable(Constants.communityFilterMap, communityFilterMap);
-                        bundle.putSerializable(Constants.classTypeFilterMap, classTypeFilterMap);
-                        bundle.putSerializable(Constants.classScheduleFilterMap, classScheduleFilterMap);
-                        bundle.putSerializable(Constants.vendorListFilterMap, vendorListFilterMap);
-                        getNavigator().navigateActivity(ClassListActivity.class, bundle);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
+                    apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
+                        @Override
+                        public void accept(FilterData filterData) throws Exception {
+                            bundle.putSerializable(Constants.classFilterData, filterData);
+                            bundle.putString(Constants.promoCode, data.promoCode);
+                            bundle.putSerializable(Constants.origin, FilterViewModel.ORIGIN_HOME);
+                            getNavigator().navigateActivity(ClassListActivity.class, bundle);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            throwable.printStackTrace();
+                        }
+                    });
 
                 } else if (json.contains("connect_listing")) {
                     ConnectListing data = gson.fromJson(json, ConnectListing.class);

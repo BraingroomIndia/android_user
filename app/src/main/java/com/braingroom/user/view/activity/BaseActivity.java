@@ -381,6 +381,17 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
+                public void showAcceptableInfo(@Nullable String title, @NonNull Spanned content, @NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
+                    dismissActiveProgress();
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
+                    if (title != null) builder.title(title);
+                    builder.content(content);
+                    builder.onPositive(positiveCallback);
+                    builder.positiveText("OK").show();
+
+                }
+
+                @Override
                 public void showAcceptableInfo(@Nullable String title, @NonNull String content, String postiveText, @NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
                     dismissActiveProgress();
                     MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);

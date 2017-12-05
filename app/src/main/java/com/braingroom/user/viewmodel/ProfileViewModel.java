@@ -200,7 +200,7 @@ public class ProfileViewModel extends ViewModel {
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
                 for (CommonIdResp.Snippet snippet : resp.getData()) {
-                    itemMap.put(snippet.getTextValue(), Integer.parseInt(snippet.getId()));
+                    itemMap.put(snippet.getTextValue(), snippet.getId());
                 }
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);
@@ -218,7 +218,7 @@ public class ProfileViewModel extends ViewModel {
                     public ListDialogData1 apply(@io.reactivex.annotations.NonNull CategoryResp categoryResp) throws Exception {
                         LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
                         for (CategoryResp.Snippet snippet : categoryResp.getData()) {
-                            itemMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
+                            itemMap.put(snippet.getCategoryName(), snippet.getId());
                         }
                         // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                         return new ListDialogData1(itemMap);
@@ -249,7 +249,7 @@ public class ProfileViewModel extends ViewModel {
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
                 for (CommonIdResp.Snippet snippet : resp.getData()) {
-                    itemMap.put(snippet.getTextValue(), Integer.parseInt(snippet.getId()));
+                    itemMap.put(snippet.getTextValue(), snippet.getId());
                 }
                 // TODO: 05/04/17 use rx zip to get if category already selected like in profile
                 return new ListDialogData1(itemMap);

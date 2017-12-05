@@ -1,5 +1,7 @@
 package com.braingroom.user.model.response;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -25,10 +27,20 @@ public class SegmentResp extends BaseResp {
     @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
         @SerializedName("id")
-        String id;
+        Integer id;
         @SerializedName("category_name")
         String segmentName;
         @SerializedName("segment_image")
         String segmentImage;
+
+        public Integer getId() {
+            return id;
+        }
+
+        public Snippet(String id, String segmentName,String segmentImage){
+            this.id=Integer.parseInt(id);
+            this.segmentName=segmentName;
+            this.segmentImage=segmentImage;
+        }
     }
 }

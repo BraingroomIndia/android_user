@@ -18,14 +18,14 @@ public class SearchSelectListItemViewModel extends ViewModel {
     public final String icon;
 
     @NonNull
-    public final String id;
+    public final Integer id;
 
     @Nullable
     public final MyConsumer<SearchSelectListItemViewModel> onClicked;
 
     public final ObservableBoolean isSelected = new ObservableBoolean();
 
-    public SearchSelectListItemViewModel(@NonNull final String icon, @NonNull final String name, @NonNull final String id, boolean selected,
+    public SearchSelectListItemViewModel(@NonNull final String icon, @NonNull final String name, @NonNull final Integer id, boolean selected,
                                          @NonNull final MyConsumer<SearchSelectListItemViewModel> clickConsumer
             , PublishSubject<SearchSelectListItemViewModel> singleSelect
             , PublishSubject<SearchSelectListItemViewModel> multipleSelect

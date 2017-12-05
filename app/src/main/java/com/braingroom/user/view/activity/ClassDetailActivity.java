@@ -318,7 +318,7 @@ public class ClassDetailActivity extends BaseActivity {
 
         };
         return new ClassDetailViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
-                getIntentString("origin"), getIntentString("catalogueId"),getIntentString(Constants.promoCode));
+                getIntentString("origin"), getIntentString("catalogueId"), getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.braingroom.user.model.response;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -25,5 +27,11 @@ public class CategoryResp extends BaseResp {
         String categoryName;
         @SerializedName("category_image")
         String categoryImage;
+
+        public Integer getId() {
+            if (TextUtils.isDigitsOnly(id))
+                return Integer.parseInt(id);
+            else return null;
+        }
     }
 }

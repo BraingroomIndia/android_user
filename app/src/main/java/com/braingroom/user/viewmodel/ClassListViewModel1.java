@@ -85,25 +85,23 @@ public class ClassListViewModel1 extends ViewModel {
 
     private boolean paginationInProgress = false;
 
-    public HashMap<String, Integer> categoryFilterMap = new HashMap<>();
+    /*public HashMap<String, Integer> categoryFilterMap = new HashMap<>();
     public HashMap<String, Integer> segmentsFilterMap = new HashMap<>();
-    public HashMap<String, String> cityFilterMap = new HashMap<>();
-    public HashMap<String, String> localityFilterMap = new HashMap<>();
+    public HashMap<String, Integer> cityFilterMap = new HashMap<>();
+    public HashMap<String, Integer> localityFilterMap = new HashMap<>();
     public HashMap<String, Integer> communityFilterMap = new HashMap<>();
     public HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
     public HashMap<String, Integer> classScheduleFilterMap = new HashMap<>();
-    public HashMap<String, String> vendorListFilterMap = new HashMap<>();
+    public HashMap<String, Integer> vendorListFilterMap = new HashMap<>();*/
     public final SearchSelectListViewModel localityVm;
-    public final Observable<HashMap<String, Pair<String, String>>> localityApiObservable;
+    public final Observable<HashMap<String, Pair<Integer, String>>> localityApiObservable;
     public String keywords = "";
     public String startDate = "";
     public String endDate = "";
+    public final String  isIncentive;
     public ObservableField<String> searchQuery = new ObservableField<>("");
     public ObservableBoolean hideSearchBar = new ObservableBoolean(true);
     PublishSubject<DataItemViewModel> segmentSelectorSubject = PublishSubject.create();
-
-    private String localityName = pref.getString(Constants.LOCALITY_NAME, "");
-    private String localityId = pref.getString(Constants.LOCALITY_ID, "");
 
 
     @Getter
@@ -123,36 +121,17 @@ public class ClassListViewModel1 extends ViewModel {
 
     public ClassListViewModel1(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator
             , @NonNull final HelperFactory helperFactory, @NonNull final FilterData filterData1,
-                               final HashMap<String, Integer> categoryMap,
-                               final HashMap<String, Integer> segmentsMap,
-                               HashMap<String, String> cityMap,
-                               HashMap<String, String> localityMap,
-                               HashMap<String, Integer> communityMap,
-                               HashMap<String, Integer> classTypeMap,
-                               final HashMap<String, Integer> classScheduleMap,
-                               HashMap<String, String> vendorListMap,
-                               @Nullable final String origin,
+                               @Nullable final String origin, final String promoCode, final String isIncentive,
                                @NonNull final ClassListActivity.UiHelper uiHelper,
                                @NonNull final FragmentHelper fragmentHelper) {
 
+        this.isIncentive = isIncentive;
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
-        localityName = pref.getString(Constants.LOCALITY_NAME, "");
-        localityId = pref.getString(Constants.LOCALITY_ID, "");
-        isLocalitySelected = !TextUtils.isEmpty(localityId);
         this.navigator = navigator;
         this.origin = origin;
         if (this.origin != null && this.origin.equals(ORIGIN_CATALOG))
             isCatalogue = true;
-        categoryFilterMap = categoryMap != null ? categoryMap : new HashMap<String, Integer>();
-        //searchQuery.set(filterData1.getKeywords());
-        segmentsFilterMap = segmentsMap != null ? segmentsMap : new HashMap<String, Integer>();
-        cityFilterMap = cityMap != null ? cityMap : new HashMap<String, String>();
-        localityFilterMap = localityMap != null ? localityMap : new HashMap<String, String>();
-        communityFilterMap = communityMap != null ? communityMap : new HashMap<String, Integer>();
-        classTypeFilterMap = classTypeMap != null ? classTypeMap : new HashMap<String, Integer>();
-        classScheduleFilterMap = classScheduleMap != null ? classScheduleMap : new HashMap<String, Integer>();
-        vendorListFilterMap = vendorListMap != null ? vendorListMap : new HashMap<String, String>();
         viewProvider = new ViewProvider() {
             @Override
             public int getView(ViewModel vm) {
@@ -181,13 +160,13 @@ public class ClassListViewModel1 extends ViewModel {
             }
         };
 
-        localityApiObservable = apiService.getLocalityList(3659 + "").map(new Function<CommonIdResp, HashMap<String, Pair<String, String>>>() {
+        localityApiObservable = apiService.getLocalityList(3659 + "").map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public HashMap<String, Pair<String, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
+            public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
-                HashMap<String, Pair<String, String>> resMap = new HashMap<>();
+                HashMap<String, Pair<Integer, String>> resMap = new HashMap<>();
                 for (CommonIdResp.Snippet snippet : resp.getData()) {
-                    resMap.put(snippet.getTextValue(), new Pair<String, String>(snippet.getId(), null));
+                    resMap.put(snippet.getTextValue(), new Pair<Integer, String>(snippet.getId(), null));
                 }
                 return resMap;
             }
@@ -198,35 +177,19 @@ public class ClassListViewModel1 extends ViewModel {
         nonReactiveItems = new ArrayList<>();
 
         filterData = filterData1;
-        if (!ORIGIN_CATALOG.equals(origin) && TextUtils.isEmpty(filterData.getLocationId()) && !TextUtils.isEmpty(localityId)) {
-            filterData.setLocationId(localityId);
-            localityFilterMap = new HashMap<>();
-            localityFilterMap.put(localityName, localityId);
-        }
 
-        localityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_LOCALITY, messageHelper, navigator, "search for locality", false, localityApiObservable, "select a city first", new Consumer<HashMap<String, Pair<String, String>>>() {
+        localityVm = new SearchSelectListViewModel(FilterActivity.FRAGMENT_TITLE_LOCALITY, messageHelper, navigator, "search for locality", false, localityApiObservable, "select a city first", new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<String, String>> selectedMap) throws Exception {
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
-                    String selectedId = "" + selectedMap.values().iterator().next().first;
+                    Integer selectedId = selectedMap.values().iterator().next().first;
                     String selectedName = "" + selectedMap.keySet().iterator().next();
-                    editor.putString(Constants.LOCALITY_ID, selectedId);
-                    editor.putString(Constants.LOCALITY_NAME, selectedName);
-                    editor.commit();
-                    localityFilterMap = new HashMap<>();
-                    localityFilterMap.put(selectedName, selectedId);
-                    filterData.setLocationId(selectedId);
+                    filterData.setLocalityId(selectedName, selectedId);
                     isLocalitySelected = true;
                     reset();
                 }
             }
         }, fragmentHelper);
-/*        filterData.setCategoryId(categoryId);
-        filterData.setCommunityId(communityId);
-        filterData.setSegmentId(segmentId);
-        filterData.setKeywords(searchQuery);
-        filterData.setCatalog(catalog);
-        filterData.setGiftId(giftId);*/
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
             @Override
             public void run() throws Exception {
@@ -238,7 +201,7 @@ public class ClassListViewModel1 extends ViewModel {
         this.uiHelper = uiHelper;
         /* if coming from community click
         * hide macro selects and call */
-        if (filterData != null && (!filterData.getCommunityId().equals("") || !filterData.getCatalog().equals("") || filterData.getCategoryId().equals(""))) {
+        if (filterData != null && (filterData.getCommunityId() == null || !filterData.getCatalog().equals("") || filterData.getCategoryId() == null)) {
             segmentsVisibility.set(false);
         }
         segments = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
@@ -249,7 +212,7 @@ public class ClassListViewModel1 extends ViewModel {
         }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(filterData.getCategoryId()))
+                return Observable.just(getDefaultSegments()).mergeWith(apiService.getSegments(filterData.getCategoryId() + ""))
                         .map(new Function<SegmentResp, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(SegmentResp resp) throws Exception {
@@ -257,13 +220,13 @@ public class ClassListViewModel1 extends ViewModel {
                                 if (resp.getData().size() == 0) resp = getDefaultSegments();
 
                                 for (final SegmentResp.Snippet elem : resp.getData()) {
-                                    if (!elem.getId().equals("-1"))
+                                    if (elem.getId() != -1)
                                         segmentAvailable = true;
                                     results.add(new DataItemViewModel(" + " + elem.getSegmentName(), false, new MyConsumer<DataItemViewModel>() {
                                         @Override
                                         public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
-                                            if (!elem.getId().equals("-1")) {
-                                                filterData.setSegmentId(elem.getId());
+                                            if (elem.getId() != -1) {
+                                                filterData.setSegmentId(elem.getSegmentName(), elem.getId());
                                                 filterData.setKeywords("");
                                                 segmentSelectorSubject.onNext(viewModel);
                                                 reset();
@@ -281,79 +244,69 @@ public class ClassListViewModel1 extends ViewModel {
                     @Override
                     public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                         List<ViewModel> selectedItems = new ArrayList<ViewModel>();
-                        if (!isEmpty(categoryFilterMap)) {
-                            if (!isEmpty(segmentsFilterMap)) {
-                                selectedItems.add(new IconTextItemViewModel(0, categoryFilterMap.keySet().iterator().next()));
-                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, segmentsFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                        if (!isEmpty(filterData.getCategoryFilterMap())) {
+                            if (!isEmpty(filterData.getSegmentsFilterMap())) {
+                                selectedItems.add(new IconTextItemViewModel(0, filterData.getCategoryFilterMap().keySet().iterator().next()));
+                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, filterData.getSegmentsFilterMap().keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                     @Override
                                     public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
-                                        segmentsFilterMap = new HashMap<String, Integer>();
-                                        filterData.setSegmentId("");
+                                        filterData.setSegmentsFilterMap(null);
                                         reset();
                                     }
                                 }));
                             } else
 
-                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, categoryFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                                selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, filterData.getCategoryFilterMap().keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                     @Override
                                     public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
-                                        categoryFilterMap = new HashMap<String, Integer>();
-                                        filterData.setCategoryId("");
+                                        filterData.setCategoryFilterMap(null);
                                         reset();
                                     }
                                 }));
                         }
 
 
-                        if (!isEmpty(localityFilterMap)) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, localityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                        if (!isEmpty(filterData.getLocalityFilterMap())) {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, filterData.getLocalityFilterMap().keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
-                                    localityFilterMap = new HashMap<String, String>();
-                                    editor.putString(Constants.LOCALITY_ID, "");
-                                    editor.putString(Constants.LOCALITY_NAME, "");
-                                    editor.commit();
-                                    filterData.setLocationId("");
+                                    filterData.setLocalityFilterMap(null);
                                     reset();
                                 }
                             }));
                         }
-                        if (!isEmpty(communityFilterMap)) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, communityFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                        if (!isEmpty(filterData.getCommunityFilterMap())) {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, filterData.getCommunityFilterMap().keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
-                                    communityFilterMap = new HashMap<String, Integer>();
-                                    filterData.setCommunityId("");
+                                    filterData.setCommunityFilterMap(null);
                                     reset();
                                 }
                             }));
                         }
-                        if (!isEmpty(classScheduleFilterMap)) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, classScheduleFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                        if (!isEmpty(filterData.getClassScheduleFilterMap())) {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, filterData.getClassScheduleFilterMap().keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
-                                    classScheduleFilterMap = new HashMap<String, Integer>();
-                                    filterData.setClassSchedule("");
+                                    filterData.setClassScheduleFilterMap(null);
                                     reset();
                                 }
                             }));
                         }
-                        if (!isEmpty(classTypeFilterMap)) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, classTypeFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                        if (!isEmpty(filterData.getClassTypeFilterMap())) {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, filterData.getClassTypeFilterMap().keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
-                                    classTypeFilterMap = new HashMap<String, Integer>();
-                                    filterData.setClassType("");
+                                    filterData.setClassTypeFilterMap(null);
                                     reset();
                                 }
                             }));
                         }
-                        if (!isEmpty(vendorListFilterMap)) {
-                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, vendorListFilterMap.keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
+                        if (!isEmpty(filterData.getVendorFilterMap())) {
+                            selectedItems.add(new IconTextItemViewModel(R.drawable.ic_close_gray_12dp, filterData.getVendorFilterMap().keySet().iterator().next(), new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel viewModel) {
-                                    vendorListFilterMap = new HashMap<String, String>();
-                                    filterData.setClassProvider("");
+                                    filterData.setVendorFilterMap(null);
                                     reset();
                                 }
                             }));
@@ -377,36 +330,36 @@ public class ClassListViewModel1 extends ViewModel {
                 if (currentPage < 2 && !isCatalogue) {
 
 
-                    if (!categoryFilterMap.isEmpty()) {
-                        String temp = categoryFilterMap.keySet().iterator().next();
+                    if (!filterData.getCategoryFilterMap().isEmpty()) {
+                        String temp = filterData.getCategoryFilterMap().keySet().iterator().next();
                         screenName = screenName + temp;
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Normal ClassList");
                         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, temp);
-                        if (!classTypeFilterMap.isEmpty()) {
-                            temp = classTypeFilterMap.keySet().iterator().next();
+                        if (!filterData.getClassTypeFilterMap().isEmpty()) {
+                            temp = filterData.getClassTypeFilterMap().keySet().iterator().next();
                             screenName = screenName + temp;
                             bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, temp);
                         }
-                        if (!localityFilterMap.isEmpty()) {
-                            temp = localityFilterMap.keySet().iterator().next();
+                        if (!filterData.getLocalityFilterMap().isEmpty()) {
+                            temp = filterData.getLocalityFilterMap().keySet().iterator().next();
                             screenName = screenName + temp;
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, localityFilterMap.values().iterator().next() + "");
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, filterData.getLocalityFilterMap().values().iterator().next() + "");
                             bundle.putString(FirebaseAnalytics.Param.LOCATION, temp);
                         }
-                    } else if (!communityFilterMap.isEmpty()) {
-                        String temp = "Community ClassList" + communityFilterMap.keySet().iterator().next();
+                    } else if (!filterData.getCommunityFilterMap().isEmpty()) {
+                        String temp = "Community ClassList" + filterData.getCommunityFilterMap().keySet().iterator().next();
                         screenName = screenName + temp;
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Community ClassList");
                         bundle.putString(FirebaseAnalytics.Param.GROUP_ID, temp);
-                        if (!classTypeFilterMap.isEmpty()) {
-                            temp = classTypeFilterMap.keySet().iterator().next();
+                        if (!filterData.getClassTypeFilterMap().isEmpty()) {
+                            temp = filterData.getClassTypeFilterMap().keySet().iterator().next();
                             screenName = screenName + temp;
                             bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, temp);
                         }
-                        if (!localityFilterMap.isEmpty()) {
-                            temp = localityFilterMap.keySet().iterator().next();
+                        if (!filterData.getLocalityFilterMap().isEmpty()) {
+                            temp = filterData.getLocalityFilterMap().keySet().iterator().next();
                             screenName = screenName + temp;
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, localityFilterMap.values().iterator().next() + "");
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, filterData.getLocalityFilterMap().values().iterator().next() + "");
                             bundle.putString(FirebaseAnalytics.Param.LOCATION, temp);
                         }
 
@@ -445,6 +398,8 @@ public class ClassListViewModel1 extends ViewModel {
                                 Bundle data = new Bundle();
                                 data.putString("id", elem.getId());
                                 data.putString("origin", origin);
+                                data.putString(Constants.promoCode, promoCode);
+                                data.putString(Constants.isIncentive, isIncentive);
                                 data.putString("catalogueId", filterData.getCatalog());
                                 navigator.navigateActivity(ClassDetailActivity.class, data);
                             }
@@ -502,17 +457,6 @@ public class ClassListViewModel1 extends ViewModel {
                 bundle.putString(Constants.origin, origin);
                 filterData.setKeywords("");
                 bundle.putSerializable(Constants.classFilterData, filterData);
-                bundle.putSerializable(Constants.categoryFilterMap, categoryFilterMap);
-                bundle.putSerializable(Constants.segmentsFilterMap, segmentsFilterMap);
-                bundle.putSerializable(Constants.cityFilterMap, cityFilterMap);
-                bundle.putSerializable(Constants.localityFilterMap, localityFilterMap);
-                bundle.putSerializable(Constants.communityFilterMap, communityFilterMap);
-                bundle.putSerializable(Constants.classTypeFilterMap, classTypeFilterMap);
-                bundle.putSerializable(Constants.classScheduleFilterMap, classScheduleFilterMap);
-                bundle.putSerializable(Constants.vendorListFilterMap, vendorListFilterMap);
-                /*bundle.putString("keywords", keywords);
-                bundle.putString("startDate", startDate);
-                bundle.putString("endDate", endDate);*/
 
                 navigator.navigateActivityForResult(FilterActivity.class, bundle, REQ_CODE_CHOOSE_FILTER);
             }
@@ -616,99 +560,8 @@ public class ClassListViewModel1 extends ViewModel {
         if (requestCode == REQ_CODE_CHOOSE_FILTER) {
             if (data != null) {
                 filterData = (FilterData) data.getSerializableExtra(Constants.classFilterData);
-                this.categoryFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.categoryFilterMap);
-                this.segmentsFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.segmentsFilterMap);
-                this.cityFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.cityFilterMap);
-                this.localityFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.localityFilterMap);
-                this.communityFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.communityFilterMap);
-                this.classTypeFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.classTypeFilterMap);
-                this.classScheduleFilterMap = (HashMap<String, Integer>) data.getSerializableExtra(Constants.classScheduleFilterMap);
-                this.vendorListFilterMap = (HashMap<String, String>) data.getSerializableExtra(Constants.vendorListFilterMap);
-                this.origin = data.getStringExtra(Constants.origin);
-                if (origin.equals(ORIGIN_CATALOG))
-
-
-                    if (categoryFilterMap.isEmpty()) {
-                        segmentsVisibility.set(false);
-                    } else {
-                        if (!segmentsVisibility.get()) {
-                            segmentsFilterMap.clear();
-                            segmentAvailable = false;
-                        }
-                    }
-                reset();
-                       /*  String startDate = data.getStringExtra("startDate");
-                String endDate = data.getStringExtra("endDate");
-                String keywords = data.getStringExtra("keywords");
-                this.startDate = startDate;
-                this.endDate = endDate;
-                this.keywords = keywords;
-                this.communityFilterMap = communityFilterMap;
-                this.classTypeFilterMap = classTypeFilterMap;
-                this.classScheduleFilterMap = classScheduleFilterMap;
-                this.vendorListFilterMap = vendorListFilterMap;
-                this.cityFilterMap = cityFilterMap;
-                this.localityFilterMap = localityFilterMap;
-               filterData.setCommunityId(this.communityFilterMap.isEmpty() ? "" : this.communityFilterMap.values().iterator().next() + "");
-                filterData.setClassType(this.classTypeFilterMap.isEmpty() ? "" : this.classTypeFilterMap.values().iterator().next() + "");
-                filterData.setClassSchedule(this.classScheduleFilterMap.isEmpty() ? "" : this.classScheduleFilterMap.values().iterator().next() + "");
-                filterData.setClassProvider(this.vendorListFilterMap.isEmpty() ? "" : this.vendorListFilterMap.values().iterator().next() + "");
-                filterData.setCity(this.cityFilterMap.isEmpty() ? "" : this.cityFilterMap.values().iterator().next() + "");
-                filterData.setLocationId(this.localityFilterMap.isEmpty() ? "" : this.localityFilterMap.values().iterator().next() + "");
-                filterData.setCategoryId(this.categoryFilterMap.isEmpty() ? "" : this.categoryFilterMap.values().iterator().next() + "");
-                filterData.setSegmentId(this.segmentsFilterMap.isEmpty() ? "" : this.segmentsFilterMap.values().iterator().next() + "");
-                filterData.setKeywords(this.keywords);
-                filterData.setStartDate(this.startDate);
-                filterData.setEndDate(this.endDate);*/
-
-
-//                if (cityFilterMap.isEmpty()) {
-//                    this.cityFilterMap.clear();
-//                } else {
-//                }
-//                boolean clearFlag = data.getBooleanExtra("clearFlag", false);
-//                if (clearFlag) {
-//                    categoryFilterMap.clear();
-//                    segmentsFilterMap.clear();
-//                    cityFilterMap.clear();
-//                    localityFilterMap.clear();
-//                    communityFilterMap.clear();
-//                    classTypeFilterMap.clear();
-//                    classScheduleFilterMap.clear();
-//                    vendorListFilterMap.clear();
-//                    startDate = "";
-//                    endDate = "";
-//                    keywords = "";
-//                }
-//                if (!categoryFilterMap.isEmpty()) {
-//                    filterData.setCategoryId(categoryFilterMap.values().iterator().next() + "");
-//                    filterData.setSegmentId("");
-//                    segmentsVisibility.set(false);
-//                }
-//                if (!segmentsFilterMap.isEmpty()) {
-//                    filterData.setSegmentId(segmentsFilterMap.values().iterator().next() + "");
-//                }
-//                if (!cityFilterMap.isEmpty()) {
-//                    filterData.setCity(cityFilterMap.values().iterator().next() + "");
-//                }
-//                if (!localityFilterMap.isEmpty()) {
-//                    filterData.setLocationId(localityFilterMap.values().iterator().next() + "");
-//                }
-//                if (!communityFilterMap.isEmpty()) {
-//                    filterData.setCommunityId(communityFilterMap.values().iterator().next() + "");
-//                }
-//                if (!classTypeFilterMap.isEmpty()) {
-//                    filterData.setClassType(classTypeFilterMap.values().iterator().next() + "");
-//                }
-//                if (!classScheduleFilterMap.isEmpty()) {
-//                    filterData.setClassSchedule(classScheduleFilterMap.values().iterator().next() + "");
-//                }
-//                if (!vendorListFilterMap.isEmpty()) {
-//                    filterData.setClassProvider(vendorListFilterMap.values().iterator().next() + "");
-//                }
-//                filterData.setKeywords(keywords);
-//                filterData.setStartDate(startDate);
-//                filterData.setEndDate(endDate);
+                if (filterData != null)
+                    reset();
             }
 
         }
@@ -764,80 +617,3 @@ public class ClassListViewModel1 extends ViewModel {
     }
 
 }
-
-  /*  private void initClassItemObserver() {
-        classes = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
-            @Override
-            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return currentPage < nextPage;
-            }
-        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
-            @Override
-            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq(), 0).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
-                    @Override
-                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return nonReactiveItems;
-                    }
-                }));
-            }
-        }).doOnNext(new Consumer<List<ViewModel>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
-                if (viewModels.size() < 2 && nextPage == 0) {
-                    layoutType.set(LAYOUT_TYPE_ROW);
-                    UiHelper.changeLayout(layoutType.get());
-                }
-                nonReactiveItems = viewModels;
-                UiHelper.notifyDataChanged();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d("Class Fetch error", "accept: " + throwable.getMessage());
-            }
-        });
-        classes.subscribe();
-    }
-
-    private void initClassItemObserverPagination() {
-        paginationInProgress = true;
-        classes = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
-            @Override
-            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return currentPage < nextPage;
-            }
-        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
-            @Override
-            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq(), nextPage).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
-                    @Override
-                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        return nonReactiveItems;
-                    }
-                }));
-            }
-        }).doOnNext(new Consumer<List<ViewModel>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
-
-                if (viewModels.size() > 0 && viewModels.get(0) instanceof ClassItemViewModel) {
-                    Iterator<ViewModel> iter = nonReactiveItems.iterator();
-                    while (iter.hasNext()) {
-                        if (iter.next() instanceof ShimmerItemViewModel) {
-                            iter.remove();
-                        }
-                    }
-                    paginationInProgress = false;
-                }
-                nonReactiveItems.addAll(viewModels);
-                UiHelper.notifyDataChanged();
-            }
-        }).doOnError(new Consumer<Throwable>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d("Class Fetch error", "accept: " + throwable.getMessage());
-            }
-        });
-        classes.subscribe();
-    }*/

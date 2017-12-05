@@ -124,6 +124,13 @@ public abstract class MvvmActivity extends AppCompatActivity {
 
     }
 
+    public float getIntentFloat(String key) {
+        if (extras != null) {
+            return extras.getFloat(key);
+        } else return 0;
+
+    }
+
     public boolean getIntentBoolean(String key) {
         if (extras != null) {
             return extras.getBoolean(key);

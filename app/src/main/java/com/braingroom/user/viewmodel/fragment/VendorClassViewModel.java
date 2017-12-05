@@ -49,7 +49,7 @@ public class VendorClassViewModel extends ViewModel {
         }).flatMap(new Function<Integer, ObservableSource<List<ViewModel>>>() {
             @Override
             public ObservableSource<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getVendorClassList(nextPage, vendorId).map(new Function<List<ClassData>, List<ViewModel>>() {
+                return apiService.getVendorClassList(nextPage, Integer.parseInt(vendorId)).map(new Function<List<ClassData>, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(List<ClassData> resp) throws Exception {
                         currentPage = nextPage;

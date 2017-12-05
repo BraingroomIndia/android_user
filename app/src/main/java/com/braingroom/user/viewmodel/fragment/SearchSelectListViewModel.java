@@ -19,14 +19,18 @@ import com.braingroom.user.viewmodel.ViewModel;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 import static com.braingroom.user.FCMInstanceIdService.TAG;
@@ -39,34 +43,34 @@ public class SearchSelectListViewModel extends ViewModel {
     public final ObservableField<String> searchQuery = new ObservableField<>("");
     public final ObservableField<String> searchHint = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
-    public final Map<String, Pair<String, String>> dataMap = new HashMap<>();
-    public final HashMap<String, Pair<String, String>> selectedDataMap = new HashMap<>();
+    public final Map<String, Pair<Integer, String>> dataMap = new HashMap<>();
+    public final HashMap<String, Pair<Integer, String>> selectedDataMap = new HashMap<>();
     private final FragmentHelper fragmentHelper;
     private final MessageHelper messageHelper;
 
     PublishSubject<SearchSelectListItemViewModel> singleSelect = PublishSubject.create();
     PublishSubject<SearchSelectListItemViewModel> multipleSelect = PublishSubject.create();
     PublishSubject<String> selectClear = PublishSubject.create();
-    Observable<HashMap<String, Pair<String, String>>> apiObservable;
-    final Consumer<HashMap<String, Pair<String, String>>> saveConsumer;
+    Observable<HashMap<String, Pair<Integer, String>>> apiObservable;
+    final Consumer<HashMap<String, Pair<Integer, String>>> saveConsumer;
 
     public SearchSelectListViewModel(final String title, final MessageHelper messageHelper, final Navigator navigator, String searchHint
-            , final boolean isMultipleSelect, final Observable<HashMap<String, Pair<String, String>>> apiObservableArg, final String dependencySelectMessage, final Consumer<HashMap<String, Pair<String, String>>> saveConsumer, final FragmentHelper fragmentHelper) {
+            , final boolean isMultipleSelect, final Observable<HashMap<String, Pair<Integer, String>>> apiObservableArg, final String dependencySelectMessage, final Consumer<HashMap<String, Pair<Integer, String>>> saveConsumer, final FragmentHelper fragmentHelper) {
         this.searchHint.set(searchHint);
         this.title.set(title);
         this.apiObservable = apiObservableArg;
         this.saveConsumer = saveConsumer;
         this.fragmentHelper = fragmentHelper;
         this.messageHelper = messageHelper;
-        //refreshDataMap(this.apiObservable);
-        searchResults = FieldUtils.toObservable(searchQuery)
+        messageHelper.dismissActiveProgress();
+        searchResults = FieldUtils.toObservable(searchQuery).observeOn(Schedulers.computation())
                 .map(new Function<String, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(String s) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         final List<String> nameList = new ArrayList<>(dataMap.keySet());
                         for (String name : nameList) {
-                            if (s.length() > 0 ? name.toLowerCase().contains(s.toLowerCase()) : true) {
+                            if (s.length() <= 0 || name.toLowerCase().contains(s.toLowerCase())) {
                                 results.add(new SearchSelectListItemViewModel(dataMap.get(name).second, name, dataMap.get(name).first
                                         , selectedDataMap.containsKey(name), new MyConsumer<SearchSelectListItemViewModel>() {
                                     @Override
@@ -83,6 +87,7 @@ public class SearchSelectListViewModel extends ViewModel {
                                         if (isMultipleSelect)
                                             multipleSelect.onNext(viewModel);
                                         else singleSelect.onNext(viewModel);
+                                        setSelectedValues(getSelectedDataMap());
                                     }
                                 }, singleSelect, multipleSelect, selectClear));
                             }
@@ -98,6 +103,7 @@ public class SearchSelectListViewModel extends ViewModel {
                     messageHelper.show(dependencySelectMessage);
                     return;
                 }
+
                 refreshDataMap(apiObservable);
 
             }
@@ -126,11 +132,10 @@ public class SearchSelectListViewModel extends ViewModel {
 
     }
 
-    public void setSelectedValues(HashMap<String, String> selectedValues) {
+    public void setSelectedValues(HashMap<String, Integer> selectedValues) {
         for (String key : selectedValues.keySet()) {
             selectedDataMap.clear();
-            selectedDataMap.put(key, new Pair<String, String>(selectedValues.get(key), null));
-            searchQuery.set("");
+            selectedDataMap.put(key, new Pair<Integer, String>(selectedValues.get(key), null));
             selectedItemsText.set(TextUtils.join(" , ", selectedDataMap.keySet()));
         }
         if (saveConsumer != null)
@@ -147,20 +152,33 @@ public class SearchSelectListViewModel extends ViewModel {
         selectedItemsText.set("select items");
     }
 
-    public void changeDataSource(final Observable<HashMap<String, Pair<String, String>>> dataSource) {
+    public void changeDataSource(final Observable<HashMap<String, Pair<Integer, String>>> dataSource) {
         this.apiObservable = dataSource;
         selectedDataMap.clear();
     }
 
+    public HashMap<String, Integer> getSelectedDataMap() {
+        HashMap<String, Integer> selectedData = new HashMap<>();
+        Iterator it;
+        if (selectedDataMap != null) {
+            for (Map.Entry<String, Pair<Integer, String>> data : selectedDataMap.entrySet()) {
+                selectedData.put(data.getKey(), data.getValue().first);
+            }
+        }
+        return selectedData;
+    }
+
     /*populates dataMap*/
-    public void refreshDataMap(final Observable<HashMap<String, Pair<String, String>>> dataSource) {
+    public void refreshDataMap(final Observable<HashMap<String, Pair<Integer, String>>> dataSource) {
         dataMap.clear();
+        messageHelper.dismissActiveProgress();
+        messageHelper.showProgressDialog("Wait", "Loading");
         selectedDataMap.clear();
         apiObservable = dataSource;
         if (apiObservable == null) return;
-        apiObservable.subscribe(new Consumer<HashMap<String, Pair<String, String>>>() {
+        apiObservable.subscribe(new Consumer<HashMap<String, Pair<Integer, String>>>() {
             @Override
-            public void accept(@NonNull HashMap<String, Pair<String, String>> map) throws Exception {
+            public void accept(@NonNull HashMap<String, Pair<Integer, String>> map) throws Exception {
                 if (map.isEmpty()) {
                     messageHelper.show("Not available");
                     fragmentHelper.remove(title.get());
@@ -169,12 +187,14 @@ public class SearchSelectListViewModel extends ViewModel {
                     dataMap.putAll(map);
                     searchQuery.set("");
                 }
+                messageHelper.dismissActiveProgress();
             }
         }, new Consumer<Throwable>()
 
         {
             @Override
             public void accept(@NonNull Throwable throwable) throws Exception {
+                messageHelper.dismissActiveProgress();
                 Log.d("Search select List VM", "accept: " + throwable.getMessage());
             }
         });

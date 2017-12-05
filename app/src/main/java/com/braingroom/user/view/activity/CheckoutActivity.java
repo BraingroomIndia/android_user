@@ -64,6 +64,9 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
     @Override
     protected ViewModel createViewModel() {
 
+        float discountFactor = getIntentFloat(Constants.discountFactor);
+        if (discountFactor > 1 || discountFactor <= 0)
+            discountFactor = 1;
         UiHelper uiHelper = new UiHelper() {
 //            @Override
 //            public void startPayUPayment(PaymentParams params, PayuConfig config, PayuHashes hashes) {
@@ -96,8 +99,9 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
             }
         };
+
         return new CheckoutViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), getMessageHelper(), getNavigator(),
-                uiHelper, (ClassData) getIntentSerializable("classData"), "gift".equals(getIntentString("checkoutType")), getIntentString(Constants.promoCode));
+                uiHelper, (ClassData) getIntentSerializable("classData"), getIntentInt(Constants.paymentMode), discountFactor, getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive));
     }
 
     @Override
@@ -117,30 +121,5 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//removed payumoney
-    /*    if (requestCode ==
-                PayUmoneySdkInitilizer.PAYU_SDK_PAYMENT_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                String paymentId =
-                        data.getStringExtra(SdkConstants.PAYMENT_ID);
-                if (paymentId != null)
-                    getMessageHelper().showDismissInfo("Congrats!", "Your class has been successfully booked");
-            } else if (resultCode == RESULT_CANCELED) {
-                getMessageHelper().show("paymemt cancelled");
-            } else if (resultCode == PayUmoneySdkInitilizer.RESULT_FAILED) {
-                getMessageHelper().show("paymemt failure");
-            } else if (resultCode == PayUmoneySdkInitilizer.RESULT_BACK) {
-//                getMessageHelper().show("paymemt failure");
-            }
-        }*/
-//        if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
-//            if (classData != null) {
-//                String response = classData.getStringExtra("payu_response");
-//                Log.d("PAYU RESPONSE", "onActivityResult: " + response);
-//                getMessageHelper().showDismissInfo("Congrats!", "Your class has been successfully booked");
-//            } else {
-//                getMessageHelper().show("paymemt failure");
-//            }
-//        }
     }
 }

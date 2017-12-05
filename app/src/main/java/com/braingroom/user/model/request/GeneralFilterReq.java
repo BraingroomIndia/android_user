@@ -49,8 +49,11 @@ public class GeneralFilterReq {
         @SerializedName("class_provider")
         String classProvider = "";
 
+        @SerializedName("city_id")
+        String cityId="";
+
         @SerializedName("location_id")
-        String locationId = "";
+        String localityId = "";
 
         @SerializedName("price_sort_status")
         String sort = "";

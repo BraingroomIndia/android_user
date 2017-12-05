@@ -9,9 +9,9 @@ import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
 import com.braingroom.user.model.response.CategoryResp;
 import com.braingroom.user.model.response.CommunityResp;
-import com.braingroom.user.model.response.ConnectFeedResp;
 import com.braingroom.user.model.response.ConnectSectionResp;
 import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.utils.ClassType;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.utils.MyConsumer;
@@ -29,10 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-import static com.braingroom.user.viewmodel.FilterViewModel.CLASS_TYPE_SEMINAR;
 
 public class GridViewModel extends ViewModel {
     protected final static int CATEGORY = 1;
@@ -119,10 +117,10 @@ public class GridViewModel extends ViewModel {
                             new MyConsumer<IconTextItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
-                                    if (!snippet.getId().equals("-1")) {
+                                    if (snippet.getId() != -1) {
                                         Bundle data = new Bundle();
                                         HashMap<String, Integer> categoryMap = new HashMap<String, Integer>();
-                                        categoryMap.put(snippet.getCategoryName(), Integer.parseInt(snippet.getId()));
+                                        categoryMap.put(snippet.getCategoryName(), snippet.getId());
                                         data.putSerializable(Constants.categoryFilterMap, categoryMap);
                                         navigator.navigateActivity(SegmentListActivity.class, data);
                                     }
@@ -149,7 +147,7 @@ public class GridViewModel extends ViewModel {
                 List<ViewModel> results = new ArrayList<>();
 
                 for (final SegmentResp.Snippet elem : resp.getData()) {
-                    if (!elem.getId().equals("-1")) {
+                    if (elem.getId() != -1) {
                         apiSuccessful = true;
                         if (layout != null)
                             layout.setTotalCount(resp.getData().size());
@@ -160,12 +158,10 @@ public class GridViewModel extends ViewModel {
                                         {
                                             Bundle data = new Bundle();
                                             FilterData filterData = new FilterData();
-                                            HashMap<String, Integer> segmentFilterMap = new HashMap<String, Integer>();
-                                            segmentFilterMap.put(elem.getSegmentName(), Integer.parseInt(elem.getId()));
-                                            filterData.setCategoryId(categoryId);
-                                            filterData.setSegmentId(elem.getId());
-                                            data.putSerializable(Constants.categoryFilterMap, categoryMap);
-                                            data.putSerializable(Constants.segmentsFilterMap, segmentFilterMap);
+                                            HashMap<String, Integer> segmentFilterMap = new HashMap<>();
+                                            segmentFilterMap.put(elem.getSegmentName(), elem.getId());
+                                            filterData.setCategoryFilterMap(categoryMap);
+                                            filterData.setSegmentsFilterMap(segmentFilterMap);
                                             data.putSerializable(Constants.classFilterData, filterData);
                                             data.putString(Constants.origin, FilterViewModel.ORIGIN_HOME);
                                             navigator.navigateActivity(ClassListActivity.class, data);
@@ -210,8 +206,7 @@ public class GridViewModel extends ViewModel {
                                                 FilterData filterData = new FilterData();
                                                 HashMap<String, Integer> communityFilterMap = new HashMap<String, Integer>();
                                                 communityFilterMap.put(snippet.getName(), Integer.parseInt(snippet.getId()));
-                                                filterData.setCommunityId(snippet.getId());
-                                                data.putSerializable(Constants.communityFilterMap, communityFilterMap);
+                                                filterData.setCommunityFilterMap(communityFilterMap);
                                                 data.putSerializable(Constants.classFilterData, filterData);
                                                 data.putString(Constants.origin, FilterViewModel.ORIGIN_COMMUNITY);
                                                 navigator.navigateActivity(ClassListActivity.class, data);
@@ -271,12 +266,11 @@ public class GridViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull IconTextItemViewModel var1) {
                 FilterData filterData = new FilterData();
-                filterData.setClassType(CLASS_TYPE_SEMINAR + "");
-                HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
-                classTypeFilterMap.put("Online Classes", CLASS_TYPE_SEMINAR);
                 Bundle data = new Bundle();
+                HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
+                classTypeFilterMap.put(ClassType.SEMINAR.name, ClassType.SEMINAR.id);
+                filterData.setClassTypeFilterMap(classTypeFilterMap);
                 data.putSerializable(Constants.classFilterData, filterData);
-                data.putSerializable(Constants.classTypeFilterMap, classTypeFilterMap);
                 data.putString(Constants.origin, FilterViewModel.ORIGIN_HOME);
                 navigator.navigateActivity(ClassListActivity.class, data);
             }
