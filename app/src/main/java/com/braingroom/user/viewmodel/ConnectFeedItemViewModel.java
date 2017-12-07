@@ -40,6 +40,7 @@ import java.util.TimeZone;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
+import static com.braingroom.user.utils.CommonUtils.getHumanDate;
 import static com.braingroom.user.utils.Constants.defaultProfilePic;
 
 
@@ -152,7 +153,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
             categoryImg.set(resArray[Integer.parseInt(data.getCategoryId()) - 1]);
         weeklyPost = data.getWeeklyPost();
         profilePicPlaceHolder = profilePicResArray[CommonUtils.randInt(0, profilePicResArray.length)];
-        smallDate = getHumanDateSmall(data.getDate());
+        smallDate = CommonUtils.getHumanDateSmall(data.getDate());
         this.navigator = navigator;
         this.vendorImage = new ObservableField<>(defaultProfilePic.equalsIgnoreCase(data.getVendorImage()) ? "" : data.getVendorImage());
         this.date = new ObservableField<>(getHumanDate(data.getDate()));
@@ -439,33 +440,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         }
     }
 
-    private String getHumanDate(String timeStamp) {
-        if (timeStamp == null)
-            return "";
-        long time = Long.valueOf(timeStamp) * 1000;
-        try {
-            java.text.DateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault());
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-            Date netDate = (new Date(time));
-            return sdf.format(netDate);
-        } catch (Exception ex) {
-            return "";
-        }
-    }
 
-    private String getHumanDateSmall(String timeStamp) {
-        if (timeStamp == null)
-            return "";
-        long time = Long.valueOf(timeStamp) * 1000;
-        try {
-            java.text.DateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-            Date netDate = (new Date(time));
-            return sdf.format(netDate);
-        } catch (Exception ex) {
-            return "";
-        }
-    }
 
 
 }

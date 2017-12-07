@@ -14,10 +14,14 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders.EventBuilder;
 import com.google.android.gms.analytics.Tracker;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.TimeZone;
 
 /**
  * Created by agrahari on 10/04/17.
@@ -91,6 +95,33 @@ public class CommonUtils {
             GoogleAnalytics.getInstance(context).dispatchLocalHits();
         }
 
+    }
+    public static String getHumanDate(String timeStamp) {
+        if (timeStamp == null)
+            return "";
+        long time = Long.valueOf(timeStamp) * 1000;
+        try {
+            java.text.DateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault());
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Date netDate = (new Date(time));
+            return sdf.format(netDate);
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    public static String getHumanDateSmall(String timeStamp) {
+        if (timeStamp == null)
+            return "";
+        long time = Long.valueOf(timeStamp) * 1000;
+        try {
+            java.text.DateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Date netDate = (new Date(time));
+            return sdf.format(netDate);
+        } catch (Exception ex) {
+            return "";
+        }
     }
 
     public static Tracker init(Context ctx) {
