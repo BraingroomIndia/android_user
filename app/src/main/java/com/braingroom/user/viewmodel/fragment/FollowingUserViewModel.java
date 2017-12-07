@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
@@ -31,7 +32,7 @@ public class FollowingUserViewModel extends ViewModel {
             , @NonNull final HelperFactory helperFactory, String userId) {
         if (TextUtils.isEmpty(userId))
             userId = pref.getString(Constants.BG_ID, "");
-        items = apiService.getFollowing(userId).map(new Function<LikedUsersListResp, List<ViewModel>>() {
+        items = apiService.getFollowing(userId).observeOn(AndroidSchedulers.mainThread()).map(new Function<LikedUsersListResp, List<ViewModel>>() {
             @Override
             public List<ViewModel> apply(LikedUsersListResp resp) throws Exception {
                 List<ViewModel> results = new ArrayList<>();

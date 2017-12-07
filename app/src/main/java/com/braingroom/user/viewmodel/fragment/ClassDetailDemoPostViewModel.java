@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -106,7 +107,7 @@ public class ClassDetailDemoPostViewModel extends ViewModel {
             public ConnectFeedResp apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 return new ConnectFeedResp(0, new ArrayList<ConnectFeedResp.Snippet>());
             }
-        }).subscribe(new Consumer<ConnectFeedResp>() {
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ConnectFeedResp resp) throws Exception {
                 showLoadingItem.set(false);

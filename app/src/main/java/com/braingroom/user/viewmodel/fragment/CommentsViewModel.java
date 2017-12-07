@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -35,6 +36,7 @@ public class CommentsViewModel extends ViewModel {
     public CommentsViewModel(final String postId, final HelperFactory helperFactory, final MessageHelper messageHelper, final Navigator navigator, final ConnectUiHelper uiHelper, final CommentFragment.UiHelper fragmentUiHelper) {
 
         commentsVmObservable = apiService.getComments(postId)
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<CommentListResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(CommentListResp resp) throws Exception {
@@ -65,7 +67,7 @@ public class CommentsViewModel extends ViewModel {
                     comment.set("");
                     return;
                 }
-                apiService.commentReply(postId, "", comment.get()).subscribe(new Consumer<CommentReplyResp>() {
+                apiService.commentReply(postId, "", comment.get()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<CommentReplyResp>() {
                     @Override
                     public void accept(@NonNull CommentReplyResp resp) throws Exception {
                         if ("1".equals(resp.getResCode())) {

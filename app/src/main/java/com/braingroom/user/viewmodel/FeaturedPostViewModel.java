@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -64,7 +65,7 @@ public class FeaturedPostViewModel extends ViewModel {
                 filterData.setMajorCateg(LEARNER_FORUM);
                 filterData.setMinorCateg(TIPS_TRICKS);
                 filterData.setFeaturedPost(true);
-                apiService.getConnectFeed(filterData, 0).doOnError(new Consumer<Throwable>() {
+                apiService.getConnectFeed(filterData, 0).observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         navigator.finishActivity();
@@ -109,7 +110,7 @@ public class FeaturedPostViewModel extends ViewModel {
                 filterData.setMajorCateg(LEARNER_FORUM);
                 filterData.setMinorCateg(TIPS_TRICKS);
                 filterData.setFeaturedPost(true);
-                apiService.getWeeklyWinners().doOnError(new Consumer<Throwable>() {
+                apiService.getWeeklyWinners().observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         navigator.finishActivity();

@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -470,7 +471,7 @@ public class ClassListViewModel1 extends ViewModel {
         }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq(), nextPage).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+                return getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq(), nextPage).observeOn(AndroidSchedulers.mainThread()).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
 

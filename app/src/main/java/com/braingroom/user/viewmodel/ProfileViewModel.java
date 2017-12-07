@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -195,7 +196,7 @@ public class ProfileViewModel extends ViewModel {
                 }
             }
         };
-        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, apiService.getCityList("35").map(new Function<CommonIdResp, ListDialogData1>() {
+        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, apiService.getCityList("35").observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();

@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 
 public class MessagesViewModel extends ViewModel {
@@ -23,6 +24,7 @@ public class MessagesViewModel extends ViewModel {
         messageHelper.showProgressDialog("Wait", "loading");
 
         messagesVm = apiService.getMessages()
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<MessageListResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(MessageListResp resp) throws Exception {

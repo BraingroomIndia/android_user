@@ -322,7 +322,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
                         public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                             return new ClassData();
                         }
-                    }).subscribe(new Consumer<ClassData>() {
+                    }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ClassData>() {
                         @Override
                         public void accept(@NonNull ClassData classData) throws Exception {
                             if (classData != null) {

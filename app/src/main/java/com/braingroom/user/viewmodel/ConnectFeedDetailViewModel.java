@@ -45,6 +45,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -202,7 +203,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
             }
         };
 
-        apiService.getFeedsByPostID(postId).subscribe(new Consumer<ConnectFeedResp>() {
+        apiService.getFeedsByPostID(postId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ConnectFeedResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull final ConnectFeedResp resp) throws Exception {
                 loading.set(false);
@@ -391,7 +392,7 @@ public class ConnectFeedDetailViewModel extends ViewModel {
                     messageHelper.showLoginRequireDialog("Only logged in users can accept a request", data);
                     return;
                 }
-                apiService.addAccept(postId).subscribe(new Consumer<BaseResp>() {
+                apiService.addAccept(postId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                         messageHelper.show(baseResp.getResMsg());

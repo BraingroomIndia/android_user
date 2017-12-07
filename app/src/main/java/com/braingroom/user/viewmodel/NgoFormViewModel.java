@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -129,7 +130,7 @@ public class NgoFormViewModel extends ViewModel {
 
         snippet.setGiftDetails(dataList);
         req.setData(snippet);
-        apiService.saveGiftCoupon(req).subscribe(new Consumer<SaveGiftCouponResp>() {
+        apiService.saveGiftCoupon(req).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<SaveGiftCouponResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull SaveGiftCouponResp resp) throws Exception {
 
@@ -174,7 +175,7 @@ public class NgoFormViewModel extends ViewModel {
         req.setTxnid(txnId);
         req.setUserEmail(couponPayData.getEmail());
         req.setUserMobile("" + couponPayData.getMobile());
-        apiService.updateCouponPaymentSuccess(new RazorBuySuccessReq(req)).subscribe(new Consumer<BaseResp>() {
+        apiService.updateCouponPaymentSuccess(new RazorBuySuccessReq(req)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                 if ("1".equals(baseResp.getResCode())) {

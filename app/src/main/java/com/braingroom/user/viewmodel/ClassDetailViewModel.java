@@ -152,7 +152,7 @@ public class ClassDetailViewModel extends ViewModel {
             }
         });
         if (!isEmpty(promo))
-            apiService.getPromoInfo(promo).subscribe(new Consumer<PromoInfo>() {
+            apiService.getPromoInfo(promo).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<PromoInfo>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull PromoInfo resp) throws Exception {
                     if (!isEmpty(resp) && !isEmpty(resp.data) && !isEmpty(resp.data.content))
@@ -232,7 +232,7 @@ public class ClassDetailViewModel extends ViewModel {
                 decideAndDiscussSnippet.setCategoryId(mClassData.getCategoryId());
                 decideAndDiscussSnippet.setPostTitle(title.s_1.get());
                 decideAndDiscussSnippet.setPostSummary(postDescription.get());
-                apiService.postDecideDiscuss(decideAndDiscussSnippet).subscribe(new Consumer<BaseResp>() {
+                apiService.postDecideDiscuss(decideAndDiscussSnippet).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                         onPostDismiss.run();
@@ -259,7 +259,8 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 if (getLoggedIn())
-                    apiService.contactTutor(classId).subscribe(new Consumer<ContactTutorResp>() {
+                    apiService.contactTutor(classId).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<ContactTutorResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull final ContactTutorResp resp) throws Exception {
                             if (resp.getData().isEmpty())
@@ -316,7 +317,7 @@ public class ClassDetailViewModel extends ViewModel {
                     public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         return new ClassData();
                     }
-                }).map(new Function<ClassData, ObservableSource<?>>() {
+                }).observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassData, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(@io.reactivex.annotations.NonNull ClassData classData) throws Exception {
                         if (classData.getId() == null)

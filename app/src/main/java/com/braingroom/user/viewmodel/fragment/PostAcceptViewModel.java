@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
@@ -22,6 +23,7 @@ public class PostAcceptViewModel extends ViewModel {
     public PostAcceptViewModel(String postId, final ConnectUiHelper uiHelper, @NonNull final Navigator navigator) {
 
         items = apiService.getAcceptedUsers(postId)
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<LikedUsersListResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(LikedUsersListResp resp) throws Exception {

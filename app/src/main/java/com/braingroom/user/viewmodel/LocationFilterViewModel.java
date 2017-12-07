@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -102,7 +103,7 @@ public class LocationFilterViewModel extends CustomDialogViewModel {
     }
 
     private Observable<ListDialogData1> getCityApiObservable(String cityId) {
-        return apiService.getCityList(cityId).map(new Function<CommonIdResp, ListDialogData1>() {
+        return apiService.getCityList(cityId).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();

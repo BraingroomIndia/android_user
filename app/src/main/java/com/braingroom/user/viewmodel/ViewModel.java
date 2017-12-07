@@ -29,6 +29,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import lombok.Setter;
 
@@ -103,7 +104,7 @@ public class ViewModel extends BaseObservable {
         String fcmToken = pref.getString(Constants.FCM_TOKEN, "");
         String referralCode = pref.getString(Constants.referralCode, "");
         Log.d("Firebase", "fcm Token: " + fcmToken);
-        apiService.logout().subscribe();
+        apiService.logout().observeOn(AndroidSchedulers.mainThread()).subscribe();
         editor.putString(Constants.BG_ID, "");
         editor.putBoolean(Constants.LOGGED_IN, false);
         editor.putString(Constants.EMAIL, "");

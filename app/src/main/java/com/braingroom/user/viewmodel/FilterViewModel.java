@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -318,7 +319,7 @@ public class FilterViewModel extends ViewModel {
                 }
             });
         else
-            return apiService.getCityList().map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
+            return apiService.getCityList().observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                 @Override
                 public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                     if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());

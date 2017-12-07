@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -134,7 +135,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                 else
                     signUpSnippet.setLocality("" + localityVM.selectedDataMap.values().iterator().next().first);
 
-                apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
+                apiService.signUp(new SignUpReq(signUpSnippet)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<SignUpResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
@@ -221,7 +222,7 @@ public class SignUpViewModelCompetition extends ViewModel {
                 signUpSnippet.setPassword(password.s_1.get());
                 signUpSnippet.setMobileNo(mobileNumber.s_1.get());
                 signUpSnippet.setSchoolName(ugInstituteVm.selectedDataMap.values().iterator().next().first+"");
-                apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
+                apiService.signUp(new SignUpReq(signUpSnippet)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<SignUpResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
@@ -287,7 +288,7 @@ public class SignUpViewModelCompetition extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    cityApiObservable = apiService.getCityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
+                    cityApiObservable = apiService.getCityList(selectedId).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
                         public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode()))
@@ -314,7 +315,7 @@ public class SignUpViewModelCompetition extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    localityApiObservable = apiService.getLocalityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
+                    localityApiObservable = apiService.getLocalityList(selectedId).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
                         public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode()))
