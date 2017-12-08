@@ -35,10 +35,12 @@ import com.braingroom.user.utils.WrapContentHeightViewPager;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
 import com.braingroom.user.view.fragment.DemoPostFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
+import com.braingroom.user.view.fragment.ReviewFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ClassDetailDemoPostViewModel;
+import com.braingroom.user.viewmodel.fragment.ReviewAddViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -82,6 +84,10 @@ public class ClassDetailActivity extends BaseActivity {
         void showQuoteForm();
 
         void postQueryForm();
+
+        void addReview();
+
+        void backFromReview();
 
         void next();
 
@@ -242,6 +248,23 @@ public class ClassDetailActivity extends BaseActivity {
                             Log.d("makeACall", "OnError: " + throwable.toString() + "\t" + phoneNumber);
                         }
                     });
+            }
+
+            @Override
+            public void addReview() {
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, classId, new ReviewAddViewModel.ReviewAddHelper() {
+                    @Override
+                    public void run() {
+                        uiHelper.backFromReview();
+                    }
+                })).addToBackStack(null).commit();
+            }
+
+            @Override
+            public void backFromReview() {
+                ClassDetailActivity.this.popBackstack();
             }
 
             @Override
