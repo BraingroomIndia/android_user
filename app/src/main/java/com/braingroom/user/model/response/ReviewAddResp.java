@@ -20,7 +20,7 @@ public class ReviewAddResp {
     @SerializedName("braingroom")
     List<Snippet> braingroom = null;
     @AllArgsConstructor(suppressConstructorProperties = true)
-    public class Snippet{
+    public static class Snippet{
 
         @SerializedName("user_id")
         String userId;

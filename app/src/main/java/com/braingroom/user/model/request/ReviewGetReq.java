@@ -21,14 +21,16 @@ public class ReviewGetReq {
         String vendorId;
         @SerializedName("class_id")
         String classId;
-        public Snippet(String userId,boolean isClass,String id){
-            this.userId="";
-            this.vendorId="";
-            this.classId="";
-            if(isClass)
-                classId=id;
-            else
+        public Snippet(String userId,int reviewType,String id){
+            if(reviewType==2){
                 vendorId=id;
+                classId="";
+            }
+            if(reviewType==3){
+                classId=id;
+                vendorId="";
+            }
+            this.userId=userId;
         }
     }
 }
