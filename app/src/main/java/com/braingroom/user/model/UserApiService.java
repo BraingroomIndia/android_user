@@ -329,8 +329,11 @@ public interface UserApiService {
     @GET("getGeoDetail")
     Observable<CommonIdResp> getGeoDetail();
 
-    @POST ("getCODOfferDetail")
-    Observable<CODOfferDetailResp> getCODOfferDetail(@Body PromoCodeReq req );
+    @POST("getGeoDetailByCity")
+    Observable<CommonIdResp> getGeoDetailByCity(@Body LocalityReq req);
+
+    @POST("getCODOfferDetail")
+    Observable<CODOfferDetailResp> getCODOfferDetail(@Body PromoCodeReq req);
 
 
 }

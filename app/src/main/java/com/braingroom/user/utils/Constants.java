@@ -15,6 +15,7 @@ public class Constants {
     public static final String BG_ID = "BG_ID";
     public static final String FCM_TOKEN = "FCM_TOKEN";
     public static final String NEW_FCM = "new_FCM";
+    public static final String SAVED_CITY="savedCity";
     public static final String LOCALITY_ID = "localityId";
     public static final String LOCALITY_NAME = "locality_name";
 

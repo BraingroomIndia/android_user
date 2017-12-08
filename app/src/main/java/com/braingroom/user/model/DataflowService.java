@@ -1369,25 +1369,38 @@ public class DataflowService {
         });
     }
 
-    private Observable<String> getGeoDetail() {
-        return api.getGeoDetail().map(new Function<CommonIdResp, String>() {
-            @Override
-            public String apply(@NonNull CommonIdResp resp) throws Exception {
-                return resp == null || resp.getData() == null || resp.getData().isEmpty() || resp.getData().get(0) == null || resp.getData().get(0).getTextValue() == null ? "" : resp.getData().get(0).getTextValue();
-            }
-        }).onErrorReturn(new Function<Throwable, String>() {
-            @Override
-            public String apply(@NonNull Throwable throwable) throws Exception {
-                return "";
-            }
-        }).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation());
+    private Observable<String> getGeoDetail(int cityId) {
+        if (cityId == -1)
+            return api.getGeoDetail().map(new Function<CommonIdResp, String>() {
+                @Override
+                public String apply(@NonNull CommonIdResp resp) throws Exception {
+                    return resp == null || resp.getData() == null || resp.getData().isEmpty() || resp.getData().get(0) == null || resp.getData().get(0).getTextValue() == null ? "" : resp.getData().get(0).getTextValue();
+                }
+            }).onErrorReturn(new Function<Throwable, String>() {
+                @Override
+                public String apply(@NonNull Throwable throwable) throws Exception {
+                    return "";
+                }
+            }).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation());
+        else
+            return api.getGeoDetailByCity(new LocalityReq(new LocalityReq.Snippet(cityId + ""))).map(new Function<CommonIdResp, String>() {
+                @Override
+                public String apply(@NonNull CommonIdResp resp) throws Exception {
+                    return resp == null || resp.getData() == null || resp.getData().isEmpty() || resp.getData().get(0) == null || resp.getData().get(0).getTextValue() == null ? "" : resp.getData().get(0).getTextValue();
+                }
+            }).onErrorReturn(new Function<Throwable, String>() {
+                @Override
+                public String apply(@NonNull Throwable throwable) throws Exception {
+                    return "";
+                }
+            }).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation());
 
 
     }
 
     public void checkGeoDetail() {
         if (TextUtils.isEmpty(Constants.GEO_TAG))
-            getGeoDetail().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+            getGeoDetail(pref.getInt(Constants.SAVED_CITY, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
                 @Override
                 public void accept(@NonNull String s) throws Exception {
                     Constants.GEO_TAG = s;

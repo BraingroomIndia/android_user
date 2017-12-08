@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -68,7 +69,7 @@ public class ListDialogViewModel1 extends ViewModel {
         if (sourceObservable == null) {
             return;
         }
-        source = sourceObservable.doOnNext(new Consumer<ListDialogData1>() {
+        source = sourceObservable.observeOn(AndroidSchedulers.mainThread()).doOnNext(new Consumer<ListDialogData1>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ListDialogData1 items) throws Exception {
                 messageHelper.dismissActiveProgress();

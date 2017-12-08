@@ -10,6 +10,11 @@
             android:id="@+id/nav_register"
             android:icon="@drawable/ic_library_books_black_24dp"
             android:title="Register" />
+
+        <item
+            android:id="@+id/nav_location"
+            android:icon="@drawable/pin"
+            android:title="Location Settings" />
         <item
             android:id="@+id/nav_catalogue"
             android:icon="@drawable/ic_class_black_24dp"

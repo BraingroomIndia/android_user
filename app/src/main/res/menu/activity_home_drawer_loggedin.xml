@@ -20,6 +20,11 @@
             android:title="Change Password" />
 
         <item
+            android:id="@+id/nav_location"
+            android:icon="@drawable/pin"
+            android:title="Location Settings" />
+
+        <item
             android:id="@+id/nav_catalogue"
             android:icon="@drawable/ic_class_black_24dp"
             android:title="Catalogue" />
