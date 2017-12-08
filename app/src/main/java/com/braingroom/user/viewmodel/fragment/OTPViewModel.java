@@ -17,6 +17,7 @@ import com.braingroom.user.view.fragment.OTPReqFragment;
 import com.braingroom.user.model.request.OTPReq;
 import com.braingroom.user.viewmodel.ViewModel;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -72,7 +73,7 @@ public class OTPViewModel extends ViewModel {
                 final SubmitOTPReq.Snippet snippet = new SubmitOTPReq.Snippet();
                 snippet.setUserId(userId);
                 snippet.setOTP(OTP.get());
-                apiService.submitOTP(new SubmitOTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
+                apiService.submitOTP(new SubmitOTPReq(snippet)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
                         if (resp != null && resp.getResCode() != null && resp.getResCode().equals("1")) //TODO
@@ -124,7 +125,7 @@ public class OTPViewModel extends ViewModel {
     public void requestOTP(String mobileNumber) {
         OTPReq.Snippet snippet = new OTPReq.Snippet(userId, mobileNumber);
         this.mobileNumber.set(mobileNumber);
-        apiService.requestOTP(new OTPReq(snippet)).subscribe(new Consumer<BaseResp>() {
+        apiService.requestOTP(new OTPReq(snippet)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
                 messageHelper.show(resp.getResMsg());

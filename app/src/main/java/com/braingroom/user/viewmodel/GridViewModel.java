@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 
 
@@ -225,7 +226,7 @@ public class GridViewModel extends ViewModel {
     }
 
     private Observable<List<ViewModel>> getConnectSection() {
-        return apiService.getConnectSections().map(new Function<ConnectSectionResp, List<ViewModel>>() {
+        return apiService.getConnectSections().observeOn(AndroidSchedulers.mainThread()).map(new Function<ConnectSectionResp, List<ViewModel>>() {
             @Override
             public List<ViewModel> apply(@io.reactivex.annotations.NonNull ConnectSectionResp resp) throws Exception {
                 List<ViewModel> results = new ArrayList<>();

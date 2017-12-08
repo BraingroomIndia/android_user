@@ -267,12 +267,11 @@ public class HomeViewModel extends ViewModel {
 
     public void refreshMapPinsToNewLocation(String latitude, String longitude) {
         exploreObservable = apiService.getExploreDashboard(latitude, longitude);
-        exploreObservable.subscribe(new Consumer<ExploreResp>() {
+        exploreObservable.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ExploreResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ExploreResp resp) throws Exception {
                 ClassLocationData cld;
                 locationList.clear();
-
                 if (!isEmpty(resp.getData()))
                     for (final ExploreResp.Snippet snippet : resp.getData()) {
                         cld = new ClassLocationData();

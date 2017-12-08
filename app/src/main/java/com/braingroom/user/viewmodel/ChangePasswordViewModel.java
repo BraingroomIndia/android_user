@@ -11,6 +11,7 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.LoginActivity;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -57,7 +58,7 @@ public class ChangePasswordViewModel extends ViewModel {
         snippet.setUuid(pref.getString(Constants.UUID, ""));
         snippet.setNewPassword(newPassword.get());
         Observable<ChangePasswordResp> respObservable = apiService.changePassword(snippet);
-        respObservable.subscribe(new Consumer<ChangePasswordResp>() {
+        respObservable.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ChangePasswordResp>() {
 
             @Override
             public void accept(@io.reactivex.annotations.NonNull ChangePasswordResp resp) throws Exception {

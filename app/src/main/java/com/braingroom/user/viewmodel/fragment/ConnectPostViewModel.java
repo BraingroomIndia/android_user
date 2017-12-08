@@ -42,6 +42,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -305,7 +306,7 @@ public class ConnectPostViewModel extends ViewModel {
                 , new HashMap<String, Integer>(), false, null, "select a group first");
 
 
-        groupVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Groups", messageHelper, apiService.getGroups("1").map(new Function<GroupResp, ListDialogData1>() {
+        groupVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Groups", messageHelper, apiService.getGroups("1").observeOn(AndroidSchedulers.mainThread()).map(new Function<GroupResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
@@ -360,7 +361,7 @@ public class ConnectPostViewModel extends ViewModel {
                     buyAndSellSnippet.setPostTitle(title.s_1.get());
                     buyAndSellSnippet.setPostSummary(description.get());
                     buyAndSellSnippet.setPostThumbUpload(imageUploadVm.remoteAddress.get());
-                    apiService.postBuyAndSell(buyAndSellSnippet).subscribe(new Consumer<BaseResp>() {
+                    apiService.postBuyAndSell(buyAndSellSnippet).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                             messageHelper.show(baseResp.getResMsg());
@@ -393,7 +394,7 @@ public class ConnectPostViewModel extends ViewModel {
                     knowledgeNuggetsSnippet.setClassLink(classPageUrl.s_1.get());
                     knowledgeNuggetsSnippet.setPostThumbUpload(imageUploadVm.remoteAddress.get());
                     knowledgeNuggetsSnippet.setVideo(videoUploadVm.remoteAddress.get());
-                    apiService.postKnowledgeNuggets(knowledgeNuggetsSnippet).subscribe(new Consumer<BaseResp>() {
+                    apiService.postKnowledgeNuggets(knowledgeNuggetsSnippet).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                             messageHelper.show(baseResp.getResMsg());
@@ -443,7 +444,7 @@ public class ConnectPostViewModel extends ViewModel {
                         learningPartnerPostSnippet.setPrivacyType(android.text.TextUtils.join("", privacyVm.getSelectedItemsId()));
                     else
                         learningPartnerPostSnippet.setPrivacyType("-1");
-                    apiService.postLearningPartner(learningPartnerPostSnippet).subscribe(new Consumer<BaseResp>() {
+                    apiService.postLearningPartner(learningPartnerPostSnippet).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                             messageHelper.show(baseResp.getResMsg());
@@ -476,7 +477,7 @@ public class ConnectPostViewModel extends ViewModel {
                     decideAndDiscussSnippet.setPostTitle(title.s_1.get());
                     decideAndDiscussSnippet.setPostSummary(description.get());
                     decideAndDiscussSnippet.setPostThumbUpload(imageUploadVm.remoteAddress.get());
-                    apiService.postDecideDiscuss(decideAndDiscussSnippet).subscribe(new Consumer<BaseResp>() {
+                    apiService.postDecideDiscuss(decideAndDiscussSnippet).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull BaseResp baseResp) throws Exception {
                             messageHelper.show(baseResp.getResMsg());
@@ -506,7 +507,7 @@ public class ConnectPostViewModel extends ViewModel {
     }
 
     private Observable<ListDialogData1> getgetGroupActivitiesApiObservable(String groupIds) {
-        return apiService.getGroupActivities(groupIds).map(new Function<CommonIdResp, ListDialogData1>() {
+        return apiService.getGroupActivities(groupIds).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
@@ -547,7 +548,7 @@ public class ConnectPostViewModel extends ViewModel {
     }
 
     private Observable<ListDialogData1> getCityApiObservable(String cityId) {
-        return apiService.getCityList(cityId).map(new Function<CommonIdResp, ListDialogData1>() {
+        return apiService.getCityList(cityId).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();

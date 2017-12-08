@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -115,7 +116,7 @@ public class ExploreViewModel extends ViewModel {
     @SuppressWarnings({"MissingPermission"})
     public void refreshMapPinsToNewLocation(final LatLng zoomLatLng) {
         exploreObservable = apiService.exploreFilter(categoryId, locationName.get() == null ? "" : locationName.get(), radius, latitude, longitude);
-        exploreObservable.subscribe(new Consumer<ExploreResp>() {
+        exploreObservable.observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ExploreResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ExploreResp resp) throws Exception {
                 ClassLocationData cld;

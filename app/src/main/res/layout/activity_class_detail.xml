@@ -253,21 +253,6 @@
                                 android:orientation="vertical">
                                 <!--Edited text color by Vikas Godara-->
                                 <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/margin_med"
-                                    android:gravity="center_vertical"
-                                    android:maxLines="2"
-                                    android:paddingBottom="@dimen/padding_small"
-                                    android:paddingRight="@dimen/padding_small"
-                                    android:paddingTop="@dimen/padding_small"
-                                    android:text="@{vm.teacherName}"
-                                    android:textColor="@color/materialBlue"
-                                    android:textSize="@dimen/text_size_medium"
-                                    app:font='@{@string/robotoRegular}'
-                                    tools:text="Teacher name can take maximum two line no more than that" />
-                                <!--Edited text color by Vikas Godara-->
-                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/margin_med"
@@ -282,6 +267,21 @@
                                     android:textSize="@dimen/text_size_medium"
                                     app:font='@{@string/robotoRegular}'
                                     tools:text="5" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/margin_med"
+                                    android:gravity="center_vertical"
+                                    android:maxLines="2"
+                                    android:paddingBottom="@dimen/padding_small"
+                                    android:paddingRight="@dimen/padding_small"
+                                    android:paddingTop="@dimen/padding_small"
+                                    android:text="@{vm.teacherName}"
+                                    android:textColor="@color/materialBlue"
+                                    android:textSize="@dimen/text_size_medium"
+                                    app:font='@{@string/robotoRegular}'
+                                    tools:text="Teacher name can take maximum two line no more than that" />
+                                <!--Edited text color by Vikas Godara-->
                             </LinearLayout>
 
                         </LinearLayout>

@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -123,7 +124,7 @@ public class ThirdPartyViewModel extends ViewModel {
             }
         };
 
-        apiService.getThirdPartyProfile(userId).subscribe(new Consumer<ThirdPartyProfileResp>() {
+        apiService.getThirdPartyProfile(userId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ThirdPartyProfileResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ThirdPartyProfileResp resp) throws Exception {
                 ThirdPartyProfileResp.Snippet data = resp.getData().get(0);
@@ -181,7 +182,7 @@ public class ThirdPartyViewModel extends ViewModel {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
-                return apiService.getConnectFeed(connectFilterData, nextPage)
+                return apiService.getConnectFeed(connectFilterData, nextPage).observeOn(AndroidSchedulers.mainThread())
                         .map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {

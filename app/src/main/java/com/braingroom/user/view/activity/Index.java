@@ -54,6 +54,7 @@ import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -100,7 +101,7 @@ public class Index extends AppCompatActivity {
         isBackground = false;
         rxPermissions = new RxPermissions(Index.this);
         apiService.checkGeoDetail();
-        apiService.forceUpdate().subscribe(new Consumer<Boolean>() {
+        apiService.forceUpdate().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(@NonNull Boolean aBoolean) throws Exception {
                 if (aBoolean != null && aBoolean) {
@@ -242,7 +243,7 @@ public class Index extends AppCompatActivity {
 
 
     public void forceUpdate() {
-        apiService.forceUpdate().subscribe(new Consumer<Boolean>() {
+        apiService.forceUpdate().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(@NonNull Boolean aBoolean) throws Exception {
                 if (aBoolean != null && aBoolean) {

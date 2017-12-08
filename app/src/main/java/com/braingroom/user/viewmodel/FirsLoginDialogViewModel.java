@@ -14,6 +14,7 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.LoginActivity;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import lombok.Setter;
@@ -62,6 +63,7 @@ public class FirsLoginDialogViewModel extends CustomDialogViewModel {
                 }
 
                 apiService.firstSocialLogin(userId, emailId, mobileVm.s_1.get() != null ? mobileVm.s_1.get() : loginResp.getData().get(0).getMobile(), referralVm.s_1.get() != null ? referralVm.s_1.get() : referralCode).
+                        observeOn(AndroidSchedulers.mainThread()).
                         subscribe(new Consumer<FirstSocialLoginResp>() {
                             @Override
                             public void accept(@io.reactivex.annotations.NonNull FirstSocialLoginResp resp) throws Exception {

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -58,7 +59,7 @@ public class ConnectFilterViewModel extends ViewModel {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
 
-                    allGroupsApiObservable = apiService.getGroups(selectedId).map(new Function<GroupResp, HashMap<String, Pair<Integer, String>>>() {
+                    allGroupsApiObservable = apiService.getGroups(selectedId).observeOn(AndroidSchedulers.mainThread()).map(new Function<GroupResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
                         public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull GroupResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());
@@ -152,7 +153,7 @@ public class ConnectFilterViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    cityApiObservable = apiService.getCityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
+                    cityApiObservable = apiService.getCityList(selectedId).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
                         public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());

@@ -44,7 +44,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
                     android:layout_marginBottom="@dimen/margin_med"
-                    android:layout_marginRight="75dp"
                     android:background="@drawable/solid_shimmer_rounded_corner" />
 
                 <TextView
@@ -56,6 +55,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
+                    android:layout_marginRight="75dp"
                     android:layout_marginBottom="@dimen/margin_med"
                     android:layout_marginTop="@dimen/margin_med"
                     android:background="@drawable/solid_shimmer_rounded_corner" />

@@ -12,6 +12,7 @@ import com.braingroom.user.utils.FileUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -48,7 +49,7 @@ public class PostApiVideoUploadViewModel extends ViewModel {
             messageHelper.showDismissInfo("", "Sorry we are unable to upload the file");
             return;
         }
-        apiService.uploadPostApiVideo(filePath, fileType, postType)
+        apiService.uploadPostApiVideo(filePath, fileType, postType).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<UploadPostApiResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull UploadPostApiResp resp) throws Exception {

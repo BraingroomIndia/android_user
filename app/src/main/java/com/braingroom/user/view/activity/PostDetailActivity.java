@@ -17,6 +17,8 @@ import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 public class PostDetailActivity extends BaseActivity implements ConnectUiHelper {
 
 
@@ -25,7 +27,7 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
         super.onCreate(savedInstanceState);
         String notificationId = getIntentString("notification_id");
         if (vm.getLoggedIn() && !TextUtils.isEmpty(notificationId))
-            vm.apiService.changeNotificationStatus(notificationId).subscribe();
+            vm.apiService.changeNotificationStatus(notificationId).observeOn(AndroidSchedulers.mainThread()).subscribe();
     }
 
     @NonNull

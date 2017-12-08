@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
@@ -530,7 +531,7 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setGiftDetails(dataList);
         req.setData(snippet);
 
-        apiService.saveGiftCoupon(req).subscribe(new Consumer<SaveGiftCouponResp>() {
+        apiService.saveGiftCoupon(req).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<SaveGiftCouponResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull SaveGiftCouponResp resp) throws Exception {
                 if ("1".equals(resp.getResCode())) {

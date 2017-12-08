@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -59,7 +60,7 @@ public class ReplyViewModel extends ViewModel {
                     reply.set("");
                     return;
                 }
-                apiService.commentReply(postId, commentId, reply.get()).subscribe(new Consumer<CommentReplyResp>() {
+                apiService.commentReply(postId, commentId, reply.get()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<CommentReplyResp>() {
                     @Override
                     public void accept(@NonNull CommentReplyResp resp) throws Exception {
                         if ("1".equals(resp.getResCode())) {

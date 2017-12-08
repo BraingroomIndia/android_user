@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -31,8 +32,9 @@ public class MessagesThreadViewModel extends ViewModel {
 
     public MessagesThreadViewModel(final String senderId, final MessageHelper messageHelper, final Navigator navigator, final MessagesThreadActivity.UiHelper uiHelper) {
         final String myUserId = pref.getString(Constants.BG_ID, "");
-        apiService.changeMessageThreadStatus(senderId).subscribe();
+        apiService.changeMessageThreadStatus(senderId).observeOn(AndroidSchedulers.mainThread()).subscribe();
         messageVmObservable = apiService.getChatMessages(senderId)
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<ChatListResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(ChatListResp resp) throws Exception {
@@ -63,7 +65,7 @@ public class MessagesThreadViewModel extends ViewModel {
                 snippet.setStatus("");
                 snippet.setMessage(reply.get());
                 snippet.setRecieverId(senderId);
-                apiService.postMessage(snippet).subscribe(new Consumer<BaseResp>() {
+                apiService.postMessage(snippet).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseResp>() {
                     @Override
                     public void accept(@NonNull BaseResp resp) throws Exception {
                         if (resp.getResCode().equals("1")) {

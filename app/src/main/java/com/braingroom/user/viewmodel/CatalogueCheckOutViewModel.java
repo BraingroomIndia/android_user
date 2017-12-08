@@ -25,6 +25,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -133,7 +134,7 @@ public class CatalogueCheckOutViewModel extends ViewModel {
             return;
         }
 
-        apiService.getQuoteDetails(quoteId).subscribe(new Consumer<QuoteDetailsResp>() {
+        apiService.getQuoteDetails(quoteId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<QuoteDetailsResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull QuoteDetailsResp resp) throws Exception {
                 messageHelper.dismissActiveProgress();

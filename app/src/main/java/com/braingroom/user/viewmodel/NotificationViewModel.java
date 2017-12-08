@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 
 public class NotificationViewModel extends ViewModel {
@@ -21,7 +22,7 @@ public class NotificationViewModel extends ViewModel {
 
     public NotificationViewModel(final HelperFactory helperFactory, final MessageHelper messageHelper, final Navigator navigator) {
         messageHelper.showProgressDialog("Wait", "loading");
-        notificationsVm = apiService.getNotifications()
+        notificationsVm = apiService.getNotifications().observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<NotificationListResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(NotificationListResp resp) throws Exception {
@@ -36,7 +37,7 @@ public class NotificationViewModel extends ViewModel {
                                     "", "1".equals(elem.getStatus())));
                         }
                         if (resp.getResCode().equals("1"))
-                            apiService.changeNotificationStatus("").subscribe();
+                            apiService.changeNotificationStatus("").observeOn(AndroidSchedulers.mainThread()).subscribe();
                         messageHelper.dismissActiveProgress();
                         return results;
                     }

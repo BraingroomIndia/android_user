@@ -46,6 +46,7 @@ import com.google.firebase.FirebaseApp;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
@@ -222,7 +223,7 @@ public abstract class BaseActivity extends MvvmActivity {
                             }
                         }
                     };
-                    vm.apiService.forceUpdate().subscribe(new Consumer<Boolean>() {
+                    vm.apiService.forceUpdate().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Boolean>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
                             if (aBoolean != null && aBoolean) {

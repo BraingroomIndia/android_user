@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import org.json.JSONObject;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -185,7 +186,7 @@ public class LoginViewmodel extends ViewModel {
         editor.putString(Constants.PROFILE_PIC, picture);
 
 
-        apiService.socialLogin(name, picture, email, socialId, fcmToken, "").subscribe(new Consumer<LoginResp>() {
+        apiService.socialLogin(name, picture, email, socialId, fcmToken, "").observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<LoginResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
 
@@ -239,7 +240,7 @@ public class LoginViewmodel extends ViewModel {
         LoginReq.Snippet snippet = new LoginReq.Snippet();
         snippet.setEmail(email);
 
-        apiService.forgotPassword(email).subscribe(new Consumer<LoginResp>() {
+        apiService.forgotPassword(email).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<LoginResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
                 if (loginResp.getResCode().equals("1")) {

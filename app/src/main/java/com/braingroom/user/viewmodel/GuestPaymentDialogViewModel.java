@@ -9,6 +9,7 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.LoginActivity;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -52,7 +53,7 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
                     return;
                 }
 
-                apiService.addGuestUser(nameVm.s_1.get(), emailVm.s_1.get(), mobileVm.s_1.get()).subscribe(new Consumer<GuestUserResp>() {
+                apiService.addGuestUser(nameVm.s_1.get(), emailVm.s_1.get(), mobileVm.s_1.get()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<GuestUserResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull GuestUserResp guestUserResp) throws Exception {
                         dismissDialog();

@@ -16,6 +16,7 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.ProfileActivity;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -57,7 +58,7 @@ public class FollowButtonViewModel extends ViewModel {
                         break;
                     case STATE_FOLLOW:
                         changeButtonState(STATE_LOADING);
-                        apiService.follow(userId).subscribe(new Consumer<FollowResp>() {
+                        apiService.follow(userId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FollowResp>() {
                             @Override
                             public void accept(@NonNull FollowResp resp) throws Exception {
                                 if (resp.getData().isEmpty()) {

@@ -50,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -127,7 +128,7 @@ public class SignupViewModel extends ViewModel {
             }).subscribe(new Consumer<String>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull String referralCode) throws Exception {
-                    apiService.checkReferal(referralCode).subscribe(new Consumer<ReferralCodeResp>() {
+                    apiService.checkReferal(referralCode).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ReferralCodeResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull ReferralCodeResp resp) throws Exception {
                             if (resp.getData() != null && resp.getData().isEmpty())
@@ -186,7 +187,7 @@ public class SignupViewModel extends ViewModel {
                 signUpSnippet.setDOB(dobVm.date.get());
                 signUpSnippet.setGender(genderVm.selectedItemsText.get());
                 messageHelper.showProgressDialog("Signup in", "Sit back while we set up your profile...");
-                apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
+                apiService.signUp(new SignUpReq(signUpSnippet)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<SignUpResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
@@ -269,7 +270,7 @@ public class SignupViewModel extends ViewModel {
                     signUpSnippet.setInstitutePoy1(passoutYear.s_1.get());
                 }
                 messageHelper.showProgressDialog("Signup in", "Sit back while we set up your profile...");
-                apiService.signUp(new SignUpReq(signUpSnippet)).subscribe(new Consumer<SignUpResp>() {
+                apiService.signUp(new SignUpReq(signUpSnippet)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<SignUpResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull SignUpResp signUpResp) throws Exception {
 
@@ -397,7 +398,7 @@ public class SignupViewModel extends ViewModel {
             public void accept(@io.reactivex.annotations.NonNull HashMap<String, Pair<Integer, String>> selectedMap) throws Exception {
                 if (selectedMap.values().iterator().hasNext()) {
                     String selectedId = "" + selectedMap.values().iterator().next().first;
-                    cityApiObservable = apiService.getCityList(selectedId).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
+                    cityApiObservable = apiService.getCityList(selectedId).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, HashMap<String, Pair<Integer, String>>>() {
                         @Override
                         public HashMap<String, Pair<Integer, String>> apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                             if ("0".equals(resp.getResCode())) messageHelper.show(resp.getResMsg());

@@ -14,6 +14,7 @@ import com.braingroom.user.utils.FileUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -88,7 +89,7 @@ public class ImageUploadViewModel extends ViewModel {
                 return;
             }
             messageHelper.show("uploading...");
-            apiService.uploadImage(filePath, fileType)
+            apiService.uploadImage(filePath, fileType).observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<UploadResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull UploadResp resp) throws Exception {

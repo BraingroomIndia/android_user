@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -144,7 +145,7 @@ public class ConnectHomeViewModel extends ViewModel {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
-                return apiService.getConnectFeed(filterData, nextPage)
+                return apiService.getConnectFeed(filterData, nextPage).observeOn(AndroidSchedulers.mainThread())
                         .map(feedDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
                             @Override
                             public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
@@ -180,7 +181,7 @@ public class ConnectHomeViewModel extends ViewModel {
         }).flatMap(new Function<Integer, Observable<NotificationCountResp>>() {
             @Override
             public Observable<NotificationCountResp> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                apiService.getPrimeTimeMessage().subscribe(new Consumer<PrimeMessageResp>() {
+                apiService.getPrimeTimeMessage().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<PrimeMessageResp>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull PrimeMessageResp resp) throws Exception {
                         if (!isEmpty(resp) && !isEmpty(resp.getData()) && !isEmpty(resp.getData().get(0)))
@@ -272,7 +273,7 @@ public class ConnectHomeViewModel extends ViewModel {
             public void run() throws Exception {
                 if (isEmpty(primeTimeMessage)) {
                     messageHelper.showProgressDialog("Wait", "loading");
-                    apiService.getPrimeTimeMessage().subscribe(new Consumer<PrimeMessageResp>() {
+                    apiService.getPrimeTimeMessage().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<PrimeMessageResp>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull PrimeMessageResp resp) throws Exception {
                             if (!isEmpty(resp) && !isEmpty(resp.getData()) && !isEmpty(resp.getData().get(0)))
