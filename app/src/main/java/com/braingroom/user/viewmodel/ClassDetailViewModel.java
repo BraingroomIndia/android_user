@@ -132,7 +132,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onPayTutorClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
             openConnectBnS, openConnectFP,*/
-            openCateglogLocationList, playAction, onQueryDismiss, onPostDismiss,onAddReviewClicked;
+            openCateglogLocationList, playAction, onQueryDismiss, onPostDismiss, onAddReviewClicked;
 
     public boolean isInWishlist = false;
 
@@ -286,7 +286,10 @@ public class ClassDetailViewModel extends ViewModel {
         onAddReviewClicked = new Action() {
             @Override
             public void run() throws Exception {
-                uiHelper.addReview();
+                if (getLoggedIn())
+                    uiHelper.addReview();
+                else
+                    messageHelper.showLoginRequireDialog("Only logged in user can add review", null);
             }
         };
 

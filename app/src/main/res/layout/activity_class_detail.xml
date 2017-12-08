@@ -390,8 +390,8 @@
 
                                 <TextView
                                     android:layout_width="0dp"
-                                    android:layout_weight="20"
                                     android:layout_height="@dimen/search_height"
+                                    android:layout_weight="20"
                                     android:background="@drawable/bottom_line_drawable"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="@dimen/margin_large"
@@ -399,14 +399,15 @@
                                     android:textColor="@color/colorTextDark"
                                     android:textSize="@dimen/text_size_medium"
                                     app:font='@{@string/robotoBold}' />
+
                                 <TextView
                                     android:layout_width="0dp"
+                                    android:layout_height="@dimen/search_height"
                                     android:layout_weight="10"
                                     android:gravity="center"
                                     android:onClick="@{vm.onAddReviewClicked}"
-                                    android:layout_height="@dimen/search_height"
-                                    android:textSize="@dimen/text_size_medium"
-                                    android:text="Add Review"/>
+                                    android:text="Add Review"
+                                    android:textSize="@dimen/text_size_medium" />
 
                             </LinearLayout>
 
@@ -424,10 +425,6 @@
 
                     </android.support.v7.widget.CardView>
 
-                    <FrameLayout
-                        android:id="@+id/fragment_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
 
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
@@ -686,6 +683,11 @@
             android:layout_height="50dp"
             android:layout_gravity="bottom"
             app:vm="@{vm.connectivityViewmodel}" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
     </FrameLayout>
