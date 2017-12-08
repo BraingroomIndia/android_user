@@ -16,6 +16,9 @@
     <color name="colorShimmerGrayLight">#e7e7e7</color>
     <color name="colorShimmerGrayLighter">#f3f3f3</color>
 
+    <color name="shimmerBackground">#2f4463</color>
+    <color name="colorShimmerBlue">#31547f</color>
+
     <color name="materialGreen">#4CAF50</color>
     <color name="materialBlue">#039be5</color>
     <color name="materialOrange">#e15a2d</color>
