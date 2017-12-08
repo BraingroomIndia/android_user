@@ -741,16 +741,18 @@ public class DataflowService {
         return api.report(new ReportReq(new ReportReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation());
     }
-    public Observable<ReviewAddResp> addReview(int reviewType,String vendorIdorClassId,String review,String rating){
-        return api.reviewAdd(new ReviewAddReq(new ReviewAddReq.Snippet(pref.getString(Constants.BG_ID,""),reviewType,vendorIdorClassId,review,rating))).subscribeOn(Schedulers.io())
+
+    public Observable<ReviewAddResp> addReview(int reviewType, String vendorIdorClassId, String review, String rating) {
+        return api.reviewAdd(new ReviewAddReq(new ReviewAddReq.Snippet(pref.getString(Constants.BG_ID, ""), reviewType, vendorIdorClassId, review, rating))).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation()).onErrorReturnItem(new ReviewAddResp());
     }
 
-    public Observable<ReviewGetResp> getReview(boolean isClassReview,String id){
-        return api.reviewGet(new ReviewGetReq(new ReviewGetReq.Snippet(pref.getString(Constants.BG_ID,""),isClassReview,id))).subscribeOn(Schedulers.io())
+    public Observable<ReviewGetResp> getReview(int reviewType, String id) {
+        return api.reviewGet(new ReviewGetReq(new ReviewGetReq.Snippet(pref.getString(Constants.BG_ID, ""), reviewType, id))).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation()).onErrorReturnItem(new ReviewGetResp());
 
     }
+
     public Observable<CategoryTreeResp> getCategoryTree() {
 
         return api.getCategories()

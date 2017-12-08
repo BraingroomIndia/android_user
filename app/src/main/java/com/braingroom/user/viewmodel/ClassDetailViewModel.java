@@ -304,12 +304,12 @@ public class ClassDetailViewModel extends ViewModel {
 
         phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer, "");
         phoneNumber.setPositiveText("Call");
-        apiService.getReview(true, classId).subscribe(new Consumer<ReviewGetResp>() {
+        apiService.getReview(Constants.classReview, classId).subscribe(new Consumer<ReviewGetResp>() {
             @Override
             public void accept(ReviewGetResp reviewGetResp) throws Exception {
                 if (reviewGetResp.getResCode()) {
                     for (ReviewGetResp.Snippet snippet : reviewGetResp.getData()) {
-                        reviewList.add(new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(),snippet.getTimeStamp()));
+                        reviewList.add(new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(), snippet.getTimeStamp()));
                     }
                     reviews.connect();
                 }

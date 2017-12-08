@@ -60,6 +60,8 @@ public class Constants {
     public static final String BGTransactionId = "BGtransactionId";
     public static final String className = "class_name";
     public static final String amount = "amount";
+    public static final int vendorReview=2;
+    public static final int classReview=3;
 
 
     public static final String FONT_REGULAR = "Roboto-Regular.ttf";
