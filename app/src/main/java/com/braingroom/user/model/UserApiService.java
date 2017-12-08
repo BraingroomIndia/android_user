@@ -165,6 +165,12 @@ public interface UserApiService {
     @POST("report")
     Observable<ReportResp> report(@Body ReportReq req);
 
+    @POST("addReview")
+    Observable<ReviewAddResp> reviewAdd(@Body ReviewAddReq reviewAddReq);
+
+    @POST("getReview")
+    Observable<ReviewGetResp> reviewGet(@Body ReviewGetReq reviewGetReq);
+
     @POST("commentReply")
     Observable<CommentReplyResp> commentReply(@Body CommentReplyReq req);
 
