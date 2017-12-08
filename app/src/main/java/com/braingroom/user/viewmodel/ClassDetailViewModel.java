@@ -24,6 +24,7 @@ import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.CODOfferDetailResp;
 import com.braingroom.user.model.response.ContactTutorResp;
 import com.braingroom.user.model.response.PromoInfo;
+import com.braingroom.user.model.response.ReviewGetResp;
 import com.braingroom.user.model.response.WishlistResp;
 import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
@@ -91,7 +92,9 @@ public class ClassDetailViewModel extends ViewModel {
     private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
+    public final ConnectableObservable<List<ViewModel>> reviews;
     List<ViewModel> addressList = new ArrayList<>();
+    List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
     List<MarkerOptions> markerList = new ArrayList<>();
 
@@ -174,6 +177,7 @@ public class ClassDetailViewModel extends ViewModel {
         PhoneListApiData.put("044-65556013", 3);
         ;
         addresses = Observable.just(addressList).publish();
+        reviews = Observable.just(reviewList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
@@ -261,20 +265,20 @@ public class ClassDetailViewModel extends ViewModel {
                 if (getLoggedIn())
                     apiService.contactTutor(classId).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Consumer<ContactTutorResp>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull final ContactTutorResp resp) throws Exception {
-                            if (resp.getData().isEmpty())
-                                messageHelper.showDismissInfo("", resp.getResMsg());
-                            else {
-                                messageHelper.showAcceptableInfo("Offer", resp.getData().get(0).getDisplayText(), "Call Tutor", new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                        uiHelper.makeACall(resp.getData().get(0).getMobileNumber());
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull final ContactTutorResp resp) throws Exception {
+                                    if (resp.getData().isEmpty())
+                                        messageHelper.showDismissInfo("", resp.getResMsg());
+                                    else {
+                                        messageHelper.showAcceptableInfo("Offer", resp.getData().get(0).getDisplayText(), "Call Tutor", new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                                                uiHelper.makeACall(resp.getData().get(0).getMobileNumber());
+                                            }
+                                        });
                                     }
-                                });
-                            }
-                        }
-                    });
+                                }
+                            });
                 else
                     messageHelper.showLoginRequireDialog("Only logged in user can call tutor", null);
             }
@@ -300,6 +304,17 @@ public class ClassDetailViewModel extends ViewModel {
 
         phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer, "");
         phoneNumber.setPositiveText("Call");
+        apiService.getReview(true, classId).subscribe(new Consumer<ReviewGetResp>() {
+            @Override
+            public void accept(ReviewGetResp reviewGetResp) throws Exception {
+                if (reviewGetResp.getResCode()) {
+                    for (ReviewGetResp.Snippet snippet : reviewGetResp.getData()) {
+                        reviewList.add(new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(),snippet.getTimeStamp()));
+                    }
+                    reviews.connect();
+                }
+            }
+        });
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {

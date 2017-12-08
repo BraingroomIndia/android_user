@@ -6,48 +6,59 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * Created by ashketchup on 8/12/17.
  */
-@Data
-@AllArgsConstructor(suppressConstructorProperties = true)
 public class ReviewGetResp {
     @SerializedName("res_code")
-    Integer resCode;
+    private Integer resCode;
 
+    @Getter
     @SerializedName("res_msg")
     String resMsg;
 
+    @Getter
     @SerializedName("braingroom")
-    List<Snippet> braingroom = null;
-    @AllArgsConstructor(suppressConstructorProperties = true)
-    public static class Snippet{
+    List<Snippet> data = null;
+
+    public boolean getResCode() {
+        return data != null && !data.isEmpty() && data.get(0) != null;
+    }
+
+    @Getter
+    public static class Snippet {
         @SerializedName("id")
-        String id;
+        private String id;
 
         @SerializedName("user_id")
-        String userId;
+        private String userId;
 
         @SerializedName("first_name")
-        String firstName;
+        private String firstName;
 
         @SerializedName("user_type_id")
         private String userTypeId;
 
         @SerializedName("timestamp")
-        String timeStamp;
+        private String timeStamp;
 
         @SerializedName("review_type")
-        String reviewType;
+        private String reviewType;
 
         @SerializedName("review_message")
-        String reviewMessage;
+        private String reviewMessage;
 
         @SerializedName("rating")
-        String rating;
+        private Integer rating;
 
         @SerializedName("class_id")
-        String classId;
+        private String classId;
+    }
+
+    public ReviewGetResp() {
+        this.data = null;
+        this.resMsg = "";
     }
 }

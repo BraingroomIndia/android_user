@@ -168,7 +168,7 @@ public interface UserApiService {
     @POST("addReview")
     Observable<ReviewAddResp> reviewAdd(@Body ReviewAddReq reviewAddReq);
 
-    @POST("getReview")
+    @POST("getReviews")
     Observable<ReviewGetResp> reviewGet(@Body ReviewGetReq reviewGetReq);
 
     @POST("commentReply")

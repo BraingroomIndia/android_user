@@ -743,12 +743,12 @@ public class DataflowService {
     }
     public Observable<ReviewAddResp> addReview(int reviewType,String vendorIdorClassId,String review,String rating){
         return api.reviewAdd(new ReviewAddReq(new ReviewAddReq.Snippet(pref.getString(Constants.BG_ID,""),reviewType,vendorIdorClassId,review,rating))).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation());
+                .observeOn(Schedulers.computation()).onErrorReturnItem(new ReviewAddResp());
     }
 
     public Observable<ReviewGetResp> getReview(boolean isClassReview,String id){
         return api.reviewGet(new ReviewGetReq(new ReviewGetReq.Snippet(pref.getString(Constants.BG_ID,""),isClassReview,id))).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation());
+                .observeOn(Schedulers.computation()).onErrorReturnItem(new ReviewGetResp());
 
     }
     public Observable<CategoryTreeResp> getCategoryTree() {

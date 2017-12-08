@@ -267,6 +267,7 @@
                                     android:textSize="@dimen/text_size_medium"
                                     app:font='@{@string/robotoRegular}'
                                     tools:text="5" />
+
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -370,6 +371,49 @@
 
                     </android.support.v7.widget.CardView>
 
+                    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/review"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_med"
+                        card_view:cardElevation="@dimen/dimen_zero">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/search_height"
+                                    android:background="@drawable/bottom_line_drawable"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="@dimen/margin_large"
+                                    android:text="Class Review"
+                                    android:textColor="@color/colorTextDark"
+                                    android:textSize="@dimen/text_size_medium"
+                                    app:font='@{@string/robotoBold}' />
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:nestedScrollingEnabled="false"
+                                bind:items="@{vm.reviews}"
+                                bind:layout_vertical="@{true}"
+                                bind:view_provider="@{@layout/item_rating}"
+                                tools:listitem="@layout/item_rating" />
+
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
 
                     <FrameLayout
                         android:id="@+id/fragment_container"

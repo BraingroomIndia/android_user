@@ -14,13 +14,18 @@ import lombok.Data;
 @AllArgsConstructor(suppressConstructorProperties = true)
 public class ReviewAddResp {
     @SerializedName("res_code")
-    Integer resCode;
+    private Integer resCode;
     @SerializedName("res_msg")
     String resMsg;
     @SerializedName("braingroom")
-    List<Snippet> braingroom = null;
+    List<Snippet> data = null;
+
+    public boolean getResCode() {
+        return data != null && !data.isEmpty() && data.get(0) != null;
+    }
+
     @AllArgsConstructor(suppressConstructorProperties = true)
-    public class Snippet{
+    public class Snippet {
 
         @SerializedName("user_id")
         String userId;
@@ -39,6 +44,11 @@ public class ReviewAddResp {
 
         @SerializedName("rating")
         String rating;
+    }
+
+    public ReviewAddResp() {
+        this.data=null;
+        this.resMsg="";
     }
 }
 
