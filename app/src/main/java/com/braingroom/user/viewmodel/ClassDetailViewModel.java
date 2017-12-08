@@ -132,7 +132,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onPayTutorClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
             openConnectBnS, openConnectFP,*/
-            openCateglogLocationList, playAction, onQueryDismiss, onPostDismiss;
+            openCateglogLocationList, playAction, onQueryDismiss, onPostDismiss,onAddReviewClicked;
 
     public boolean isInWishlist = false;
 
@@ -283,6 +283,12 @@ public class ClassDetailViewModel extends ViewModel {
                     messageHelper.showLoginRequireDialog("Only logged in user can call tutor", null);
             }
         };
+        onAddReviewClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                uiHelper.addReview();
+            }
+        };
 
         callConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
@@ -300,8 +306,6 @@ public class ClassDetailViewModel extends ViewModel {
             }
 
         };
-
-
         phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer, "");
         phoneNumber.setPositiveText("Call");
         apiService.getReview(Constants.classReview, classId).subscribe(new Consumer<ReviewGetResp>() {

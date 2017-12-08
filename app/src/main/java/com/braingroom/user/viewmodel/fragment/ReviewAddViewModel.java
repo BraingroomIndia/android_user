@@ -1,6 +1,5 @@
 package com.braingroom.user.viewmodel.fragment;
 
-import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
@@ -17,6 +16,7 @@ public class ReviewAddViewModel extends ViewModel {
     public ObservableInt rating;
     public String id;
     int reviewType;
+    ReviewAddHelper reviewAddHelper;
     public Action onClick = new Action() {
         @Override
         public void run() throws Exception {
@@ -25,9 +25,15 @@ public class ReviewAddViewModel extends ViewModel {
     };
     public void submitReview(){
         apiService.addReview(reviewType,id,text.get(),""+rating.get());
+        if(reviewAddHelper!=null)
+            reviewAddHelper.run();
     }
-    public ReviewAddViewModel(String id,int reviewType){
+    public interface ReviewAddHelper {
+        void run();
+    }
+    public ReviewAddViewModel(String id,int reviewType,ReviewAddHelper reviewAddHelper){
         this.id=id;
         this.reviewType=reviewType;
+        this.reviewAddHelper = reviewAddHelper;
     }
 }

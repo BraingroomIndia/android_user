@@ -389,7 +389,8 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="20"
                                     android:layout_height="@dimen/search_height"
                                     android:background="@drawable/bottom_line_drawable"
                                     android:gravity="center_vertical"
@@ -398,6 +399,14 @@
                                     android:textColor="@color/colorTextDark"
                                     android:textSize="@dimen/text_size_medium"
                                     app:font='@{@string/robotoBold}' />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="10"
+                                    android:gravity="center"
+                                    android:onClick="@{vm.onAddReviewClicked}"
+                                    android:layout_height="@dimen/search_height"
+                                    android:textSize="@dimen/text_size_medium"
+                                    android:text="Add Review"/>
 
                             </LinearLayout>
 
