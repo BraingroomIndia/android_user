@@ -111,18 +111,6 @@ public abstract class BaseActivity extends MvvmActivity {
         screenDims.width = size.x;
         screenDims.height = size.y;
         getNavigator().forceUpdate();
-        if (pref.getBoolean(Constants.NEW_FCM, false)) {
-            vm.apiService.registerUserDevice().subscribe(new Consumer<BaseResp>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull BaseResp resp) throws Exception {
-                    if (resp.getResCode() != null) {
-                        editor.putBoolean(Constants.NEW_FCM, false).commit();
-                        sendCustomEvent(BaseActivity.this, "New token sent:", "", "");
-                    }
-
-                }
-            });
-        }
 
 
     }

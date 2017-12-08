@@ -18,6 +18,7 @@ import com.braingroom.user.model.QRCode.PostDetail;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
+import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
@@ -44,6 +45,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
 import static com.braingroom.user.FCMInstanceIdService.TAG;
+import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
 /*
  * Created by godara on 17/11/17.
@@ -74,6 +76,7 @@ public class Splash extends AppCompatActivity {
         Log.d(TAG, "onCreate: Called  ");
         branch = Branch.getInstance();
         apiService.checkGeoDetail();
+        apiService.registerUserDevice();
         if (getIntent().getExtras() != null)
             bundleReceived = getIntent().getExtras().getBundle(Constants.pushNotification);
         branchData();
@@ -229,8 +232,7 @@ public class Splash extends AppCompatActivity {
                     navigateToIndex();
                 }
             });
-        }
-        else navigateToIndex();
+        } else navigateToIndex();
 
     }
 
