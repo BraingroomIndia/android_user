@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -23,7 +24,9 @@
         android:onClick="@{editable ? vm.onOpenClicked : null}"
         android:paddingBottom="@dimen/padding_large"
         android:paddingLeft="@dimen/padding_large"
-        android:paddingTop="@dimen/margin_small">
+        android:paddingStart="@dimen/padding_large"
+        android:paddingTop="@dimen/margin_small"
+        tools:ignore="RtlSymmetry">
 
         <TextView
             android:id="@+id/title"
@@ -31,6 +34,7 @@
             android:layout_height="25dp"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/arrow"
+            android:layout_toStartOf="@+id/arrow"
             android:gravity="bottom"
             android:text="@{vm.title}"
             android:textColor="@color/colorTextDark"
@@ -42,6 +46,7 @@
             android:layout_height="25dp"
             android:layout_below="@+id/title"
             android:layout_toLeftOf="@+id/arrow"
+            android:layout_toStartOf="@+id/arrow"
             android:ellipsize="end"
             android:gravity="top"
             android:lines="1"
@@ -52,9 +57,12 @@
 
         <ImageView
             android:id="@+id/arrow"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:contentDescription="TODO"
+            android:foregroundGravity="center"
             android:padding="@dimen/margin_small"
             android:src="@drawable/ic_chevron_right_black_24dp"
             android:tint="@color/colorTextGray" />

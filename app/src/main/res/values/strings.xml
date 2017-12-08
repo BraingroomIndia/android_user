@@ -103,6 +103,8 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="save">SAVE</string>
+    <string name="clear">CLEAR</string>
 
 
     <!--Edited By Vikas Godara-->

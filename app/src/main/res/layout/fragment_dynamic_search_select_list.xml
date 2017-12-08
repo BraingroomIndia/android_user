@@ -59,11 +59,13 @@
                 android:gravity="center_vertical"
                 android:lines="1"
                 android:paddingLeft="@dimen/margin_small"
-                android:paddingRight="@dimen/padding_large"
+                android:paddingRight="@dimen/margin_small"
                 android:text="@{vm.selectedItemsText}"
                 android:textColor="@color/colorTextGray"
                 android:textSize="@dimen/text_size_large"
-                app:font='@{@string/robotoRegular}' />
+                app:font='@{@string/robotoRegular}'
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/save" />
 
             <TextView
                 android:id="@+id/save"
@@ -72,10 +74,11 @@
                 android:layout_toLeftOf="@+id/clear"
                 android:onClick="@{vm.onSaveClicked}"
                 android:padding="@dimen/margin_small"
-                android:text="SAVE"
+                android:text="@string/save"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size_large"
-                app:font='@{@string/robotoBold}' />
+                app:font='@{@string/robotoBold}'
+                android:layout_toStartOf="@+id/clear" />
 
             <TextView
                 android:id="@+id/clear"
@@ -84,10 +87,11 @@
                 android:layout_alignParentRight="true"
                 android:onClick="@{vm.onClearClicked}"
                 android:padding="@dimen/margin_small"
-                android:text="CLEAR"
+                android:text="@string/clear"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size_large"
-                app:font='@{@string/robotoRegular}' />
+                app:font='@{@string/robotoRegular}'
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
     </RelativeLayout>
 </layout>

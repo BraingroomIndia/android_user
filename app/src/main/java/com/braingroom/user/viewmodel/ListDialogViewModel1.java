@@ -11,6 +11,7 @@ import com.braingroom.user.view.MessageHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class ListDialogViewModel1 extends ViewModel {
                 messageHelper.dismissActiveProgress();
                 dialogData = items;
                 if (dialogData.getItems().isEmpty()) {
-                    dialogHelper.showListDialog(title, new ArrayList<String>(Arrays.asList("Not Available")));
+                    dialogHelper.showListDialog(title, new ArrayList<>(Collections.singletonList("Not Available")));
 
                 } else if (isMultiSelect)
                     dialogHelper.showMultiselectList(title, new ArrayList<>(dialogData.getItems().keySet())
@@ -85,7 +86,7 @@ public class ListDialogViewModel1 extends ViewModel {
         }).doOnError(new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Log.e("ListDialogViewmodel", "onError in source observable", throwable);
+                Log.d("ListDialogViewmodel", "onError in source observable", throwable);
             }
         }).onErrorResumeNext(Observable.<ListDialogData1>empty())
                 .share();

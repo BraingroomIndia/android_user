@@ -15,9 +15,9 @@
     <dimen name="header_height_large">60dp</dimen>
     <dimen name="category_container_height">85dp</dimen>
 
-    <dimen name="text_size_small">10dp</dimen>
-    <dimen name="text_size_medium">15dp</dimen>
-    <dimen name="text_size_large">20dp</dimen>
+    <dimen name="text_size_small">10sp</dimen>
+    <dimen name="text_size_medium">15sp</dimen>
+    <dimen name="text_size_large">20sp</dimen>
 
     <dimen name="padding_small">5dp</dimen>
     <dimen name="padding_large">20dp</dimen>
