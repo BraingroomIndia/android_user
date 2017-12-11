@@ -22,15 +22,24 @@ public class CityReq {
         String id;
         @SerializedName("only_major_cities")
         String majorCity;
+        @SerializedName("country_id")
+        String countryId;
 
         public Snippet(String id) {
             this.id = id;
             majorCity = null;
+            countryId = null;
         }
 
         public Snippet(boolean majorCity) {
             this.id = null;
             this.majorCity = majorCity ? "1" : null;
+        }
+
+        public Snippet(boolean majorCity, String countryId) {
+            this.id = null;
+            this.majorCity = majorCity ? "1" : null;
+            this.countryId = countryId;
         }
     }
 }

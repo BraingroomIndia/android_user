@@ -228,6 +228,11 @@ public class DataflowService {
                 .observeOn(Schedulers.computation());
     }
 
+    public Observable<CommonIdResp> getMajorCity(String countryId) {
+        return api.getCityList(new CityReq(new CityReq.Snippet(true, countryId))).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation());
+    }
+
     public Observable<CommonIdResp> getCityList() {
 
         return api.getCityList(new CityReq(new CityReq.Snippet(true))).subscribeOn(Schedulers.io())
@@ -686,6 +691,11 @@ public class DataflowService {
     public Observable<CommonIdResp> getCountry() {
 
         return api.getCountry().subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation());
+    }
+    public Observable<CommonIdResp> getMajorCountry() {
+
+        return api.getMajorCountry(new CountryReq()).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation());
     }
 
@@ -1415,6 +1425,7 @@ public class DataflowService {
                 @Override
                 public void accept(@NonNull String s) throws Exception {
                     Constants.GEO_TAG = s;
+                    registerUserDevice();
                 }
             });
     }

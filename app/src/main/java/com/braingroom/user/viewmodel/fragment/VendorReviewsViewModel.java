@@ -1,10 +1,14 @@
 package com.braingroom.user.viewmodel.fragment;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.braingroom.user.model.response.ReviewGetResp;
 import com.braingroom.user.model.response.VendorReviewResp;
+import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
+import com.braingroom.user.viewmodel.ReviewItemViewModel;
 import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
 import com.braingroom.user.viewmodel.VendorReviewItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -15,31 +19,42 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
 public class VendorReviewsViewModel extends ViewModel {
 
     public final Observable<List<ViewModel>> items;
+    public final Action onAddReviewClicked;
 
     public VendorReviewsViewModel(@NonNull final MessageHelper messageHelper, final String vendorId) {
 //// TODO: 18/04/17 remove hardcoded vendor id
         items = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return getLoadingItems(0).mergeWith(apiService.getVendorReviews(vendorId).map(new Function<VendorReviewResp, List<ViewModel>>() {
+                return apiService.getReview(Constants.vendorReview, vendorId).map(new Function<ReviewGetResp, List<ViewModel>>() {
                     @Override
-                    public List<ViewModel> apply(VendorReviewResp resp) throws Exception {
+                    public List<ViewModel> apply(ReviewGetResp resp) throws Exception {
                         List<ViewModel> results = new ArrayList<>();
                         callAgain = null;
-                        for (final VendorReviewResp.Snippet elem : resp.getData()) {
-                            results.add(new VendorReviewItemViewModel(messageHelper, elem.getReviewerName(), elem.getReview(), elem.getRating()));
+                        for (final ReviewGetResp.Snippet snippet : resp.getData()) {
+                            results.add((new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(), snippet.getTimeStamp())));
                         }
                         return results;
                     }
-                }));
+                });
 
             }
         });
+        onAddReviewClicked = new Action() {
+            @Override
+            public void run() throws Exception {
+                if (getLoggedIn())
+                    Log.d("onAddReviewClicked","onAddReviewClicked");
+                else
+                    messageHelper.showLoginRequireDialog("Only logged in user can add review", null);
+            }
+        };
     }
 
     @Override

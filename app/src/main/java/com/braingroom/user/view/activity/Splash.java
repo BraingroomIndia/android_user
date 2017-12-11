@@ -76,7 +76,6 @@ public class Splash extends AppCompatActivity {
         Log.d(TAG, "onCreate: Called  ");
         branch = Branch.getInstance();
         apiService.checkGeoDetail();
-        apiService.registerUserDevice();
         if (getIntent().getExtras() != null)
             bundleReceived = getIntent().getExtras().getBundle(Constants.pushNotification);
         branchData();

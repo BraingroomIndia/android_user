@@ -73,7 +73,7 @@ public class AppModule {
         CustomInterceptor customInterceptor = new CustomInterceptor(gson);
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
             builder = new OkHttpClient.Builder().addInterceptor(loggingInterceptor)
                     .addInterceptor(customInterceptor)
                     .addNetworkInterceptor(new StethoInterceptor())

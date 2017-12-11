@@ -50,7 +50,17 @@ public class LocationSettingViewModel extends CustomDialogViewModel {
         if (pref.getString("connect_city_name", null) != null)
             selectedCity.put(pref.getString("connect_city_name", ""), pref.getInt("connect_city_id", 0));
 */
-        countryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Country", messageHelper, apiService.getCountry().map(new Function<CommonIdResp, ListDialogData1>() {
+        countryConsumer = new Consumer<HashMap<String, Integer>>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
+                if (selectedMap.values().iterator().hasNext()) {
+                    String selectedId = "" + selectedMap.values().iterator().next();
+                    cityVm.reInit(getCityApiObservable(selectedId));
+                }
+            }
+        };
+
+        countryVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Country", messageHelper, apiService.getMajorCountry().map(new Function<CommonIdResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
@@ -61,15 +71,6 @@ public class LocationSettingViewModel extends CustomDialogViewModel {
             }
         }), new HashMap<String, Integer>(), false, countryConsumer, "");
 
-        countryConsumer = new Consumer<HashMap<String, Integer>>() {
-            @Override
-            public void accept(@io.reactivex.annotations.NonNull HashMap<String, Integer> selectedMap) throws Exception {
-                if (selectedMap.values().iterator().hasNext()) {
-                    String selectedId = "" + selectedMap.values().iterator().next();
-                    cityVm.reInit(getCityApiObservable(selectedId));
-                }
-            }
-        };
 
         cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), new HashMap<String, Integer>(), false, null, "select a country first");
 
@@ -102,8 +103,8 @@ public class LocationSettingViewModel extends CustomDialogViewModel {
         });
     }*/
 
-    private Observable<ListDialogData1> getCityApiObservable(String cityId) {
-        return apiService.getCityList(cityId).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, ListDialogData1>() {
+    private Observable<ListDialogData1> getCityApiObservable(String countryId) {
+        return apiService.getMajorCity(countryId).observeOn(AndroidSchedulers.mainThread()).map(new Function<CommonIdResp, ListDialogData1>() {
             @Override
             public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
                 LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
@@ -128,6 +129,7 @@ public class LocationSettingViewModel extends CustomDialogViewModel {
             messageHelper.show("Please select a city");
         } else {
             editor.putInt(Constants.SAVED_CITY, cityVm.selectedItemsMap.values().iterator().next()).apply();
+            Constants.GEO_TAG = "";
             apiService.checkGeoDetail();
             dismissDialog();
         }

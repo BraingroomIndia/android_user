@@ -117,6 +117,9 @@ public interface UserApiService {
     @POST("getCountry")
     Observable<CommonIdResp> getCountry();
 
+    @POST("getCountry")
+    Observable<CommonIdResp> getMajorCountry(@Body CountryReq req);
+
     @POST("getState")
     Observable<CommonIdResp> getState(@Body StateReq req);
 

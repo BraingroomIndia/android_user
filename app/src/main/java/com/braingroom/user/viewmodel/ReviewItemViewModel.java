@@ -12,7 +12,7 @@ public class ReviewItemViewModel extends ViewModel {
     public String text;
     public String timestamp;
 
-    ReviewItemViewModel(int rating, String title, String text, String timestamp) {
+    public ReviewItemViewModel(int rating, String title, String text, String timestamp) {
         this.rating = rating + "";
         this.title = title;
         this.timestamp = CommonUtils.getHumanDate(timestamp);

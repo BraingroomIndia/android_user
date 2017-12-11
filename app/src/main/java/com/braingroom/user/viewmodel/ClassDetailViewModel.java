@@ -318,8 +318,10 @@ public class ClassDetailViewModel extends ViewModel {
                     for (ReviewGetResp.Snippet snippet : reviewGetResp.getData()) {
                         reviewList.add(new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(), snippet.getTimeStamp()));
                     }
-                    reviews.connect();
-                }
+
+                } else
+                    reviewList.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
+                reviews.connect();
             }
         });
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {

@@ -171,7 +171,7 @@ public class HomeViewModel extends ViewModel {
             }
         });
 
-        FieldUtils.toObservable(callAgain).subscribe(new Consumer<Integer>() {
+        FieldUtils.toObservable(callAgain).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Integer>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 apiService.getCompetitionStatus().subscribe(new Consumer<CompetitionStatusResp>() {
@@ -385,7 +385,7 @@ public class HomeViewModel extends ViewModel {
         userEmail.set(pref.getString(Constants.EMAIL, null));
         loggedIn.set(getLoggedIn());
         connectivityViewmodel.onResume();
-        apiService.getCompetitionStatus().subscribe(new Consumer<CompetitionStatusResp>() {
+        apiService.getCompetitionStatus().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<CompetitionStatusResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull CompetitionStatusResp resp) throws Exception {
                 if (resp.getData() == null) {

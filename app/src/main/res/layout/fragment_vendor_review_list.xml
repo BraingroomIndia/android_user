@@ -15,18 +15,47 @@
     </data>
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/reviews"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             bind:divider_decoration='@{"space_divider"}'
             bind:items="@{vm.items}"
             bind:layout_vertical="@{true}"
             bind:space_length="@{@dimen/margin_med}"
-            bind:view_provider="@{@layout/item_vendor_review}" />
+            bind:view_provider="@{@layout/item_rating}"
+            tools:listitem="@layout/item_rating" />
+
+        <!--       <android.support.v7.widget.RecyclerView
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                   bind:divider_decoration='@{"space_divider"}'
+                   bind:items="@{vm.items}"
+                   bind:layout_vertical="@{true}"
+                   bind:space_length="@{@dimen/margin_med}"
+                   bind:view_provider="@{@layout/item_vendor_review}" />-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="70dp"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:onClick="@{vm.onAddReviewClicked}"
+            android:src="@drawable/ic_mode_edit_white_24dp" />
+
 
     </RelativeLayout>
 </layout>
