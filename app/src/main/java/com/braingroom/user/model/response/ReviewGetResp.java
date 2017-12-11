@@ -41,7 +41,7 @@ public class ReviewGetResp {
         @SerializedName("user_type_id")
         private String userTypeId;
 
-        @SerializedName("timestamp")
+        @SerializedName("add_date")
         private String timeStamp;
 
         @SerializedName("review_type")

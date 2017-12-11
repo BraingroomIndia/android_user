@@ -73,6 +73,7 @@ public class Splash extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         UserApplication.getInstance().getMAppComponent().inject(this);
+        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY, -1) == -1;
         Log.d(TAG, "onCreate: Called  ");
         branch = Branch.getInstance();
         apiService.checkGeoDetail();

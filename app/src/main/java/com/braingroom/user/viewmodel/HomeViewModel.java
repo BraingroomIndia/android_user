@@ -7,14 +7,18 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.response.CompetitionStatusResp;
 import com.braingroom.user.model.response.ExploreResp;
 import com.braingroom.user.model.response.NotificationCountResp;
+import com.braingroom.user.model.response.UserGeoLocationResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
+import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.DialogHelper;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
@@ -97,7 +101,7 @@ public class HomeViewModel extends ViewModel {
 */
 
     public HomeViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator,
-                         @NonNull final DialogHelper dialogHelper, @NonNull final HomeActivity.UiHelper uiHelper) {
+                         @NonNull final DialogHelper dialogHelper, @NonNull final HelperFactory helperFactory, @NonNull final HomeActivity.UiHelper uiHelper) {
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
@@ -131,6 +135,24 @@ public class HomeViewModel extends ViewModel {
         onRegister = new ObservableField<>(temp);
 
 
+        if (UserApplication.locationSettingPopup) {
+            apiService.getUserGeoLocation().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<UserGeoLocationResp>() {
+                @Override
+                public void accept(UserGeoLocationResp resp) throws Exception {
+                    if (resp.getResCode()) {
+                        UserApplication.locationSettingPopup = false;
+                        messageHelper.showAcceptableInfo(resp.getData().getTitle(), resp.getData().getMessage(), new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialogHelper.showCustomView(R.layout.dialog_location_setting, new LocationSettingViewModel(messageHelper, navigator, helperFactory), false);
+                            }
+                        });
+                    }
+
+                }
+            });
+        }
+
         observable = Observable.interval(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread());
 
         pinColorMap.put("#026510", R.drawable.pin_new_1);
@@ -159,7 +181,7 @@ public class HomeViewModel extends ViewModel {
                     (@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return apiService.getUnreadMessageCount();
             }
-        }).subscribe(new Consumer<NotificationCountResp>() {
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<NotificationCountResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws
                     Exception {

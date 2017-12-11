@@ -15,7 +15,7 @@ public class ReviewItemViewModel extends ViewModel {
     public ReviewItemViewModel(int rating, String title, String text, String timestamp) {
         this.rating = rating + "";
         this.title = title;
-        this.timestamp = CommonUtils.getHumanDate(timestamp);
+        this.timestamp = timestamp;
         this.text = text;
     }
 }

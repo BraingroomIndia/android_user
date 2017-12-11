@@ -344,5 +344,8 @@ public interface UserApiService {
     @POST("getCODOfferDetail")
     Observable<CODOfferDetailResp> getCODOfferDetail(@Body PromoCodeReq req);
 
+    @POST("getUserGeoLocation")
+    Observable<UserGeoLocationResp> getUserGeoLocation(@Body UserGeoLocationReq req);
+
 
 }

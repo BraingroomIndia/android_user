@@ -693,6 +693,7 @@ public class DataflowService {
         return api.getCountry().subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation());
     }
+
     public Observable<CommonIdResp> getMajorCountry() {
 
         return api.getMajorCountry(new CountryReq()).subscribeOn(Schedulers.io())
@@ -1441,4 +1442,10 @@ public class DataflowService {
     public Observable<CODOfferDetailResp> getCODOfferDetail(PromoCodeReq.Snippet snippet) {
         return api.getCODOfferDetail(new PromoCodeReq(snippet)).onErrorReturnItem(new CODOfferDetailResp()).subscribeOn(Schedulers.io());
     }
+
+    public Observable<UserGeoLocationResp> getUserGeoLocation() {
+        return api.getUserGeoLocation(new UserGeoLocationReq()).onErrorReturnItem(new UserGeoLocationResp()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    ;
 }

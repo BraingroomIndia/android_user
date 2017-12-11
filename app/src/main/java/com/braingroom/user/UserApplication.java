@@ -62,6 +62,7 @@ public class UserApplication extends BranchApp {
     public static int versionCode = 10;
 //
 
+    public static boolean locationSettingPopup;
     @Getter
     private AppComponent mAppComponent;
     private Map<String, Typeface> fontCache = new HashMap<>();
