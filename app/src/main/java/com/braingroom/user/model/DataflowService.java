@@ -758,8 +758,8 @@ public class DataflowService {
                 .observeOn(Schedulers.computation()).onErrorReturnItem(new ReviewAddResp());
     }
 
-    public Observable<ReviewGetResp> getReview(int reviewType, String id) {
-        return api.reviewGet(new ReviewGetReq(new ReviewGetReq.Snippet(pref.getString(Constants.BG_ID, ""), reviewType, id))).subscribeOn(Schedulers.io())
+    public Observable<ReviewGetResp> getReview(int reviewType, String id, int pageNumber) {
+        return api.reviewGet((pageNumber > 1 ? pageNumber : "") + "", new ReviewGetReq(new ReviewGetReq.Snippet(pref.getString(Constants.BG_ID, ""), reviewType, id))).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation()).onErrorReturnItem(new ReviewGetResp());
 
     }
@@ -1422,7 +1422,7 @@ public class DataflowService {
 
     public void checkGeoDetail() {
         if (TextUtils.isEmpty(Constants.GEO_TAG))
-            getGeoDetail(pref.getInt(Constants.SAVED_CITY, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+            getGeoDetail(pref.getInt(Constants.SAVED_CITY_ID, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
                 @Override
                 public void accept(@NonNull String s) throws Exception {
                     Constants.GEO_TAG = s;

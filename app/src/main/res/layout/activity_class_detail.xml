@@ -419,7 +419,9 @@
                                 android:nestedScrollingEnabled="false"
                                 bind:items="@{vm.reviews}"
                                 bind:layout_vertical="@{true}"
-                                bind:view_provider="@{@layout/item_rating}"
+                                bind:paginate="@{true}"
+                                bind:viewmodel="@{vm}"
+                                bind:view_provider="@{vm.viewProvider}"
                                 tools:listitem="@layout/item_rating" />
 
 

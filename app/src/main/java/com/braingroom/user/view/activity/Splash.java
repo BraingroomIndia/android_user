@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.braingroom.user.UserApplication;
@@ -18,15 +17,12 @@ import com.braingroom.user.model.QRCode.PostDetail;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
-import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.utils.Constants;
-import com.braingroom.user.viewmodel.ClassDetailViewModel;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.FilterViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -36,7 +32,6 @@ import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -44,7 +39,6 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
-import static com.braingroom.user.FCMInstanceIdService.TAG;
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
 /*
@@ -73,7 +67,7 @@ public class Splash extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         UserApplication.getInstance().getMAppComponent().inject(this);
-        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY, -1) == -1;
+        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -1) == -1;
         Log.d(TAG, "onCreate: Called  ");
         branch = Branch.getInstance();
         apiService.checkGeoDetail();

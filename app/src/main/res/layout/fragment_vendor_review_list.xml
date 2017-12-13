@@ -28,8 +28,10 @@
             bind:divider_decoration='@{"space_divider"}'
             bind:items="@{vm.items}"
             bind:layout_vertical="@{true}"
+            bind:paginate="@{true}"
             bind:space_length="@{@dimen/margin_med}"
             bind:view_provider="@{@layout/item_rating}"
+            bind:viewmodel="@{vm}"
             tools:listitem="@layout/item_rating" />
 
         <!--       <android.support.v7.widget.RecyclerView
@@ -55,6 +57,11 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:onClick="@{vm.onAddReviewClicked}"
             android:src="@drawable/ic_mode_edit_white_24dp" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
     </RelativeLayout>

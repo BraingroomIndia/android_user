@@ -38,6 +38,8 @@ import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ConnectHomeActivity;
 import com.braingroom.user.view.activity.VendorProfileActivity;
+
+import com.braingroom.user.view.adapters.ViewProvider;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -50,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -92,7 +95,7 @@ public class ClassDetailViewModel extends ViewModel {
     private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
-    public final ConnectableObservable<List<ViewModel>> reviews;
+    public Observable<List<ViewModel>> reviews;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
@@ -128,6 +131,17 @@ public class ClassDetailViewModel extends ViewModel {
     public ConnectFilterData connectFilterData = new ConnectFilterData();
     public final ImageUploadViewModel imageUploadViewModel;
 
+    public final ViewProvider viewProvider = new ViewProvider() {
+        @Override
+        public int getView(ViewModel vm) {
+            if (vm instanceof IconTextItemViewModel)
+                return R.layout.item_show_more;
+            else
+                return R.layout.item_rating;
+
+        }
+    };
+    private int pageNumber = 1;
 
     public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onPayTutorClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
@@ -311,17 +325,39 @@ public class ClassDetailViewModel extends ViewModel {
         };
         phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer, "");
         phoneNumber.setPositiveText("Call");
-        apiService.getReview(Constants.classReview, classId).subscribe(new Consumer<ReviewGetResp>() {
+        FieldUtils.toObservable(callAgain).subscribe(new Consumer<Integer>() {
             @Override
-            public void accept(ReviewGetResp reviewGetResp) throws Exception {
-                if (reviewGetResp.getResCode()) {
-                    for (ReviewGetResp.Snippet snippet : reviewGetResp.getData()) {
-                        reviewList.add(new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(), snippet.getTimeStamp()));
-                    }
+            public void accept(Integer integer) throws Exception {
+                reviews = apiService.getReview(Constants.classReview, classId, pageNumber).map(new Function<ReviewGetResp, List<ViewModel>>() {
+                    @Override
+                    public List<ViewModel> apply(ReviewGetResp reviewGetResp) throws Exception {
+                        ListIterator listIterator = reviewList.listIterator(reviewList.size());
+                        if (listIterator.hasPrevious() && listIterator.previous() instanceof IconTextItemViewModel)
+                            listIterator.remove();
 
-                } else
-                    reviewList.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
-                reviews.connect();
+                        if (reviewGetResp.getResCode()) {
+                            for (ReviewGetResp.Snippet snippet : reviewGetResp.getData()) {
+                                reviewList.add(new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(), snippet.getTimeStamp()));
+                            }
+                            reviewList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
+                                @Override
+                                public void accept(IconTextItemViewModel var1) {
+                                    if (pageNumber > -1) {
+                                        pageNumber++;
+                                        callAgain.set(callAgain.get() + 1);
+                                    }
+
+                                }
+                            }));
+
+                        } else if (reviewList.isEmpty()) {
+                            pageNumber = -1;
+                            reviewList.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
+                        } else pageNumber = -1;
+                        return reviewList;
+                    }
+                });
+                reviews.subscribe();
             }
         });
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
@@ -551,15 +587,22 @@ public class ClassDetailViewModel extends ViewModel {
                         helperFactory.createDialogHelper().showCustomView(R.layout.content_contact_admin_dailog, new ContactAdminDialogViewModel(messageHelper, navigator, classId), false);
 
                     }
-                };
+                }
 
-        onQueryDismiss = new Action() {
-            @Override
-            public void run() throws Exception {
-                uiHelper.next();
-            }
-        };
+        ;
+
+        onQueryDismiss = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        uiHelper.next();
+                    }
+                }
+
+        ;
         getQuoteClicked = new
+
                 Action() {
                     @Override
                     public void run() throws Exception {
@@ -575,17 +618,23 @@ public class ClassDetailViewModel extends ViewModel {
                         }
 
                     }
-                };
+                }
 
-        playAction = new Action() {
-            @Override
-            public void run() throws Exception {
-                if (videoId.get() != null && isYouTube.get()) {
-                    navigator.openStandaloneYoutube(videoId.get());
-                } else if (videoId.get() != null)
-                    navigator.openStandaloneVideo(videoId.get());
-            }
-        };
+        ;
+
+        playAction = new
+
+                Action() {
+                    @Override
+                    public void run() throws Exception {
+                        if (videoId.get() != null && isYouTube.get()) {
+                            navigator.openStandaloneYoutube(videoId.get());
+                        } else if (videoId.get() != null)
+                            navigator.openStandaloneVideo(videoId.get());
+                    }
+                }
+
+        ;
         //Edited By Vikas Godara
 
     }
@@ -672,5 +721,11 @@ public class ClassDetailViewModel extends ViewModel {
     public void onPause() {
         super.onPause();
         connectivityViewmodel.onPause();
+    }
+
+    @Override
+    public void paginate() {
+        super.paginate();
+        callAgain.set(callAgain.get() + 1);
     }
 }

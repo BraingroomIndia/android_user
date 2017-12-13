@@ -480,6 +480,7 @@ public abstract class BaseActivity extends MvvmActivity {
         if (count > 0) {
             getSupportFragmentManager().popBackStack();
         }
+
     }
 
     public void popBackstack(String title) {

@@ -17,28 +17,24 @@ import io.reactivex.functions.Action;
  */
 
 public class ReviewFragment extends BaseFragment {
-    public static ReviewFragment newInstance(int reviewType, String id) {
+    public static ReviewFragment newInstance(int reviewType, String id, final ReviewAddViewModel.ReviewAddHelper reviewAddHelper) {
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         bundle.putInt("reviewType", reviewType);
         ReviewFragment fragment = new ReviewFragment();
         fragment.setArguments(bundle);
+        fragment.reviewAddHelper = reviewAddHelper;
         return fragment;
     }
 
+    public ReviewAddViewModel.ReviewAddHelper reviewAddHelper;
 
     @Nullable
     @Override
     protected ViewModel createViewModel() {
         int reviewType = getArguments().getInt("reviewType");
         String id = getStringArguments("id");
-        ReviewAddViewModel.ReviewAddHelper reviewAddHelper = new ReviewAddViewModel.ReviewAddHelper() {
-            @Override
-            public void run() {
-                activity.popBackstack();
-            }
-        };
-        return new ReviewAddViewModel(id, reviewType, reviewAddHelper);
+        return new ReviewAddViewModel(activity.getMessageHelper(), id, reviewType, reviewAddHelper);
     }
 
     @Override

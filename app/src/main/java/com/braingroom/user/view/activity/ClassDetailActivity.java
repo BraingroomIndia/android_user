@@ -254,7 +254,12 @@ public class ClassDetailActivity extends BaseActivity {
             public void addReview() {
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, classId)).addToBackStack(null).commit();
+                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, classId, new ReviewAddViewModel.ReviewAddHelper() {
+                    @Override
+                    public void run() {
+                        popBackstack();
+                    }
+                })).addToBackStack(null).commit();
             }
 
             @Override

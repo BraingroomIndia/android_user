@@ -106,6 +106,7 @@ public class ListDialogViewModel1 extends ViewModel {
     public void show() {
         if (source == null) {
             messageHelper.show(dependencyMessage);
+            return;
         }
         messageHelper.showProgressDialog(null, "Loading...");
         disposable = source.subscribe();
