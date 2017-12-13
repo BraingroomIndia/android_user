@@ -328,6 +328,7 @@ public class ClassDetailViewModel extends ViewModel {
         FieldUtils.toObservable(callAgain).subscribe(new Consumer<Integer>() {
             @Override
             public void accept(Integer integer) throws Exception {
+                messageHelper.showProgressDialog("", "Loading");
                 reviews = apiService.getReview(Constants.classReview, classId, pageNumber).map(new Function<ReviewGetResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(ReviewGetResp reviewGetResp) throws Exception {
@@ -357,7 +358,14 @@ public class ClassDetailViewModel extends ViewModel {
                         return reviewList;
                     }
                 });
-                reviews.subscribe();
+
+                reviews.observeOn(AndroidSchedulers.mainThread()).doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        messageHelper.dismissActiveProgress();
+                    }
+                }).subscribe();
+
             }
         });
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {

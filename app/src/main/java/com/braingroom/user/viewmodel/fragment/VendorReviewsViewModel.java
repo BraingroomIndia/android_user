@@ -46,6 +46,7 @@ public class VendorReviewsViewModel extends ViewModel {
         items = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                messageHelper.showProgressDialog("", "Loading");
                 return apiService.getReview(Constants.vendorReview, vendorId, pageNumber).map(new Function<ReviewGetResp, List<ViewModel>>() {
                     @Override
                     public List<ViewModel> apply(ReviewGetResp resp) throws Exception {
@@ -56,6 +57,7 @@ public class VendorReviewsViewModel extends ViewModel {
                             results.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
                             pageNumber = -1;
                         }
+                        messageHelper.dismissActiveProgress();
                         return results;
                     }
                 });
