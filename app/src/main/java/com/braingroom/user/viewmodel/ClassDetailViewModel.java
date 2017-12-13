@@ -136,6 +136,8 @@ public class ClassDetailViewModel extends ViewModel {
         public int getView(ViewModel vm) {
             if (vm instanceof IconTextItemViewModel)
                 return R.layout.item_show_more;
+            else if (vm instanceof EmptyItemViewModel)
+                return R.layout.item_empty_data;
             else
                 return R.layout.item_rating;
 

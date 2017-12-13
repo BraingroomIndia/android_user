@@ -26,7 +26,7 @@ public class VendorReviewFragment extends BaseFragment {
             @Override
             public void addReviewFragment() {
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, activity.getIntentString("id"), new ReviewAddViewModel.ReviewAddHelper() {
+                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.vendorReview, activity.getIntentString("id"), new ReviewAddViewModel.ReviewAddHelper() {
                     @Override
                     public void run() {
                         getChildFragmentManager().popBackStack();
