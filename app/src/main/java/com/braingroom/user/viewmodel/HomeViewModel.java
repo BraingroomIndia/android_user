@@ -225,7 +225,7 @@ public class HomeViewModel extends ViewModel {
                     (@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 return apiService.getUnreadNotificationCount();
             }
-        }).subscribe(new Consumer<NotificationCountResp>() {
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<NotificationCountResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull NotificationCountResp resp) throws
                     Exception {
