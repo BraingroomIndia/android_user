@@ -111,7 +111,7 @@ public class LoginViewmodel extends ViewModel {
             public void accept(Disposable disposable) throws Exception {
                 messageHelper.showProgressDialog("Logging in", "Sit back while we connect you...");
             }
-        }).subscribe(new Consumer<LoginResp>() {
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<LoginResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull LoginResp loginResp) throws Exception {
                 messageHelper.dismissActiveProgress();

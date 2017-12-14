@@ -327,19 +327,19 @@ public class ClassDetailViewModel extends ViewModel {
         };
         phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer, "");
         phoneNumber.setPositiveText("Call");
-        FieldUtils.toObservable(callAgain).subscribe(new Consumer<Integer>() {
+        reviews = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
-            public void accept(Integer integer) throws Exception {
-                messageHelper.showProgressDialog("", "Loading");
-                reviews = apiService.getReview(Constants.classReview, classId, pageNumber).map(new Function<ReviewGetResp, List<ViewModel>>() {
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                /*//  messageHelper.showProgressDialog("", "Loading");*/
+                return apiService.getReview(Constants.classReview, classId, pageNumber).map(new Function<ReviewGetResp, List<ViewModel>>() {
                     @Override
-                    public List<ViewModel> apply(ReviewGetResp reviewGetResp) throws Exception {
+                    public List<ViewModel> apply(ReviewGetResp resp) throws Exception {
                         ListIterator listIterator = reviewList.listIterator(reviewList.size());
                         if (listIterator.hasPrevious() && listIterator.previous() instanceof IconTextItemViewModel)
                             listIterator.remove();
 
-                        if (reviewGetResp.getResCode()) {
-                            for (ReviewGetResp.Snippet snippet : reviewGetResp.getData()) {
+                        if (resp.getResCode()) {
+                            for (ReviewGetResp.Snippet snippet : resp.getData()) {
                                 reviewList.add(new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(), snippet.getTimeStamp()));
                             }
                             reviewList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
@@ -360,13 +360,6 @@ public class ClassDetailViewModel extends ViewModel {
                         return reviewList;
                     }
                 });
-
-                reviews.observeOn(AndroidSchedulers.mainThread()).doOnComplete(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        messageHelper.dismissActiveProgress();
-                    }
-                }).subscribe();
 
             }
         });
@@ -697,7 +690,7 @@ public class ClassDetailViewModel extends ViewModel {
     }
 
     public void addToWishlist() {
-        apiService.addToWishlist(mClassData.getId()).subscribe(new Consumer<WishlistResp>() {
+        apiService.addToWishlist(mClassData.getId()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<WishlistResp>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull WishlistResp wishlistResp) throws Exception {
                 isInWishlist = !isInWishlist;

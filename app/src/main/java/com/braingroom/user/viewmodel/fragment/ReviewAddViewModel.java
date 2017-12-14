@@ -29,10 +29,6 @@ public class ReviewAddViewModel extends ViewModel {
     public Action onClick = new Action() {
         @Override
         public void run() throws Exception {
-            if (isEmpty(text.get())) {
-                messageHelper.show("Can't post empty review");
-                return;
-            }
             if (rating.get() == 0) {
                 messageHelper.show("Please rate the class between 1-5");
                 return;
@@ -40,7 +36,7 @@ public class ReviewAddViewModel extends ViewModel {
             apiService.addReview(reviewType, id, text.get(), rating.get() + "").observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ReviewAddResp>() {
                 @Override
                 public void accept(final ReviewAddResp reviewAddResp) throws Exception {
-                    messageHelper.showAcceptableInfo("Submited", reviewAddResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
+                    messageHelper.showAcceptableInfo("Submitted", reviewAddResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             reviewAddHelper.run();
