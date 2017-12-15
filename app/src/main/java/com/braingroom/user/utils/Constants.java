@@ -15,10 +15,10 @@ public class Constants {
     public static final String BG_ID = "BG_ID";
     public static final String FCM_TOKEN = "FCM_TOKEN";
     public static final String NEW_FCM = "new_FCM";
-    public static final String SAVED_CITY_NAME="savedCityName";
-    public static final String SAVED_CITY_ID ="savedCityId";
-    public static final String SAVED_COUNTRY_NAME="savedCountryName";
-    public static final String SAVED_COUNTRY_ID ="savedCountryId";
+    public static final String SAVED_CITY_NAME = "savedCityName";
+    public static final String SAVED_CITY_ID = "savedCityId";
+    public static final String SAVED_COUNTRY_NAME = "savedCountryName";
+    public static final String SAVED_COUNTRY_ID = "savedCountryId";
     public static final String LOCALITY_ID = "localityId";
     public static final String LOCALITY_NAME = "locality_name";
 
@@ -30,7 +30,6 @@ public class Constants {
     public static final int catalogBooking = 4;
     public static final int paymentOnline = 1;
     public static final int paymentOffline = 2;
-
 
 
     //Bundle keys
@@ -54,7 +53,7 @@ public class Constants {
     public static final String discountFactor = "discountFactor";
     public static final String paymentMode = "paymentMode";
     public static final String competitionStatus = "CompetitionStatus";
-    public static final String isIncentive="isIncentive";
+    public static final String isIncentive = "isIncentive";
 
 
     public static final String quoteId = "quoteId";
@@ -63,15 +62,15 @@ public class Constants {
     public static final String BGTransactionId = "BGtransactionId";
     public static final String className = "class_name";
     public static final String amount = "amount";
-    public static final int vendorReview=2;
-    public static final int classReview=3;
+    public static final int vendorReview = 2;
+    public static final int classReview = 3;
 
-    public static final String home ="Home";
-    public static final String classListing ="classListing";
-    public static final String connectListing ="connectListing";
-    public static final String postDetail ="postDetails";
-    public static final String classDetail="classDetails";
-    public static final String communityListing="communityListing";
+    public static final String home = "Home";
+    public static final String classListing = "class_listing";
+    public static final String connectListing = "connect_listing";
+    public static final String postDetail = "post_detail";
+    public static final String classDetail = "class_detail";
+    public static final String communityListing = "community_listing";
 
 
     public static final String FONT_REGULAR = "Roboto-Regular.ttf";

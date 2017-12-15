@@ -74,8 +74,17 @@ public class Splash extends AppCompatActivity {
         if (getIntent().getExtras() != null)
             bundleReceived = getIntent().getExtras().getBundle(Constants.pushNotification);
         branchData();
+        onNewIntent(getIntent());
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        String action = intent.getAction();
+        String data = intent.getDataString();
+        if (Intent.ACTION_VIEW.equals(action) && data != null) {
+        }
+    }
 
     public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
         try {
