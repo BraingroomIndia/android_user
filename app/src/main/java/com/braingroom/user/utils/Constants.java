@@ -66,6 +66,13 @@ public class Constants {
     public static final int vendorReview=2;
     public static final int classReview=3;
 
+    public static final String home ="Home";
+    public static final String classListing ="classListing";
+    public static final String connectListing ="connectListing";
+    public static final String postDetail ="postDetails";
+    public static final String classDetail="classDetails";
+    public static final String communityListing="communityListing";
+
 
     public static final String FONT_REGULAR = "Roboto-Regular.ttf";
     public static final String FONT_BOLD = "Roboto-Bold.ttf";
