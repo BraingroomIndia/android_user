@@ -2,18 +2,15 @@ package com.braingroom.user.viewmodel.fragment;
 
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.response.ReviewGetResp;
-import com.braingroom.user.model.response.VendorReviewResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.viewmodel.EmptyItemViewModel;
 import com.braingroom.user.viewmodel.ReviewItemViewModel;
 import com.braingroom.user.viewmodel.RowShimmerItemViewModel;
-import com.braingroom.user.viewmodel.VendorReviewItemViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 
 import java.util.ArrayList;
@@ -21,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
@@ -32,7 +28,7 @@ public class VendorReviewsViewModel extends ViewModel {
 
     public final UiHelper uiHelper;
 
-    private int pageNumber = 0;
+    private int pageNumber = 1;
 
     public interface UiHelper {
         void addReviewFragment();
@@ -51,7 +47,7 @@ public class VendorReviewsViewModel extends ViewModel {
                     @Override
                     public List<ViewModel> apply(ReviewGetResp resp) throws Exception {
                         for (final ReviewGetResp.Snippet snippet : resp.getData()) {
-                            results.add((new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(), snippet.getTimeStamp())));
+                            results.add((new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getClassTopic(), snippet.getReviewMessage(), snippet.getTimeStamp())));
                         }
                         if (results.isEmpty()) {
                             results.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
@@ -99,7 +95,6 @@ public class VendorReviewsViewModel extends ViewModel {
             return;
         else
             pageNumber++;
-        super.paginate();
         callAgain.set(callAgain.get() + 1);
     }
 

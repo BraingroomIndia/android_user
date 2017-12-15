@@ -80,7 +80,7 @@ public class DataflowService {
 
     public void registerUserDevice() {
 
-        api.registerUserDevice(new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""))))
+        api.registerUserDevice(new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""), pref.getString(Constants.BG_ID, null))))
                 .onErrorReturn(new Function<Throwable, BaseResp>() {
                     @Override
                     public BaseResp apply(@NonNull Throwable throwable) throws Exception {

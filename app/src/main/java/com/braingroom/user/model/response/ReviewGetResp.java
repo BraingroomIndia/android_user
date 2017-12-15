@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -55,6 +53,13 @@ public class ReviewGetResp {
 
         @SerializedName("class_id")
         private String classId;
+
+        @SerializedName("class_topic")
+        private String classTopic;
+
+        public String getClassTopic() {
+            return this.classTopic == null ? "Vendor Review" : (this.classTopic.trim().isEmpty() ? "Vendor Review" : this.classTopic);
+        }
     }
 
     public ReviewGetResp() {

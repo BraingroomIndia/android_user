@@ -327,7 +327,12 @@ public class ClassDetailViewModel extends ViewModel {
         };
         phoneNumber = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Phone Number", messageHelper, Observable.just((new ListDialogData1(PhoneListApiData))), new HashMap<String, Integer>(), false, callConsumer, "");
         phoneNumber.setPositiveText("Call");
-        reviews = FieldUtils.toObservable(callAgain).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+        reviews = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(Integer integer) throws Exception {
+                return pageNumber != -1;
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 /*//  messageHelper.showProgressDialog("", "Loading");*/
@@ -342,21 +347,23 @@ public class ClassDetailViewModel extends ViewModel {
                             for (ReviewGetResp.Snippet snippet : resp.getData()) {
                                 reviewList.add(new ReviewItemViewModel(snippet.getRating(), snippet.getFirstName(), snippet.getReviewMessage(), snippet.getTimeStamp()));
                             }
-                            reviewList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
-                                @Override
-                                public void accept(IconTextItemViewModel var1) {
-                                    if (pageNumber > -1) {
-                                        pageNumber++;
-                                        callAgain.set(callAgain.get() + 1);
-                                    }
+                            if (resp.getData().size() == 10)
+                                reviewList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
+                                    @Override
+                                    public void accept(IconTextItemViewModel var1) {
+                                        if (pageNumber > -1) {
+                                            pageNumber++;
+                                            callAgain.set(callAgain.get() + 1);
+                                        }
 
-                                }
-                            }));
+                                    }
+                                }));
 
                         } else if (reviewList.isEmpty()) {
                             pageNumber = -1;
                             reviewList.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
-                        } else pageNumber = -1;
+                        } else if (reviewList.size() < 10) pageNumber = -1;
+                        else pageNumber = -1;
                         return reviewList;
                     }
                 });

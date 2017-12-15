@@ -63,7 +63,7 @@ public class LocationSettingViewModel extends CustomDialogViewModel {
         }), selectedCountries, false, countryConsumer, "");
 
 
-        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable("-1"), selectedCity, false, null, "select a country first");
+        cityVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "City", messageHelper, getCityApiObservable((selectedCountries.values().iterator().hasNext() ? selectedCountries.values().iterator().next() + "" : "-1")), selectedCity, false, null, "select a country first");
 
 
         onResetClicked = new Action() {

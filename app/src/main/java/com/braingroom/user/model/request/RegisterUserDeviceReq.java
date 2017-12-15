@@ -17,5 +17,8 @@ public class RegisterUserDeviceReq {
     public static class Snippet {
         @SerializedName("device_id")
         String deviceId;
+
+        @SerializedName("user_id")
+        String userId;
     }
 }

@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.ReviewItemViewModel" />
@@ -74,6 +76,20 @@
                 tools:text="Title" />
         </LinearLayout>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:fontFamily="@string/robotoRegular"
+            android:paddingLeft="@dimen/margin_med"
+            android:paddingRight="@dimen/margin_med"
+            android:text="@{vm.className}"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/text_size_medium"
+            android:visibility="@{vm.className==null? View.GONE:View.VISIBLE}"
+            tools:text="Class Name" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,9 +98,10 @@
             android:paddingLeft="@dimen/margin_med"
             android:paddingRight="@dimen/margin_med"
             android:text="@{vm.text}"
-            app:font="@string/robotoRegular"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/text_size_medium"
+            android:visibility="@{vm.text.trim().empty?View.GONE:View.VISIBLE}"
+            app:font="@string/robotoRegular"
             tools:text="Review" />
 
         <TextView
