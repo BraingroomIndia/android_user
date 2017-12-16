@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by godara on 15/12/17.
  */
 
-public class DeepLinkingResp {
+public class DeepLinkDataResp {
 
     @SerializedName("type")
     public String type;

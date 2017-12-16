@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -1447,5 +1448,7 @@ public class DataflowService {
         return api.getUserGeoLocation(new UserGeoLocationReq()).onErrorReturnItem(new UserGeoLocationResp()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    ;
+    public Observable<DeepLinkDataResp> getDeepLinkData(String url) {
+        return api.getDeepLinkData(new DeepLinkDataReq(url)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation());
+    }
 }

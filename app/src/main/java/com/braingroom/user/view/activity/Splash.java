@@ -17,6 +17,7 @@ import com.braingroom.user.model.QRCode.PostDetail;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
+import com.braingroom.user.model.response.DeepLinkDataResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.FilterViewModel;
@@ -73,7 +74,6 @@ public class Splash extends AppCompatActivity {
         apiService.checkGeoDetail();
         if (getIntent().getExtras() != null)
             bundleReceived = getIntent().getExtras().getBundle(Constants.pushNotification);
-        branchData();
         onNewIntent(getIntent());
     }
 
@@ -83,6 +83,14 @@ public class Splash extends AppCompatActivity {
         String action = intent.getAction();
         String data = intent.getDataString();
         if (Intent.ACTION_VIEW.equals(action) && data != null) {
+            apiService.getDeepLinkData(data).subscribe(new Consumer<DeepLinkDataResp>() {
+                @Override
+                public void accept(DeepLinkDataResp resp) throws Exception {
+                    qrCodeData(gson.toJson(resp));
+                }
+            });
+        } else {
+            branchData();
         }
     }
 
