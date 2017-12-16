@@ -72,14 +72,15 @@ public class Splash extends AppCompatActivity {
         Log.d(TAG, "onCreate: Called  ");
         branch = Branch.getInstance();
         apiService.checkGeoDetail();
-        if (getIntent().getExtras() != null)
-            bundleReceived = getIntent().getExtras().getBundle(Constants.pushNotification);
+
         onNewIntent(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (getIntent().getExtras() != null)
+            bundleReceived = getIntent().getExtras().getBundle(Constants.pushNotification);
         String action = intent.getAction();
         String data = intent.getDataString();
         if (Intent.ACTION_VIEW.equals(action) && data != null) {
@@ -103,7 +104,6 @@ public class Splash extends AppCompatActivity {
         Intent intent = new Intent(Splash.this, destination);
         intent.putExtra("classData", bundle);
         startActivity(intent);
-        finish();
     }
 
     private void pushNotification() {
@@ -164,12 +164,19 @@ public class Splash extends AppCompatActivity {
     private void qrCodeData(final String json) {
 
         final Bundle bundle = new Bundle();
-        if (json == null) {
+        if (json == null || json.isEmpty() || json.trim().isEmpty()) {
+            navigateToIndex();
             return;
         }
-        if (json.contains("class_listing")) {
+        if (json.contains(Constants.classListing)) {
             final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
-            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
+            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    navigateToIndex();
+                    throwable.printStackTrace();
+                }
+            }).subscribe(new Consumer<FilterData>() {
                 @Override
                 public void accept(FilterData filterData) throws Exception {
                     bundle.putSerializable(Constants.classFilterData, filterData);
@@ -181,12 +188,11 @@ public class Splash extends AppCompatActivity {
             }, new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
-                    navigateToIndex();
                     throwable.printStackTrace();
                 }
             });
 
-        } else if (json.contains("connect_listing")) {
+        } else if (json.contains(Constants.connectListing)) {
             try {
                 ConnectListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ConnectListing.class);
                 ConnectFilterData connectFilterData = gson.fromJson(gson.toJson(data.reqData), ConnectFilterData.class);
@@ -197,7 +203,7 @@ public class Splash extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        } else if (json.contains("class_detail")) {
+        } else if (json.contains(Constants.classDetail)) {
 
             try {
                 ClassDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassDetail.class);
@@ -209,7 +215,7 @@ public class Splash extends AppCompatActivity {
                 e.printStackTrace();
                 navigateToIndex();
             }
-        } else if (json.contains("post_detail")) {
+        } else if (json.contains(Constants.postDetail)) {
 
             try {
                 PostDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), PostDetail.class);
@@ -221,10 +227,10 @@ public class Splash extends AppCompatActivity {
             }
         } else if (json.contains("class_booking")) {
             final ClassBooking data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassBooking.class);
-            apiService.getClassDetail(data.reqData.id, 0).onErrorReturn(new Function<Throwable, ClassData>() {
+            apiService.getClassDetail(data.reqData.id, 0).doOnError(new Consumer<Throwable>() {
                 @Override
-                public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    return new ClassData();
+                public void accept(Throwable throwable) throws Exception {
+                    navigateToIndex();
                 }
             }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<ClassData>() {
                 @Override
@@ -240,10 +246,13 @@ public class Splash extends AppCompatActivity {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
                     throwable.printStackTrace();
-                    navigateToIndex();
                 }
             });
-        } else navigateToIndex();
+        } else if (json.contains(Constants.home)) {
+            navigateActivity(HomeActivity.class, null);
+        } else if (json.contains(Constants.communityListing))
+            navigateActivity(CommunityListActivity.class, null);
+        else navigateToIndex();
 
     }
 
