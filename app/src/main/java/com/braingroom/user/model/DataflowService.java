@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -758,6 +759,13 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread()).onErrorReturnItem(new ReviewAddResp());
     }
 
+    public Observable<ReviewAddResp> addReview(int reviewType, String vendorIdorClassId, String review, String rating, String userId) {
+        if (!isEmpty(userId))
+            return api.reviewAdd(new ReviewAddReq(new ReviewAddReq.Snippet(userId, reviewType, vendorIdorClassId, review, rating))).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread()).onErrorReturnItem(new ReviewAddResp());
+        else return addReview(reviewType, vendorIdorClassId, review, rating);
+    }
+
     public Observable<ReviewGetResp> getReview(int reviewType, String id, int pageNumber) {
         return api.reviewGet((pageNumber > 1 ? pageNumber : "") + "", new ReviewGetReq(new ReviewGetReq.Snippet(pref.getString(Constants.BG_ID, ""), reviewType, id))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).onErrorReturnItem(new ReviewGetResp());
@@ -1447,5 +1455,7 @@ public class DataflowService {
         return api.getUserGeoLocation(new UserGeoLocationReq()).onErrorReturnItem(new UserGeoLocationResp()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    ;
+    public Observable<DeepLinkDataResp> getDeepLinkData(String url) {
+        return api.getDeepLinkData(new DeepLinkDataReq(url)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation());
+    }
 }

@@ -156,10 +156,14 @@ public class ClassDetailViewModel extends ViewModel {
     public static final String BNS = "Buy & Sell";
     public static final String AP = "Activity partner";
 
+    public final String userId;
+
     public final MyConsumerString expandAction, collapseAction;
 
     public ClassDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo, final String isIncentive) {
+                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo, final String isIncentive, final String userId) {
+
+        this.userId = userId;
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
@@ -304,10 +308,18 @@ public class ClassDetailViewModel extends ViewModel {
             public void run() throws Exception {
                 if (getLoggedIn())
                     uiHelper.addReview();
+                else if (!isEmpty(userId)) uiHelper.addReview(userId);
                 else
                     messageHelper.showLoginRequireDialog("Only logged in user can add review", null);
             }
         };
+        if (!isEmpty(userId)) {
+            try {
+                onAddReviewClicked.run();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         callConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
