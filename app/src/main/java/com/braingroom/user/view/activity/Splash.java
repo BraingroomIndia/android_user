@@ -122,7 +122,7 @@ public class Splash extends AppCompatActivity {
             classId = data.get("class_id");
             messageSenderId = data.get("sender_id");
             messageSenderName = data.get("sender_name");
-            nonfictionPurpose = data.get("notification_purpose");
+            nonfictionPurpose = data.get("notification_type");
             userId = data.get("user_id");
             // if onMessageReceived not called
         } else if (getIntent().getExtras() != null) {
@@ -130,7 +130,7 @@ public class Splash extends AppCompatActivity {
             classId = getIntent().getExtras().getString("class_id");
             messageSenderId = getIntent().getExtras().getString("sender_id");
             messageSenderName = getIntent().getExtras().getString("sender_name");
-            nonfictionPurpose = getIntent().getExtras().getString("notification_purpose");
+            nonfictionPurpose = getIntent().getExtras().getString("notification_type");
             userId = getIntent().getExtras().getString("user_id");
 
         } else {
@@ -141,7 +141,7 @@ public class Splash extends AppCompatActivity {
             bundle.putString("postId", postId);
             navigateActivity(PostDetailActivity.class, bundle);
         } else if (classId != null) {
-            if ("review".equals(nonfictionPurpose))
+            if ("class_review".equals(nonfictionPurpose))
                 bundle.putString(Constants.BG_ID, userId);
             bundle.putString("id", classId);
             bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
