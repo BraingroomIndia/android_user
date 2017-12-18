@@ -47,7 +47,7 @@ public class ReviewFragment extends BaseFragment {
         int reviewType = getArguments().getInt("reviewType");
         String id = getStringArguments("id");
         String userId = getStringArguments(Constants.BG_ID);
-        return new ReviewAddViewModel(activity.getMessageHelper(), id, reviewType, reviewAddHelper);
+        return new ReviewAddViewModel(activity.getMessageHelper(), id,userId, reviewType, reviewAddHelper);
     }
 
     @Override

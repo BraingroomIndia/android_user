@@ -69,18 +69,18 @@ public class Splash extends AppCompatActivity {
         super.onCreate(icicle);
         UserApplication.getInstance().getMAppComponent().inject(this);
         UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -1) == -1;
+        Log.d(this.getClass().getSimpleName(), "FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
         Log.d(TAG, "onCreate: Called  ");
         branch = Branch.getInstance();
         apiService.checkGeoDetail();
-
         onNewIntent(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (getIntent().getExtras() != null)
-            bundleReceived = getIntent().getExtras().getBundle(Constants.pushNotification);
+        if (intent.getExtras() != null)
+            bundleReceived = intent.getExtras().getBundle(Constants.pushNotification);
         String action = intent.getAction();
         String data = intent.getDataString();
         if (Intent.ACTION_VIEW.equals(action) && data != null) {
@@ -96,11 +96,7 @@ public class Splash extends AppCompatActivity {
     }
 
     public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
-        try {
-            Log.d(this.getClass().getSimpleName(), "FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         Intent intent = new Intent(Splash.this, destination);
         intent.putExtra("classData", bundle);
         startActivity(intent);

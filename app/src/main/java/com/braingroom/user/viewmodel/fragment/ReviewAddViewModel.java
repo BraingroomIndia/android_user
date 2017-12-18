@@ -66,6 +66,5 @@ public class ReviewAddViewModel extends ViewModel {
         this.reviewAddHelper = reviewAddHelper;
         this.messageHelper = messageHelper;
         this.userId = userId;
-        reviewAddHelper.run();
     }
 }
