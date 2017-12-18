@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "873890902795",
+    "firebase_url": "https://braingroom-user-59b08.firebaseio.com",
+    "project_id": "braingroom-user-59b08",
+    "storage_bucket": "braingroom-user-59b08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873890902795:android:4736c8e23dfcd7d7",
+        "android_client_info": {
+          "package_name": "com.braingroom.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873890902795-p7plh583dscmoeini3cn1ba52r1g00ef.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.braingroom.user",
+            "certificate_hash": "d37b098553384b1f9ddaf3415eeac9582f58ce8d"
+          }
+        },
+        {
+          "client_id": "873890902795-i05947lck5n2e9hafhviribtcu5r9l31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7YUa0Kb07QRJ1QvwvU1GvDQuyreternA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873890902795-i05947lck5n2e9hafhviribtcu5r9l31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
