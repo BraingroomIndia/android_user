@@ -71,6 +71,7 @@ public class FCMService extends FirebaseMessagingService {
         Intent intent;
         Bundle data = new Bundle();
         String notificationType = remoteMessage.getData().get("notify_type");
+
         String notificationId = remoteMessage.getData().get("notification_id");
         String title = null;
         String title1 = null;

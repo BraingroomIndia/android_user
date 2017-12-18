@@ -87,6 +87,8 @@ public class ClassDetailActivity extends BaseActivity {
 
         void addReview();
 
+        void addReview(String userId);
+
         void backFromReview();
 
         void next();
@@ -263,6 +265,18 @@ public class ClassDetailActivity extends BaseActivity {
             }
 
             @Override
+            public void addReview(String userId) {
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, classId, userId, new ReviewAddViewModel.ReviewAddHelper() {
+                    @Override
+                    public void run() {
+                        popBackstack();
+                    }
+                })).addToBackStack(null).commit();
+            }
+
+            @Override
             public void backFromReview() {
                 ClassDetailActivity.this.popBackstack();
             }
@@ -341,7 +355,7 @@ public class ClassDetailActivity extends BaseActivity {
 
         };
         return new ClassDetailViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
-                getIntentString("origin"), getIntentString("catalogueId"), getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive));
+                getIntentString("origin"), getIntentString("catalogueId"), getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive), getIntentString(Constants.BG_ID));
     }
 
     @Override

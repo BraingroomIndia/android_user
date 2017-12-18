@@ -111,11 +111,14 @@ public class Splash extends AppCompatActivity {
         String classId = null;
         String messageSenderId = null;
         String messageSenderName = null;
+        String nonfictionPurpose = null;
+        String userId = null;
+        HashMap<String, String> data;
         Bundle bundle = new Bundle();
         //if onMessageReceived called
         if (bundleReceived != null) {
             bundle.putBoolean(Constants.pushNotification, true);
-            HashMap<String, String> data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
+            data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
             }.getType());
             Log.d(TAG, "hashMap data" + data.toString());
             bundle.putString("notification_id", data.get("notification_id"));
@@ -123,12 +126,17 @@ public class Splash extends AppCompatActivity {
             classId = data.get("class_id");
             messageSenderId = data.get("sender_id");
             messageSenderName = data.get("sender_name");
+            nonfictionPurpose = data.get("notification_purpose");
+            userId = data.get("user_id");
             // if onMessageReceived not called
         } else if (getIntent().getExtras() != null) {
             postId = getIntent().getExtras().getString("post_id");
             classId = getIntent().getExtras().getString("class_id");
             messageSenderId = getIntent().getExtras().getString("sender_id");
             messageSenderName = getIntent().getExtras().getString("sender_name");
+            nonfictionPurpose = getIntent().getExtras().getString("notification_purpose");
+            userId = getIntent().getExtras().getString("user_id");
+
         } else {
             navigateActivity(Index.class, null);
             return;
@@ -137,6 +145,8 @@ public class Splash extends AppCompatActivity {
             bundle.putString("postId", postId);
             navigateActivity(PostDetailActivity.class, bundle);
         } else if (classId != null) {
+            if ("review".equals(nonfictionPurpose))
+                bundle.putString(Constants.BG_ID, userId);
             bundle.putString("id", classId);
             bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
             navigateActivity(ClassDetailActivity.class, bundle);

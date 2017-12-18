@@ -24,6 +24,7 @@ public class ReviewAddViewModel extends ViewModel {
     public ObservableInt rating = new ObservableInt(0);
     public String id;
     private final int reviewType;
+    private final String userId;
     public final MessageHelper messageHelper;
     ReviewAddHelper reviewAddHelper;
     public Action onClick = new Action() {
@@ -33,7 +34,7 @@ public class ReviewAddViewModel extends ViewModel {
                 messageHelper.show("Please rate the class between 1-5");
                 return;
             }
-            apiService.addReview(reviewType, id, text.get(), rating.get() + "").observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ReviewAddResp>() {
+            apiService.addReview(reviewType, id, text.get(), rating.get() + "", userId).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ReviewAddResp>() {
                 @Override
                 public void accept(final ReviewAddResp reviewAddResp) throws Exception {
                     messageHelper.showAcceptableInfo("Submitted", reviewAddResp.getResMsg(), new MaterialDialog.SingleButtonCallback() {
@@ -56,5 +57,15 @@ public class ReviewAddViewModel extends ViewModel {
         this.reviewType = reviewType;
         this.reviewAddHelper = reviewAddHelper;
         this.messageHelper = messageHelper;
+        this.userId = null;
+    }
+
+    public ReviewAddViewModel(MessageHelper messageHelper, String id, String userId, int reviewType, ReviewAddHelper reviewAddHelper) {
+        this.id = id;
+        this.reviewType = reviewType;
+        this.reviewAddHelper = reviewAddHelper;
+        this.messageHelper = messageHelper;
+        this.userId = userId;
+        reviewAddHelper.run();
     }
 }
