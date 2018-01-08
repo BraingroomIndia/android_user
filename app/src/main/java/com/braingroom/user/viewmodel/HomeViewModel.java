@@ -141,7 +141,7 @@ public class HomeViewModel extends ViewModel {
                 public void accept(UserGeoLocationResp resp) throws Exception {
                     if (resp.getResCode()) {
                         UserApplication.locationSettingPopup = false;
-                        messageHelper.showAcceptableInfo(resp.getData().getTitle(), resp.getData().getMessage(), new MaterialDialog.SingleButtonCallback() {
+                        messageHelper.showAcceptDismissInfo(resp.getData().getTitle(), resp.getData().getMessage(), new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 dialogHelper.showCustomView(R.layout.dialog_location_setting, new LocationSettingViewModel(messageHelper, navigator, helperFactory), false);
