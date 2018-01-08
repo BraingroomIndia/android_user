@@ -290,12 +290,7 @@ public class ClassDetailViewModel extends ViewModel {
                                     if (resp.getData().isEmpty())
                                         messageHelper.showDismissInfo("", resp.getResMsg());
                                     else {
-                                        messageHelper.showAcceptableInfo("Offer", resp.getData().get(0).getDisplayText(), "Call Tutor", new MaterialDialog.SingleButtonCallback() {
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                                uiHelper.makeACall(resp.getData().get(0).getMobileNumber());
-                                            }
-                                        });
+                                        messageHelper.showDismissInfo("Contact Tutor", resp.getData().get(0).getDisplayText());
                                     }
                                 }
                             });
