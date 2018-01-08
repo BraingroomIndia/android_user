@@ -42,7 +42,7 @@ public interface MessageHelper {
 
     void showAcceptableInfo(@Nullable String title, @NonNull String content, String postiveText, @NonNull MaterialDialog.SingleButtonCallback positiveCallback);
 
-    void showAcceptDismissInfo(/*@Nullable String title,@NonNull String content,@NonNull String positiveText,@NonNull String negativeText, @NonNull */);
+    void showAcceptDismissInfo(@Nullable String title, @NonNull String content, @NonNull MaterialDialog.SingleButtonCallback positiveCallback);
 
     void showProgressDialog(@Nullable String title, @NonNull String content);
 

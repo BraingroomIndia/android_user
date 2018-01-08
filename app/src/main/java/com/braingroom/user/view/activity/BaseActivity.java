@@ -391,27 +391,13 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
-                public void showAcceptDismissInfo() {
-                    new MaterialDialog.Builder(BaseActivity.this)
-                            .title("Use Google's Location Services?")
-                            .content("Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.")
-                            .positiveText("Agree").negativeText("Disagree")
-                            .showListener(new DialogInterface.OnShowListener() {
-                                @Override
-                                public void onShow(DialogInterface dialog) {
-                                }
-                            })
-                            .cancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                }
-                            })
-                            .dismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                }
-                            })
-                            .show();
+                public void showAcceptDismissInfo(@Nullable String title, @NonNull String content, @NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
+                    dismissActiveProgress();
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(BaseActivity.this);
+                    if (title != null) builder.title(title);
+                    builder.content(content);
+                    builder.onNegative(positiveCallback);
+                    builder.positiveText("Ok").negativeText("Change").show();
                 }
 
                 @Override
