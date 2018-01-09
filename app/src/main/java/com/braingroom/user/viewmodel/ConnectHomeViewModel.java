@@ -38,6 +38,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import lombok.Getter;
+import timber.log.Timber;
 
 public class ConnectHomeViewModel extends ViewModel {
 
@@ -126,7 +127,7 @@ public class ConnectHomeViewModel extends ViewModel {
                 if (resp.getData().size() == 0 && currentPage < 1) {
                     nonReactiveItems.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No Post Available", null));
                 } else {
-                    //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
+                    //  Timber.tag(TAG).d(("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
                         nonReactiveItems.add(new ConnectFeedItemViewModel(elem, false, false, uiHelper, helperFactory, messageHelper, navigator));
                     }
@@ -344,7 +345,7 @@ public class ConnectHomeViewModel extends ViewModel {
                 if (isNewNotification)
                     callAgain.set(callAgain.get() + 1);
 
-                Log.d("Notification", "accept: " + isNewNotification);
+                Timber.tag(TAG).d("Notification", "accept: " + isNewNotification);
             }
         });
     }

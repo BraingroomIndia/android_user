@@ -49,6 +49,7 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 import static com.braingroom.user.R.string.action_learners_forum;
 import static com.braingroom.user.R.string.action_tips_tricks;
@@ -240,14 +241,14 @@ public class ClassDetailActivity extends BaseActivity {
                         public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
                             Intent intent = new Intent(Intent.ACTION_CALL);
                             intent.setData(Uri.parse("tel:" + phoneNumber));
-                            Log.d(TAG, "accept: " + phoneNumber);
+                            Timber.tag(TAG).d("accept: " + phoneNumber);
                             getNavigator().navigateActivity(intent);
                         }
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                             //throwable.printStackTrace();
-                            Log.d("makeACall", "OnError: " + throwable.toString() + "\t" + phoneNumber);
+                            Timber.tag(TAG).e(throwable, "makeACall" + phoneNumber);
                         }
                     });
             }

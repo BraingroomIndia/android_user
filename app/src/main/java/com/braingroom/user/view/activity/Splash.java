@@ -38,6 +38,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 import static android.text.TextUtils.isEmpty;
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
@@ -69,8 +70,8 @@ public class Splash extends AppCompatActivity {
         super.onCreate(icicle);
         UserApplication.getInstance().getMAppComponent().inject(this);
         UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -1) == -1;
-        Log.d(this.getClass().getSimpleName(), "FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
-        Log.d(TAG, "onCreate: Called  ");
+        Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
+        Timber.tag(TAG).d("onCreate: Called  ");
         branch = Branch.getInstance();
         apiService.checkGeoDetail();
         onNewIntent(getIntent());
@@ -116,7 +117,7 @@ public class Splash extends AppCompatActivity {
             bundle.putBoolean(Constants.pushNotification, true);
             data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
             }.getType());
-            Log.d(TAG, "hashMap data" + data.toString());
+            Timber.tag(TAG).d("hashMap data" + data.toString());
             bundle.putString("notification_id", data.get("notification_id"));
             postId = data.get("post_id");
             classId = data.get("class_id");
@@ -176,13 +177,14 @@ public class Splash extends AppCompatActivity {
         }
         if (json.contains(Constants.classListing)) {
             final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
-            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
+            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
                     navigateToIndex();
+                    Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(data.reqData));
                     throwable.printStackTrace();
                 }
-            }).subscribe(new Consumer<FilterData>() {
+            }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
                 @Override
                 public void accept(FilterData filterData) throws Exception {
                     bundle.putSerializable(Constants.classFilterData, filterData);
@@ -194,7 +196,8 @@ public class Splash extends AppCompatActivity {
             }, new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
-                    throwable.printStackTrace();
+
+                    Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(data.reqData));
                 }
             });
 
@@ -205,6 +208,7 @@ public class Splash extends AppCompatActivity {
                 bundle.putSerializable(Constants.connectFilterData, connectFilterData);
                 navigateActivity(ConnectHomeActivity.class, bundle);
             } catch (Exception e) {
+                Timber.tag(TAG).e(e, Constants.connectListing);
                 navigateToIndex();
                 e.printStackTrace();
             }
@@ -218,6 +222,7 @@ public class Splash extends AppCompatActivity {
                 bundle.putString(Constants.promoCode, data.reqData.getPromoCode());
                 navigateActivity(ClassDetailActivity.class, bundle);
             } catch (Exception e) {
+                Timber.tag(TAG).e(e, Constants.classDetail);
                 e.printStackTrace();
                 navigateToIndex();
             }
@@ -228,6 +233,7 @@ public class Splash extends AppCompatActivity {
                 bundle.putString("postId", data.reqData.getPostId());
                 navigateActivity(PostDetailActivity.class, bundle);
             } catch (Exception e) {
+                Timber.tag(TAG).e(e, Constants.postDetail);
                 e.printStackTrace();
                 navigateToIndex();
             }
@@ -236,6 +242,7 @@ public class Splash extends AppCompatActivity {
             apiService.getClassDetail(data.reqData.id, 0).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
+                    Timber.tag(TAG).e(throwable);
                     navigateToIndex();
                 }
             }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<ClassData>() {
@@ -275,7 +282,9 @@ public class Splash extends AppCompatActivity {
                         /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
                          Launch Monster viewer activity if a link clicked without $android_deeplink_path
                         */
-                        else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
+                        if (branchError != null) {
+                            Timber.tag(TAG).e("Branch Error" + branchError.getMessage());
+                        } else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                             HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
                             if (referringParams.containsKey("referral")) {
                                 String referralCode = referringParams.get("referral");
@@ -298,7 +307,7 @@ public class Splash extends AppCompatActivity {
                     }
                 }, this.getIntent().getData(), this);
         } catch (Exception e) {
-            Log.d(TAG, "Branch error: " + e.getLocalizedMessage());
+            Timber.tag(TAG).e(e, "Branch error: ");
             navigateToIndex();
             e.printStackTrace();
 

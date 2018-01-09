@@ -10,6 +10,8 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import timber.log.Timber;
+
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
 /**
@@ -32,7 +34,7 @@ public class FCMInstanceIdService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
+        Timber.tag(TAG).d("Refreshed token: " + refreshedToken);
         sendCustomEvent(this, "Refreshed token:", refreshedToken, "");
         editor.putBoolean(Constants.NEW_FCM, true);
         editor.putString(Constants.FCM_TOKEN, refreshedToken).commit();

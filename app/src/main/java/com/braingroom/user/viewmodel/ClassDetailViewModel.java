@@ -64,6 +64,7 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Setter;
+import timber.log.Timber;
 
 
 public class ClassDetailViewModel extends ViewModel {
@@ -171,7 +172,7 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 retry();
-                Log.d(TAG, "run: " + callAgain.get());
+                Timber.tag(TAG).d("run: " + callAgain.get());
             }
         });
         if (!isEmpty(promo))
@@ -295,7 +296,7 @@ public class ClassDetailViewModel extends ViewModel {
                                 }
                             });
                 else
-                    messageHelper.showLoginRequireDialog("Only logged in user can call tutor", null);
+                    messageHelper.showLoginRequireDialog("Only logged in user can contact tutor", null);
             }
         };
         onAddReviewClicked = new Action() {
@@ -439,7 +440,7 @@ public class ClassDetailViewModel extends ViewModel {
                             description.set(Html.fromHtml(classData.getClassSummary())); //Edited By Vikas Godara
 
                         } catch (Exception e) {
-                            Log.d(TAG, "description:" + e.toString());
+                            Timber.tag(TAG).d("description:" + e.toString());
                             // e.printStackTrace();
                         }
 
@@ -678,7 +679,7 @@ public class ClassDetailViewModel extends ViewModel {
                 mGoogleMap.addMarker(markerOption);
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10.0f));
             } catch (Exception e) {
-                Log.d(TAG, "populateMarkers: " + e.toString());
+                Timber.tag(TAG).d("populateMarkers: " + e.toString());
             }
         }
 

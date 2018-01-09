@@ -26,6 +26,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
+import timber.log.Timber;
 
 public class SignupActivity extends BaseActivity {
 
@@ -80,7 +81,7 @@ public class SignupActivity extends BaseActivity {
         rxPermissions.request(Manifest.permission.RECEIVE_SMS).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
-                Log.d("Message permission", "accept: " + aBoolean.toString());
+                Timber.tag(TAG).d("Message permission", "accept: " + aBoolean.toString());
             }
         });
 

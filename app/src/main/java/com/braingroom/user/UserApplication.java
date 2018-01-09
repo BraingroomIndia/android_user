@@ -15,6 +15,7 @@ import com.braingroom.user.utils.BindingAdapters;
 import com.braingroom.user.utils.BindingUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.DaggerAppComponent;
+import com.braingroom.user.utils.ProductionTree;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
@@ -81,8 +82,11 @@ public class UserApplication extends BranchApp {
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
-        if (!BuildConfig.DEBUG)
-            Fabric.with(this, new Crashlytics());
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new ProductionTree(this));
+        }
         Branch.getAutoInstance(this);
 
         try {

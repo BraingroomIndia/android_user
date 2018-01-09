@@ -52,6 +52,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import timber.log.Timber;
 
 
 public class HomeViewModel extends ViewModel {
@@ -121,7 +122,7 @@ public class HomeViewModel extends ViewModel {
             public void run() throws Exception {
                 retry();
                 connectivityViewmodel.isConnected.set(true);
-                Log.d(TAG, "run internet: " + connectivityViewmodel.isConnected.get());
+                Timber.tag(TAG).d("run internet: " + connectivityViewmodel.isConnected.get());
             }
         });
         this.dialogHelper = dialogHelper;
@@ -310,7 +311,7 @@ public class HomeViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d(TAG, "populateMarkers: " + throwable.toString());
+                Timber.tag(TAG).d("populateMarkers: " + throwable.toString());
 
             }
         });
@@ -346,7 +347,7 @@ public class HomeViewModel extends ViewModel {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            // Log.d(TAG, "populateMarkers : " + i + "\n" + location.toString());
+            // Timber.tag(TAG).d( "populateMarkers : " + i + "\n" + location.toString());
             lngSum = lngSum + Double.valueOf(location.getLongitude());
             markerOption = new MarkerOptions().position(latlng).title(location.getLocationArea()).icon(getPinIcon(location));
             markerList.add(markerOption);
@@ -384,7 +385,7 @@ public class HomeViewModel extends ViewModel {
                 if (isNewNotification)
                     callAgain.set(callAgain.get() + 1);
 
-                Log.d("Notification", "accept: " + isNewNotification);
+                Timber.tag(TAG).d("Notification", "accept: " + isNewNotification);
             }
         });
     }

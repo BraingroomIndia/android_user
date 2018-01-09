@@ -10,6 +10,7 @@ import com.braingroom.user.UserApplication;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 public class ConnectivityViewModel extends ViewModel {
 
@@ -36,7 +37,7 @@ public class ConnectivityViewModel extends ViewModel {
                     }
                 }
 
-                Log.d("Connectivity", "accept: " + isConnectedToInternet);
+                Timber.tag(TAG).d("Connectivity", "accept: " + isConnectedToInternet);
             }
         });
     }

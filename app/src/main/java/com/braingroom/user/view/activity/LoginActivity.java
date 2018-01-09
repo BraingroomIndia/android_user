@@ -39,6 +39,8 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
+import timber.log.Timber;
+
 public class LoginActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -124,7 +126,8 @@ public class LoginActivity extends BaseActivity implements
 
                     @Override
                     public void onError(FacebookException exception) {
-                        Log.d(TAG, "onError: " + exception.toString());
+                        Timber.tag(TAG).d("onError: ", exception);
+                        Timber.tag(TAG).d(TAG, "onError: ", exception);
                         getMessageHelper().show("Facebook login error");
                     }
                 });
@@ -193,7 +196,7 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected ViewModel createViewModel() {
         referralCode = getIntentString("referralCode");
-        Log.d("LoginActivity", "referralCode " + referralCode);
+        Timber.tag(TAG).d("LoginActivity", "referralCode " + referralCode);
 
 
         return new LoginViewmodel(getMessageHelper(), getNavigator(), referralCode);

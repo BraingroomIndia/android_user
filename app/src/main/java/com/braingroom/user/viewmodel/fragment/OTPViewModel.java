@@ -21,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 
 /*
@@ -113,7 +114,7 @@ public class OTPViewModel extends ViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         logOut();
-                        Log.d(TAG, "submit OTP: " + throwable.toString());
+                        Timber.tag(TAG).d("submit OTP: " + throwable.toString());
                         // throwable.printStackTrace();
 
                     }
@@ -133,7 +134,7 @@ public class OTPViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d(TAG, "request Otp: " + throwable.toString());
+                Timber.tag(TAG).d("request Otp: " + throwable.toString());
 
             }
         });
@@ -153,7 +154,7 @@ public class OTPViewModel extends ViewModel {
         otpDisposable = UserApplication.getInstance().getOtpArrived().subscribe(new Consumer<String>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull String otp) throws Exception {
-                Log.d("Otp received in signup", "accept: " + otp);
+                Timber.tag(TAG).d("Otp received in signup", "accept: " + otp);
                 if (!otp.equals("")) {
                     try {
                         OTP.set(otp);

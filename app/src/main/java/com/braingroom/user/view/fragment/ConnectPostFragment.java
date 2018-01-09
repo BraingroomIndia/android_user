@@ -11,6 +11,7 @@ import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ConnectPostViewModel;
 
 import lombok.Getter;
+import timber.log.Timber;
 
 
 /**
@@ -66,7 +67,7 @@ public class ConnectPostFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: " + requestCode);
+        Timber.tag(TAG).d( "onActivityResult: " + requestCode);
         vm.handleActivityResult(requestCode, resultCode, data);
     }
 
