@@ -37,8 +37,8 @@
     <string name="branch_test_base_url" translatable="false">https://ht5w.test-app.link/</string>
     <string name="branch_live_base_url" translatable="false">https://ht5w.app.link/</string>
 
-    <string name="facebook_app_id" translatable="false">174195469818514</string>
-    <string name="fb_login_protocol_scheme">fb174195469818514</string>
+    <string name="facebook_app_id" translatable="false">1949694208609258</string>
+    <string name="fb_login_protocol_scheme">fb1949694208609258</string>
 
 
     <string name="action_done">Done</string>

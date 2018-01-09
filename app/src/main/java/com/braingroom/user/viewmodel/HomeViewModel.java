@@ -129,7 +129,7 @@ public class HomeViewModel extends ViewModel {
         Action temp = new Action() {
             @Override
             public void run() throws Exception {
-                messageHelper.show("Cliked");
+                messageHelper.show("Clicked");
             }
         };
         onRegister = new ObservableField<>(temp);

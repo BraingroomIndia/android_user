@@ -24,7 +24,7 @@ public class ContactTutorResp extends BaseResp {
     public static class Snippet {
 
 
-        @SerializedName("status")
+        @SerializedName("message")
         String displayText;
 
         @SerializedName("mobile")

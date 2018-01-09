@@ -397,7 +397,7 @@ public abstract class BaseActivity extends MvvmActivity {
                     if (title != null) builder.title(title);
                     builder.content(content);
                     builder.onNegative(positiveCallback);
-                    builder.positiveText("Ok").negativeText("Change").show();
+                    builder.positiveText("Continue").negativeText("Change").show();
                 }
 
                 @Override
