@@ -59,7 +59,7 @@ public class UserApplication extends BranchApp {
 
     public boolean loggedIn = false;
 
-    public static int versionCode = 10;
+    public static int versionCode = BuildConfig.VERSION_CODE;
 //
 
     public static boolean locationSettingPopup;
