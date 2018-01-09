@@ -93,7 +93,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
         super.onCreate(savedInstanceState);
         UserApplication.getInstance().getMAppComponent().inject(this);
         setContentView(R.layout.activity_qrcode_reader);
-        baseUrl = BuildConfig.DEBUG ? getString(R.string.branch_test_base_url) : getString(R.string.branch_live_base_url);
+        baseUrl = !BuildConfig.DEBUG ? getString(R.string.branch_test_base_url) : getString(R.string.branch_live_base_url);
         // getting barcode instance
         barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_fragment);
 
@@ -114,7 +114,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
     @Override
     public void onScanned(final Barcode barcode) {
-        Timber.tag(TAG).d( "onScanned: " + barcode.displayValue);
+        Timber.tag(TAG).d("onScanned: " + barcode.displayValue);
         barcodeReader.playBeep();
         Bundle bundle = new Bundle();
         if (barCodeUrl != null && barCodeUrl.contains(baseUrl))
@@ -133,7 +133,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
     @Override
     public void onScannedMultiple(List<Barcode> barcodes) {
-        Timber.tag(TAG).d( "onScannedMultiple: " + barcodes.size());
+        Timber.tag(TAG).d("onScannedMultiple: " + barcodes.size());
     }
 
     @Override
@@ -235,7 +235,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     public String getBranchUrlData(String url) {
         if (TextUtils.isEmpty(url))
             return null;
-        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG  ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
+        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
         try {
             jsonObject = new JSONObject(jsonObject.getString("data"));
             jsonObject = new JSONObject(jsonObject.getString("qrcode"));
