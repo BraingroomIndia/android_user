@@ -983,43 +983,46 @@ public class DataflowService {
 //        8  vendor
         if (isDigitsOnly(data.getClassProvider()))
             filterReqName.add(getVendorName(Integer.parseInt(data.getClassProvider())));
-        return Observable.zip(filterReqName, new Function<Object[], FilterData>() {
-            @Override
-            public FilterData apply(Object[] objects) throws Exception {
+        if (filterReqName.isEmpty())
+            return Observable.just(filterData);
+        else
+            return Observable.zip(filterReqName, new Function<Object[], FilterData>() {
+                @Override
+                public FilterData apply(Object[] objects) throws Exception {
 
-                for (Object nameIdPair : objects)
-                    if (nameIdPair instanceof NameIdPair) {
-                        NameIdPair object = (NameIdPair) nameIdPair;
-                        switch (object.type) {
-                            case Category:
-                                filterData.setCategoryId(object.name, object.id);
-                                break;
-                            case Segment:
-                                filterData.setSegmentId(object.name, object.id);
-                                break;
-                            case City:
-                                filterData.setCityId(object.name, object.id);
-                                break;
-                            case Locality:
-                                filterData.setLocalityId(object.name, object.id);
-                                break;
-                            case Community:
-                                filterData.setCommunityId(object.name, object.id);
-                                break;
-                            case ClassType:
-                                filterData.setClassTypeId(object.name, object.id);
-                                break;
-                            case ClassSchedule:
-                                filterData.setClassScheduleId(object.name, object.id);
-                                break;
-                            case VendorList:
-                                filterData.setVendorId(object.name, object.id);
-                                break;
+                    for (Object nameIdPair : objects)
+                        if (nameIdPair instanceof NameIdPair) {
+                            NameIdPair object = (NameIdPair) nameIdPair;
+                            switch (object.type) {
+                                case Category:
+                                    filterData.setCategoryId(object.name, object.id);
+                                    break;
+                                case Segment:
+                                    filterData.setSegmentId(object.name, object.id);
+                                    break;
+                                case City:
+                                    filterData.setCityId(object.name, object.id);
+                                    break;
+                                case Locality:
+                                    filterData.setLocalityId(object.name, object.id);
+                                    break;
+                                case Community:
+                                    filterData.setCommunityId(object.name, object.id);
+                                    break;
+                                case ClassType:
+                                    filterData.setClassTypeId(object.name, object.id);
+                                    break;
+                                case ClassSchedule:
+                                    filterData.setClassScheduleId(object.name, object.id);
+                                    break;
+                                case VendorList:
+                                    filterData.setVendorId(object.name, object.id);
+                                    break;
+                            }
                         }
-                    }
-                return filterData;
-            }
-        });
+                    return filterData;
+                }
+            });
 
     }
 

@@ -210,7 +210,6 @@ public class Splash extends AppCompatActivity {
             } catch (Exception e) {
                 Timber.tag(TAG).e(e, Constants.connectListing);
                 navigateToIndex();
-                e.printStackTrace();
             }
 
         } else if (json.contains(Constants.classDetail)) {
