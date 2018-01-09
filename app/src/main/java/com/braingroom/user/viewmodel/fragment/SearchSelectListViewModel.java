@@ -32,6 +32,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import timber.log.Timber;
 
 import static com.braingroom.user.FCMInstanceIdService.TAG;
 
@@ -142,7 +143,7 @@ public class SearchSelectListViewModel extends ViewModel {
             try {
                 saveConsumer.accept(selectedDataMap);
             } catch (Exception e) {
-                Log.d(TAG, "setSelectedValues : " + e.toString());
+                Timber.tag(TAG).d("setSelectedValues : " + e);
             }
     }
 
@@ -195,7 +196,7 @@ public class SearchSelectListViewModel extends ViewModel {
             @Override
             public void accept(@NonNull Throwable throwable) throws Exception {
                 messageHelper.dismissActiveProgress();
-                Log.d("Search select List VM", "accept: " + throwable.getMessage());
+                Timber.tag(TAG).e(throwable, "Search select List VM");
             }
         });
     }

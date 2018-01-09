@@ -64,6 +64,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import timber.log.Timber;
 
 import static com.braingroom.user.FCMInstanceIdService.TAG;
 
@@ -113,7 +114,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
     @Override
     public void onScanned(final Barcode barcode) {
-        Log.e(TAG, "onScanned: " + barcode.displayValue);
+        Timber.tag(TAG).d( "onScanned: " + barcode.displayValue);
         barcodeReader.playBeep();
         Bundle bundle = new Bundle();
         if (barCodeUrl != null && barCodeUrl.contains(baseUrl))
@@ -132,7 +133,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
     @Override
     public void onScannedMultiple(List<Barcode> barcodes) {
-        Log.e(TAG, "onScannedMultiple: " + barcodes.size());
+        Timber.tag(TAG).d( "onScannedMultiple: " + barcodes.size());
     }
 
     @Override

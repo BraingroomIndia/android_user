@@ -28,6 +28,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import timber.log.Timber;
 
 public class CommunityListViewModel extends ViewModel {
 
@@ -42,7 +43,7 @@ public class CommunityListViewModel extends ViewModel {
             public void run() throws Exception {
                 retry();
                 connectivityViewmodel.isConnected.set(true);
-                Log.d(TAG, "run internet: " + connectivityViewmodel.isConnected.get());
+                Timber.tag(TAG).d( "run internet: " + connectivityViewmodel.isConnected.get());
             }
         });
         gridItems = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {

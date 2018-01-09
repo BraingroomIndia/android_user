@@ -17,6 +17,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import timber.log.Timber;
 
 public class VendorProfileViewModel extends ViewModel {
 
@@ -74,7 +75,7 @@ public class VendorProfileViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d("VendorProfile", "accept: " + throwable.getMessage());
+                Timber.tag(TAG).e(throwable, "VendorProfile");
             }
         });
 

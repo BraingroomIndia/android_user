@@ -32,6 +32,7 @@ import javax.inject.Named;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import lombok.Setter;
+import timber.log.Timber;
 
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
@@ -103,7 +104,7 @@ public class ViewModel extends BaseObservable {
 
         String fcmToken = pref.getString(Constants.FCM_TOKEN, "");
         String referralCode = pref.getString(Constants.referralCode, "");
-        Log.d("Firebase", "fcm Token: " + fcmToken);
+        Timber.tag(TAG).d("Firebase", "fcm Token: " + fcmToken);
         apiService.logout().observeOn(AndroidSchedulers.mainThread()).subscribe();
         editor.putString(Constants.BG_ID, "");
         editor.putBoolean(Constants.LOGGED_IN, false);
@@ -155,7 +156,6 @@ public class ViewModel extends BaseObservable {
     public void onUserInteraction() {
 
     }
-
 
 
     boolean isValidPhoneNo(CharSequence phoneNo) {

@@ -16,6 +16,7 @@ import com.braingroom.user.view.Navigator;
 
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 public class PostApiImageUploadViewModel extends ViewModel {
 
@@ -46,7 +47,7 @@ public class PostApiImageUploadViewModel extends ViewModel {
         String fileType = FileUtils.getMimeType(fileUri);
         if (filePath == null || fileType == null) {
             messageHelper.show("Sorry we are unable to upload the file");
-            Log.d(TAG, "\nimageUpload: File Path" + filePath + "\nFile type" + fileType);
+            Timber.tag(TAG).d("\nimageUpload: File Path" + filePath + "\nFile type" + fileType);
             return;
         }
         apiService.uploadPostApiImage(filePath, fileType, postType)
@@ -58,8 +59,8 @@ public class PostApiImageUploadViewModel extends ViewModel {
 
                             messageHelper.show("image upload success");
                             remoteAddress.set(resp.getData().get(0).getUrl());
-                            Log.d(TAG, "getImgPath: " + resp.getData());
-                            Log.d(TAG, "getImgPath: " + resp.getData().get(0).getUrl());
+                            Timber.tag(TAG).d("getImgPath: " + resp.getData());
+                            Timber.tag(TAG).d("getImgPath: " + resp.getData().get(0).getUrl());
                         } else {
                             messageHelper.show("image upload FAIlURE");
                         }
@@ -71,7 +72,7 @@ public class PostApiImageUploadViewModel extends ViewModel {
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         messageHelper.dismissActiveProgress();
                         messageHelper.show("image upload FAIlURE");
-                        Log.d("Image upload", "accept: ");
+                        Timber.tag(TAG).e(throwable, "Image upload");
                         throwable.printStackTrace();
                     }
                 });

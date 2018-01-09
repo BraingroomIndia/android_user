@@ -39,6 +39,7 @@ public class CatalogueCheckOutActivity extends BaseActivity implements PaymentRe
                 try {
                     co.open(activity, options);
                 } catch (Exception e) {
+
                     getMessageHelper().show("Error in payment: " + e.getMessage());
                     e.printStackTrace();
                 }

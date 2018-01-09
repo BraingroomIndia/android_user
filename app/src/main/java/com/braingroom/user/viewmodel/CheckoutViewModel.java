@@ -48,6 +48,7 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
+import timber.log.Timber;
 
 public class CheckoutViewModel extends ViewModel {
     @Override
@@ -443,7 +444,7 @@ public class CheckoutViewModel extends ViewModel {
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Throwable th) throws Exception {
-                            Log.d("Checkout ", "accept: ");
+                            Timber.tag(TAG).d("Checkout ");
                         }
                     });
                 } else if (getLoggedIn() && isGuest == 1) {
@@ -487,7 +488,7 @@ public class CheckoutViewModel extends ViewModel {
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Throwable th) throws Exception {
-                            Log.d("Checkout ", "accept: ");
+                            Timber.tag(TAG).d("Checkout ", "accept: ");
                         }
                     });
                 } else {
@@ -599,8 +600,9 @@ public class CheckoutViewModel extends ViewModel {
             }
         }
         snippet.setLevels(levels.toString());
+        final GetBookingDetailsReq req = new GetBookingDetailsReq(snippet);
         messageHelper.showProgressDialog(null, "Initiating Payment...");
-        apiService.getBookingDetails(new GetBookingDetailsReq(snippet)
+        apiService.getBookingDetails(req
                 , appliedPromoCodeId != null ? appliedPromoCodeId : null
                 , appliedPromoCodeId != null ? appliedPromoCode.get() : null).subscribe(new Consumer<PayUCheckoutData>() {
             @Override
@@ -628,7 +630,7 @@ public class CheckoutViewModel extends ViewModel {
                     preFill.put("email", chekcoutData.getEmail());
                     preFill.put("contact", chekcoutData.getPhone());
                     options.put("prefill", preFill);
-                        /*Log.d(TAG, "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
+                        /*Timber.tag(TAG).d( "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
                                 + "\namount\t:\t" + chekcoutData.getAmount() * 100 + "\nemail\t:\t" + chekcoutData.getEmail()
                                 + "\ncontact\t:\t" + chekcoutData.getPhone());*/
                     messageHelper.dismissActiveProgress();
@@ -640,7 +642,8 @@ public class CheckoutViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 messageHelper.show(throwable.getMessage());
-                Log.d("PayUCheckoutData", "accept: " + throwable.getMessage());
+                Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
+
             }
         });
 
@@ -719,21 +722,23 @@ public class CheckoutViewModel extends ViewModel {
             String temp = gson.toJson(levelsList);
             temp = "{\"tickets\":" + temp + "}";
             snippet.setTickets(temp);
-            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).doOnError(new Consumer<Throwable>() {
+            final RazorSuccessReq req = new RazorSuccessReq(snippet);
+            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
                 }
-            }).doOnComplete(new Action() {
+            }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
                     messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
                     if (bundle.getBoolean(Constants.success))
                         navigator.finishActivity();
+                    else
+                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
                 }
             }).subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
@@ -757,7 +762,7 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
 
                 }
             });
@@ -799,21 +804,23 @@ public class CheckoutViewModel extends ViewModel {
             String temp = gson.toJson(levelsList);
             temp = "{\"tickets\":" + temp + "}";
             snippet.setTickets(temp);
-            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).doOnError(new Consumer<Throwable>() {
+            final RazorSuccessReq req = new RazorSuccessReq(snippet);
+            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
                 }
-            }).doOnComplete(new Action() {
+            }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
                     messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
                     if (bundle.getBoolean(Constants.success))
                         navigator.finishActivity();
+                    else
+                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
                 }
             }).subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
@@ -837,17 +844,17 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
 
                 }
             });
         } else {
 
+            messageHelper.showProgressDialog("Wait", "Processing your payment...");
             bundle.putString(Constants.BGTransactionId, mChekcoutData.getBGtransactionid());
             bundle.putString(Constants.className, classData.getClassTopic());
             bundle.putString(Constants.name, mChekcoutData.getFirstname());
             bundle.putString(Constants.amount, mChekcoutData.getAmount() + "");
-            messageHelper.showProgressDialog("Wait", "Processing your payment...");
             RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
             snippet.setBookingType(Constants.normalBooking);
             snippet.setBgTxnid(mChekcoutData.getBGtransactionid());
@@ -877,7 +884,8 @@ public class CheckoutViewModel extends ViewModel {
             String temp = gson.toJson(levelsList);
             temp = "{\"tickets\":" + temp + "}";
             snippet.setTickets(temp);
-            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).doOnError(new Consumer<Throwable>() {
+            final RazorSuccessReq req = new RazorSuccessReq(snippet);
+            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                     messageHelper.dismissActiveProgress();
@@ -885,13 +893,15 @@ public class CheckoutViewModel extends ViewModel {
                     bundle.putBoolean(Constants.success, false);
 //                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
                 }
-            }).doOnComplete(new Action() {
+            }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
                     messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
                     if (bundle.getBoolean(Constants.success))
                         navigator.finishActivity();
+                    else
+                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
                 }
             }).subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
@@ -915,8 +925,7 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
-
+                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
                 }
             });
         }

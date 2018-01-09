@@ -15,6 +15,7 @@ import com.braingroom.user.view.Navigator;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 public class PostApiVideoUploadViewModel extends ViewModel {
 
@@ -67,7 +68,7 @@ public class PostApiVideoUploadViewModel extends ViewModel {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                         messageHelper.show("video upload FAIlURE");
-                        Log.d("Video upload", "accept: ");
+                        Timber.tag(TAG).e(throwable, "Video upload");
                         throwable.printStackTrace();
                     }
                 });

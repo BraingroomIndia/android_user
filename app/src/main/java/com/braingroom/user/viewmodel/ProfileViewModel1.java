@@ -241,7 +241,7 @@ public class ProfileViewModel1 extends ViewModel {
                 if (resp.getData().size() == 0 && currentPage < 1) {
                     nonReactiveItems.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No Post Available", null));
                 } else {
-                    //  Log.d("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
+                    //  Timber.tag(TAG).d(("ConnectFeed", "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                     for (final ConnectFeedResp.Snippet elem : resp.getData()) {
                         nonReactiveItems.add(new ConnectFeedItemViewModel(elem, true, true, uiHelper, helperFactory, messageHelper, navigator));
                     }

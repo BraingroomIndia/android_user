@@ -20,6 +20,10 @@ import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
+import timber.log.Timber;
+
+import static android.content.ContentValues.TAG;
+
 public class CheckoutActivity extends BaseActivity implements PaymentResultListener {
 
     private RecyclerView mRecyclerView;
@@ -33,6 +37,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
     @Override
     public void onPaymentError(int i, String reason) {
+        Timber.tag(TAG).e("Error from Razor pay\t" + reason);
         getMessageHelper().show("Payment Failure, Reason : " + reason);
     }
 
@@ -94,6 +99,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
                 try {
                     co.open(activity, options);
                 } catch (Exception e) {
+                    Timber.tag(TAG).e(e, "Error in starting razorPay");
                     getMessageHelper().show("Error in payment: " + e.getMessage());
                 }
 

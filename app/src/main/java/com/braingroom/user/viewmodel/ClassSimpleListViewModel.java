@@ -21,6 +21,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import timber.log.Timber;
 
 
 public class ClassSimpleListViewModel extends ViewModel {
@@ -44,7 +45,7 @@ public class ClassSimpleListViewModel extends ViewModel {
             public void run() throws Exception {
                 retry();
                 connectivityViewmodel.isConnected.set(true);
-                Log.d(TAG, "run: " + callAgain.get());
+                Timber.tag(TAG).d( "run: " + callAgain.get());
             }
         });
         if (id != null)
@@ -67,7 +68,7 @@ public class ClassSimpleListViewModel extends ViewModel {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
-                Log.d(TAG, "apply: " + callAgain.get());
+                Timber.tag(TAG).d( "apply: " + callAgain.get());
                 if ("wishlist".equalsIgnoreCase(listType))
                     apiObservable = apiService.getWishList(nextPage);
                 else if ("bookinghistory".equalsIgnoreCase(listType))

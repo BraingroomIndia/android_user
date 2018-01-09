@@ -50,6 +50,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import lombok.Data;
 import lombok.Getter;
+import timber.log.Timber;
 
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
@@ -283,9 +284,9 @@ public abstract class BaseActivity extends MvvmActivity {
                                         .build(BaseActivity.this);
                         startActivityForResult(intent, reqCode);
                     } catch (GooglePlayServicesRepairableException e) {
-                        Log.d("Place Api", "launchPlaceSearchIntent: " + e.getMessage());
+                        Timber.tag(TAG).e(e, "Place Api");
                     } catch (GooglePlayServicesNotAvailableException e) {
-                        Log.d("Place Api", "launchPlaceSearchIntent: " + e.getMessage());
+                        Timber.tag(TAG).e(e, "Place Api");
                     }
                 }
 

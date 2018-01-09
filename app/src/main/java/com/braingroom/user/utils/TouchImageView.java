@@ -17,6 +17,10 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
 
+import timber.log.Timber;
+
+import static io.fabric.sdk.android.Fabric.TAG;
+
 public class TouchImageView extends ImageView {
 
     Matrix matrix;
@@ -214,7 +218,7 @@ public class TouchImageView extends ImageView {
             int bmWidth = drawable.getIntrinsicWidth();
             int bmHeight = drawable.getIntrinsicHeight();
 
-            Log.d("bmSize", "bmWidth: " + bmWidth + " bmHeight : " + bmHeight);
+            Timber.d("bmSize \t bmWidth: " + bmWidth + " bmHeight : " + bmHeight);
 
             float scaleX = (float) viewWidth / (float) bmWidth;
             float scaleY = (float) viewHeight / (float) bmHeight;

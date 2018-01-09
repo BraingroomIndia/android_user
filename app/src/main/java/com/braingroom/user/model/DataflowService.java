@@ -34,6 +34,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
 import static android.content.ContentValues.TAG;
 import static com.braingroom.user.model.DataflowService.FilterType.Category;
@@ -41,6 +42,7 @@ import static com.braingroom.user.model.DataflowService.FilterType.City;
 import static com.braingroom.user.model.DataflowService.FilterType.Community;
 import static com.braingroom.user.model.DataflowService.FilterType.Locality;
 import static com.braingroom.user.model.DataflowService.FilterType.Segment;
+
 
 public class DataflowService {
 
@@ -80,11 +82,12 @@ public class DataflowService {
 
 
     public void registerUserDevice() {
-
-        api.registerUserDevice(new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""), pref.getString(Constants.BG_ID, null))))
+        final RegisterUserDeviceReq req = new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""), pref.getString(Constants.BG_ID, null)));
+        api.registerUserDevice(req)
                 .onErrorReturn(new Function<Throwable, BaseResp>() {
                     @Override
                     public BaseResp apply(@NonNull Throwable throwable) throws Exception {
+                        Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
                         return new BaseResp();
                     }
                 }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
@@ -109,8 +112,13 @@ public class DataflowService {
         snippet.setSocialId(id);
         snippet.setPhone(mobile);
         snippet.setRegId(fcmToken);
-        return api.socialLogin(new SocialLoginReq(snippet)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        final SocialLoginReq req = new SocialLoginReq(snippet);
+        return api.socialLogin(req).subscribeOn(Schedulers.io()).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
+            }
+        }).observeOn(AndroidSchedulers.mainThread());
 
     }
 
@@ -136,13 +144,13 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<SignUpResp> signUp(SignUpReq signUpReq) {
+    public Observable<SignUpResp> signUp(final SignUpReq signUpReq) {
 
         return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(new Function<Throwable, SignUpResp>() {
                     @Override
                     public SignUpResp apply(@NonNull Throwable throwable) throws Exception {
-                        Log.d("SignUp", "apply: " + throwable.toString());
+                        Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(signUpReq));
                         List<SignUpResp.Snippet> snippet = new ArrayList<SignUpResp.Snippet>(0);
                         SignUpResp resp = new SignUpResp(snippet);
                         resp.setResMsg("Some error occurred ");
@@ -518,7 +526,7 @@ public class DataflowService {
                                 dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
                             } catch (Exception e) {
                                 //  e.printStackTrace();
-                                Log.d(TAG, "apply: " + e.toString());
+                                Timber.tag(TAG).d("apply: " + e);
                             }
 
                         }
@@ -539,7 +547,7 @@ public class DataflowService {
                                 dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
                             } catch (Exception e) {
                                 //  e.printStackTrace();
-                                Log.d(TAG, "apply: " + e.toString());
+                                Timber.tag(TAG).d("apply: " + e.toString());
                             }
 
                         }
@@ -619,6 +627,11 @@ public class DataflowService {
                 checkoutData.setUdf4(data.getUdf4());
                 return checkoutData;
             }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
+            }
         })
                 /*.flatMap(new Function<PayUBookingDetailsResp, ObservableSource<PayUCheckoutData>>() {
                     @Override
@@ -659,10 +672,14 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<RazorSuccessResp> postRazorpaySuccess(RazorSuccessReq req) {
-
+    public Observable<RazorSuccessResp> postRazorpaySuccess(final RazorSuccessReq req) {
         return api.postRazorPaySuccess(req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
+                    }
+                });
     }
 
     public Observable<VendorReviewResp> getVendorReviews(String vendorId) {
