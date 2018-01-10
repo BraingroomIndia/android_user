@@ -70,8 +70,8 @@ public class DataflowService {
 
     public class NameIdPair {
         FilterType type;
-        String name;
-        Integer id;
+        public String name;
+        public Integer id;
 
         public NameIdPair(FilterType type, String name, Integer id) {
             this.name = name;
@@ -848,12 +848,25 @@ public class DataflowService {
     }
 
 
-    private Observable<NameIdPair> getCategoryName(final Integer id) {
+    public Observable<NameIdPair> getCategoryName(final Integer id) {
         return getCategory().map(new Function<CategoryResp, NameIdPair>() {
             @Override
             public NameIdPair apply(CategoryResp categoryResp) throws Exception {
                 for (CategoryResp.Snippet snippet : categoryResp.getData())
                     if (snippet.getId().equals(id))
+                        return new NameIdPair(Category, snippet.getCategoryName(), snippet.getId());
+
+                return new NameIdPair(Category, null, null);
+            }
+        });
+    }
+
+    public Observable<NameIdPair> getCategoryName(final String id) {
+        return getCategory().map(new Function<CategoryResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(CategoryResp categoryResp) throws Exception {
+                for (CategoryResp.Snippet snippet : categoryResp.getData())
+                    if (snippet.getId().equals(Integer.parseInt(id)))
                         return new NameIdPair(Category, snippet.getCategoryName(), snippet.getId());
 
                 return new NameIdPair(Category, null, null);

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
+/*
  * Created by himan on 1/25/2017.
  */
 @Data

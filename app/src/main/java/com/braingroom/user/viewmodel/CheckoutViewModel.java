@@ -711,7 +711,7 @@ public class CheckoutViewModel extends ViewModel {
             snippet.setPromoCode(appliedPromoCode.get());
             snippet.setPromoAmount(appliedPromoAmount + "");
             snippet.setCodAmount(0 + "");
-            snippet.setPaymentMode(paymentMode);
+            snippet.setPaymentMode(Constants.paymentOnline);
             snippet.setIsIncentive(isIncentive);
             List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
             for (ViewModel nonReactiveItem : nonReactiveItems) {
@@ -779,7 +779,7 @@ public class CheckoutViewModel extends ViewModel {
             snippet.setBgTxnid(mChekcoutData.getBGtransactionid());
             snippet.setAmount("0");
             snippet.setCodAmount(totalAmountAfterPromo.get() + "");
-            snippet.setPaymentMode(paymentMode);
+            snippet.setPaymentMode(Constants.paymentOffline);
             snippet.setIsIncentive(isIncentive);
             snippet.setPriceCode(classData.getPriceCode());
             snippet.setClassId(classData.getId());
@@ -872,7 +872,7 @@ public class CheckoutViewModel extends ViewModel {
             snippet.setPromoCode(appliedPromoCode.get());
             snippet.setPromoAmount(appliedPromoAmount + "");
             snippet.setCodAmount(0 + "");
-            snippet.setPaymentMode(paymentMode);
+            snippet.setPaymentMode(Constants.paymentOnline);
             snippet.setIsIncentive(isIncentive);
             List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
             for (ViewModel nonReactiveItem : nonReactiveItems) {

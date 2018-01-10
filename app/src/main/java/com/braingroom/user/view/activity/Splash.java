@@ -17,6 +17,7 @@ import com.braingroom.user.model.QRCode.PostDetail;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
+import com.braingroom.user.model.request.DeepLinkDataReq;
 import com.braingroom.user.model.response.DeepLinkDataResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
@@ -264,7 +265,24 @@ public class Splash extends AppCompatActivity {
             navigateActivity(HomeActivity.class, null);
         } else if (json.contains(Constants.communityListing))
             navigateActivity(CommunityListActivity.class, null);
-        else navigateToIndex();
+        else if (json.contains(Constants.segmentListing)) {
+            final DeepLinkDataResp data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), DeepLinkDataResp.class);
+            apiService.getCategoryName(data.data.categId).doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    Timber.tag(TAG).e(throwable, "Segment Listing");
+                }
+            }).subscribe(new Consumer<DataflowService.NameIdPair>() {
+                @Override
+                public void accept(DataflowService.NameIdPair nameIdPair) throws Exception {
+                    HashMap<String, Integer> hashMap = new HashMap<>();
+                    hashMap.put(nameIdPair.name, nameIdPair.id);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constants.categoryFilterMap, hashMap);
+                    navigateActivity(SegmentListActivity.class, bundle);
+                }
+            });
+        } else navigateToIndex();
 
     }
 
