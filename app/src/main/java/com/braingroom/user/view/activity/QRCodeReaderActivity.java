@@ -64,6 +64,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import timber.log.Timber;
 
 import static com.braingroom.user.FCMInstanceIdService.TAG;
 
@@ -113,7 +114,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
     @Override
     public void onScanned(final Barcode barcode) {
-        Log.e(TAG, "onScanned: " + barcode.displayValue);
+        Timber.tag(TAG).d("onScanned: " + barcode.displayValue);
         barcodeReader.playBeep();
         Bundle bundle = new Bundle();
         if (barCodeUrl != null && barCodeUrl.contains(baseUrl))
@@ -132,7 +133,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
     @Override
     public void onScannedMultiple(List<Barcode> barcodes) {
-        Log.e(TAG, "onScannedMultiple: " + barcodes.size());
+        Timber.tag(TAG).d("onScannedMultiple: " + barcodes.size());
     }
 
     @Override
@@ -234,7 +235,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     public String getBranchUrlData(String url) {
         if (TextUtils.isEmpty(url))
             return null;
-        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG  ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
+        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
         try {
             jsonObject = new JSONObject(jsonObject.getString("data"));
             jsonObject = new JSONObject(jsonObject.getString("qrcode"));
@@ -285,7 +286,12 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
                 if (json.contains("class_listing")) {
 
                     final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
-                    apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
+                    apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            Timber.tag(TAG).e(throwable, json);
+                        }
+                    }).subscribe(new Consumer<FilterData>() {
                         @Override
                         public void accept(FilterData filterData) throws Exception {
                             bundle.putSerializable(Constants.classFilterData, filterData);
@@ -296,7 +302,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
-                            throwable.printStackTrace();
+                            Timber.tag(TAG).e(throwable, json);
                         }
                     });
 

@@ -52,6 +52,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public class BindingUtils {
@@ -218,9 +219,9 @@ public class BindingUtils {
 
     @BindingAdapter(value = {"imageUrl", "placeHolder", "errorUrl", "scaleWidth", "scaleHeight"}, requireAll = false)
     public static void setImageUrl(ImageView imageView, String url, int placeHolder, int errorUrl, int scaleWidth, int scaleHeight) {
-        Log.d(TAG, "setImageUrl: " + url);
+        Timber.tag(TAG).d( "setImageUrl: " + url);
 
-        Log.d(TAG, "setImageUrl: " + url);
+        Timber.tag(TAG).d( "setImageUrl: " + url);
         if ("".equals(url)) url = null;
         Picasso picasso = Picasso.with(imageView.getContext());
         RequestCreator requestCreator;

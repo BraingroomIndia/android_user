@@ -49,6 +49,7 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 import static com.braingroom.user.R.string.action_learners_forum;
 import static com.braingroom.user.R.string.action_tips_tricks;
@@ -86,6 +87,8 @@ public class ClassDetailActivity extends BaseActivity {
         void postQueryForm();
 
         void addReview();
+
+        void addReview(String userId);
 
         void backFromReview();
 
@@ -238,14 +241,14 @@ public class ClassDetailActivity extends BaseActivity {
                         public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
                             Intent intent = new Intent(Intent.ACTION_CALL);
                             intent.setData(Uri.parse("tel:" + phoneNumber));
-                            Log.d(TAG, "accept: " + phoneNumber);
+                            Timber.tag(TAG).d("accept: " + phoneNumber);
                             getNavigator().navigateActivity(intent);
                         }
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                             //throwable.printStackTrace();
-                            Log.d("makeACall", "OnError: " + throwable.toString() + "\t" + phoneNumber);
+                            Timber.tag(TAG).e(throwable, "makeACall" + phoneNumber);
                         }
                     });
             }
@@ -255,6 +258,18 @@ public class ClassDetailActivity extends BaseActivity {
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, classId, new ReviewAddViewModel.ReviewAddHelper() {
+                    @Override
+                    public void run() {
+                        popBackstack();
+                    }
+                })).addToBackStack(null).commit();
+            }
+
+            @Override
+            public void addReview(String userId) {
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, classId, userId, new ReviewAddViewModel.ReviewAddHelper() {
                     @Override
                     public void run() {
                         popBackstack();
@@ -341,7 +356,7 @@ public class ClassDetailActivity extends BaseActivity {
 
         };
         return new ClassDetailViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
-                getIntentString("origin"), getIntentString("catalogueId"), getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive));
+                getIntentString("origin"), getIntentString("catalogueId"), getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive), getIntentString(Constants.BG_ID));
     }
 
     @Override

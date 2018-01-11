@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.text.Spanned;
 import android.util.Log;
 
+import com.braingroom.user.BuildConfig;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassLevelData;
@@ -29,6 +30,10 @@ import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.CheckoutActivity;
 import com.braingroom.user.view.activity.PaySuccessActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
+import com.crashlytics.android.answers.AddToCartEvent;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.PurchaseEvent;
+import com.crashlytics.android.answers.StartCheckoutEvent;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -37,8 +42,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -48,6 +55,7 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
+import timber.log.Timber;
 
 public class CheckoutViewModel extends ViewModel {
     @Override
@@ -164,6 +172,14 @@ public class CheckoutViewModel extends ViewModel {
 
     public CheckoutViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper,
                              @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final int paymentMode, final float discountFactor, final String promo, final String isIncentive) {
+
+        if (!BuildConfig.DEBUG)
+            Answers.getInstance().logAddToCart(new AddToCartEvent()
+                    .putItemPrice(BigDecimal.valueOf(0))
+                    .putCurrency(Currency.getInstance(classData.getPriceCode()))
+                    .putItemName(classData.getClassTopic())
+                    .putItemType(classData.getClassType())
+                    .putItemId(classData.getId()));
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
         this.paymentMode = paymentMode;
@@ -443,7 +459,7 @@ public class CheckoutViewModel extends ViewModel {
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Throwable th) throws Exception {
-                            Log.d("Checkout ", "accept: ");
+                            Timber.tag(TAG).d("Checkout ");
                         }
                     });
                 } else if (getLoggedIn() && isGuest == 1) {
@@ -487,7 +503,7 @@ public class CheckoutViewModel extends ViewModel {
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Throwable th) throws Exception {
-                            Log.d("Checkout ", "accept: ");
+                            Timber.tag(TAG).d("Checkout ", "accept: ");
                         }
                     });
                 } else {
@@ -565,6 +581,7 @@ public class CheckoutViewModel extends ViewModel {
         preFill.put("email", email);
         preFill.put("contact", mobile);
         options.put("prefill", preFill);
+
         uiHelper.startRazorpayPayment(options);
     }
 
@@ -591,22 +608,39 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setUserId(gUserId);
         JSONArray levels = new JSONArray();
         JSONObject levelObj;
+        int itemCount1 = 0;
         for (ViewModel nonReactiveItem : nonReactiveItems) {
             levelObj = new JSONObject();
             if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                itemCount1 = itemCount1 + Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get());
                 levelObj.put(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get());
                 levels.put(levelObj);
             }
         }
+        final int itemCount = itemCount1;
         snippet.setLevels(levels.toString());
+        final GetBookingDetailsReq req = new GetBookingDetailsReq(snippet);
         messageHelper.showProgressDialog(null, "Initiating Payment...");
-        apiService.getBookingDetails(new GetBookingDetailsReq(snippet)
+        apiService.getBookingDetails(req
                 , appliedPromoCodeId != null ? appliedPromoCodeId : null
                 , appliedPromoCodeId != null ? appliedPromoCode.get() : null).subscribe(new Consumer<PayUCheckoutData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull PayUCheckoutData chekcoutData) throws Exception {
 
                 mChekcoutData = chekcoutData;
+
+                if (BuildConfig.DEBUG && mChekcoutData != null)
+                    Answers.getInstance().logStartCheckout(new StartCheckoutEvent()
+                            .putTotalPrice(BigDecimal.valueOf(mChekcoutData.getAmount()))
+                            .putCurrency(Currency.getInstance(classData.getPriceCode()))
+                            .putItemCount(itemCount)
+                            .putCustomAttribute("bg_txnid", mChekcoutData.getBGtransactionid())
+                            .putCustomAttribute("coupon_id", appliedPromoCode.get())
+                            .putCustomAttribute("promo_id", appliedPromoCode.get())
+                            .putCustomAttribute("user_id", mChekcoutData.getUdf1())
+                            .putCustomAttribute("is_guest", isGuest)
+                            .putCustomAttribute("user_email", mChekcoutData.getEmail())
+                            .putCustomAttribute("user_mobile", mChekcoutData.getPhone()));
                 if (usePayU) {
                 } else {
                     if (totalAmountAfterPromo.get() == 0) {
@@ -628,7 +662,7 @@ public class CheckoutViewModel extends ViewModel {
                     preFill.put("email", chekcoutData.getEmail());
                     preFill.put("contact", chekcoutData.getPhone());
                     options.put("prefill", preFill);
-                        /*Log.d(TAG, "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
+                        /*Timber.tag(TAG).d( "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
                                 + "\namount\t:\t" + chekcoutData.getAmount() * 100 + "\nemail\t:\t" + chekcoutData.getEmail()
                                 + "\ncontact\t:\t" + chekcoutData.getPhone());*/
                     messageHelper.dismissActiveProgress();
@@ -640,7 +674,8 @@ public class CheckoutViewModel extends ViewModel {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                 messageHelper.show(throwable.getMessage());
-                Log.d("PayUCheckoutData", "accept: " + throwable.getMessage());
+                Timber.tag(TAG).e(throwable, "Api name : getBookingDetails\trequest payload\n" + gson.toJson(req));
+
             }
         });
 
@@ -719,21 +754,43 @@ public class CheckoutViewModel extends ViewModel {
             String temp = gson.toJson(levelsList);
             temp = "{\"tickets\":" + temp + "}";
             snippet.setTickets(temp);
-            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).doOnError(new Consumer<Throwable>() {
+            final RazorSuccessReq req = new RazorSuccessReq(snippet);
+            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
                 }
-            }).doOnComplete(new Action() {
+            }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
+                    if (BuildConfig.DEBUG)
+                        Answers.getInstance().logPurchase(new PurchaseEvent()
+                                .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
+                                .putCurrency(Currency.getInstance(classData.getPriceCode()))
+                                .putItemName(classData.getClassTopic())
+                                .putItemType(classData.getClassType())
+                                .putItemId(req.getData().classId)
+                                .putSuccess(bundle.getBoolean(Constants.success))
+                                .putCustomAttribute("tickets", req.getData().getTickets())
+                                .putCustomAttribute("txnid", req.getData().getRazorPayTxnid())
+                                .putCustomAttribute("bg_txnid", req.getData().getBgTxnid())
+                                .putCustomAttribute("coupon_id", req.getData().getCouponCode())
+                                .putCustomAttribute("promo_id", req.getData().getPromoAmount())
+                                .putCustomAttribute("user_id", req.getData().getUserId())
+                                .putCustomAttribute("is_guest", req.getData().getIsGuest())
+                                .putCustomAttribute("payment_mode", req.getData().getPaymentMode())
+                                .putCustomAttribute("user_email", req.getData().getUserEmail())
+                                .putCustomAttribute("user_mobile", req.getData().getUserMobile())
+                                .putCustomAttribute("cod_amount", req.getData().getCodAmount())
+                        );
                     messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
                     if (bundle.getBoolean(Constants.success))
                         navigator.finishActivity();
+                    else
+                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
                 }
             }).subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
@@ -757,7 +814,7 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
 
                 }
             });
@@ -799,21 +856,50 @@ public class CheckoutViewModel extends ViewModel {
             String temp = gson.toJson(levelsList);
             temp = "{\"tickets\":" + temp + "}";
             snippet.setTickets(temp);
-            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).doOnError(new Consumer<Throwable>() {
+            final RazorSuccessReq req = new RazorSuccessReq(snippet);
+            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
                 }
-            }).doOnComplete(new Action() {
+            }).doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    messageHelper.dismissActiveProgress();
+                    messageHelper.show(throwable.getMessage());
+                    bundle.putBoolean(Constants.success, false);
+                }
+            }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
+                    if (BuildConfig.DEBUG)
+                        Answers.getInstance().logPurchase(new PurchaseEvent()
+                                .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
+                                .putCurrency(Currency.getInstance(classData.getPriceCode()))
+                                .putItemName(classData.getClassTopic())
+                                .putItemType(classData.getClassType())
+                                .putItemId(req.getData().classId)
+                                .putSuccess(bundle.getBoolean(Constants.success))
+                                .putCustomAttribute("tickets", req.getData().getTickets())
+                                .putCustomAttribute("txnid", req.getData().getRazorPayTxnid())
+                                .putCustomAttribute("bg_txnid", req.getData().getBgTxnid())
+                                .putCustomAttribute("coupon_id", req.getData().getCouponCode())
+                                .putCustomAttribute("promo_id", req.getData().getPromoAmount())
+                                .putCustomAttribute("user_id", req.getData().getUserId())
+                                .putCustomAttribute("is_guest", req.getData().getIsGuest())
+                                .putCustomAttribute("payment_mode", req.getData().getPaymentMode())
+                                .putCustomAttribute("user_email", req.getData().getUserEmail())
+                                .putCustomAttribute("user_mobile", req.getData().getUserMobile())
+                                .putCustomAttribute("cod_amount", req.getData().getCodAmount())
+                        );
                     messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
                     if (bundle.getBoolean(Constants.success))
                         navigator.finishActivity();
+                    else
+                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
                 }
             }).subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
@@ -837,17 +923,17 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
+                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
 
                 }
             });
         } else {
 
+            messageHelper.showProgressDialog("Wait", "Processing your payment...");
             bundle.putString(Constants.BGTransactionId, mChekcoutData.getBGtransactionid());
             bundle.putString(Constants.className, classData.getClassTopic());
             bundle.putString(Constants.name, mChekcoutData.getFirstname());
             bundle.putString(Constants.amount, mChekcoutData.getAmount() + "");
-            messageHelper.showProgressDialog("Wait", "Processing your payment...");
             RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
             snippet.setBookingType(Constants.normalBooking);
             snippet.setBgTxnid(mChekcoutData.getBGtransactionid());
@@ -877,7 +963,8 @@ public class CheckoutViewModel extends ViewModel {
             String temp = gson.toJson(levelsList);
             temp = "{\"tickets\":" + temp + "}";
             snippet.setTickets(temp);
-            apiService.postRazorpaySuccess(new RazorSuccessReq(snippet)).doOnError(new Consumer<Throwable>() {
+            final RazorSuccessReq req = new RazorSuccessReq(snippet);
+            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                     messageHelper.dismissActiveProgress();
@@ -885,13 +972,35 @@ public class CheckoutViewModel extends ViewModel {
                     bundle.putBoolean(Constants.success, false);
 //                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
                 }
-            }).doOnComplete(new Action() {
+            }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
+                    if (BuildConfig.DEBUG)
+                        Answers.getInstance().logPurchase(new PurchaseEvent()
+                                .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
+                                .putCurrency(Currency.getInstance(classData.getPriceCode()))
+                                .putItemName(classData.getClassTopic())
+                                .putItemType(classData.getClassType())
+                                .putItemId(req.getData().classId)
+                                .putSuccess(bundle.getBoolean(Constants.success))
+                                .putCustomAttribute("tickets", req.getData().getTickets())
+                                .putCustomAttribute("txnid", req.getData().getRazorPayTxnid())
+                                .putCustomAttribute("bg_txnid", req.getData().getBgTxnid())
+                                .putCustomAttribute("coupon_id", req.getData().getCouponCode())
+                                .putCustomAttribute("promo_id", req.getData().getPromoAmount())
+                                .putCustomAttribute("user_id", req.getData().getUserId())
+                                .putCustomAttribute("is_guest", req.getData().getIsGuest())
+                                .putCustomAttribute("payment_mode", req.getData().getPaymentMode())
+                                .putCustomAttribute("user_email", req.getData().getUserEmail())
+                                .putCustomAttribute("user_mobile", req.getData().getUserMobile())
+                                .putCustomAttribute("cod_amount", req.getData().getCodAmount())
+                        );
                     messageHelper.dismissActiveProgress();
                     navigator.navigateActivity(PaySuccessActivity.class, bundle);
                     if (bundle.getBoolean(Constants.success))
                         navigator.finishActivity();
+                    else
+                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
                 }
             }).subscribe(new Consumer<RazorSuccessResp>() {
                 @Override
@@ -915,8 +1024,7 @@ public class CheckoutViewModel extends ViewModel {
                     messageHelper.dismissActiveProgress();
                     messageHelper.show(throwable.getMessage());
                     bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
-
+                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
                 }
             });
         }

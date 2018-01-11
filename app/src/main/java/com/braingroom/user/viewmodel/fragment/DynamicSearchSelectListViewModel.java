@@ -171,7 +171,7 @@ public class DynamicSearchSelectListViewModel extends ViewModel {
 //        }, new Consumer<Throwable>() {
 //            @Override
 //            public void accept(@NonNull Throwable throwable) throws Exception {
-//                Log.d("Search select List VM", "accept: " + throwable.getMessage());
+//                Timber.tag(TAG).d(("Search select List VM", "accept: " + throwable.getMessage());
 //            }
 //        });
 //    }

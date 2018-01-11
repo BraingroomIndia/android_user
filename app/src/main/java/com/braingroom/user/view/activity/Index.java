@@ -359,8 +359,10 @@ public class Index extends AppCompatActivity {
                 }
 
                 @Override
-                public void showAcceptDismissInfo() {
+                public void showAcceptDismissInfo(@Nullable String title, @android.support.annotation.NonNull String content, @android.support.annotation.NonNull MaterialDialog.SingleButtonCallback positiveCallback) {
+
                 }
+
 
                 @Override
                 public void showProgressDialog(@Nullable String title, @NonNull String content) {

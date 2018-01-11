@@ -1,7 +1,5 @@
 package com.braingroom.user.model;
 
-import android.util.Log;
-
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.utils.Constants;
@@ -17,10 +15,7 @@ import java.nio.charset.UnsupportedCharsetException;
 
 import javax.inject.Inject;
 
-import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -28,6 +23,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
+import timber.log.Timber;
 
 import static android.content.ContentValues.TAG;
 
@@ -54,7 +50,9 @@ public class CustomInterceptor implements Interceptor {
         Request.Builder requestBuilder = original.newBuilder()
                 .addHeader("X-App-Type", "BGUSR01")
                 .addHeader("X-App-Version", versionCode + "")
-                .addHeader("X-App-Geo", Constants.GEO_TAG);
+                .addHeader("X-App-Geo", Constants.GEO_TAG)
+                .addHeader("X-App-UUID", UserApplication.DeviceFingerPrintID)
+                .addHeader("X-App-Platform", "Android");
         Request request = requestBuilder.build();
         Response response;
         try {
@@ -62,15 +60,15 @@ public class CustomInterceptor implements Interceptor {
         } catch (ConnectException e) {
             //  e.printStackTrace();
 
-            Log.d(TAG, "intercept: no network " + e.getLocalizedMessage());
+            Timber.tag(TAG).e("intercept: no network " + e);
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;
         } catch (SocketTimeoutException e) {
-            Log.d(TAG, "intercept: no network " + e.getLocalizedMessage());
+            Timber.tag(TAG).e("intercept: no network " + e);
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;
         } catch (UnknownHostException e) {
-            Log.d(TAG, "intercept: no network " + e.getLocalizedMessage());
+            Timber.tag(TAG).e("intercept: no network " + e);
             UserApplication.getInstance().getInternetStatusBus().onNext(false);
             throw e;
         }

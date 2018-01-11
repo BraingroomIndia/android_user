@@ -1,12 +1,16 @@
 package com.braingroom.user;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.multidex.MultiDex;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.widget.TextView;
 
 import com.braingroom.user.utils.AppComponent;
@@ -15,24 +19,32 @@ import com.braingroom.user.utils.BindingAdapters;
 import com.braingroom.user.utils.BindingUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.DaggerAppComponent;
+import com.braingroom.user.utils.ProductionTree;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 /*import com.squareup.leakcanary.RefWatcher;*/
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import io.branch.referral.Branch;
 import io.branch.referral.BranchApp;
+import io.branch.referral.PrefHelper;
 import io.fabric.sdk.android.Fabric;
 import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
 import timber.log.Timber;
+
+import static com.google.android.gms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo;
 
 
 public class UserApplication extends BranchApp {
@@ -59,7 +71,7 @@ public class UserApplication extends BranchApp {
 
     public boolean loggedIn = false;
 
-    public static int versionCode = 10;
+    public static int versionCode = BuildConfig.VERSION_CODE;
 //
 
     public static boolean locationSettingPopup;
@@ -76,14 +88,19 @@ public class UserApplication extends BranchApp {
     // Google Analytics
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
+    public static String DeviceFingerPrintID;
 
     @Override
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
-        if (!BuildConfig.DEBUG)
-            Fabric.with(this, new Crashlytics());
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new ProductionTree(this));
+        }
         Branch.getAutoInstance(this);
+        DeviceFingerPrintID = PrefHelper.getInstance(this).getDeviceFingerPrintID();
 
         try {
             versionCode = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;

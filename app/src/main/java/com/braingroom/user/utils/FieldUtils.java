@@ -9,6 +9,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.functions.Cancellable;
+import timber.log.Timber;
 
 
 public class FieldUtils {
@@ -23,7 +24,7 @@ public class FieldUtils {
                     @Override
                     public void onPropertyChanged(android.databinding.Observable observable, int i) {
                         e.onNext(field.get());
-                        Log.d("onPropertyChanged", "cancel: " + field.toString());
+                        Timber.d("onPropertyChanged", "cancel: " + field.toString());
                     }
                 };
                 field.addOnPropertyChangedCallback(callback);
@@ -31,7 +32,7 @@ public class FieldUtils {
                     @Override
                     public void cancel() throws Exception {
                         field.removeOnPropertyChangedCallback(callback);
-                        Log.d("removeOnProperty", "cancel: " + field.toString());
+                        Timber.d("removeOnProperty", "cancel: " + field.toString());
                     }
                 });
             }

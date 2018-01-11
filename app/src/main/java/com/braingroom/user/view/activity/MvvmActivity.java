@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import dagger.internal.Preconditions;
+import timber.log.Timber;
 
 
 /**
@@ -150,7 +151,7 @@ public abstract class MvvmActivity extends AppCompatActivity {
                 mTracker = GoogleAnalytics.getInstance(ctx).newTracker(R.xml.global_tracker);
             }
         } catch (Exception e) {
-            Log.d("Notification", "init, e=" + e);
+            Timber.w(e, "Google Analytics");
         }
 
 

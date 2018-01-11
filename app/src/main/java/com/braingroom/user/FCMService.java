@@ -38,6 +38,8 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Random;
 
+import timber.log.Timber;
+
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
 public class FCMService extends FirebaseMessagingService {
@@ -54,12 +56,12 @@ public class FCMService extends FirebaseMessagingService {
         if (mFirebaseAnalytics == null)
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Timber.tag(TAG).d( "From: " + remoteMessage.getFrom());
         UserApplication.getInstance().newNotificationBus.onNext(true);
-        Log.d(TAG, "onMessageReceived: " + remoteMessage.toString());
+        Timber.tag(TAG).d( "onMessageReceived: " + remoteMessage.toString());
 
         if (remoteMessage.getData() != null)
-            Log.d(TAG, "Payload:" + remoteMessage.getData());
+            Timber.tag(TAG).d( "Payload:" + remoteMessage.getData());
 
         sendNotification(remoteMessage);
 
@@ -71,6 +73,7 @@ public class FCMService extends FirebaseMessagingService {
         Intent intent;
         Bundle data = new Bundle();
         String notificationType = remoteMessage.getData().get("notify_type");
+
         String notificationId = remoteMessage.getData().get("notification_id");
         String title = null;
         String title1 = null;
@@ -94,7 +97,7 @@ public class FCMService extends FirebaseMessagingService {
         data.putBoolean(Constants.pushNotification, true);
         data.putString(Constants.pushNotification, mapToJson);
         int number = (random).nextInt(Integer.MAX_VALUE);
-        Log.d(TAG, "sendNotification: " + number);
+        Timber.tag(TAG).d( "sendNotification: " + number);
         intent = new Intent(this, Splash.class);
         intent.putExtra(Constants.pushNotification, data);
         intent.setAction(number+"");

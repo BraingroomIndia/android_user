@@ -21,6 +21,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import lombok.Setter;
+import timber.log.Timber;
 
 public class ListDialogViewModel1 extends ViewModel {
 
@@ -87,7 +88,7 @@ public class ListDialogViewModel1 extends ViewModel {
         }).doOnError(new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Log.d("ListDialogViewmodel", "onError in source observable", throwable);
+                Timber.tag(TAG).e(throwable, "ListDialogViewmodel");
             }
         }).onErrorResumeNext(Observable.<ListDialogData1>empty())
                 .share();
@@ -165,7 +166,7 @@ public class ListDialogViewModel1 extends ViewModel {
             if (resultConsumer != null)
                 resultConsumer.accept(selectedItemsMap);
         } catch (Exception e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Timber.tag(TAG).d(e.getLocalizedMessage());
         }
     }
 

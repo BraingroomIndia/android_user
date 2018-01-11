@@ -46,6 +46,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
 import static lombok.libs.org.objectweb.asm.commons.GeneratorAdapter.AND;
@@ -162,7 +163,7 @@ public class ConnectPostViewModel extends ViewModel {
         }
 
 
-        Log.d(TAG, "postType: " + postType);
+        Timber.tag(TAG).d( "postType: " + postType);
 
 
         postConsumer = new Consumer<HashMap<String, Integer>>() {
@@ -198,7 +199,7 @@ public class ConnectPostViewModel extends ViewModel {
         try {
             postConsumer.accept(mSelectedPostType);
         } catch (Exception e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Timber.tag(TAG).d( e.getLocalizedMessage());
         }
         privacyVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Privacy", messageHelper
                 , Observable.just(new ListDialogData1(privacyTypeApiData))
@@ -269,7 +270,7 @@ public class ConnectPostViewModel extends ViewModel {
                     String selectedIds = android.text.TextUtils.join(",", new ArrayList(selectedMap.values()));
                     setGroup(selectedIds);
                     activityVm.reInit(getgetGroupActivitiesApiObservable(selectedIds));
-                    Log.d(TAG, "accept: " + selectedIds);
+                    Timber.tag(TAG).d( "accept: " + selectedIds);
                 }
 
             }
@@ -584,7 +585,7 @@ public class ConnectPostViewModel extends ViewModel {
             if (postType != null)
                 imageUploadVm.imageUpload(fileUri, postType);
             else messageHelper.show("Select post type ");
-            Log.d(TAG, "fileuri: " + fileUri);
+            Timber.tag(TAG).d( "fileuri: " + fileUri);
 
         } else if (((requestCode == REQ_CODE_CHOOSE_VIDEO)
                 && resultCode == RESULT_OK && data != null && data.getData() != null)) {
@@ -592,7 +593,7 @@ public class ConnectPostViewModel extends ViewModel {
             if (postType != null)
                 videoUploadVm.uploadVideo(fileUri, postType);
             else messageHelper.show("Select post type ");
-            Log.d(TAG, "fileuri: " + fileUri);
+            Timber.tag(TAG).d( "fileuri: " + fileUri);
 
         }
 

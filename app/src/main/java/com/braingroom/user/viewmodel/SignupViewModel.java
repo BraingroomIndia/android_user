@@ -56,6 +56,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import timber.log.Timber;
 
 
 public class SignupViewModel extends ViewModel {
@@ -216,7 +217,7 @@ public class SignupViewModel extends ViewModel {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        Log.d(TAG, "signUp: " + throwable.toString());
+                        Timber.tag(TAG).d( "signUp: " + throwable.toString());
 
                     }
                 });
@@ -296,7 +297,7 @@ public class SignupViewModel extends ViewModel {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        Log.d(TAG, "signUp: " + throwable.toString());
+                        Timber.tag(TAG).d( "signUp: " + throwable.toString());
 
                     }
                 });

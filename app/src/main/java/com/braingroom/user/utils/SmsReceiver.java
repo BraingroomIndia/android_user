@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.braingroom.user.UserApplication;
 
+import timber.log.Timber;
+
 /**
  * Created by godara on 01/07/17.
  */
@@ -33,7 +35,7 @@ public class SmsReceiver extends BroadcastReceiver {
                         SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) aPdusObj);
                         String senderAddress = currentMessage.getDisplayOriginatingAddress();
                         message = currentMessage.getDisplayMessageBody();
-                        Log.e(TAG, "Received SMS: " + message + ", Sender: " + senderAddress);
+                        Timber.tag(TAG).d( "Received SMS: " + message + ", Sender: " + senderAddress);
                         // if the SMS is not from our gateway, ignore the message
                         if (!senderAddress.toLowerCase().contains(SMS_ORIGIN.toLowerCase())) {
                             return;
@@ -44,7 +46,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     }
             }
         } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
+            Timber.tag(TAG).d( "Exception: " + e.getMessage());
         }
     }
 
@@ -63,7 +65,7 @@ public class SmsReceiver extends BroadcastReceiver {
             int start = index + 2;
             int length = 6;
             code = message.substring(start, start + length);
-            Log.e(TAG, "OTP received: " + code);
+            Timber.tag(TAG).d( "OTP received: " + code);
         }
         return code;
     }

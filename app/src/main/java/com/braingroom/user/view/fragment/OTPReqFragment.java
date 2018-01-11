@@ -19,6 +19,9 @@ import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.OTPViewModel;
 
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
+
+import static com.braingroom.user.view.activity.LoginActivity.TAG;
 
 /**
  * Created by godara on 01/07/17.
@@ -77,7 +80,7 @@ public class OTPReqFragment extends BaseFragment {
                                             try {
                                                 ((OTPViewModel) vm).requestOTP(mobile);
                                             } catch (Exception e) {
-                                                Log.d("Cast error", "accept:" + e.toString());
+                                                Timber.tag(TAG).w(e, "Cast error");
                                             }
 
                                         }

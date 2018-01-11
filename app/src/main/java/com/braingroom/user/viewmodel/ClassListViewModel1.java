@@ -53,6 +53,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
+import timber.log.Timber;
 
 public class ClassListViewModel1 extends ViewModel {
 
@@ -377,7 +378,7 @@ public class ClassListViewModel1 extends ViewModel {
 
                 }
                 // FireBase Tracking
-                Log.d(TAG, "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
+                Timber.tag(TAG).d( "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                 if (resp.getClassDataList().size() == 0 && currentPage == 0) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                 } else {
@@ -500,7 +501,7 @@ public class ClassListViewModel1 extends ViewModel {
                 }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        Log.d("Class Fetch error", "accept: " + throwable.getMessage());
+                        Timber.tag(TAG).e(throwable,"Class Fetch error");
                     }
                 });
             }

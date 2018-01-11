@@ -37,6 +37,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
 import lombok.Getter;
+import timber.log.Timber;
 
 public class ExploreViewModel extends ViewModel {
 
@@ -91,7 +92,7 @@ public class ExploreViewModel extends ViewModel {
                             results.add(new DataItemViewModel(elem.getCategoryName(), false, new MyConsumer<DataItemViewModel>() {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull DataItemViewModel viewModel) {
-                                    categoryId = elem.getId()+"";
+                                    categoryId = elem.getId() + "";
 //                                    zoom = 11.0f;
                                     refreshMapPinsToNewLocation(null);
                                     categorySelectorSubject.onNext(viewModel);
@@ -139,7 +140,7 @@ public class ExploreViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d("Explore Viewmodel", "accept: ");
+                Timber.tag(TAG).e(throwable, "Explore Viewmodel");
             }
         });
     }
@@ -211,7 +212,7 @@ public class ExploreViewModel extends ViewModel {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                Log.d("Location", "accept: ");
+                Timber.tag(TAG).w(throwable, "Location");
             }
         });
 

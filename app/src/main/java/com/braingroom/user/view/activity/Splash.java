@@ -17,6 +17,7 @@ import com.braingroom.user.model.QRCode.PostDetail;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
+import com.braingroom.user.model.response.DeepLinkDataResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.FilterViewModel;
@@ -37,6 +38,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 import static android.text.TextUtils.isEmpty;
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
@@ -68,21 +70,33 @@ public class Splash extends AppCompatActivity {
         super.onCreate(icicle);
         UserApplication.getInstance().getMAppComponent().inject(this);
         UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -1) == -1;
-        Log.d(TAG, "onCreate: Called  ");
+        Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
+        Timber.tag(TAG).d("onCreate: Called  ");
         branch = Branch.getInstance();
         apiService.checkGeoDetail();
-        if (getIntent().getExtras() != null)
-            bundleReceived = getIntent().getExtras().getBundle(Constants.pushNotification);
-        branchData();
+        onNewIntent(getIntent());
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getExtras() != null)
+            bundleReceived = intent.getExtras().getBundle(Constants.pushNotification);
+        String action = intent.getAction();
+        String data = intent.getDataString();
+        if (Intent.ACTION_VIEW.equals(action) && data != null) {
+            apiService.getDeepLinkData(data).subscribe(new Consumer<DeepLinkDataResp>() {
+                @Override
+                public void accept(DeepLinkDataResp resp) throws Exception {
+                    qrCodeData(gson.toJson(resp));
+                }
+            });
+        } else {
+            branchData();
+        }
+    }
 
     public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
-        try {
-            Log.d(this.getClass().getSimpleName(), "FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         Intent intent = new Intent(Splash.this, destination);
         intent.putExtra("classData", bundle);
         startActivity(intent);
@@ -94,24 +108,32 @@ public class Splash extends AppCompatActivity {
         String classId = null;
         String messageSenderId = null;
         String messageSenderName = null;
+        String nonfictionPurpose = null;
+        String userId = null;
+        HashMap<String, String> data;
         Bundle bundle = new Bundle();
         //if onMessageReceived called
         if (bundleReceived != null) {
             bundle.putBoolean(Constants.pushNotification, true);
-            HashMap<String, String> data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
+            data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
             }.getType());
-            Log.d(TAG, "hashMap data" + data.toString());
+            Timber.tag(TAG).d("hashMap data" + data.toString());
             bundle.putString("notification_id", data.get("notification_id"));
             postId = data.get("post_id");
             classId = data.get("class_id");
             messageSenderId = data.get("sender_id");
             messageSenderName = data.get("sender_name");
+            nonfictionPurpose = data.get("notification_type");
+            userId = data.get("user_id");
             // if onMessageReceived not called
         } else if (getIntent().getExtras() != null) {
             postId = getIntent().getExtras().getString("post_id");
             classId = getIntent().getExtras().getString("class_id");
             messageSenderId = getIntent().getExtras().getString("sender_id");
             messageSenderName = getIntent().getExtras().getString("sender_name");
+            nonfictionPurpose = getIntent().getExtras().getString("notification_type");
+            userId = getIntent().getExtras().getString("user_id");
+
         } else {
             navigateActivity(Index.class, null);
             return;
@@ -120,6 +142,8 @@ public class Splash extends AppCompatActivity {
             bundle.putString("postId", postId);
             navigateActivity(PostDetailActivity.class, bundle);
         } else if (classId != null) {
+            if ("class_review".equals(nonfictionPurpose))
+                bundle.putString(Constants.BG_ID, userId);
             bundle.putString("id", classId);
             bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
             navigateActivity(ClassDetailActivity.class, bundle);
@@ -147,10 +171,11 @@ public class Splash extends AppCompatActivity {
     private void qrCodeData(final String json) {
 
         final Bundle bundle = new Bundle();
-        if (json == null) {
+        if (json == null || json.isEmpty() || json.trim().isEmpty()) {
+            navigateToIndex();
             return;
         }
-        if (json.contains("class_listing")) {
+        if (json.contains(Constants.classListing)) {
             final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
             apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
                 @Override
@@ -164,23 +189,24 @@ public class Splash extends AppCompatActivity {
             }, new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
+
+                    Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(data.reqData));
                     navigateToIndex();
-                    throwable.printStackTrace();
                 }
             });
 
-        } else if (json.contains("connect_listing")) {
+        } else if (json.contains(Constants.connectListing)) {
             try {
                 ConnectListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ConnectListing.class);
                 ConnectFilterData connectFilterData = gson.fromJson(gson.toJson(data.reqData), ConnectFilterData.class);
                 bundle.putSerializable(Constants.connectFilterData, connectFilterData);
                 navigateActivity(ConnectHomeActivity.class, bundle);
             } catch (Exception e) {
+                Timber.tag(TAG).e(e, Constants.connectListing);
                 navigateToIndex();
-                e.printStackTrace();
             }
 
-        } else if (json.contains("class_detail")) {
+        } else if (json.contains(Constants.classDetail)) {
 
             try {
                 ClassDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassDetail.class);
@@ -189,25 +215,28 @@ public class Splash extends AppCompatActivity {
                 bundle.putString(Constants.promoCode, data.reqData.getPromoCode());
                 navigateActivity(ClassDetailActivity.class, bundle);
             } catch (Exception e) {
+                Timber.tag(TAG).e(e, Constants.classDetail);
                 e.printStackTrace();
                 navigateToIndex();
             }
-        } else if (json.contains("post_detail")) {
+        } else if (json.contains(Constants.postDetail)) {
 
             try {
                 PostDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), PostDetail.class);
                 bundle.putString("postId", data.reqData.getPostId());
                 navigateActivity(PostDetailActivity.class, bundle);
             } catch (Exception e) {
+                Timber.tag(TAG).e(e, Constants.postDetail);
                 e.printStackTrace();
                 navigateToIndex();
             }
         } else if (json.contains("class_booking")) {
             final ClassBooking data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassBooking.class);
-            apiService.getClassDetail(data.reqData.id, 0).onErrorReturn(new Function<Throwable, ClassData>() {
+            apiService.getClassDetail(data.reqData.id, 0).doOnError(new Consumer<Throwable>() {
                 @Override
-                public ClassData apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    return new ClassData();
+                public void accept(Throwable throwable) throws Exception {
+                    Timber.tag(TAG).e(throwable);
+                    navigateToIndex();
                 }
             }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<ClassData>() {
                 @Override
@@ -223,10 +252,13 @@ public class Splash extends AppCompatActivity {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
                     throwable.printStackTrace();
-                    navigateToIndex();
                 }
             });
-        } else navigateToIndex();
+        } else if (json.contains(Constants.home)) {
+            navigateActivity(HomeActivity.class, null);
+        } else if (json.contains(Constants.communityListing))
+            navigateActivity(CommunityListActivity.class, null);
+        else navigateToIndex();
 
     }
 
@@ -243,7 +275,10 @@ public class Splash extends AppCompatActivity {
                         /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
                          Launch Monster viewer activity if a link clicked without $android_deeplink_path
                         */
-                        else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
+                        else if (branchError != null) {
+                            Timber.tag(TAG).e("Branch Error" + branchError.getMessage());
+                            navigateToIndex();
+                        } else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                             HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
                             if (referringParams.containsKey("referral")) {
                                 String referralCode = referringParams.get("referral");
@@ -266,7 +301,7 @@ public class Splash extends AppCompatActivity {
                     }
                 }, this.getIntent().getData(), this);
         } catch (Exception e) {
-            Log.d(TAG, "Branch error: " + e.getLocalizedMessage());
+            Timber.tag(TAG).e(e, "Branch error: ");
             navigateToIndex();
             e.printStackTrace();
 

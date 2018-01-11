@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -33,6 +34,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
 import static android.content.ContentValues.TAG;
 import static com.braingroom.user.model.DataflowService.FilterType.Category;
@@ -40,6 +42,7 @@ import static com.braingroom.user.model.DataflowService.FilterType.City;
 import static com.braingroom.user.model.DataflowService.FilterType.Community;
 import static com.braingroom.user.model.DataflowService.FilterType.Locality;
 import static com.braingroom.user.model.DataflowService.FilterType.Segment;
+
 
 public class DataflowService {
 
@@ -79,11 +82,12 @@ public class DataflowService {
 
 
     public void registerUserDevice() {
-
-        api.registerUserDevice(new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""), pref.getString(Constants.BG_ID, null))))
+        final RegisterUserDeviceReq req = new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""), pref.getString(Constants.BG_ID, null)));
+        api.registerUserDevice(req)
                 .onErrorReturn(new Function<Throwable, BaseResp>() {
                     @Override
                     public BaseResp apply(@NonNull Throwable throwable) throws Exception {
+                        Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
                         return new BaseResp();
                     }
                 }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
@@ -108,8 +112,13 @@ public class DataflowService {
         snippet.setSocialId(id);
         snippet.setPhone(mobile);
         snippet.setRegId(fcmToken);
-        return api.socialLogin(new SocialLoginReq(snippet)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        final SocialLoginReq req = new SocialLoginReq(snippet);
+        return api.socialLogin(req).subscribeOn(Schedulers.io()).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
+            }
+        }).observeOn(AndroidSchedulers.mainThread());
 
     }
 
@@ -135,13 +144,13 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<SignUpResp> signUp(SignUpReq signUpReq) {
+    public Observable<SignUpResp> signUp(final SignUpReq signUpReq) {
 
         return api.BuyerRegistration(signUpReq).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(new Function<Throwable, SignUpResp>() {
                     @Override
                     public SignUpResp apply(@NonNull Throwable throwable) throws Exception {
-                        Log.d("SignUp", "apply: " + throwable.toString());
+                        Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(signUpReq));
                         List<SignUpResp.Snippet> snippet = new ArrayList<SignUpResp.Snippet>(0);
                         SignUpResp resp = new SignUpResp(snippet);
                         resp.setResMsg("Some error occurred ");
@@ -517,7 +526,7 @@ public class DataflowService {
                                 dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
                             } catch (Exception e) {
                                 //  e.printStackTrace();
-                                Log.d(TAG, "apply: " + e.toString());
+                                Timber.tag(TAG).d("apply: " + e);
                             }
 
                         }
@@ -538,7 +547,7 @@ public class DataflowService {
                                 dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
                             } catch (Exception e) {
                                 //  e.printStackTrace();
-                                Log.d(TAG, "apply: " + e.toString());
+                                Timber.tag(TAG).d("apply: " + e.toString());
                             }
 
                         }
@@ -618,6 +627,11 @@ public class DataflowService {
                 checkoutData.setUdf4(data.getUdf4());
                 return checkoutData;
             }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
+            }
         })
                 /*.flatMap(new Function<PayUBookingDetailsResp, ObservableSource<PayUCheckoutData>>() {
                     @Override
@@ -658,10 +672,14 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<RazorSuccessResp> postRazorpaySuccess(RazorSuccessReq req) {
-
+    public Observable<RazorSuccessResp> postRazorpaySuccess(final RazorSuccessReq req) {
         return api.postRazorPaySuccess(req).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
+                    }
+                });
     }
 
     public Observable<VendorReviewResp> getVendorReviews(String vendorId) {
@@ -756,6 +774,13 @@ public class DataflowService {
     public Observable<ReviewAddResp> addReview(int reviewType, String vendorIdorClassId, String review, String rating) {
         return api.reviewAdd(new ReviewAddReq(new ReviewAddReq.Snippet(pref.getString(Constants.BG_ID, ""), reviewType, vendorIdorClassId, review, rating))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).onErrorReturnItem(new ReviewAddResp());
+    }
+
+    public Observable<ReviewAddResp> addReview(int reviewType, String vendorIdorClassId, String review, String rating, String userId) {
+        if (!isEmpty(userId))
+            return api.reviewAdd(new ReviewAddReq(new ReviewAddReq.Snippet(userId, reviewType, vendorIdorClassId, review, rating))).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread()).onErrorReturnItem(new ReviewAddResp());
+        else return addReview(reviewType, vendorIdorClassId, review, rating);
     }
 
     public Observable<ReviewGetResp> getReview(int reviewType, String id, int pageNumber) {
@@ -932,69 +957,120 @@ public class DataflowService {
         filterData.setEndDate(data.getEndDate());
         filterData.setKeywords(data.getKeywords());
         List<Observable<NameIdPair>> filterReqName = new ArrayList<>();
+        final GeneralFilterReq payLoad = new GeneralFilterReq(data);
 //        1
-        if (isDigitsOnly(data.getCategoryId())) {
-            filterReqName.add(getCategoryName(Integer.parseInt(data.getCategoryId())));
+        try {
+            if (!isEmpty(data.getCategoryId()))
+                filterReqName.add(getCategoryName(Integer.parseInt(data.getCategoryId())));
 //        2
-            if (isDigitsOnly(data.getSegmentId()))
-                filterReqName.add(getSegmentName(Integer.parseInt(data.getCategoryId()), Integer.parseInt(data.getSegmentId())));
+            try {
+                if (!isEmpty(data.getSegmentId()))
+                    filterReqName.add(getSegmentName(Integer.parseInt(data.getCategoryId()), Integer.parseInt(data.getSegmentId())));
+            } catch (Exception e) {
+                Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+            }
+
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
         }
 //        3 city
-        if (isDigitsOnly(data.getCityId())) {
-            filterReqName.add(getCityName(Integer.parseInt(data.getCityId())));
+        try {
+            if (!isEmpty(data.getCityId()))
+                filterReqName.add(getCityName(Integer.parseInt(data.getCityId())));
 //        4 locality
-            if (isDigitsOnly(data.getLocalityId()))
-                filterReqName.add(getLocalityName(Integer.parseInt(data.getCityId()), Integer.parseInt(data.getLocalityId())));
-        }
-//        5 community
-        if (isDigitsOnly(data.getCommunityId()))
-            filterReqName.add(getCommunityName(Integer.parseInt(data.getCommunityId())));
-//        6 class Type
-        if (isDigitsOnly(data.getClassType()))
-            filterReqName.add(getClassType(Integer.parseInt(data.getClassType())));
-//        7  class schedule
-        if (isDigitsOnly(data.getClassSchedule()))
-            filterReqName.add(getClassSchedule(Integer.parseInt(data.getClassSchedule())));
-//        8  vendor
-        if (isDigitsOnly(data.getClassProvider()))
-            filterReqName.add(getVendorName(Integer.parseInt(data.getClassProvider())));
-        return Observable.zip(filterReqName, new Function<Object[], FilterData>() {
-            @Override
-            public FilterData apply(Object[] objects) throws Exception {
-
-                for (Object nameIdPair : objects)
-                    if (nameIdPair instanceof NameIdPair) {
-                        NameIdPair object = (NameIdPair) nameIdPair;
-                        switch (object.type) {
-                            case Category:
-                                filterData.setCategoryId(object.name, object.id);
-                                break;
-                            case Segment:
-                                filterData.setSegmentId(object.name, object.id);
-                                break;
-                            case City:
-                                filterData.setCityId(object.name, object.id);
-                                break;
-                            case Locality:
-                                filterData.setLocalityId(object.name, object.id);
-                                break;
-                            case Community:
-                                filterData.setCommunityId(object.name, object.id);
-                                break;
-                            case ClassType:
-                                filterData.setClassTypeId(object.name, object.id);
-                                break;
-                            case ClassSchedule:
-                                filterData.setClassScheduleId(object.name, object.id);
-                                break;
-                            case VendorList:
-                                filterData.setVendorId(object.name, object.id);
-                                break;
-                        }
-                    }
-                return filterData;
+            try {
+                if (!isEmpty(data.getLocalityId()))
+                    filterReqName.add(getLocalityName(Integer.parseInt(data.getCityId()), Integer.parseInt(data.getLocalityId())));
+            } catch (Exception e) {
+                Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
             }
-        });
+
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
+//        5 community
+        try {
+            if (!isEmpty(data.getCommunityId()))
+                filterReqName.add(getCommunityName(Integer.parseInt(data.getCommunityId())));
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
+//        6 class Type
+        try {
+            if (!isEmpty(data.getClassType()))
+                filterReqName.add(getClassType(Integer.parseInt(data.getClassType())));
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
+//        7  class schedule
+        try {
+            if (!isEmpty(data.getClassSchedule()))
+                filterReqName.add(getClassSchedule(Integer.parseInt(data.getClassSchedule())));
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
+//        8  vendor
+        try {
+            if (!isEmpty(data.getClassProvider()))
+                filterReqName.add(getVendorName(Integer.parseInt(data.getClassProvider())));
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
+        if (filterReqName.isEmpty())
+            return Observable.just(filterData);
+        else
+            return Observable.zip(filterReqName, new Function<Object[], FilterData>() {
+                @Override
+                public FilterData apply(Object[] objects) throws Exception {
+
+                    for (Object nameIdPair : objects)
+                        if (nameIdPair instanceof NameIdPair) {
+                            NameIdPair object = (NameIdPair) nameIdPair;
+                            switch (object.type) {
+                                case Category:
+                                    filterData.setCategoryId(object.name, object.id);
+                                    break;
+                                case Segment:
+                                    filterData.setSegmentId(object.name, object.id);
+                                    break;
+                                case City:
+                                    filterData.setCityId(object.name, object.id);
+                                    break;
+                                case Locality:
+                                    filterData.setLocalityId(object.name, object.id);
+                                    break;
+                                case Community:
+                                    filterData.setCommunityId(object.name, object.id);
+                                    break;
+                                case ClassType:
+                                    filterData.setClassTypeId(object.name, object.id);
+                                    break;
+                                case ClassSchedule:
+                                    filterData.setClassScheduleId(object.name, object.id);
+                                    break;
+                                case VendorList:
+                                    filterData.setVendorId(object.name, object.id);
+                                    break;
+                            }
+                        }
+                    return filterData;
+                }
+            }).doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+                }
+            }).onErrorReturn(new Function<Throwable, FilterData>() {
+                @Override
+                public FilterData apply(Throwable throwable) throws Exception {
+                    return filterData;
+                }
+            });
 
     }
 
@@ -1447,5 +1523,7 @@ public class DataflowService {
         return api.getUserGeoLocation(new UserGeoLocationReq()).onErrorReturnItem(new UserGeoLocationResp()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    ;
+    public Observable<DeepLinkDataResp> getDeepLinkData(String url) {
+        return api.getDeepLinkData(new DeepLinkDataReq(url)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation());
+    }
 }

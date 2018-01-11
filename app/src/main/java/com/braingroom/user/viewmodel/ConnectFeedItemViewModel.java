@@ -173,7 +173,7 @@ public class ConnectFeedItemViewModel extends ViewModel {
         this.video = new ObservableField<>(data.getVideo());
         this.videoThumb = new ObservableField<>(isEmpty(video.get()) ? null : "http://img.youtube.com/vi/" + video.get() + "/hqdefault.jpg");
         this.liked = new ObservableBoolean(data.getLiked() != 0);
-        // Log.d(TAG, "ConnectFeedItemViewModel: \n videoUrl \t " + video.get() + "\n videoThumb \t" + videoThumb.get() + "\n");
+        // Timber.tag(TAG).d( "ConnectFeedItemViewModel: \n videoUrl \t " + video.get() + "\n videoThumb \t" + videoThumb.get() + "\n");
         this.reported = new ObservableBoolean(data.getReported() != 0);
         this.postType = data.getPostType();
         this.isActivityRequest = "activity_request".equalsIgnoreCase(postType);

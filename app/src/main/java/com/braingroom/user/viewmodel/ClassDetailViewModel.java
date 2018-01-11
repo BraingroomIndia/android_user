@@ -64,6 +64,7 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Setter;
+import timber.log.Timber;
 
 
 public class ClassDetailViewModel extends ViewModel {
@@ -156,10 +157,14 @@ public class ClassDetailViewModel extends ViewModel {
     public static final String BNS = "Buy & Sell";
     public static final String AP = "Activity partner";
 
+    public final String userId;
+
     public final MyConsumerString expandAction, collapseAction;
 
     public ClassDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
-                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo, final String isIncentive) {
+                                @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo, final String isIncentive, final String userId) {
+
+        this.userId = userId;
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
@@ -167,7 +172,7 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 retry();
-                Log.d(TAG, "run: " + callAgain.get());
+                Timber.tag(TAG).d("run: " + callAgain.get());
             }
         });
         if (!isEmpty(promo))
@@ -286,17 +291,12 @@ public class ClassDetailViewModel extends ViewModel {
                                     if (resp.getData().isEmpty())
                                         messageHelper.showDismissInfo("", resp.getResMsg());
                                     else {
-                                        messageHelper.showAcceptableInfo("Offer", resp.getData().get(0).getDisplayText(), "Call Tutor", new MaterialDialog.SingleButtonCallback() {
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                                uiHelper.makeACall(resp.getData().get(0).getMobileNumber());
-                                            }
-                                        });
+                                        messageHelper.showDismissInfo("Contact Tutor", resp.getData().get(0).getDisplayText());
                                     }
                                 }
                             });
                 else
-                    messageHelper.showLoginRequireDialog("Only logged in user can call tutor", null);
+                    messageHelper.showLoginRequireDialog("Only logged in user can contact tutor", null);
             }
         };
         onAddReviewClicked = new Action() {
@@ -304,10 +304,18 @@ public class ClassDetailViewModel extends ViewModel {
             public void run() throws Exception {
                 if (getLoggedIn())
                     uiHelper.addReview();
+                else if (!isEmpty(userId)) uiHelper.addReview(userId);
                 else
                     messageHelper.showLoginRequireDialog("Only logged in user can add review", null);
             }
         };
+        if (!isEmpty(userId)) {
+            try {
+                onAddReviewClicked.run();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         callConsumer = new Consumer<HashMap<String, Integer>>() {
             @Override
@@ -432,7 +440,7 @@ public class ClassDetailViewModel extends ViewModel {
                             description.set(Html.fromHtml(classData.getClassSummary())); //Edited By Vikas Godara
 
                         } catch (Exception e) {
-                            Log.d(TAG, "description:" + e.toString());
+                            Timber.tag(TAG).d("description:" + e.toString());
                             // e.printStackTrace();
                         }
 
@@ -671,7 +679,7 @@ public class ClassDetailViewModel extends ViewModel {
                 mGoogleMap.addMarker(markerOption);
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10.0f));
             } catch (Exception e) {
-                Log.d(TAG, "populateMarkers: " + e.toString());
+                Timber.tag(TAG).d("populateMarkers: " + e.toString());
             }
         }
 
