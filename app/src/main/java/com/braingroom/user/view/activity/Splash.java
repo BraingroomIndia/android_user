@@ -69,7 +69,7 @@ public class Splash extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         UserApplication.getInstance().getMAppComponent().inject(this);
-        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -1) == -1;
+        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
         Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
         Timber.tag(TAG).d("onCreate: Called  ");
         branch = Branch.getInstance();
