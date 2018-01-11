@@ -395,7 +395,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="dev.braingroom.com"
+                    android:host="www.braingroom.com"
                     android:pathPrefix="/"
                     android:scheme="https" />
             </intent-filter>
