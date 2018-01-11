@@ -97,10 +97,10 @@ public class Splash extends AppCompatActivity {
     }
 
     public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
-
         Intent intent = new Intent(Splash.this, destination);
         intent.putExtra("classData", bundle);
         startActivity(intent);
+        finish();
     }
 
     private void pushNotification() {
@@ -177,14 +177,7 @@ public class Splash extends AppCompatActivity {
         }
         if (json.contains(Constants.classListing)) {
             final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
-            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) throws Exception {
-                    navigateToIndex();
-                    Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(data.reqData));
-                    throwable.printStackTrace();
-                }
-            }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
+            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
                 @Override
                 public void accept(FilterData filterData) throws Exception {
                     bundle.putSerializable(Constants.classFilterData, filterData);
@@ -198,6 +191,7 @@ public class Splash extends AppCompatActivity {
                 public void accept(Throwable throwable) throws Exception {
 
                     Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(data.reqData));
+                    navigateToIndex();
                 }
             });
 
@@ -281,8 +275,9 @@ public class Splash extends AppCompatActivity {
                         /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
                          Launch Monster viewer activity if a link clicked without $android_deeplink_path
                         */
-                        if (branchError != null) {
+                        else if (branchError != null) {
                             Timber.tag(TAG).e("Branch Error" + branchError.getMessage());
+                            navigateToIndex();
                         } else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                             HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
                             if (referringParams.containsKey("referral")) {

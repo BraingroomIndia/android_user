@@ -32,12 +32,12 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="daf5ece1b04b791eaebc08ac2106413d127a80f7" />
-        <!--   <meta-data
-               android:name="com.razorpay.ApiKey"
-               android:value="rzp_live_SN4tYAqDnzHHem" />-->
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_OqXUgMZBz4WkBL" />
+            android:value="rzp_live_SN4tYAqDnzHHem" />
+        <!--  <meta-data
+              android:name="com.razorpay.ApiKey"
+              android:value="rzp_test_OqXUgMZBz4WkBL" />-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -57,7 +57,7 @@
             android:value="@string/branch_test_key" />
         <meta-data
             android:name="io.branch.sdk.TestMode"
-            android:value="true" />
+            android:value="false" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -393,9 +393,11 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https"
+
+                <data
                     android:host="dev.braingroom.com"
-                    android:pathPrefix="/" />
+                    android:pathPrefix="/"
+                    android:scheme="https" />
             </intent-filter>
 
             <!-- AppLink config -->

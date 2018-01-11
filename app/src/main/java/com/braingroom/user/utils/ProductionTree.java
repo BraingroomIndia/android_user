@@ -23,8 +23,7 @@ public class ProductionTree extends Timber.Tree {
 
     @Override
     protected void log(int priority, String tag, String message, Throwable t) {
-        // Log the message to Crashlytics, so we can see it in crash reports
-        Crashlytics.log(message);
+        // Log the message to Crashlytics, so we can see it in crash reports;
 
         // Log the exception in Crashlytics if we have one.
         if (t != null) {
@@ -33,12 +32,13 @@ public class ProductionTree extends Timber.Tree {
 
         // If this is an error or a warning, log it as a exception so we see it in Crashlytics.
         if (priority > Log.WARN) {
-            Crashlytics.logException(new Throwable(message));
+            Crashlytics.log(priority, tag, message);
+            //Crashlytics.logException(new Throwable(message));
         }
 
         // Track INFO level logs as custom Answers events.
         if (priority == Log.INFO) {
-            Answers.getInstance().logCustom(new CustomEvent(message));
+            // Answers.getInstance().logCustom(new CustomEvent(message));
         }
     }
 }

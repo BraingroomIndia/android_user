@@ -957,32 +957,70 @@ public class DataflowService {
         filterData.setEndDate(data.getEndDate());
         filterData.setKeywords(data.getKeywords());
         List<Observable<NameIdPair>> filterReqName = new ArrayList<>();
+        final GeneralFilterReq payLoad = new GeneralFilterReq(data);
 //        1
-        if (isDigitsOnly(data.getCategoryId())) {
-            filterReqName.add(getCategoryName(Integer.parseInt(data.getCategoryId())));
+        try {
+            if (!isEmpty(data.getCategoryId()))
+                filterReqName.add(getCategoryName(Integer.parseInt(data.getCategoryId())));
 //        2
-            if (isDigitsOnly(data.getSegmentId()))
-                filterReqName.add(getSegmentName(Integer.parseInt(data.getCategoryId()), Integer.parseInt(data.getSegmentId())));
+            try {
+                if (!isEmpty(data.getSegmentId()))
+                    filterReqName.add(getSegmentName(Integer.parseInt(data.getCategoryId()), Integer.parseInt(data.getSegmentId())));
+            } catch (Exception e) {
+                Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+            }
+
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
         }
 //        3 city
-        if (isDigitsOnly(data.getCityId())) {
-            filterReqName.add(getCityName(Integer.parseInt(data.getCityId())));
+        try {
+            if (!isEmpty(data.getCityId()))
+                filterReqName.add(getCityName(Integer.parseInt(data.getCityId())));
 //        4 locality
-            if (isDigitsOnly(data.getLocalityId()))
-                filterReqName.add(getLocalityName(Integer.parseInt(data.getCityId()), Integer.parseInt(data.getLocalityId())));
+            try {
+                if (!isEmpty(data.getLocalityId()))
+                    filterReqName.add(getLocalityName(Integer.parseInt(data.getCityId()), Integer.parseInt(data.getLocalityId())));
+            } catch (Exception e) {
+                Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+            }
+
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
         }
+
 //        5 community
-        if (isDigitsOnly(data.getCommunityId()))
-            filterReqName.add(getCommunityName(Integer.parseInt(data.getCommunityId())));
+        try {
+            if (!isEmpty(data.getCommunityId()))
+                filterReqName.add(getCommunityName(Integer.parseInt(data.getCommunityId())));
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
 //        6 class Type
-        if (isDigitsOnly(data.getClassType()))
-            filterReqName.add(getClassType(Integer.parseInt(data.getClassType())));
+        try {
+            if (!isEmpty(data.getClassType()))
+                filterReqName.add(getClassType(Integer.parseInt(data.getClassType())));
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
 //        7  class schedule
-        if (isDigitsOnly(data.getClassSchedule()))
-            filterReqName.add(getClassSchedule(Integer.parseInt(data.getClassSchedule())));
+        try {
+            if (!isEmpty(data.getClassSchedule()))
+                filterReqName.add(getClassSchedule(Integer.parseInt(data.getClassSchedule())));
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
 //        8  vendor
-        if (isDigitsOnly(data.getClassProvider()))
-            filterReqName.add(getVendorName(Integer.parseInt(data.getClassProvider())));
+        try {
+            if (!isEmpty(data.getClassProvider()))
+                filterReqName.add(getVendorName(Integer.parseInt(data.getClassProvider())));
+        } catch (Exception e) {
+            Timber.tag(TAG).e(e, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+        }
+
         if (filterReqName.isEmpty())
             return Observable.just(filterData);
         else
@@ -1020,6 +1058,16 @@ public class DataflowService {
                                     break;
                             }
                         }
+                    return filterData;
+                }
+            }).doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(payLoad));
+                }
+            }).onErrorReturn(new Function<Throwable, FilterData>() {
+                @Override
+                public FilterData apply(Throwable throwable) throws Exception {
                     return filterData;
                 }
             });

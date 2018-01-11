@@ -142,7 +142,7 @@ public class HomeViewModel extends ViewModel {
                 public void accept(UserGeoLocationResp resp) throws Exception {
                     if (resp.getResCode()) {
                         UserApplication.locationSettingPopup = false;
-                        editor.putInt(Constants.SAVED_CITY_ID, -2).apply();
+                        editor.putInt(Constants.SAVED_CITY_ID, -1).apply();
                         messageHelper.showAcceptDismissInfo(resp.getData().getTitle(), resp.getData().getMessage(), new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
