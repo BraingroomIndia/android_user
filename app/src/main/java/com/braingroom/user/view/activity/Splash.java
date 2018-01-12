@@ -70,7 +70,7 @@ public class Splash extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         UserApplication.getInstance().getMAppComponent().inject(this);
-        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -1) == -1;
+        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
         Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
         Timber.tag(TAG).d("onCreate: Called  ");
         branch = Branch.getInstance();
@@ -98,10 +98,10 @@ public class Splash extends AppCompatActivity {
     }
 
     public void navigateActivity(Class<?> destination, @Nullable Bundle bundle) {
-
         Intent intent = new Intent(Splash.this, destination);
         intent.putExtra("classData", bundle);
         startActivity(intent);
+        finish();
     }
 
     private void pushNotification() {
@@ -178,14 +178,7 @@ public class Splash extends AppCompatActivity {
         }
         if (json.contains(Constants.classListing)) {
             final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
-            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) throws Exception {
-                    navigateToIndex();
-                    Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(data.reqData));
-                    throwable.printStackTrace();
-                }
-            }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
+            apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
                 @Override
                 public void accept(FilterData filterData) throws Exception {
                     bundle.putSerializable(Constants.classFilterData, filterData);
@@ -199,6 +192,7 @@ public class Splash extends AppCompatActivity {
                 public void accept(Throwable throwable) throws Exception {
 
                     Timber.tag(TAG).e(throwable, "Qr code issue\nrequest Payload\n" + gson.toJson(data.reqData));
+                    navigateToIndex();
                 }
             });
 
@@ -275,11 +269,16 @@ public class Splash extends AppCompatActivity {
             }).subscribe(new Consumer<DataflowService.NameIdPair>() {
                 @Override
                 public void accept(DataflowService.NameIdPair nameIdPair) throws Exception {
-                    HashMap<String, Integer> hashMap = new HashMap<>();
-                    hashMap.put(nameIdPair.name, nameIdPair.id);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Constants.categoryFilterMap, hashMap);
-                    navigateActivity(SegmentListActivity.class, bundle);
+                    if (nameIdPair != null && nameIdPair.id > 0) {
+                        HashMap<String, Integer> hashMap = new HashMap<>();
+                        hashMap.put(nameIdPair.name, nameIdPair.id);
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putSerializable(Constants.categoryFilterMap, hashMap);
+                        navigateActivity(SegmentListActivity.class, bundle1);
+                    } else {
+                        Timber.tag(TAG).e("Category id is wrong" + json);
+                        navigateToIndex();
+                    }
                 }
             });
         } else navigateToIndex();
@@ -299,8 +298,9 @@ public class Splash extends AppCompatActivity {
                         /* In case the clicked link has $android_deeplink_path the Branch will launch the MonsterViewer automatically since AutoDeeplinking feature is enabled.
                          Launch Monster viewer activity if a link clicked without $android_deeplink_path
                         */
-                        if (branchError != null) {
+                        else if (branchError != null) {
                             Timber.tag(TAG).e("Branch Error" + branchError.getMessage());
+                            navigateToIndex();
                         } else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                             HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
                             if (referringParams.containsKey("referral")) {

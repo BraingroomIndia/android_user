@@ -21,7 +21,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 12
-        versionName "1.0.1.1"
+        versionName "1.0.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -37,26 +37,37 @@ android {
         }
     }
     buildTypes {
-
         release {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            versionNameSuffix '-live'
         }
-
-
+        debug {
+            ext.alwaysUpdateBuildId = false
+            ext.enableCrashlytics = false
+            versionNameSuffix '-dev'
+        }
     }
     dataBinding {
         enabled = true
     }
-
     /* compileOptions {
          sourceCompatibility JavaVersion.VERSION_1_8
          targetCompatibility JavaVersion.VERSION_1_8
      }*/
-
+    productFlavors {
+        prod {
+            minSdkVersion 16
+            applicationId 'com.braingroom.user'
+            targetSdkVersion 27
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            versionCode 12
+            versionName '1.0.1.2'
+        }
+    }
 }
 
 
@@ -71,25 +82,18 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
-
     //FaceBook Login
-    
-
     //
     compile 'com.android.support:cardview-v7:27.0.1'
     compile 'com.android.support:recyclerview-v7:27.0.1'
     compile('com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1') {
         exclude group: 'com.android.support', module: 'support-v4'
     }
-    
-
-    
     compile('com.patloew.rxlocation:rxlocation:1.0.3') {
         exclude group: 'com.google.gms', module: 'play-services-location'
     }
-
     //Dimension
-//    compile 'com.intuit.sdp:sdp-android:1.0.4'
+    //    compile 'com.intuit.sdp:sdp-android:1.0.4'
     //Dimension
     //    compile 'at.blogc:expandabletextview:1.0.3'
     compile('io.branch.sdk.android:library:2.12.1') {
@@ -98,9 +102,7 @@ dependencies {
     }
     //memory
     //memory
-    
-
-compile 'com.facebook.android:facebook-android-sdk:4.17.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.17.0'
     compile 'com.google.android.gms:play-services-auth:11.6.0'
     compile 'com.google.android.gms:play-services-maps:11.6.0'
     compile 'com.google.android.gms:play-services-places:11.6.0'

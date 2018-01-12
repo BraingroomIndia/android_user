@@ -72,6 +72,7 @@ public class Constants {
     public static final String postDetail = "post_detail";
     public static final String classDetail = "class_detail";
     public static final String communityListing = "community_listing";
+    public static final String segmentListing = "segment_listing";
 
 
     public static final String FONT_REGULAR = "Roboto-Regular.ttf";
@@ -80,5 +81,9 @@ public class Constants {
 
     public static final String ACTIVITY_NAME = "ACTIVITY_NAME";
     public static final String pushNotification = "pushNotification";
+
+    public static final String development = "dev";
+
+    public static final String production = "www";
 
 }

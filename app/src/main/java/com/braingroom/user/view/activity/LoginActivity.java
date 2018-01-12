@@ -126,8 +126,8 @@ public class LoginActivity extends BaseActivity implements
 
                     @Override
                     public void onError(FacebookException exception) {
-                        Timber.tag(TAG).d("onError: ", exception);
-                        Timber.tag(TAG).d(TAG, "onError: ", exception);
+                        Timber.tag(TAG).wtf(exception, exception.getLocalizedMessage());
+                        Timber.tag(TAG).e(TAG, "onError: ", exception);
                         getMessageHelper().show("Facebook login error");
                     }
                 });

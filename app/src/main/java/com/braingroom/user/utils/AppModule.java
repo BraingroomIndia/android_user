@@ -33,9 +33,11 @@ public class AppModule {
     private final UserApplication application;
     String mBaseUrl;
 
-    public AppModule(UserApplication application, String baseUrl) {
+    public AppModule(UserApplication application) {
         this.application = application;
-        this.mBaseUrl = baseUrl;
+        if (BuildConfig.DEBUG)
+            this.mBaseUrl = "https://dev.braingroom.com/apis/";
+        else this.mBaseUrl = "https://www.braingroom.com/apis/";
     }
 
     @Provides
@@ -124,13 +126,7 @@ public class AppModule {
     @Provides
     @Singleton
     Picasso providesPicasso() {
-        if (BuildConfig.DEBUG) {
-            Picasso picasso = Picasso.with(application);
-            picasso.setIndicatorsEnabled(true);
-            return picasso;
-        } else {
-            return Picasso.with(application);
-        }
+        return Picasso.with(application);
     }
 
 }

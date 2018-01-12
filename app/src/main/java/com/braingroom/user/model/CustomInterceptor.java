@@ -1,7 +1,5 @@
 package com.braingroom.user.model;
 
-import android.util.Log;
-
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.utils.Constants;
@@ -17,10 +15,7 @@ import java.nio.charset.UnsupportedCharsetException;
 
 import javax.inject.Inject;
 
-import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -55,7 +50,9 @@ public class CustomInterceptor implements Interceptor {
         Request.Builder requestBuilder = original.newBuilder()
                 .addHeader("X-App-Type", "BGUSR01")
                 .addHeader("X-App-Version", versionCode + "")
-                .addHeader("X-App-Geo", Constants.GEO_TAG);
+                .addHeader("X-App-Geo", Constants.GEO_TAG)
+                .addHeader("X-App-UUID", UserApplication.DeviceFingerPrintID)
+                .addHeader("X-App-Platform", "Android");
         Request request = requestBuilder.build();
         Response response;
         try {

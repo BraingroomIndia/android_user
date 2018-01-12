@@ -87,13 +87,15 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     public DataflowService apiService;
 
     public String baseUrl = "";
+    public String branchKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UserApplication.getInstance().getMAppComponent().inject(this);
         setContentView(R.layout.activity_qrcode_reader);
-        baseUrl = !BuildConfig.DEBUG ? getString(R.string.branch_test_base_url) : getString(R.string.branch_live_base_url);
+        baseUrl = getString(R.string.branch_base_url);
+        branchKey = getString(R.string.branch_key);
         // getting barcode instance
         barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_fragment);
 
@@ -235,7 +237,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     public String getBranchUrlData(String url) {
         if (TextUtils.isEmpty(url))
             return null;
-        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
+        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + branchKey);
         try {
             jsonObject = new JSONObject(jsonObject.getString("data"));
             jsonObject = new JSONObject(jsonObject.getString("qrcode"));
@@ -286,7 +288,12 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
                 if (json.contains("class_listing")) {
 
                     final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
-                    apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
+                    apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            Timber.tag(TAG).e(throwable, json);
+                        }
+                    }).subscribe(new Consumer<FilterData>() {
                         @Override
                         public void accept(FilterData filterData) throws Exception {
                             bundle.putSerializable(Constants.classFilterData, filterData);
@@ -297,7 +304,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
-                            throwable.printStackTrace();
+                            Timber.tag(TAG).e(throwable, json);
                         }
                     });
 
