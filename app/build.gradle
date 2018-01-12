@@ -58,7 +58,7 @@ android {
          sourceCompatibility JavaVersion.VERSION_1_8
          targetCompatibility JavaVersion.VERSION_1_8
      }*/
-    productFlavors {
+/*    productFlavors {
         prod {
             minSdkVersion 16
             applicationId 'com.braingroom.user'
@@ -67,7 +67,7 @@ android {
             versionCode 12
             versionName '1.0.1.2'
         }
-    }
+    }*/
 }
 
 
