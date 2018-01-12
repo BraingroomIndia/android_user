@@ -70,8 +70,8 @@ public class DataflowService {
 
     public class NameIdPair {
         FilterType type;
-        String name;
-        Integer id;
+        public String name;
+        public Integer id;
 
         public NameIdPair(FilterType type, String name, Integer id) {
             this.name = name;
@@ -848,7 +848,7 @@ public class DataflowService {
     }
 
 
-    private Observable<NameIdPair> getCategoryName(final Integer id) {
+    public Observable<NameIdPair> getCategoryName(final Integer id) {
         return getCategory().map(new Function<CategoryResp, NameIdPair>() {
             @Override
             public NameIdPair apply(CategoryResp categoryResp) throws Exception {

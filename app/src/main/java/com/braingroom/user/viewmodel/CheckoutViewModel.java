@@ -629,7 +629,7 @@ public class CheckoutViewModel extends ViewModel {
 
                 mChekcoutData = chekcoutData;
 
-                if (BuildConfig.DEBUG && mChekcoutData != null)
+                if (!BuildConfig.DEBUG && mChekcoutData != null)
                     Answers.getInstance().logStartCheckout(new StartCheckoutEvent()
                             .putTotalPrice(BigDecimal.valueOf(mChekcoutData.getAmount()))
                             .putCurrency(Currency.getInstance(classData.getPriceCode()))
@@ -765,7 +765,7 @@ public class CheckoutViewModel extends ViewModel {
             }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
-                    if (BuildConfig.DEBUG)
+                    if (!BuildConfig.DEBUG)
                         Answers.getInstance().logPurchase(new PurchaseEvent()
                                 .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
                                 .putCurrency(Currency.getInstance(classData.getPriceCode()))
@@ -874,7 +874,7 @@ public class CheckoutViewModel extends ViewModel {
             }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
-                    if (BuildConfig.DEBUG)
+                    if (!BuildConfig.DEBUG)
                         Answers.getInstance().logPurchase(new PurchaseEvent()
                                 .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
                                 .putCurrency(Currency.getInstance(classData.getPriceCode()))
@@ -975,7 +975,7 @@ public class CheckoutViewModel extends ViewModel {
             }).doFinally(new Action() {
                 @Override
                 public void run() throws Exception {
-                    if (BuildConfig.DEBUG)
+                    if (!BuildConfig.DEBUG)
                         Answers.getInstance().logPurchase(new PurchaseEvent()
                                 .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
                                 .putCurrency(Currency.getInstance(classData.getPriceCode()))

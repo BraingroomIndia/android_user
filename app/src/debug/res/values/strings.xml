@@ -32,10 +32,9 @@
 
     <string name="sign_up"><u>New User?Signup</u>.</string>
     <string name="google_maps_key" translatable="false">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
-    <string name="branch_test_key" translatable="false">key_test_pexsI2ytGiNEj794aRPe2mkgFsnwUtCT</string>
-    <string name="branch_key" translatable="false">key_live_hpBAJ2zvLlPqp388kOv49pieszozQrrF</string>
+    <string name="branch_key" translatable="false">key_test_pexsI2ytGiNEj794aRPe2mkgFsnwUtCT</string>
     <string name="branch_live_key" translatable="false">key_live_hpBAJ2zvLlPqp388kOv49pieszozQrrF</string>
-    <string name="branch_base_url" translatable="false">https://ht5w.app.link/</string>
+    <string name="branch_base_url" translatable="false">https://ht5w.test-app.link/</string>
 
     <string name="facebook_app_id" translatable="false">1949694208609258</string>
     <string name="fb_login_protocol_scheme">fb1949694208609258</string>
@@ -58,9 +57,9 @@
     <!--Added By Vikas Godara-->
     <string name="q1">What is Braingroom?</string>
 
-    <string name="razor_pay_key">rzp_live_SN4tYAqDnzHHem</string>
-    <bool name="branch_mode">false</bool>
-    <string name="deep_linking">www.braingroom.com</string>
+    <string name="razor_pay_key">rzp_test_OqXUgMZBz4WkBL</string>
+    <bool name="branch_mode">true</bool>
+    <string name="deep_linking">dev.braingroom.com</string>
     <string name="q2">What are the benefits of posting classes in Braingroom?</string>
     <string name="q3">Why do I need to register in BrainGroom?</string>
     <string name="q4">Is there any fee for registration?</string>

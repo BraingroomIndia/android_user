@@ -120,7 +120,7 @@ public class UserApplication extends BranchApp {
 //            Timber.plant(new CrashReportingTree());
 //        }
         sInstance = this;
-        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this, BASE_URL)).build();
+        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
         internetStatusBus = PublishSubject.create();
         newNotificationBus = PublishSubject.create();
