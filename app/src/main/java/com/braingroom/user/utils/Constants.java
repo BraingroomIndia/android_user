@@ -67,7 +67,6 @@ public class Constants {
 
     public static final String home = "Home";
     public static final String classListing = "class_listing";
-    public static final String segmentListing = "segment_listing";
     public static final String connectListing = "connect_listing";
     public static final String postDetail = "post_detail";
     public static final String classDetail = "class_detail";

@@ -24,6 +24,7 @@ android {
         versionName "1.0.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
 
 
     }
@@ -143,6 +144,7 @@ dependencies {
     compile 'com.hanks:htextview-scale:0.1.1'
     compile 'com.ms-square:expandableTextView:0.1.4'
     compile 'com.razorpay:checkout:1.4.0'
+    compile 'com.stripe:stripe-android:5.1.0'
     compile 'me.relex:circleindicator:1.2.2@aar'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.squareup:javapoet:1.9.0'

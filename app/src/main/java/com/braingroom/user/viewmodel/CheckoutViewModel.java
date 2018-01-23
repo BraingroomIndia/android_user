@@ -730,7 +730,7 @@ public class CheckoutViewModel extends ViewModel {
             snippet.setAmount("" + totalAmountAfterPromo.get());
             snippet.setClassId(classData.getId());
             snippet.setUserId(gUserId);
-            snippet.setPaymentMode(paymentMode);
+            snippet.setPaymentMode(Constants.paymentOnline);
             snippet.setLocalityId(selectedLocalityId);
             snippet.setRazorPayTxnid(razorpayId);
             snippet.setUserEmail(couponPayData.getEmail());

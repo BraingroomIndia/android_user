@@ -12,6 +12,13 @@
     <color name="colorTextDark">#333333</color>
     <color name="black">#000000</color>
 
+    <color name="light_gray">#F0F5F5</color>
+    <color name="translucent_white">#80FFFFFF</color>
+    <color name="dark_gray">#243037</color>
+
+    <color name="light_blue">#59AAFF</color>
+
+    <color name="dark_blue">#1C6AC9</color>
     <color name="colorShimmerGray">#d7d7d7</color>
     <color name="colorShimmerGrayLight">#e7e7e7</color>
     <color name="colorShimmerGrayLighter">#f3f3f3</color>

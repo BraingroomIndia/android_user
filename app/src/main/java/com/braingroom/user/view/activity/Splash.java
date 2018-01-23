@@ -69,13 +69,17 @@ public class Splash extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        UserApplication.getInstance().getMAppComponent().inject(this);
-        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
-        Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
-        Timber.tag(TAG).d("onCreate: Called  ");
-        branch = Branch.getInstance();
-        apiService.checkGeoDetail();
-        onNewIntent(getIntent());
+        if (false)
+            navigateActivity(StripeActivity.class, null);
+        else {
+            UserApplication.getInstance().getMAppComponent().inject(this);
+            UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
+            Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
+            Timber.tag(TAG).d("onCreate: Called  ");
+            branch = Branch.getInstance();
+            apiService.checkGeoDetail();
+            onNewIntent(getIntent());
+        }
     }
 
     @Override
