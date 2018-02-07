@@ -33,6 +33,7 @@ import javax.inject.Named;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
+import io.branch.referral.PrefHelper;
 import io.branch.referral.util.LinkProperties;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -43,6 +44,8 @@ import timber.log.Timber;
 
 import static android.text.TextUtils.isEmpty;
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
+import static com.braingroom.user.view.activity.StripeActivity.QUERY_CLIENT_SECRET;
+import static com.braingroom.user.view.activity.StripeActivity.QUERY_SOURCE_ID;
 
 /*
  * Created by godara on 17/11/17.
@@ -69,17 +72,19 @@ public class Splash extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        if (false)
+
+        if (false) {
             navigateActivity(StripeActivity.class, null);
-        else {
-            UserApplication.getInstance().getMAppComponent().inject(this);
-            UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
-            Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
-            Timber.tag(TAG).d("onCreate: Called  ");
-            branch = Branch.getInstance();
-            apiService.checkGeoDetail();
-            onNewIntent(getIntent());
+            return;
         }
+        UserApplication.getInstance().getMAppComponent().inject(this);
+        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
+        Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
+        Timber.tag(TAG).d("onCreate: Called  ");
+        branch = Branch.getInstance();
+        UserApplication.DeviceFingerPrintID = PrefHelper.getInstance(this).getDeviceFingerPrintID();
+        apiService.checkGeoDetail();
+        onNewIntent(getIntent());
     }
 
     @Override
@@ -296,6 +301,7 @@ public class Splash extends AppCompatActivity {
                 branch.initSession(new Branch.BranchUniversalReferralInitListener() {
                     @Override
                     public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
+                        UserApplication.DeviceFingerPrintID = PrefHelper.getInstance(Splash.this).getDeviceFingerPrintID();
                         //If not Launched by clicking Branch link
                         if (branchUniversalObject == null)
                             pushNotification();

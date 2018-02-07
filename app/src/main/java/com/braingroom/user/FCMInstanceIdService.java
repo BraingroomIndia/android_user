@@ -3,6 +3,7 @@ package com.braingroom.user;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.utils.Constants;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
@@ -14,9 +15,9 @@ import timber.log.Timber;
 
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
-/**
+/*
  * Created by Promolta-H on 05-02-2017.
- */
+*/
 
 public class FCMInstanceIdService extends FirebaseInstanceIdService {
 
@@ -25,6 +26,10 @@ public class FCMInstanceIdService extends FirebaseInstanceIdService {
     @Inject
     @Named("defaultPrefEditor")
     SharedPreferences.Editor editor;
+
+    @Inject
+    public DataflowService apiService;
+
 
     public FCMInstanceIdService() {
         UserApplication.getInstance().getMAppComponent().inject(this);
@@ -35,6 +40,7 @@ public class FCMInstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Timber.tag(TAG).d("Refreshed token: " + refreshedToken);
+        apiService.checkGeoDetail(refreshedToken);
         sendCustomEvent(this, "Refreshed token:", refreshedToken, "");
         editor.putBoolean(Constants.NEW_FCM, true);
         editor.putString(Constants.FCM_TOKEN, refreshedToken).commit();

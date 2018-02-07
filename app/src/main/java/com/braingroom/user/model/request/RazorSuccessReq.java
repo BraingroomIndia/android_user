@@ -78,6 +78,9 @@ public class RazorSuccessReq {
 
         @SerializedName("price_code")
         private String priceCode;
+
+        @SerializedName("stripe_token")
+        private String stripeToken;
     }
 
     @Data

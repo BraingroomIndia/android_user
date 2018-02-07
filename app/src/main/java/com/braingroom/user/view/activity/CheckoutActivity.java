@@ -22,8 +22,6 @@ import org.json.JSONObject;
 
 import timber.log.Timber;
 
-import static android.content.ContentValues.TAG;
-
 public class CheckoutActivity extends BaseActivity implements PaymentResultListener {
 
     private RecyclerView mRecyclerView;
@@ -32,7 +30,7 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
 
     @Override
     public void onPaymentSuccess(String razorpayKey) {
-        ((CheckoutViewModel) vm).handleRazorpaySuccess(razorpayKey);
+        ((CheckoutViewModel) vm).handleRazorPaySuccess(razorpayKey);
     }
 
     @Override
@@ -94,15 +92,21 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
             @Override
             public void startRazorpayPayment(JSONObject options) {
 
-                final Activity activity = CheckoutActivity.this;
-                final Checkout co = new Checkout();
-                try {
-                    co.open(activity, options);
-                } catch (Exception e) {
-                    Timber.tag(TAG).e(e, "Error in starting razorPay");
-                    getMessageHelper().show("Error in payment: " + e.getMessage());
-                }
+                if (!((CheckoutViewModel) vm).classData.getPriceCode().contains("INR")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("checkoutData", options.toString());
+                    getNavigator().navigateActivityForResult(StripeActivity.class, bundle, ViewModel.REQ_CODE_STRIPE);
+                } else {
+                    final Activity activity = CheckoutActivity.this;
+                    final Checkout co = new Checkout();
+                    try {
+                        co.open(activity, options);
+                    } catch (Exception e) {
+                        Timber.tag(TAG).e(e, "Error in starting razorPay");
+                        getMessageHelper().show("Error in payment: " + e.getMessage());
+                    }
 
+                }
             }
         };
 

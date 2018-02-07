@@ -100,7 +100,6 @@ public class UserApplication extends BranchApp {
             Timber.plant(new ProductionTree(this));
         }
         Branch.getAutoInstance(this);
-        DeviceFingerPrintID = PrefHelper.getInstance(this).getDeviceFingerPrintID();
 
         try {
             versionCode = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;

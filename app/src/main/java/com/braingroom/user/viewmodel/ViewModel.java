@@ -44,6 +44,7 @@ public class ViewModel extends BaseObservable {
     public static final int REQ_CODE_CHOOSE_VIDEO = 3;
 
     public static final int REQ_CODE_LOGIN = 4;
+    public static final int REQ_CODE_STRIPE = 6;
     public static final int REQ_CODE_PLAY_VIDEO = 5;
     public boolean apiSuccessful = false;
     public ConnectivityViewModel connectivityViewmodel;
@@ -175,7 +176,7 @@ public class ViewModel extends BaseObservable {
     }
 
     public boolean isEmpty(List<?> data) {
-        return data == null || data.isEmpty();
+        return data == null || data.isEmpty() || data.get(0) == null;
     }
 
     void setScreenName(String screenName) {

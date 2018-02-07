@@ -28,6 +28,7 @@ android {
 
 
     }
+
     signingConfigs {
 
         release {
@@ -55,11 +56,12 @@ android {
     dataBinding {
         enabled = true
     }
-    /* compileOptions {
+     compileOptions {
          sourceCompatibility JavaVersion.VERSION_1_8
          targetCompatibility JavaVersion.VERSION_1_8
-     }*/
-/*    productFlavors {
+     }
+    flavorDimensions "prod"
+    productFlavors {
         prod {
             minSdkVersion 16
             applicationId 'com.braingroom.user'
@@ -146,6 +148,7 @@ dependencies {
     compile 'com.razorpay:checkout:1.4.0'
     compile 'com.stripe:stripe-android:5.1.0'
     compile 'me.relex:circleindicator:1.2.2@aar'
+    compile 'com.stripe:stripe-android:6.0.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.squareup:javapoet:1.9.0'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
@@ -166,4 +169,3 @@ configurations.all {
     }
 }
 apply plugin: 'com.google.gms.google-services'
-

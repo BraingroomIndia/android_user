@@ -99,7 +99,7 @@ public class CatalogueCheckOutViewModel extends ViewModel {
                     snippet.setLevels("[{\"" + classId + "\":\"1\"}]");
                     snippet.setUserId(userId);
                     snippet.setIsGuest(0);
-                    apiService.getBookingDetails(new GetBookingDetailsReq(snippet), "", "").doOnError(new Consumer<Throwable>() {
+                    apiService.getBookingDetails(new GetBookingDetailsReq(snippet)).doOnError(new Consumer<Throwable>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
                             throwable.printStackTrace();

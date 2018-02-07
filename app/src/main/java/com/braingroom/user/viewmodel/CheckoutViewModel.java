@@ -1,5 +1,6 @@
 package com.braingroom.user.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -7,7 +8,6 @@ import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Spanned;
-import android.util.Log;
 
 import com.braingroom.user.BuildConfig;
 import com.braingroom.user.R;
@@ -19,7 +19,6 @@ import com.braingroom.user.model.request.CouponCodeReq;
 import com.braingroom.user.model.request.GetBookingDetailsReq;
 import com.braingroom.user.model.request.PromoCodeReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
-import com.braingroom.user.model.request.SaveGiftCouponReq;
 import com.braingroom.user.model.response.PromocodeResp;
 import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.SaveGiftCouponResp;
@@ -32,8 +31,6 @@ import com.braingroom.user.view.activity.PaySuccessActivity;
 import com.braingroom.user.view.adapters.ViewProvider;
 import com.crashlytics.android.answers.AddToCartEvent;
 import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.PurchaseEvent;
-import com.crashlytics.android.answers.StartCheckoutEvent;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -63,6 +60,14 @@ public class CheckoutViewModel extends ViewModel {
         super.handleActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_LOGIN)
             gUserId = pref.getString(Constants.BG_ID, "");
+        if (requestCode == REQ_CODE_STRIPE) {
+            if (resultCode == Activity.RESULT_OK && data.getExtras() != null) {
+                String stripeToken = data.getExtras().getString("stripe_token");
+                if (!isEmpty(stripeToken)) {
+                    handleStripeSuccess(stripeToken);
+                } else messageHelper.showDismissInfo("Error", "Something went wrong");
+            } else messageHelper.showDismissInfo("Error", "Something went wrong");
+        }
     }
 
     public final ListDialogViewModel1 locationsVm;
@@ -100,7 +105,7 @@ public class CheckoutViewModel extends ViewModel {
 
     private int isGuest = 0;
 
-    private ClassData classData;
+    public ClassData classData;
     private PayUCheckoutData mChekcoutData;
     private final boolean usePayU = false;
     MessageHelper messageHelper;
@@ -111,6 +116,7 @@ public class CheckoutViewModel extends ViewModel {
     public final boolean isCod;
     final int paymentMode;
     final String isIncentive;
+    private RazorSuccessReq successReq;
 
 
     //private PayUChecksum checksum;
@@ -121,8 +127,6 @@ public class CheckoutViewModel extends ViewModel {
 
     public interface UiHelper {
         void onGuestLoginSuccess(String userId);
-
-        void onCollectGiftDetail(String name, String email, String personalMsg);
     }
 
     @Getter
@@ -282,12 +286,7 @@ public class CheckoutViewModel extends ViewModel {
                                         messageHelper.show("Something went wrong. JSON error");
                                     }
                                 }
-
-                                @Override
-                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
-
-                                }
-                            }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
+                            }, classData.getId()), false);
                     return;
                 }
                 startPayment();
@@ -301,34 +300,6 @@ public class CheckoutViewModel extends ViewModel {
             public void run() throws Exception {
                 applyingPromoCode.set(true);
                 applyingCouponCode.set(false);
-                promoCode.set("");
-                appliedPromoCode.set(null);
-                appliedPromoAmount = 0;
-                couponCode.set(null);
-                appliedCouponCode.set(null);
-                appliedCouponAmount = 0;
-               /* if (!getLoggedIn() && isGuest == 0) {
-                    helperFactory.createDialogHelper()
-                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
-                                @Override
-                                public void onGuestLoginSuccess(String id) {
-
-                                    gUserId = id;
-                                    isGuest = 1;
-
-                                    try {
-                                        cartAmount.run();
-                                    } catch (Exception e) {
-                                    }
-                                }
-
-                                @Override
-                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
-
-                                }
-                            }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
-
-                } else {*/
                 promoCode.set("");
                 appliedPromoCode.set(null);
                 appliedPromoAmount = 0;
@@ -360,34 +331,7 @@ public class CheckoutViewModel extends ViewModel {
                 couponCode.set("");
                 appliedCouponCode.set(null);
                 appliedCouponAmount = 0;
-                if (!getLoggedIn() && isGuest == 0) {
-                    helperFactory.createDialogHelper()
-                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
-                                @Override
-                                public void onGuestLoginSuccess(String id) {
-                                    gUserId = id;
-                                    isGuest = 1;
-                                    try {
-                                        cartAmount.run();
-                                    } catch (Exception e) {
-                                    }
-                                }
-
-                                @Override
-                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
-
-                                }
-                            }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
-
-                } else {
-                    promoCode.set(null);
-                    appliedPromoCode.set(null);
-                    appliedPromoAmount = 0;
-                    couponCode.set("");
-                    appliedCouponCode.set(null);
-                    appliedCouponAmount = 0;
-                    cartAmount.run();
-                }
+                cartAmount.run();
 
 
             }
@@ -414,16 +358,12 @@ public class CheckoutViewModel extends ViewModel {
                                     isGuest = 1;
 
                                     try {
-                                        cartAmount.run();
+                                        onApplyPromoCode.run();
                                     } catch (Exception e) {
                                     }
                                 }
 
-                                @Override
-                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
-
-                                }
-                            }, classData.getId(), CheckoutActivity.class.getSimpleName()), false);
+                            }, classData.getId()), false);
 
                 } else if (promoCode != null && promoCode.get().length() > 3) {
                     PromoCodeReq.Snippet snippet = new PromoCodeReq.Snippet();
@@ -471,7 +411,23 @@ public class CheckoutViewModel extends ViewModel {
         onApplyCouponCode = new Action() {
             @Override
             public void run() throws Exception {
-                if (couponCode != null && couponCode.get().length() > 3) {
+
+                if (!getLoggedIn() && isGuest == 0) {
+                    helperFactory.createDialogHelper()
+                            .showCustomView(R.layout.content_guest_payment_dialog, new GuestPaymentDialogViewModel(classData, messageHelper, navigator, new UiHelper() {
+                                @Override
+                                public void onGuestLoginSuccess(String id) {
+                                    gUserId = id;
+                                    isGuest = 1;
+                                    try {
+                                        onApplyPromoCode.run();
+                                    } catch (Exception e) {
+                                    }
+                                }
+
+                            }, classData.getId()), false);
+
+                } else if (couponCode != null && couponCode.get().length() > 3) {
                     CouponCodeReq.Snippet snippet = new CouponCodeReq.Snippet();
                     snippet.setClassId(classData.getId());
                     snippet.setCode(couponCode.get());
@@ -514,6 +470,7 @@ public class CheckoutViewModel extends ViewModel {
 
     }
 
+/*
     public void saveGiftClassData(String userId, int isGuest, String giftRecepientEmail, String giftRecepientName, String giftPersonalMsg) {
 
         gUserId = userId;
@@ -563,25 +520,27 @@ public class CheckoutViewModel extends ViewModel {
             }
         });
     }
+*/
 
-    public void startRazorpayPayment(int amount, String mobile, String email) throws JSONException {
+    public void startRazorpayPayment(String name, String description, String currencyCode, int amount, String contact, String email) throws JSONException {
         if (amount == 0) {
-            handleRazorpaySuccess("");
+            handleRazorPaySuccess("");
             return;
         }
         JSONObject options = new JSONObject();
-        options.put("name", "Gift Coupon");
-        options.put("description", "By: Braingroom.com");
+        options.put("name", name);
+        options.put("description", description);
         //You can omit the image option to fetch the image from dashboard
         options.put("image", "https://www.braingroom.com/homepage/img/logo.jpg");
-        options.put("currency", "INR");
+        options.put("currency", currencyCode);
         options.put("amount", "" + amount * 100);
-
         JSONObject preFill = new JSONObject();
         preFill.put("email", email);
-        preFill.put("contact", mobile);
+        preFill.put("contact", contact);
         options.put("prefill", preFill);
-
+        JSONObject notes = new JSONObject();
+        notes.put("razorPaySuccessReq", gson.toJson(getBookingSuccessReq()));
+        options.put("notes", notes);
         uiHelper.startRazorpayPayment(options);
     }
 
@@ -621,52 +580,24 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setLevels(levels.toString());
         final GetBookingDetailsReq req = new GetBookingDetailsReq(snippet);
         messageHelper.showProgressDialog(null, "Initiating Payment...");
-        apiService.getBookingDetails(req
-                , appliedPromoCodeId != null ? appliedPromoCodeId : null
-                , appliedPromoCodeId != null ? appliedPromoCode.get() : null).subscribe(new Consumer<PayUCheckoutData>() {
+        apiService.getBookingDetails(req).subscribe(new Consumer<PayUCheckoutData>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull PayUCheckoutData chekcoutData) throws Exception {
 
                 mChekcoutData = chekcoutData;
 
-                if (!BuildConfig.DEBUG && mChekcoutData != null)
-                    Answers.getInstance().logStartCheckout(new StartCheckoutEvent()
-                            .putTotalPrice(BigDecimal.valueOf(mChekcoutData.getAmount()))
-                            .putCurrency(Currency.getInstance(classData.getPriceCode()))
-                            .putItemCount(itemCount)
-                            .putCustomAttribute("bg_txnid", mChekcoutData.getBGtransactionid())
-                            .putCustomAttribute("coupon_id", appliedPromoCode.get())
-                            .putCustomAttribute("promo_id", appliedPromoCode.get())
-                            .putCustomAttribute("user_id", mChekcoutData.getUdf1())
-                            .putCustomAttribute("is_guest", isGuest)
-                            .putCustomAttribute("user_email", mChekcoutData.getEmail())
-                            .putCustomAttribute("user_mobile", mChekcoutData.getPhone()));
-                if (usePayU) {
-                } else {
+                {
                     if (totalAmountAfterPromo.get() == 0) {
-                        handleRazorpaySuccess("");
+                        handleRazorPaySuccess("");
                         return;
                     }
                     if (isCod) {
-                        handleRazorpaySuccess("");
+                        handleCodPaymentSuccess();
                         return;
                     }
-                    JSONObject options = new JSONObject();
-                    options.put("name", classData.getClassTopic());
-                    options.put("description", "By: " + classData.getClassProvider());
-                    //You can omit the image option to fetch the image from dashboard
-                    options.put("image", "https://www.braingroom.com/homepage/img/logo.jpg");
-                    options.put("currency", "INR");
-                    options.put("amount", "" + chekcoutData.getAmount() * 100);
-                    JSONObject preFill = new JSONObject();
-                    preFill.put("email", chekcoutData.getEmail());
-                    preFill.put("contact", chekcoutData.getPhone());
-                    options.put("prefill", preFill);
-                        /*Timber.tag(TAG).d( "accept: name\t:\t" + classData.getClassTopic() + "\ndescription, By: " + classData.getTeacher()
-                                + "\namount\t:\t" + chekcoutData.getAmount() * 100 + "\nemail\t:\t" + chekcoutData.getEmail()
-                                + "\ncontact\t:\t" + chekcoutData.getPhone());*/
                     messageHelper.dismissActiveProgress();
-                    uiHelper.startRazorpayPayment(options);
+                    startRazorpayPayment(classData.getClassTopic(), "By: " + classData.getClassProvider(), classData.getPriceCode(), chekcoutData.getAmount(), chekcoutData.getPhone(), chekcoutData.getEmail());
+
                 }
 
             }
@@ -693,426 +624,123 @@ public class CheckoutViewModel extends ViewModel {
         }
     }
 
-    public void collectGiftingDetails() {
-        helperFactory.createDialogHelper()
-                .showCustomView(R.layout.content_gift_details_dialog, new GiftingDetailsDialogViewModel(messageHelper, new UiHelper() {
-                    @Override
-                    public void onGuestLoginSuccess(String userId) {
-                        gUserId = userId;
-                        isGuest = 1;
-
-                    }
-
-                    @Override
-                    public void onCollectGiftDetail(String name, String email, String personalMsg) {
-                        saveGiftClassData(gUserId, isGuest, email, name, personalMsg);
-
-                    }
-                }), false);
+    public void handleStripeSuccess(String stripeToken) {
+        getBookingSuccessReq().getData().setStripeToken(stripeToken);
+        getBookingSuccessReq().getData().setRazorPayTxnid("");
+        handlePaymentSuccess();
     }
 
-    public void handleRazorpaySuccess(final String razorpayId) {
-        String date;
+    public void handleRazorPaySuccess(String razorpayId) {
+        getBookingSuccessReq().getData().setStripeToken("");
+        getBookingSuccessReq().getData().setRazorPayTxnid(razorpayId);
+        handlePaymentSuccess();
+    }
+
+    public void handleCodPaymentSuccess() {
+        getBookingSuccessReq().getData().setStripeToken("");
+        getBookingSuccessReq().getData().setRazorPayTxnid("");
+        handlePaymentSuccess();
+    }
+
+    private void handlePaymentSuccess() {
+
 
         final Bundle bundle = new Bundle();
+        bundle.putString(Constants.BGTransactionId, mChekcoutData.getBGtransactionid());
+        bundle.putString(Constants.className, classData.getClassTopic());
+        bundle.putString(Constants.name, mChekcoutData.getFirstname());
+        bundle.putString(Constants.amount, classData.getPriceSymbolNonSpanned() + mChekcoutData.getAmount() + "");
+        messageHelper.showProgressDialog("Wait", "Processing your payment...");
 
-
-        if (isGift.get()) {
-            bundle.putString(Constants.BGTransactionId, couponPayData.getBGtransactionid());
-            bundle.putString(Constants.className, classData.getClassTopic());
-            bundle.putString(Constants.name, couponPayData.getName());
-            bundle.putString(Constants.amount, couponPayData.getPrice() + "");
-            messageHelper.showProgressDialog("Processing", "finalizing your purchase");
-            RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
-            snippet.setBgTxnid(couponPayData.getBGtransactionid());
-            snippet.setBookingType(Constants.giftClass);
-            snippet.setTermId(couponPayData.getTermId());
-            snippet.setAmount("" + totalAmountAfterPromo.get());
-            snippet.setClassId(classData.getId());
-            snippet.setUserId(gUserId);
-            snippet.setPaymentMode(Constants.paymentOnline);
-            snippet.setLocalityId(selectedLocalityId);
-            snippet.setRazorPayTxnid(razorpayId);
-            snippet.setUserEmail(couponPayData.getEmail());
-            snippet.setUserMobile(couponPayData.getMobile());
-            snippet.setUserEmail(couponPayData.getEmail());
-            snippet.setUserMobile(couponPayData.getMobile());
-            snippet.setIsGuest(isGuest);
-            snippet.setCouponCode(appliedCouponCode.get());
-            snippet.setCouponAmount(appliedCouponAmount + "");
-            snippet.setPromoCode(appliedPromoCode.get());
-            snippet.setPromoAmount(appliedPromoAmount + "");
-            snippet.setCodAmount(0 + "");
-            snippet.setPaymentMode(Constants.paymentOnline);
-            snippet.setIsIncentive(isIncentive);
-            List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
-            for (ViewModel nonReactiveItem : nonReactiveItems) {
-                if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
-                    levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
-                }
+        apiService.postRazorpaySuccess(getBookingSuccessReq()).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                messageHelper.dismissActiveProgress();
+                messageHelper.show(throwable.getMessage());
+                bundle.putBoolean(Constants.success, false);
             }
-            String temp = gson.toJson(levelsList);
-            temp = "{\"tickets\":" + temp + "}";
-            snippet.setTickets(temp);
-            final RazorSuccessReq req = new RazorSuccessReq(snippet);
-            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(throwable.getMessage());
-                    bundle.putBoolean(Constants.success, false);
-                }
-            }).doFinally(new Action() {
-                @Override
-                public void run() throws Exception {
-                    if (!BuildConfig.DEBUG)
-                        Answers.getInstance().logPurchase(new PurchaseEvent()
-                                .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
-                                .putCurrency(Currency.getInstance(classData.getPriceCode()))
-                                .putItemName(classData.getClassTopic())
-                                .putItemType(classData.getClassType())
-                                .putItemId(req.getData().classId)
-                                .putSuccess(bundle.getBoolean(Constants.success))
-                                .putCustomAttribute("tickets", req.getData().getTickets())
-                                .putCustomAttribute("txnid", req.getData().getRazorPayTxnid())
-                                .putCustomAttribute("bg_txnid", req.getData().getBgTxnid())
-                                .putCustomAttribute("coupon_id", req.getData().getCouponCode())
-                                .putCustomAttribute("promo_id", req.getData().getPromoAmount())
-                                .putCustomAttribute("user_id", req.getData().getUserId())
-                                .putCustomAttribute("is_guest", req.getData().getIsGuest())
-                                .putCustomAttribute("payment_mode", req.getData().getPaymentMode())
-                                .putCustomAttribute("user_email", req.getData().getUserEmail())
-                                .putCustomAttribute("user_mobile", req.getData().getUserMobile())
-                                .putCustomAttribute("cod_amount", req.getData().getCodAmount())
-                        );
-                    messageHelper.dismissActiveProgress();
-                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
-                    if (bundle.getBoolean(Constants.success))
-                        navigator.finishActivity();
-                    else
-                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
-                }
-            }).subscribe(new Consumer<RazorSuccessResp>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(resp.getResMsg());
-                    if (isEmpty(resp)) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else if (isEmpty(resp.getData())) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else if (isEmpty(resp.getData().get(0))) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else
-                        bundle.putBoolean(Constants.success, true);
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                messageHelper.dismissActiveProgress();
+                messageHelper.show(throwable.getMessage());
+                bundle.putBoolean(Constants.success, false);
+            }
+        }).doFinally(() -> {
+            messageHelper.dismissActiveProgress();
+            navigator.navigateActivity(PaySuccessActivity.class, bundle);
+            if (bundle.getBoolean(Constants.success))
+                navigator.finishActivity();
+            else
+                Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(getBookingSuccessReq()));
+        }).subscribe(resp -> {
+            messageHelper.dismissActiveProgress();
+            messageHelper.show(resp.getResMsg());
+            if (isEmpty(resp)) {
+                bundle.putBoolean(Constants.success, false);
+            } else if (isEmpty(resp.getData())) {
+                bundle.putBoolean(Constants.success, false);
+            } else
+                bundle.putBoolean(Constants.success, true);
 
 
-                }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(throwable.getMessage());
-                    bundle.putBoolean(Constants.success, false);
-                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                messageHelper.dismissActiveProgress();
+                messageHelper.show(throwable.getMessage());
+                bundle.putBoolean(Constants.success, false);
+                Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(getBookingSuccessReq()));
 
-                }
-            });
+            }
+        });
 
-        } else if (isCod) {
+    }
 
-            bundle.putString(Constants.BGTransactionId, mChekcoutData.getBGtransactionid());
-            bundle.putString(Constants.className, classData.getClassTopic());
-            bundle.putString(Constants.name, mChekcoutData.getFirstname());
-            bundle.putString(Constants.amount, mChekcoutData.getAmount() + "");
-            messageHelper.showProgressDialog("Wait", "Processing your payment...");
-            RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
-            snippet.setBookingType(Constants.normalBooking);
-            snippet.setBgTxnid(mChekcoutData.getBGtransactionid());
-            snippet.setAmount("0");
+    private RazorSuccessReq getBookingSuccessReq() {
+        if (successReq == null)
+            successReq = createBookingSuccessReq();
+        return successReq;
+
+
+    }
+
+    private RazorSuccessReq createBookingSuccessReq() {
+        RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
+        snippet.setBookingType(Constants.normalBooking);
+        snippet.setBgTxnid(mChekcoutData.getBGtransactionid());
+        snippet.setPriceCode(classData.getPriceCode());
+        snippet.setClassId(classData.getId());
+        snippet.setUserId(mChekcoutData.getUdf1());
+        snippet.setLocalityId(selectedLocalityId);
+        snippet.setUserEmail(mChekcoutData.getEmail());
+        snippet.setUserMobile(mChekcoutData.getPhone());
+        snippet.setUserId(mChekcoutData.getUdf1());
+        snippet.setIsGuest(isGuest);
+        snippet.setCouponCode(appliedCouponCode.get());
+        snippet.setCouponAmount(appliedCouponAmount + "");
+        snippet.setPromoCode(appliedPromoCode.get());
+        snippet.setPromoAmount(appliedPromoAmount + "");
+        List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
+        for (ViewModel nonReactiveItem : nonReactiveItems) {
+            if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
+                levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
+            }
+        }
+
+        String temp = gson.toJson(levelsList);
+        temp = "{\"tickets\":" + temp + "}";
+        snippet.setTickets(temp);
+        if (isCod) {
             snippet.setCodAmount(totalAmountAfterPromo.get() + "");
+            snippet.setAmount("0");
             snippet.setPaymentMode(Constants.paymentOffline);
-            snippet.setIsIncentive(isIncentive);
-            snippet.setPriceCode(classData.getPriceCode());
-            snippet.setClassId(classData.getId());
-            snippet.setUserId(mChekcoutData.getUdf1());
-            snippet.setLocalityId(selectedLocalityId);
-            snippet.setRazorPayTxnid(razorpayId);
-            snippet.setUserEmail(mChekcoutData.getEmail());
-            snippet.setUserMobile(mChekcoutData.getPhone());
-            snippet.setUserId(mChekcoutData.getUdf1());
-            snippet.setIsGuest(isGuest);
-            snippet.setCouponCode(appliedCouponCode.get());
-            snippet.setCouponAmount(appliedCouponAmount + "");
-            snippet.setPromoCode(appliedPromoCode.get());
-            snippet.setPromoAmount(appliedPromoAmount + "");
-            List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
-            for (ViewModel nonReactiveItem : nonReactiveItems) {
-                if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
-                    levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
-                }
-            }
-
-            String temp = gson.toJson(levelsList);
-            temp = "{\"tickets\":" + temp + "}";
-            snippet.setTickets(temp);
-            final RazorSuccessReq req = new RazorSuccessReq(snippet);
-            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(throwable.getMessage());
-                    bundle.putBoolean(Constants.success, false);
-                }
-            }).doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(throwable.getMessage());
-                    bundle.putBoolean(Constants.success, false);
-                }
-            }).doFinally(new Action() {
-                @Override
-                public void run() throws Exception {
-                    if (!BuildConfig.DEBUG)
-                        Answers.getInstance().logPurchase(new PurchaseEvent()
-                                .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
-                                .putCurrency(Currency.getInstance(classData.getPriceCode()))
-                                .putItemName(classData.getClassTopic())
-                                .putItemType(classData.getClassType())
-                                .putItemId(req.getData().classId)
-                                .putSuccess(bundle.getBoolean(Constants.success))
-                                .putCustomAttribute("tickets", req.getData().getTickets())
-                                .putCustomAttribute("txnid", req.getData().getRazorPayTxnid())
-                                .putCustomAttribute("bg_txnid", req.getData().getBgTxnid())
-                                .putCustomAttribute("coupon_id", req.getData().getCouponCode())
-                                .putCustomAttribute("promo_id", req.getData().getPromoAmount())
-                                .putCustomAttribute("user_id", req.getData().getUserId())
-                                .putCustomAttribute("is_guest", req.getData().getIsGuest())
-                                .putCustomAttribute("payment_mode", req.getData().getPaymentMode())
-                                .putCustomAttribute("user_email", req.getData().getUserEmail())
-                                .putCustomAttribute("user_mobile", req.getData().getUserMobile())
-                                .putCustomAttribute("cod_amount", req.getData().getCodAmount())
-                        );
-                    messageHelper.dismissActiveProgress();
-                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
-                    if (bundle.getBoolean(Constants.success))
-                        navigator.finishActivity();
-                    else
-                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
-                }
-            }).subscribe(new Consumer<RazorSuccessResp>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(resp.getResMsg());
-                    if (isEmpty(resp)) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else if (isEmpty(resp.getData())) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else if (isEmpty(resp.getData().get(0))) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else
-                        bundle.putBoolean(Constants.success, true);
-
-
-                }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(throwable.getMessage());
-                    bundle.putBoolean(Constants.success, false);
-                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
-
-                }
-            });
         } else {
-
-            messageHelper.showProgressDialog("Wait", "Processing your payment...");
-            bundle.putString(Constants.BGTransactionId, mChekcoutData.getBGtransactionid());
-            bundle.putString(Constants.className, classData.getClassTopic());
-            bundle.putString(Constants.name, mChekcoutData.getFirstname());
-            bundle.putString(Constants.amount, mChekcoutData.getAmount() + "");
-            RazorSuccessReq.Snippet snippet = new RazorSuccessReq.Snippet();
-            snippet.setBookingType(Constants.normalBooking);
-            snippet.setBgTxnid(mChekcoutData.getBGtransactionid());
-            snippet.setAmount("" + totalAmountAfterPromo.get());
-            snippet.setClassId(classData.getId());
-            snippet.setUserId(mChekcoutData.getUdf1());
-            snippet.setLocalityId(selectedLocalityId);
-            snippet.setRazorPayTxnid(razorpayId);
-            snippet.setUserEmail(mChekcoutData.getEmail());
-            snippet.setUserMobile(mChekcoutData.getPhone());
-            snippet.setUserId(mChekcoutData.getUdf1());
-            snippet.setIsGuest(isGuest);
-            snippet.setCouponCode(appliedCouponCode.get());
-            snippet.setCouponAmount(appliedCouponAmount + "");
-            snippet.setPromoCode(appliedPromoCode.get());
-            snippet.setPromoAmount(appliedPromoAmount + "");
-            snippet.setCodAmount(0 + "");
+            snippet.setAmount(totalAmountAfterPromo.get() + "");
+            snippet.setCodAmount("0");
             snippet.setPaymentMode(Constants.paymentOnline);
-            snippet.setIsIncentive(isIncentive);
-            List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
-            for (ViewModel nonReactiveItem : nonReactiveItems) {
-                if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
-                    levelsList.add(new RazorSuccessReq.Levels(((LevelPricingItemViewModel) nonReactiveItem).levelId, ((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()));
-                }
-            }
-
-            String temp = gson.toJson(levelsList);
-            temp = "{\"tickets\":" + temp + "}";
-            snippet.setTickets(temp);
-            final RazorSuccessReq req = new RazorSuccessReq(snippet);
-            apiService.postRazorpaySuccess(req).doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(throwable.getMessage());
-                    bundle.putBoolean(Constants.success, false);
-//                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
-                }
-            }).doFinally(new Action() {
-                @Override
-                public void run() throws Exception {
-                    if (!BuildConfig.DEBUG)
-                        Answers.getInstance().logPurchase(new PurchaseEvent()
-                                .putItemPrice(BigDecimal.valueOf(Integer.parseInt(req.getData().amount)))
-                                .putCurrency(Currency.getInstance(classData.getPriceCode()))
-                                .putItemName(classData.getClassTopic())
-                                .putItemType(classData.getClassType())
-                                .putItemId(req.getData().classId)
-                                .putSuccess(bundle.getBoolean(Constants.success))
-                                .putCustomAttribute("tickets", req.getData().getTickets())
-                                .putCustomAttribute("txnid", req.getData().getRazorPayTxnid())
-                                .putCustomAttribute("bg_txnid", req.getData().getBgTxnid())
-                                .putCustomAttribute("coupon_id", req.getData().getCouponCode())
-                                .putCustomAttribute("promo_id", req.getData().getPromoAmount())
-                                .putCustomAttribute("user_id", req.getData().getUserId())
-                                .putCustomAttribute("is_guest", req.getData().getIsGuest())
-                                .putCustomAttribute("payment_mode", req.getData().getPaymentMode())
-                                .putCustomAttribute("user_email", req.getData().getUserEmail())
-                                .putCustomAttribute("user_mobile", req.getData().getUserMobile())
-                                .putCustomAttribute("cod_amount", req.getData().getCodAmount())
-                        );
-                    messageHelper.dismissActiveProgress();
-                    navigator.navigateActivity(PaySuccessActivity.class, bundle);
-                    if (bundle.getBoolean(Constants.success))
-                        navigator.finishActivity();
-                    else
-                        Timber.tag(TAG).e("Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
-                }
-            }).subscribe(new Consumer<RazorSuccessResp>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull RazorSuccessResp resp) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(resp.getResMsg());
-                    if (isEmpty(resp)) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else if (isEmpty(resp.getData())) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else if (isEmpty(resp.getData().get(0))) {
-                        bundle.putBoolean(Constants.success, false);
-                    } else
-                        bundle.putBoolean(Constants.success, true);
-
-
-                }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                    messageHelper.dismissActiveProgress();
-                    messageHelper.show(throwable.getMessage());
-                    bundle.putBoolean(Constants.success, false);
-                    Timber.tag(TAG).e(throwable, "Api name : razorPaySuccess\trequest payload\n" + gson.toJson(req));
-                }
-            });
         }
-
-    }
-/*
-    public PayuHashes generateHashFromSDK(PaymentParams mPaymentParams, String salt) {
-        PayuHashes payuHashes = new PayuHashes();
-        PostData postData = new PostData();
-
-        // payment Hash;
-        checksum = null;
-        checksum = new PayUChecksum();
-        checksum.setAmount(mPaymentParams.getAmount());
-        checksum.setKey(mPaymentParams.getKey());
-        checksum.setRazorPayTxnid(mPaymentParams.getTxnId());
-        checksum.setEmail(mPaymentParams.getEmail());
-        checksum.setSalt(salt);
-        checksum.setProductinfo(mPaymentParams.getProductInfo());
-        checksum.setFirstname(mPaymentParams.getFirstName());
-        checksum.setUdf1(mPaymentParams.getUdf1());
-        checksum.setUdf2(mPaymentParams.getUdf2());
-        checksum.setUdf3(mPaymentParams.getUdf3());
-        checksum.setUdf4(mPaymentParams.getUdf4());
-        checksum.setUdf5(mPaymentParams.getUdf5());
-
-        postData = checksum.getHash();
-        if (postData.getCode() == PayuErrors.NO_ERROR) {
-            payuHashes.setPaymentHash(postData.getResult());
-        }
-
-        // checksum for payemnt related details
-        // var1 should be either user credentials or default
-        String var1 = mPaymentParams.getUserCredentials() == null ? PayuConstants.DEFAULT : mPaymentParams.getUserCredentials();
-        String key = mPaymentParams.getKey();
-
-        if ((postData = calculateHash(key, PayuConstants.PAYMENT_RELATED_DETAILS_FOR_MOBILE_SDK, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR) // Assign post data first then check for success
-            payuHashes.setPaymentRelatedDetailsForMobileSdkHash(postData.getResult());
-        //vas
-        if ((postData = calculateHash(key, PayuConstants.VAS_FOR_MOBILE_SDK, PayuConstants.DEFAULT, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
-            payuHashes.setVasForMobileSdkHash(postData.getResult());
-
-        // getIbibocodes
-        if ((postData = calculateHash(key, PayuConstants.GET_MERCHANT_IBIBO_CODES, PayuConstants.DEFAULT, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
-            payuHashes.setMerchantIbiboCodesHash(postData.getResult());
-
-        if (!var1.contentEquals(PayuConstants.DEFAULT)) {
-            // get user card
-            if ((postData = calculateHash(key, PayuConstants.GET_USER_CARDS, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR) // todo rename storedc ard
-                payuHashes.setStoredCardsHash(postData.getResult());
-            // save user card
-            if ((postData = calculateHash(key, PayuConstants.SAVE_USER_CARD, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
-                payuHashes.setSaveCardHash(postData.getResult());
-            // delete user card
-            if ((postData = calculateHash(key, PayuConstants.DELETE_USER_CARD, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
-                payuHashes.setDeleteCardHash(postData.getResult());
-            // edit user card
-            if ((postData = calculateHash(key, PayuConstants.EDIT_USER_CARD, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
-                payuHashes.setEditCardHash(postData.getResult());
-        }
-
-        if (mPaymentParams.getOfferKey() != null) {
-            postData = calculateHash(key, PayuConstants.OFFER_KEY, mPaymentParams.getOfferKey(), salt);
-            if (postData.getCode() == PayuErrors.NO_ERROR) {
-                payuHashes.setCheckOfferStatusHash(postData.getResult());
-            }
-        }
-
-        if (mPaymentParams.getOfferKey() != null && (postData = calculateHash(key, PayuConstants.CHECK_OFFER_STATUS, mPaymentParams.getOfferKey(), salt)) != null && postData.getCode() == PayuErrors.NO_ERROR) {
-            payuHashes.setCheckOfferStatusHash(postData.getResult());
-        }
-
-        // we have generated all the hases now lest launch sdk's ui
-        return payuHashes;
-    }
-
-    private PostData calculateHash(String key, String command, String var1, String salt) {
-        checksum = null;
-        checksum = new PayUChecksum();
-        checksum.setKey(key);
-        checksum.setCommand(command);
-        checksum.setVar1(var1);
-        checksum.setSalt(salt);
-        return checksum.getHash();
-    }*/
-
-    public void afterPayment(Bundle data) {
-        navigator.navigateActivity(PaySuccessActivity.class, data);
+        return new RazorSuccessReq(snippet);
     }
 
 

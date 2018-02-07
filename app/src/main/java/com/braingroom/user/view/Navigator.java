@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.View;
 
@@ -14,7 +15,7 @@ public interface Navigator {
 
     void navigateActivity(Class<?> destination, @Nullable Bundle bundle);
 
-    void navigateActivityForResult(Class<? extends MvvmActivity> destination, @Nullable Bundle bundle, int reqCode);
+    void navigateActivityForResult(Class<? extends AppCompatActivity> destination, @Nullable Bundle bundle, int reqCode);
 
     void navigateActivity(Intent intent);
 

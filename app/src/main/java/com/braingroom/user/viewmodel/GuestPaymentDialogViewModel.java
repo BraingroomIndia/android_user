@@ -21,18 +21,15 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
     public final Action onClickLogin, onClickGuestPay;
 
     public GuestPaymentDialogViewModel(final ClassData classData, @NonNull final MessageHelper messageHelper,
-                                       @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper, String classId, final String activitySimpleName) {
+                                       @NonNull final Navigator navigator, final CheckoutViewModel.UiHelper uiHelper, String classId) {
         emailVm = new DataItemViewModel("");
         mobileVm = new DataItemViewModel("");
         nameVm = new DataItemViewModel("");
         onClickLogin = new Action() {
             @Override
             public void run() throws Exception {
-                Bundle data = new Bundle();
-                data.putString("backStackActivity", activitySimpleName);
-                data.putSerializable("classData", classData);
                 dismissDialog();
-                navigator.navigateActivityForResult(LoginActivity.class, data, REQ_CODE_LOGIN);
+                navigator.navigateActivityForResult(LoginActivity.class, null, REQ_CODE_LOGIN);
 
             }
         };
@@ -40,15 +37,15 @@ public class GuestPaymentDialogViewModel extends CustomDialogViewModel {
         onClickGuestPay = new Action() {
             @Override
             public void run() throws Exception {
-                if ("".equals(nameVm.s_1.get())) {
+                if (isEmpty(nameVm.s_1.get())) {
                     messageHelper.show("Name cannot be empty");
                     return;
                 }
-                if (false) {//(!EmailValidator.getInstance(false).isValid(emailVm.s_1.get())) {
+                if (isEmpty(emailVm.s_1.get())) {//(!EmailValidator.getInstance(false).isValid(emailVm.s_1.get())) {
                     messageHelper.show("Enter a valid email");
                     return;
                 }
-                if (!isValidPhoneNo(mobileVm.s_1.get())) {
+                if (isEmpty(mobileVm.s_1.get())) {
                     messageHelper.show("Enter a valid mobile number");
                     return;
                 }

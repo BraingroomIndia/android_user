@@ -2,7 +2,9 @@ package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.activity.HomeActivity;
 
@@ -18,14 +20,14 @@ public class PaySuccessViewModel extends ViewModel {
     public final ObservableField<String> className;
     public final ObservableField<String> name;
     public final ObservableField<String> transactionId;
-    public final ObservableField<String> totalAmount;
+    public final ObservableField<Spanned> totalAmount;
     public final Action onDoneClicked, onTryAgainClicked;
 
     public PaySuccessViewModel(@NonNull final Navigator navigator, final String name, String transactionId, String className, String totalAmount) {
         this.className = new ObservableField<>(className);
         this.name = new ObservableField<>(name);
         this.transactionId = new ObservableField<>(transactionId);
-        this.totalAmount = new ObservableField<>("\u20B9   " + totalAmount);
+        this.totalAmount = new ObservableField<>(CommonUtils.fromHtml(totalAmount));
         onDoneClicked = new Action() {
             @Override
             public void run() throws Exception {
