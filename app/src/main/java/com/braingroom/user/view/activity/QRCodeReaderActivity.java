@@ -148,6 +148,11 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
     }
 
+    @Override
+    public void onCameraPermissionDenied() {
+
+    }
+
 
     public Navigator getNavigator() {
         if (navigator == null)
