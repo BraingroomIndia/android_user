@@ -33,6 +33,7 @@ import javax.inject.Named;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
+import io.branch.referral.PrefHelper;
 import io.branch.referral.util.LinkProperties;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -43,6 +44,8 @@ import timber.log.Timber;
 
 import static android.text.TextUtils.isEmpty;
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
+import static com.braingroom.user.view.activity.StripeActivity.QUERY_CLIENT_SECRET;
+import static com.braingroom.user.view.activity.StripeActivity.QUERY_SOURCE_ID;
 
 /*
  * Created by godara on 17/11/17.
@@ -69,11 +72,17 @@ public class Splash extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+
+        if (false) {
+            navigateActivity(StripeActivity.class, null);
+            return;
+        }
         UserApplication.getInstance().getMAppComponent().inject(this);
         UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
         Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
         Timber.tag(TAG).d("onCreate: Called  ");
         branch = Branch.getInstance();
+        UserApplication.DeviceFingerPrintID = PrefHelper.getInstance(this).getDeviceFingerPrintID();
         apiService.checkGeoDetail();
         onNewIntent(getIntent());
     }
@@ -112,12 +121,18 @@ public class Splash extends AppCompatActivity {
         String nonfictionPurpose = null;
         String userId = null;
         HashMap<String, String> data;
+        String notificationId;
         Bundle bundle = new Bundle();
         //if onMessageReceived called
         if (bundleReceived != null) {
-            bundle.putBoolean(Constants.pushNotification, true);
             data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
             }.getType());
+            if (bundleReceived.getBoolean(Constants.pushNotification, false)) {
+                notificationId = data.get("notification_id");
+                sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
+                bundle.putBoolean(Constants.pushNotification, true);
+            }
+
             Timber.tag(TAG).d("hashMap data" + data.toString());
             bundle.putString("notification_id", data.get("notification_id"));
             postId = data.get("post_id");
@@ -261,11 +276,10 @@ public class Splash extends AppCompatActivity {
             navigateActivity(CommunityListActivity.class, null);
         else if (json.contains(Constants.segmentListing)) {
             final DeepLinkDataResp data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), DeepLinkDataResp.class);
-            apiService.getCategoryName(Integer.parseInt(data.data.categId)).doOnError(new Consumer<Throwable>() {
+            apiService.getCategoryName(data.data.categId).doOnError(new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
-                    Timber.tag(TAG).e(throwable, json);
-                    navigateToIndex();
+                    Timber.tag(TAG).e(throwable, "Segment Listing");
                 }
             }).subscribe(new Consumer<DataflowService.NameIdPair>() {
                 @Override
@@ -293,6 +307,7 @@ public class Splash extends AppCompatActivity {
                 branch.initSession(new Branch.BranchUniversalReferralInitListener() {
                     @Override
                     public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
+                        UserApplication.DeviceFingerPrintID = PrefHelper.getInstance(Splash.this).getDeviceFingerPrintID();
                         //If not Launched by clicking Branch link
                         if (branchUniversalObject == null)
                             pushNotification();

@@ -12,6 +12,7 @@
         android:value="27.0.1" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -408,8 +409,23 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="https://ht5w.app.link"
+                    android:host="ht5w.app.link"
                     android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".view.activity.StripeActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="stripe"
+                    android:scheme="braingroom" />
             </intent-filter>
         </activity>
 

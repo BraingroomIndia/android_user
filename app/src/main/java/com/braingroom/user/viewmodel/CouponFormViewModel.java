@@ -57,11 +57,8 @@ public class CouponFormViewModel extends ViewModel {
                                     saveGiftCoupon(id);
                                 }
 
-                                @Override
-                                public void onCollectGiftDetail(String name, String email, String personalMsg) {
 
-                                }
-                            }, null, CouponFormActivity.class.getSimpleName()), false);
+                            }, null), false);
 
                 } else {
                     saveGiftCoupon(pref.getString(Constants.BG_ID, ""));

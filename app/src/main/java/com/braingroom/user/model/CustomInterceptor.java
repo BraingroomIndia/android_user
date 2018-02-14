@@ -1,5 +1,7 @@
 package com.braingroom.user.model;
 
+import android.util.Log;
+
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.utils.Constants;
@@ -54,7 +56,7 @@ public class CustomInterceptor implements Interceptor {
                 .addHeader("X-App-UUID", UserApplication.DeviceFingerPrintID)
                 .addHeader("X-App-Platform", "Android");
         Request request = requestBuilder.build();
-        Response response;
+            Response response;
         try {
             response = chain.proceed(request);
         } catch (ConnectException e) {
@@ -107,6 +109,9 @@ public class CustomInterceptor implements Interceptor {
             }
 
         }
+//        Log.d("OkHttp", String.format("--> Sending request %s on %s%n%s", request.url(), chain.request().body(), request.headers()));
+
+
         return response;
     }
 

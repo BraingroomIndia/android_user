@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
 
-/**
+/*
  * Created by godara on 11/05/17.
  */
 @AllArgsConstructor(suppressConstructorProperties = true)

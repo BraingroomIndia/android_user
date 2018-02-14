@@ -73,20 +73,16 @@ public class AppModule {
     OkHttpClient provideOkHttpClient(Cache cache, Gson gson) {
         OkHttpClient.Builder builder;
         CustomInterceptor customInterceptor = new CustomInterceptor(gson);
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder = new OkHttpClient.Builder().addInterceptor(loggingInterceptor)
-                    .addInterceptor(customInterceptor)
-                    .addNetworkInterceptor(new StethoInterceptor())
-                    .cache(cache);
-        } else {
-            builder = new OkHttpClient.Builder()
-                    .addInterceptor(customInterceptor)
-                    .cache(cache);
+        HttpLoggingInterceptor showHeader = new HttpLoggingInterceptor();
+        showHeader.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        HttpLoggingInterceptor showBody = new HttpLoggingInterceptor();
+        showBody.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        }
 
+        builder = new OkHttpClient.Builder().addInterceptor(customInterceptor)
+                .addNetworkInterceptor(new StethoInterceptor())
+                .addInterceptor(showHeader).addInterceptor(showBody)
+                .cache(cache);
         builder = builder.connectTimeout(100, TimeUnit.SECONDS);
         builder = builder.readTimeout(100, TimeUnit.SECONDS);
         builder = builder.writeTimeout(100, TimeUnit.SECONDS);
@@ -128,5 +124,6 @@ public class AppModule {
     Picasso providesPicasso() {
         return Picasso.with(application);
     }
+
 
 }

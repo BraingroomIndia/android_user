@@ -28,6 +28,7 @@ import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -83,6 +84,18 @@ public class DataflowService {
 
     public void registerUserDevice() {
         final RegisterUserDeviceReq req = new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""), pref.getString(Constants.BG_ID, null)));
+        api.registerUserDevice(req)
+                .onErrorReturn(new Function<Throwable, BaseResp>() {
+                    @Override
+                    public BaseResp apply(@NonNull Throwable throwable) throws Exception {
+                        Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
+                        return new BaseResp();
+                    }
+                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+    }
+
+    public void registerUserDevice(String fcm) {
+        final RegisterUserDeviceReq req = new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(fcm, pref.getString(Constants.BG_ID, null)));
         api.registerUserDevice(req)
                 .onErrorReturn(new Function<Throwable, BaseResp>() {
                     @Override
@@ -608,7 +621,7 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<PayUCheckoutData> getBookingDetails(final GetBookingDetailsReq req, final String promoId, final String promoVal) {
+    public Observable<PayUCheckoutData> getBookingDetails(final GetBookingDetailsReq req) {
 
         return api.getBookingDetails(req).map(new Function<PayUBookingDetailsResp, PayUCheckoutData>() {
             @Override
@@ -673,6 +686,7 @@ public class DataflowService {
     }
 
     public Observable<RazorSuccessResp> postRazorpaySuccess(final RazorSuccessReq req) {
+        Timber.tag(TAG).e("request payload\n" + gson.toJson(req));
         return api.postRazorPaySuccess(req).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
                     @Override
@@ -854,6 +868,19 @@ public class DataflowService {
             public NameIdPair apply(CategoryResp categoryResp) throws Exception {
                 for (CategoryResp.Snippet snippet : categoryResp.getData())
                     if (snippet.getId().equals(id))
+                        return new NameIdPair(Category, snippet.getCategoryName(), snippet.getId());
+
+                return new NameIdPair(Category, null, null);
+            }
+        });
+    }
+
+    public Observable<NameIdPair> getCategoryName(final String id) {
+        return getCategory().map(new Function<CategoryResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(CategoryResp categoryResp) throws Exception {
+                for (CategoryResp.Snippet snippet : categoryResp.getData())
+                    if (snippet.getId().equals(Integer.parseInt(id)))
                         return new NameIdPair(Category, snippet.getCategoryName(), snippet.getId());
 
                 return new NameIdPair(Category, null, null);
@@ -1505,6 +1532,31 @@ public class DataflowService {
                     registerUserDevice();
                 }
             });
+    }
+
+    public void checkGeoDetail(final Runnable action) {
+        if (TextUtils.isEmpty(Constants.GEO_TAG))
+            getGeoDetail(pref.getInt(Constants.SAVED_CITY_ID, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+                @Override
+                public void accept(@NonNull String s) throws Exception {
+                    Constants.GEO_TAG = s;
+                    registerUserDevice();
+                    try {
+                        action.run();
+                    } catch (Exception e) {
+                    }
+                }
+            });
+    }
+
+    public void checkGeoDetail(final String fcm) {
+        getGeoDetail(pref.getInt(Constants.SAVED_CITY_ID, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(@NonNull String s) throws Exception {
+                Constants.GEO_TAG = s;
+                registerUserDevice(fcm);
+            }
+        });
     }
 
     private boolean isDigitsOnly(String text) {

@@ -161,7 +161,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
                 }
 
                 @Override
-                public void navigateActivityForResult(Class<? extends MvvmActivity> destination, @Nullable Bundle bundle, int reqCode) {
+                public void navigateActivityForResult(Class<? extends AppCompatActivity> destination, @Nullable Bundle bundle, int reqCode) {
                     Intent intent = new Intent(QRCodeReaderActivity.this, destination);
                     intent.putExtra("classData", bundle);
                     startActivityForResult(intent, reqCode);

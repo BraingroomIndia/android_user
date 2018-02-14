@@ -146,7 +146,7 @@ public class HomeViewModel extends ViewModel {
                         messageHelper.showAcceptDismissInfo(resp.getData().getTitle(), resp.getData().getMessage(), new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                dialogHelper.showCustomView(R.layout.dialog_location_setting, new LocationSettingViewModel(messageHelper, navigator, helperFactory), false);
+                                dialogHelper.showCustomView(R.layout.dialog_location_setting, new LocationSettingViewModel(messageHelper, navigator, helperFactory, uiHelper::restartActivity), false);
                             }
                         });
                     }

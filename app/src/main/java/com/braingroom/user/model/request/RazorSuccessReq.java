@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
+/*
  * Created by himan on 1/25/2017.
  */
 @Data
@@ -78,6 +78,12 @@ public class RazorSuccessReq {
 
         @SerializedName("price_code")
         private String priceCode;
+
+        @SerializedName("stripe_token")
+        private String stripeToken;
+
+        @SerializedName("three_d_secure")
+        private String threeDSecure;
     }
 
     @Data

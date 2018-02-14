@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import dagger.internal.Preconditions;
+import io.branch.referral.PrefHelper;
 import timber.log.Timber;
 
 
@@ -76,6 +77,8 @@ public abstract class MvvmActivity extends AppCompatActivity {
         vm.setMFirebaseAnalytics(mFirebaseAnalytics);
         vm.setMTracker(mTracker);
         getDefaultBinder().bind(binding, vm);
+        if (UserApplication.DeviceFingerPrintID.equals(PrefHelper.NO_STRING_VALUE))
+            UserApplication.DeviceFingerPrintID = PrefHelper.getInstance(this).getDeviceFingerPrintID();
         vm.apiService.checkGeoDetail();
     }
 
