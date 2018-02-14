@@ -100,12 +100,7 @@ public abstract class BaseActivity extends MvvmActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
-        pushNotification = getIntentBoolean(Constants.pushNotification);
-        String notificationId = getIntentString("notification_id");
-        if (pushNotification)
-            sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         screenDims = new ScreenDims();
         Point size = new Point();
         WindowManager w = getWindowManager();
@@ -113,8 +108,6 @@ public abstract class BaseActivity extends MvvmActivity {
         screenDims.width = size.x;
         screenDims.height = size.y;
         getNavigator().forceUpdate();
-
-
 
 
     }

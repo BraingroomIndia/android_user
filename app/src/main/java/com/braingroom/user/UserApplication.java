@@ -88,7 +88,7 @@ public class UserApplication extends BranchApp {
     // Google Analytics
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
-    public static String DeviceFingerPrintID;
+    public static String DeviceFingerPrintID = "";
 
     @Override
     public void onCreate() {

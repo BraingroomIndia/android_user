@@ -166,7 +166,7 @@
                     android:layout_marginTop="@dimen/padding_small"
                     android:gravity="center"
                     android:onClick="@{vm.onOpenCouponCode}"
-                    android:text='@{vm.appliedCouponCode == null ? "Apply a Coupon Code" : "Coupon Code Discount Rs. : " + vm.appliedCouponAmount}'
+                    android:text='@{vm.appliedCouponCode == null ? "Apply a Coupon Code" : "Coupon Code Discount: " +vm.priceSymbol+" " + vm.appliedCouponAmount}'
                     android:textColor="@color/materialBlue"
                     android:textSize="@dimen/text_size_large"
                     android:visibility="@{vm.applyingCouponCode ?  View.GONE: View.VISIBLE}"
@@ -212,7 +212,7 @@
                     android:layout_marginTop="@dimen/padding_small"
                     android:gravity="center"
                     android:onClick="@{vm.onOpenPromoCode}"
-                    android:text='@{vm.appliedPromoCode == null ? "Apply a Promo Code" : "Promo Code Discount Rs. : " + vm.appliedPromoAmount}'
+                    android:text='@{vm.appliedPromoCode == null ? "Apply a Promo Code" : "Promo Code Discount: " +vm.priceSymbol+ " " + vm.appliedPromoAmount}'
                     android:textColor="@color/materialBlue"
                     android:textSize="@dimen/text_size_large"
                     android:visibility="@{vm.applyingPromoCode ?  View.GONE : View.VISIBLE}"

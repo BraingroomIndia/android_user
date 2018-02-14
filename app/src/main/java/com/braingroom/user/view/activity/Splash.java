@@ -121,12 +121,18 @@ public class Splash extends AppCompatActivity {
         String nonfictionPurpose = null;
         String userId = null;
         HashMap<String, String> data;
+        String notificationId;
         Bundle bundle = new Bundle();
         //if onMessageReceived called
         if (bundleReceived != null) {
-            bundle.putBoolean(Constants.pushNotification, true);
             data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
             }.getType());
+            if (bundleReceived.getBoolean(Constants.pushNotification, false)) {
+                notificationId = data.get("notification_id");
+                sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
+                bundle.putBoolean(Constants.pushNotification, true);
+            }
+
             Timber.tag(TAG).d("hashMap data" + data.toString());
             bundle.putString("notification_id", data.get("notification_id"));
             postId = data.get("post_id");

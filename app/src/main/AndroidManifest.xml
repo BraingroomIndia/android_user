@@ -413,9 +413,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-<<<<<<< Updated upstream
-        <activity android:name=".view.activity.StripeActivity" />
-=======
+
         <activity
             android:name=".view.activity.StripeActivity"
             android:launchMode="singleTask">
@@ -430,7 +428,6 @@
                     android:scheme="braingroom" />
             </intent-filter>
         </activity>
->>>>>>> Stashed changes
 
         <!-- Facebook Login -->
 

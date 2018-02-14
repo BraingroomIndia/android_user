@@ -20,7 +20,6 @@ import com.braingroom.user.model.request.GetBookingDetailsReq;
 import com.braingroom.user.model.request.PromoCodeReq;
 import com.braingroom.user.model.request.RazorSuccessReq;
 import com.braingroom.user.model.response.PromocodeResp;
-import com.braingroom.user.model.response.RazorSuccessResp;
 import com.braingroom.user.model.response.SaveGiftCouponResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
@@ -63,8 +62,9 @@ public class CheckoutViewModel extends ViewModel {
         if (requestCode == REQ_CODE_STRIPE) {
             if (resultCode == Activity.RESULT_OK && data.getExtras() != null) {
                 String stripeToken = data.getExtras().getString("stripe_token");
+                String threeDSecure = data.getExtras().getString("three_d_secure");
                 if (!isEmpty(stripeToken)) {
-                    handleStripeSuccess(stripeToken);
+                    handleStripeSuccess(stripeToken, threeDSecure);
                 } else messageHelper.showDismissInfo("Error", "Something went wrong");
             } else messageHelper.showDismissInfo("Error", "Something went wrong");
         }
@@ -533,6 +533,7 @@ public class CheckoutViewModel extends ViewModel {
         //You can omit the image option to fetch the image from dashboard
         options.put("image", "https://www.braingroom.com/homepage/img/logo.jpg");
         options.put("currency", currencyCode);
+        options.put("currency_symbol", classData.getPriceSymbol());
         options.put("amount", "" + amount * 100);
         JSONObject preFill = new JSONObject();
         preFill.put("email", email);
@@ -624,9 +625,10 @@ public class CheckoutViewModel extends ViewModel {
         }
     }
 
-    public void handleStripeSuccess(String stripeToken) {
+    public void handleStripeSuccess(String stripeToken, String threeDSecure) {
         getBookingSuccessReq().getData().setStripeToken(stripeToken);
         getBookingSuccessReq().getData().setRazorPayTxnid("");
+        getBookingSuccessReq().getData().setThreeDSecure(threeDSecure);
         handlePaymentSuccess();
     }
 

@@ -81,6 +81,9 @@ public class RazorSuccessReq {
 
         @SerializedName("stripe_token")
         private String stripeToken;
+
+        @SerializedName("three_d_secure")
+        private String threeDSecure;
     }
 
     @Data

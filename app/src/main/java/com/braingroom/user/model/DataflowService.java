@@ -28,6 +28,7 @@ import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -1529,6 +1530,21 @@ public class DataflowService {
                 public void accept(@NonNull String s) throws Exception {
                     Constants.GEO_TAG = s;
                     registerUserDevice();
+                }
+            });
+    }
+
+    public void checkGeoDetail(final Runnable action) {
+        if (TextUtils.isEmpty(Constants.GEO_TAG))
+            getGeoDetail(pref.getInt(Constants.SAVED_CITY_ID, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+                @Override
+                public void accept(@NonNull String s) throws Exception {
+                    Constants.GEO_TAG = s;
+                    registerUserDevice();
+                    try {
+                        action.run();
+                    } catch (Exception e) {
+                    }
                 }
             });
     }

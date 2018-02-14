@@ -11,13 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.CustomView.CardView.OnCardFormSubmitListener;
 import com.braingroom.user.utils.CustomView.CardView.utils.CardType;
 import com.braingroom.user.utils.CustomView.CardView.view.CardEditText;
@@ -72,8 +75,10 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
     private JSONObject checkout;
     private int checkoutAmount;
     private String checkOutCurrency;
+    private String currencySymbol;
     protected Bundle extras;
     MaterialDialog progressDialog;
+    TextView payButton;
 
     private SourceParams sourceParams;
 
@@ -82,6 +87,8 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
         PUBLISHABLE_KEY = getString(R.string.stripe_publish_key);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actvity_stripe);
+        payButton = findViewById(R.id.pay_button);
+
         mStripe = new LazyStripe(this, PUBLISHABLE_KEY);
         mSupportedCardTypesView = findViewById(R.id.supported_card_types);
         mSupportedCardTypesView.setSupportedCardTypes(SUPPORTED_CARD_TYPES);
@@ -91,6 +98,8 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
                 checkout = new JSONObject(extras.getString("checkoutData"));
                 checkoutAmount = Integer.parseInt(checkout.getString("amount"));
                 checkOutCurrency = checkout.getString("currency");
+                currencySymbol = checkout.getString("currency_symbol");
+                payButton.setText(CommonUtils.fromHtml("Pay only " + currencySymbol + " " + checkoutAmount / 100));
             } catch (JSONException e) {
                 e.printStackTrace();
                 this.setResult(android.app.Activity.RESULT_CANCELED);
@@ -126,12 +135,17 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
         }
     }
 
+    public void onCardFormSubmit(View view) {
+        onCardFormSubmit();
+    }
+
+
     @Override
     public void onCardFormSubmit() {
 
-        final Card card = new Card(mCardForm.getCardNumber(), mCardForm.getExpirationMonth(), mCardForm.getExpirationYear(), mCardForm.getCvv());
 
-        if (card.validateCard()) {
+        if (mCardForm.isValid()) {
+            final Card card = new Card(mCardForm.getCardNumber(), mCardForm.getExpirationMonth(), mCardForm.getExpirationYear(), mCardForm.getCvv());
             showProgressDialog("Wait", "Communicating with server");
             sourceParams = SourceParams.createCardParams(card);
             attemptPurchase();
@@ -216,6 +230,7 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
             // If 3DS is not required, you can charge the source.
             Intent resultIntent = new Intent();
             resultIntent.putExtra("stripe_token", source.getId());
+            resultIntent.putExtra("three_d_secure", cardData.getThreeDSecureStatus());
             setResult(RESULT_OK, resultIntent);
             dismissActiveProgress();
             finish();
@@ -274,6 +289,7 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
                 Log.e(TAG, sourceId);
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("stripe_token", sourceId);
+                resultIntent.putExtra("three_d_secure", SourceCardData.REQUIRED);
                 setResult(RESULT_OK, resultIntent);
                 finish();
                 mRedirectSource = null;
@@ -287,7 +303,7 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
                 .title(title)
                 .content(content)
                 .progress(true, 0).cancelable(false)
-//                .canceledOnTouchOutside(false)
+                .canceledOnTouchOutside(false)
                 .show();
 
     }
