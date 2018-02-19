@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.model.QRCode.ClassBooking;
@@ -94,13 +96,8 @@ public class Splash extends AppCompatActivity {
             bundleReceived = intent.getExtras().getBundle(Constants.pushNotification);
         String action = intent.getAction();
         String data = intent.getDataString();
-        if (Intent.ACTION_VIEW.equals(action) && data != null) {
-            apiService.getDeepLinkData(data).subscribe(new Consumer<DeepLinkDataResp>() {
-                @Override
-                public void accept(DeepLinkDataResp resp) throws Exception {
-                    qrCodeData(gson.toJson(resp));
-                }
-            });
+        if (Intent.ACTION_VIEW.equals(action) && data != null && data.contains(getResources().getString(R.string.deep_linking))) {
+            apiService.getDeepLinkData(data).subscribe(resp -> qrCodeData(gson.toJson(resp)));
         } else {
             branchData();
         }
@@ -127,7 +124,7 @@ public class Splash extends AppCompatActivity {
         if (bundleReceived != null) {
             data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
             }.getType());
-            if (bundleReceived.getBoolean(Constants.pushNotification, false)) {
+            if (!bundleReceived.getString(Constants.pushNotification, "").isEmpty()) {
                 notificationId = data.get("notification_id");
                 sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
                 bundle.putBoolean(Constants.pushNotification, true);
@@ -316,7 +313,7 @@ public class Splash extends AppCompatActivity {
                         */
                         else if (branchError != null) {
                             Timber.tag(TAG).e("Branch Error" + branchError.getMessage());
-                            navigateToIndex();
+                            pushNotification();
                         } else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                             HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
                             if (referringParams.containsKey("referral")) {
