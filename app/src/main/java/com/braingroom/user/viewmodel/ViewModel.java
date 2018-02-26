@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.braingroom.user.BuildConfig;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.model.response.BaseResp;
@@ -180,8 +181,10 @@ public class ViewModel extends BaseObservable {
     }
 
     void setScreenName(String screenName) {
-        mTracker.setScreenName(screenName);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        if (!BuildConfig.DEBUG) {
+            mTracker.setScreenName(screenName);
+            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
 
     }
 

@@ -42,6 +42,9 @@ public class ClassListResp extends BaseResp {
         @SerializedName("detail_class_link")
         private String classWebUrl;
 
+        @SerializedName(value = "class_ratting", alternate = {"rating"})
+        private Integer rating;
+
         @SerializedName("class_provided")
         private String teacher;
 
@@ -72,6 +75,9 @@ public class ClassListResp extends BaseResp {
         @SerializedName("session_date")
         private String sessionDate;
 
+        @SerializedName("is_cod_avaiable")
+        private int isCode;
+
         @SerializedName("sesssion_time")
         private String sessionTime;
 
@@ -99,8 +105,6 @@ public class ClassListResp extends BaseResp {
         @SerializedName("class_summary")
         private String classSummary;
 
-        @SerializedName("rating")
-        private Integer rating;
 
         @SerializedName("photo")
         private String photo;

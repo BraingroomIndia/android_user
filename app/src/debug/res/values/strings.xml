@@ -34,7 +34,7 @@
     <string name="google_maps_key" translatable="false">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
     <string name="branch_key" translatable="false">key_test_pexsI2ytGiNEj794aRPe2mkgFsnwUtCT</string>
     <string name="branch_live_key" translatable="false">key_live_hpBAJ2zvLlPqp388kOv49pieszozQrrF</string>
-    <string name="branch_base_url" translatable="false">https://ht5w.test-app.link/</string>
+    <string name="branch_base_url" translatable="false">ht5w.test-app.link</string>
 
     <string name="facebook_app_id" translatable="false">1949694208609258</string>
     <string name="fb_login_protocol_scheme">fb1949694208609258</string>
@@ -157,4 +157,7 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="light_theme_form">Light Theme</string>
     <string name="dark_theme_form">Dark Theme</string>
     <string name="scan_with_card_io">Scan with card.io</string>
+
+    <!---->
+    <bool name="testMode">true</bool>
 </resources>

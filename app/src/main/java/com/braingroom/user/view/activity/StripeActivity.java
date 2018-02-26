@@ -66,8 +66,8 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
 
     private static String PUBLISHABLE_KEY = "";
 
-    public static final String RETURN_SCHEMA = "braingroom://";
-    public static final String RETURN_HOST_ASYNC = "stripe";
+    public static final String RETURN_SCHEMA = "https://";
+    public static final String RETURN_HOST_ASYNC = "www.braingroom.com/stripe";
     public static final String RETURN_HOST_SYNC = "sync";
     public static final String QUERY_CLIENT_SECRET = "client_secret";
     public static final String QUERY_SOURCE_ID = "source";

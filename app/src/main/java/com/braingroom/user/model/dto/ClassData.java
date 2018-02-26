@@ -63,6 +63,13 @@ public class ClassData implements Serializable {
     @SerializedName("class_type_data")
     private String classTypeData;
 
+    public boolean getIsCode() {
+        return (isCode == 1);
+    }
+
+    @SerializedName("is_cod_avaiable")
+    private int isCode;
+
     @SerializedName("session_date")
     private String sessionDate;
 
@@ -93,7 +100,7 @@ public class ClassData implements Serializable {
     @SerializedName("class_summary")
     private String classSummary;
 
-    @SerializedName("rating")
+    @SerializedName("class_ratting")
     private Integer rating;
 
     @SerializedName("photo")
@@ -287,8 +294,10 @@ public class ClassData implements Serializable {
         this.classSummary = classSummary;
     }
 
-    public Integer getRating() {
-        return rating;
+    public String getRating() {
+        if (rating == null)
+            rating = 4;
+        return rating.toString();
     }
 
     public void setRating(Integer rating) {

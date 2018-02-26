@@ -44,6 +44,7 @@ import com.braingroom.user.viewmodel.fragment.ReviewAddViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -54,6 +55,7 @@ import timber.log.Timber;
 import static com.braingroom.user.R.string.action_learners_forum;
 import static com.braingroom.user.R.string.action_tips_tricks;
 import static com.braingroom.user.R.string.action_tutors_talk;
+import static com.google.android.youtube.player.YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT;
 
 public class ClassDetailActivity extends BaseActivity {
 
@@ -123,17 +125,14 @@ public class ClassDetailActivity extends BaseActivity {
                     }
                 }
             });
+        youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_fragment);
+        youTubePlayerFragment.getView().setVisibility(View.INVISIBLE);
 
         rxPermissions = new RxPermissions(this);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null)
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
-                }
-            });
+            mapFragment.getMapAsync(((ClassDetailViewModel) vm)::setGoogleMap);
 
     }
 
@@ -148,11 +147,26 @@ public class ClassDetailActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        myPlaybackEventListener = new MyPlaybackEventListener();
         classId = getIntentString("id");
         uiHelper = new UiHelper() {
             @Override
             public void initYoutube() {
+                youTubePlayerFragment.getView().setVisibility(View.VISIBLE);
+                youTubePlayerFragment.initialize("AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", new YouTubePlayer.OnInitializedListener() {
+                    @Override
+                    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+                        //youTubePlayer.setPlaybackEventListener(myPlaybackEventListener);
+                        youTubePlayer.setFullscreen(false);
+                        youTubePlayer.setFullscreenControlFlags(FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+                        ((ClassDetailViewModel) vm).setYoutubePlayer(youTubePlayer);
+                    }
+
+                    @Override
+                    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                        Log.d("Youtube player error", "onInitializationFailure: ");
+                    }
+                });
+
             }
 
             @Override
@@ -163,7 +177,7 @@ public class ClassDetailActivity extends BaseActivity {
             @Override
             public void stopShimmer() {
                 mFirebaseAnalytics.setCurrentScreen(ClassDetailActivity.this, ((ClassDetailViewModel) vm).mClassData.getClassTopic(), null);
-//                shimmerFrameLayout.stopShimmerAnimation();
+
             }
 
             @Override

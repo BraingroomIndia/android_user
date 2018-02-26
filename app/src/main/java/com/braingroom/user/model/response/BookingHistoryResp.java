@@ -72,6 +72,7 @@ public class BookingHistoryResp {
         @SerializedName("price_code")
         private String priceCode;
 
+
         @SerializedName("no_of_seats")
         public String noOfSeats;
 
@@ -94,7 +95,7 @@ public class BookingHistoryResp {
         public String classSummary;
 
         @SerializedName("class_ratting")
-        public Integer classRatting;
+        public Integer rating;
 
         @SerializedName("pic_name")
         public String photo;

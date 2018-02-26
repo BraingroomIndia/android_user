@@ -25,6 +25,7 @@ public class FilterData implements Serializable {
     private HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
     private HashMap<String, Integer> classScheduleFilterMap = new HashMap<>();
     private HashMap<String, Integer> vendorFilterMap = new HashMap<>();
+    private HashMap<String, Integer> classDurationFilterMap = new HashMap<>();
     //    1 Category
     private Integer categoryId;
     //    2 Segment
@@ -41,6 +42,8 @@ public class FilterData implements Serializable {
     private Integer classScheduleId;
     //    8  Vendor
     private Integer vendorId;
+
+    private Integer classDurationId;
 
     private String endDate = "";
     private String sortOrder = "";
@@ -125,6 +128,14 @@ public class FilterData implements Serializable {
         this.vendorId = getId(this.vendorFilterMap);
     }
 
+    // 9
+    public void setClassDurationFilterMap(HashMap<String, Integer> classDurationFilterMap) {
+        if (this.classDurationFilterMap != null)
+            this.classDurationFilterMap = classDurationFilterMap;
+        else this.classDurationFilterMap = new HashMap<>();
+        this.classDurationId = getId(this.classDurationFilterMap);
+    }
+
     public void setEndDate(String endDate) {
         if (endDate == null || "YYYY-MM-DD".equalsIgnoreCase(endDate))
             this.endDate = "";
@@ -206,7 +217,7 @@ public class FilterData implements Serializable {
 
     //  6
     public HashMap<String, Integer> getClassTypeFilterMap() {
-        if (classScheduleFilterMap != null)
+        if (classTypeFilterMap != null)
             return classTypeFilterMap;
         else return new HashMap<>();
     }
@@ -224,6 +235,14 @@ public class FilterData implements Serializable {
             return vendorFilterMap;
         else return new HashMap<>();
     }
+
+    //  9
+    public HashMap<String, Integer> getClassDurationFilterMap() {
+        if (classDurationFilterMap != null)
+            return classDurationFilterMap;
+        else return new HashMap<>();
+    }
+
 
     //  1
     public void setCategoryId(String name, Integer id) {
@@ -293,6 +312,14 @@ public class FilterData implements Serializable {
         this.vendorId = id;
     }
 
+    //  9
+    public void setClassDurationId(String name, Integer id) {
+        if (id != null && !isEmpty(name))
+            this.classDurationFilterMap.put(name, id);
+        else this.classDurationFilterMap = new HashMap<>();
+        this.classDurationId = id;
+    }
+
     //  1
     public Integer getCategoryId() {
         return categoryId;
@@ -333,6 +360,11 @@ public class FilterData implements Serializable {
         return vendorId;
     }
 
+    //  9
+    public Integer getClassDurationId() {
+        return classDurationId;
+    }
+
     public String getStartDate() {
         return startDate;
     }
@@ -371,7 +403,7 @@ public class FilterData implements Serializable {
 //      6
         if (data.classTypeFilterMap != null)
             this.classTypeFilterMap = data.classTypeFilterMap;
-        else this.classScheduleFilterMap = new HashMap<>();
+        else this.classTypeFilterMap = new HashMap<>();
         this.classTypeId = data.classTypeId;
 //      7
         if (data.classScheduleFilterMap != null)
@@ -383,6 +415,11 @@ public class FilterData implements Serializable {
             this.vendorFilterMap = data.vendorFilterMap;
         else this.vendorFilterMap = new HashMap<>();
         this.vendorId = data.vendorId;
+//       9
+        if (data.classDurationFilterMap != null)
+            this.classDurationFilterMap = data.classDurationFilterMap;
+        else this.classDurationFilterMap = new HashMap<>();
+        this.classDurationId = data.classDurationId;
 
         this.endDate = data.endDate;
         this.startDate = data.startDate;
@@ -400,7 +437,7 @@ public class FilterData implements Serializable {
     }
 
     public GeneralFilterReq getFilterReq() {
-        return new GeneralFilterReq(new GeneralFilterReq.Snippet("", keywords + "", startDate + "", endDate + "", getCategoryId() == null ? "" : getCategoryId() + "", getSegmentId() == null ? "" : getSegmentId() + "", getClassTypeId() == null ? "" : getClassTypeId() + "", getCommunityId() == null ? "" : getCommunityId() + "", getClassScheduleId() == null ? "" : getClassScheduleId() + "", getVendorId() == null ? "" : getVendorId() + "", getCityId() == null ? "" : getCityId() + "", getLocalityId() == null ? "" : getLocalityId() + "", sortOrder + "", sortOrderCat + "", catalog + "", giftId + ""));
+        return new GeneralFilterReq(new GeneralFilterReq.Snippet("", keywords + "", startDate + "", endDate + "", getCategoryId() == null ? "" : getCategoryId().toString(), getSegmentId() == null ? "" : getSegmentId() + "", getClassTypeId() == null ? "" : getClassTypeId() + "", getCommunityId() == null ? "" : getCommunityId() + "", getClassScheduleId() == null ? "" : getClassScheduleId() + "", getClassDurationId() == null ? "" : getClassDurationId().toString(), getVendorId() == null ? "" : getVendorId() + "", getCityId() == null ? "" : getCityId() + "", getLocalityId() == null ? "" : getLocalityId() + "", sortOrder + "", sortOrderCat + "", catalog + "", giftId + ""));
     }
 
 

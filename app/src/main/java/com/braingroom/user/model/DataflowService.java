@@ -213,6 +213,18 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<CommonIdResp> getAllClassTypes() {
+
+        return api.getAllClassTypes().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<CommonIdResp> getAllDurations() {
+
+        return api.getAllDurations().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<CategoryResp> getCategory() {
 
         return api.getCategories().subscribeOn(Schedulers.io())
@@ -363,6 +375,7 @@ public class DataflowService {
                         for (ClassListResp.Snippet classDetail : classListResp.getData()) {
 
                             ClassData classData = new ClassData();
+                            classData.setRating(classDetail.getRating());
                             classData.setImage(classDetail.getPicName());
                             classData.setClassTopic(classDetail.getClassTopic());
                             if (classDetail.getLocation() != null && !classDetail.getLocation().isEmpty())
@@ -418,41 +431,6 @@ public class DataflowService {
                         return dataList;
                     }
                 });
-
-        /*return api.getVendorProfile(pageIndex > 1 ? pageIndex + "" : "",
-                new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull VendorProfileResp resp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        //Edited by Vikas Godara
-                        int i = 0;
-                        if (resp.getData().get(i).getClasses() != null)
-                            for (VendorProfileResp.Snippet.ClassDetail classDetail : resp.getData().get(i).getClasses()) {
-                                ClassData classData = new ClassData();
-                                classData.setImage(classDetail.photo);
-                                classData.setClassTopic(classDetail.classTopic);
-                                classData.setLocality(classDetail.location);
-                                classData.setPricingType("Single");
-                                classData.setPrice(classDetail.price);
-                                classData.setNoOfSession(classDetail.noOfSession);
-                                classData.setClassDuration(classDetail.classDuration);
-                                classData.setC
-
-
-                                if (classDetail.classTimingId.equals("1"))
-                                    classData.setClassType("Fixed");
-                                else
-                                    classData.setClassType("Flexible");
-                                classData.setId(classDetail.id);
-                                //Edited by Vikas Godara
-                                dataList.add(gson.fromJson(gson.toJson(classData), ClassData.class));
-                                i++;
-
-                            }
-                        return dataList;
-                    }
-                });*/
     }
 
     public Observable<List<ClassData>> getBookingHistory(String userId, Integer pageIndex) {
@@ -467,6 +445,7 @@ public class DataflowService {
                             for (BookingHistoryResp.Snippet snippet : resp.getData()) {
                                 BookingHistoryResp.ClassDetail classDetail = snippet.getClassDetail();
                                 ClassData classData = new ClassData();
+                                classData.setRating(classDetail.getRating());
                                 classData.setImage(classDetail.getPhoto());
                                 classData.setClassTopic(classDetail.getClassTopic());
                                 if (classDetail.getLocation().size() != 0)

@@ -46,11 +46,14 @@ public class GeneralFilterReq {
         @SerializedName("class_schedule")
         String classSchedule = "";
 
+        @SerializedName("duration")
+        String classDuration = "";
+
         @SerializedName("class_provider")
         String classProvider = "";
 
         @SerializedName("city_id")
-        String cityId="";
+        String cityId = "";
 
         @SerializedName("location_id")
         String localityId = "";
@@ -66,6 +69,7 @@ public class GeneralFilterReq {
 
         @SerializedName("gift_id")
         String giftId = "";
+
 
     }
 }
