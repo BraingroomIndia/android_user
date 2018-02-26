@@ -51,8 +51,8 @@
                                     android:id="@+id/input_keywords"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@={vm.keywords}"
                                     android:maxLines="1"
+                                    android:text="@={vm.keywords}"
                                     android:textColor="@color/colorTextDark"
                                     app:font='@{@string/robotoRegular}' />
 
@@ -64,8 +64,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_med"
                                 android:gravity="center"
-                                android:visibility="@{vm.isCatalogue ? View.GONE : View.VISIBLE}"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:visibility="@{vm.isCatalogue ? View.GONE : View.VISIBLE}">
 
                                 <include
                                     layout="@layout/item_date_dialog_opener"
@@ -120,8 +120,10 @@
                                 <include
                                     layout="@layout/item_list_dialog_opener"
                                     app:editable="@{true}"
-                                    app:isInvisible="@{!vm.isCommunityVisible}"
+                                    app:isInvisible="@{true}"
                                     app:vm="@{vm.communityVm}" />
+
+
 
                                 <include
                                     layout="@layout/item_list_dialog_opener"
@@ -131,6 +133,12 @@
                                 <include
                                     layout="@layout/item_list_dialog_opener"
                                     app:editable="@{true}"
+                                    app:vm="@{vm.classDurationVm}" />
+
+                                <include
+                                    layout="@layout/item_list_dialog_opener"
+                                    app:editable="@{true}"
+                                    app:isInvisible="@{true}"
                                     app:vm="@{vm.classScheduleVm}" />
 
                                 <include

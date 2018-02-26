@@ -2,11 +2,14 @@ package com.braingroom.user.view.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.model.QRCode.ClassBooking;
@@ -69,14 +72,11 @@ public class Splash extends AppCompatActivity {
 
     public final String TAG = Splash.class.getSimpleName();
 
+    private String deepLinkBasUlr;
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-        if (false) {
-            navigateActivity(StripeActivity.class, null);
-            return;
-        }
         UserApplication.getInstance().getMAppComponent().inject(this);
         UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
         Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
@@ -85,6 +85,10 @@ public class Splash extends AppCompatActivity {
         UserApplication.DeviceFingerPrintID = PrefHelper.getInstance(this).getDeviceFingerPrintID();
         apiService.checkGeoDetail();
         onNewIntent(getIntent());
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
     }
 
     @Override
@@ -94,13 +98,8 @@ public class Splash extends AppCompatActivity {
             bundleReceived = intent.getExtras().getBundle(Constants.pushNotification);
         String action = intent.getAction();
         String data = intent.getDataString();
-        if (Intent.ACTION_VIEW.equals(action) && data != null) {
-            apiService.getDeepLinkData(data).subscribe(new Consumer<DeepLinkDataResp>() {
-                @Override
-                public void accept(DeepLinkDataResp resp) throws Exception {
-                    qrCodeData(gson.toJson(resp));
-                }
-            });
+        if (Intent.ACTION_VIEW.equals(action) && data != null && data.contains(getString(R.string.deep_linking))) {
+            apiService.getDeepLinkData(data).map(gson::toJson).subscribe(this::qrCodeData);
         } else {
             branchData();
         }
@@ -122,12 +121,14 @@ public class Splash extends AppCompatActivity {
         String userId = null;
         HashMap<String, String> data;
         String notificationId;
+        String userType;
+        String thirdPartyId;
         Bundle bundle = new Bundle();
         //if onMessageReceived called
         if (bundleReceived != null) {
             data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
             }.getType());
-            if (bundleReceived.getBoolean(Constants.pushNotification, false)) {
+            if (!bundleReceived.getString(Constants.pushNotification, "").isEmpty()) {
                 notificationId = data.get("notification_id");
                 sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
                 bundle.putBoolean(Constants.pushNotification, true);
@@ -141,6 +142,9 @@ public class Splash extends AppCompatActivity {
             messageSenderName = data.get("sender_name");
             nonfictionPurpose = data.get("notification_type");
             userId = data.get("user_id");
+            userType = data.get("user_type_id");
+            thirdPartyId = data.get("third_party_id");
+
             // if onMessageReceived not called
         } else if (getIntent().getExtras() != null) {
             postId = getIntent().getExtras().getString("post_id");
@@ -149,7 +153,8 @@ public class Splash extends AppCompatActivity {
             messageSenderName = getIntent().getExtras().getString("sender_name");
             nonfictionPurpose = getIntent().getExtras().getString("notification_type");
             userId = getIntent().getExtras().getString("user_id");
-
+            userType = getIntent().getExtras().getString("user_type_id");
+            thirdPartyId = getIntent().getExtras().getString("third_party_id");
         } else {
             navigateActivity(Index.class, null);
             return;
@@ -173,6 +178,16 @@ public class Splash extends AppCompatActivity {
                 // For every one else open Chat thread
                 navigateActivity(MessagesThreadActivity.class, bundle);
 
+        } else if (thirdPartyId != null && userType != null) { // Follow Notification
+            if (userType.equalsIgnoreCase("1")) //Vendor Profile
+            {
+                bundle.putString("id", thirdPartyId);
+                navigateActivity(VendorProfileActivity.class, bundle);
+            } else if (userType.equalsIgnoreCase("2")) { //
+                bundle.putString("userId", thirdPartyId);
+                navigateActivity(ThirdPartyViewActivity.class, bundle);
+            }
+
         } else {
             navigateActivity(Index.class, null);
         }
@@ -192,6 +207,7 @@ public class Splash extends AppCompatActivity {
             return;
         }
         if (json.contains(Constants.classListing)) {
+            json.replace("\"", "");
             final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
             apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
                 @Override
@@ -225,7 +241,7 @@ public class Splash extends AppCompatActivity {
         } else if (json.contains(Constants.classDetail)) {
 
             try {
-                ClassDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassDetail.class);
+                ClassDetail data = gson.fromJson(json.replace("\\", "").substring(0, json.replace("\\", "").lastIndexOf("}") + 1), ClassDetail.class);
                 bundle.putString("id", data.reqData.getId());
                 bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
                 bundle.putString(Constants.promoCode, data.reqData.getPromoCode());
@@ -316,7 +332,7 @@ public class Splash extends AppCompatActivity {
                         */
                         else if (branchError != null) {
                             Timber.tag(TAG).e("Branch Error" + branchError.getMessage());
-                            navigateToIndex();
+                            pushNotification();
                         } else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                             HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
                             if (referringParams.containsKey("referral")) {

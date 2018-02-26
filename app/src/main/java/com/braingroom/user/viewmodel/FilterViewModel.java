@@ -14,7 +14,6 @@ import com.braingroom.user.model.response.CommonIdResp;
 import com.braingroom.user.model.response.CommunityResp;
 import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.utils.ClassSchedule;
-import com.braingroom.user.utils.ClassType;
 import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
@@ -44,12 +43,12 @@ public class FilterViewModel extends ViewModel {
     public static final String ORIGIN_CATALOG = "CATALOG";
     private final String origin;
     public final ObservableField<String> keywords;
-    public final ListDialogViewModel1 categoryVm, segmentsVm, communityVm, classTypeVm, classScheduleVm;
+    public final ListDialogViewModel1 categoryVm, segmentsVm, communityVm, classTypeVm, classScheduleVm, classDurationVm;
     public final DatePickerViewModel startDateVm, endDateVm;
     public final Action onBackClicked, onResetClicked, onApplyClicked;
     public final Navigator navigator;
     public final MessageHelper messageHelper;
-    public final Consumer<HashMap<String, Integer>> categoryConsumer, segmentConsumer, classScheduleConsumer, communityConsumer, classTypeConsumer;
+    public final Consumer<HashMap<String, Integer>> categoryConsumer, segmentConsumer, classScheduleConsumer, communityConsumer, classTypeConsumer, classDurationConsumer;
     public final Consumer<HashMap<String, Pair<Integer, String>>> cityConsumer, localityConsumer, vendorConsumer;
     private boolean clearFlag = false;
     public final SearchSelectListViewModel cityVm, localityVm, vendorListVm;
@@ -179,6 +178,12 @@ public class FilterViewModel extends ViewModel {
                 filterData.setVendorFilterMap(CommonUtils.getSelectedDataMap(stringPairHashMap));
             }
         };
+        classDurationConsumer = new Consumer<HashMap<String, Integer>>() {
+            @Override
+            public void accept(HashMap<String, Integer> stringIntegerHashMap) throws Exception {
+                filterData.setClassDurationFilterMap(stringIntegerHashMap);
+            }
+        };
 
         cityApiObservable = getCityApiObservable();
 
@@ -214,14 +219,8 @@ public class FilterViewModel extends ViewModel {
             }
         }), filterData1.getCommunityFilterMap(), false, communityConsumer, "");
 
-        LinkedHashMap<String, Integer> ClassTypeApiData = new LinkedHashMap<>();
-        ClassTypeApiData.put(ClassType.WORKSHOP.name, ClassType.WORKSHOP.id);
-        ClassTypeApiData.put(ClassType.SEMINAR.name, ClassType.SEMINAR.id);
-        ClassTypeApiData.put(ClassType.WEBINAR.name, ClassType.WEBINAR.id);
-        ClassTypeApiData.put(ClassType.CLASSES.name, ClassType.CLASSES.id);
-        ClassTypeApiData.put(ClassType.ACTIVITY.name, ClassType.ACTIVITY.id);
-        classTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Type", messageHelper, Observable.just(new ListDialogData1(ClassTypeApiData)), filterData1.getClassTypeFilterMap(), false, classTypeConsumer, "");
-
+        classTypeVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Type", messageHelper, apiService.getAllClassTypes().map(this::commonIdToListDialogData1), filterData1.getClassTypeFilterMap(), false, classTypeConsumer, "");
+        classDurationVm = new ListDialogViewModel1(helperFactory.createDialogHelper(), "Class Duration", messageHelper, apiService.getAllDurations().map(this::commonIdToListDialogData1), filterData1.getClassDurationFilterMap(), false, classDurationConsumer, "");
         LinkedHashMap<String, Integer> ClassScheduleApiData = new LinkedHashMap<>();
         ClassScheduleApiData.put(ClassSchedule.Fixed.name, ClassSchedule.Fixed.id);
         ClassScheduleApiData.put(ClassSchedule.Flexible.name, ClassSchedule.Flexible.id);
@@ -265,17 +264,15 @@ public class FilterViewModel extends ViewModel {
     }
 
     private Observable<ListDialogData1> getLocalityApiObservable(String cityId) {
-        return apiService.getLocalityList(cityId).map(new Function<CommonIdResp, ListDialogData1>() {
-            @Override
-            public ListDialogData1 apply(@io.reactivex.annotations.NonNull CommonIdResp resp) throws Exception {
-                LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
-                for (CommonIdResp.Snippet snippet : resp.getData()) {
-                    itemMap.put(snippet.getTextValue(), snippet.getId());
-                }
-                // TODO: 05/04/17 use rx zip to get if category already selected like in profile
-                return new ListDialogData1(itemMap);
-            }
-        });
+        return apiService.getLocalityList(cityId).map(this::commonIdToListDialogData1);
+    }
+
+    private ListDialogData1 commonIdToListDialogData1(@io.reactivex.annotations.NonNull CommonIdResp resp) {
+        LinkedHashMap<String, Integer> itemMap = new LinkedHashMap<>();
+        for (CommonIdResp.Snippet snippet : resp.getData()) {
+            itemMap.put(snippet.getTextValue(), snippet.getId());
+        }
+        return new ListDialogData1(itemMap);
     }
 
     public void reset() {

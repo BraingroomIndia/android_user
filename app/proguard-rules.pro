@@ -101,20 +101,25 @@
 }
 #####
 
-##-injars :Mobilisten.aar
-
-#-keep class com.zoho.commons.ChatComponent.class
-#-keep class com.zoho.*
-
-#-keep public class com.zoho.**
-
-#-keep public class com.zoho.** {
- # public protected *;
-#}
-
 
 -keep class com.facebook.applinks.** { *; }
 -keepclassmembers class com.facebook.applinks.** { *; }
 -keep class com.facebook.FacebookSdk { *; }
+-keep class * extends java.util.ListResourceBundle {
+    protected Object[][] getContents();
+}
+
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+    public static final *** NULL;
+}
+
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+    @com.google.android.gms.common.annotation.KeepName *;
+}
+
+-keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
 -keep class com.google.android.gms.ads.identifier.** { *; }
 -printmapping mapping.txt

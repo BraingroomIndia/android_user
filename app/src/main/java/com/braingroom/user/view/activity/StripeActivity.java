@@ -66,8 +66,8 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
 
     private static String PUBLISHABLE_KEY = "";
 
-    public static final String RETURN_SCHEMA = "braingroom://";
-    public static final String RETURN_HOST_ASYNC = "stripe";
+    public static final String RETURN_SCHEMA = "https://";
+    public static final String RETURN_HOST_ASYNC = "www.braingroom.com/stripe";
     public static final String RETURN_HOST_SYNC = "sync";
     public static final String QUERY_CLIENT_SECRET = "client_secret";
     public static final String QUERY_SOURCE_ID = "source";
@@ -164,21 +164,6 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
 
     }
 
-    private void createSource(SourceParams cardSourceParams, Stripe mStripe) {
-        mStripe.createSource(
-                cardSourceParams,
-                new SourceCallback() {
-                    @Override
-                    public void onSuccess(Source source) {
-                        source.getId();
-                    }
-
-                    @Override
-                    public void onError(Exception error) {
-                        // Tell the user that something went wrong
-                    }
-                });
-    }
 
     private void attemptPurchase() {
         mStripe.getStripe().createSource(sourceParams, new SourceCallback() {
@@ -195,24 +180,6 @@ public class StripeActivity extends AppCompatActivity implements OnCardFormSubmi
                 proceedWithPurchaseIf3DSCheckIsNotNecessary(source);
             }
         });
-
-       /* CustomerSession.getInstance().retrieveCurrentCustomer(new CustomerSession.CustomerRetrievalListener() {
-            @Override
-            public void onCustomerRetrieved(@NonNull Customer customer) {
-                String sourceId = customer.getDefaultSource();
-                if (sourceId == null) {
-//                  TODO  displayError("No payment method selected");
-                    return;
-                }
-                CustomerSource source = customer.getSourceById(sourceId);
-                proceedWithPurchaseIf3DSCheckIsNotNecessary(source.asSource(), customer.getId());
-            }
-
-            @Override
-            public void onError(int errorCode, @Nullable String errorMessage) {
-//         TODO       displayError("Error getting payment method");
-            }
-        });*/
 
     }
 

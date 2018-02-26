@@ -16,10 +16,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.braingroom.user.model.QRCode.PostDetail;
 import com.braingroom.user.model.dto.FilterData;
+import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 import com.braingroom.user.view.activity.ClassListActivity;
@@ -38,6 +40,7 @@ import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -56,6 +59,7 @@ public class FCMService extends FirebaseMessagingService {
     protected Tracker mTracker;
     protected FirebaseAnalytics mFirebaseAnalytics;
     protected Random random = new Random();
+    int screenWidth;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -63,15 +67,12 @@ public class FCMService extends FirebaseMessagingService {
             mTracker = UserApplication.getInstance().getDefaultTracker();
         if (mFirebaseAnalytics == null)
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        Timber.tag(TAG).d("From: " + remoteMessage.getFrom());
-        UserApplication.getInstance().newNotificationBus.onNext(true);
-        Timber.tag(TAG).d("onMessageReceived: " + remoteMessage.toString());
+        if (screenWidth == 0)
+            screenWidth = CommonUtils.getScreenWidth();
+        Timber.tag(TAG).d("Payload:" + remoteMessage.getData());
 
         if (remoteMessage.getData() != null)
-            Timber.tag(TAG).d("Payload:" + remoteMessage.getData());
-
-        sendNotification(remoteMessage);
+            sendNotification(remoteMessage);
 
     }
 
@@ -103,7 +104,6 @@ public class FCMService extends FirebaseMessagingService {
             imageUrl = remoteMessage.getData().get("image");
         }
         String mapToJson = objGson.toJson(remoteMessage.getData());
-        data.putBoolean(Constants.pushNotification, true);
         data.putString(Constants.pushNotification, mapToJson);
         int number = (random).nextInt(Integer.MAX_VALUE);
         Timber.tag(TAG).d("sendNotification: " + number);
@@ -149,23 +149,17 @@ public class FCMService extends FirebaseMessagingService {
 
 
     public Bitmap getBitmapfromUrl(String imageUrl) {
-        HttpURLConnection connection = null;
         try {
+            if (screenWidth != 0)
+                return Picasso.with(this).load(imageUrl).resize(screenWidth, screenWidth / 2).get();
+            else return Picasso.with(this).load(imageUrl).get();
+        } catch (IOException e) {
+            Timber.tag(TAG).e(e, "Image issue");
 
-            URL url = new URL(imageUrl);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            return BitmapFactory.decodeStream(input);
-        } catch (Exception e) {
-            Timber.tag("Nonfiction").w(e, e.getMessage());
-            return null;
-        } finally {
-            if (connection != null)
-                connection.disconnect();
         }
+        return null;
     }
+
 
     public Bitmap getBitmapFromResource(int id) {
         return BitmapFactory.decodeResource(getResources(), id);
@@ -176,7 +170,7 @@ public class FCMService extends FirebaseMessagingService {
         NotificationCompat.Builder builder;
         builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle(builder);
-          Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         style.bigText(detailDescription).setBigContentTitle(title);
 
         builder.setContentTitle(title).
@@ -186,8 +180,8 @@ public class FCMService extends FirebaseMessagingService {
                 setContentText(shortDescription).
                 setStyle(style).
                 setAutoCancel(true).
-                  setSound(defaultSoundUri).
-                        setContentIntent(pendingIntent);
+                setSound(defaultSoundUri).
+                setContentIntent(pendingIntent);
 
         return builder;
     }
@@ -196,7 +190,7 @@ public class FCMService extends FirebaseMessagingService {
         NotificationCompat.Builder builder;
         builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle(builder);
-           Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         if (image == null)
             return new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_notifications_64px)
@@ -204,7 +198,7 @@ public class FCMService extends FirebaseMessagingService {
                     .setContentTitle(title == null ? "" : title)
                     .setContentText(shortDescription)
                     .setAutoCancel(true)
-                       .setSound(defaultSoundUri)
+                    .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent);
         style.setBigContentTitle(title).setSummaryText(shortDescription).bigPicture(image);
         builder.setContentTitle(title).
@@ -214,12 +208,10 @@ public class FCMService extends FirebaseMessagingService {
                 setLargeIcon(getBitmapFromResource(R.mipmap.ic_launcher)).
                 setStyle(style).
                 setAutoCancel(true).
-                    setSound(defaultSoundUri).
-                        setContentIntent(pendingIntent);
+                setSound(defaultSoundUri).
+                setContentIntent(pendingIntent);
         return builder;
     }
-
-
 
 
 }

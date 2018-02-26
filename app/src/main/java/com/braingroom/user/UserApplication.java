@@ -107,6 +107,7 @@ public class UserApplication extends BranchApp {
             e.printStackTrace();
         }
         sAnalytics = GoogleAnalytics.getInstance(this);
+        sAnalytics.setDryRun(BuildConfig.DEBUG);
       /*  if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }

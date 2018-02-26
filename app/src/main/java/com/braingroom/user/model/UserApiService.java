@@ -305,6 +305,12 @@ public interface UserApiService {
     @POST("getCommunity")
     Observable<CommunityResp> getCommunity();
 
+    @POST("getAllClassTypes")
+    Observable<CommonIdResp> getAllClassTypes();
+
+    @POST("getAllDurations")
+    Observable<CommonIdResp> getAllDurations();
+
     @POST("getCategory")
     Observable<CategoryResp> getCategories();
 

@@ -94,7 +94,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
         super.onCreate(savedInstanceState);
         UserApplication.getInstance().getMAppComponent().inject(this);
         setContentView(R.layout.activity_qrcode_reader);
-        baseUrl = getString(R.string.branch_base_url);
+        baseUrl = "https://" + getString(R.string.branch_base_url);
         branchKey = getString(R.string.branch_key);
         // getting barcode instance
         barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_fragment);
