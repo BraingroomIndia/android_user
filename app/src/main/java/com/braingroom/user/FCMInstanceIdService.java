@@ -12,9 +12,6 @@ import javax.inject.Named;
 
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
 
-/**
- * Created by Promolta-H on 05-02-2017.
- */
 
 public class FCMInstanceIdService extends FirebaseInstanceIdService {
 

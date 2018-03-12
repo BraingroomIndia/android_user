@@ -105,6 +105,9 @@ public class ClassData implements Serializable {
     @SerializedName("video")
     private String videoId;
 
+    @SerializedName("cdnUrl")
+    private String cdnUrl;
+
     @SerializedName("level_id")
     private String levelId;
 
@@ -149,6 +152,12 @@ public class ClassData implements Serializable {
 
     @SerializedName("localities")
     private List<String> catalogLocations;
+
+    @SerializedName("is_secure_content")
+    private int isSecureContent;
+
+    @SerializedName("access_id")
+    private String accessId = "D80A4A71C0";
 
 
     public List<ClassLevelData> getLevelDetails() {
@@ -446,5 +455,13 @@ public class ClassData implements Serializable {
 
     public String getPriceSymbolNonSpanned() {
         return TextUtils.isEmpty(priceSymbol) ? "&#8377;" : priceSymbol;
+    }
+
+    public String getCdnUrl() {
+        return cdnUrl;
+    }
+
+    public void setCdnUrl(String cdnUrl) {
+        this.cdnUrl = cdnUrl;
     }
 }

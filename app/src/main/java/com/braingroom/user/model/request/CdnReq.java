@@ -1,5 +1,6 @@
-package com.braingroom.user.model.response;
+package com.braingroom.user.model.request;
 
+import com.braingroom.user.model.response.BaseResp;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -12,21 +13,18 @@ import lombok.EqualsAndHashCode;
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
 @EqualsAndHashCode(callSuper = false)
-public class UploadPostApiResp extends BaseResp {
+public class CdnReq {
 
     @SerializedName("braingroom")
-    List<Snippet> data;
+    Snippet data;
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
-    @EqualsAndHashCode(callSuper = false)
     public static class Snippet {
-        @SerializedName("url")
-        String url;
+        @SerializedName("class_id")
+        String classId;
 
-        @SerializedName("success_url")
-        String thumb;
-
+        @SerializedName("access_key")
+        String accessKey;
     }
-
 }

@@ -16,9 +16,6 @@ import com.braingroom.user.UserApplication;
 
 import java.io.File;
 
-/**
- * Created by Promolta-H on 02-02-2017.
- */
 public class FileUtils {
 
 

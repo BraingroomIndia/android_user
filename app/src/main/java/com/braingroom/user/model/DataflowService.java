@@ -29,6 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -471,13 +472,26 @@ public class DataflowService {
     public Observable<ClassData> getClassDetail(final String classId, final int isCatalogue) {
 
         return api.getClassDetail(new ClassDetailReq(new ClassDetailReq.Snippet(classId, pref.getString(Constants.BG_ID, ""), isCatalogue))).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation()).map(new Function<ClassListResp, ClassData>() {
+                .observeOn(Schedulers.computation()).filter(new Predicate<ClassListResp>() {
                     @Override
-                    public ClassData apply(@NonNull ClassListResp resp) throws Exception {
-                        return gson.fromJson(gson.toJson(resp.getData().get(0)), ClassData.class);
+                    public boolean test(ClassListResp classListResp) throws Exception {
+                        return classListResp.getData().get(0).getIsSecureContent() == 1;
+                    }
+                }).flatMap(new Function<ClassListResp, Observable<ClassData>>() {
+                    @Override
+                    public Observable<ClassData> apply(@NonNull final ClassListResp resp) throws Exception {
+                        final ClassData classData = gson.fromJson(gson.toJson(resp.getData().get(0)), ClassData.class);
+                        return api.getCdnUrl(new CdnReq(new CdnReq.Snippet(classData.getId(), classData.getAccessId()))).map(new Function<CdnResp, ClassData>() {
+
+                            @Override
+                            public ClassData apply(CdnResp cdnResp) throws Exception {
+                                classData.setCdnUrl(cdnResp.getData().get(0).getUrl());
+                                return classData;
+                            }
+                        });
+
                     }
                 });
-
     }
 
     public Observable<BaseResp> contactAdmin(ContactAdmin req) {

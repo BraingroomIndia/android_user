@@ -8,9 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * Created by Promolta-H on 02-02-2017.
- */
+
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
 @EqualsAndHashCode(callSuper = false)

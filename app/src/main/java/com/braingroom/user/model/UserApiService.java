@@ -347,5 +347,8 @@ public interface UserApiService {
     @POST("getUserGeoLocation")
     Observable<UserGeoLocationResp> getUserGeoLocation(@Body UserGeoLocationReq req);
 
+    @POST("getCDNUrl")
+    Observable<CdnResp> getCdnUrl(@Body CdnReq req);
+
 
 }

@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
 @EqualsAndHashCode(callSuper = false)
-public class UploadPostApiResp extends BaseResp {
+public class CdnResp extends BaseResp {
 
     @SerializedName("braingroom")
     List<Snippet> data;
@@ -23,10 +23,6 @@ public class UploadPostApiResp extends BaseResp {
     public static class Snippet {
         @SerializedName("url")
         String url;
-
-        @SerializedName("success_url")
-        String thumb;
-
     }
 
 }

@@ -22,9 +22,11 @@ import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.PromoCodeReq;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.CODOfferDetailResp;
+import com.braingroom.user.model.response.CategoryTreeResp;
 import com.braingroom.user.model.response.ContactTutorResp;
 import com.braingroom.user.model.response.PromoInfo;
 import com.braingroom.user.model.response.ReviewGetResp;
+import com.braingroom.user.model.response.SegmentResp;
 import com.braingroom.user.model.response.WishlistResp;
 import com.braingroom.user.utils.CommonUtils;
 import com.braingroom.user.utils.Constants;
@@ -434,6 +436,7 @@ public class ClassDetailViewModel extends ViewModel {
                                 videoThumb.set("");
                                 videoId.set(classData.getVideoId());
                             }
+
                         }
                         uiHelper.stopShimmer();
                         hideViewMore.set(uiHelper.isViewEllipsized());

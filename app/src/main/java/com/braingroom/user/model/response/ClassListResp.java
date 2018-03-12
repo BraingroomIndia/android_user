@@ -156,6 +156,11 @@ public class ClassListResp extends BaseResp {
         @SerializedName("price_code")
         private String priceCode;
 
+        @SerializedName("is_secure_content")
+        private int isSecureContent;
+
+        @SerializedName("access_key")
+        private String accessKey = "D80A4A71C0";
 
     }
 
