@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -60,13 +59,17 @@
                             app:imageUrl="@{vm.imagePath ?? vm.videoThumb }"
                             app:placeHolder="@{R.drawable.video_placeholder}" />
 
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_centerInParent="true"
-                            android:onClick="@{vm.playAction}"
-                            android:src="@drawable/play_button"
-                            android:visibility="@{vm.videoThumb==null ? View.GONE : View.VISIBLE}" />
+                        <fragment
+                            android:id="@+id/youtube_fragment"
+                            android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <VideoView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="@{vm.videoId==null ||  vm.isYouTube ? View.GONE : View.VISIBLE}"
+                            app:videoUrl="@{vm.videoId}" />
                     </RelativeLayout>
 
                 </android.support.design.widget.CollapsingToolbarLayout>

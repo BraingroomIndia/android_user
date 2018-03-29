@@ -14,6 +14,11 @@
             android:id="@+id/nav_booking_history"
             android:icon="@drawable/ic_history_black_24dp"
             android:title="Booking History" />
+
+        <item
+            android:id="@+id/nav_online_booking"
+            android:icon="@drawable/ic_history_black_24dp"
+            android:title="Online Video" />
         <item
             android:id="@+id/nav_change_pass"
             android:icon="@drawable/ic_lock_open_black_24dp"

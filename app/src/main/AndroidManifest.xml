@@ -401,9 +401,12 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.OnlineClassVideoActivity" />
+        <activity android:name=".view.FullScreenVideoActivity" />
 
 
         <!-- SMS Receiver -->
+
         <receiver android:name=".utils.SmsReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
