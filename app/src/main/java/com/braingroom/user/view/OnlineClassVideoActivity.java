@@ -1,10 +1,13 @@
 package com.braingroom.user.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.braingroom.user.R;
+import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.view.activity.BaseActivity;
 import com.braingroom.user.viewmodel.OnlineClassVideoListViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
@@ -14,12 +17,20 @@ import com.braingroom.user.viewmodel.ViewModel;
  */
 
 public class OnlineClassVideoActivity extends BaseActivity {
+    public String value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TextView className = (TextView) findViewById(R.id.my_online_classes);
+        getSupportActionBar().setTitle("My Online Classes");
         if (getActionBar() != null)
             getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        value = getIntentString("class_topic");
+        className.setText(value);
     }
 
     @NonNull
@@ -42,4 +53,5 @@ public class OnlineClassVideoActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

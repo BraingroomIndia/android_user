@@ -26,6 +26,7 @@ public class ClassSimpleListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 //        mRecyclerView = ((ActivityClassSimplelistBinding) binding).classRecyclerview;
 //        setRecyclerView();
+        getSupportActionBar().setTitle("Booking History");
     }
 
 

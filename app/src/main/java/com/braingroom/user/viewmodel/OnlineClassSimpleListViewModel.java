@@ -1,6 +1,6 @@
 package com.braingroom.user.viewmodel;
 
-import android.databinding.ObservableField;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -12,21 +12,23 @@ import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
 import com.braingroom.user.view.OnlineClassVideoActivity;
 import com.braingroom.user.view.activity.ClassDetailActivity;
-import com.braingroom.user.view.adapters.CustomGridLayoutManger;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import timber.log.Timber;
 
+/**
+ * Created by android on 26/03/18.
+ */
 
-public class ClassSimpleListViewModel extends ViewModel {
-
+public class OnlineClassSimpleListViewModel extends ViewModel {
     private final String listType;
     private final String userId;
     public Observable<List<ViewModel>> result;
@@ -37,7 +39,7 @@ public class ClassSimpleListViewModel extends ViewModel {
     private Observable<List<ClassData>> apiObservable = null;
     private List<ViewModel> classes;
 
-    public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1, String id) {
+    public OnlineClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1, String id) {
         this.listType = listType1;
         classes = new ArrayList<>();
         this.connectivityViewmodel = new ConnectivityViewModel(new Action() {
@@ -58,7 +60,6 @@ public class ClassSimpleListViewModel extends ViewModel {
                 retry();
             }
         });
-
         result = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -68,15 +69,11 @@ public class ClassSimpleListViewModel extends ViewModel {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
-                Timber.tag(TAG).d("apply: " + callAgain.get());
-                if ("wishlist".equalsIgnoreCase(listType))
+                Timber.tag(TAG).d("apply:" + callAgain.get());
+                if ("Wishlist".equalsIgnoreCase(listType))
                     apiObservable = apiService.getWishList(nextPage);
-                else if ("bookinghistory".equalsIgnoreCase(listType))
-                    apiObservable = apiService.getBookingHistory(userId, nextPage);
                 else if ("onlineBookingHistory".equalsIgnoreCase(listType))
                     apiObservable = apiService.getBookingOnlineHistory(userId, nextPage);
-
-
                 return apiObservable
                         .map(new Function<List<ClassData>, List<ViewModel>>() {
                             @Override
@@ -84,28 +81,24 @@ public class ClassSimpleListViewModel extends ViewModel {
                                 List<ViewModel> results = new ArrayList<>();
                                 if (resp.size() == 0)
                                     nextPageAvailable = false;
-                                if (resp.size() == 0 && classes.size() == 0) {
+                                if (resp.size() == 0 && classes.size() == 0)
                                     classes.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
-                                }
+
                                 for (final ClassData elem : resp) {
                                     if (elem.getClassType().equalsIgnoreCase("Online Classes"))
                                         elem.setLocality("Online");
                                     else if (elem.getClassType().equalsIgnoreCase("Webinars"))
                                         elem.setLocality("Webinar");
-                                    classes.add(new ClassItemViewModel(elem, new Action() {
+                                    classes.add(new OnlineClassItemViewModel(elem, new Action() {
                                         @Override
                                         public void run() throws Exception {
                                             if (!elem.getId().equals("-1")) {
                                                 if ("onlineBookingHistory".equalsIgnoreCase(listType)) {
                                                     Bundle data = new Bundle();
                                                     data.putString("txn_id", elem.getTxnId());
+                                                    data.putString("class_topic", elem.getClassTopic());
                                                     navigator.navigateActivity(OnlineClassVideoActivity.class, data);
 
-                                                } else {
-                                                    Bundle data = new Bundle();
-                                                    data.putString("id", elem.getId());
-                                                    data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-                                                    navigator.navigateActivity(ClassDetailActivity.class, data);
                                                 }
                                             }
                                         }
@@ -121,10 +114,8 @@ public class ClassSimpleListViewModel extends ViewModel {
                                 return classes;
                             }
                         }).mergeWith(getLoadingItems(3));
-
             }
         });
-
     }
 
     @Override
@@ -135,7 +126,6 @@ public class ClassSimpleListViewModel extends ViewModel {
 
         }
     }
-
 
     private Observable<List<ViewModel>> getLoadingItems(int count) {
         List<ViewModel> result = new ArrayList<>();
@@ -160,5 +150,4 @@ public class ClassSimpleListViewModel extends ViewModel {
         callAgain.set(callAgain.get() + 1);
         connectivityViewmodel.isConnected.set(true);
     }
-
 }

@@ -112,7 +112,7 @@ public class HomeViewModel extends ViewModel {
         imageUploadViewModel = new ImageUploadViewModel(R.drawable.avatar_male, pref.getString(Constants.PROFILE_PIC, ""));
 //        this.featuredVm = new ShowcaseClassListViewModel("Fast Tracked - Education & Skill Development", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
         this.recommendedVm = new ShowcaseClassListViewModel("Recommended - Classes & Activities", messageHelper, navigator, apiService.getRecommendedClass(), ClassDetailActivity.class);
-        this.featuredVm = new ShowcaseClassListViewModel("Free - Classes & Activities", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
+        this.featuredVm = new ShowcaseClassListViewModel("Top Selling Online Classes", messageHelper, navigator, apiService.getFeaturedClass(), ClassDetailActivity.class);
 //        this.indigenousVm = new ShowcaseClassListViewModel("Featured - Classes & Activities", messageHelper, navigator, apiService.getIndigeneousClass(), ClassDetailActivity.class);
         this.profileImage.set(pref.getString(Constants.PROFILE_PIC, null));
         this.userName.set(pref.getString(Constants.NAME, "Hello Learner!"));

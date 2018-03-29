@@ -11,18 +11,52 @@
             type="com.braingroom.user.viewmodel.OnlineClassVideoListViewModel" />
     </data>
 
-
-    <android.support.v7.widget.RecyclerView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:spanCount="2"
-        bind:items="@{vm.items}"
-        bind:layout_grid_vertical="@{true}"
-        bind:span_count="@{2}"
-        bind:view_provider="@{@layout/icon_text_cardview}"
-        tools:listitem="@layout/icon_text_cardview" />
+        android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/class_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/my_online_classes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_above="@+id/class_recyclerview"
+                    android:layout_gravity="left|center_horizontal"
+                    android:padding="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="20sp"
+                    tools:text="Class Topic"
+                    app:font='@{@string/robotoRegular}'/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/class_name"
+                android:layout_marginTop="5dp"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                bind:items="@{vm.items}"
+                bind:view_provider="@{@layout/icon_text_cardview_session}"
+                tools:listitem="@layout/icon_text_cardview_session" />
+            <!--bind:layout_grid_vertical="@{true}"
+            app:spanCount="2"
+            bind:span_count="@{2}"
+            -->
+        </RelativeLayout>
+
+
+    </FrameLayout>
 
 </layout>
