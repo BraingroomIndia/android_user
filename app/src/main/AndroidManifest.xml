@@ -29,7 +29,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:replace="android:allowBackup,android:theme">
-
         <meta-data
             android:name="asset_statements"
             android:resource="@string/asset_statements" />
@@ -39,9 +38,11 @@
         <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="@string/razor_pay_key" />
-        <!--  <meta-data
+        <!--
+              <meta-data
               android:name="com.razorpay.ApiKey"
-              android:value="rzp_test_OqXUgMZBz4WkBL" />-->
+              android:value="rzp_test_OqXUgMZBz4WkBL" />
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -86,7 +87,7 @@
         <activity
             android:name=".view.activity.Index"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"></activity>
+            android:theme="@style/SplashTheme" />
         <activity
             android:name=".view.activity.LoginActivity"
             android:label="@string/app_name">
@@ -349,15 +350,13 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
-            <!--Branch in App linking-->
+            <!-- Branch in App linking -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -369,7 +368,7 @@
                     android:pathPrefix="/"
                     android:scheme="https" />
             </intent-filter>
-            <!--Website in app linking-->
+            <!-- Website in app linking -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -382,7 +381,6 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.activity.StripeActivity"
             android:launchMode="singleTask">
@@ -403,7 +401,6 @@
         <activity android:name=".view.OnlineClassVideoActivity" />
         <activity android:name=".view.FullScreenVideoActivity" />
 
-
         <!-- SMS Receiver -->
 
         <receiver android:name=".utils.SmsReceiver">
@@ -412,8 +409,7 @@
             </intent-filter>
         </receiver>
 
-
-        <!--Google analytics -->
+        <!-- Google analytics -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
@@ -421,13 +417,16 @@
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
+
         <service
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false" />
 
-        <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-             installation campaign reporting -->
+        <!--
+             Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
+             installation campaign reporting
+        -->
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:exported="true"
@@ -436,8 +435,10 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
-    </application>
 
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
+        <activity android:name=".view.activity.OnlineClassSimpleListActivity"></activity>
+    </application>
 
 </manifest>
