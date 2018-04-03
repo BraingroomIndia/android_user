@@ -215,6 +215,113 @@
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    card_view:cardElevation="@dimen/dimen_zero">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/top_line_drawable"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/margin_small"
+                        android:paddingLeft="@dimen/padding_large"
+                        android:paddingRight="@dimen/margin_small"
+                        android:paddingTop="@dimen/margin_small">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="3"
+                            android:text="Micro Sessions"
+                            android:textColor="@color/colorTextDark"
+                            android:textSize="@dimen/text_size_large"
+                            app:font='@{@string/robotoRegular}' />
+
+                        <RelativeLayout
+                            android:id="@+id/session_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:nestedScrollingEnabled="false"
+                                bind:items="@{vm.reviews}"
+                                bind:layout_vertical="@{true}"
+                                bind:paginate="@{true}"
+                                bind:view_provider="@{vm.viewProvider}"
+                                bind:viewmodel="@{vm}"
+                                tools:listitem="@layout/item_sessions" />
+
+
+                            <!--<TextView
+                                android:id="@+id/session_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{vm.sessionName}"
+                                android:layout_toRightOf="@+id/session_check_box"
+                                android:paddingBottom="@dimen/padding_small"
+                                android:paddingRight="@dimen/padding_small"
+                                android:paddingTop="@dimen/padding_small"
+                                android:layout_weight="1"
+                                android:textColor="@color/colorTextDark"
+                                android:textSize="@dimen/text_size_medium"
+                                app:font='@{@string/robotoRegular}'
+                                tools:text="Session Name"/>-->
+
+                        </RelativeLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/search_height"
+                            android:background="@color/colorTextGray"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="20dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="#FF29540B"
+                                android:gravity="center"
+                                android:onClick="@{vm.onPayTutorClicked}"
+                                android:padding="@dimen/padding_small"
+                                android:paddingLeft="@dimen/margin_small"
+                                android:paddingRight="@dimen/margin_small"
+                                android:text="Fix Appointment"
+                                android:textColor="@color/white"
+                                android:visibility="@{vm.isCod?View.VISIBLE:View.GONE}"
+                                app:autoSizeTextType="uniform"
+                                app:font='@{@string/robotoBold}' />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@color/materialOrange"
+                                android:gravity="center"
+                                android:onClick="@{vm.onBookClicked}"
+                                android:padding="@dimen/padding_small"
+                                android:paddingLeft="@dimen/margin_small"
+                                android:paddingRight="@dimen/margin_small"
+                                android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'
+                                android:textColor="@color/white"
+                                android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
+                                app:autoSizeTextType="uniform"
+                                app:font='@{@string/robotoBold}'
+                                tools:text="Book Now" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
