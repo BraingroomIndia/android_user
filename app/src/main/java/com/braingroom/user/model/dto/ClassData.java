@@ -3,6 +3,7 @@ package com.braingroom.user.model.dto;
 import android.text.Spanned;
 import android.text.TextUtils;
 
+import com.braingroom.user.model.response.ClassListResp;
 import com.braingroom.user.utils.CommonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -125,10 +126,12 @@ public class ClassData implements Serializable {
     private String classProvider;
     @SerializedName("localities")
     private List<String> catalogLocations;
+
     @SerializedName("full_session")
-    private List<FullSessionData> fullsessiondetails;
+    private List<ClassListResp.FullSession> fullSession;
+
     @SerializedName("sessions")
-    private List<SessionLevelData> sessionleveldetails;
+    private List<ClassListResp.MicroSessions> microSessions;
 
 
     public boolean getIsCode() {
@@ -434,19 +437,15 @@ public class ClassData implements Serializable {
         return TextUtils.isEmpty(priceSymbol) ? "&#8377;" : priceSymbol;
     }
 
-    public List<FullSessionData> getFullsessiondetails() {
-        return fullsessiondetails;
+    public List<ClassListResp.FullSession> getFullsessiondetails() {
+        return fullSession;
     }
 
-    public void setFullsessiondetails(List<FullSessionData> fullsessiondetails) {
-        this.fullsessiondetails = fullsessiondetails;
+
+
+    public List<ClassListResp.MicroSessions> getSessionleveldetails() {
+        return microSessions;
     }
 
-    public List<SessionLevelData> getSessionleveldetails() {
-        return sessionleveldetails;
-    }
 
-    public void setSessionleveldetails(List<SessionLevelData> sessionleveldetails) {
-        this.sessionleveldetails = sessionleveldetails;
-    }
 }

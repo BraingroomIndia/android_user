@@ -489,11 +489,12 @@ public class ClassDetailViewModel extends ViewModel {
                             if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON)) {
                                 price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getPrice()));
                                 //offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+classData.getLevelDetails().get(0).getPrice()));
-                            }else {
+                            } else {
                                 price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
                                 //offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
 
-                            }else
+                            }
+                        else
                             price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(0).getPrice()));
                         imageUploadViewModel.setRemoteAddress(classData.getTeacherPic());
                         teacherPic.set(classData.getTeacherPic());
@@ -538,13 +539,16 @@ public class ClassDetailViewModel extends ViewModel {
                                 }, null));
                             }
                         addresses.connect();
-                        try{
-                        for(final FullSessionData fullSessionData : classData.getFullsessiondetails()){
-                            fullSessionDataList.add(fullSessionData);
-                        }
-                        for(final SessionLevelData sessionLevelData : classData.getSessionleveldetails()){
-                            sessionsList.add(sessionLevelData);
-                        }}catch (Exception e){
+                        try {
+                            for (final ClassListResp.FullSession fullSessionData : classData.getFullsessiondetails()) {
+                                fullSessionData.getAdditionalTicketPrice();
+                               /* fullSessionDataList.add(fullSessionData);*/
+                            }
+                            for (final ClassListResp.MicroSessions sessionLevelData : classData.getSessionleveldetails()) {
+                                sessionLevelData.getAdditionalTicketPrice();
+                               /* sessionsList.add(sessionLevelData);*/
+                            }
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
