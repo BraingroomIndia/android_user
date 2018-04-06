@@ -5,12 +5,12 @@ package com.braingroom.user.viewmodel;
  */
 
 public class SessionItemViewModel extends ViewModel {
-    public final String sessionItem;
+    //public final String sessionItem;
     public final String sessionTitle;
 
 
-    public SessionItemViewModel(String sessionItem, String sessionTitle) {
-        this.sessionItem = sessionItem;
+    public SessionItemViewModel(/*String sessionItem,*/ String sessionTitle) {
+        //this.sessionItem = sessionItem;
         this.sessionTitle = sessionTitle;
     }
 }

@@ -60,6 +60,10 @@
             android:icon="@drawable/ic_action_competition"
             android:title="Competition" />
         <item
+            android:id="@+id/app_info"
+            android:icon="@drawable/app_info"
+            android:title="App Info" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
             android:title="Logout" />

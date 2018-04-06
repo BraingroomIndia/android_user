@@ -21,6 +21,7 @@ public class ClassListResp extends BaseResp {
     @SerializedName("braingroom")
     List<Snippet> data;
 
+
     @Data
     @EqualsAndHashCode(callSuper = false)
     @Getter
@@ -145,6 +146,10 @@ public class ClassListResp extends BaseResp {
         //Edited By Vikas Goodara
         @SerializedName(value = "vendorClasseLevelDetail", alternate = "VendorClasseLevelDetail")
         public List<ClassLevel> classLevels; //Edited by Vikas Godara
+       /* @SerializedName(value = "full_session",alternate = "full_session")
+        public List<FullSession> fullSessions;
+        @SerializedName(value = "sessions",alternate = "sessions")
+        public List<MicroSessions> microSessions;*/
 
         @SerializedName("catalog_description")
         private String catalogDescription;
@@ -160,6 +165,11 @@ public class ClassListResp extends BaseResp {
         @SerializedName("price_code")
         private String priceCode;
 
+        @SerializedName("session_name")
+        private  String sessionName;
+
+        @SerializedName("session_desc")
+        private  String sessionDescription;
 
     }
 
@@ -220,6 +230,41 @@ public class ClassListResp extends BaseResp {
 
         @SerializedName("end_range")
         private String endRange;
+    }
+    @Data
+    @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
+    public static class FullSession{
+        @SerializedName("session_name")
+        private  String sessionName;
+        @SerializedName("session_desc")
+        private  String sessionDescription;
+        @SerializedName("session_start")
+        private  String sessionStart;
+        @SerializedName("price")
+        private  String price;
+        @SerializedName("offer_price")
+        private  String offerPrice;
+        @SerializedName("min_persion_allowed")
+        private  String minPersionAllowed;
+    }
+    @Data
+    @Getter
+    @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
+    public static class MicroSessions{
+        @SerializedName("session_name")
+        private  String sessionName;
+        @SerializedName("session_desc")
+        private  String sessionDescription;
+        @SerializedName("session_start")
+        private  String sessionStart;
+        @SerializedName("price")
+        private  String price;
+        @SerializedName("offer_price")
+        private  String offerPrice;
+        @SerializedName("min_persion_allowed")
+        private  String minPersionAllowed;
     }
 
 

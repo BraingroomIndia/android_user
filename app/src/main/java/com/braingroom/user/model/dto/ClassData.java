@@ -125,6 +125,11 @@ public class ClassData implements Serializable {
     private String classProvider;
     @SerializedName("localities")
     private List<String> catalogLocations;
+    @SerializedName("full_session")
+    private List<FullSessionData> fullsessiondetails;
+    @SerializedName("sessions")
+    private List<SessionLevelData> sessionleveldetails;
+
 
     public boolean getIsCode() {
         return (isCode == 1);
@@ -427,5 +432,21 @@ public class ClassData implements Serializable {
 
     public String getPriceSymbolNonSpanned() {
         return TextUtils.isEmpty(priceSymbol) ? "&#8377;" : priceSymbol;
+    }
+
+    public List<FullSessionData> getFullsessiondetails() {
+        return fullsessiondetails;
+    }
+
+    public void setFullsessiondetails(List<FullSessionData> fullsessiondetails) {
+        this.fullsessiondetails = fullsessiondetails;
+    }
+
+    public List<SessionLevelData> getSessionleveldetails() {
+        return sessionleveldetails;
+    }
+
+    public void setSessionleveldetails(List<SessionLevelData> sessionleveldetails) {
+        this.sessionleveldetails = sessionleveldetails;
     }
 }

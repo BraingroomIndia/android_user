@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by android on 06/04/18.
  */
 
-public class SessionLevelData implements Serializable {
+public class FullSessionData implements Serializable {
     @SerializedName("session_id")
     private String sessionId;
     @SerializedName("session_name")

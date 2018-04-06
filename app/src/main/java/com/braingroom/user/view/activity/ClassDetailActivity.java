@@ -2,6 +2,7 @@ package com.braingroom.user.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,8 +18,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.braingroom.user.R;
@@ -65,6 +68,17 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final TextView tv = (TextView) findViewById(R.id.offer_price);
+        tv.setPaintFlags(tv.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        String[] arraySpinner = new String[] {
+                "Please Select","1", "2", "3", "4", "5"
+        };
+        Spinner s = (Spinner) findViewById(R.id.min_persion_allow);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, arraySpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s.setAdapter(adapter);
+
         catalogLocationList = findViewById(R.id.catalog_location_list);
         if (catalogLocationList != null)
             catalogLocationList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,11 +16,14 @@ import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.dto.ConnectFilterData;
+import com.braingroom.user.model.dto.FullSessionData;
 import com.braingroom.user.model.dto.ListDialogData1;
+import com.braingroom.user.model.dto.SessionLevelData;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.PromoCodeReq;
 import com.braingroom.user.model.response.BaseResp;
 import com.braingroom.user.model.response.CODOfferDetailResp;
+import com.braingroom.user.model.response.ClassListResp;
 import com.braingroom.user.model.response.ContactTutorResp;
 import com.braingroom.user.model.response.PromoInfo;
 import com.braingroom.user.model.response.ReviewGetResp;
@@ -79,12 +81,15 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> videoThumb = new ObservableField<>(null);
     public final ObservableField<String> rating = new ObservableField<>("");
     public final ObservableField<Spanned> price = new ObservableField<>(null);
+    //public final ObservableField<Spanned> offerPrice = new ObservableField<>(null);
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
     public final ObservableField<String> teacherName = new ObservableField<>(null);
     public final ObservableField<Spanned> description = new ObservableField<>(null); //Edited By Vikas Godara
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
     public final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
+    //public final ObservableField<String> sessionName = new ObservableField<>(null);
+    //public final ObservableField<String> sessionDescription = new ObservableField<>(null);
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
     private final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
@@ -98,10 +103,13 @@ public class ClassDetailViewModel extends ViewModel {
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
     public Observable<List<ViewModel>> reviews;
+    //public Observable<List<ViewModel>> sessions;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
     List<MarkerOptions> markerList = new ArrayList<>();
+    List<SessionLevelData> sessionsList = new ArrayList<>();//Edited By kambarajan
+    List<FullSessionData> fullSessionDataList = new ArrayList<>();
 
     public ObservableField<Integer> retry = new ObservableField<>(0);
 
@@ -140,6 +148,15 @@ public class ClassDetailViewModel extends ViewModel {
             return R.layout.item_empty_data;
         else
             return R.layout.item_rating;
+
+    };
+    public final ViewProvider sessionViewProvider = vm -> {
+        if (vm instanceof IconTextItemViewModel)
+            return R.layout.item_show_more;
+        else if (vm instanceof EmptyItemViewModel)
+            return R.layout.item_empty_data;
+        else
+            return R.layout.item_sessions;
 
     };
     private int pageNumber = 1;
@@ -197,6 +214,7 @@ public class ClassDetailViewModel extends ViewModel {
         ;
         addresses = Observable.just(addressList).publish();
         reviews = Observable.just(reviewList).publish();
+        //sessions = Observable.just(sessionsList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
@@ -376,6 +394,48 @@ public class ClassDetailViewModel extends ViewModel {
 
             }
         });
+        /*sessions = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(Integer integer) throws Exception {
+                return pageNumber != -1;
+            }
+        }).flatMap(new Function<Integer, ObservableSource<?>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                return apiService.getClassDetail(classId,1).map(new Function<ClassListResp, List<ViewModel>>() {
+                    @Override
+                    public List<ViewModel> apply(ClassListResp resp) throws Exception {
+                        ListIterator listIterator = sessionsList.listIterator(sessionsList.size());
+                        if (listIterator.hasPrevious() && listIterator.previous() instanceof IconTextItemViewModel)
+                            listIterator.remove();
+
+                        if (resp.getResCode()) {
+                            for (ClassListResp.Snippet snippet : resp.getData()) {
+                                sessionsList.add(new SessionItemViewModel(snippet.getSessionName()));
+                            }
+                            if (resp.getData().size() == 10)
+                                sessionsList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
+                                    @Override
+                                    public void accept(IconTextItemViewModel var1) {
+                                        if (pageNumber > -1) {
+                                            pageNumber++;
+                                            callAgain.set(callAgain.get() + 1);
+                                        }
+
+                                    }
+                                }));
+
+                        } else if (sessionsList.isEmpty()) {
+                            pageNumber = -1;
+                            sessionsList.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
+                        } else if (sessionsList.size() < 10) pageNumber = -1;
+                        else pageNumber = -1;
+                        return sessionsList;
+                    }
+                });
+
+            }
+        });*/
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -426,11 +486,14 @@ public class ClassDetailViewModel extends ViewModel {
                         rating.set(classData.getRating());
                         isCod.set(classData.getIsCode());
                         if (classData.getIsCoupleClass() != 1)
-                            if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON))
+                            if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON)) {
                                 price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getPrice()));
-                            else
+                                //offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+classData.getLevelDetails().get(0).getPrice()));
+                            }else {
                                 price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
-                        else
+                                //offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
+
+                            }else
                             price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(0).getPrice()));
                         imageUploadViewModel.setRemoteAddress(classData.getTeacherPic());
                         teacherPic.set(classData.getTeacherPic());
@@ -442,9 +505,10 @@ public class ClassDetailViewModel extends ViewModel {
                             Timber.tag(TAG).d("description:" + e.toString());
                             // e.printStackTrace();
                         }
-
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
+                        //sessionName.set(classData.getSessionName());
+                        //sessionDescription.set(classData.getSessionDescription());
                         title.s_1.set(classTopic.get() + "\n");
 
                         if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin)) {
@@ -474,7 +538,15 @@ public class ClassDetailViewModel extends ViewModel {
                                 }, null));
                             }
                         addresses.connect();
-
+                        try{
+                        for(final FullSessionData fullSessionData : classData.getFullsessiondetails()){
+                            fullSessionDataList.add(fullSessionData);
+                        }
+                        for(final SessionLevelData sessionLevelData : classData.getSessionleveldetails()){
+                            sessionsList.add(sessionLevelData);
+                        }}catch (Exception e){
+                            e.printStackTrace();
+                        }
 
                         if (classData.getVideoId() != null && !classData.getVideoId().equalsIgnoreCase(defaultLink)) {//Edited By Vikas Godara
 
