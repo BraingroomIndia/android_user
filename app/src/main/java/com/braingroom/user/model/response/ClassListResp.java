@@ -21,19 +21,11 @@ public class ClassListResp /*extends BaseResp*/ {
     @SerializedName("braingroom")
     List<Snippet> data;
 
-    @SerializedName("braingroom")
-    List<MicroSessions> microSessionsdata;
 
-    public List<MicroSessions> getMicroSessionsdata() {
-        return microSessionsdata;
-    }
 
     @SerializedName("res_code")
     private Integer resCode;
 
-    public boolean getResCode() {
-        return microSessionsdata != null && !microSessionsdata.isEmpty() && microSessionsdata.get(0) != null;
-    }
 
     @Data
     @EqualsAndHashCode(callSuper = false)

@@ -58,6 +58,7 @@ import java.util.ListIterator;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -107,8 +108,8 @@ public class ClassDetailViewModel extends ViewModel {
     private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
+    public final ConnectableObservable<List<ViewModel>> sessions;
     public Observable<List<ViewModel>> reviews;
-    public Observable<List<ViewModel>> sessions;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
@@ -443,49 +444,7 @@ public class ClassDetailViewModel extends ViewModel {
 
             }
         });*/
-        sessions = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
-            @Override
-            public boolean test(Integer integer) throws Exception {
-                return pageNumber != -1;
-            }
-        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
-            @Override
-            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                final int isCatalogue = 0;
-                return apiService.getClassDetail(classId, isCatalogue).map(new Function<ClassListResp, List<ViewModel>>() {
 
-                    @Override
-                    public List<ViewModel> apply(ClassListResp resp) throws Exception {
-                        ListIterator listIterator = sessionsList.listIterator(sessionsList.size());
-                        if (listIterator.hasPrevious() && listIterator.previous() instanceof IconTextItemViewModel)
-                            listIterator.remove();
-
-                        if (resp.getResCode()) {
-                            for (ClassListResp.MicroSessions sessions : resp.getMicroSessionsdata()) {
-                                sessionsList.add(new SessionItemViewModel(sessions.getSessionName(),sessions.getSessionDesc(),sessions.getPrice(),sessions.getOfferPrice()));
-                            }
-                            /*if (resp.getMicroSessionsdata().size() == 10)
-                                sessionsList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
-                                    @Override
-                                    public void accept(IconTextItemViewModel var1) {
-                                        if (pageNumber > -1) {
-                                            pageNumber++;
-                                            callAgain.set(callAgain.get() + 1);
-                                        }
-                                    }
-                                }));
-*/
-                        } else if (sessionsList.isEmpty()) {
-                            pageNumber = -1;
-                            sessionsList.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
-                        } else if (sessionsList.size() < 10) pageNumber = -1;
-                        else pageNumber = -1;
-                        return sessionsList;
-                    }
-                });
-
-            }
-        });
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -591,11 +550,11 @@ public class ClassDetailViewModel extends ViewModel {
                         addresses.connect();
                         try {
                             for (final ClassListResp.FullSession fullSessionData : classData.getFullsessiondetails()) {
-                                fullSessionAdditionalprice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getAdditionalTicketPrice()));
+                                fullSessionAdditionalprice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getAdditionalTicketPrice()));
                                 fullSessionName.set(fullSessionData.getSessionName());
                                 fullSessionDescription.set(fullSessionData.getSessionDesc());
-                                fullSessionPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getPrice()));
-                                offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getOfferPrice()));
+                                fullSessionPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getPrice()));
+                                offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getOfferPrice()));
                                 //minPersionAllowed.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getMinPersonAllowed()));
                                /* fullSessionDataList.add(fullSessionData);*/
                             }
@@ -621,6 +580,11 @@ public class ClassDetailViewModel extends ViewModel {
                                 videoId.set(classData.getVideoId());
                             }
                         }
+
+                        for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
+                            sessionsList.add(new SessionItemViewModel(microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
+                        }
+                        sessions.connect();
                         uiHelper.stopShimmer();
                         hideViewMore.set(uiHelper.isViewEllipsized());
                         isShimmerOn.set(false);

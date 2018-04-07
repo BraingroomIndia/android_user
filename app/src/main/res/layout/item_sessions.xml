@@ -68,7 +68,7 @@
                         android:paddingBottom="@dimen/padding_small"
                         android:paddingRight="@dimen/padding_small"
                         android:paddingTop="@dimen/padding_small"
-                        android:text='@{vm.sessionPrice}'
+                        android:text='@{vm.sessionPrice+""}'
                         android:textColor="@color/materialBlue"
                         android:textSize="@dimen/text_size_medium"
                         app:font='@{@string/robotoBold}'
@@ -88,7 +88,7 @@
                         android:textColor="@color/materialBlue"
                         android:textSize="@dimen/text_size_medium"
                         app:font='@{@string/robotoBold}'
-                        android:text='@{vm.sessionOfferPrice}'
+                        android:text='@{vm.sessionOfferPrice+""  }'
                         tools:text="Offer Price"
                         android:layout_toRightOf="@+id/price"
                         android:layout_centerVertical="true"/>
