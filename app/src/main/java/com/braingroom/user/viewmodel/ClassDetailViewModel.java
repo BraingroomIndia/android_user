@@ -81,15 +81,20 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> videoThumb = new ObservableField<>(null);
     public final ObservableField<String> rating = new ObservableField<>("");
     public final ObservableField<Spanned> price = new ObservableField<>(null);
-    //public final ObservableField<Spanned> offerPrice = new ObservableField<>(null);
+    public final ObservableField<Spanned> fullSessionAdditionalprice = new ObservableField<>(null);
+    public final ObservableField<Spanned> fullSessionPrice = new ObservableField<>(null);
+    public final ObservableField<Spanned> offerPrice = new ObservableField<>();
+    //public final ObservableField<Spanned> minPersionAllowed = new ObservableField<>();
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
     public final ObservableField<String> teacherName = new ObservableField<>(null);
     public final ObservableField<Spanned> description = new ObservableField<>(null); //Edited By Vikas Godara
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
     public final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
-    //public final ObservableField<String> sessionName = new ObservableField<>(null);
-    //public final ObservableField<String> sessionDescription = new ObservableField<>(null);
+    public final ObservableField<String> sessionName = new ObservableField<>();
+    public final ObservableField<String> sessionDescription = new ObservableField<>();
+    public final ObservableField<String> fullSessionName = new ObservableField<>();
+    public final ObservableField<String> fullSessionDescription = new ObservableField<>();
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
     private final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
@@ -103,13 +108,14 @@ public class ClassDetailViewModel extends ViewModel {
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
     public Observable<List<ViewModel>> reviews;
-    //public Observable<List<ViewModel>> sessions;
+    public Observable<List<ViewModel>> sessions;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
     List<MarkerOptions> markerList = new ArrayList<>();
-    List<SessionLevelData> sessionsList = new ArrayList<>();//Edited By kambarajan
+    /*List<SessionLevelData> sessionsList = new ArrayList<>();*///Edited By kambarajan
     List<FullSessionData> fullSessionDataList = new ArrayList<>();
+    List<ViewModel> sessionsList = new ArrayList<>();
 
     public ObservableField<Integer> retry = new ObservableField<>(0);
 
@@ -214,7 +220,7 @@ public class ClassDetailViewModel extends ViewModel {
         ;
         addresses = Observable.just(addressList).publish();
         reviews = Observable.just(reviewList).publish();
-        //sessions = Observable.just(sessionsList).publish();
+        sessions = Observable.just(sessionsList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
@@ -399,21 +405,23 @@ public class ClassDetailViewModel extends ViewModel {
             public boolean test(Integer integer) throws Exception {
                 return pageNumber != -1;
             }
-        }).flatMap(new Function<Integer, ObservableSource<?>>() {
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return apiService.getClassDetail(classId,1).map(new Function<ClassListResp, List<ViewModel>>() {
+                final int isCatalogue = 0;
+                return apiService.getClassDetail(classId, isCatalogue).map(new Function<ClassData, List<ViewModel>>() {
+
                     @Override
-                    public List<ViewModel> apply(ClassListResp resp) throws Exception {
+                    public List<ViewModel> apply(ClassData resp) throws Exception {
                         ListIterator listIterator = sessionsList.listIterator(sessionsList.size());
                         if (listIterator.hasPrevious() && listIterator.previous() instanceof IconTextItemViewModel)
                             listIterator.remove();
 
-                        if (resp.getResCode()) {
-                            for (ClassListResp.Snippet snippet : resp.getData()) {
-                                sessionsList.add(new SessionItemViewModel(snippet.getSessionName()));
+                        if (!isEmpty(resp.getMicroSessions())) {
+                            for (ClassListResp.MicroSessions sessions : resp.getMicroSessions()) {
+                                sessionsList.add(new SessionItemViewModel(sessions.getSessionName(),sessions.getSessionDesc(),sessions.getPrice(),sessions.getOfferPrice()));
                             }
-                            if (resp.getData().size() == 10)
+                            if (resp.getMicroSessions().size() == 10)
                                 sessionsList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
                                     @Override
                                     public void accept(IconTextItemViewModel var1) {
@@ -421,7 +429,6 @@ public class ClassDetailViewModel extends ViewModel {
                                             pageNumber++;
                                             callAgain.set(callAgain.get() + 1);
                                         }
-
                                     }
                                 }));
 
@@ -436,6 +443,49 @@ public class ClassDetailViewModel extends ViewModel {
 
             }
         });*/
+        sessions = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(Integer integer) throws Exception {
+                return pageNumber != -1;
+            }
+        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+            @Override
+            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+                final int isCatalogue = 0;
+                return apiService.getClassDetail(classId, isCatalogue).map(new Function<ClassListResp, List<ViewModel>>() {
+
+                    @Override
+                    public List<ViewModel> apply(ClassListResp resp) throws Exception {
+                        ListIterator listIterator = sessionsList.listIterator(sessionsList.size());
+                        if (listIterator.hasPrevious() && listIterator.previous() instanceof IconTextItemViewModel)
+                            listIterator.remove();
+
+                        if (resp.getResCode()) {
+                            for (ClassListResp.MicroSessions sessions : resp.getMicroSessionsdata()) {
+                                sessionsList.add(new SessionItemViewModel(sessions.getSessionName(),sessions.getSessionDesc(),sessions.getPrice(),sessions.getOfferPrice()));
+                            }
+                            /*if (resp.getMicroSessionsdata().size() == 10)
+                                sessionsList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
+                                    @Override
+                                    public void accept(IconTextItemViewModel var1) {
+                                        if (pageNumber > -1) {
+                                            pageNumber++;
+                                            callAgain.set(callAgain.get() + 1);
+                                        }
+                                    }
+                                }));
+*/
+                        } else if (sessionsList.isEmpty()) {
+                            pageNumber = -1;
+                            sessionsList.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
+                        } else if (sessionsList.size() < 10) pageNumber = -1;
+                        else pageNumber = -1;
+                        return sessionsList;
+                    }
+                });
+
+            }
+        });
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
@@ -541,11 +591,18 @@ public class ClassDetailViewModel extends ViewModel {
                         addresses.connect();
                         try {
                             for (final ClassListResp.FullSession fullSessionData : classData.getFullsessiondetails()) {
-                                fullSessionData.getAdditionalTicketPrice();
+                                fullSessionAdditionalprice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getAdditionalTicketPrice()));
+                                fullSessionName.set(fullSessionData.getSessionName());
+                                fullSessionDescription.set(fullSessionData.getSessionDesc());
+                                fullSessionPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getPrice()));
+                                offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getOfferPrice()));
+                                //minPersionAllowed.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getMinPersonAllowed()));
                                /* fullSessionDataList.add(fullSessionData);*/
                             }
                             for (final ClassListResp.MicroSessions sessionLevelData : classData.getSessionleveldetails()) {
                                 sessionLevelData.getAdditionalTicketPrice();
+                                sessionName.set(sessionLevelData.getSessionName());
+                                sessionDescription.set(sessionLevelData.getSessionDesc());
                                /* sessionsList.add(sessionLevelData);*/
                             }
                         } catch (Exception e) {

@@ -37,23 +37,43 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_weight="1"
-                        tools:text="Session Name"/>
+                        android:layout_centerVertical="true"/>
+                    <TextView
+                        android:id="@+id/session_name"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        tools:text="Session Name"
+                        android:layout_centerVertical="true"
+                        android:lines="1"
+                        android:text="@{vm.sessionName}"
+                        android:layout_toRightOf="@+id/session_check_box"/>
+                    <!--android:text="@{vm.sessionName}"-->
+                    <TextView
+                        android:id="@+id/session_description"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        tools:text="Session Description"
+                        android:text="@{vm.sessionDesc}"
+                        android:layout_below="@+id/session_name"
+                        android:layout_toRightOf="@+id/session_check_box"/>
+                    <!--android:text="@{vm.sessionDescription}"-->
                     <TextView
                         android:id="@+id/price"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_large"
                         android:layout_weight="1"
-                        android:layout_toRightOf="@+id/session_check_box"
+                        android:layout_toRightOf="@+id/session_description"
                         android:gravity="center_vertical"
                         android:paddingBottom="@dimen/padding_small"
                         android:paddingRight="@dimen/padding_small"
                         android:paddingTop="@dimen/padding_small"
-
+                        android:text='@{vm.sessionPrice}'
                         android:textColor="@color/materialBlue"
                         android:textSize="@dimen/text_size_medium"
                         app:font='@{@string/robotoBold}'
-                        tools:text="Price" />
+                        tools:text="Price"
+                        android:layout_centerVertical="true"/>
                     <!--android:text='@{vm.price}'-->
                     <TextView
                         android:id="@+id/offer_price"
@@ -68,8 +88,10 @@
                         android:textColor="@color/materialBlue"
                         android:textSize="@dimen/text_size_medium"
                         app:font='@{@string/robotoBold}'
+                        android:text='@{vm.sessionOfferPrice}'
                         tools:text="Offer Price"
-                        android:layout_toRightOf="@+id/price"/>
+                        android:layout_toRightOf="@+id/price"
+                        android:layout_centerVertical="true"/>
                    <!-- android:text='@{vm.price}'-->
                 </RelativeLayout>
 

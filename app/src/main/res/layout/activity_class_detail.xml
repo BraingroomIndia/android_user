@@ -166,7 +166,7 @@
                                 tools:text="Session Name"
                                 android:layout_centerVertical="true"
                                 android:lines="1"
-
+                                android:text="@{vm.fullSessionName}"
                                 android:layout_toRightOf="@+id/class_check_box"/>
                             <!--android:text="@{vm.sessionName}"-->
                             <TextView
@@ -174,7 +174,7 @@
                                 android:layout_width="120dp"
                                 android:layout_height="wrap_content"
                                 tools:text="Session Description"
-
+                                android:text="@{vm.fullSessionDescription}"
                                 android:layout_below="@+id/session_name"
                                 android:layout_toRightOf="@+id/class_check_box"/>
                             <!--android:text="@{vm.sessionDescription}"-->
@@ -199,6 +199,8 @@
                                 android:spinnerMode="dropdown"
                                 android:background="@drawable/spinner_background"
                                 android:layout_marginTop="10dp"></Spinner>
+                            <!--android:text="@{vm.minPersionAllowed}"-->
+
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -218,7 +220,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:text="₹ 500"
+                                android:text="@{vm.fullSessionAdditionalprice}"
                                 android:layout_marginTop="10dp"
                                 android:textStyle="bold"/>
                             </RelativeLayout>
@@ -265,7 +267,7 @@
                                 android:paddingBottom="@dimen/padding_small"
                                 android:paddingRight="@dimen/padding_small"
                                 android:paddingTop="@dimen/padding_small"
-                                android:text='@{vm.price}'
+                                android:text='@{vm.fullSessionPrice}'
                                 android:textColor="@color/materialBlue"
                                 android:textSize="@dimen/text_size_medium"
                                 app:font='@{@string/robotoBold}'
@@ -280,7 +282,7 @@
                                 android:paddingBottom="@dimen/padding_small"
                                 android:paddingRight="@dimen/padding_small"
                                 android:paddingTop="@dimen/padding_small"
-
+                                android:text='@{vm.offerPrice}'
                                 android:textColor="@color/materialBlue"
                                 android:textSize="@dimen/text_size_medium"
                                 app:font='@{@string/robotoBold}'
@@ -345,10 +347,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:nestedScrollingEnabled="false"
-
+                                bind:items="@{vm.sessions}"
                                 bind:layout_vertical="@{true}"
                                 bind:paginate="@{true}"
-
+                                bind:view_provider="@{vm.sessionViewProvider}"
                                 bind:viewmodel="@{vm}"
                                 tools:listitem="@layout/item_sessions" />
                             <!--bind:items="@{vm.sessions}"-->

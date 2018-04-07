@@ -447,5 +447,83 @@ public class ClassData implements Serializable {
         return microSessions;
     }
 
+    public String getGroupId() {
+        return groupId;
+    }
 
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getSegmentId() {
+        return segmentId;
+    }
+
+    public void setSegmentId(String segmentId) {
+        this.segmentId = segmentId;
+    }
+
+    public int getIsCoupleClass() {
+        return isCoupleClass;
+    }
+
+    public void setIsCoupleClass(int isCoupleClass) {
+        this.isCoupleClass = isCoupleClass;
+    }
+
+    public void setIsCode(int isCode) {
+        this.isCode = isCode;
+    }
+
+    public String getAboutAcademy() {
+        return aboutAcademy;
+    }
+
+    public void setAboutAcademy(String aboutAcademy) {
+        this.aboutAcademy = aboutAcademy;
+    }
+
+    public void setPriceSymbol(String priceSymbol) {
+        this.priceSymbol = priceSymbol;
+    }
+
+    public String getPriceCode() {
+        return priceCode;
+    }
+
+    public void setPriceCode(String priceCode) {
+        this.priceCode = priceCode;
+    }
+
+    public String getTxnId() {
+        return txnId;
+    }
+
+    public void setTxnId(String txnId) {
+        this.txnId = txnId;
+    }
+
+    public List<ClassListResp.FullSession> getFullSession() {
+        return fullSession;
+    }
+
+    public void setFullSession(List<ClassListResp.FullSession> fullSession) {
+        this.fullSession = fullSession;
+    }
+
+    public List<ClassListResp.MicroSessions> getMicroSessions() {
+        return microSessions;
+    }
+
+    public void setMicroSessions(List<ClassListResp.MicroSessions> microSessions) {
+        this.microSessions = microSessions;
+    }
 }

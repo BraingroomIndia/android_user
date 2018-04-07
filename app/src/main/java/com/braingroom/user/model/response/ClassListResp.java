@@ -13,7 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor(suppressConstructorProperties = true)
 @EqualsAndHashCode(callSuper = false)
 @Getter
-public class ClassListResp extends BaseResp {
+public class ClassListResp /*extends BaseResp*/ {
 
     @SerializedName("next_page")
     int nextPage;
@@ -21,6 +21,19 @@ public class ClassListResp extends BaseResp {
     @SerializedName("braingroom")
     List<Snippet> data;
 
+    @SerializedName("braingroom")
+    List<MicroSessions> microSessionsdata;
+
+    public List<MicroSessions> getMicroSessionsdata() {
+        return microSessionsdata;
+    }
+
+    @SerializedName("res_code")
+    private Integer resCode;
+
+    public boolean getResCode() {
+        return microSessionsdata != null && !microSessionsdata.isEmpty() && microSessionsdata.get(0) != null;
+    }
 
     @Data
     @EqualsAndHashCode(callSuper = false)
@@ -260,6 +273,78 @@ public class ClassListResp extends BaseResp {
 
         @SerializedName("additional_ticket_price")
         private Integer additionalTicketPrice;
+
+        public String getSessionId() {
+            return sessionId;
+        }
+
+        public void setSessionId(String sessionId) {
+            this.sessionId = sessionId;
+        }
+
+        public String getSessionName() {
+            return sessionName;
+        }
+
+        public void setSessionName(String sessionName) {
+            this.sessionName = sessionName;
+        }
+
+        public String getSessionDesc() {
+            return sessionDesc;
+        }
+
+        public void setSessionDesc(String sessionDesc) {
+            this.sessionDesc = sessionDesc;
+        }
+
+        public String getSessionStart() {
+            return sessionStart;
+        }
+
+        public void setSessionStart(String sessionStart) {
+            this.sessionStart = sessionStart;
+        }
+
+        public String getSessionEnd() {
+            return sessionEnd;
+        }
+
+        public void setSessionEnd(String sessionEnd) {
+            this.sessionEnd = sessionEnd;
+        }
+
+        public Integer getPrice() {
+            return price;
+        }
+
+        public void setPrice(Integer price) {
+            this.price = price;
+        }
+
+        public Integer getOfferPrice() {
+            return offerPrice;
+        }
+
+        public void setOfferPrice(Integer offerPrice) {
+            this.offerPrice = offerPrice;
+        }
+
+        public Integer getMinPersonAllowed() {
+            return minPersonAllowed;
+        }
+
+        public void setMinPersonAllowed(Integer minPersonAllowed) {
+            this.minPersonAllowed = minPersonAllowed;
+        }
+
+        public Integer getAdditionalTicketPrice() {
+            return additionalTicketPrice;
+        }
+
+        public void setAdditionalTicketPrice(Integer additionalTicketPrice) {
+            this.additionalTicketPrice = additionalTicketPrice;
+        }
     }
 
     @Data
@@ -293,6 +378,78 @@ public class ClassListResp extends BaseResp {
 
         @SerializedName("additional_ticket_price")
         private Integer additionalTicketPrice;
+
+        public String getSessionId() {
+            return sessionId;
+        }
+
+        public void setSessionId(String sessionId) {
+            this.sessionId = sessionId;
+        }
+
+        public String getSessionName() {
+            return sessionName;
+        }
+
+        public void setSessionName(String sessionName) {
+            this.sessionName = sessionName;
+        }
+
+        public String getSessionDesc() {
+            return sessionDesc;
+        }
+
+        public void setSessionDesc(String sessionDesc) {
+            this.sessionDesc = sessionDesc;
+        }
+
+        public String getSessionStart() {
+            return sessionStart;
+        }
+
+        public void setSessionStart(String sessionStart) {
+            this.sessionStart = sessionStart;
+        }
+
+        public String getSessionEnd() {
+            return sessionEnd;
+        }
+
+        public void setSessionEnd(String sessionEnd) {
+            this.sessionEnd = sessionEnd;
+        }
+
+        public Integer getPrice() {
+            return price;
+        }
+
+        public void setPrice(Integer price) {
+            this.price = price;
+        }
+
+        public Integer getOfferPrice() {
+            return offerPrice;
+        }
+
+        public void setOfferPrice(Integer offerPrice) {
+            this.offerPrice = offerPrice;
+        }
+
+        public Integer getMinPersonAllowed() {
+            return minPersonAllowed;
+        }
+
+        public void setMinPersonAllowed(Integer minPersonAllowed) {
+            this.minPersonAllowed = minPersonAllowed;
+        }
+
+        public Integer getAdditionalTicketPrice() {
+            return additionalTicketPrice;
+        }
+
+        public void setAdditionalTicketPrice(Integer additionalTicketPrice) {
+            this.additionalTicketPrice = additionalTicketPrice;
+        }
     }
 
 

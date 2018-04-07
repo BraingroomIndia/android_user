@@ -70,14 +70,14 @@ public class ClassDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         final TextView tv = (TextView) findViewById(R.id.offer_price);
         tv.setPaintFlags(tv.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-        String[] arraySpinner = new String[] {
+        /*String[] arraySpinner = new String[] {
                 "Please Select","1", "2", "3", "4", "5"
         };
         Spinner s = (Spinner) findViewById(R.id.min_persion_allow);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, arraySpinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        s.setAdapter(adapter);
+        s.setAdapter(adapter);*/
 
         catalogLocationList = findViewById(R.id.catalog_location_list);
         if (catalogLocationList != null)
