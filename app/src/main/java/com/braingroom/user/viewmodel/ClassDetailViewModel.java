@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -18,7 +19,6 @@ import com.braingroom.user.model.dto.ClassLocationData;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FullSessionData;
 import com.braingroom.user.model.dto.ListDialogData1;
-import com.braingroom.user.model.dto.SessionLevelData;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
 import com.braingroom.user.model.request.PromoCodeReq;
 import com.braingroom.user.model.response.BaseResp;
@@ -56,9 +56,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -85,7 +86,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<Spanned> fullSessionAdditionalprice = new ObservableField<>(null);
     public final ObservableField<Spanned> fullSessionPrice = new ObservableField<>(null);
     public final ObservableField<Spanned> offerPrice = new ObservableField<>();
-    //public final ObservableField<Spanned> minPersionAllowed = new ObservableField<>();
+    public final ObservableField<Integer> minPersionAllowed = new ObservableField<>();
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
     public final ObservableField<String> teacherName = new ObservableField<>(null);
     public final ObservableField<Spanned> description = new ObservableField<>(null); //Edited By Vikas Godara
@@ -104,6 +105,8 @@ public class ClassDetailViewModel extends ViewModel {
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isCod = new ObservableBoolean(true);
+    public ObservableBoolean isGroup = new ObservableBoolean(true);
+    public ObservableBoolean isPersion = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
     private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
@@ -128,7 +131,6 @@ public class ClassDetailViewModel extends ViewModel {
     private Consumer<HashMap<String, Integer>> callConsumer;
 
     public boolean isGift = false;
-
 
     public final Action callTutor;
     private GoogleMap mGoogleMap;
@@ -167,8 +169,7 @@ public class ClassDetailViewModel extends ViewModel {
 
     };
     private int pageNumber = 1;
-
-    public final Action onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
+    public final Action selectFullSession,onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onPayTutorClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
             openConnectBnS, openConnectFP,*/
             openCateglogLocationList, playAction, onQueryDismiss, onPostDismiss, onAddReviewClicked;
@@ -401,49 +402,6 @@ public class ClassDetailViewModel extends ViewModel {
 
             }
         });
-        /*sessions = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
-            @Override
-            public boolean test(Integer integer) throws Exception {
-                return pageNumber != -1;
-            }
-        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
-            @Override
-            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                final int isCatalogue = 0;
-                return apiService.getClassDetail(classId, isCatalogue).map(new Function<ClassData, List<ViewModel>>() {
-
-                    @Override
-                    public List<ViewModel> apply(ClassData resp) throws Exception {
-                        ListIterator listIterator = sessionsList.listIterator(sessionsList.size());
-                        if (listIterator.hasPrevious() && listIterator.previous() instanceof IconTextItemViewModel)
-                            listIterator.remove();
-
-                        if (!isEmpty(resp.getMicroSessions())) {
-                            for (ClassListResp.MicroSessions sessions : resp.getMicroSessions()) {
-                                sessionsList.add(new SessionItemViewModel(sessions.getSessionName(),sessions.getSessionDesc(),sessions.getPrice(),sessions.getOfferPrice()));
-                            }
-                            if (resp.getMicroSessions().size() == 10)
-                                sessionsList.add(new IconTextItemViewModel("", "", new MyConsumer<IconTextItemViewModel>() {
-                                    @Override
-                                    public void accept(IconTextItemViewModel var1) {
-                                        if (pageNumber > -1) {
-                                            pageNumber++;
-                                            callAgain.set(callAgain.get() + 1);
-                                        }
-                                    }
-                                }));
-
-                        } else if (sessionsList.isEmpty()) {
-                            pageNumber = -1;
-                            sessionsList.add(new EmptyItemViewModel(R.drawable.ic_no_post_64dp, null, "No review found", null));
-                        } else if (sessionsList.size() < 10) pageNumber = -1;
-                        else pageNumber = -1;
-                        return sessionsList;
-                    }
-                });
-
-            }
-        });*/
 
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
@@ -494,17 +452,20 @@ public class ClassDetailViewModel extends ViewModel {
                         imagePath.set(classData.getImage()); //Edited by Vikas Godara
                         rating.set(classData.getRating());
                         isCod.set(classData.getIsCode());
+                        try {
+
                         if (classData.getIsCoupleClass() != 1)
                             if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON)) {
                                 price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getPrice()));
-                                //offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+classData.getLevelDetails().get(0).getPrice()));
                             } else {
                                 price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
-                                //offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
 
                             }
                         else
                             price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(0).getPrice()));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         imageUploadViewModel.setRemoteAddress(classData.getTeacherPic());
                         teacherPic.set(classData.getTeacherPic());
                         teacherName.set(classData.getClassProvider());
@@ -556,6 +517,7 @@ public class ClassDetailViewModel extends ViewModel {
                                 fullSessionPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getPrice()));
                                 offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getOfferPrice()));
                                 //minPersionAllowed.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getMinPersonAllowed()));
+                                minPersionAllowed.set(fullSessionData.getMinPersonAllowed());
                                /* fullSessionDataList.add(fullSessionData);*/
                             }
                             for (final ClassListResp.MicroSessions sessionLevelData : classData.getSessionleveldetails()) {
@@ -580,11 +542,24 @@ public class ClassDetailViewModel extends ViewModel {
                                 videoId.set(classData.getVideoId());
                             }
                         }
-
+                        //Edited by kambarajan
+                        //For Microsessions
                         for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
                             sessionsList.add(new SessionItemViewModel(microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
                         }
-                        sessions.connect();
+                        //sessions.connect();
+
+                        if(minPersionAllowed.get() > 1) {
+                            isPersion.set(false);
+                            isGroup.set(true);
+                        }else{
+                            isGroup.set(false);
+                            isPersion.set(true);
+                        }
+
+
+
+
                         uiHelper.stopShimmer();
                         hideViewMore.set(uiHelper.isViewEllipsized());
                         isShimmerOn.set(false);
@@ -603,17 +578,29 @@ public class ClassDetailViewModel extends ViewModel {
                 });
             }
         }).subscribe();
+        selectFullSession = new Action() {
+            @Override
+            public void run() throws Exception {
+                messageHelper.show("test");
+
+
+            }
+        };
 
         onBookClicked = new Action() {
             @Override
             public void run() throws Exception {
                 if (mClassData != null) {
-                    Bundle data = new Bundle();
-                    data.putSerializable("classData", mClassData);
-                    data.putSerializable("checkoutType", "class");
-                    data.putString(Constants.isIncentive, isIncentive);
-                    data.putString(Constants.promoCode, promo);
-                    navigator.navigateActivity(CheckoutActivity.class, data);
+                    try {
+                        Bundle data = new Bundle();
+                        data.putSerializable("classData", mClassData);
+                        data.putSerializable("checkoutType", "class");
+                        data.putString(Constants.isIncentive, isIncentive);
+                        data.putString(Constants.promoCode, promo);
+                        navigator.navigateActivity(CheckoutActivity.class, data);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         };

@@ -141,6 +141,7 @@ dependencies {
     annotationProcessor 'com.squareup:javapoet:1.9.0'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compileOnly 'org.projectlombok:lombok:1.12.6'
     annotationProcessor 'org.projectlombok:lombok:1.12.6'  /// Never change
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     provided 'org.projectlombok:lombok:1.12.6'   // Never change

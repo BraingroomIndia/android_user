@@ -13,7 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor(suppressConstructorProperties = true)
 @EqualsAndHashCode(callSuper = false)
 @Getter
-public class ClassListResp /*extends BaseResp*/ {
+public class ClassListResp extends BaseResp {
 
     @SerializedName("next_page")
     int nextPage;
@@ -23,8 +23,8 @@ public class ClassListResp /*extends BaseResp*/ {
 
 
 
-    @SerializedName("res_code")
-    private Integer resCode;
+    /*@SerializedName("res_code")
+    private Integer resCode;*/
 
 
     @Data

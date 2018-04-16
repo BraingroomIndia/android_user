@@ -57,6 +57,82 @@ public class ReviewGetResp {
         @SerializedName("class_topic")
         private String classTopic;
 
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getUserTypeId() {
+            return userTypeId;
+        }
+
+        public void setUserTypeId(String userTypeId) {
+            this.userTypeId = userTypeId;
+        }
+
+        public String getTimeStamp() {
+            return timeStamp;
+        }
+
+        public void setTimeStamp(String timeStamp) {
+            this.timeStamp = timeStamp;
+        }
+
+        public String getReviewType() {
+            return reviewType;
+        }
+
+        public void setReviewType(String reviewType) {
+            this.reviewType = reviewType;
+        }
+
+        public String getReviewMessage() {
+            return reviewMessage;
+        }
+
+        public void setReviewMessage(String reviewMessage) {
+            this.reviewMessage = reviewMessage;
+        }
+
+        public Integer getRating() {
+            return rating;
+        }
+
+        public void setRating(Integer rating) {
+            this.rating = rating;
+        }
+
+        public String getClassId() {
+            return classId;
+        }
+
+        public void setClassId(String classId) {
+            this.classId = classId;
+        }
+
+        public void setClassTopic(String classTopic) {
+            this.classTopic = classTopic;
+        }
+
         public String getClassTopic() {
             return this.classTopic == null ? "Vendor Review" : (this.classTopic.trim().isEmpty() ? "Vendor Review" : this.classTopic);
         }

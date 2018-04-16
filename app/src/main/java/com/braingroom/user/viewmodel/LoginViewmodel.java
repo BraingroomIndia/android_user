@@ -54,6 +54,7 @@ public class LoginViewmodel extends ViewModel {
         this.navigator = navigator;
 
         this.referralCode = referralCode;
+
         onLoginClicked = new Action() {
             @Override
             public void run() throws Exception {
