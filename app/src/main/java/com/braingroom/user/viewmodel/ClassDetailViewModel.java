@@ -114,6 +114,7 @@ public class ClassDetailViewModel extends ViewModel {
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isCod = new ObservableBoolean(true);
     public ObservableBoolean isGroup = new ObservableBoolean(true);
+    public ObservableBoolean isAdditionalPrice = new ObservableBoolean(true);
     public ObservableBoolean isPersion = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
     private String vendorId;
@@ -527,6 +528,12 @@ public class ClassDetailViewModel extends ViewModel {
                                 offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getOfferPrice()));
                                 //minPersionAllowed.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getMinPersonAllowed()));
                                 minPersionAllowed.set(fullSessionData.getMinPersonAllowed());
+                                if(fullSessionAdditionalprice.equals("₹0")){
+                                    isAdditionalPrice.set(false);
+                                }
+                                else{
+                                    isAdditionalPrice.set(true);
+                                }
                                /* fullSessionDataList.add(fullSessionData);*/
                             }
                             /*for (final ClassListResp.MicroSessions sessionLevelData : classData.getSessionleveldetails()) {

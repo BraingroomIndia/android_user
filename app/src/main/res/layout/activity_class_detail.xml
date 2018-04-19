@@ -221,7 +221,7 @@
                                     android:layout_marginTop="10dp"
                                     android:text="For each persion add : "
                                     android:layout_below="@+id/min_persion_allow"
-                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
+                                    android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"
                                    />
                                 <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
 
@@ -234,7 +234,7 @@
                                     android:text="@{vm.fullSessionAdditionalprice}"
                                     android:layout_toRightOf="@+id/static_persion_add"
                                     android:textStyle="bold"
-                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
+                                    android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"
                                      />
                                 <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
                                 <TextView
