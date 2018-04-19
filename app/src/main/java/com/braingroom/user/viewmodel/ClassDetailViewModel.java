@@ -120,9 +120,9 @@ public class ClassDetailViewModel extends ViewModel {
     private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
-    //public final ConnectableObservable<List<ViewModel>> sessions;
+    public final ConnectableObservable<List<ViewModel>> sessions;
     public Observable<List<ViewModel>> reviews;
-    public Observable<List<ViewModel>> sessions;
+    //public Observable<List<ViewModel>> sessions;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
@@ -564,7 +564,7 @@ public class ClassDetailViewModel extends ViewModel {
                         /*for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
                             sessionsList.add(new SessionItemViewModel(microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
                         }*/
-                        //sessions.connect();
+                        //
                         try {
                             if (minPersionAllowed.get() > 1) {
                                 isPersion.set(false);
@@ -575,6 +575,7 @@ public class ClassDetailViewModel extends ViewModel {
                                 for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
                                     sessionsList.add(new SessionItemViewModel(microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
                                 }
+                                sessions.connect();
                             }
                         }catch (Exception e){
                             e.printStackTrace();
