@@ -13,6 +13,9 @@
         <variable
             name="vm"
             type="com.braingroom.user.viewmodel.ClassDetailViewModel" />
+        <variable
+            name="spinnerAdapter"
+            type="android.widget.ArrayAdapter" />
 
     </data>
 
@@ -441,7 +444,8 @@
                                 bind:view_provider="@{vm.sessionViewProvider}"
                                 bind:paginate="@{true}"
                                 bind:viewmodel="@{vm}"
-                                tools:listitem="@layout/item_sessions" />
+                                tools:listitem="@layout/item_sessions"
+                                android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"/>
 
 
                             <!--<TextView

@@ -83,20 +83,28 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> videoThumb = new ObservableField<>(null);
     public final ObservableField<String> rating = new ObservableField<>("");
     public final ObservableField<Spanned> price = new ObservableField<>(null);
-    public final ObservableField<Spanned> fullSessionAdditionalprice = new ObservableField<>(null);
+
+    //Edited by kambarajan
+    //For Fullsession
+    public final ObservableField<String> fullSessionName = new ObservableField<>();
+    public final ObservableField<String> fullSessionDescription = new ObservableField<>();
     public final ObservableField<Spanned> fullSessionPrice = new ObservableField<>(null);
     public final ObservableField<Spanned> offerPrice = new ObservableField<>();
+    public final ObservableField<Spanned> fullSessionAdditionalprice = new ObservableField<>(null);
     public final ObservableField<Integer> minPersionAllowed = new ObservableField<>();
+    public final ObservableField<Spanned> totalPrice = new ObservableField<>();
+    //For microsessions
+    public final ObservableField<String> sessionName = new ObservableField<>();
+    public final ObservableField<String> sessionDescription = new ObservableField<>();
+    public final ObservableField<Spanned> microSessionOfferPrice = new ObservableField<>();
+    public final ObservableField<Spanned> microSessionPrice = new ObservableField<>(null);
+
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
     public final ObservableField<String> teacherName = new ObservableField<>(null);
     public final ObservableField<Spanned> description = new ObservableField<>(null); //Edited By Vikas Godara
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
     public final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
-    public final ObservableField<String> sessionName = new ObservableField<>();
-    public final ObservableField<String> sessionDescription = new ObservableField<>();
-    public final ObservableField<String> fullSessionName = new ObservableField<>();
-    public final ObservableField<String> fullSessionDescription = new ObservableField<>();
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
     private final ObservableArrayList<String> catalogLocationList = new ObservableArrayList<>();
@@ -111,13 +119,14 @@ public class ClassDetailViewModel extends ViewModel {
     private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
-    public final ConnectableObservable<List<ViewModel>> sessions;
+    //public final ConnectableObservable<List<ViewModel>> sessions;
     public Observable<List<ViewModel>> reviews;
+    public Observable<List<ViewModel>> sessions;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
     List<MarkerOptions> markerList = new ArrayList<>();
-    /*List<SessionLevelData> sessionsList = new ArrayList<>();*///Edited By kambarajan
+    //List<SessionLevelData> sessionsList = new ArrayList<>();*///Edited By kambarajan
     List<FullSessionData> fullSessionDataList = new ArrayList<>();
     List<ViewModel> sessionsList = new ArrayList<>();
 
@@ -520,12 +529,12 @@ public class ClassDetailViewModel extends ViewModel {
                                 minPersionAllowed.set(fullSessionData.getMinPersonAllowed());
                                /* fullSessionDataList.add(fullSessionData);*/
                             }
-                            for (final ClassListResp.MicroSessions sessionLevelData : classData.getSessionleveldetails()) {
+                            /*for (final ClassListResp.MicroSessions sessionLevelData : classData.getSessionleveldetails()) {
                                 sessionLevelData.getAdditionalTicketPrice();
                                 sessionName.set(sessionLevelData.getSessionName());
                                 sessionDescription.set(sessionLevelData.getSessionDesc());
-                               /* sessionsList.add(sessionLevelData);*/
-                            }
+                               *//* sessionsList.add(sessionLevelData);*//*
+                            }*/
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -544,22 +553,25 @@ public class ClassDetailViewModel extends ViewModel {
                         }
                         //Edited by kambarajan
                         //For Microsessions
-                        for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
+
+                        /*for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
                             sessionsList.add(new SessionItemViewModel(microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
-                        }
+                        }*/
                         //sessions.connect();
-
-                        if(minPersionAllowed.get() > 1) {
-                            isPersion.set(false);
-                            isGroup.set(true);
-                        }else{
-                            isGroup.set(false);
-                            isPersion.set(true);
+                        try {
+                            if (minPersionAllowed.get() > 1) {
+                                isPersion.set(false);
+                                isGroup.set(true);
+                            } else {
+                                isGroup.set(false);
+                                isPersion.set(true);
+                                for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
+                                    sessionsList.add(new SessionItemViewModel(microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
+                                }
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-
-
-
-
                         uiHelper.stopShimmer();
                         hideViewMore.set(uiHelper.isViewEllipsized());
                         isShimmerOn.set(false);
@@ -582,6 +594,7 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 messageHelper.show("test");
+                totalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned() +fullSessionPrice));
 
 
             }

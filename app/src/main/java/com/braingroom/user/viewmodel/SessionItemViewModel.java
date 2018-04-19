@@ -15,7 +15,7 @@ public class SessionItemViewModel extends ViewModel {
     public final int sessionPrice;
     public final int sessionOfferPrice;
     public final Action selectMicroSession;
-    public ObservableBoolean isPersion = new ObservableBoolean(true);
+    //public ObservableBoolean isPersion = new ObservableBoolean(true);
 
 
     public SessionItemViewModel(String sessionName, String sessionDesc, Integer sessionPrice, Integer sessionOfferPrice) {
@@ -31,6 +31,6 @@ public class SessionItemViewModel extends ViewModel {
 
             }
         };
+        //isPersion.set(true);
     }
-
 }
