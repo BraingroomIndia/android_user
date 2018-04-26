@@ -37,8 +37,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_weight="1" />
-
+                    android:layout_weight="1"
+                    />
+                <!--android:checked="@{vm.isMicrosession ? View.VISIBLE : View.INVISIBLE}"-->
                 <TextView
                     android:id="@+id/session_name"
                     android:layout_width="120dp"
@@ -62,7 +63,7 @@
 
                 <TextView
                     android:id="@+id/offer_price"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
@@ -81,7 +82,7 @@
 
                 <TextView
                     android:id="@+id/price"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
@@ -95,7 +96,9 @@
                     android:textColor="@color/materialBlue"
                     android:textSize="@dimen/text_size_medium"
                     app:font='@{@string/robotoBold}'
-                    tools:text="Price" />
+                    tools:text="Price"
+                    android:background="@drawable/strike_through"/>
+                    <!--android:visibility="@{vm.isMicrosession ? StrikethroughSpan.VISIABLE : StrikethroughSpan.GONE}"-->
 
             </RelativeLayout>
 

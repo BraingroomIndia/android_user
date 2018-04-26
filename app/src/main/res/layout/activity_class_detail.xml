@@ -162,7 +162,10 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_weight="1"
                                 android:onClick="@{vm.selectFullSession}"
-                                android:background="@drawable/checkbox_bg" />
+                                android:background="@drawable/checkbox_bg"
+                                />
+                            <!--android:checked="@{vm.isPersion}"-->
+
                             <!--android:onClick="@{vm.selectFullSession}"-->
 
                             <TextView
@@ -221,9 +224,10 @@
                                     android:layout_marginTop="10dp"
                                     android:text="For each persion add : "
                                     android:layout_below="@+id/min_persion_allow"
-                                    android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"
+                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
+
                                    />
-                                <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
+                                <!---->
 
                                 <TextView
                                     android:id="@+id/additional_price"
@@ -234,9 +238,9 @@
                                     android:text="@{vm.fullSessionAdditionalprice}"
                                     android:layout_toRightOf="@+id/static_persion_add"
                                     android:textStyle="bold"
-                                    android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"
+                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
                                      />
-                                <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
+                                <!--android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"-->
                                 <TextView
                                     android:id="@+id/total"
                                     android:layout_width="50dp"
@@ -304,6 +308,7 @@
                                 android:textSize="@dimen/text_size_medium"
                                 app:font='@{@string/robotoBold}'
                                 tools:text="Price"
+                                android:background="@drawable/strike_through"
                                 android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
                                 />
                                 <!--android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"-->
@@ -506,7 +511,6 @@
                                 tools:text="Book Now" />
 
                         </LinearLayout>-->
-
 
                     </LinearLayout>
 

@@ -1,7 +1,5 @@
 package com.braingroom.user.viewmodel;
 
-
-import android.databinding.ObservableBoolean;
 import io.reactivex.functions.Action;
 
 
@@ -15,7 +13,7 @@ public class SessionItemViewModel extends ViewModel {
     public final int sessionPrice;
     public final int sessionOfferPrice;
     public final Action selectMicroSession;
-    //public ObservableBoolean isPersion = new ObservableBoolean(true);
+
 
 
     public SessionItemViewModel(String sessionName, String sessionDesc, Integer sessionPrice, Integer sessionOfferPrice) {
@@ -23,6 +21,8 @@ public class SessionItemViewModel extends ViewModel {
         this.sessionDesc = sessionDesc;
         this.sessionPrice = sessionPrice;
         this.sessionOfferPrice = sessionOfferPrice;
+        /*this.sessionPrice = "₹" +sessionPrice;
+        this.sessionOfferPrice = "₹" +sessionOfferPrice;*/
 
 
         selectMicroSession = new Action() {
@@ -31,6 +31,5 @@ public class SessionItemViewModel extends ViewModel {
 
             }
         };
-        //isPersion.set(true);
     }
 }

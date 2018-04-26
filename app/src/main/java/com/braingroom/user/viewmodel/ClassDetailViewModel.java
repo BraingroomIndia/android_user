@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -56,8 +55,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -90,7 +87,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> fullSessionDescription = new ObservableField<>();
     public final ObservableField<Spanned> fullSessionPrice = new ObservableField<>(null);
     public final ObservableField<Spanned> offerPrice = new ObservableField<>();
-    public final ObservableField<Spanned> fullSessionAdditionalprice = new ObservableField<>(null);
+    public final ObservableField<Spanned> fullSessionAdditionalprice = new ObservableField<>();
     public final ObservableField<Integer> minPersionAllowed = new ObservableField<>();
     public final ObservableField<Spanned> totalPrice = new ObservableField<>();
     //For microsessions
@@ -528,12 +525,13 @@ public class ClassDetailViewModel extends ViewModel {
                                 offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getOfferPrice()));
                                 //minPersionAllowed.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getMinPersonAllowed()));
                                 minPersionAllowed.set(fullSessionData.getMinPersonAllowed());
-                                if(fullSessionAdditionalprice.equals("₹0")){
+
+                                /*if(fullSessionAdditionalprice.equals("₹0")){
                                     isAdditionalPrice.set(false);
                                 }
                                 else{
                                     isAdditionalPrice.set(true);
-                                }
+                                }*/
                                /* fullSessionDataList.add(fullSessionData);*/
                             }
                             /*for (final ClassListResp.MicroSessions sessionLevelData : classData.getSessionleveldetails()) {
@@ -602,8 +600,7 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 messageHelper.show("test");
-                totalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned() +fullSessionPrice));
-
+                totalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned() + fullSessionPrice));
 
             }
         };
