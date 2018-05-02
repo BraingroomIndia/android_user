@@ -38,6 +38,9 @@ public class GetBookingDetailsReq {
 
         @SerializedName("is_guest")
         int isGuest;
+
+        @SerializedName("class_session_id")
+        String classSessionId;
     }
 
 //    @Data

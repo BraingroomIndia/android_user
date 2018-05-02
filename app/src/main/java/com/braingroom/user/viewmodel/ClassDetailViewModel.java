@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -95,6 +96,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> sessionDescription = new ObservableField<>();
     public final ObservableField<Spanned> microSessionOfferPrice = new ObservableField<>();
     public final ObservableField<Spanned> microSessionPrice = new ObservableField<>(null);
+    public final ObservableField<Spanned> singlePersionTotalPrice = new ObservableField<>();
 
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
     public final ObservableField<String> teacherName = new ObservableField<>(null);
@@ -413,7 +415,7 @@ public class ClassDetailViewModel extends ViewModel {
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                return !apiSuccessful;
+                    return !apiSuccessful;
             }
         }).flatMap(new Function<Integer, ObservableSource<?>>() {
             @Override
@@ -525,6 +527,8 @@ public class ClassDetailViewModel extends ViewModel {
                                 offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getOfferPrice()));
                                 //minPersionAllowed.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getMinPersonAllowed()));
                                 minPersionAllowed.set(fullSessionData.getMinPersonAllowed());
+                                Log.i("TAG",""+classData.getFullsessiondetails());
+
 
                                 /*if(fullSessionAdditionalprice.equals("₹0")){
                                     isAdditionalPrice.set(false);
@@ -567,6 +571,12 @@ public class ClassDetailViewModel extends ViewModel {
                             if (minPersionAllowed.get() > 1) {
                                 isPersion.set(false);
                                 isGroup.set(true);
+                                if(fullSessionAdditionalprice.equals("₹0")){
+                                    isAdditionalPrice.set(false);
+                                }
+                                else{
+                                    isAdditionalPrice.set(true);
+                                }
                             } else {
                                 isGroup.set(false);
                                 isPersion.set(true);
@@ -600,7 +610,12 @@ public class ClassDetailViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 messageHelper.show("test");
-                totalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned() + fullSessionPrice));
+                SessionItemViewModel sessionItemViewModel;
+                //totalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned() + fullSessionPrice));
+                //singlePersionTotalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned()+ fullSessionPrice));
+                singlePersionTotalPrice.set(offerPrice.get());
+
+
 
             }
         };
@@ -615,6 +630,7 @@ public class ClassDetailViewModel extends ViewModel {
                         data.putSerializable("checkoutType", "class");
                         data.putString(Constants.isIncentive, isIncentive);
                         data.putString(Constants.promoCode, promo);
+                        //data.putString("",);
                         navigator.navigateActivity(CheckoutActivity.class, data);
                     }catch (Exception e){
                         e.printStackTrace();

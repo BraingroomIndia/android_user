@@ -69,6 +69,9 @@ public class PayUBookingDetailsResp extends BaseResp {
         @SerializedName("udf4")
         public String udf4;
 
+        @SerializedName("class_session_id")
+        public String classSessionId;
+
     }
 
 }

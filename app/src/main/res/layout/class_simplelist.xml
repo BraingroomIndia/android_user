@@ -43,6 +43,7 @@
             layout="@layout/content_internet_connectivity"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+
             app:vm="@{vm.connectivityViewmodel}" />
     </FrameLayout>
 </layout>

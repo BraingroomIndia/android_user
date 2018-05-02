@@ -60,6 +60,9 @@ public class PayUCheckoutData implements Serializable {
     @SerializedName("udf4")
     public String udf4;
 
+    @SerializedName("class_session_id")
+    public String classSessionId;
+
     private String paymentHash;
     private String vasMobileSdkHash;
     private String paymentMobileSdkHash;

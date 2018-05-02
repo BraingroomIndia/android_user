@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:entries="@{vm.items}"
             android:gravity="center"
-            android:selectedItemPosition="@={vm.selectedIdx}" />
+            android:selectedItemPosition="@={vm.selectedIdx}"
+            />
 
     </LinearLayout>
 </layout>

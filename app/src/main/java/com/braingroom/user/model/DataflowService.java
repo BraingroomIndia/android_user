@@ -3,6 +3,7 @@ package com.braingroom.user.model;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.dto.ClassData;
@@ -785,6 +786,7 @@ public class DataflowService {
                 checkoutData.setUdf2(data.getUdf2());
                 checkoutData.setUdf3(data.getUdf3());
                 checkoutData.setUdf4(data.getUdf4());
+                checkoutData.setClassSessionId(data.getClassSessionId());
                 return checkoutData;
             }
         }).doOnError(new Consumer<Throwable>() {
@@ -1641,6 +1643,7 @@ public class DataflowService {
                 @Override
                 public String apply(@NonNull CommonIdResp resp) throws Exception {
                     return resp == null || resp.getData() == null || resp.getData().isEmpty() || resp.getData().get(0) == null || resp.getData().get(0).getTextValue() == null ? "" : resp.getData().get(0).getTextValue();
+                    //Timber.tag(TAG).d("resp: " + resp);
                 }
             }).onErrorReturn(new Function<Throwable, String>() {
                 @Override

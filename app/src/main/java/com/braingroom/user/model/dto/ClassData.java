@@ -442,7 +442,6 @@ public class ClassData implements Serializable {
     }
 
 
-
     public List<ClassListResp.MicroSessions> getSessionleveldetails() {
         return microSessions;
     }

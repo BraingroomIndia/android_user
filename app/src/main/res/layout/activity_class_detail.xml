@@ -217,6 +217,13 @@
 
                             </Spinner>
 
+                                <!--<include
+                                    android:id="@+id/min_persion_allow"
+                                    layout="@layout/item_spinner"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    app:vm="@{vm.SpinnerViewModel}"
+                                    android:layout_below="@+id/min_per_all"/>-->
                                 <TextView
                                     android:id="@+id/static_persion_add"
                                     android:layout_width="wrap_content"
@@ -224,11 +231,9 @@
                                     android:layout_marginTop="10dp"
                                     android:text="For each persion add : "
                                     android:layout_below="@+id/min_persion_allow"
-                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
-
+                                    android:visibility="@{vm.isAdditionalPrice ? View.GONE : View.VISIBLE}"
                                    />
-                                <!---->
-
+                                <!--android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"-->
                                 <TextView
                                     android:id="@+id/additional_price"
                                     android:layout_width="wrap_content"
@@ -238,16 +243,16 @@
                                     android:text="@{vm.fullSessionAdditionalprice}"
                                     android:layout_toRightOf="@+id/static_persion_add"
                                     android:textStyle="bold"
-                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
+                                    android:visibility="@{vm.isAdditionalPrice ? View.GONE : View.VISIBLE}"
                                      />
                                 <!--android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"-->
                                 <TextView
                                     android:id="@+id/total"
                                     android:layout_width="50dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@+id/additional_price"
                                     android:text="Total "
                                     android:layout_marginLeft="120dp"
+                                    android:layout_alignBottom="@+id/total_price"
                                     android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
                                     />
                                 <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
@@ -257,8 +262,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/margin_large"
                                     android:layout_weight="1"
-                                    android:paddingBottom="@dimen/padding_small"
-                                    android:paddingRight="@dimen/padding_small"
                                     android:text='@{vm.offerPrice}'
                                     android:textColor="@color/materialBlue"
                                     android:textSize="@dimen/text_size_medium"
@@ -511,6 +514,38 @@
                                 tools:text="Book Now" />
 
                         </LinearLayout>-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/static_total_text"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:text="Total "
+                                android:layout_toLeftOf="@+id/single_persion_total_price"
+                                android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
+                                />
+                            <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
+                            <TextView
+                                android:id="@+id/single_persion_total_price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_large"
+                                android:layout_weight="1"
+                                android:paddingBottom="@dimen/padding_small"
+                                android:paddingRight="@dimen/padding_small"
+                                android:text='@{vm.singlePersionTotalPrice}'
+                                android:textColor="@color/materialBlue"
+                                android:textSize="@dimen/text_size_medium"
+                                app:font='@{@string/robotoBold}'
+                                tools:text="₹0"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
+                                />
+                        </RelativeLayout>
+
 
                     </LinearLayout>
 
