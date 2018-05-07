@@ -16,6 +16,9 @@
         <variable
             name="spinnerAdapter"
             type="android.widget.ArrayAdapter" />
+        <variable
+            name="listener"
+            type="android.view.View.OnClickListener"/>
 
     </data>
 
@@ -155,17 +158,28 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <CheckBox
+                            <!--<android.support.v7.widget.AppCompatCheckBox
                                 android:id="@+id/class_check_box"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_weight="1"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:onClick="@{vm.selectFullSession}"
                                 android:background="@drawable/checkbox_bg"
-                                />
+                                />-->
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:id="@+id/class_check_box"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_weight="1"
+                                android:checked="@{vm.radioSelectFullSession}"
+                                android:onClick="@{vm.selectFullSession}"/>
                             <!--android:checked="@{vm.isPersion}"-->
-
+                            <!--android:checked="@{vm.selectFullSession}"-->
+                            <!--android:onCheckedChanged="@{()-> handler.checked(fullSessionDescription) }"-->
                             <!--android:onClick="@{vm.selectFullSession}"-->
 
                             <TextView
@@ -204,18 +218,20 @@
                                 <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
 
 
-                            <Spinner
+                            <android.support.v7.widget.AppCompatSpinner
                                 android:id="@+id/min_persion_allow"
                                 android:layout_width="150dp"
                                 android:layout_height="25dp"
                                 android:layout_marginTop="30dp"
                                 android:background="@drawable/spinner_background"
                                 android:spinnerMode="dropdown"
+                                android:drawSelectorOnTop="true"
+                                app:adapter="@{spinnerAdapter}"
                                 android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
                                 >
                                 <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
 
-                            </Spinner>
+                            </android.support.v7.widget.AppCompatSpinner>
 
                                 <!--<include
                                     android:id="@+id/min_persion_allow"

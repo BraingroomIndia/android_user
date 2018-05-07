@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Spinner;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -72,6 +73,7 @@ import timber.log.Timber;
 public class ClassDetailViewModel extends ViewModel {
 
     public ClassData mClassData;
+    public SpinnerViewModel spinnerViewModel;
 
     private static String PRICE_TYPE_PER_PERSON = "perPerson";
     private static String PRICE_TYPE_GROUP = "Group";
@@ -121,7 +123,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ConnectableObservable<List<ViewModel>> addresses;
     public final ConnectableObservable<List<ViewModel>> sessions;
     public Observable<List<ViewModel>> reviews;
-    //public Observable<List<ViewModel>> sessions;
+    public Observable<List<ViewModel>> microSessions;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
@@ -129,6 +131,8 @@ public class ClassDetailViewModel extends ViewModel {
     //List<SessionLevelData> sessionsList = new ArrayList<>();*///Edited By kambarajan
     List<FullSessionData> fullSessionDataList = new ArrayList<>();
     List<ViewModel> sessionsList = new ArrayList<>();
+
+    public final ObservableBoolean radioSelectFullSession = new ObservableBoolean(true);
 
     public ObservableField<Integer> retry = new ObservableField<>(0);
 
@@ -231,6 +235,7 @@ public class ClassDetailViewModel extends ViewModel {
         ;
         addresses = Observable.just(addressList).publish();
         reviews = Observable.just(reviewList).publish();
+        microSessions = Observable.just(sessionsList).publish();
         sessions = Observable.just(sessionsList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
@@ -527,7 +532,9 @@ public class ClassDetailViewModel extends ViewModel {
                                 offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getOfferPrice()));
                                 //minPersionAllowed.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getMinPersonAllowed()));
                                 minPersionAllowed.set(fullSessionData.getMinPersonAllowed());
-                                Log.i("TAG",""+classData.getFullsessiondetails());
+                                singlePersionTotalPrice.set(offerPrice.get());
+                                //spinnerViewModel.items.set(0,minPersionAllowed.toString());
+                                //Log.i("TAG",""+classData.getFullsessiondetails());
 
 
                                 /*if(fullSessionAdditionalprice.equals("₹0")){
@@ -606,20 +613,17 @@ public class ClassDetailViewModel extends ViewModel {
                 });
             }
         }).subscribe();
+        //singlePersionTotalPrice.set();
+        //selectFullSession
         selectFullSession = new Action() {
             @Override
             public void run() throws Exception {
                 messageHelper.show("test");
-                SessionItemViewModel sessionItemViewModel;
                 //totalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned() + fullSessionPrice));
                 //singlePersionTotalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned()+ fullSessionPrice));
-                singlePersionTotalPrice.set(offerPrice.get());
-
-
-
+                //singlePersionTotalPrice.set(offerPrice.get());
             }
         };
-
         onBookClicked = new Action() {
             @Override
             public void run() throws Exception {

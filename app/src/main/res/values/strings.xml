@@ -157,6 +157,7 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <string name="light_theme_form">Light Theme</string>
     <string name="dark_theme_form">Dark Theme</string>
     <string name="scan_with_card_io">Scan with card.io</string>
+    <string name="select_micro_session_name">Select and Book Specific Micro Sessions From the List</string>
     <!--Edited By Vikas Godara-->
 
     <!---->

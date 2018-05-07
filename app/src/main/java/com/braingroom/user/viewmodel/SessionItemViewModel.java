@@ -18,9 +18,9 @@ public class SessionItemViewModel extends ViewModel {
     public final String sessionOfferPrice;
     public final Action selectMicroSession;
 
-    public final ObservableField<Spanned> singlePersionTotalPrice = new ObservableField<>();
-    public ObservableBoolean isPersion = new ObservableBoolean(true);
-
+    //public ObservableBoolean isPersion = new ObservableBoolean(true);
+    public final ObservableBoolean radioSelectMicroSession = new ObservableBoolean(false);
+    ClassDetailViewModel classDetailViewModel;
 
 
     public SessionItemViewModel(String sessionName, String sessionDesc, Integer sessionPrice, Integer sessionOfferPrice) {
@@ -34,8 +34,10 @@ public class SessionItemViewModel extends ViewModel {
             @Override
             public void run() throws Exception {
                 //singlePersionTotalPrice.set(sessionOfferPrice.toString());
-                isPersion.get();
-
+                //classDetailViewModel.singlePersionTotalPrice.set(sessionOfferPrice.toString());  //update total price for micro sessions
+                radioSelectMicroSession.set(true);
+                classDetailViewModel.radioSelectFullSession.get();
+                //isPersion.get();
             }
         };
     }
