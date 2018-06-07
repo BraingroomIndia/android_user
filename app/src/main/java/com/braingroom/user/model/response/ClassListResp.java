@@ -1,7 +1,10 @@
 package com.braingroom.user.model.response;
 
+import android.databinding.Bindable;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -238,7 +241,7 @@ public class ClassListResp extends BaseResp {
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
     @EqualsAndHashCode(callSuper = false)
-    public static class FullSession {
+    public static class FullSession implements Serializable{
         @SerializedName("session_id")
         private String sessionId;
 
@@ -343,7 +346,7 @@ public class ClassListResp extends BaseResp {
     @Getter
     @AllArgsConstructor(suppressConstructorProperties = true)
     @EqualsAndHashCode(callSuper = false)
-    public static class MicroSessions {
+    public static class MicroSessions implements Serializable{
         @SerializedName("session_id")
         private String sessionId;
 

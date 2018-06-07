@@ -163,4 +163,9 @@ Credential verified vendor will have a credential verified logo in the respectiv
     <!---->
     <bool name="testMode">false</bool>
     <string name="asset_statements" translatable="false">[{\n  \"relation\": [\"delegate_permission/common.handle_all_urls\"],\n  \"target\": {\n    \"namespace\": \"web\",\n    \"site\": \"https://ht5w.app.link\",\n  }\n}]</string>
+    <array name="days">
+        <item name="Mon">Monday</item>
+        <item name="Tue">Tuesday</item>
+        <item name="Wed">Wednesday</item>
+    </array>
 </resources>

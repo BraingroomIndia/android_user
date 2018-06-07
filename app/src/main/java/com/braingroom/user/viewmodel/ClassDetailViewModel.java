@@ -10,7 +10,8 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Spinner;
+import android.view.View;
+import android.widget.CheckBox;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -92,6 +93,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<Spanned> offerPrice = new ObservableField<>();
     public final ObservableField<Spanned> fullSessionAdditionalprice = new ObservableField<>();
     public final ObservableField<Integer> minPersionAllowed = new ObservableField<>();
+    /*public final ArrayList<ObservableField<Integer>> noOfPersions = new ArrayList<ObservableField<Integer>>();*/
     public final ObservableField<Spanned> totalPrice = new ObservableField<>();
     //For microsessions
     public final ObservableField<String> sessionName = new ObservableField<>();
@@ -99,6 +101,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<Spanned> microSessionOfferPrice = new ObservableField<>();
     public final ObservableField<Spanned> microSessionPrice = new ObservableField<>(null);
     public final ObservableField<Spanned> singlePersionTotalPrice = new ObservableField<>();
+    public final ObservableField<String> microSessionHeading = new ObservableField<>("Select and Book Specific Micro Sessions From the List");
 
     public final ObservableField<String> teacherPic = new ObservableField<>(null);
     public final ObservableField<String> teacherName = new ObservableField<>(null);
@@ -115,7 +118,7 @@ public class ClassDetailViewModel extends ViewModel {
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
     public ObservableBoolean isCod = new ObservableBoolean(true);
     public ObservableBoolean isGroup = new ObservableBoolean(true);
-    public ObservableBoolean isAdditionalPrice = new ObservableBoolean(true);
+    public ObservableBoolean isAdditionalPrice = new ObservableBoolean(false);
     public ObservableBoolean isPersion = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
     private String vendorId;
@@ -131,9 +134,8 @@ public class ClassDetailViewModel extends ViewModel {
     //List<SessionLevelData> sessionsList = new ArrayList<>();*///Edited By kambarajan
     List<FullSessionData> fullSessionDataList = new ArrayList<>();
     List<ViewModel> sessionsList = new ArrayList<>();
-
-    public final ObservableBoolean radioSelectFullSession = new ObservableBoolean(true);
-
+    public final ObservableBoolean fieldsEnabled = new ObservableBoolean();
+    public final ObservableBoolean checkSelectFullSession = new ObservableBoolean(true);
     public ObservableField<Integer> retry = new ObservableField<>(0);
 
     public final DataItemViewModel title;
@@ -182,7 +184,7 @@ public class ClassDetailViewModel extends ViewModel {
 
     };
     private int pageNumber = 1;
-    public final Action selectFullSession,onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
+    public final Action clickFullSession, onBookClicked, onShowDetailAddressClicked, onVendorProfileClicked, getQuoteClicked,
             onPayTutorClicked, onPeopleNearYou, onConnect, onGetTutor, onQueryClicked, onSubmitPostClicked, /*openConnectTnT,
             openConnectBnS, openConnectFP,*/
             openCateglogLocationList, playAction, onQueryDismiss, onPostDismiss, onAddReviewClicked;
@@ -197,10 +199,13 @@ public class ClassDetailViewModel extends ViewModel {
 
     public final MyConsumerString expandAction, collapseAction;
 
+    SessionItemViewModel sessionItemViewModel;
+
     public ClassDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
                                 @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo, final String isIncentive, final String userId) {
 
         this.userId = userId;
+        this.sessionItemViewModel = sessionItemViewModel;
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
         this.mTracker = mTracker;
@@ -420,7 +425,7 @@ public class ClassDetailViewModel extends ViewModel {
         FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
-                    return !apiSuccessful;
+                return !apiSuccessful;
             }
         }).flatMap(new Function<Integer, ObservableSource<?>>() {
             @Override
@@ -468,16 +473,16 @@ public class ClassDetailViewModel extends ViewModel {
                         isCod.set(classData.getIsCode());
                         try {
 
-                        if (classData.getIsCoupleClass() != 1)
-                            if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON)) {
-                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getPrice()));
-                            } else {
-                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
+                            if (classData.getIsCoupleClass() != 1)
+                                if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON)) {
+                                    price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getPrice()));
+                                } else {
+                                    price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(1).getPrice()));
 
-                            }
-                        else
-                            price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(0).getPrice()));
-                        }catch (Exception e){
+                                }
+                            else
+                                price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getGroups().get(0).getPrice()));
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         imageUploadViewModel.setRemoteAddress(classData.getTeacherPic());
@@ -531,7 +536,10 @@ public class ClassDetailViewModel extends ViewModel {
                                 fullSessionPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getPrice()));
                                 offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSessionData.getOfferPrice()));
                                 //minPersionAllowed.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getMinPersonAllowed()));
+                                /*Integer name[] ={fullSessionData.getMinPersonAllowed()};
+                                minPersionAllowed.set(name);*/
                                 minPersionAllowed.set(fullSessionData.getMinPersonAllowed());
+                                //noOfPersions.add(minPersionAllowed);
                                 singlePersionTotalPrice.set(offerPrice.get());
                                 //spinnerViewModel.items.set(0,minPersionAllowed.toString());
                                 //Log.i("TAG",""+classData.getFullsessiondetails());
@@ -549,7 +557,7 @@ public class ClassDetailViewModel extends ViewModel {
                                 sessionLevelData.getAdditionalTicketPrice();
                                 sessionName.set(sessionLevelData.getSessionName());
                                 sessionDescription.set(sessionLevelData.getSessionDesc());
-                               *//* sessionsList.add(sessionLevelData);*//*
+                               *//* .add(sessionLevelData);*//*
                             }*/
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -578,21 +586,28 @@ public class ClassDetailViewModel extends ViewModel {
                             if (minPersionAllowed.get() > 1) {
                                 isPersion.set(false);
                                 isGroup.set(true);
-                                if(fullSessionAdditionalprice.equals("₹0")){
+                                if (fullSessionAdditionalprice.equals("₹0")) {
                                     isAdditionalPrice.set(false);
-                                }
-                                else{
+                                } else {
                                     isAdditionalPrice.set(true);
                                 }
                             } else {
                                 isGroup.set(false);
                                 isPersion.set(true);
-                                for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
-                                    sessionsList.add(new SessionItemViewModel(microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
+                                if (microSessions != null) {
+                                    for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
+                                        sessionsList.add(new SessionItemViewModel(checkSelectFullSession, microSessions.getSessionId(), microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
+
+                                    }
+
+                                } else if (microSessions.equals(null)) {
+                                    messageHelper.show("There is no Microsessions");
+                                    microSessionHeading.set("");
+
                                 }
                                 sessions.connect();
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         uiHelper.stopShimmer();
@@ -613,15 +628,25 @@ public class ClassDetailViewModel extends ViewModel {
                 });
             }
         }).subscribe();
-        //singlePersionTotalPrice.set();
-        //selectFullSession
-        selectFullSession = new Action() {
+        singlePersionTotalPrice.set(offerPrice.get());
+        clickFullSession = new Action() {
             @Override
             public void run() throws Exception {
-                messageHelper.show("test");
+                //messageHelper.show("test");
+                //SessionItemViewModel sessionItemViewModel = new SessionItemViewModel();
+                //sessionItemViewModel.checkSelectMicroSession.set(false);
+
+                Log.d("This is test", "FULL - " + String.valueOf(checkSelectFullSession.get()));
+                for (ViewModel viewModel : sessionsList) {
+                    SessionItemViewModel sessionView = (SessionItemViewModel) viewModel;
+                    sessionView.checkSelectMicroSession.set(true);
+                    Log.d("This is test", "status : " + sessionView.checkSelectMicroSession.get());
+                }
                 //totalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned() + fullSessionPrice));
                 //singlePersionTotalPrice.set(CommonUtils.fromHtml(mClassData.getPriceSymbolNonSpanned()+ fullSessionPrice));
                 //singlePersionTotalPrice.set(offerPrice.get());
+                //singlePersionTotalPrice.get();
+
             }
         };
         onBookClicked = new Action() {
@@ -636,14 +661,12 @@ public class ClassDetailViewModel extends ViewModel {
                         data.putString(Constants.promoCode, promo);
                         //data.putString("",);
                         navigator.navigateActivity(CheckoutActivity.class, data);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
         };
-
-
         onShowDetailAddressClicked = new
 
                 Action() {
@@ -874,5 +897,17 @@ public class ClassDetailViewModel extends ViewModel {
     public void paginate() {
         super.paginate();
         callAgain.set(callAgain.get() + 1);
+    }
+
+    public void onCheckedChanged(View view) {
+        fieldsEnabled.set(((CheckBox) view).isChecked());
+        Log.d("Checked", "Full session" + ((CheckBox) view).isChecked());
+        //Log.d("This is test", "FULL - " + String.valueOf(checkSelectFullSession.get()));
+        for (ViewModel viewModel : sessionsList) {
+            SessionItemViewModel sessionView = (SessionItemViewModel) viewModel;
+            sessionView.checkSelectMicroSession.set(false);
+            //Log.d("This is test", "status : " + sessionView.checkSelectMicroSession.get());
+        }
+    //sessionItemViewModel.checkSelectMicroSession.set(false);
     }
 }

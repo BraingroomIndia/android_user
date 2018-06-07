@@ -7,7 +7,7 @@
     <data>
 
         <import type="com.braingroom.user.R" />
-
+        <import type="com.braingroom.user.utils.BindingUtils" />
         <import type="android.view.View" />
 
         <variable
@@ -17,8 +17,11 @@
             name="spinnerAdapter"
             type="android.widget.ArrayAdapter" />
         <variable
-            name="listener"
-            type="android.view.View.OnClickListener"/>
+            name="selectSession"
+            type="com.braingroom.user.SessionHandler"/>
+        <!--<variable
+             name="handler"
+             type="com.braingroom.user.SessionHandler"/>-->
 
     </data>
 
@@ -153,6 +156,90 @@
                             app:font='@{@string/robotoRegular}'
                             tools:text="Class Name " />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:text="@{vm.fixedClassDate}"
+                            android:textColor="@color/materialBlueGray"
+                            android:textSize="@dimen/text_size_medium"
+                            android:visibility="@{vm.fixedClassDate == null ? View.GONE : View.VISIBLE}"
+                            app:font='@{@string/robotoRegular}'
+                            tools:text="Class date" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                           <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="@dimen/margin_small"
+                                android:paddingRight="@dimen/padding_small"
+                                android:text="@{vm.sessionDurationInfo}"
+                                android:textColor="@color/colorTextGray"
+                                android:textSize="@dimen/text_size_medium"
+                                app:font='@{@string/robotoRegular}'
+                                tools:text="Session Duration Info" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_large"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingBottom="@dimen/padding_small"
+                                android:paddingRight="@dimen/padding_small"
+                                android:paddingTop="@dimen/padding_small"
+                                android:text='@{vm.price}'
+                                android:textColor="@color/materialBlue"
+                                android:textSize="@dimen/text_size_medium"
+                                app:font='@{@string/robotoBold}'
+                                tools:text="Price"
+                                android:visibility="@{!vm.isGroup ? View.VISIBLE : View.GONE}"/>
+
+                            <!--android:text='@{vm.offerPrice}'-->
+                            <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_med"
+                            android:visibility="gone"
+                            android:layout_marginLeft="@dimen/margin_large"
+                            android:background="@drawable/solid_material_green_rounded_corner"
+                            android:drawablePadding="@dimen/padding_small"
+                            android:drawableRight="@drawable/ic_star_white_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/padding_small"
+                            android:paddingRight="@dimen/padding_small"
+                            android:text="@{vm.rating}"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_medium"
+                            app:font='@{@string/robotoRegular}' />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    card_view:cardElevation="@dimen/dimen_zero">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/top_line_drawable"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/margin_small"
+                        android:paddingLeft="@dimen/padding_large"
+                        android:paddingRight="@dimen/margin_small"
+                        android:paddingTop="@dimen/margin_small">
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -169,18 +256,27 @@
                                 android:onClick="@{vm.selectFullSession}"
                                 android:background="@drawable/checkbox_bg"
                                 />-->
-                            <android.support.v7.widget.AppCompatRadioButton
+                            <android.support.v7.widget.AppCompatCheckBox
                                 android:id="@+id/class_check_box"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_weight="1"
-                                android:checked="@{vm.radioSelectFullSession}"
-                                android:onClick="@{vm.selectFullSession}"/>
-                            <!--android:checked="@{vm.isPersion}"-->
-                            <!--android:checked="@{vm.selectFullSession}"-->
-                            <!--android:onCheckedChanged="@{()-> handler.checked(fullSessionDescription) }"-->
-                            <!--android:onClick="@{vm.selectFullSession}"-->
+                                android:background="@drawable/checkbox_bg"
+                                android:checked="@{vm.checkSelectFullSession}"
+                                />
+                                <!--android:onCheckedChanged="@{(cb,checked) -> selectSession.checkFullSession(view,isChecked)}"-->
+                                <!--android:onCheckedChanged="@{()->vm.checked(onCheckedchanged)}"-->
+                                <!-- android:onCheckedChanged="@{()->vm.checked(vm)}"-->
+                                <!-- android:checked="@{vm.checkSelectFullSession}"-->
+                                <!--android:onCheckedChanged="@{()->vm.checked(vm)}"-->
+                                <!--android:onCheckedChanged="@{selectSession::checkFullSession}"-->
+                                <!--android:checked="@{vm.checkSelectFullSession}"-->
+                                <!--android:onClick="@{vm.clickFullSession}"-->
+                                <!--android:onCheckedChanged="@{()->selectSession.checked(minPersionAllowed)}"-->
+                                <!--android:onCheckedChanged="@{(cb, isChecked) -> presenter.onFollow(isChecked)}"-->
+                                <!-- android:onClick="@{vm.onCheckedChanged}"-->
+                                <!--android:checked="@{vm.checkSelectFullSession}"-->
 
                             <TextView
                                 android:id="@+id/session_name"
@@ -191,7 +287,6 @@
                                 tools:text="Session Name"
                                 android:textColor="@color/black"
                                 android:textStyle="bold"/>
-                            <!--android:text="@{vm.sessionName}"-->
                             <TextView
                                 android:id="@+id/session_description"
                                 android:layout_width="100dp"
@@ -200,43 +295,56 @@
                                 android:layout_toRightOf="@+id/class_check_box"
                                 android:text="@{vm.fullSessionDescription}"
                                 tools:text="Session Description" />
-                            <!--android:text="@{vm.sessionDescription}"-->
+
                             <RelativeLayout
                                 android:layout_width="200dp"
                                 android:layout_height="110dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="true">
-                            <TextView
-                                android:id="@+id/min_per_all"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Min Persion Allowed"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
-                                 />
-                                <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
+                                <TextView
+                                    android:id="@+id/min_per_all"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Min Persion Allowed"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
+                                    />
 
-
-                            <android.support.v7.widget.AppCompatSpinner
-                                android:id="@+id/min_persion_allow"
-                                android:layout_width="150dp"
-                                android:layout_height="25dp"
-                                android:layout_marginTop="30dp"
-                                android:background="@drawable/spinner_background"
-                                android:spinnerMode="dropdown"
-                                android:drawSelectorOnTop="true"
-                                app:adapter="@{spinnerAdapter}"
-                                android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
-                                >
-                                <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
-
-                            </android.support.v7.widget.AppCompatSpinner>
+                                <android.support.v7.widget.AppCompatSpinner
+                                    android:id="@+id/min_persion_allow"
+                                    android:layout_width="150dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginTop="30dp"
+                                    android:background="@drawable/spinner_background"
+                                    android:spinnerMode="dropdown"
+                                    android:drawSelectorOnTop="true"
+                                    android:entries="@array/days"
+                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
+                                    android:selectedItemPosition="@={vm.minPersionAllowed}">
+                                </android.support.v7.widget.AppCompatSpinner>
+                                <!--android:entries="@array/days"-->
+                                <!--app:adapter="@{spinnerAdapter}"-->
+                                <!--bind:selectedValue="@={vm.minPersionAllowed}"-->
+                            <!--bind:pmtOpt="@{vm.minPersionAllowed}">-->
+                                <!--<TextView
+                                    android:id="@+id/min_persion_allow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end|bottom"
+                                    android:gravity="end|bottom"
+                                    android:padding="@dimen/_1sdp"
+                                    android:text="Minimum Persions"
+                                    android:textColor="@color/materialBlue"
+                                    tools:text="Minimum Persions"
+                                    android:background="@drawable/spinner_background"
+                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
+                                    android:layout_below="@+id/min_per_all"/>-->
 
                                 <!--<include
                                     android:id="@+id/min_persion_allow"
                                     layout="@layout/item_spinner"
-                                    android:layout_width="50dp"
+                                    android:layout_width="125dp"
                                     android:layout_height="wrap_content"
                                     app:vm="@{vm.SpinnerViewModel}"
                                     android:layout_below="@+id/min_per_all"/>-->
@@ -247,9 +355,9 @@
                                     android:layout_marginTop="10dp"
                                     android:text="For each persion add : "
                                     android:layout_below="@+id/min_persion_allow"
-                                    android:visibility="@{vm.isAdditionalPrice ? View.GONE : View.VISIBLE}"
-                                   />
-                                <!--android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"-->
+                                    android:visibility="@{vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"
+                                    />
+                                <!-- android:text="For each persion add : "-->
                                 <TextView
                                     android:id="@+id/additional_price"
                                     android:layout_width="wrap_content"
@@ -259,9 +367,8 @@
                                     android:text="@{vm.fullSessionAdditionalprice}"
                                     android:layout_toRightOf="@+id/static_persion_add"
                                     android:textStyle="bold"
-                                    android:visibility="@{vm.isAdditionalPrice ? View.GONE : View.VISIBLE}"
-                                     />
-                                <!--android:visibility="@{vm.isGroup || vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"-->
+                                    android:visibility="@{vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"
+                                    />
                                 <TextView
                                     android:id="@+id/total"
                                     android:layout_width="50dp"
@@ -269,9 +376,8 @@
                                     android:text="Total "
                                     android:layout_marginLeft="120dp"
                                     android:layout_alignBottom="@+id/total_price"
-                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
+                                    android:visibility="@{vm.isGroup || vm.isPersion? View.VISIBLE : View.GONE}"
                                     />
-                                <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
                                 <TextView
                                     android:id="@+id/total_price"
                                     android:layout_width="wrap_content"
@@ -287,141 +393,66 @@
                                     android:layout_toLeftOf="@+id/total"
                                     android:layout_alignParentEnd="true"
                                     android:layout_alignParentRight="true"
+                                    android:visibility="@{vm.isGroup || vm.isPersion ? View.VISIBLE : View.GONE}"
+                                    />
+                                <TextView
+                                    android:id="@+id/offer_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_weight="1"
+                                    android:paddingBottom="@dimen/padding_small"
+                                    android:paddingRight="@dimen/padding_small"
+                                    android:paddingTop="@dimen/padding_small"
+                                    android:text='@{vm.offerPrice}'
+                                    android:textColor="@color/materialBlue"
+                                    android:textSize="@dimen/text_size_medium"
+                                    app:font='@{@string/robotoBold}'
+                                    tools:text="Offer Price"
+                                    android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
+                                    />
+                                <TextView
+                                    android:id="@+id/full_sedsession_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/margin_large"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_below="@+id/offer_price"
+                                    android:paddingBottom="@dimen/padding_small"
+                                    android:paddingRight="@dimen/padding_small"
+                                    android:paddingTop="@dimen/padding_small"
+                                    android:text='@{vm.fullSessionPrice}'
+                                    android:textColor="@color/materialBlue"
+                                    android:textSize="@dimen/text_size_medium"
+                                    app:font='@{@string/robotoBold}'
+                                    tools:text="Price"
+                                    android:background="@drawable/strike_through"
+                                    android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/group_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/margin_large"
+                                    android:layout_weight="1"
+                                    android:paddingBottom="@dimen/padding_small"
+                                    android:paddingRight="@dimen/padding_small"
+                                    android:text='@{vm.price}'
+                                    android:textColor="@color/materialBlue"
+                                    android:textSize="@dimen/text_size_medium"
+                                    app:font='@{@string/robotoBold}'
+                                    tools:text="Price"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
                                     android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
-                                     />
-                                <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
-
-                            <TextView
-                                android:id="@+id/offer_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_weight="1"
-                                android:paddingBottom="@dimen/padding_small"
-                                android:paddingRight="@dimen/padding_small"
-                                android:paddingTop="@dimen/padding_small"
-                                android:text='@{vm.offerPrice}'
-                                android:textColor="@color/materialBlue"
-                                android:textSize="@dimen/text_size_medium"
-                                app:font='@{@string/robotoBold}'
-                                tools:text="Offer Price"
-                                android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
-                                />
-                                <!--android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"-->
-                            <TextView
-                                android:id="@+id/full_sedsession_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/margin_large"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_below="@+id/offer_price"
-                                android:paddingBottom="@dimen/padding_small"
-                                android:paddingRight="@dimen/padding_small"
-                                android:paddingTop="@dimen/padding_small"
-                                android:text='@{vm.fullSessionPrice}'
-                                android:textColor="@color/materialBlue"
-                                android:textSize="@dimen/text_size_medium"
-                                app:font='@{@string/robotoBold}'
-                                tools:text="Price"
-                                android:background="@drawable/strike_through"
-                                android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
-                                />
-                                <!--android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"-->
-
-                            <TextView
-                                android:id="@+id/group_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/margin_large"
-                                android:layout_weight="1"
-                                android:paddingBottom="@dimen/padding_small"
-                                android:paddingRight="@dimen/padding_small"
-                                android:text='@{vm.price}'
-                                android:textColor="@color/materialBlue"
-                                android:textSize="@dimen/text_size_medium"
-                                app:font='@{@string/robotoBold}'
-                                tools:text="Price"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
-                               />
-                                <!-- android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
+                                    />
                             </RelativeLayout>
                         </RelativeLayout>
-
-                        <!--<TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:gravity="center_vertical"
-                            android:maxLines="1"
-                            android:text="@{vm.fixedClassDate}"
-                            android:textColor="@color/materialBlueGray"
-                            android:textSize="@dimen/text_size_medium"
-                            android:visibility="@{vm.fixedClassDate == null ? View.GONE : View.VISIBLE}"
-                            app:font='@{@string/robotoRegular}'
-                            tools:text="Class date" />-->
-
-                        <!--<LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-
-                           &lt;!&ndash; <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="@dimen/margin_small"
-                                android:paddingRight="@dimen/padding_small"
-                                android:text="@{vm.sessionDurationInfo}"
-                                android:textColor="@color/colorTextGray"
-                                android:textSize="@dimen/text_size_medium"
-                                app:font='@{@string/robotoRegular}'
-                                tools:text="Session Duration Info" />&ndash;&gt;
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/margin_large"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="@dimen/padding_small"
-                                android:paddingRight="@dimen/padding_small"
-                                android:paddingTop="@dimen/padding_small"
-                                android:text='@{vm.fullSessionPrice}'
-                                android:textColor="@color/materialBlue"
-                                android:textSize="@dimen/text_size_medium"
-                                app:font='@{@string/robotoBold}'
-                                tools:text="Price"
-                                android:visibility="@{!vm.isGroup ? View.VISIBLE : View.GONE}"/>
-
-
-                            &lt;!&ndash;android:text='@{vm.offerPrice}'&ndash;&gt;
-                            &lt;!&ndash;<TextView&ndash;&gt;
-                            &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;
-                            &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
-                            &lt;!&ndash;android:layout_marginBottom="@dimen/margin_med"&ndash;&gt;
-                            &lt;!&ndash;android:visibility="gone"&ndash;&gt;
-                            &lt;!&ndash;android:layout_marginLeft="@dimen/margin_large"&ndash;&gt;
-                            &lt;!&ndash;android:background="@drawable/solid_material_green_rounded_corner"&ndash;&gt;
-                            &lt;!&ndash;android:drawablePadding="@dimen/padding_small"&ndash;&gt;
-                            &lt;!&ndash;android:drawableRight="@drawable/ic_star_white_24dp"&ndash;&gt;
-                            &lt;!&ndash;android:gravity="center_vertical"&ndash;&gt;
-                            &lt;!&ndash;android:paddingLeft="@dimen/padding_small"&ndash;&gt;
-                            &lt;!&ndash;android:paddingRight="@dimen/padding_small"&ndash;&gt;
-                            &lt;!&ndash;android:text="@{vm.rating}"&ndash;&gt;
-                            &lt;!&ndash;android:textColor="@color/white"&ndash;&gt;
-                            &lt;!&ndash;android:textSize="@dimen/text_size_medium"&ndash;&gt;
-                            &lt;!&ndash;app:font='@{@string/robotoRegular}' />&ndash;&gt;
-                        </LinearLayout>-->
-
-
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -447,7 +478,7 @@
                             android:ellipsize="end"
                             android:gravity="center_vertical"
                             android:maxLines="3"
-                            android:text="@string/select_micro_session_name"
+                            android:text="@{vm.microSessionHeading}"
                             android:textColor="@color/colorTextDark"
                             android:textSize="@dimen/text_size_large"
                             app:font='@{@string/robotoRegular}'
@@ -530,7 +561,7 @@
                                 tools:text="Book Now" />
 
                         </LinearLayout>-->
-                        <RelativeLayout
+                        <!--<RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
@@ -541,7 +572,7 @@
                                 android:layout_toLeftOf="@+id/single_persion_total_price"
                                 android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
                                 />
-                            <!--android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"-->
+                            &lt;!&ndash;android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"&ndash;&gt;
                             <TextView
                                 android:id="@+id/single_persion_total_price"
                                 android:layout_width="wrap_content"
@@ -560,7 +591,7 @@
                                 android:layout_alignParentRight="true"
                                 android:visibility="@{vm.isPersion ? View.VISIBLE : View.GONE}"
                                 />
-                        </RelativeLayout>
+                        </RelativeLayout>-->
 
 
                     </LinearLayout>
