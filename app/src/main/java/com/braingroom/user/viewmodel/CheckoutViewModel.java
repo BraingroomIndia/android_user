@@ -8,6 +8,7 @@ import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Spanned;
+import android.util.Log;
 
 import com.braingroom.user.BuildConfig;
 import com.braingroom.user.R;
@@ -701,9 +702,23 @@ public class CheckoutViewModel extends ViewModel {
 
     private RazorSuccessReq getBookingSuccessReq() {
         if (successReq == null)
-            successReq = createBookingSuccessReq();
+            if (successReq == null) {
+                Log.d("successReq", "IS NULL ###");
+                successReq = createBookingSuccessReq();
+            }else{
+                successReq.getData().setPromoCode(appliedPromoCode.get());
+                successReq.getData().setPromoAmount(appliedPromoAmount + "");
+                if (isCod) {
+                    successReq.getData().setCodAmount(totalAmountAfterPromo.get() + "");
+                    successReq.getData().setAmount("0");
+                    successReq.getData().setPaymentMode(Constants.paymentOffline);
+                } else {
+                    successReq.getData().setAmount(totalAmountAfterPromo.get() + "");
+                    successReq.getData().setCodAmount("0");
+                    successReq.getData().setPaymentMode(Constants.paymentOnline);
+                }
+            }
         return successReq;
-
 
     }
 
