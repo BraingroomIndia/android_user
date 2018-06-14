@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.widget.TextView;
 
 import com.braingroom.user.R;
 import com.braingroom.user.view.ConnectUiHelper;
@@ -28,6 +30,9 @@ public class PostDetailActivity extends BaseActivity implements ConnectUiHelper 
         String notificationId = getIntentString("notification_id");
         if (vm.getLoggedIn() && !TextUtils.isEmpty(notificationId))
             vm.apiService.changeNotificationStatus(notificationId).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        TextView hyperLink = (TextView)findViewById(R.id.description);
+        hyperLink.setMovementMethod(LinkMovementMethod.getInstance());
+
     }
 
     @NonNull
