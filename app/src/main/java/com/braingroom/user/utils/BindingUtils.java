@@ -5,6 +5,7 @@ import android.databinding.BindingAdapter;
 import android.databinding.BindingConversion;
 import android.databinding.InverseBindingAdapter;
 import android.databinding.InverseBindingListener;
+import android.databinding.ObservableField;
 import android.net.Uri;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.braingroom.user.GroupMembers;
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.databinding.NavHeaderConnectBinding;
@@ -61,11 +63,16 @@ import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public class BindingUtils {
-
+    public final ObservableField<GroupMembers> obvSelectedMembers = new ObservableField<>();
     private static final String TAG = BindingUtils.class.getSimpleName();
 
     public static final String DIVIDER_TYPE_LINE = "line_divider";
     public static final String DIVIDER_TYPE_SPACE = "space_divider";
+
+    public BindingUtils(GroupMembers groupMembers){
+        obvSelectedMembers.set(groupMembers);
+
+    }
 
     @Nullable
     private static ViewModelBinder defaultBinder = null;
@@ -345,7 +352,8 @@ public class BindingUtils {
         }
         return null;
     }
-    @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
+    @BindingAdapter(value = {"bind:selectedValue", "bind:selectedValueAttrChanged"}, requireAll =
+            false)
     public static void bindSpinnerData(AppCompatSpinner pAppCompatSpinner, String newSelectedValue, final InverseBindingListener newTextAttrChanged) {
         pAppCompatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -361,7 +369,8 @@ public class BindingUtils {
             pAppCompatSpinner.setSelection(pos, true);
         }
     }
-    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+    @InverseBindingAdapter(attribute = "bind:selectedValue", event =
+            "bind:selectedValueAttrChanged")
     public static String captureSelectedValue(AppCompatSpinner pAppCompatSpinner) {
         return (String) pAppCompatSpinner.getSelectedItem();
     }

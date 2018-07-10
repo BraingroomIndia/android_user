@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.braingroom.user.BR;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassLocationData;
@@ -75,6 +76,7 @@ public class ClassDetailViewModel extends ViewModel {
 
     public ClassData mClassData;
     public SpinnerViewModel spinnerViewModel;
+    String defaultPrice;
 
     private static String PRICE_TYPE_PER_PERSON = "perPerson";
     private static String PRICE_TYPE_GROUP = "Group";
@@ -84,6 +86,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> videoThumb = new ObservableField<>(null);
     public final ObservableField<String> rating = new ObservableField<>("");
     public final ObservableField<Spanned> price = new ObservableField<>(null);
+    public final ObservableArrayList<String> items = new ObservableArrayList<>();
 
     //Edited by kambarajan
     //For Fullsession
@@ -135,7 +138,7 @@ public class ClassDetailViewModel extends ViewModel {
     List<FullSessionData> fullSessionDataList = new ArrayList<>();
     List<ViewModel> sessionsList = new ArrayList<>();
     public final ObservableBoolean fieldsEnabled = new ObservableBoolean();
-    public final ObservableBoolean checkSelectFullSession = new ObservableBoolean(true);
+    public final ObservableBoolean checkSelectFullSession = new ObservableBoolean(false);
     public ObservableField<Integer> retry = new ObservableField<>(0);
 
     public final DataItemViewModel title;
@@ -539,6 +542,7 @@ public class ClassDetailViewModel extends ViewModel {
                                 /*Integer name[] ={fullSessionData.getMinPersonAllowed()};
                                 minPersionAllowed.set(name);*/
                                 minPersionAllowed.set(fullSessionData.getMinPersonAllowed());
+                                fullSessionAdditionalprice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSessionData.getAdditionalTicketPrice()));
                                 //noOfPersions.add(minPersionAllowed);
                                 singlePersionTotalPrice.set(offerPrice.get());
                                 //spinnerViewModel.items.set(0,minPersionAllowed.toString());
@@ -581,12 +585,14 @@ public class ClassDetailViewModel extends ViewModel {
                         /*for (ClassListResp.MicroSessions microSessions : classData.getMicroSessions()) {
                             sessionsList.add(new SessionItemViewModel(microSessions.getSessionName(), microSessions.getSessionDesc(), microSessions.getPrice(), microSessions.getOfferPrice()));
                         }*/
-                        //
+
+                        /*fullSessionAdditionalprice.equals("₹0")*/
+                        defaultPrice = "₹0";
                         try {
                             if (minPersionAllowed.get() > 1) {
                                 isPersion.set(false);
                                 isGroup.set(true);
-                                if (fullSessionAdditionalprice.equals("₹0")) {
+                                if (fullSessionAdditionalprice.toString().equalsIgnoreCase(defaultPrice)) {
                                     isAdditionalPrice.set(false);
                                 } else {
                                     isAdditionalPrice.set(true);
@@ -600,7 +606,7 @@ public class ClassDetailViewModel extends ViewModel {
 
                                     }
 
-                                } else if (microSessions.equals(null)) {
+                                } else if (microSessions == null) {
                                     messageHelper.show("There is no Microsessions");
                                     microSessionHeading.set("");
 
@@ -900,14 +906,24 @@ public class ClassDetailViewModel extends ViewModel {
     }
 
     public void onCheckedChanged(View view) {
-        fieldsEnabled.set(((CheckBox) view).isChecked());
-        Log.d("Checked", "Full session" + ((CheckBox) view).isChecked());
+        checkSelectFullSession.set(((CheckBox) view).isChecked());
+        //checkSelectFullSession.set(true);
+        Log.d("Checked", "Full session :" + ((CheckBox) view).isChecked());
         //Log.d("This is test", "FULL - " + String.valueOf(checkSelectFullSession.get()));
         for (ViewModel viewModel : sessionsList) {
             SessionItemViewModel sessionView = (SessionItemViewModel) viewModel;
-            sessionView.checkSelectMicroSession.set(false);
-            //Log.d("This is test", "status : " + sessionView.checkSelectMicroSession.get());
+            //sessionView.checkSelectMicroSession.set(false);
+            if(checkSelectFullSession.get()) {
+                sessionView.checkSelectMicroSession.set(false);
+
+                Log.d("Checked","MicroSession : "+sessionView.checkSelectMicroSession.get());
+                //super.notifyPropertyChanged(BR.vmConnect);
+                //notifyPropertyChanged(BR.selectSession);
+                //sessionView.notifyPropertyChanged();
+            }
+            Log.d("This is test full", "status : " + checkSelectFullSession.get());
         }
     //sessionItemViewModel.checkSelectMicroSession.set(false);
+
     }
 }

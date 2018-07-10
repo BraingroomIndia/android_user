@@ -19,15 +19,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.braingroom.user.GroupMembers;
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
 import com.braingroom.user.databinding.DemoClassExpandedSceneBinding;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.view.fragment.ReviewFragment;
@@ -41,6 +46,8 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import java.util.List;
 
 import io.reactivex.functions.Consumer;
 import timber.log.Timber;
@@ -64,10 +71,14 @@ public class ClassDetailActivity extends BaseActivity {
     RelativeLayout mSceneRoot;
     ImageView imageView;
     TextView catalogLocationList;
+    MessageHelper messageHelper;
+
+    private List<GroupMembers> members;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //members =
         /*String[] arraySpinner = new String[] {
                 "Please Select","1", "2", "3", "4", "5"
         };
@@ -76,6 +87,19 @@ public class ClassDetailActivity extends BaseActivity {
                 android.R.layout.simple_spinner_item, arraySpinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(adapter);*/
+        /*CheckBox checkBox = (CheckBox) findViewById(R.id.class_check_box);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    toast = Toast.makeText(getApplicationContext(), "checked", Toast.LENGTH_SHORT);
+                    toast.show();
+                }else{
+                    toast = Toast.makeText(getApplicationContext(), "UnChecked", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });*/
 
         catalogLocationList = findViewById(R.id.catalog_location_list);
         if (catalogLocationList != null)
@@ -85,14 +109,16 @@ public class ClassDetailActivity extends BaseActivity {
                     Layout l = catalogLocationList.getLayout();
                     if (l != null && vm != null) {
                         try {
-                            ((ClassDetailViewModel) vm).hideViewMore.set((l.getEllipsisCount(3) > 0));
+                            ((ClassDetailViewModel) vm).hideViewMore.set((l.getEllipsisCount(3) >
+                                    0));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
             });
-        youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_fragment);
+        youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R
+                .id.youtube_fragment);
         youTubePlayerFragment.getView().setVisibility(View.INVISIBLE);
 
         rxPermissions = new RxPermissions(this);
@@ -120,9 +146,12 @@ public class ClassDetailActivity extends BaseActivity {
                 if (youTubePlayerFragment == null)
                     return;
                 youTubePlayerFragment.getView().setVisibility(View.VISIBLE);
-                youTubePlayerFragment.initialize("AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", new YouTubePlayer.OnInitializedListener() {
+                youTubePlayerFragment.initialize("AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", new
+                        YouTubePlayer.OnInitializedListener() {
                     @Override
-                    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+                    public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                                        YouTubePlayer youTubePlayer, boolean
+                                                                wasRestored) {
                         //youTubePlayer.setPlaybackEventListener(myPlaybackEventListener);
                         youTubePlayer.setFullscreen(false);
                         youTubePlayer.setFullscreenControlFlags(FULLSCREEN_FLAG_CUSTOM_LAYOUT);
@@ -130,7 +159,9 @@ public class ClassDetailActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                    public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                                        YouTubeInitializationResult
+                                                                youTubeInitializationResult) {
                         Log.d("Youtube player error", "onInitializationFailure: ");
                     }
                 });
@@ -144,20 +175,23 @@ public class ClassDetailActivity extends BaseActivity {
 
             @Override
             public void stopShimmer() {
-                mFirebaseAnalytics.setCurrentScreen(ClassDetailActivity.this, ((ClassDetailViewModel) vm).mClassData.getClassTopic(), null);
+                mFirebaseAnalytics.setCurrentScreen(ClassDetailActivity.this, (
+                        (ClassDetailViewModel) vm).mClassData.getClassTopic(), null);
 
             }
 
             @Override
             public void showQuoteForm() {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance(getIntentString("catalogueId"), classId)).addToBackStack(null).commit();
+                transaction.add(R.id.fragment_container, QuoteFormFragment.newInstance
+                        (getIntentString("catalogueId"), classId)).addToBackStack(null).commit();
             }
 
             @Override
             public void postQueryForm() {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment_container, ClassQueryFragment.newInstance()).addToBackStack(null).commit();
+                transaction.add(R.id.fragment_container, ClassQueryFragment.newInstance())
+                        .addToBackStack(null).commit();
             }
 
             @Override
@@ -165,7 +199,8 @@ public class ClassDetailActivity extends BaseActivity {
                 if (phoneNumber != null && rxPermissions != null)
                     rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(new Consumer<Boolean>() {
                         @Override
-                        public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
+                        public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean)
+                                throws Exception {
                             Intent intent = new Intent(Intent.ACTION_DIAL);
                             intent.setData(Uri.parse("tel:" + phoneNumber));
                             Timber.tag(TAG).d("accept: " + phoneNumber);
@@ -173,7 +208,8 @@ public class ClassDetailActivity extends BaseActivity {
                         }
                     }, new Consumer<Throwable>() {
                         @Override
-                        public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        public void accept(@io.reactivex.annotations.NonNull Throwable throwable)
+                                throws Exception {
                             //throwable.printStackTrace();
                             Timber.tag(TAG).e(throwable, "makeACall" + phoneNumber);
                         }
@@ -184,7 +220,8 @@ public class ClassDetailActivity extends BaseActivity {
             public void addReview() {
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, classId, new ReviewAddViewModel.ReviewAddHelper() {
+                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants
+                        .classReview, classId, new ReviewAddViewModel.ReviewAddHelper() {
                     @Override
                     public void run() {
                         popBackstack();
@@ -196,7 +233,8 @@ public class ClassDetailActivity extends BaseActivity {
             public void addReview(String userId) {
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants.classReview, classId, userId, new ReviewAddViewModel.ReviewAddHelper() {
+                transaction.replace(R.id.fragment_container, ReviewFragment.newInstance(Constants
+                        .classReview, classId, userId, new ReviewAddViewModel.ReviewAddHelper() {
                     @Override
                     public void run() {
                         popBackstack();
@@ -218,24 +256,30 @@ public class ClassDetailActivity extends BaseActivity {
 
                 if (ClassDetailViewModel.KNK.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container1);
-                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataKNN);
+                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), (
+                            (ClassDetailViewModel) vm).connectFilterDataKNN);
                     title = ClassDetailViewModel.KNK;
                 }
                 if (ClassDetailViewModel.BNS.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container2);
-                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataBNS);
+                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), (
+                            (ClassDetailViewModel) vm).connectFilterDataBNS);
                     title = ClassDetailViewModel.BNS;
                 }
 
                 if (ClassDetailViewModel.AP.equals(s)) {
                     mSceneRoot = findViewById(R.id.scene_container3);
                     title = ClassDetailViewModel.AP;
-                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), ((ClassDetailViewModel) vm).connectFilterDataFP);
+                    demoPostVm = new ClassDetailDemoPostViewModel(getNavigator(), (
+                            (ClassDetailViewModel) vm).connectFilterDataFP);
                 }
-                mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_colapsed_scene, ClassDetailActivity.this);
-                mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_expanded_scene, ClassDetailActivity.this);
+                mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout
+                        .demo_class_colapsed_scene, ClassDetailActivity.this);
+                mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout
+                        .demo_class_expanded_scene, ClassDetailActivity.this);
                 TransitionManager.go(mExpandedScene, mFadeTransition);
-                DemoClassExpandedSceneBinding expBinding = DemoClassExpandedSceneBinding.bind(mSceneRoot.getChildAt(0));
+                DemoClassExpandedSceneBinding expBinding = DemoClassExpandedSceneBinding.bind
+                        (mSceneRoot.getChildAt(0));
                 expBinding.setTitle(title);
                 expBinding.setCollapseAction(((ClassDetailViewModel) vm).collapseAction);
                 expBinding.setVm(demoPostVm);
@@ -259,10 +303,13 @@ public class ClassDetailActivity extends BaseActivity {
                     title = ClassDetailViewModel.AP;
                 }
 
-                mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_colapsed_scene, ClassDetailActivity.this);
-                mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout.demo_class_expanded_scene, ClassDetailActivity.this);
+                mColapsedScene = Scene.getSceneForLayout(mSceneRoot, R.layout
+                        .demo_class_colapsed_scene, ClassDetailActivity.this);
+                mExpandedScene = Scene.getSceneForLayout(mSceneRoot, R.layout
+                        .demo_class_expanded_scene, ClassDetailActivity.this);
                 TransitionManager.go(mColapsedScene, mFadeTransition);
-                DemoClassColapsedSceneBinding collapseBinding = DemoClassColapsedSceneBinding.bind(mSceneRoot.getChildAt(0));
+                DemoClassColapsedSceneBinding collapseBinding = DemoClassColapsedSceneBinding
+                        .bind(mSceneRoot.getChildAt(0));
                 collapseBinding.setTitle(title);
                 collapseBinding.setExpandAction(((ClassDetailViewModel) vm).expandAction);
 
@@ -282,8 +329,11 @@ public class ClassDetailActivity extends BaseActivity {
 
 
         };
-        return new ClassDetailViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
-                getIntentString("origin"), getIntentString("catalogueId"), getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive), getIntentString(Constants.BG_ID));
+        return new ClassDetailViewModel(getFirebaseAnalytics(), getGoogleTracker(),
+                getHelperFactory(), uiHelper, getMessageHelper(), getNavigator(), classId,
+                getIntentString("origin"), getIntentString("catalogueId"), getIntentString
+                (Constants.promoCode), getIntentString(Constants.isIncentive), getIntentString
+                (Constants.BG_ID));
     }
 
     @Override
@@ -351,7 +401,8 @@ public class ClassDetailActivity extends BaseActivity {
 
     public boolean isViewEllipsized(TextView view) {
 
-        return view != null && view.getLayout() != null && (view.getLayout().getEllipsisCount(3) > 0);
+        return view != null && view.getLayout() != null && (view.getLayout().getEllipsisCount(3)
+                > 0);
     }
 
     public interface UiHelper {

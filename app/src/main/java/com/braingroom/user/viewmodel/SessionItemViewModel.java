@@ -28,7 +28,7 @@ public class SessionItemViewModel extends ViewModel {
 
 
     //public ObservableBoolean isPersion = new ObservableBoolean(true);
-    public final ObservableBoolean checkSelectMicroSession = new ObservableBoolean(false);
+    public final ObservableBoolean checkSelectMicroSession = new ObservableBoolean(true);
     public final ObservableBoolean checkFullSession;
     ClassDetailViewModel classDetailViewModel;
     public final ObservableBoolean fieldsEnabled = new ObservableBoolean();
@@ -61,8 +61,11 @@ public class SessionItemViewModel extends ViewModel {
     }
     public void onCheckedChanged(View view){
         fieldsEnabled.set(((CheckBox)view).isChecked());
+        //checkSelectMicroSession.set(true);
         Log.d("Checked", "Full session" + ((CheckBox)view).isChecked());
+        /*if(checkSelectMicroSession.get()) {
+            checkFullSession.set(false);
+        }*/
         checkFullSession.set(false);
-        checkFullSession.get();
     }
 }

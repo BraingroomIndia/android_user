@@ -19,6 +19,10 @@
         <variable
             name="selectSession"
             type="com.braingroom.user.SessionHandler"/>
+        <variable
+            name="bindingAdapter"
+            type="com.braingroom.user.utils.BindingUtils"
+            />
         <!--<variable
              name="handler"
              type="com.braingroom.user.SessionHandler"/>-->
@@ -264,7 +268,11 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/checkbox_bg"
                                 android:checked="@{vm.checkSelectFullSession}"
+                                android:onClick="@{vm.onCheckedChanged}"
                                 />
+                            <!--android:checked="@{vm.checkSelectFullSession}"
+                                android:onClick="@{vm.onCheckedChanged}"
+                                android:onCheckedChanged="@{selectSession::checkFullSession}"-->
                                 <!--android:onCheckedChanged="@{(cb,checked) -> selectSession.checkFullSession(view,isChecked)}"-->
                                 <!--android:onCheckedChanged="@{()->vm.checked(onCheckedchanged)}"-->
                                 <!-- android:onCheckedChanged="@{()->vm.checked(vm)}"-->
@@ -311,7 +319,7 @@
                                     android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
                                     />
 
-                                <android.support.v7.widget.AppCompatSpinner
+                                <!--<android.support.v7.widget.AppCompatSpinner
                                     android:id="@+id/min_persion_allow"
                                     android:layout_width="150dp"
                                     android:layout_height="25dp"
@@ -319,10 +327,20 @@
                                     android:background="@drawable/spinner_background"
                                     android:spinnerMode="dropdown"
                                     android:drawSelectorOnTop="true"
-                                    android:entries="@array/days"
+                                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                                     android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}"
-                                    android:selectedItemPosition="@={vm.minPersionAllowed}">
-                                </android.support.v7.widget.AppCompatSpinner>
+                                    android:selectedItemPosition="@={vm.minPersionAllowed}"
+                                    bind:selectedValue="@{bindingAdapter.obvSelectedMembers}"
+                                    app:adapter="@{spinnerAdapter}">
+                                </android.support.v7.widget.AppCompatSpinner>-->
+                                <include
+                                    android:id="@+id/min_persion_allow"
+                                    layout="@layout/item_spinner"
+                                    android:layout_width="125dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/min_per_all"
+                                    android:visibility="@{vm.isGroup ? View.VISIBLE : View.GONE}" />
+                                <!--app:vm="@{vm.SpinnerViewModel}"-->
                                 <!--android:entries="@array/days"-->
                                 <!--app:adapter="@{spinnerAdapter}"-->
                                 <!--bind:selectedValue="@={vm.minPersionAllowed}"-->
@@ -347,7 +365,7 @@
                                     android:layout_width="125dp"
                                     android:layout_height="wrap_content"
                                     app:vm="@{vm.SpinnerViewModel}"
-                                    android:layout_below="@+id/min_per_all"/>-->
+                                    android:layout_below="@+id/min_per_all"/>-->f
                                 <TextView
                                     android:id="@+id/static_persion_add"
                                     android:layout_width="wrap_content"
@@ -367,6 +385,7 @@
                                     android:text="@{vm.fullSessionAdditionalprice}"
                                     android:layout_toRightOf="@+id/static_persion_add"
                                     android:textStyle="bold"
+                                    android:background="#ffff94"
                                     android:visibility="@{vm.isAdditionalPrice ? View.VISIBLE : View.GONE}"
                                     />
                                 <TextView
