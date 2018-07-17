@@ -25,7 +25,7 @@
             android:orientation="vertical">
 
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorAccent"
@@ -47,7 +47,7 @@
                     android:text="Basic information"
                     android:textColor="@color/white"
                     app:font='@{@string/robotoRegular}' />
-            </LinearLayout>
+            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,6 +58,55 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="@dimen/margin_small">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_small">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="bottom"
+                        android:text="SignUp"
+                        android:textColor="@color/black"
+                        android:textSize="24dp"
+                        app:font='@{@string/robotoRegular}' />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/margin_med"
+                        android:background="@drawable/small_curved_button"
+                        android:onClick="@{vm.onSkipAndSignupClicked}"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:paddingLeft="@dimen/margin_small"
+                        android:paddingRight="@dimen/margin_small"
+                        android:paddingTop="@dimen/padding_small"
+                        android:text="Next"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_large"
+                        app:font='@{@string/robotoRegular}' />
+                    <!--android:background="@drawable/solid_bg_green_rounded_corner"-->
+
+
+                    <!--   <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_alignParentRight="true"
+                           android:layout_marginTop="@dimen/margin_med"
+                           android:background="@drawable/solid_bg_green_rounded_corner"
+                           android:onClick="@{vm.onNextClicked}"
+                           android:paddingBottom="@dimen/padding_small"
+                           android:paddingLeft="@dimen/padding_med"
+                           android:paddingRight="@dimen/padding_med"
+                           android:paddingTop="@dimen/padding_small"
+                           android:text="Next"
+                           android:textColor="@color/white"
+                           android:textSize="@dimen/text_size_large"
+                           app:font='@{@string/robotoRegular}' />-->
+                </RelativeLayout>
 
                 <include
                     layout="@layout/floating_label_edit_text"
@@ -97,7 +146,7 @@
                     app:editable="@{true}"
                     app:vm="@{vm.ugInstituteVm}" />
 
-                <RelativeLayout
+                <!--<RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/margin_small">
@@ -119,7 +168,7 @@
                         app:font='@{@string/robotoRegular}' />
 
 
-                    <!--   <TextView
+                       <TextView
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:layout_alignParentRight="true"
@@ -133,8 +182,17 @@
                            android:text="Next"
                            android:textColor="@color/white"
                            android:textSize="@dimen/text_size_large"
-                           app:font='@{@string/robotoRegular}' />-->
-                </RelativeLayout>
+                           app:font='@{@string/robotoRegular}' />
+                    &lt;!&ndash;<TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="bottom"
+                        android:text="SignUp"
+                        android:textColor="@color/black"
+                        android:textSize="24dp"
+                        app:font='@{@string/robotoRegular}' />&ndash;&gt;
+
+                </RelativeLayout>-->
             </LinearLayout>
 
         </LinearLayout>

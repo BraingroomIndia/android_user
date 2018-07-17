@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
@@ -48,7 +49,7 @@ public class LoginActivity extends BaseActivity implements
 
     CallbackManager callbackManager;
     private GoogleApiClient mGoogleApiClient;
-    LoginButton mFbLogin;
+    Button mFbLogin;
 
     MaterialDialog forgotPassDialog;
     UIHandler uiHandler;
@@ -91,9 +92,9 @@ public class LoginActivity extends BaseActivity implements
        /* try {
             ZohoSalesIQ.Chat.setVisibility(MbedableComponent.CHAT,true);
         } catch (Exception e){e.printStackTrace();}*/
-        mFbLogin = (LoginButton) findViewById(R.id.fb_login_original);
+        mFbLogin = (Button) findViewById(R.id.fb_login_original);
         callbackManager = CallbackManager.Factory.create();
-        mFbLogin.setReadPermissions("email");
+        //mFbLogin.setReadPermissions("email");
         Intent intent = getIntent();
         classId = intent.getStringExtra("classId");
         thirdPartyUserId = intent.getStringExtra("thirdPartyUserId");
@@ -144,20 +145,20 @@ public class LoginActivity extends BaseActivity implements
             @Override
             public void showForgotPassDialog() {
                 forgotPassDialog = new MaterialDialog.Builder(LoginActivity.this)
-                        .title("Password recovery")
-                        .content("Please enter your email")
+                        .title("Forgot Password")
                         .inputType(InputType.TYPE_CLASS_TEXT |
                                 InputType.TYPE_TEXT_VARIATION_PERSON_NAME |
                                 InputType.TYPE_TEXT_FLAG_CAP_WORDS)
                         .inputRange(4, 30)
                         .positiveText("SUBMIT")
-                        .input("Email", "", false, new MaterialDialog.InputCallback() {
+                        .input("Please enter your email", "", false, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 getMessageHelper().showProgressDialog("Resetting Password", "Sending Email...");
                                 ((LoginViewmodel) vm).forgotPassword(input.toString());
                             }
                         }).show();
+                //.content("Please enter your email")
 
 
             }
