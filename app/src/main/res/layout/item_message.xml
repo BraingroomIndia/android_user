@@ -16,7 +16,25 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:onClick="@{vm.onClicked}"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/action_message"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"/>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:padding="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="70dp"
@@ -79,5 +97,6 @@
                 app:font='@{@string/robotoRegular}' />
 
         </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </layout>

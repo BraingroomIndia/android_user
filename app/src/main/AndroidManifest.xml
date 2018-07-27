@@ -438,7 +438,8 @@
 
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
-        <activity android:name=".view.activity.OnlineClassSimpleListActivity"></activity>
+        <activity android:name=".view.activity.OnlineClassSimpleListActivity" />
+        <activity android:name=".view.activity.TabedHomeActivity"></activity>
     </application>
 
 </manifest>

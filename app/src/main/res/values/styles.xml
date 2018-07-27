@@ -146,5 +146,14 @@
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
     </style>
     <!--Card View-->
-
+    <!--&lt;!&ndash; Base application theme. &ndash;&gt;
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        &lt;!&ndash;   your app branding color for the app bar &ndash;&gt;
+        <item name="colorPrimary">#3F51B5</item>
+        &lt;!&ndash;   darker variant for the status bar and contextual app bars &ndash;&gt;
+        <item name="colorPrimaryDark">#303F9F</item>
+        &lt;!&ndash;   theme UI controls like checkboxes and text fields &ndash;&gt;
+        <item name="colorAccent">#FF4081</item>
+    </style>
+-->
 </resources>
