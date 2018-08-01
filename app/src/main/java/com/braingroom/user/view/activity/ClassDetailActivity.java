@@ -27,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.braingroom.user.GroupMembers;
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
 import com.braingroom.user.databinding.DemoClassExpandedSceneBinding;
@@ -73,7 +72,6 @@ public class ClassDetailActivity extends BaseActivity {
     TextView catalogLocationList;
     MessageHelper messageHelper;
 
-    private List<GroupMembers> members;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

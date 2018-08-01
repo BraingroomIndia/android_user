@@ -32,7 +32,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.braingroom.user.GroupMembers;
+
 import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.databinding.NavHeaderConnectBinding;
@@ -63,16 +63,12 @@ import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public class BindingUtils {
-    public final ObservableField<GroupMembers> obvSelectedMembers = new ObservableField<>();
+
     private static final String TAG = BindingUtils.class.getSimpleName();
 
     public static final String DIVIDER_TYPE_LINE = "line_divider";
     public static final String DIVIDER_TYPE_SPACE = "space_divider";
 
-    public BindingUtils(GroupMembers groupMembers){
-        obvSelectedMembers.set(groupMembers);
-
-    }
 
     @Nullable
     private static ViewModelBinder defaultBinder = null;
