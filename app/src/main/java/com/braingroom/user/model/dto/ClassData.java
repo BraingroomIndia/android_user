@@ -126,6 +126,12 @@ public class ClassData implements Serializable {
     @SerializedName("localities")
     private List<String> catalogLocations;
 
+    @SerializedName("full_session")
+    private List<ClassSession> fullSession;
+    @SerializedName("sessions")
+    private List<ClassSession> mircoSessions;
+
+
     public boolean getIsCode() {
         return (isCode == 1);
     }
@@ -428,4 +434,21 @@ public class ClassData implements Serializable {
     public String getPriceSymbolNonSpanned() {
         return TextUtils.isEmpty(priceSymbol) ? "&#8377;" : priceSymbol;
     }
+
+    public List<ClassSession> getFullSession() {
+        return fullSession;
+    }
+
+    public void setFullSession(List<ClassSession> fullSession) {
+        this.fullSession = fullSession;
+    }
+
+    public List<ClassSession> getMircoSessions() {
+        return mircoSessions;
+    }
+
+    public void setMircoSessions(List<ClassSession> mircoSessions) {
+        this.mircoSessions = mircoSessions;
+    }
+
 }

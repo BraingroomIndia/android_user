@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ClassLocationData;
+import com.braingroom.user.model.dto.ClassSession;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.request.DecideAndDiscussPostReq;
@@ -70,6 +71,7 @@ import timber.log.Timber;
 public class ClassDetailViewModel extends ViewModel {
 
     public ClassData mClassData;
+    public ClassSession mClassSession;
 
     private static String PRICE_TYPE_PER_PERSON = "perPerson";
     private static String PRICE_TYPE_GROUP = "Group";
@@ -83,6 +85,10 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> teacherName = new ObservableField<>(null);
     public final ObservableField<Spanned> description = new ObservableField<>(null); //Edited By Vikas Godara
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
+    public final ObservableField<Spanned> actualPrice = new ObservableField<>(null);
+    public final ObservableField<Spanned> offerPrice = new ObservableField<>(null);
+    public final ObservableField<Spanned> sessionName = new ObservableField<>(null);
+    public final ObservableField<Spanned> sessionDesc = new ObservableField<>(null);
     public final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
@@ -97,11 +103,15 @@ public class ClassDetailViewModel extends ViewModel {
     private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
+    public final ConnectableObservable<List<ViewModel>> microSessions;
     public Observable<List<ViewModel>> reviews;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
     List<MarkerOptions> markerList = new ArrayList<>();
+    List<ClassSession>fullSession=new ArrayList<>();
+    List<ViewModel> microSessionsList = new ArrayList<>();
+    public final ObservableField<Spanned> microsessionfirstitemprice = new ObservableField<>(null);
 
     public ObservableField<Integer> retry = new ObservableField<>(0);
 
@@ -197,6 +207,7 @@ public class ClassDetailViewModel extends ViewModel {
         ;
         addresses = Observable.just(addressList).publish();
         reviews = Observable.just(reviewList).publish();
+        microSessions=Observable.just(microSessionsList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
 //        this.helperFactory=helperFactory;
@@ -321,7 +332,7 @@ public class ClassDetailViewModel extends ViewModel {
 
                 String number = null;
                 if (selectedMap.values().iterator().hasNext()) {
-                    number = android.text.TextUtils.join("", selectedMap.keySet());
+                    number = TextUtils.join("", selectedMap.keySet());
 
                 }
                 if (number != null) {
@@ -446,6 +457,28 @@ public class ClassDetailViewModel extends ViewModel {
                         sessionDurationInfo.set(classData.getNoOfSession() + " Sessions, " + classData.getClassDuration());
                         classTopic.set(classData.getClassTopic());
                         title.s_1.set(classTopic.get() + "\n");
+
+
+                        if (!isEmpty(classData.getFullSession()))
+                        {
+                            for(final ClassSession classSession:classData.getFullSession())
+                                fullSession.add(classSession);
+                            offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() +fullSession.get(0).getOfferPrice()));
+                            actualPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSession.get(0).getPrice()));
+                            sessionName.set(CommonUtils.fromHtml(fullSession.get(0).getSessionName()));
+                            sessionDesc.set(CommonUtils.fromHtml(fullSession.get(0).getSessionDesc()));
+
+                        }
+
+                        if (!isEmpty(classData.getMircoSessions()))
+                        {
+                            for(final ClassSession classSession:classData.getMircoSessions())
+                                microSessionsList.add(new ClassSessionViewModel(classSession.getSessionName(), classSession.getOfferPrice(),
+                                        classSession.getPrice(), classSession.getSessionDesc(), classData.getPriceSymbolNonSpanned()));
+                            microSessions.connect();
+
+                        }
+
 
                         if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin)) {
 

@@ -160,8 +160,12 @@ public class ClassListResp extends BaseResp {
         @SerializedName("price_code")
         private String priceCode;
 
+        @SerializedName(value = "full_session")
+        public List<ClassSession> fullSession;
 
-    }
+        @SerializedName(value = "sessions")
+        public List<ClassSession> microSessions;
+   }
 
     @Data
     @AllArgsConstructor(suppressConstructorProperties = true)
@@ -222,5 +226,36 @@ public class ClassListResp extends BaseResp {
         private String endRange;
     }
 
+    @Data
+    @AllArgsConstructor(suppressConstructorProperties = true)
+    @EqualsAndHashCode(callSuper = false)
+    public class ClassSession {
 
+
+        @SerializedName("session_id")
+        private String sessionId;
+
+        @SerializedName("session_name")
+        private String sessionName;
+
+        @SerializedName("session_desc")
+        private String sessionDesc;
+
+        @SerializedName("session_start")
+        private String sessionStart;
+
+        @SerializedName("price")
+        private String price;
+
+        @SerializedName("offer_price")
+        private String offerPrice;
+
+        @SerializedName("min_person_allowed")
+        private String minPersonAllowed;
+
+        @SerializedName("additional_ticket_price")
+        private String additionalTicketPrice;
+
+
+    }
 }

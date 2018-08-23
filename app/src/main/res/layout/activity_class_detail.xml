@@ -62,50 +62,54 @@
                         app:videoUrl="@{vm.videoId}" />
                 </RelativeLayout>
 
+
+
             </android.support.design.widget.CollapsingToolbarLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/search_height"
-                android:background="@color/colorTextGray"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="55sp"-->
+                <!--android:background="@color/white"-->
+                <!--android:orientation="horizontal">-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#FF29540B"
-                    android:gravity="center"
-                    android:onClick="@{vm.onPayTutorClicked}"
-                    android:padding="@dimen/padding_small"
-                    android:paddingLeft="@dimen/margin_small"
-                    android:paddingRight="@dimen/margin_small"
-                    android:text="Fix Appointment"
-                    android:textColor="@color/white"
-                    android:visibility="@{vm.isCod?View.VISIBLE:View.GONE}"
-                    app:autoSizeTextType="uniform"
-                    app:font='@{@string/robotoBold}' />
+                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="1dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_weight="1"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:background="@color/white"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:text='₹2000'&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:textColor="@color/black"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:textSize="@dimen/text_size_large"&ndash;&gt;-->
+                    <!--&lt;!&ndash;app:font='@{@string/robotoBold}'&ndash;&gt;-->
+                    <!--&lt;!&ndash;tools:text="Total" />&ndash;&gt;-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/materialOrange"
-                    android:gravity="center"
-                    android:onClick="@{vm.onBookClicked}"
-                    android:padding="@dimen/padding_small"
-                    android:paddingLeft="@dimen/margin_small"
-                    android:paddingRight="@dimen/margin_small"
-                    android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'
-                    android:textColor="@color/white"
-                    android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
-                    app:autoSizeTextType="uniform"
-                    app:font='@{@string/robotoBold}'
-                    tools:text="Book Now" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:background="@color/materialOrange"-->
+                    <!--android:onClick="@{vm.onBookClicked}"-->
+                    <!--android:layout_margin="@dimen/_4sdp"-->
+                    <!--android:padding="@dimen/padding_small"-->
+                    <!--android:paddingLeft="@dimen/margin_small"-->
+                    <!--android:paddingRight="@dimen/margin_small"-->
+                    <!--android:text='Pay   ₹2000'-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"-->
+                    <!--app:autoSizeTextType="uniform"-->
+                    <!--android:textSize="@dimen/text_size_large"-->
+                    <!--app:font='@{@string/robotoBold}'-->
+                    <!--tools:text="Book Now" />-->
 
-            </LinearLayout>
+                <!--&lt;!&ndash;android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'&ndash;&gt;-->
+
+
+            <!--</LinearLayout>-->
 
         </android.support.design.widget.AppBarLayout>
+
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -119,11 +123,71 @@
                 android:background="@color/colorBackgroundGray"
                 android:focusableInTouchMode="true"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55sp"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:visibility="@{vm.isCod?View.VISIBLE:View.GONE}">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:paddingTop="@dimen/_4sdp"
+                        android:paddingBottom="@dimen/_4sdp"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:background="#FF29540B"
+                        android:gravity="center"
+                        android:onClick="@{vm.onPayTutorClicked}"
+                        android:text="Fix Appointment"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_medium"
+                        android:visibility="@{vm.isCod?View.VISIBLE:View.GONE}"
+                        app:autoSizeTextType="uniform"
+                        app:font='@{@string/robotoBold}' />
+
+                    <!--<TextView-->
+                    <!--android:layout_width="3dp"-->
+                    <!--android:layout_height="4match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="@color/materialOrange"-->
+                    <!--android:gravity="center"-->
+                    <!--android:onClick="@{vm.onBookClicked}"-->
+                    <!--android:padding="@dimen/padding_small"-->
+                    <!--android:paddingLeft="@dimen/margin_small"-->
+                    <!--android:paddingRight="@dimen/margin_small"-->
+                    <!--android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"-->
+                    <!--app:autoSizeTextType="uniform"-->
+                    <!--app:font='@{@string/robotoBold}'-->
+                    <!--tools:text="Book Now" />-->
+
+                    <!--<TextView-->
+                    <!--android:layout_width="1dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="@color/materialOrange"-->
+                    <!--android:gravity="right"-->
+                    <!--android:paddingBottom="@dimen/padding_small"-->
+                    <!--android:paddingRight="@dimen/padding_medium"-->
+                    <!--android:paddingTop="@dimen/padding_small"-->
+                    <!--android:text='₹2000'-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="@dimen/text_size_large"-->
+                    <!--app:font='@{@string/robotoBold}'-->
+                    <!--tools:text="Total" />-->
+
+                </LinearLayout>
+
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     card_view:cardElevation="@dimen/dimen_zero">
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -141,6 +205,9 @@
                             android:ellipsize="end"
                             android:gravity="center_vertical"
                             android:maxLines="3"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="@dimen/_5sdp"
+                            android:paddingBottom="@dimen/_5sdp"
                             android:text="@{vm.classTopic}"
                             android:textColor="@color/colorTextDark"
                             android:textSize="@dimen/text_size_large"
@@ -153,6 +220,7 @@
                             android:ellipsize="end"
                             android:gravity="center_vertical"
                             android:maxLines="1"
+                            android:paddingLeft="5dp"
                             android:text="@{vm.fixedClassDate}"
                             android:textColor="@color/materialBlueGray"
                             android:textSize="@dimen/text_size_medium"
@@ -160,61 +228,189 @@
                             app:font='@{@string/robotoRegular}'
                             tools:text="Class date" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:gravity="center_vertical"
+                            android:paddingTop="@dimen/_4sdp"
+                            android:paddingBottom="@dimen/margin_small"
+                            android:paddingLeft="@dimen/_4sdp"
+                            android:paddingRight="@dimen/padding_small"
+                            android:text="@{vm.sessionDurationInfo}"
+                            android:textColor="@color/colorTextGray"
+                            android:textSize="@dimen/text_size_medium"
+                            app:font='@{@string/robotoRegular}'
+                            tools:text="Session Duration Info" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <!--<LinearLayout-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:gravity="center_vertical">-->
+
+                                <!--<LinearLayout-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:orientation="vertical">-->
+
+                                    <!--<RadioButton-->
+                                        <!--android:layout_width="wrap_content"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:text="@{vm.sessionName}"-->
+                                        <!--tools:text="Full Session"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:layout_width="wrap_content"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:gravity="center_vertical"-->
+                                        <!--android:paddingLeft="@dimen/_20sdp"-->
+                                        <!--android:paddingRight="@dimen/padding_small"-->
+                                        <!--android:text="@{vm.sessionDesc}"-->
+                                        <!--android:textColor="@color/colorTextGray"-->
+                                        <!--android:textSize="@dimen/text_size_medium"-->
+                                        <!--app:font='@{@string/robotoRegular}'-->
+                                        <!--tools:text="Session Description" />-->
+                                <!--</LinearLayout>-->
+
+                                <!--<TextView-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:id="@+id/text_actual_price"-->
+                                    <!--android:gravity="right"-->
+                                    <!--android:layout_weight="1"-->
+                                    <!--android:text="@{vm.actualPrice}"-->
+                                    <!--android:textColor="@color/material_light_red"-->
+                                    <!--android:textSize="@dimen/text_size_large"-->
+                                    <!--app:font='@{@string/robotoBold}'-->
+                                    <!--tools:text="Actual Price" />-->
+
+                                <!--<TextView-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:gravity="right"-->
+                                    <!--android:layout_weight="1"-->
+                                    <!--android:paddingRight="@dimen/padding_small"-->
+                                    <!--android:text="@{vm.offerPrice}"-->
+                                    <!--android:textColor="@color/materialBlue"-->
+                                    <!--android:textSize="@dimen/text_size_large"-->
+                                    <!--app:font='@{@string/robotoBold}'-->
+                                    <!--tools:text="Offer Price" />-->
+
+                                <!--&lt;!&ndash;a-->
+                            <!--pp:font='@{@string/robotoRegular}' />&ndash;&gt;-->
+
+                            <!--</LinearLayout>-->
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="4">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_weight="3">
+
+                                    <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{vm.sessionName}"
+                                    tools:text="Full Session"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingLeft="@dimen/_20sdp"
+                                        android:text="@{vm.sessionDesc}"
+                                        android:textColor="@color/colorTextGray"
+                                        android:textSize="@dimen/text_size_medium"
+                                        app:font='@{@string/robotoRegular}'
+                                        tools:text="Session Description" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="right"
+                                        android:text="@{vm.actualPrice}"
+                                        android:textColor="@color/material_light_red"
+                                        android:textSize="@dimen/text_size_large"
+                                        app:font='@{@string/robotoBold}'
+                                        tools:text="Actual Price" />
+
+                                    <TextView
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="right"
+                                        android:text="@{vm.offerPrice}"
+                                        android:textColor="@color/materialBlue"
+                                        android:textSize="@dimen/text_size_large"
+                                        app:font='@{@string/robotoBold}'
+                                        tools:text="Offer Price" />
+                                </LinearLayout>
+
+                            </LinearLayout>
 
 
                             <TextView
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="@dimen/margin_small"
-                                android:paddingRight="@dimen/padding_small"
-                                android:text="@{vm.sessionDurationInfo}"
-                                android:textColor="@color/colorTextGray"
-                                android:textSize="@dimen/text_size_medium"
-                                app:font='@{@string/robotoRegular}'
-                                tools:text="Session Duration Info" />
+                                android:layout_gravity="center_horizontal"
+                                android:text="(OR)" />
 
-                            <TextView
-                                android:layout_width="0dp"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/margin_large"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="@dimen/padding_small"
-                                android:paddingRight="@dimen/padding_small"
-                                android:paddingTop="@dimen/padding_small"
-                                android:text='@{vm.price}'
-                                android:textColor="@color/materialBlue"
-                                android:textSize="@dimen/text_size_large"
-                                app:font='@{@string/robotoBold}'
-                                tools:text="Price" />
-                            <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginBottom="@dimen/margin_med"-->
-                            <!--android:visibility="gone"-->
-                            <!--android:layout_marginLeft="@dimen/margin_large"-->
-                            <!--android:background="@drawable/solid_material_green_rounded_corner"-->
-                            <!--android:drawablePadding="@dimen/padding_small"-->
-                            <!--android:drawableRight="@drawable/ic_star_white_24dp"-->
-                            <!--android:gravity="center_vertical"-->
-                            <!--android:paddingLeft="@dimen/padding_small"-->
-                            <!--android:paddingRight="@dimen/padding_small"-->
-                            <!--android:text="@{vm.rating}"-->
-                            <!--android:textColor="@color/white"-->
-                            <!--android:textSize="@dimen/text_size_medium"-->
-                            <!--app:font='@{@string/robotoRegular}' />-->
-                        </LinearLayout>
+                                android:gravity="center_vertical">
 
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <RadioButton
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Book Individual Micro Sessions" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:nestedScrollingEnabled="false"
+                                android:paddingLeft="@dimen/margin_large"
+                                bind:items="@{vm.microSessions}"
+                                bind:layout_vertical="@{true}"
+                                bind:view_provider="@{@layout/activity_micro_sessions}"
+                                tools:listitem="@layout/activity_micro_sessions" />
+
+                            <!--android:paddingBottom="@dimen/margin_med"-->
+                            <!--android:paddingEnd="@dimen/margin_med"-->
+                            <!---->
+                            <!--android:paddingRight="@dimen/margin_med"-->
+                            <!--android:paddingStart="@dimen/margin_large"-->
+                            <!--android:paddingTop="@dimen/margin_med"-->
+
+                        </RadioGroup>
 
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
+
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
@@ -671,6 +867,85 @@
 
         </android.support.v4.widget.NestedScrollView>
 
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:layout_gravity="bottom">
+            <!--android:layout_marginTop="600dp"-->
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55sp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text='₹2000'
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                app:font='@{@string/robotoBold}'
+                tools:text="Total" />
+
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/materialOrange"
+                    android:gravity="center"
+                    android:onClick="@{vm.onBookClicked}"
+                    android:padding="@dimen/padding_small"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
+                    android:layout_marginRight="@dimen/padding_medium"
+                    android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large"
+                    android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
+                    app:autoSizeTextType="uniform"
+                    app:font='@{@string/robotoBold}'
+                    tools:text="Book Now" />
+
+
+
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:background="@color/materialOrange"-->
+                    <!--android:onClick="@{vm.onBookClicked}"-->
+                    <!--android:layout_margin="@dimen/_4sdp"-->
+                    <!--android:padding="@dimen/padding_small"-->
+                    <!--android:paddingLeft="@dimen/margin_small"-->
+                    <!--android:paddingRight="@dimen/margin_small"-->
+                    <!--android:text='Pay ₹2000'-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"-->
+                    <!--app:autoSizeTextType="uniform"-->
+                    <!--android:textSize="@dimen/text_size_large"-->
+                    <!--app:font='@{@string/robotoBold}'-->
+                    <!--tools:text="Book Now" />-->
+
+                <!--android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'-->
+
+
+            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
+
+
+
         <ProgressBar
             android:id="@+id/loading"
             style="?android:attr/progressBarStyleLarge"
@@ -685,6 +960,7 @@
             android:layout_height="50dp"
             android:layout_gravity="bottom"
             app:vm="@{vm.connectivityViewmodel}" />
+
 
     </android.support.design.widget.CoordinatorLayout>
 
