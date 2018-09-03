@@ -11,6 +11,12 @@ public class ClassSessionViewModel extends ViewModel
     public final ObservableField<Spanned> sActualPrice = new ObservableField<>();
     public final ObservableField<String> sDescription = new ObservableField<>();
 
+    public boolean checked;
+    public String name;
+    public String OfferPrice;
+    public String ActualPrice;
+    public String Description;
+
     public ClassSessionViewModel(String sessionName, String offerPrice, String actualPrice,
                                    String sessionDescription, String priceSymbolNonSpanned ) {
 
@@ -19,5 +25,15 @@ public class ClassSessionViewModel extends ViewModel
         this.sActualPrice.set(CommonUtils.fromHtml(priceSymbolNonSpanned + actualPrice));
         this.sDescription.set(sessionDescription);
 
+        this.name.set();
+        this.OfferPrice.set(offerPrice);
+        this.ActualPrice.set(actualPrice);
+        this.Description.set(sessionDescription);
+
+
+    }
+
+    public boolean isChecked() {
+        return checked;
     }
 }

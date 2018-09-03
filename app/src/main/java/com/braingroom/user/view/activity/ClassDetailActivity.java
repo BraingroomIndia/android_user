@@ -10,14 +10,24 @@ import android.support.transition.Scene;
 import android.support.transition.Transition;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,11 +35,13 @@ import com.braingroom.user.R;
 import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
 import com.braingroom.user.databinding.DemoClassExpandedSceneBinding;
 import com.braingroom.user.utils.Constants;
+import com.braingroom.user.view.adapters.MicroSessionsViewAdapater;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.view.fragment.ReviewFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
+import com.braingroom.user.viewmodel.ClassSessionViewModel;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ClassDetailDemoPostViewModel;
 import com.braingroom.user.viewmodel.fragment.ReviewAddViewModel;
@@ -38,6 +50,9 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.functions.Consumer;
 import timber.log.Timber;
@@ -50,6 +65,7 @@ public class ClassDetailActivity extends BaseActivity {
     YouTubePlayerFragment youTubePlayerFragment;
     YouTubePlayer youTubePlayer;
     MyPlaybackEventListener myPlaybackEventListener;
+
     UiHelper uiHelper;
     SupportMapFragment mapFragment;
     RxPermissions rxPermissions;
@@ -59,13 +75,46 @@ public class ClassDetailActivity extends BaseActivity {
     Scene mColapsedScene;
     Scene mExpandedScene;
     RelativeLayout mSceneRoot;
+    RadioButton rb1,rb2;
+//    RadioGroup radioGroup;
+    Button button;
     ImageView imageView;
-    TextView catalogLocationList;
+    RecyclerView cv;
+    CheckBox chk;
+    RecyclerView microSessionRecyclerView;
+    TextView catalogLocationList,bNow,txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         catalogLocationList = findViewById(R.id.catalog_location_list);
+           rb1=(RadioButton)findViewById(R.id.rbutton1);
+           rb2=(RadioButton)findViewById(R.id.rbutton2);
+//           radioGroup=(RadioGroup)findViewById(R.id.rg);
+//           chk=(CheckBox)findViewById(R.id.cb_microsession_);
+//           cv=(RecyclerView)findViewById(R.id.rcview);
+
+        rb2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(rb2.isChecked()){
+                    rb1.setChecked(false);
+
+                }
+
+            }
+        });
+
+        rb1.setOnClickListener(new View.OnClickListener() {
+               @Override
+            public void onClick(View view) {
+                if(rb1.isChecked()){
+                    rb2.setChecked(true);
+//                    chk.setClickable(true);
+                }
+            }
+        });
+
         if (catalogLocationList != null)
             catalogLocationList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -80,6 +129,7 @@ public class ClassDetailActivity extends BaseActivity {
                     }
                 }
             });
+
         youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_fragment);
         youTubePlayerFragment.getView().setVisibility(View.INVISIBLE);
 
@@ -89,6 +139,27 @@ public class ClassDetailActivity extends BaseActivity {
         if (mapFragment != null)
             mapFragment.getMapAsync(((ClassDetailViewModel) vm)::setGoogleMap);
 
+        microSessionRecyclerView = (RecyclerView) findViewById(R.id.rcview);
+
+        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(this);
+        microSessionRecyclerView.setLayoutManager(recyclerLayoutManager);
+
+
+//        DividerItemDecoration dividerItemDecoration =
+//                new DividerItemDecoration(brandRecyclerView.getContext(),
+//                        recyclerLayoutManager.getOrientation());
+//        brandRecyclerView.addItemDecoration(dividerItemDecoration);
+
+
+        MicroSessionsViewAdapater recyclerViewAdapter = new
+                MicroSessionsViewAdapater(((ClassDetailViewModel)vm).microSessionsList,this);
+        microSessionRecyclerView.setAdapter(recyclerViewAdapter);
+
+    }
+    public List<ViewModel> getItems(){
+        List<ViewModel> itemsList=new ArrayList<>();
+        itemsList.add(new ClassSessionViewModel("Java","150","250","Java Sample Session", null));
+       return itemsList;
     }
 
     @Override

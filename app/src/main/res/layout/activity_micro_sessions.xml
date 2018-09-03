@@ -28,11 +28,16 @@
             android:layout_weight="3">
 
             <CheckBox
+                android:id="@+id/cb_microsession_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="true"
                 android:text="@{vm.sName}"/>
+                <!--android:text="item_checkbox" />-->
+
 
             <TextView
+                android:id="@+id/txt_session_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/_20sdp"
@@ -41,6 +46,7 @@
                 android:textSize="@dimen/text_size_medium"
                 app:font='@{@string/robotoRegular}'
                 tools:text="Session Description" />
+            <!--android:text="textView_session_description"-->
         </LinearLayout>
 
     <LinearLayout
@@ -50,6 +56,7 @@
         android:layout_weight="1">
 
         <TextView
+            android:id="@+id/txt_actual_price"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -58,8 +65,10 @@
             android:textSize="@dimen/text_size_large"
             app:font='@{@string/robotoBold}'
             tools:text="Actual Price" />
+        <!--android:text="textView_actual_price"-->
 
         <TextView
+            android:id="@+id/txt_offer_price"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -68,6 +77,8 @@
             android:textSize="@dimen/text_size_large"
             app:font='@{@string/robotoBold}'
             tools:text="Offer Price" />
+        <!--android:text="textView_offer_price"-->
+
     </LinearLayout>
 
     </LinearLayout>

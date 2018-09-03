@@ -243,66 +243,9 @@
                             tools:text="Session Duration Info" />
 
                         <RadioGroup
+                            android:id="@+id/rg"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-
-                            <!--<LinearLayout-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:gravity="center_vertical">-->
-
-                                <!--<LinearLayout-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:orientation="vertical">-->
-
-                                    <!--<RadioButton-->
-                                        <!--android:layout_width="wrap_content"-->
-                                        <!--android:layout_height="wrap_content"-->
-                                        <!--android:text="@{vm.sessionName}"-->
-                                        <!--tools:text="Full Session"/>-->
-
-                                    <!--<TextView-->
-                                        <!--android:layout_width="wrap_content"-->
-                                        <!--android:layout_height="wrap_content"-->
-                                        <!--android:gravity="center_vertical"-->
-                                        <!--android:paddingLeft="@dimen/_20sdp"-->
-                                        <!--android:paddingRight="@dimen/padding_small"-->
-                                        <!--android:text="@{vm.sessionDesc}"-->
-                                        <!--android:textColor="@color/colorTextGray"-->
-                                        <!--android:textSize="@dimen/text_size_medium"-->
-                                        <!--app:font='@{@string/robotoRegular}'-->
-                                        <!--tools:text="Session Description" />-->
-                                <!--</LinearLayout>-->
-
-                                <!--<TextView-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:id="@+id/text_actual_price"-->
-                                    <!--android:gravity="right"-->
-                                    <!--android:layout_weight="1"-->
-                                    <!--android:text="@{vm.actualPrice}"-->
-                                    <!--android:textColor="@color/material_light_red"-->
-                                    <!--android:textSize="@dimen/text_size_large"-->
-                                    <!--app:font='@{@string/robotoBold}'-->
-                                    <!--tools:text="Actual Price" />-->
-
-                                <!--<TextView-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:gravity="right"-->
-                                    <!--android:layout_weight="1"-->
-                                    <!--android:paddingRight="@dimen/padding_small"-->
-                                    <!--android:text="@{vm.offerPrice}"-->
-                                    <!--android:textColor="@color/materialBlue"-->
-                                    <!--android:textSize="@dimen/text_size_large"-->
-                                    <!--app:font='@{@string/robotoBold}'-->
-                                    <!--tools:text="Offer Price" />-->
-
-                                <!--&lt;!&ndash;a-->
-                            <!--pp:font='@{@string/robotoRegular}' />&ndash;&gt;-->
-
-                            <!--</LinearLayout>-->
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -317,10 +260,11 @@
                                     android:layout_weight="3">
 
                                     <RadioButton
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{vm.sessionName}"
-                                    tools:text="Full Session"/>
+                                        android:id="@+id/rbutton1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{vm.sessionName}"
+                                        tools:text="Full Session"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -380,23 +324,29 @@
                                     android:orientation="vertical">
 
                                     <RadioButton
+                                        android:id="@+id/rbutton2"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Book Individual Micro Sessions" />
 
+
                                 </LinearLayout>
+
 
                             </LinearLayout>
 
+                        </RadioGroup>
                             <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rcview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:nestedScrollingEnabled="false"
-                                android:paddingLeft="@dimen/margin_large"
-                                bind:items="@{vm.microSessions}"
-                                bind:layout_vertical="@{true}"
-                                bind:view_provider="@{@layout/activity_micro_sessions}"
-                                tools:listitem="@layout/activity_micro_sessions" />
+                                android:paddingLeft="@dimen/margin_large"/>
+                                <!--bind:items="@{vm.microSessions}"-->
+                                <!--bind:layout_vertical="@{true}"-->
+                                <!--bind:view_provider="@{@layout/activity_micro_sessions}"-->
+                                <!--tools:listitem="@layout/activity_micro_sessions" />-->
+
 
                             <!--android:paddingBottom="@dimen/margin_med"-->
                             <!--android:paddingEnd="@dimen/margin_med"-->
@@ -405,7 +355,7 @@
                             <!--android:paddingStart="@dimen/margin_large"-->
                             <!--android:paddingTop="@dimen/margin_med"-->
 
-                        </RadioGroup>
+
 
                     </LinearLayout>
 
@@ -890,7 +840,7 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center"
-                android:text='₹2000'
+                android:text='@{vm.Total}'
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
                 app:font='@{@string/robotoBold}'
@@ -898,6 +848,7 @@
 
 
                 <TextView
+                    android:id="@+id/booknow"
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

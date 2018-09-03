@@ -101,16 +101,23 @@ public class ClassDetailViewModel extends ViewModel {
     public ObservableBoolean isCod = new ObservableBoolean(true);
     public ObservableBoolean isYouTube = new ObservableBoolean(true);
     private String vendorId;
+    public final ObservableField<String> name = new ObservableField<>(null);
+
+
+    private String OfferPrice;
+    private String ActualPrice;
+    private String Description;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
     public final ConnectableObservable<List<ViewModel>> microSessions;
     public Observable<List<ViewModel>> reviews;
+    public final ObservableField<String> Total = new ObservableField<>(null);
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
     List<MarkerOptions> markerList = new ArrayList<>();
     List<ClassSession>fullSession=new ArrayList<>();
-    List<ViewModel> microSessionsList = new ArrayList<>();
+    public List<ViewModel> microSessionsList = new ArrayList<>();
     public final ObservableField<Spanned> microsessionfirstitemprice = new ObservableField<>(null);
 
     public ObservableField<Integer> retry = new ObservableField<>(0);
@@ -123,7 +130,6 @@ public class ClassDetailViewModel extends ViewModel {
     private Consumer<HashMap<String, Integer>> callConsumer;
 
     public boolean isGift = false;
-
 
     public final Action callTutor;
     private GoogleMap mGoogleMap;
@@ -458,7 +464,6 @@ public class ClassDetailViewModel extends ViewModel {
                         classTopic.set(classData.getClassTopic());
                         title.s_1.set(classTopic.get() + "\n");
 
-
                         if (!isEmpty(classData.getFullSession()))
                         {
                             for(final ClassSession classSession:classData.getFullSession())
@@ -475,8 +480,7 @@ public class ClassDetailViewModel extends ViewModel {
                             for(final ClassSession classSession:classData.getMircoSessions())
                                 microSessionsList.add(new ClassSessionViewModel(classSession.getSessionName(), classSession.getOfferPrice(),
                                         classSession.getPrice(), classSession.getSessionDesc(), classData.getPriceSymbolNonSpanned()));
-                            microSessions.connect();
-
+//                            Total.set(((ClassSessionViewModel)microSessionsList.get(0)).sOfferPrice);
                         }
 
 
