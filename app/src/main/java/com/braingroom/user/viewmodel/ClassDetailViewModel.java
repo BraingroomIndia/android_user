@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -50,7 +52,9 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -64,6 +68,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
+import lombok.Getter;
 import lombok.Setter;
 import timber.log.Timber;
 
@@ -72,9 +77,14 @@ public class ClassDetailViewModel extends ViewModel {
 
     public ClassData mClassData;
     public ClassSession mClassSession;
+    public
+    @Nullable
+    ObservableInt layoutType;
 
     private static String PRICE_TYPE_PER_PERSON = "perPerson";
     private static String PRICE_TYPE_GROUP = "Group";
+//    public static final int LAYOUT_TYPE_ROW = -1;
+//    public static final int LAYOUT_TYPE_TILE = 1;
 
     private String defaultLink = "https://www.braingroom.com/Vendor/defult_pic.jpg";
     public final ObservableField<String> imagePath = new ObservableField<>(null);
@@ -103,15 +113,25 @@ public class ClassDetailViewModel extends ViewModel {
     private String vendorId;
     public final ObservableField<String> name = new ObservableField<>(null);
 
+    @Getter
+    public final ViewProvider viewMSIProvider = vm -> {
+        if (vm instanceof ClassSessionViewModel)
+            return R.layout.activity_micro_sessions;
+        return 0;
+    };
 
+    private int nextPage = 0;
+    private int currentPage = -1;
     private String OfferPrice;
     private String ActualPrice;
     private String Description;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
-    public final ConnectableObservable<List<ViewModel>> microSessions;
+//    public final ConnectableObservable<List<ViewModel>> microSessions;
+    public Observable<List<ViewModel>>microClasses;
     public Observable<List<ViewModel>> reviews;
     public final ObservableField<String> Total = new ObservableField<>(null);
+    private int payTotal = 0;
     List<ViewModel> addressList = new ArrayList<>();
     List<ViewModel> reviewList = new ArrayList<>();
     List<ClassLocationData> locationList = new ArrayList<>();
@@ -178,6 +198,8 @@ public class ClassDetailViewModel extends ViewModel {
     public ClassDetailViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, final ClassDetailActivity.UiHelper uiHelper, @NonNull final MessageHelper messageHelper,
                                 @NonNull final Navigator navigator, @NonNull final String classId, final String origin, final String catalogueId, final String promo, final String isIncentive, final String userId) {
 
+
+
         this.userId = userId;
 
         this.mFirebaseAnalytics = mFirebaseAnalytics;
@@ -213,10 +235,10 @@ public class ClassDetailViewModel extends ViewModel {
         ;
         addresses = Observable.just(addressList).publish();
         reviews = Observable.just(reviewList).publish();
-        microSessions=Observable.just(microSessionsList).publish();
+//        microSessions=Observable.just(microSessionsList).publish();
         this.messageHelper = messageHelper;
         this.navigator = navigator;
-//        this.helperFactory=helperFactory;
+//        this.helperFactory=helperClassSessionViewModelFactory;
         this.uiHelper = uiHelper;
         isMapVisible.set(!ClassListViewModel1.ORIGIN_CATALOG.equals(origin));
         this.title = new DataItemViewModel("");
@@ -464,24 +486,105 @@ public class ClassDetailViewModel extends ViewModel {
                         classTopic.set(classData.getClassTopic());
                         title.s_1.set(classTopic.get() + "\n");
 
-                        if (!isEmpty(classData.getFullSession()))
-                        {
-                            for(final ClassSession classSession:classData.getFullSession())
+                        if (!isEmpty(classData.getFullSession())) {
+                            for (final ClassSession classSession : classData.getFullSession())
                                 fullSession.add(classSession);
-                            offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() +fullSession.get(0).getOfferPrice()));
-                            actualPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned()+fullSession.get(0).getPrice()));
+                            offerPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSession.get(0).getOfferPrice()));
+                            actualPrice.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + fullSession.get(0).getPrice()));
                             sessionName.set(CommonUtils.fromHtml(fullSession.get(0).getSessionName()));
                             sessionDesc.set(CommonUtils.fromHtml(fullSession.get(0).getSessionDesc()));
 
                         }
 
-                        if (!isEmpty(classData.getMircoSessions()))
-                        {
-                            for(final ClassSession classSession:classData.getMircoSessions())
-                                microSessionsList.add(new ClassSessionViewModel(classSession.getSessionName(), classSession.getOfferPrice(),
-                                        classSession.getPrice(), classSession.getSessionDesc(), classData.getPriceSymbolNonSpanned()));
-//                            Total.set(((ClassSessionViewModel)microSessionsList.get(0)).sOfferPrice);
+                        nonReactiveItems = new ArrayList<>();
+                        if (!isEmpty(classData.getMircoSessions()) && classData.getNoOfSession().length() <= 2) {
+                            for (final ClassSession classSession : classData.getMircoSessions())
+                                nonReactiveItems.add(new ClassSessionViewModel(classSession, new Action() {
+                                    @Override
+                                    public void run() throws Exception {
+                                        Bundle data = new Bundle();
+                                        data.putString("price", classSession.getOfferPrice());
+
+                                        if(classSession.isSelected()){
+                                            classSession.setSelected(false);
+                                            payTotal -= Integer.parseInt(classSession.getOfferPrice());
+                                        }
+                                        else
+                                        {
+                                            classSession.setSelected(true);
+                                            payTotal += Integer.parseInt(classSession.getOfferPrice());
+                                        }
+                                        Total.set("" + payTotal);
+                                    }
+                                }));
+                                uiHelper.notifyDataChanged();
+                            // new Action() {
+//                                        @Override
+//                                        public void run() throws Exception {
+////                                            layoutType.set(-1 * layoutType.get());
+////                                            uiHelper.changeLayout(layoutType.get());
+//                                        }
+//                                    }));
+//                                Total.set((Spanned)((ClassSessionViewModel)microSessionsList.get(0)).sOfferPrice);
+//        getSessionName(), classSession.getOfferPrice(),
+//                                            classSession.getPrice(), classSession.getSessionDesc(), classData.getPriceSymbolNonSpanned()));
+
+//                            nonReactiveItems.connect();
+//                            //total.set(((classsession)microsessionlist.get(0)).sofferprice);
+//                            microSessionsList.add(classSession);
+//                            microSessions.add(new DataItemViewModel(classSession.getMircoSessions(), false, new MyConsumer<DataItemViewModel>() {
+//                                @Override
+//                                public void accept(@io.reactivex.annotations.NonNull DataItemViewModel dataItemViewModel) {
+//                                    messageHelper.showDismissInfo(null, classSession.getMircoSessions());
+//                                }
+//                            }, null));
+//                        }
+//                        microSessions.connect();
                         }
+
+//                        microClasses = FieldUtils.toObservable(callAgain).filter(new Predicate<Integer>() {
+//                            @Override
+//                            public boolean test(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+//                                return currentPage < nextPage;
+//                            }
+//                        }).flatMap(new Function<Integer, Observable<List<ViewModel>>>() {
+//                            @Override
+//                            public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
+//                                return getLoadingItems().mergeWith(apiService.generalFilter(filterData.getFilterReq(), nextPage).observeOn(AndroidSchedulers.mainThread()).map(classDataMapFunction).onErrorReturn(new Function<Throwable, List<ViewModel>>() {
+//                                    @Override
+//                                    public List<ViewModel> apply(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+//
+//                                        return new ArrayList<ViewModel>(0);
+//                                    }
+//                                })).doOnNext(new Consumer<List<ViewModel>>() {
+//                                    @Override
+//                                    public void accept(@io.reactivex.annotations.NonNull List<ViewModel> viewModels) throws Exception {
+//
+//                                        if (viewModels.size() > 0 && (viewModels.get(0) instanceof ClassItemViewModel || viewModels.get(0) instanceof EmptyItemViewModel) || nextPage == -1) {
+//                                            Iterator<ViewModel> iter = nonReactiveItems.iterator();
+//                                            while (iter.hasNext()) {
+//                                                if (iter.next() instanceof ShimmerItemViewModel) {
+//                                                    iter.remove();
+//                                                }
+//                                            }
+//                                            if (viewModels.size() < 2 && currentPage < 1) {
+////                                                layoutType.set(LAYOUT_TYPE_ROW);
+////                                                uiHelper.changeLayout(layoutType.get());
+//                                            }
+////                                            paginationInProgress = false;
+//                                        }
+//                                        nonReactiveItems.addAll(viewModels);
+//                                    }
+//                                }).doOnError(new Consumer<Throwable>() {
+//                                    @Override
+//                                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+//                                        Timber.tag(TAG).e(throwable, "Class Fetch error");
+//                                    }
+//                                });
+//                            }
+//                        });
+//                        microClasses.subscribe();
+
 
 
                         if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin)) {
@@ -700,7 +803,19 @@ public class ClassDetailViewModel extends ViewModel {
         this.mGoogleMap = googleMap;
         if (locationList.size() > 0) populateMarkers(locationList);
     }
-
+//    private Observable<List<ViewModel>> getLoadingItems() {
+//        List<ViewModel> result = new ArrayList<>();
+//        int count;
+//        if (nextPage == 0)
+//            count = 4;
+//        else
+//            count = 2;
+//         if (layoutType.get() == LAYOUT_TYPE_ROW)
+//           result.addAll(Collections.nCopies(count, new RowShimmerItemViewModel()));
+//          else
+//          result.addAll(Collections.nCopies(count, new TileShimmerItemViewModel()));
+//          return Observable.just(result);
+//    }
     public void setYoutubePlayer(@NonNull YouTubePlayer player) {
         this.youTubePlayer = player;
         this.youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);

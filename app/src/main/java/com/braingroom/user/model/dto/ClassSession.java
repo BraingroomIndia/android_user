@@ -38,6 +38,15 @@ public class ClassSession implements Serializable {
     @SerializedName("additional_ticket_price")
     private String additionalTicketPrice;
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    private boolean isSelected;
 
     public String getSessionId() {
         return sessionId;

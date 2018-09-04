@@ -34,8 +34,10 @@ import android.widget.TextView;
 import com.braingroom.user.R;
 import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
 import com.braingroom.user.databinding.DemoClassExpandedSceneBinding;
+import com.braingroom.user.databinding.ActivityClassDetailBinding;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.adapters.MicroSessionsViewAdapater;
+import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.view.fragment.ReviewFragment;
@@ -55,17 +57,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
+import lombok.Getter;
 import timber.log.Timber;
 
 import static com.google.android.youtube.player.YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT;
 
 public class ClassDetailActivity extends BaseActivity {
+//    public interface UiHelper{
+//        void changeLayout(int layoutType);
+//
+//        void notifyDataChanged();
+//
+//        void show(String tag);
+//
+//        void remove(String tag);
+//    }
+
+    @Getter
+    private ClassDetailActivity classDetailActivity;
 
     public String classId;
     YouTubePlayerFragment youTubePlayerFragment;
     YouTubePlayer youTubePlayer;
     MyPlaybackEventListener myPlaybackEventListener;
-
     UiHelper uiHelper;
     SupportMapFragment mapFragment;
     RxPermissions rxPermissions;
@@ -76,13 +90,14 @@ public class ClassDetailActivity extends BaseActivity {
     Scene mExpandedScene;
     RelativeLayout mSceneRoot;
     RadioButton rb1,rb2;
-//    RadioGroup radioGroup;
+    RadioGroup radioGroup;
     Button button;
     ImageView imageView;
-    RecyclerView cv;
     CheckBox chk;
-    RecyclerView microSessionRecyclerView;
-    TextView catalogLocationList,bNow,txt;
+    private RecyclerView microSessionRecyclerView;
+    private MicroSessionsViewAdapater mAdapter;
+    private LinearLayoutManager linearLayoutManager;
+    TextView catalogLocationList,bNow,txt,orButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,30 +105,16 @@ public class ClassDetailActivity extends BaseActivity {
         catalogLocationList = findViewById(R.id.catalog_location_list);
            rb1=(RadioButton)findViewById(R.id.rbutton1);
            rb2=(RadioButton)findViewById(R.id.rbutton2);
-//           radioGroup=(RadioGroup)findViewById(R.id.rg);
-//           chk=(CheckBox)findViewById(R.id.cb_microsession_);
-//           cv=(RecyclerView)findViewById(R.id.rcview);
+           orButton=(TextView)findViewById(R.id.orbutton);
+           radioGroup=(RadioGroup)findViewById(R.id.rg);
+//           chk=(CheckBox)findViewById(R.id.cb_microsession_name);
 
-        rb2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(rb2.isChecked()){
-                    rb1.setChecked(false);
+           microSessionRecyclerView=((ActivityClassDetailBinding)binding).rcview;
+           mAdapter = new MicroSessionsViewAdapater(vm, ((ClassDetailViewModel) vm).getViewMSIProvider());
+           microSessionRecyclerView.setHasFixedSize(false);
+           msessionRecycler();
 
-                }
 
-            }
-        });
-
-        rb1.setOnClickListener(new View.OnClickListener() {
-               @Override
-            public void onClick(View view) {
-                if(rb1.isChecked()){
-                    rb2.setChecked(true);
-//                    chk.setClickable(true);
-                }
-            }
-        });
 
         if (catalogLocationList != null)
             catalogLocationList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -139,11 +140,44 @@ public class ClassDetailActivity extends BaseActivity {
         if (mapFragment != null)
             mapFragment.getMapAsync(((ClassDetailViewModel) vm)::setGoogleMap);
 
-        microSessionRecyclerView = (RecyclerView) findViewById(R.id.rcview);
+////        microSessionRecyclerView = (RecyclerView) findViewById(R.id.rcview);
+//
+//        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(this);
+//        microSessionRecyclerView.setLayoutManager(recyclerLayoutManager);
 
-        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(this);
-        microSessionRecyclerView.setLayoutManager(recyclerLayoutManager);
+//           cv=(RecyclerView)findViewById(R.id.rcview);
+//       if(chk.length()>=1){
+//           orButton.setVisibility(View.VISIBLE);
+//           rb2.setVisibility(View.VISIBLE);
 
+        rb2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (rb2.isChecked()) {
+                    rb1.setChecked(false);
+//                       chk.setVisibility(View.VISIBLE);
+
+                }
+
+            }
+        });
+//       }
+//       else{
+//           rb2.setVisibility(View.GONE);
+//           orButton.setVisibility(View.GONE);
+//       }
+
+
+        rb1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (rb1.isChecked()) {
+                    rb2.setChecked(false);
+//                    chk.setVisibility(View.INVISIBLE);
+//                    chk.setClickable(false);
+                }
+            }
+        });
 
 //        DividerItemDecoration dividerItemDecoration =
 //                new DividerItemDecoration(brandRecyclerView.getContext(),
@@ -151,16 +185,42 @@ public class ClassDetailActivity extends BaseActivity {
 //        brandRecyclerView.addItemDecoration(dividerItemDecoration);
 
 
-        MicroSessionsViewAdapater recyclerViewAdapter = new
-                MicroSessionsViewAdapater(((ClassDetailViewModel)vm).microSessionsList,this);
-        microSessionRecyclerView.setAdapter(recyclerViewAdapter);
+//        MicroSessionsViewAdapater recyclerViewAdapter = new
+//                MicroSessionsViewAdapater(((ClassDetailViewModel)vm).microSessionsList,this);
+//        microSessionRecyclerView.setAdapter(recyclerViewAdapter);
 
     }
-    public List<ViewModel> getItems(){
-        List<ViewModel> itemsList=new ArrayList<>();
-        itemsList.add(new ClassSessionViewModel("Java","150","250","Java Sample Session", null));
-       return itemsList;
+    private void msessionRecycler() {
+        RecyclerView.OnScrollListener onScrollListener;
+        linearLayoutManager = new LinearLayoutManager(this);
+        microSessionRecyclerView.setLayoutManager(linearLayoutManager);
+        microSessionRecyclerView.setAdapter(mAdapter);
+//        mAdapter.setLayoutManager(linearLayoutManager);
+
+        onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+            }
+        };
+
+        microSessionRecyclerView.clearOnScrollListeners();
+        microSessionRecyclerView.addOnScrollListener(onScrollListener);
+
     }
+//    public List<ViewModel> getItems(){
+//        List<ViewModel> itemsList=new ArrayList<>();
+//        itemsList.add(new ClassSessionViewModel("Java","150","250","Java Sample Session", null));
+//       return itemsList;
+//    }
 
     @Override
     protected void onStart() {
@@ -194,6 +254,12 @@ public class ClassDetailActivity extends BaseActivity {
                     }
                 });
 
+            }
+
+            @Override
+            public void notifyDataChanged() {
+                if (mAdapter != null)
+                    mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -416,6 +482,8 @@ public class ClassDetailActivity extends BaseActivity {
 
     public interface UiHelper {
         void initYoutube();
+
+        void notifyDataChanged();
 
         void invalidateMenu();
 

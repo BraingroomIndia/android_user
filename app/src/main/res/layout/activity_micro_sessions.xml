@@ -27,12 +27,25 @@
             android:orientation="vertical"
             android:layout_weight="3">
 
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:ellipsize="end"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:lines="2"-->
+                <!--android:text="@{vm.classData.classTopic}"-->
+                <!--android:textColor="@color/colorTextDark"-->
+                <!--android:textSize="@dimen/text_size_medium"-->
+                <!--app:font='@{@string/robotoRegular}'-->
+                <!--tools:text="Class topic" />-->
+
             <CheckBox
                 android:id="@+id/cb_microsession_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{vm.onClicked}"
                 android:clickable="true"
-                android:text="@{vm.sName}"/>
+                android:text="@{vm.classSession.sessionName}"/>
                 <!--android:text="item_checkbox" />-->
 
 
@@ -41,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/_20sdp"
-                android:text="@{vm.sDescription}"
+                android:text="@{vm.classSession.sessionDesc}"
                 android:textColor="@color/colorTextGray"
                 android:textSize="@dimen/text_size_medium"
                 app:font='@{@string/robotoRegular}'
@@ -60,7 +73,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@{vm.sActualPrice}"
+            android:text="@{vm.classSession.price}"
             android:textColor="@color/material_light_red"
             android:textSize="@dimen/text_size_large"
             app:font='@{@string/robotoBold}'
@@ -72,7 +85,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@{vm.sOfferPrice}"
+            android:text="@{vm.classSession.offerPrice}"
             android:textColor="@color/materialBlue"
             android:textSize="@dimen/text_size_large"
             app:font='@{@string/robotoBold}'

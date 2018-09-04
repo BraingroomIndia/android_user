@@ -308,6 +308,7 @@
 
 
                             <TextView
+                                android:id="@+id/orbutton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
@@ -327,7 +328,9 @@
                                         android:id="@+id/rbutton2"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Book Individual Micro Sessions" />
+                                        android:text="@{vm.sessionName}"/>
+                                    <!--android:text="Book Individual Micro Sessions"-->
+
 
 
                                 </LinearLayout>
@@ -335,17 +338,33 @@
 
                             </LinearLayout>
 
-                        </RadioGroup>
+                            <!--<android.support.v7.widget.RecyclerView-->
+                                <!--android:id="@+id/class_recyclerview"-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:padding="2dp"-->
+                                <!--android:layout_height="match_parent"-->
+                                <!--app:layoutManager="android.support.v7.widget.GridLayoutManager"-->
+                                <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+                                <!--app:spanCount="2"-->
+                                <!--tools:context="com.braingroom.user.view.activity.ClassListActivity"-->
+                                <!--tools:listitem="@layout/item_class_tile_listing" />-->
+
+
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/rcview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:nestedScrollingEnabled="false"
-                                android:paddingLeft="@dimen/margin_large"/>
-                                <!--bind:items="@{vm.microSessions}"-->
-                                <!--bind:layout_vertical="@{true}"-->
-                                <!--bind:view_provider="@{@layout/activity_micro_sessions}"-->
-                                <!--tools:listitem="@layout/activity_micro_sessions" />-->
+                                android:paddingLeft="@dimen/margin_large"
+                                tools:context="com.braingroom.user.view.activity.ClassDetailActivity"
+                                tools:listitem="@layout/activity_micro_sessions"/>
+
+                            <!--app:layoutManager="android.support.v7.widget.LinearLayoutManager"-->
+                            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+                            <!--bind:items="@{vm.microSessions}"-->
+                            <!--bind:layout_vertical="@{true}"-->
+                            <!--bind:view_provider="@{@layout/activity_micro_sessions}"-->
+                            <!--tools:listitem="@layout/activity_micro_sessions"-->
 
 
                             <!--android:paddingBottom="@dimen/margin_med"-->
@@ -355,7 +374,7 @@
                             <!--android:paddingStart="@dimen/margin_large"-->
                             <!--android:paddingTop="@dimen/margin_med"-->
 
-
+                        </RadioGroup>
 
                     </LinearLayout>
 
