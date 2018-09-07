@@ -103,6 +103,8 @@ public class CheckoutViewModel extends ViewModel {
     private String selectedLocalityId;
     private String gUserId = pref.getString(Constants.BG_ID, "");
 
+    private String selectedItemsSessionIds;
+
     private int isGuest = 0;
 
     public ClassData classData;
@@ -175,7 +177,7 @@ public class CheckoutViewModel extends ViewModel {
     };
 
     public CheckoutViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper,
-                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final int paymentMode, final float discountFactor, final String promo, final String isIncentive) {
+                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final int paymentMode, final float discountFactor, final String promo, final String isIncentive, final String selectedItemsSessionIds) {
 
         if (!BuildConfig.DEBUG)
             Answers.getInstance().logAddToCart(new AddToCartEvent()
@@ -185,6 +187,7 @@ public class CheckoutViewModel extends ViewModel {
                     .putItemType(classData.getClassType())
                     .putItemId(classData.getId()));
         this.mFirebaseAnalytics = mFirebaseAnalytics;
+        this.selectedItemsSessionIds=selectedItemsSessionIds;
         this.mTracker = mTracker;
         this.paymentMode = paymentMode;
         this.isIncentive = isIncentive;
@@ -566,6 +569,7 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setLocalityId(selectedLocalityId);
         snippet.setIsGuest(isGuest);
         snippet.setUserId(gUserId);
+        snippet.setClassSessionId(selectedItemsSessionIds);
         JSONArray levels = new JSONArray();
         JSONObject levelObj;
         int itemCount1 = 0;

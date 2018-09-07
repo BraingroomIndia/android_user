@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
 <data>
@@ -12,7 +11,6 @@
         type="com.braingroom.user.viewmodel.ClassSessionViewModel"/>
 
 </data>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,27 +25,12 @@
             android:orientation="vertical"
             android:layout_weight="3">
 
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:ellipsize="end"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:lines="2"-->
-                <!--android:text="@{vm.classData.classTopic}"-->
-                <!--android:textColor="@color/colorTextDark"-->
-                <!--android:textSize="@dimen/text_size_medium"-->
-                <!--app:font='@{@string/robotoRegular}'-->
-                <!--tools:text="Class topic" />-->
-
             <CheckBox
                 android:id="@+id/cb_microsession_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{vm.onClicked}"
-                android:clickable="true"
                 android:text="@{vm.classSession.sessionName}"/>
-                <!--android:text="item_checkbox" />-->
-
 
             <TextView
                 android:id="@+id/txt_session_description"
@@ -59,7 +42,7 @@
                 android:textSize="@dimen/text_size_medium"
                 app:font='@{@string/robotoRegular}'
                 tools:text="Session Description" />
-            <!--android:text="textView_session_description"-->
+
         </LinearLayout>
 
     <LinearLayout
@@ -73,24 +56,22 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@{vm.classSession.price}"
+            android:text="@{vm.actualPrice}"
             android:textColor="@color/material_light_red"
             android:textSize="@dimen/text_size_large"
             app:font='@{@string/robotoBold}'
             tools:text="Actual Price" />
-        <!--android:text="textView_actual_price"-->
 
         <TextView
             android:id="@+id/txt_offer_price"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@{vm.classSession.offerPrice}"
+            android:text="@{vm.offerPrice}"
             android:textColor="@color/materialBlue"
             android:textSize="@dimen/text_size_large"
             app:font='@{@string/robotoBold}'
             tools:text="Offer Price" />
-        <!--android:text="textView_offer_price"-->
 
     </LinearLayout>
 

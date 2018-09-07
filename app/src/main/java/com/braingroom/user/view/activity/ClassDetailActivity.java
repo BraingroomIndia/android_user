@@ -35,6 +35,8 @@ import com.braingroom.user.R;
 import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
 import com.braingroom.user.databinding.DemoClassExpandedSceneBinding;
 import com.braingroom.user.databinding.ActivityClassDetailBinding;
+import com.braingroom.user.model.dto.ClassData;
+import com.braingroom.user.model.dto.ClassSession;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.view.adapters.MicroSessionsViewAdapater;
 import com.braingroom.user.view.adapters.NonReactiveRecyclerViewAdapter;
@@ -56,6 +58,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.fabric.sdk.android.services.common.CommonUtils;
 import io.reactivex.functions.Consumer;
 import lombok.Getter;
 import timber.log.Timber;
@@ -63,15 +66,6 @@ import timber.log.Timber;
 import static com.google.android.youtube.player.YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT;
 
 public class ClassDetailActivity extends BaseActivity {
-//    public interface UiHelper{
-//        void changeLayout(int layoutType);
-//
-//        void notifyDataChanged();
-//
-//        void show(String tag);
-//
-//        void remove(String tag);
-//    }
 
     @Getter
     private ClassDetailActivity classDetailActivity;
@@ -97,7 +91,8 @@ public class ClassDetailActivity extends BaseActivity {
     private RecyclerView microSessionRecyclerView;
     private MicroSessionsViewAdapater mAdapter;
     private LinearLayoutManager linearLayoutManager;
-    TextView catalogLocationList,bNow,txt,orButton;
+    TextView catalogLocationList,bNow,txt,orButton,total,oprice,moprice;
+    ClassData classData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +102,11 @@ public class ClassDetailActivity extends BaseActivity {
            rb2=(RadioButton)findViewById(R.id.rbutton2);
            orButton=(TextView)findViewById(R.id.orbutton);
            radioGroup=(RadioGroup)findViewById(R.id.rg);
-//           chk=(CheckBox)findViewById(R.id.cb_microsession_name);
+           chk=(CheckBox)findViewById(R.id.cb_microsession_name);
+           total=(TextView)findViewById(R.id.totalview);
+           oprice=(TextView)findViewById(R.id.offerprice);
+           moprice=(TextView)findViewById(R.id.txt_offer_price);
+
 
            microSessionRecyclerView=((ActivityClassDetailBinding)binding).rcview;
            mAdapter = new MicroSessionsViewAdapater(vm, ((ClassDetailViewModel) vm).getViewMSIProvider());
@@ -140,32 +139,21 @@ public class ClassDetailActivity extends BaseActivity {
         if (mapFragment != null)
             mapFragment.getMapAsync(((ClassDetailViewModel) vm)::setGoogleMap);
 
-////        microSessionRecyclerView = (RecyclerView) findViewById(R.id.rcview);
-//
-//        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(this);
-//        microSessionRecyclerView.setLayoutManager(recyclerLayoutManager);
-
-//           cv=(RecyclerView)findViewById(R.id.rcview);
-//       if(chk.length()>=1){
-//           orButton.setVisibility(View.VISIBLE);
-//           rb2.setVisibility(View.VISIBLE);
-
         rb2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (rb2.isChecked()) {
                     rb1.setChecked(false);
-//                       chk.setVisibility(View.VISIBLE);
+//                    total.setVisibility(View.INVISIBLE);
+                    ((ClassDetailViewModel) vm).Total.set(com.braingroom.user.utils.CommonUtils.fromHtml(""));
 
+                    mAdapter.allowItemsClickable();
+
+                    uiHelper.notifyDataChanged();
                 }
 
             }
         });
-//       }
-//       else{
-//           rb2.setVisibility(View.GONE);
-//           orButton.setVisibility(View.GONE);
-//       }
 
 
         rb1.setOnClickListener(new View.OnClickListener() {
@@ -173,29 +161,34 @@ public class ClassDetailActivity extends BaseActivity {
             public void onClick(View view) {
                 if (rb1.isChecked()) {
                     rb2.setChecked(false);
-//                    chk.setVisibility(View.INVISIBLE);
-//                    chk.setClickable(false);
+                    total.setText(oprice.getText());
+//                    total.setVisibility(View.VISIBLE);
+
+                    mAdapter.preventItemsClickable();
+
+                    for (int index = 0; index < vm.nonReactiveItems.size(); index++)
+                        ((ClassSessionViewModel)vm.nonReactiveItems.get(index)).classSession.setSelected(false);
+
+                    uiHelper.notifyDataChanged();
                 }
+
             }
         });
-
-//        DividerItemDecoration dividerItemDecoration =
-//                new DividerItemDecoration(brandRecyclerView.getContext(),
-//                        recyclerLayoutManager.getOrientation());
-//        brandRecyclerView.addItemDecoration(dividerItemDecoration);
-
 
 //        MicroSessionsViewAdapater recyclerViewAdapter = new
 //                MicroSessionsViewAdapater(((ClassDetailViewModel)vm).microSessionsList,this);
 //        microSessionRecyclerView.setAdapter(recyclerViewAdapter);
 
     }
+    public void status(View view){
+        int sts=radioGroup.getCheckedRadioButtonId();
+        rb1.findViewById(sts);
+    }
     private void msessionRecycler() {
         RecyclerView.OnScrollListener onScrollListener;
         linearLayoutManager = new LinearLayoutManager(this);
         microSessionRecyclerView.setLayoutManager(linearLayoutManager);
         microSessionRecyclerView.setAdapter(mAdapter);
-//        mAdapter.setLayoutManager(linearLayoutManager);
 
         onScrollListener = new RecyclerView.OnScrollListener() {
             @Override
@@ -216,11 +209,6 @@ public class ClassDetailActivity extends BaseActivity {
         microSessionRecyclerView.addOnScrollListener(onScrollListener);
 
     }
-//    public List<ViewModel> getItems(){
-//        List<ViewModel> itemsList=new ArrayList<>();
-//        itemsList.add(new ClassSessionViewModel("Java","150","250","Java Sample Session", null));
-//       return itemsList;
-//    }
 
     @Override
     protected void onStart() {

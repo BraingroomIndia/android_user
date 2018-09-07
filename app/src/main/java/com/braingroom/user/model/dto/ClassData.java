@@ -125,12 +125,20 @@ public class ClassData implements Serializable {
     private String classProvider;
     @SerializedName("localities")
     private List<String> catalogLocations;
-
     @SerializedName("full_session")
     private List<ClassSession> fullSession;
     @SerializedName("sessions")
     private List<ClassSession> mircoSessions;
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    private boolean isSelected;
 
     public boolean getIsCode() {
         return (isCode == 1);

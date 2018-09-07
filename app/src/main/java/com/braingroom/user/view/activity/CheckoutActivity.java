@@ -111,7 +111,8 @@ public class CheckoutActivity extends BaseActivity implements PaymentResultListe
         };
 
         return new CheckoutViewModel(getFirebaseAnalytics(), getGoogleTracker(), getHelperFactory(), getMessageHelper(), getNavigator(),
-                uiHelper, (ClassData) getIntentSerializable("classData"), getIntentInt(Constants.paymentMode), discountFactor, getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive));
+                uiHelper, (ClassData) getIntentSerializable("classData"), getIntentInt(Constants.paymentMode), discountFactor,
+                getIntentString(Constants.promoCode), getIntentString(Constants.isIncentive), getIntentString("selectedItemsSessionIds"));
     }
 
     @Override
