@@ -78,6 +78,7 @@ import timber.log.Timber;
 public class ClassDetailViewModel extends ViewModel {
 
     public ClassData mClassData;
+    public ClassSession mClassSession;
 
 
     public
@@ -153,6 +154,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final Action callTutor;
     private GoogleMap mGoogleMap;
     YouTubePlayer youTubePlayer;
+    boolean isItemSelected=true;
 
     @NonNull
     final MessageHelper messageHelper;
@@ -503,9 +505,6 @@ public class ClassDetailViewModel extends ViewModel {
                                 nonReactiveItems.add(new ClassSessionViewModel(classSession, new Action() {
                                     @Override
                                     public void run() throws Exception {
-//                                        Bundle data = new Bundle();
-//                                        data.putString("price", classSession.getOfferPrice());
-
                                         if (classSession.isSelected()) {
                                             classSession.setSelected(false);
                                             payTotal -= Integer.parseInt(classSession.getOfferPrice());
@@ -529,8 +528,6 @@ public class ClassDetailViewModel extends ViewModel {
                                 Total.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getMircoSessions().get(0).getOfferPrice()));
 
                         }
-
-
 
                         if (ClassListViewModel1.ORIGIN_CATALOG.equals(origin)) {
 
@@ -592,7 +589,11 @@ public class ClassDetailViewModel extends ViewModel {
             }
         }).subscribe();
 
+
+
+
         onBookClicked = new Action() {
+
             @Override
             public void run() throws Exception {
                 if (mClassData != null) {
@@ -601,25 +602,29 @@ public class ClassDetailViewModel extends ViewModel {
                     data.putSerializable("checkoutType", "class");
                     data.putString(Constants.isIncentive, isIncentive);
                     data.putString(Constants.promoCode, promo);
+
                     StringBuilder sb = new StringBuilder();
                     for (int index = 0; index < nonReactiveItems.size(); index++) {
-                        boolean isItemSelected = ((ClassSessionViewModel) nonReactiveItems.get(index)).classSession.isSelected();
+                        isItemSelected = ((ClassSessionViewModel) nonReactiveItems.get(index)).classSession.isSelected();
                         if (isItemSelected == true) {
-                            if(sb.length()==0){
+                            if (sb.length() == 0) {
                                 sb.append(((ClassSessionViewModel) nonReactiveItems.get(index)).classSession.getSessionId());
-                            }
-                            else{
+                            } else {
                                 sb.append(",");
                                 sb.append(((ClassSessionViewModel) nonReactiveItems.get(index)).classSession.getSessionId());
                             }
                         }
                     }
 
-                    data.putString("selectedItemsSessionIds",sb.toString());
-                    navigator.navigateActivity(CheckoutActivity.class, data);
+                    data.putString("selectedItemsSessionIds", sb.toString());
+                    if(payTotal!=0 || mClassData.isSelected())
+                       navigator.navigateActivity(CheckoutActivity.class, data);
+
                 }
+
             }
-        };
+
+            };
 
 
         onShowDetailAddressClicked = new

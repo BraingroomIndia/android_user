@@ -35,6 +35,9 @@ public class PromoCodeReq {
         @SerializedName("total_amount")
         String totalAmount;
 
+        @SerializedName("class_session_id")
+        String classSessionId;
+
         public Snippet(String code) {
             this.code = code;
         }
@@ -47,6 +50,8 @@ public class PromoCodeReq {
         public Snippet() {
 
         }
+
+
     }
 
 

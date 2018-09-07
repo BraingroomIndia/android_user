@@ -84,6 +84,9 @@ public class RazorSuccessReq {
 
         @SerializedName("three_d_secure")
         private String threeDSecure;
+
+        @SerializedName("class_session_id")
+        private String classSessionId;
     }
 
     @Data

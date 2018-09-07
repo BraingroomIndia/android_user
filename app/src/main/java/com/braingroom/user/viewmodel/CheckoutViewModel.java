@@ -385,6 +385,7 @@ public class CheckoutViewModel extends ViewModel {
                     snippet.setCode(promoCode.get());
                     snippet.setIsGuest(isGuest);
                     snippet.setUserId(gUserId);
+                    snippet.setClassSessionId(selectedItemsSessionIds);
                     snippet.setTotalAmount(totalAmount.get() + "");
                     apiService.applyPromoCode(snippet).subscribe(new Consumer<PromocodeResp>() {
                         @Override
@@ -727,6 +728,7 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setCouponAmount(appliedCouponAmount + "");
         snippet.setPromoCode(appliedPromoCode.get());
         snippet.setPromoAmount(appliedPromoAmount + "");
+        snippet.setClassSessionId(selectedItemsSessionIds);
         List<RazorSuccessReq.Levels> levelsList = new ArrayList<>();
         for (ViewModel nonReactiveItem : nonReactiveItems) {
             if (Integer.parseInt(((LevelPricingItemViewModel) nonReactiveItem).countVm.countText.get()) > 0) {
