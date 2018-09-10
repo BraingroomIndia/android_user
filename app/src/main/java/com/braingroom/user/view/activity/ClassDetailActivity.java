@@ -2,6 +2,7 @@ package com.braingroom.user.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -91,7 +92,7 @@ public class ClassDetailActivity extends BaseActivity {
     private RecyclerView microSessionRecyclerView;
     private MicroSessionsViewAdapater mAdapter;
     private LinearLayoutManager linearLayoutManager;
-    TextView catalogLocationList,orButton,total,oprice,moprice,booknow;
+    TextView catalogLocationList,orButton,total,oprice,moprice,actprice;
     ClassData classData;
 
     @Override
@@ -105,8 +106,8 @@ public class ClassDetailActivity extends BaseActivity {
            total=(TextView)findViewById(R.id.totalview);
            oprice=(TextView)findViewById(R.id.offerprice);
            moprice=(TextView)findViewById(R.id.txt_offer_price);
-
-
+           actprice=(TextView)findViewById(R.id.acprice);
+           actprice.setPaintFlags(actprice.getPaintFlags()|Paint.STRIKE_THRU_TEXT_FLAG);
            microSessionRecyclerView=((ActivityClassDetailBinding)binding).rcview;
            mAdapter = new MicroSessionsViewAdapater(vm, ((ClassDetailViewModel) vm).getViewMSIProvider());
            microSessionRecyclerView.setHasFixedSize(false);

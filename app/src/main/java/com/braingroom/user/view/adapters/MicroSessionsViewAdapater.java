@@ -3,12 +3,14 @@ package com.braingroom.user.view.adapters;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.braingroom.user.R;
 import com.braingroom.user.utils.BindingUtils;
@@ -51,7 +53,7 @@ public class MicroSessionsViewAdapater extends RecyclerView.Adapter<MicroSession
 
         binder.bind(holder.viewBinding, viewModel.nonReactiveItems.get(position));
         holder.viewBinding.executePendingBindings();
-
+       ((TextView)holder.viewBinding.getRoot().findViewById(R.id.txt_actual_price)).setPaintFlags(((TextView)holder.viewBinding.getRoot().findViewById(R.id.txt_actual_price)).getPaintFlags()|Paint.STRIKE_THRU_TEXT_FLAG);
         ((CheckBox)holder.viewBinding.getRoot().findViewById(R.id.cb_microsession_name)).setSelected(
                 ((ClassSessionViewModel)viewModel.nonReactiveItems.get(position)).classSession.isSelected()
         );
