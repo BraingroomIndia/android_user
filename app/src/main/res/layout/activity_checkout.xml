@@ -260,11 +260,14 @@
                 android:background="@color/materialGreen"
                 android:gravity="center"
                 android:onClick="@{vm.onProceedClicked}"
-                android:text='@{vm.showBookOption? (vm.totalAmountAfterPromo==0?"Book for free" : "Pay only " +vm.priceSymbol + vm.totalAmountAfterPromo +(vm.isCod ? " to Tutor":"") ):"Select Items to Proceed" }'
+                android:text='@{vm.totalAmountAfterPromo==0?"Book for free" : "Pay only " +vm.priceSymbol + vm.totalAmountAfterPromo +(vm.isCod ? " to Tutor":"")}'
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_large"
                 app:font='@{@string/robotoBold}'
                 tools:text='&#x20b9;' />
+
+            <!--android:text='@{vm.showBookOption? (vm.totalAmountAfterPromo==0?"Book for free" : "Pay only " +vm.priceSymbol + vm.totalAmountAfterPromo +(vm.isCod ? " to Tutor":"") ):"Select Items to Proceed" }'-->
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

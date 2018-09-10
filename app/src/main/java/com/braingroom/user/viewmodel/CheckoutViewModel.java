@@ -177,7 +177,7 @@ public class CheckoutViewModel extends ViewModel {
     };
 
     public CheckoutViewModel(@NonNull final FirebaseAnalytics mFirebaseAnalytics, @NonNull final Tracker mTracker, @NonNull final HelperFactory helperFactory, @NonNull final MessageHelper messageHelper,
-                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final int paymentMode, final float discountFactor, final String promo, final String isIncentive, final String selectedItemsSessionIds) {
+                             @NonNull final Navigator navigator, final CheckoutActivity.UiHelper uiHelper, final ClassData classData, final int paymentMode, final float discountFactor, final String promo, final String isIncentive, final String selectedItemsSessionIds,final String TotalAmount) {
 
         if (!BuildConfig.DEBUG)
             Answers.getInstance().logAddToCart(new AddToCartEvent()
@@ -197,6 +197,7 @@ public class CheckoutViewModel extends ViewModel {
         this.discountFactor = discountFactor;
         this.isCod = paymentMode == 2;
         totalAmountAfterPromo = new ObservableInt(0);
+        totalAmountAfterPromo.set(Integer.parseInt(TotalAmount));
         couponCode = new ObservableField<>();
         appliedCouponCode = new ObservableField<>(null);
         this.promoCode = new ObservableField<>();
@@ -570,7 +571,8 @@ public class CheckoutViewModel extends ViewModel {
         snippet.setLocalityId(selectedLocalityId);
         snippet.setIsGuest(isGuest);
         snippet.setUserId(gUserId);
-        snippet.setClassSessionId(selectedItemsSessionIds);
+//        snippet.setClassSessionId(selectedItemsSessionIds);
+
         JSONArray levels = new JSONArray();
         JSONObject levelObj;
         int itemCount1 = 0;

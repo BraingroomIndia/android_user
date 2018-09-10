@@ -91,7 +91,7 @@ public class ClassDetailActivity extends BaseActivity {
     private RecyclerView microSessionRecyclerView;
     private MicroSessionsViewAdapater mAdapter;
     private LinearLayoutManager linearLayoutManager;
-    TextView catalogLocationList,bNow,txt,orButton,total,oprice,moprice;
+    TextView catalogLocationList,orButton,total,oprice,moprice,booknow;
     ClassData classData;
 
     @Override
@@ -101,7 +101,6 @@ public class ClassDetailActivity extends BaseActivity {
            rb1=(RadioButton)findViewById(R.id.rbutton1);
            rb2=(RadioButton)findViewById(R.id.rbutton2);
            orButton=(TextView)findViewById(R.id.orbutton);
-           radioGroup=(RadioGroup)findViewById(R.id.rg);
            chk=(CheckBox)findViewById(R.id.cb_microsession_name);
            total=(TextView)findViewById(R.id.totalview);
            oprice=(TextView)findViewById(R.id.offerprice);
@@ -112,8 +111,6 @@ public class ClassDetailActivity extends BaseActivity {
            mAdapter = new MicroSessionsViewAdapater(vm, ((ClassDetailViewModel) vm).getViewMSIProvider());
            microSessionRecyclerView.setHasFixedSize(false);
            msessionRecycler();
-
-
 
         if (catalogLocationList != null)
             catalogLocationList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -144,9 +141,8 @@ public class ClassDetailActivity extends BaseActivity {
             public void onClick(View view) {
                 if (rb2.isChecked()) {
                     rb1.setChecked(false);
-//                    total.setVisibility(View.INVISIBLE);
+                    ((ClassDetailViewModel) vm).mClassData.setSelected(false);
                     ((ClassDetailViewModel) vm).Total.set(com.braingroom.user.utils.CommonUtils.fromHtml(""));
-
                     mAdapter.allowItemsClickable();
 
                     uiHelper.notifyDataChanged();
@@ -155,15 +151,14 @@ public class ClassDetailActivity extends BaseActivity {
             }
         });
 
-
         rb1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (rb1.isChecked()) {
                     rb2.setChecked(false);
+                    ((ClassDetailViewModel) vm).setPayTotal(0);
+                    ((ClassDetailViewModel) vm).mClassData.setSelected(true);
                     total.setText(oprice.getText());
-//                    total.setVisibility(View.VISIBLE);
-
                     mAdapter.preventItemsClickable();
 
                     for (int index = 0; index < vm.nonReactiveItems.size(); index++)
@@ -175,15 +170,8 @@ public class ClassDetailActivity extends BaseActivity {
             }
         });
 
-//        MicroSessionsViewAdapater recyclerViewAdapter = new
-//                MicroSessionsViewAdapater(((ClassDetailViewModel)vm).microSessionsList,this);
-//        microSessionRecyclerView.setAdapter(recyclerViewAdapter);
+    }
 
-    }
-    public void status(View view){
-        int sts=radioGroup.getCheckedRadioButtonId();
-        rb1.findViewById(sts);
-    }
     private void msessionRecycler() {
         RecyclerView.OnScrollListener onScrollListener;
         linearLayoutManager = new LinearLayoutManager(this);

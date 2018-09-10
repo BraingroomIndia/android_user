@@ -232,7 +232,7 @@
                                 android:id="@+id/orbutton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
+                                android:layout_gravity="center"
                                 android:text="(OR)" />
 
                             <LinearLayout
@@ -726,86 +726,48 @@
 
         </android.support.v4.widget.NestedScrollView>
 
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:layout_gravity="bottom">
-            <!--android:layout_marginTop="600dp"-->
-
-
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="55sp"
                 android:background="@color/white"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="bottom">
 
-                <TextView
-                    android:id="@+id/totalview"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:gravity="center"
-                    android:text='@{vm.Total}'
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_large"
-                    app:font='@{@string/robotoBold}'
-                    tools:text="Total" />
-
-
-                <TextView
-                    android:id="@+id/booknow"
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/materialOrange"
-                    android:gravity="center"
-                    android:onClick="@{vm.onBookClicked}"
-                    android:padding="@dimen/padding_small"
-                    android:paddingLeft="@dimen/margin_small"
-                    android:paddingRight="@dimen/margin_small"
-                    android:layout_marginRight="@dimen/padding_medium"
-                    android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_large"
-                    android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
-                    app:autoSizeTextType="uniform"
-                    app:font='@{@string/robotoBold}'
-                    tools:text="Book Now" />
+        <TextView
+            android:id="@+id/totalview"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text='@{vm.Total}'
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_large"
+            app:font='@{@string/robotoBold}'
+            tools:text="Total" />
 
 
-
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:textAlignment="center"-->
-                    <!--android:background="@color/materialOrange"-->
-                    <!--android:onClick="@{vm.onBookClicked}"-->
-                    <!--android:layout_margin="@dimen/_4sdp"-->
-                    <!--android:padding="@dimen/padding_small"-->
-                    <!--android:paddingLeft="@dimen/margin_small"-->
-                    <!--android:paddingRight="@dimen/margin_small"-->
-                    <!--android:text='Pay ₹2000'-->
-                    <!--android:textColor="@color/white"-->
-                    <!--android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"-->
-                    <!--app:autoSizeTextType="uniform"-->
-                    <!--android:textSize="@dimen/text_size_large"-->
-                    <!--app:font='@{@string/robotoBold}'-->
-                    <!--tools:text="Book Now" />-->
-
-                <!--android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'-->
-
+        <TextView
+            android:id="@+id/booknow"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/materialOrange"
+            android:gravity="center"
+            android:onClick="@{vm.onBookClicked}"
+            android:padding="@dimen/padding_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small"
+            android:layout_marginRight="@dimen/padding_medium"
+            android:text='@{vm.price == null || "".equals(vm.price) || "0".equals(vm.price) ? "Free Booking" : "Book Now"}'
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large"
+            android:visibility="@{!vm.isGift ? View.VISIBLE : View.GONE}"
+            app:autoSizeTextType="uniform"
+            app:font='@{@string/robotoBold}'
+            tools:text="Book Now" />
 
             </LinearLayout>
-        </android.support.design.widget.AppBarLayout>
-
-
 
         <ProgressBar
             android:id="@+id/loading"

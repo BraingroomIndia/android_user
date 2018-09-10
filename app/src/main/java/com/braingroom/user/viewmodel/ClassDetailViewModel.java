@@ -524,6 +524,7 @@ public class ClassDetailViewModel extends ViewModel {
                                     payTotal = Integer.parseInt(classSession.getOfferPrice());
                                 index++;
                             }
+
                                 uiHelper.notifyDataChanged();
                                 Total.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getMircoSessions().get(0).getOfferPrice()));
 
@@ -617,6 +618,13 @@ public class ClassDetailViewModel extends ViewModel {
                     }
 
                     data.putString("selectedItemsSessionIds", sb.toString());
+
+                    if(payTotal==0)
+                        data.putString("amount", fullSession.get(0).getOfferPrice());
+                    else
+                        data.putString("amount", String.valueOf(payTotal));
+
+
                     if(payTotal!=0 || mClassData.isSelected())
                        navigator.navigateActivity(CheckoutActivity.class, data);
 
