@@ -30,7 +30,7 @@ public class GiftcardResp extends BaseResp {
         public String cardImage;
 
 //        @SerializedName("card_type")
-//        public String cardType;
+//        public String threeDSecure;
 //
 
     }

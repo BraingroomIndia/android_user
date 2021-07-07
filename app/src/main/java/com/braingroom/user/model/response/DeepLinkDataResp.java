@@ -73,7 +73,7 @@ public class DeepLinkDataResp {
         @SerializedName("author_id")
         public String authorId;
 
-        @SerializedName("categ_id")
+        @SerializedName(value = "categ_id", alternate = {"category_id"})
         public String categId;
 
         @SerializedName("country_id")

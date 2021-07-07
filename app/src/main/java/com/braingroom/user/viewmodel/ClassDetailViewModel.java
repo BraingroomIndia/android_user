@@ -83,7 +83,7 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<String> teacherName = new ObservableField<>(null);
     public final ObservableField<Spanned> description = new ObservableField<>(null); //Edited By Vikas Godara
     public final ObservableField<String> sessionDurationInfo = new ObservableField<>(null);
-    private final ObservableField<String> videoId = new ObservableField<>(null);
+    public final ObservableField<String> videoId = new ObservableField<>(null);
     public final ObservableField<String> classTopic = new ObservableField<>(null);
     public final ObservableField<String> catalogDescription = new ObservableField<>(null);
     public final ObservableField<String> classProvider = new ObservableField<>(null);
@@ -92,7 +92,8 @@ public class ClassDetailViewModel extends ViewModel {
     public final ObservableField<Spanned> locationConcat = new ObservableField<>();
     public ObservableField<String> fixedClassDate = new ObservableField<>();
     public ObservableBoolean isMapVisible = new ObservableBoolean(true);
-    private ObservableBoolean isYouTube = new ObservableBoolean(true);
+    public ObservableBoolean isCod = new ObservableBoolean(true);
+    public ObservableBoolean isYouTube = new ObservableBoolean(true);
     private String vendorId;
     public ObservableBoolean isShimmerOn = new ObservableBoolean(true);
     public final ConnectableObservable<List<ViewModel>> addresses;
@@ -132,17 +133,14 @@ public class ClassDetailViewModel extends ViewModel {
     public ConnectFilterData connectFilterData = new ConnectFilterData();
     public final ImageUploadViewModel imageUploadViewModel;
 
-    public final ViewProvider viewProvider = new ViewProvider() {
-        @Override
-        public int getView(ViewModel vm) {
-            if (vm instanceof IconTextItemViewModel)
-                return R.layout.item_show_more;
-            else if (vm instanceof EmptyItemViewModel)
-                return R.layout.item_empty_data;
-            else
-                return R.layout.item_rating;
+    public final ViewProvider viewProvider = vm -> {
+        if (vm instanceof IconTextItemViewModel)
+            return R.layout.item_show_more;
+        else if (vm instanceof EmptyItemViewModel)
+            return R.layout.item_empty_data;
+        else
+            return R.layout.item_rating;
 
-        }
     };
     private int pageNumber = 1;
 
@@ -425,7 +423,8 @@ public class ClassDetailViewModel extends ViewModel {
                             isMapVisible.set(false);
                         vendorId = classData.getTeacherId();
                         imagePath.set(classData.getImage()); //Edited by Vikas Godara
-                        rating.set("" + classData.getRating());
+                        rating.set(classData.getRating());
+                        isCod.set(classData.getIsCode());
                         if (classData.getIsCoupleClass() != 1)
                             if (classData.getPricingType().equalsIgnoreCase(PRICE_TYPE_PER_PERSON))
                                 price.set(CommonUtils.fromHtml(classData.getPriceSymbolNonSpanned() + classData.getLevelDetails().get(0).getPrice()));
@@ -498,6 +497,9 @@ public class ClassDetailViewModel extends ViewModel {
                                 populateMarkers(locationList);
                         uiHelper.invalidateMenu();
                         setScreenName(classData.getClassTopic());
+                        if (youTubePlayer == null && videoId.get() != null && isYouTube.get()) {
+                            uiHelper.initYoutube();
+                        }
                         return Observable.empty();
 
                     }
@@ -646,7 +648,7 @@ public class ClassDetailViewModel extends ViewModel {
                     @Override
                     public void run() throws Exception {
                         if (videoId.get() != null && isYouTube.get()) {
-                            navigator.openStandaloneYoutube(videoId.get());
+                            // navigator.openStandaloneYoutube(videoId.get());
                         } else if (videoId.get() != null)
                             navigator.openStandaloneVideo(videoId.get());
                     }
@@ -664,8 +666,13 @@ public class ClassDetailViewModel extends ViewModel {
 
     public void setYoutubePlayer(@NonNull YouTubePlayer player) {
         this.youTubePlayer = player;
-        this.youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
-        if (videoId.get() != null) player.cueVideo(videoId.get());
+        this.youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+        if (videoId.get() != null) {
+            player.setShowFullscreenButton(false);
+            player.loadVideo(videoId.get());
+            player.play();
+        }
+
     }
 
     private void populateMarkers(@NonNull List<ClassLocationData> locations) {

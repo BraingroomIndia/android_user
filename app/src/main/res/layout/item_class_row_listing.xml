@@ -66,7 +66,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -79,7 +79,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/padding_small"
@@ -102,14 +102,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/margin_med"
-                        android:scaleType="centerInside"
-                        android:text="Group"
-                        android:tint="@color/materialOrange"
-                        android:visibility='@{"Group".equalsIgnoreCase(vm.classData.pricingType) ? View.VISIBLE : View.GONE}'
+                        android:background="@drawable/solid_material_green_rounded_corner"
+                        android:drawableEnd="@drawable/ic_star_white_16dp"
+                        android:drawablePadding="5dp"
+                        android:drawableRight="@drawable/ic_star_white_16dp"
+                        android:gravity="center"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:text="@{vm.classData.rating}"
+                        android:textColor="@color/white"
                         app:font='@{@string/robotoRegular}'
-                        tools:text="Group" />
+                        tools:text="5" />
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -117,9 +123,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
@@ -145,6 +153,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
 
                     <TextView
                         android:layout_width="0dp"

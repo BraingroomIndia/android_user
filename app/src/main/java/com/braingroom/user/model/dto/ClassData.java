@@ -4,6 +4,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 
 import com.braingroom.user.utils.CommonUtils;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -62,94 +63,72 @@ public class ClassData implements Serializable {
 
     @SerializedName("class_type_data")
     private String classTypeData;
-
+    @SerializedName("is_cod_avaiable")
+    private int isCode;
     @SerializedName("session_date")
     private String sessionDate;
-
     @SerializedName("sesssion_time")
     private String sessionTime;
-
     @SerializedName("class_type")
     private String classType;
-
     @SerializedName("no_of_seats")
     private String noOfSeats;
-
     @SerializedName("no_of_session")
     private String noOfSession;
-
     @SerializedName("class_date")
     private Boolean classDate;
-
     @SerializedName("class_start_time")
     private String classStartTime;
-
     @SerializedName("class_duration")
     private String classDuration;
-
     @SerializedName("class_topic")
     private String classTopic;
-
     @SerializedName("class_summary")
     private String classSummary;
-
-    @SerializedName("rating")
+    @SerializedName("class_ratting")
     private Integer rating;
-
     @SerializedName("photo")
     private String image;
-
     @SerializedName("pic_name")
     private String picName;
-
     @SerializedName("video")
     private String videoId;
-
     @SerializedName("level_id")
     private String levelId;
-
     @SerializedName("level_name")
     private String levelName;
-
     @SerializedName("Description")
     private String description;
-
     @SerializedName("about_academy")
     private String aboutAcademy;
-
     @SerializedName("expert_level_id")
     private String expertLevelId;
-
     @SerializedName("price")
     private String price;
-
     @SerializedName("price_type")
     private String pricingType;
-
     @SerializedName("location")
     private List<ClassLocationData> location;
-
     @SerializedName("locality")
     private String locality;
-
     @SerializedName("price_symbol")
     private String priceSymbol = "&#8377;";
-
     @SerializedName("price_code")
     private String priceCode;
-
+    @Expose(serialize = false, deserialize = false)
+    private String txnId;
     @SerializedName("vendorClasseLevelDetail")
     private List<ClassLevelData> levelDetails;
-
     @SerializedName("catalog_description")
     private String catalogDescription;
-
     @SerializedName("class_provided_by")
     private String classProvider;
-
     @SerializedName("localities")
     private List<String> catalogLocations;
 
+    public boolean getIsCode() {
+        return (isCode == 1);
+    }
 
     public List<ClassLevelData> getLevelDetails() {
         return levelDetails;
@@ -287,8 +266,10 @@ public class ClassData implements Serializable {
         this.classSummary = classSummary;
     }
 
-    public Integer getRating() {
-        return rating;
+    public String getRating() {
+        if (rating == null)
+            rating = 4;
+        return rating.toString();
     }
 
     public void setRating(Integer rating) {

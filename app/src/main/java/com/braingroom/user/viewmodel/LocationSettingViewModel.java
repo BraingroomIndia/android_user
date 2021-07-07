@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.braingroom.user.model.dto.ListDialogData1;
 import com.braingroom.user.model.response.CommonIdResp;
@@ -8,6 +9,7 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.HelperFactory;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.activity.HomeActivity;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,10 +32,12 @@ public class LocationSettingViewModel extends CustomDialogViewModel {
     public Consumer<HashMap<String, Integer>> countryConsumer;
     private final MessageHelper messageHelper;
     private final HashMap<String, Integer> selectedCountries, selectedCity;
+    private final Runnable restartActivity;
 
-    public LocationSettingViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory) {
+    public LocationSettingViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull HelperFactory helperFactory, @Nullable Runnable restartActivity) {
         this.navigator = navigator;
         this.messageHelper = messageHelper;
+        this.restartActivity = restartActivity;
         selectedCountries = new HashMap<>();
         selectedCity = new HashMap<>();
         if (pref.getString(Constants.SAVED_COUNTRY_NAME, null) != null)
@@ -75,6 +79,7 @@ public class LocationSettingViewModel extends CustomDialogViewModel {
         onSaveClicked = new Action() {
             @Override
             public void run() throws Exception {
+                dismissDialog();
                 apply();
             }
         };
@@ -126,8 +131,8 @@ public class LocationSettingViewModel extends CustomDialogViewModel {
             editor.putString(Constants.SAVED_COUNTRY_NAME, countryVm.selectedItemsMap.keySet().iterator().next()).apply();
             editor.putInt(Constants.SAVED_COUNTRY_ID, countryVm.selectedItemsMap.values().iterator().next()).apply();
             Constants.GEO_TAG = "";
-            apiService.checkGeoDetail();
-            dismissDialog();
+            apiService.checkGeoDetail(restartActivity);
+
         }
 
 

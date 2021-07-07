@@ -66,45 +66,32 @@ public class BookingHistoryResp {
 
         @SerializedName("class_type")
         public String classType;
-        @SerializedName("price_symbol")
-        private String priceSymbol;
-
-        @SerializedName("price_code")
-        private String priceCode;
-
         @SerializedName("no_of_seats")
         public String noOfSeats;
-
         @SerializedName("no_of_session")
         public String noOfSession;
-
         @SerializedName("class_date")
         public String classDate;
-
         @SerializedName("class_start_time")
         public String classStartTime;
-
         @SerializedName("class_duration")
         public String classDuration;
-
         @SerializedName("class_topic")
         public String classTopic;
-
         @SerializedName("class_summary")
         public String classSummary;
-
         @SerializedName("class_ratting")
-        public Integer classRatting;
-
+        public Integer rating;
         @SerializedName("pic_name")
         public String photo;
-
         @SerializedName("VendorClasseLevelDetail")
         public List<ClassLevel> classLevels;
-
         @SerializedName("VendorClasseLocationDetail")
         public List<Location> location;
-
+        @SerializedName("price_symbol")
+        private String priceSymbol;
+        @SerializedName("price_code")
+        private String priceCode;
 
         @Getter
         @EqualsAndHashCode(callSuper = false)
@@ -152,8 +139,9 @@ public class BookingHistoryResp {
 
     }
 
+    @Getter
     @EqualsAndHashCode(callSuper = false)
-    static class PayuTransaction {
+    public static class PayuTransaction {
 
         @SerializedName("id")
         public String id;
@@ -161,7 +149,7 @@ public class BookingHistoryResp {
         @SerializedName("created")
         public String created;
 
-        @SerializedName("razorPayTxnid")
+        @SerializedName("txnid")
         public String txnid;
 
         @SerializedName("amount")

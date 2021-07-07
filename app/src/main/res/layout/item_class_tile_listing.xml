@@ -56,17 +56,26 @@
                     app:font='@{@string/robotoRegular}'
                     tools:text="Class topic" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:text="@{vm.classData.classProvider}"
-                    android:textColor="@color/colorTextGray"
-                    android:textSize="@dimen/text_size_small"
-                    app:font='@{@string/robotoRegular}'
-                    tools:text="Teacher Name" />
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:text="@{vm.classData.classProvider}"
+                        android:textColor="@color/colorTextGray"
+                        android:textSize="@dimen/text_size_small"
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="Teacher Name" />
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -96,25 +105,42 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/margin_med"
                         android:scaleType="centerInside"
                         android:src="@drawable/group"
                         android:tint="@color/materialOrange"
                         android:visibility='@{"Group".equalsIgnoreCase(vm.classData.pricingType) ? View.VISIBLE : View.GONE}' />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/solid_material_green_rounded_corner"
+                        android:drawablePadding="@dimen/padding_small"
+                        android:drawableRight="@drawable/ic_star_white_16dp"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/padding_small"
+                        android:paddingRight="@dimen/padding_small"
+                        android:text="@{vm.classData.rating}"
+                        android:textColor="@color/white"
+                        app:font='@{@string/robotoRegular}'
+                        tools:text="5" />
+
                 </LinearLayout>
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="18dp"
                     android:orientation="horizontal">
 
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:text='@{vm.classData.price == null || "".equals(vm.classData.price) || "0".equals(vm.classData.price)  ? "Free Booking" : vm.classData.priceSymbol +vm.classData.price}'
@@ -123,9 +149,10 @@
                         tools:text="Rs 500" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:text="@{vm.classData.classTypeData}"

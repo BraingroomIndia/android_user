@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
@@ -99,12 +100,7 @@ public abstract class BaseActivity extends MvvmActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
-        pushNotification = getIntentBoolean(Constants.pushNotification);
-        String notificationId = getIntentString("notification_id");
-        if (pushNotification)
-            sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         screenDims = new ScreenDims();
         Point size = new Point();
         WindowManager w = getWindowManager();
@@ -152,7 +148,7 @@ public abstract class BaseActivity extends MvvmActivity {
                 }
 
                 @Override
-                public void navigateActivityForResult(Class<? extends MvvmActivity> destination, @Nullable Bundle bundle, int reqCode) {
+                public void navigateActivityForResult(Class<? extends AppCompatActivity> destination, @Nullable Bundle bundle, int reqCode) {
                     Intent intent = new Intent(BaseActivity.this, destination);
                     intent.putExtra("classData", bundle);
                     startActivityForResult(intent, reqCode);

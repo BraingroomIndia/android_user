@@ -4,24 +4,18 @@ import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.transition.Fade;
 import android.support.transition.Scene;
 import android.support.transition.Transition;
 import android.support.transition.TransitionManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Layout;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,9 +25,7 @@ import com.braingroom.user.R;
 import com.braingroom.user.databinding.DemoClassColapsedSceneBinding;
 import com.braingroom.user.databinding.DemoClassExpandedSceneBinding;
 import com.braingroom.user.utils.Constants;
-import com.braingroom.user.utils.WrapContentHeightViewPager;
 import com.braingroom.user.view.fragment.ClassQueryFragment;
-import com.braingroom.user.view.fragment.DemoPostFragment;
 import com.braingroom.user.view.fragment.QuoteFormFragment;
 import com.braingroom.user.view.fragment.ReviewFragment;
 import com.braingroom.user.viewmodel.ClassDetailViewModel;
@@ -41,9 +33,8 @@ import com.braingroom.user.viewmodel.ClassListViewModel1;
 import com.braingroom.user.viewmodel.ViewModel;
 import com.braingroom.user.viewmodel.fragment.ClassDetailDemoPostViewModel;
 import com.braingroom.user.viewmodel.fragment.ReviewAddViewModel;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -51,19 +42,17 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
-import static com.braingroom.user.R.string.action_learners_forum;
-import static com.braingroom.user.R.string.action_tips_tricks;
-import static com.braingroom.user.R.string.action_tutors_talk;
+import static com.google.android.youtube.player.YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT;
 
 public class ClassDetailActivity extends BaseActivity {
 
+    public String classId;
     YouTubePlayerFragment youTubePlayerFragment;
     YouTubePlayer youTubePlayer;
     MyPlaybackEventListener myPlaybackEventListener;
     UiHelper uiHelper;
     SupportMapFragment mapFragment;
     RxPermissions rxPermissions;
-
     //    WrapContentHeightViewPager pager;
  /*   PostPagerAdapter pagerAdapter;
 */
@@ -72,93 +61,6 @@ public class ClassDetailActivity extends BaseActivity {
     RelativeLayout mSceneRoot;
     ImageView imageView;
     TextView catalogLocationList;
-
-    public String classId;
-
-    public interface UiHelper {
-        void initYoutube();
-
-        void invalidateMenu();
-
-        void stopShimmer();
-
-        void showQuoteForm();
-
-        void postQueryForm();
-
-        void addReview();
-
-        void addReview(String userId);
-
-        void backFromReview();
-
-        void next();
-
-        void makeACall(String phoneNumber);
-
-        void expandDemoClass(String v);
-
-        void compressDemoClass(String v);
-
-        boolean isViewEllipsized();
-
-
-    }
-
-
-   /* private class PostPagerAdapter extends FragmentStatePagerAdapter {
-        SparseArray<Fragment> registeredFragments = new SparseArray<>();
-
-        PostPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment;
-            switch (position) {
-                case 0:
-                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataKNN);
-                    break;
-                case 1:
-                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataBNS);
-                    break;
-                case 2:
-                    fragment = DemoPostFragment.newInstance(((ClassDetailViewModel) vm).connectFilterDataFP);
-                    break;
-                default:
-                    fragment = null;
-                    break;
-            }
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            if (position == 0) return getString(action_tips_tricks);
-            if (position == 1) return getString(action_learners_forum);
-            if (position == 2) return getString(action_tutors_talk);
-            return "NO TAB";
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            registeredFragments.put(position, fragment);
-            return fragment;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            registeredFragments.remove(position);
-            super.destroyItem(container, position, object);
-        }
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,20 +80,16 @@ public class ClassDetailActivity extends BaseActivity {
                     }
                 }
             });
+        youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_fragment);
+        youTubePlayerFragment.getView().setVisibility(View.INVISIBLE);
 
         rxPermissions = new RxPermissions(this);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null)
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    ((ClassDetailViewModel) vm).setGoogleMap(googleMap);
-                }
-            });
+            mapFragment.getMapAsync(((ClassDetailViewModel) vm)::setGoogleMap);
 
     }
-
 
     @Override
     protected void onStart() {
@@ -203,11 +101,28 @@ public class ClassDetailActivity extends BaseActivity {
     @NonNull
     @Override
     protected ViewModel createViewModel() {
-        myPlaybackEventListener = new MyPlaybackEventListener();
         classId = getIntentString("id");
         uiHelper = new UiHelper() {
             @Override
             public void initYoutube() {
+                if (youTubePlayerFragment == null)
+                    return;
+                youTubePlayerFragment.getView().setVisibility(View.VISIBLE);
+                youTubePlayerFragment.initialize("AIzaSyBsaNQgFsk2LbSmXydzNAhBdsQ4YkzAoh0", new YouTubePlayer.OnInitializedListener() {
+                    @Override
+                    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+                        //youTubePlayer.setPlaybackEventListener(myPlaybackEventListener);
+                        youTubePlayer.setFullscreen(false);
+                        youTubePlayer.setFullscreenControlFlags(FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+                        ((ClassDetailViewModel) vm).setYoutubePlayer(youTubePlayer);
+                    }
+
+                    @Override
+                    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                        Log.d("Youtube player error", "onInitializationFailure: ");
+                    }
+                });
+
             }
 
             @Override
@@ -218,7 +133,7 @@ public class ClassDetailActivity extends BaseActivity {
             @Override
             public void stopShimmer() {
                 mFirebaseAnalytics.setCurrentScreen(ClassDetailActivity.this, ((ClassDetailViewModel) vm).mClassData.getClassTopic(), null);
-//                shimmerFrameLayout.stopShimmerAnimation();
+
             }
 
             @Override
@@ -239,7 +154,7 @@ public class ClassDetailActivity extends BaseActivity {
                     rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(new Consumer<Boolean>() {
                         @Override
                         public void accept(@io.reactivex.annotations.NonNull Boolean aBoolean) throws Exception {
-                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
                             intent.setData(Uri.parse("tel:" + phoneNumber));
                             Timber.tag(TAG).d("accept: " + phoneNumber);
                             getNavigator().navigateActivity(intent);
@@ -366,7 +281,6 @@ public class ClassDetailActivity extends BaseActivity {
         return R.layout.activity_class_detail;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (getLayoutId() != R.layout.activity_class_detail_catalog) {
@@ -383,7 +297,6 @@ public class ClassDetailActivity extends BaseActivity {
     public ClassDetailViewModel getViewModel() {
         return (ClassDetailViewModel) vm;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -425,6 +338,41 @@ public class ClassDetailActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    public boolean isViewEllipsized(TextView view) {
+
+        return view != null && view.getLayout() != null && (view.getLayout().getEllipsisCount(3) > 0);
+    }
+
+    public interface UiHelper {
+        void initYoutube();
+
+        void invalidateMenu();
+
+        void stopShimmer();
+
+        void showQuoteForm();
+
+        void postQueryForm();
+
+        void addReview();
+
+        void addReview(String userId);
+
+        void backFromReview();
+
+        void next();
+
+        void makeACall(String phoneNumber);
+
+        void expandDemoClass(String v);
+
+        void compressDemoClass(String v);
+
+        boolean isViewEllipsized();
+
+
+    }
+
     public final class MyPlaybackEventListener implements YouTubePlayer.PlaybackEventListener {
 
         @Override
@@ -455,11 +403,6 @@ public class ClassDetailActivity extends BaseActivity {
             // Called when a jump in playback position occurs, either
             // due to user scrubbing or call to seekRelativeMillis() or seekToMillis()
         }
-    }
-
-    public boolean isViewEllipsized(TextView view) {
-
-        return view != null && view.getLayout() != null && (view.getLayout().getEllipsisCount(3) > 0);
     }
 
 

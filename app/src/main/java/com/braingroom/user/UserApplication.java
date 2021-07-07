@@ -88,7 +88,7 @@ public class UserApplication extends BranchApp {
     // Google Analytics
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
-    public static String DeviceFingerPrintID;
+    public static String DeviceFingerPrintID = "";
 
     @Override
     public void onCreate() {
@@ -100,7 +100,6 @@ public class UserApplication extends BranchApp {
             Timber.plant(new ProductionTree(this));
         }
         Branch.getAutoInstance(this);
-        DeviceFingerPrintID = PrefHelper.getInstance(this).getDeviceFingerPrintID();
 
         try {
             versionCode = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -108,6 +107,7 @@ public class UserApplication extends BranchApp {
             e.printStackTrace();
         }
         sAnalytics = GoogleAnalytics.getInstance(this);
+        sAnalytics.setDryRun(BuildConfig.DEBUG);
       /*  if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
@@ -120,7 +120,7 @@ public class UserApplication extends BranchApp {
 //            Timber.plant(new CrashReportingTree());
 //        }
         sInstance = this;
-        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this, BASE_URL)).build();
+        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
         internetStatusBus = PublishSubject.create();
         newNotificationBus = PublishSubject.create();

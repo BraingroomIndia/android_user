@@ -2,11 +2,14 @@ package com.braingroom.user.view.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.braingroom.user.R;
 import com.braingroom.user.UserApplication;
 import com.braingroom.user.model.DataflowService;
 import com.braingroom.user.model.QRCode.ClassBooking;
@@ -17,6 +20,7 @@ import com.braingroom.user.model.QRCode.PostDetail;
 import com.braingroom.user.model.dto.ClassData;
 import com.braingroom.user.model.dto.ConnectFilterData;
 import com.braingroom.user.model.dto.FilterData;
+import com.braingroom.user.model.request.DeepLinkDataReq;
 import com.braingroom.user.model.response.DeepLinkDataResp;
 import com.braingroom.user.utils.Constants;
 import com.braingroom.user.viewmodel.ClassListViewModel1;
@@ -32,6 +36,7 @@ import javax.inject.Named;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
+import io.branch.referral.PrefHelper;
 import io.branch.referral.util.LinkProperties;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -42,6 +47,8 @@ import timber.log.Timber;
 
 import static android.text.TextUtils.isEmpty;
 import static com.braingroom.user.utils.CommonUtils.sendCustomEvent;
+import static com.braingroom.user.view.activity.StripeActivity.QUERY_CLIENT_SECRET;
+import static com.braingroom.user.view.activity.StripeActivity.QUERY_SOURCE_ID;
 
 /*
  * Created by godara on 17/11/17.
@@ -65,16 +72,23 @@ public class Splash extends AppCompatActivity {
 
     public final String TAG = Splash.class.getSimpleName();
 
+    private String deepLinkBasUlr;
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         UserApplication.getInstance().getMAppComponent().inject(this);
-        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -1) == -1;
+        UserApplication.locationSettingPopup = pref.getInt(Constants.SAVED_CITY_ID, -2) == -2;
         Timber.tag(TAG).d("FCM token: " + pref.getString(Constants.FCM_TOKEN, ""));
         Timber.tag(TAG).d("onCreate: Called  ");
         branch = Branch.getInstance();
+        UserApplication.DeviceFingerPrintID = PrefHelper.getInstance(this).getDeviceFingerPrintID();
         apiService.checkGeoDetail();
         onNewIntent(getIntent());
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
     }
 
     @Override
@@ -84,13 +98,8 @@ public class Splash extends AppCompatActivity {
             bundleReceived = intent.getExtras().getBundle(Constants.pushNotification);
         String action = intent.getAction();
         String data = intent.getDataString();
-        if (Intent.ACTION_VIEW.equals(action) && data != null) {
-            apiService.getDeepLinkData(data).subscribe(new Consumer<DeepLinkDataResp>() {
-                @Override
-                public void accept(DeepLinkDataResp resp) throws Exception {
-                    qrCodeData(gson.toJson(resp));
-                }
-            });
+        if (Intent.ACTION_VIEW.equals(action) && data != null && data.contains(getString(R.string.deep_linking))) {
+            apiService.getDeepLinkData(data).map(gson::toJson).subscribe(this::qrCodeData);
         } else {
             branchData();
         }
@@ -111,12 +120,20 @@ public class Splash extends AppCompatActivity {
         String nonfictionPurpose = null;
         String userId = null;
         HashMap<String, String> data;
+        String notificationId;
+        String userType;
+        String thirdPartyId;
         Bundle bundle = new Bundle();
         //if onMessageReceived called
         if (bundleReceived != null) {
-            bundle.putBoolean(Constants.pushNotification, true);
             data = gson.fromJson(bundleReceived.getString(Constants.pushNotification), new TypeToken<HashMap<String, String>>() {
             }.getType());
+            if (!bundleReceived.getString(Constants.pushNotification, "").isEmpty()) {
+                notificationId = data.get("notification_id");
+                sendCustomEvent(this, "Notification Opened", notificationId != null ? notificationId : "", "");
+                bundle.putBoolean(Constants.pushNotification, true);
+            }
+
             Timber.tag(TAG).d("hashMap data" + data.toString());
             bundle.putString("notification_id", data.get("notification_id"));
             postId = data.get("post_id");
@@ -125,6 +142,9 @@ public class Splash extends AppCompatActivity {
             messageSenderName = data.get("sender_name");
             nonfictionPurpose = data.get("notification_type");
             userId = data.get("user_id");
+            userType = data.get("user_type_id");
+            thirdPartyId = data.get("third_party_id");
+
             // if onMessageReceived not called
         } else if (getIntent().getExtras() != null) {
             postId = getIntent().getExtras().getString("post_id");
@@ -133,7 +153,8 @@ public class Splash extends AppCompatActivity {
             messageSenderName = getIntent().getExtras().getString("sender_name");
             nonfictionPurpose = getIntent().getExtras().getString("notification_type");
             userId = getIntent().getExtras().getString("user_id");
-
+            userType = getIntent().getExtras().getString("user_type_id");
+            thirdPartyId = getIntent().getExtras().getString("third_party_id");
         } else {
             navigateActivity(Index.class, null);
             return;
@@ -157,6 +178,16 @@ public class Splash extends AppCompatActivity {
                 // For every one else open Chat thread
                 navigateActivity(MessagesThreadActivity.class, bundle);
 
+        } else if (thirdPartyId != null && userType != null) { // Follow Notification
+            if (userType.equalsIgnoreCase("1")) //Vendor Profile
+            {
+                bundle.putString("id", thirdPartyId);
+                navigateActivity(VendorProfileActivity.class, bundle);
+            } else if (userType.equalsIgnoreCase("2")) { //
+                bundle.putString("userId", thirdPartyId);
+                navigateActivity(ThirdPartyViewActivity.class, bundle);
+            }
+
         } else {
             navigateActivity(Index.class, null);
         }
@@ -176,6 +207,7 @@ public class Splash extends AppCompatActivity {
             return;
         }
         if (json.contains(Constants.classListing)) {
+            json.replace("\"", "");
             final ClassListing data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassListing.class);
             apiService.getFilterData(data.reqData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<FilterData>() {
                 @Override
@@ -209,7 +241,7 @@ public class Splash extends AppCompatActivity {
         } else if (json.contains(Constants.classDetail)) {
 
             try {
-                ClassDetail data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), ClassDetail.class);
+                ClassDetail data = gson.fromJson(json.replace("\\", "").substring(0, json.replace("\\", "").lastIndexOf("}") + 1), ClassDetail.class);
                 bundle.putString("id", data.reqData.getId());
                 bundle.putString(Constants.origin, ClassListViewModel1.ORIGIN_HOME);
                 bundle.putString(Constants.promoCode, data.reqData.getPromoCode());
@@ -258,7 +290,29 @@ public class Splash extends AppCompatActivity {
             navigateActivity(HomeActivity.class, null);
         } else if (json.contains(Constants.communityListing))
             navigateActivity(CommunityListActivity.class, null);
-        else navigateToIndex();
+        else if (json.contains(Constants.segmentListing)) {
+            final DeepLinkDataResp data = gson.fromJson(json.substring(0, json.lastIndexOf("}") + 1), DeepLinkDataResp.class);
+            apiService.getCategoryName(data.data.categId).doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    Timber.tag(TAG).e(throwable, "Segment Listing");
+                }
+            }).subscribe(new Consumer<DataflowService.NameIdPair>() {
+                @Override
+                public void accept(DataflowService.NameIdPair nameIdPair) throws Exception {
+                    if (nameIdPair != null && nameIdPair.id > 0) {
+                        HashMap<String, Integer> hashMap = new HashMap<>();
+                        hashMap.put(nameIdPair.name, nameIdPair.id);
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putSerializable(Constants.categoryFilterMap, hashMap);
+                        navigateActivity(SegmentListActivity.class, bundle1);
+                    } else {
+                        Timber.tag(TAG).e("Category id is wrong" + json);
+                        navigateToIndex();
+                    }
+                }
+            });
+        } else navigateToIndex();
 
     }
 
@@ -269,6 +323,7 @@ public class Splash extends AppCompatActivity {
                 branch.initSession(new Branch.BranchUniversalReferralInitListener() {
                     @Override
                     public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
+                        UserApplication.DeviceFingerPrintID = PrefHelper.getInstance(Splash.this).getDeviceFingerPrintID();
                         //If not Launched by clicking Branch link
                         if (branchUniversalObject == null)
                             pushNotification();
@@ -277,7 +332,7 @@ public class Splash extends AppCompatActivity {
                         */
                         else if (branchError != null) {
                             Timber.tag(TAG).e("Branch Error" + branchError.getMessage());
-                            navigateToIndex();
+                            pushNotification();
                         } else if (!branchUniversalObject.getMetadata().containsKey("$android_deeplink_path")) {
                             HashMap<String, String> referringParams = branchUniversalObject.getMetadata();
                             if (referringParams.containsKey("referral")) {

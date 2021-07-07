@@ -87,20 +87,12 @@ public class ClassListViewModel1 extends ViewModel {
 
     private boolean paginationInProgress = false;
 
-    /*public HashMap<String, Integer> categoryFilterMap = new HashMap<>();
-    public HashMap<String, Integer> segmentsFilterMap = new HashMap<>();
-    public HashMap<String, Integer> cityFilterMap = new HashMap<>();
-    public HashMap<String, Integer> localityFilterMap = new HashMap<>();
-    public HashMap<String, Integer> communityFilterMap = new HashMap<>();
-    public HashMap<String, Integer> classTypeFilterMap = new HashMap<>();
-    public HashMap<String, Integer> classScheduleFilterMap = new HashMap<>();
-    public HashMap<String, Integer> vendorListFilterMap = new HashMap<>();*/
     public final SearchSelectListViewModel localityVm;
     public final Observable<HashMap<String, Pair<Integer, String>>> localityApiObservable;
     public String keywords = "";
     public String startDate = "";
     public String endDate = "";
-    public final String  isIncentive;
+    public final String isIncentive;
     public ObservableField<String> searchQuery = new ObservableField<>("");
     public ObservableBoolean hideSearchBar = new ObservableBoolean(true);
     PublishSubject<DataItemViewModel> segmentSelectorSubject = PublishSubject.create();
@@ -378,7 +370,7 @@ public class ClassListViewModel1 extends ViewModel {
 
                 }
                 // FireBase Tracking
-                Timber.tag(TAG).d( "\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
+                Timber.tag(TAG).d("\napply: nextPage:\t " + nextPage + "\n currentPage:\t" + currentPage);
                 if (resp.getClassDataList().size() == 0 && currentPage == 0) {
                     results.add(new EmptyItemViewModel(R.drawable.empty_board, null, "No classes Available", null));
                 } else {
@@ -501,7 +493,7 @@ public class ClassListViewModel1 extends ViewModel {
                 }).doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        Timber.tag(TAG).e(throwable,"Class Fetch error");
+                        Timber.tag(TAG).e(throwable, "Class Fetch error");
                     }
                 });
             }

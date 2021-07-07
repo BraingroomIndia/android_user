@@ -1,0 +1,163 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="PrivateResource">Braingroom</string>
+
+
+    <string name="screen_profile">My Profile</string>
+    <string name="screen_explore">Explore</string>
+    <string name="screen_filter">Filter Options</string>
+    <string name="screen_vendor_profile">Vendor Profile</string>
+    <string name="screen_message">Messages</string>
+    <string name="screen_notification">Notifications</string>
+    <string name="screen_catalogue">Catalogue</string>
+    <string name="screen_giftcoupons">Giftcards &amp; Coupons</string>
+    <string name="screen_ngo_form">NGO Form</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_share">Share</string>
+
+
+    <!--Fonts-->
+    <string name="robotoBold" translatable="false">Roboto-Bold.ttf</string>
+    <string name="robotoBoldItalic" translatable="false">Roboto-BoldItalic.ttf</string>
+    <string name="robotoRegular" translatable="false">Roboto-Regular.ttf</string>
+
+    <!--Fonts-->
+
+    <string name="searchHint">Search for Classes, Activities and More</string>
+    <string name="searchBlogHint">Search in blog posts</string>
+    <string name="searchHintSmall">Search for Classes</string>
+
+    <string name="sign_up"><u>New User?Signup</u>.</string>
+    <string name="google_maps_key" translatable="false">AIzaSyBXMqBKSN7KnfPy0rWGQgw4fMH9vf07HK0</string>
+    <string name="branch_key" translatable="false">key_test_pexsI2ytGiNEj794aRPe2mkgFsnwUtCT</string>
+    <string name="branch_live_key" translatable="false">key_live_hpBAJ2zvLlPqp388kOv49pieszozQrrF</string>
+    <string name="branch_base_url" translatable="false">ht5w.test-app.link</string>
+
+    <string name="facebook_app_id" translatable="false">1949694208609258</string>
+    <string name="fb_login_protocol_scheme">fb1949694208609258</string>
+
+
+    <string name="action_done">Done</string>
+    <string name="action_discard">Discard</string>
+
+    <string name="action_tips_tricks">Knowledge Nugget</string>
+    <string name="action_learners_forum">Buy &amp; Sell</string>
+    <string name="action_tutors_talk">Activity Partners</string>
+
+    <string name="action_discuss_n_decide">Discussion Forum</string>
+    <string name="action_tutors_article">Articles &amp; Videos</string>
+
+    <string name="action_message">Message</string>
+    <string name="action_notification">Notification</string>
+    <string name="Cancel">Cancel</string>
+
+    <!--Added By Vikas Godara-->
+    <string name="q1">What is Braingroom?</string>
+
+    <string name="razor_pay_key">rzp_test_RzeA80NW4jeMpe</string>
+    <string name="title_action_reset">Reset</string>
+
+    <string name="label_card_number">XXXX XXXX XXXX XXXX</string>
+    <string name="label_expired_date">MM/YY</string>
+    <string name="label_card_holder">CARD HOLDER</string>
+    <string name="label_cvv_code">CVV CODE</string>
+
+    <string name="hint_card_number">16-DIGIT CARD NUMBER</string>
+    <string name="hint_expired_date">EXPIRED DATE</string>
+    <string name="hint_card_holder">CARD HOLDER</string>
+    <string name="hint_cvv_code">CVV CODE</string>
+
+    <string name="label_secure_submission">Secure Submission</string>
+    <bool name="branch_mode">true</bool>
+    <string name="stripe_publish_key">pk_test_NmdmvyAZiCpoYZCXgpJMYADS</string>
+    <string name="deep_linking">dev.braingroom.com</string>
+    <string name="q2">What are the benefits of posting classes in Braingroom?</string>
+    <string name="q3">Why do I need to register in BrainGroom?</string>
+    <string name="q4">Is there any fee for registration?</string>
+    <string name="q5">What is \'Identity verified vendor\' and \'Credential verified vendor\' in BrainGroom?</string>
+    <string name="q6">What is the advantage of being a verified vendor?</string>
+    <string name="q7">How to post a class/workshop/activity in BrainGroom?</string>
+    <string name="q8">How many classes can I post in BrainGroom for free?</string>
+    <string name="q9">Can I remove/edit my class/workshop/activity details after posting in BrainGroom?</string>
+    <string name="q10">How to get my classes in \'Featured Classes List\' in home page and category page?</string>
+    <string name="q11">What is \'Catalogue\' in BrainGroom? And How to list my class/workshop/activity in catalogue?</string>
+    <string name="q12">How do I get notified if anyone books my class?</string>
+
+    <string name="a1">It is an online marketplace for educational, recreational and wellness classes with defined target segment, quantifiable outcomes and specified time duration. Braingroom Portal and app helps users find and book all types of education and lifestyle classes in and around them in few clicks. Class listing is completely free in braingroom.com. We also provide free marketing and promotions for every client.</string>
+    <string name="a2">Posting your classes/workshops/activities in BrainGroom helps your visibility in and around the city. We provide free publicity through all the social medias and also a free video and photo shoot to promote your classes/workshops/activities.</string>
+    <string name="a3">You will have the access to post your own classes/workshops/activities for free in BrainGroom. You will also be able to book your favourite classes/workshops/activities sessions.</string>
+    <string name="a4">No. Registering in BrainGroom is free.</string>
+    <string name="a5">Identity verified vendor will have an identity verified logo in the respective profile. To become an Identity verified vendor, upload any two of the identity proof (Aadhar card, Licence, Passport, academy registration certificate (only for academy) &amp; PAN card) in your profile and send the attested copy of your Identity proof to BrainGroom office.
+Credential verified vendor will have a credential verified logo in the respective profile. To become a Credential verified vendor, upload any one of your credential proof (Certification of Teacher, Experience Certificate &amp; any certificate related to the professional experience)</string>
+    <string name="a6">Verified logo in the class/workshop/activity provider\'s profile will be given first preference in the class listing page for any users.</string>
+    <string name="a7">To post a class/workshop/activity, you should be registered in BrainGroom. If you are a registered member, log in to your profile and click on \'Post a Class\' in your dashboard and post the respective class. Once BrainGroom admin verify your class, it will be posted in the portal/app.</string>
+    <string name="a8">You can post unlimited number classes in BrainGroom for free.</string>
+    <string name="a9">No, once you have posted the class, you cannot edit/delete the class/workshop/activity details till the validity of the class/workshop/activity gets over. If you want to edit/delete your class/workshop/activity, you can contact BrainGroom help desk and inform.</string>
+    <string name="a10">Select \'Promote your Class\' and choose your required days to promote your classes. Payments for home page &amp; category page featured listings will be different and will change from time to time based on demand. Vendors should check the details thoroughly before booking.</string>
+    <string name="a11">BrainGroom Catalogue is the B2B feature which helps Schools, Colleges, Corporate, Clubs, Residential Communities and Parties to organize an event (workshops/classes/activities) at their location within few clicks. To list your class/workshop/activity, click on \'Add to Catalogue\' in your Dashboard and select the respective class/activity/workshop to be added. After Admin verification, it will get posted in the Catalogue list.</string>
+    <string name="a12">For mobile application users, a push notification will be sent if there is any booking. Web users will get a notification in their respective BrainGroom dashboard for booking details.</string>
+    <string name="booking_related_help">Contact Customer Care</string>
+
+    <string name="action_connect">Connect</string>
+
+    <string name="msg_sit_back">Sit back &amp; Relax! while we verify your mobile number</string>
+    <string name="msg_manual_otp">(Enter the OTP below in case if we fail to detect the SMS automatically)</string>
+    <string name="lbl_enter_otp">Enter OTP</string>
+    <string name="lbl_submit">Submit</string>
+    <string name="done">Done</string>
+    <string name="name">Name</string>
+    <string name="success">Success</string>
+    <string name="classs_name">Class Name</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="transaction_number">Transaction Number</string>
+    <string name="payment_success">Your payment has been processed successfully</string>
+    <string name="failed">Failed</string>
+    <string name="payment_fail">Unfortunately transaction has failed. Please retry </string>
+
+    <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="save">SAVE</string>
+    <string name="clear">CLEAR</string>
+
+
+    <!--Edited By Vikas Godara-->
+
+    <!--Card View-->
+    <string name="bt_form_hint_card_number">Card Number</string>
+    <string name="bt_form_hint_expiration">Expiration Date</string>
+    <string name="bt_form_hint_cvv">@string/bt_cvv</string>
+    <string name="bt_form_hint_postal_code">Postal Code</string>
+    <string name="bt_form_hint_country_code">Country Code</string>
+    <string name="bt_form_hint_mobile_number">Mobile Number</string>
+
+    <string name="bt_cvv">CVV</string>
+    <string name="bt_cvc">CVC</string>
+    <string name="bt_cid">CID</string>
+    <string name="bt_cvn">CVN</string>
+
+    <string name="bt_month">Month</string>
+    <string name="bt_year">Year</string>
+
+    <string name="bt_card_number_required">Card number is required</string>
+    <string name="bt_card_number_invalid">Card number is invalid</string>
+    <string name="bt_cvv_required">%s is required</string>
+    <string name="bt_cvv_invalid">%s is invalid</string>
+    <string name="bt_expiration_required">Expiration date is required</string>
+    <string name="bt_expiration_invalid">Expiration date is invalid</string>
+    <string name="bt_postal_code_required">Postal code is required</string>
+    <string name="bt_country_code_required">Country code is required</string>
+    <string name="bt_mobile_number_required">Mobile number is required</string>
+    <string name="purchase">Purchase</string>
+    <string name="valid">Form is valid</string>
+    <string name="invalid">Form is invalid</string>
+    <string name="light_theme_form">Light Theme</string>
+    <string name="dark_theme_form">Dark Theme</string>
+    <string name="scan_with_card_io">Scan with card.io</string>
+
+    <!---->
+    <bool name="testMode">true</bool>
+</resources>

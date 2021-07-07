@@ -26,6 +26,9 @@ public class NotificationListResp extends BaseResp {
         @SerializedName("post_id")
         public String postId;
 
+        @SerializedName("class_id")
+        public String classId;
+
         @SerializedName("description")
         public String description;
 

@@ -87,13 +87,15 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     public DataflowService apiService;
 
     public String baseUrl = "";
+    public String branchKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UserApplication.getInstance().getMAppComponent().inject(this);
         setContentView(R.layout.activity_qrcode_reader);
-        baseUrl = BuildConfig.DEBUG ? getString(R.string.branch_test_base_url) : getString(R.string.branch_live_base_url);
+        baseUrl = "https://" + getString(R.string.branch_base_url);
+        branchKey = getString(R.string.branch_key);
         // getting barcode instance
         barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_fragment);
 
@@ -146,6 +148,11 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
 
     }
 
+    @Override
+    public void onCameraPermissionDenied() {
+
+    }
+
 
     public Navigator getNavigator() {
         if (navigator == null)
@@ -159,7 +166,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
                 }
 
                 @Override
-                public void navigateActivityForResult(Class<? extends MvvmActivity> destination, @Nullable Bundle bundle, int reqCode) {
+                public void navigateActivityForResult(Class<? extends AppCompatActivity> destination, @Nullable Bundle bundle, int reqCode) {
                     Intent intent = new Intent(QRCodeReaderActivity.this, destination);
                     intent.putExtra("classData", bundle);
                     startActivityForResult(intent, reqCode);
@@ -235,7 +242,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements BarcodeRe
     public String getBranchUrlData(String url) {
         if (TextUtils.isEmpty(url))
             return null;
-        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + (BuildConfig.DEBUG ? getString(R.string.branch_test_key) : getString(R.string.branch_live_key)));
+        JSONObject jsonObject = doGetRequest("https://api.branch.io/v1/url?url=" + url + "&branch_key=" + branchKey);
         try {
             jsonObject = new JSONObject(jsonObject.getString("data"));
             jsonObject = new JSONObject(jsonObject.getString("qrcode"));

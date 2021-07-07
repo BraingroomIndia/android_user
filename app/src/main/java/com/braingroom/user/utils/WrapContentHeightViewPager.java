@@ -42,8 +42,14 @@ public class WrapContentHeightViewPager extends ViewPager {
 
         // Initially set the height to that of the first child - the
         // PagerTitleStrip (since we always know that it won't be 0).
-        int height = firstChild.getMeasuredHeight();
+        int height = 0;
 
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            int h = child.getMeasuredHeight();
+            if (h > height) height = h;
+        }
         if (wrapHeight) {
 
             // Keep the current measured width.

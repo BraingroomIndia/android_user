@@ -2,7 +2,6 @@ package com.braingroom.user.viewmodel;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.braingroom.user.R;
 import com.braingroom.user.model.dto.ClassData;
@@ -10,6 +9,7 @@ import com.braingroom.user.utils.Constants;
 import com.braingroom.user.utils.FieldUtils;
 import com.braingroom.user.view.MessageHelper;
 import com.braingroom.user.view.Navigator;
+import com.braingroom.user.view.OnlineClassVideoActivity;
 import com.braingroom.user.view.activity.ClassDetailActivity;
 
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -26,15 +25,14 @@ import timber.log.Timber;
 
 public class ClassSimpleListViewModel extends ViewModel {
 
+    private final String listType;
+    private final String userId;
+    public Observable<List<ViewModel>> result;
     private boolean paginationInProgress = false;
     private int nextPage = 1;
     private int currentPage = 0;
     private boolean nextPageAvailable = true;
-    private final String listType;
-    private final String userId;
     private Observable<List<ClassData>> apiObservable = null;
-
-    public Observable<List<ViewModel>> result;
     private List<ViewModel> classes;
 
     public ClassSimpleListViewModel(@NonNull final MessageHelper messageHelper, @NonNull final Navigator navigator, @NonNull String listType1, String id) {
@@ -45,7 +43,7 @@ public class ClassSimpleListViewModel extends ViewModel {
             public void run() throws Exception {
                 retry();
                 connectivityViewmodel.isConnected.set(true);
-                Timber.tag(TAG).d( "run: " + callAgain.get());
+                Timber.tag(TAG).d("run: " + callAgain.get());
             }
         });
         if (id != null)
@@ -68,11 +66,14 @@ public class ClassSimpleListViewModel extends ViewModel {
             @Override
             public Observable<List<ViewModel>> apply(@io.reactivex.annotations.NonNull Integer integer) throws Exception {
                 paginationInProgress = true;
-                Timber.tag(TAG).d( "apply: " + callAgain.get());
+                Timber.tag(TAG).d("apply: " + callAgain.get());
                 if ("wishlist".equalsIgnoreCase(listType))
                     apiObservable = apiService.getWishList(nextPage);
                 else if ("bookinghistory".equalsIgnoreCase(listType))
                     apiObservable = apiService.getBookingHistory(userId, nextPage);
+                else if ("onlineBookingHistory".equalsIgnoreCase(listType))
+                    apiObservable = apiService.getBookingOnlineHistory(userId, nextPage);
+
 
                 return apiObservable
                         .map(new Function<List<ClassData>, List<ViewModel>>() {
@@ -93,10 +94,17 @@ public class ClassSimpleListViewModel extends ViewModel {
                                         @Override
                                         public void run() throws Exception {
                                             if (!elem.getId().equals("-1")) {
-                                                Bundle data = new Bundle();
-                                                data.putString("id", elem.getId());
-                                                data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
-                                                navigator.navigateActivity(ClassDetailActivity.class, data);
+                                                if ("onlineBookingHistory".equalsIgnoreCase(listType)) {
+                                                    Bundle data = new Bundle();
+                                                    data.putString("txn_id", elem.getTxnId());
+                                                    navigator.navigateActivity(OnlineClassVideoActivity.class, data);
+
+                                                } else {
+                                                    Bundle data = new Bundle();
+                                                    data.putString("id", elem.getId());
+                                                    data.putString("origin", ClassListViewModel1.ORIGIN_HOME);
+                                                    navigator.navigateActivity(ClassDetailActivity.class, data);
+                                                }
                                             }
                                         }
                                     }));

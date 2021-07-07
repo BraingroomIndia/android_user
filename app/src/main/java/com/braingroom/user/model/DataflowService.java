@@ -3,19 +3,145 @@ package com.braingroom.user.model;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
-
-import com.braingroom.user.model.request.*;
-import com.braingroom.user.model.response.*;
-import com.braingroom.user.model.dto.*;
 
 import com.braingroom.user.UserApplication;
+import com.braingroom.user.model.dto.ClassData;
+import com.braingroom.user.model.dto.ClassListData;
+import com.braingroom.user.model.dto.ConnectFilterData;
+import com.braingroom.user.model.dto.FilterData;
+import com.braingroom.user.model.dto.PayUCheckoutData;
+import com.braingroom.user.model.dto.ProfileData;
+import com.braingroom.user.model.dto.VendorProfileData;
+import com.braingroom.user.model.request.ArticleAndVideosPostReq;
+import com.braingroom.user.model.request.BookedSessionReq;
+import com.braingroom.user.model.request.BuyAndSellPostReq;
+import com.braingroom.user.model.request.CdnUrlReq;
+import com.braingroom.user.model.request.ChangeNotificationStatusReq;
+import com.braingroom.user.model.request.ChangePasswordReq;
+import com.braingroom.user.model.request.ChatMessageReq;
+import com.braingroom.user.model.request.CityReq;
+import com.braingroom.user.model.request.ClassDetailReq;
+import com.braingroom.user.model.request.CommentReplyReq;
+import com.braingroom.user.model.request.CommentViewReply;
+import com.braingroom.user.model.request.CommentViewReplyReq;
+import com.braingroom.user.model.request.CommonIdReq;
+import com.braingroom.user.model.request.CommonUserIdReq;
+import com.braingroom.user.model.request.CommonUuidReq;
+import com.braingroom.user.model.request.ConnectDataReq;
+import com.braingroom.user.model.request.ConnectFeedReq;
+import com.braingroom.user.model.request.ConnectPostByIdReq;
+import com.braingroom.user.model.request.ContactAdmin;
+import com.braingroom.user.model.request.ContactTutorReq;
+import com.braingroom.user.model.request.CountryReq;
+import com.braingroom.user.model.request.CouponCodeReq;
+import com.braingroom.user.model.request.DecideAndDiscussPostReq;
+import com.braingroom.user.model.request.DeepLinkDataReq;
+import com.braingroom.user.model.request.ExploreReq;
+import com.braingroom.user.model.request.FirstSocialLoginReq;
+import com.braingroom.user.model.request.FollowReq;
+import com.braingroom.user.model.request.GeneralFilterReq;
+import com.braingroom.user.model.request.GetBookingDetailsReq;
+import com.braingroom.user.model.request.GiftCouponReq;
+import com.braingroom.user.model.request.GuestUserReq;
+import com.braingroom.user.model.request.InstituteReq;
+import com.braingroom.user.model.request.KnowledgeNuggetsPostReq;
+import com.braingroom.user.model.request.LearningPartnerPostReq;
+import com.braingroom.user.model.request.LikeReq;
+import com.braingroom.user.model.request.LocalityReq;
+import com.braingroom.user.model.request.LoginReq;
+import com.braingroom.user.model.request.LogoutReq;
+import com.braingroom.user.model.request.MarkerDataReq;
+import com.braingroom.user.model.request.MessageListReq;
+import com.braingroom.user.model.request.MessageReplyReq;
+import com.braingroom.user.model.request.OTPReq;
+import com.braingroom.user.model.request.OnlineBookinHistoryReq;
+import com.braingroom.user.model.request.PostRelatedReq;
+import com.braingroom.user.model.request.ProfileUpdateReq;
+import com.braingroom.user.model.request.PromoCodeReq;
+import com.braingroom.user.model.request.QuoteDetailsReq;
+import com.braingroom.user.model.request.QuoteReq;
+import com.braingroom.user.model.request.RazorBuySuccessReq;
+import com.braingroom.user.model.request.RazorSuccessReq;
+import com.braingroom.user.model.request.ReferralCodeReq;
+import com.braingroom.user.model.request.RegisterUserDeviceReq;
+import com.braingroom.user.model.request.ReportReq;
+import com.braingroom.user.model.request.ReviewAddReq;
+import com.braingroom.user.model.request.ReviewGetReq;
+import com.braingroom.user.model.request.SaveGiftCouponReq;
+import com.braingroom.user.model.request.SearchReq;
+import com.braingroom.user.model.request.SegmentReq;
+import com.braingroom.user.model.request.SignUpReq;
+import com.braingroom.user.model.request.SocialLoginReq;
+import com.braingroom.user.model.request.StateReq;
+import com.braingroom.user.model.request.SubmitOTPReq;
+import com.braingroom.user.model.request.ThirdPartyProfileReq;
+import com.braingroom.user.model.request.UserGeoLocationReq;
+import com.braingroom.user.model.request.UserListReq;
+import com.braingroom.user.model.request.WishlistReq;
+import com.braingroom.user.model.response.BaseResp;
+import com.braingroom.user.model.response.BookedSessionResp;
+import com.braingroom.user.model.response.BookingHistoryResp;
+import com.braingroom.user.model.response.CODOfferDetailResp;
+import com.braingroom.user.model.response.CatalogueGroupResp;
+import com.braingroom.user.model.response.CategoryResp;
+import com.braingroom.user.model.response.CategoryTreeResp;
+import com.braingroom.user.model.response.ChangePasswordResp;
+import com.braingroom.user.model.response.ChatListResp;
+import com.braingroom.user.model.response.ClassListResp;
+import com.braingroom.user.model.response.CommentListResp;
+import com.braingroom.user.model.response.CommentReplyResp;
+import com.braingroom.user.model.response.CommonIdResp;
+import com.braingroom.user.model.response.CommunityResp;
+import com.braingroom.user.model.response.CompetitionStatusResp;
+import com.braingroom.user.model.response.ConnectFeedResp;
+import com.braingroom.user.model.response.ConnectSectionResp;
+import com.braingroom.user.model.response.ContactTutorResp;
+import com.braingroom.user.model.response.DeepLinkDataResp;
+import com.braingroom.user.model.response.ExploreResp;
+import com.braingroom.user.model.response.FirstSocialLoginResp;
+import com.braingroom.user.model.response.FollowResp;
+import com.braingroom.user.model.response.GiftcardResp;
+import com.braingroom.user.model.response.GroupResp;
+import com.braingroom.user.model.response.GuestUserResp;
+import com.braingroom.user.model.response.LikeResp;
+import com.braingroom.user.model.response.LikedUsersListResp;
+import com.braingroom.user.model.response.LoginResp;
+import com.braingroom.user.model.response.MarkerDataResp;
+import com.braingroom.user.model.response.MessageListResp;
+import com.braingroom.user.model.response.NotificationCountResp;
+import com.braingroom.user.model.response.NotificationListResp;
+import com.braingroom.user.model.response.PayUBookingDetailsResp;
+import com.braingroom.user.model.response.PrimeMessageResp;
+import com.braingroom.user.model.response.ProfileResp;
+import com.braingroom.user.model.response.PromoInfo;
+import com.braingroom.user.model.response.PromocodeResp;
+import com.braingroom.user.model.response.QuoteDetailsResp;
+import com.braingroom.user.model.response.RazorSuccessResp;
+import com.braingroom.user.model.response.ReferralCodeResp;
+import com.braingroom.user.model.response.ReportResp;
+import com.braingroom.user.model.response.ReviewAddResp;
+import com.braingroom.user.model.response.ReviewGetResp;
+import com.braingroom.user.model.response.SaveGiftCouponResp;
+import com.braingroom.user.model.response.SegmentResp;
+import com.braingroom.user.model.response.SignUpResp;
+import com.braingroom.user.model.response.ThirdPartyProfileResp;
+import com.braingroom.user.model.response.UploadPostApiResp;
+import com.braingroom.user.model.response.UploadResp;
+import com.braingroom.user.model.response.UserGeoLocationResp;
+import com.braingroom.user.model.response.VendorProfileResp;
+import com.braingroom.user.model.response.VendorReviewResp;
+import com.braingroom.user.model.response.WinnerResp;
+import com.braingroom.user.model.response.WishlistResp;
 import com.braingroom.user.utils.Constants;
-
-
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +151,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -47,39 +172,20 @@ import static com.braingroom.user.model.DataflowService.FilterType.Segment;
 public class DataflowService {
 
     @Inject
+    @Named("defaultPref")
+    public SharedPreferences pref;
+    @Inject
     @Named("api")
     UserApiService api;
-
     @Inject
     Gson gson;
     SharedPreferences sharedPreferences;
-
-    @Inject
-    @Named("defaultPref")
-    public SharedPreferences pref;
 
 
     @Inject
     public DataflowService() {
 
     }
-
-    public static enum FilterType {
-        Category, Segment, City, Locality, Community, ClassType, ClassSchedule, VendorList
-    }
-
-    public class NameIdPair {
-        FilterType type;
-        String name;
-        Integer id;
-
-        public NameIdPair(FilterType type, String name, Integer id) {
-            this.name = name;
-            this.type = type;
-            this.id = id;
-        }
-    }
-
 
     public void registerUserDevice() {
         final RegisterUserDeviceReq req = new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(pref.getString(Constants.FCM_TOKEN, ""), pref.getString(Constants.BG_ID, null)));
@@ -93,6 +199,17 @@ public class DataflowService {
                 }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
     }
 
+    public void registerUserDevice(String fcm) {
+        final RegisterUserDeviceReq req = new RegisterUserDeviceReq(new RegisterUserDeviceReq.Snippet(fcm, pref.getString(Constants.BG_ID, null)));
+        api.registerUserDevice(req)
+                .onErrorReturn(new Function<Throwable, BaseResp>() {
+                    @Override
+                    public BaseResp apply(@NonNull Throwable throwable) throws Exception {
+                        Timber.tag(TAG).e(throwable, "request payload\n" + gson.toJson(req));
+                        return new BaseResp();
+                    }
+                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+    }
 
     public Observable<LoginResp> login(String email, String password, String fcmToken) {
 
@@ -200,6 +317,18 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<CommonIdResp> getAllClassTypes() {
+
+        return api.getAllClassTypes().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<CommonIdResp> getAllDurations() {
+
+        return api.getAllDurations().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<CategoryResp> getCategory() {
 
         return api.getCategories().subscribeOn(Schedulers.io())
@@ -217,7 +346,6 @@ public class DataflowService {
         return api.getGroupActivities(new CommonIdReq(new CommonIdReq.Snippet(groupIds))).subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread());
     }
-
 
     public Observable<SegmentResp> getSegments(String categoryId) {
 
@@ -269,7 +397,6 @@ public class DataflowService {
         return api.addToWishlist(new WishlistReq(new WishlistReq.Snippet(pref.getString(Constants.UUID, ""), classId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 
     public Observable<ProfileData> getProfile(String userId) {
         return api.getProfile(new CommonIdReq(new CommonIdReq.Snippet(userId))).subscribeOn(Schedulers.io())
@@ -336,7 +463,6 @@ public class DataflowService {
                 });
     }
 
-
     public Observable<List<ClassData>> getWishList(int pageIndex) {
 
         return api.getWishlist(pageIndex > 1 ? pageIndex + "" : "",
@@ -350,6 +476,7 @@ public class DataflowService {
                         for (ClassListResp.Snippet classDetail : classListResp.getData()) {
 
                             ClassData classData = new ClassData();
+                            classData.setRating(classDetail.getRating());
                             classData.setImage(classDetail.getPicName());
                             classData.setClassTopic(classDetail.getClassTopic());
                             if (classDetail.getLocation() != null && !classDetail.getLocation().isEmpty())
@@ -405,41 +532,6 @@ public class DataflowService {
                         return dataList;
                     }
                 });
-
-        /*return api.getVendorProfile(pageIndex > 1 ? pageIndex + "" : "",
-                new CommonIdReq(new CommonIdReq.Snippet(vendorId))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<VendorProfileResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull VendorProfileResp resp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        //Edited by Vikas Godara
-                        int i = 0;
-                        if (resp.getData().get(i).getClasses() != null)
-                            for (VendorProfileResp.Snippet.ClassDetail classDetail : resp.getData().get(i).getClasses()) {
-                                ClassData classData = new ClassData();
-                                classData.setImage(classDetail.photo);
-                                classData.setClassTopic(classDetail.classTopic);
-                                classData.setLocality(classDetail.location);
-                                classData.setPricingType("Single");
-                                classData.setPrice(classDetail.price);
-                                classData.setNoOfSession(classDetail.noOfSession);
-                                classData.setClassDuration(classDetail.classDuration);
-                                classData.setC
-
-
-                                if (classDetail.classTimingId.equals("1"))
-                                    classData.setClassType("Fixed");
-                                else
-                                    classData.setClassType("Flexible");
-                                classData.setId(classDetail.id);
-                                //Edited by Vikas Godara
-                                dataList.add(gson.fromJson(gson.toJson(classData), ClassData.class));
-                                i++;
-
-                            }
-                        return dataList;
-                    }
-                });*/
     }
 
     public Observable<List<ClassData>> getBookingHistory(String userId, Integer pageIndex) {
@@ -454,6 +546,7 @@ public class DataflowService {
                             for (BookingHistoryResp.Snippet snippet : resp.getData()) {
                                 BookingHistoryResp.ClassDetail classDetail = snippet.getClassDetail();
                                 ClassData classData = new ClassData();
+                                classData.setRating(classDetail.getRating());
                                 classData.setImage(classDetail.getPhoto());
                                 classData.setClassTopic(classDetail.getClassTopic());
                                 if (classDetail.getLocation().size() != 0)
@@ -477,15 +570,91 @@ public class DataflowService {
                 });
     }
 
+    public Observable<List<ClassData>> getBookingOnlineHistory(String userId, Integer pageIndex) {
+
+        return api.getOnlineBookingHistory(pageIndex > 1 ? pageIndex + "" : "",
+                new OnlineBookinHistoryReq(new OnlineBookinHistoryReq.Snippet(userId))).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).map(new Function<BookingHistoryResp, List<ClassData>>() {
+                    @Override
+                    public List<ClassData> apply(@NonNull BookingHistoryResp resp) throws Exception {
+                        List<ClassData> dataList = new ArrayList<>();
+                        if (!resp.getData().isEmpty())
+                            for (BookingHistoryResp.Snippet snippet : resp.getData()) {
+                                BookingHistoryResp.ClassDetail classDetail = snippet.getClassDetail();
+                                ClassData classData = new ClassData();
+                                classData.setRating(classDetail.getRating());
+                                classData.setImage(classDetail.getPhoto());
+                                classData.setClassTopic(classDetail.getClassTopic());
+                                if (classDetail.getLocation().size() != 0)
+                                    classData.setLocality(classDetail.getLocation().get(0).getLocality());
+                                classData.setPricingType(classDetail.getClassType());
+                                if (classDetail.getClassLevels().size() != 0)
+                                    classData.setPrice(classDetail.classLevels.get(0).getPrice());
+                                classData.setNoOfSession(classDetail.getNoOfSession());
+                                classData.setClassDuration(classDetail.getClassDuration());
+                                classData.setClassType(classDetail.getClassType());
+                                classData.setId(classDetail.getId());
+                                classData.setClassTypeData(classDetail.getClassTypeData());
+                                classData.setTeacher(classDetail.getTeacher());
+                                classData.setPriceSymbol(classDetail.getPriceSymbol());
+                                classData.setPriceCode(classDetail.getPriceCode());
+                                classData.setTxnId(snippet.getPayuTransaction().getTxnid());
+                                //Edited by Vikas Godara
+                                dataList.add(classData);
+                            }
+                        return dataList;
+                    }
+                });
+    }
+
+    public Observable<List<BookedSessionResp.Session>> getOnlineVideoList(String classId) {
+        return api.getOnlineVideoList(new BookedSessionReq(new BookedSessionReq.Snippet(classId, pref.getString(Constants.BG_ID, "")))).map(BookedSessionResp::getSession).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<String> getCDNVideoUrl(String txnId, String sessionId) {
+        return api.getVideoUrl(new CdnUrlReq(new CdnUrlReq.Snippet(txnId, pref.getString(Constants.BG_ID, ""), sessionId))).map(resp -> resp.getData().get(0).getTextValue()).map(new Function<String, String>() {
+            @Override
+            public String apply(String s) throws Exception {
+                URL url = null;
+                try {
+                    url = new URL(s);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                InputStream M3U8 = null;
+
+                try {
+                    M3U8 = (InputStream) url.getContent();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                BufferedReader br = new BufferedReader(new InputStreamReader(M3U8));
+                for (int i = 0; i < 2; ++i)
+                    try {
+                        br.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                String target = null; //this parses the third line of the playlist
+                try {
+                    target = br.readLine();
+                    br.close();
+                    url = new URL(target);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return url.toString();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn((throwable) -> "");
+    }
+
     public Observable<ClassData> getClassDetail(final String classId, final int isCatalogue) {
 
         return api.getClassDetail(new ClassDetailReq(new ClassDetailReq.Snippet(classId, pref.getString(Constants.BG_ID, ""), isCatalogue))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, ClassData>() {
-                    @Override
-                    public ClassData apply(@NonNull ClassListResp resp) throws Exception {
-                        return gson.fromJson(gson.toJson(resp.getData().get(0)), ClassData.class);
-                    }
-                });
+                .observeOn(AndroidSchedulers.mainThread()).map(resp -> gson.fromJson(gson.toJson(resp.getData().get(0)), ClassData.class));
 
     }
 
@@ -502,15 +671,12 @@ public class DataflowService {
     public Observable<List<ClassData>> getIndigeneousClass() {
 
         return api.getIndianClass().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).map(new Function<ClassListResp, List<ClassData>>() {
-                    @Override
-                    public List<ClassData> apply(@NonNull ClassListResp classListResp) throws Exception {
-                        List<ClassData> dataList = new ArrayList<>();
-                        for (ClassListResp.Snippet snippet : classListResp.getData()) {
-                            dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
-                        }
-                        return dataList;
+                .observeOn(AndroidSchedulers.mainThread()).map(classListResp -> {
+                    List<ClassData> dataList = new ArrayList<>();
+                    for (ClassListResp.Snippet snippet : classListResp.getData()) {
+                        dataList.add(gson.fromJson(gson.toJson(snippet), ClassData.class));
                     }
+                    return dataList;
                 });
     }
 
@@ -583,16 +749,10 @@ public class DataflowService {
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
     }
 
-
     public Observable<ExploreResp> getExploreDashboard(String latitude, String longitude) {
 
         return api.getExploreDashboard(new ExploreReq(new ExploreReq.Snippet(null, null, null, latitude, longitude))).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(new Function<Throwable, ExploreResp>() {
-                    @Override
-                    public ExploreResp apply(@NonNull Throwable throwable) throws Exception {
-                        return new ExploreResp(new ArrayList<ExploreResp.Snippet>());
-                    }
-                });
+                .observeOn(AndroidSchedulers.mainThread()).onErrorReturn(throwable -> new ExploreResp(new ArrayList<>()));
 
     }
 
@@ -608,7 +768,7 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<PayUCheckoutData> getBookingDetails(final GetBookingDetailsReq req, final String promoId, final String promoVal) {
+    public Observable<PayUCheckoutData> getBookingDetails(final GetBookingDetailsReq req) {
 
         return api.getBookingDetails(req).map(new Function<PayUBookingDetailsResp, PayUCheckoutData>() {
             @Override
@@ -673,6 +833,7 @@ public class DataflowService {
     }
 
     public Observable<RazorSuccessResp> postRazorpaySuccess(final RazorSuccessReq req) {
+        Timber.tag(TAG).e("request payload\n" + gson.toJson(req));
         return api.postRazorPaySuccess(req).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).doOnError(new Consumer<Throwable>() {
                     @Override
@@ -847,8 +1008,7 @@ public class DataflowService {
 
     }
 
-
-    private Observable<NameIdPair> getCategoryName(final Integer id) {
+    public Observable<NameIdPair> getCategoryName(final Integer id) {
         return getCategory().map(new Function<CategoryResp, NameIdPair>() {
             @Override
             public NameIdPair apply(CategoryResp categoryResp) throws Exception {
@@ -861,6 +1021,18 @@ public class DataflowService {
         });
     }
 
+    public Observable<NameIdPair> getCategoryName(final String id) {
+        return getCategory().map(new Function<CategoryResp, NameIdPair>() {
+            @Override
+            public NameIdPair apply(CategoryResp categoryResp) throws Exception {
+                for (CategoryResp.Snippet snippet : categoryResp.getData())
+                    if (snippet.getId().equals(Integer.parseInt(id)))
+                        return new NameIdPair(Category, snippet.getCategoryName(), snippet.getId());
+
+                return new NameIdPair(Category, null, null);
+            }
+        });
+    }
 
     private Observable<NameIdPair> getSegmentName(Integer categoryId, final Integer segmentId) {
 
@@ -1123,7 +1295,6 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
     public Observable<LikedUsersListResp> getLikedUsers(String postId) {
 //        LikedUsersListResp.Snippet snippet = new LikedUsersListResp.Snippet();
 //        snippet.setUserImage("https://lh5.googleusercontent.com/-n-KJMm8mENs/AAAAAAAAAAI/AAAAAAAAAHY/uG2vXBFifNU/photo.jpg?sz=50");
@@ -1142,14 +1313,12 @@ public class DataflowService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
     public Observable<BaseResp> addAccept(String postId) {
 
 
         return api.addAccept(new PostRelatedReq(new PostRelatedReq.Snippet(pref.getString(Constants.BG_ID, ""), postId))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 
     public Observable<BaseResp> postArticleVideos(ArticleAndVideosPostReq.Snippet snippet) {
 
@@ -1270,7 +1439,6 @@ public class DataflowService {
         return api.postMessage(new MessageReplyReq(snippet)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 
     public Observable<UploadPostApiResp> uploadPostApiImage(String filePath, String type, String post_type) {
 
@@ -1507,6 +1675,31 @@ public class DataflowService {
             });
     }
 
+    public void checkGeoDetail(final Runnable action) {
+        if (TextUtils.isEmpty(Constants.GEO_TAG))
+            getGeoDetail(pref.getInt(Constants.SAVED_CITY_ID, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+                @Override
+                public void accept(@NonNull String s) throws Exception {
+                    Constants.GEO_TAG = s;
+                    registerUserDevice();
+                    try {
+                        action.run();
+                    } catch (Exception e) {
+                    }
+                }
+            });
+    }
+
+    public void checkGeoDetail(final String fcm) {
+        getGeoDetail(pref.getInt(Constants.SAVED_CITY_ID, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(@NonNull String s) throws Exception {
+                Constants.GEO_TAG = s;
+                registerUserDevice(fcm);
+            }
+        });
+    }
+
     private boolean isDigitsOnly(String text) {
         return !isEmpty(text) && text.matches("[0-9]+");
     }
@@ -1525,5 +1718,21 @@ public class DataflowService {
 
     public Observable<DeepLinkDataResp> getDeepLinkData(String url) {
         return api.getDeepLinkData(new DeepLinkDataReq(url)).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation());
+    }
+
+    public static enum FilterType {
+        Category, Segment, City, Locality, Community, ClassType, ClassSchedule, VendorList
+    }
+
+    public class NameIdPair {
+        public String name;
+        public Integer id;
+        FilterType type;
+
+        public NameIdPair(FilterType type, String name, Integer id) {
+            this.name = name;
+            this.type = type;
+            this.id = id;
+        }
     }
 }

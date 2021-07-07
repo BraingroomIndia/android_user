@@ -1,6 +1,7 @@
 package com.braingroom.user.viewmodel;
 
 import android.databinding.ObservableBoolean;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -22,9 +23,11 @@ public class IconTextItemViewModel extends ViewModel {
     public final String title;
 
     @NonNull
-    public final int placeHolder = R.drawable.white_background_drawable;
+    public final int placeHolder;
 
     public final ObservableBoolean isSelected = new ObservableBoolean();
+    @Nullable
+    public final MyConsumer<IconTextItemViewModel> onClicked;
 
     public IconTextItemViewModel(@NonNull final String icon, @NonNull final String title
             , @NonNull final MyConsumer<IconTextItemViewModel> clickAction) {
@@ -32,6 +35,7 @@ public class IconTextItemViewModel extends ViewModel {
         this.title = title;
         this.imageRes = 0;
         this.onClicked = clickAction;
+        placeHolder = R.drawable.white_background_drawable;
     }
 
     public IconTextItemViewModel(@NonNull final String icon, @NonNull final String title
@@ -41,6 +45,7 @@ public class IconTextItemViewModel extends ViewModel {
         this.title = title;
         this.imageRes = 0;
         this.onClicked = clickAction;
+        placeHolder = R.drawable.white_background_drawable;
         isSelected.set(selected);
         if (selectorSubject != null) {
             selectorSubject.subscribe(new Consumer<IconTextItemViewModel>() {
@@ -62,6 +67,7 @@ public class IconTextItemViewModel extends ViewModel {
         this.title = title;
         this.image = "";
         this.onClicked = clickAction;
+        placeHolder = R.drawable.white_background_drawable;
     }
 
     public IconTextItemViewModel(final int iconRes, @NonNull final String title) {
@@ -69,9 +75,15 @@ public class IconTextItemViewModel extends ViewModel {
         this.title = title;
         this.image = "";
         this.onClicked = null;
+        placeHolder = R.drawable.white_background_drawable;
     }
 
-    @Nullable
-    public final MyConsumer<IconTextItemViewModel> onClicked;
+    public IconTextItemViewModel(@DrawableRes final int placeHolder, @NonNull final String image, @NonNull final String title, MyConsumer<IconTextItemViewModel> onClicked) {
+        this.placeHolder = placeHolder;
+        this.title = title;
+        this.image = "";
+        this.onClicked = onClicked;
+        this.imageRes = 0;
+    }
 
 }
